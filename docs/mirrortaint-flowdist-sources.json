@@ -1,0 +1,54 @@
+{
+  "review_date": "2026-09-30",
+  "execution_status": "Downloaded and inspected; full tool and benchmark reproduction not performed.",
+  "repositories": [
+    {
+      "name": "MirrorTaint",
+      "url": "https://github.com/MirrorTaint/MirrorTaint.git",
+      "commit": "54fcbfc5bb3a0d7cd30309098355d999553a861b"
+    },
+    {
+      "name": "FlowDist-upstream",
+      "url": "https://bitbucket.org/wsucailab/flowdist.git",
+      "commit": "9a683606aa42289e045cdbfa9391b55e79a3ac05"
+    },
+    {
+      "name": "FlowDist",
+      "url": "https://github.com/baltsers/FlowDist.git",
+      "commit": "14491152666feaf4a6b2c2f3f833e7c59b73dd57"
+    }
+  ],
+  "files": [
+    {
+      "name": "papers/mirrortaint.pdf",
+      "url": "https://lingming.cs.illinois.edu/publications/icse2023d.pdf",
+      "bytes": 1059991,
+      "sha256": "e6b58480e5ee6a66abd77f6231bea0f67cae029abd8de054f8cc0a383cc30995"
+    },
+    {
+      "name": "papers/flowdist.pdf",
+      "url": "https://chapering.github.io/pubs/sec21.pdf",
+      "bytes": 5873451,
+      "sha256": "ecb251d239070a7e8ef8d885cd34552cbb127a6dba45478f849937f4a4f43609"
+    },
+    {
+      "name": "MirrorTaint/mirrorTaint.jar",
+      "url": "https://github.com/MirrorTaint/MirrorTaint/blob/54fcbfc5bb3a0d7cd30309098355d999553a861b/mirrorTaint.jar",
+      "bytes": 6223665,
+      "sha256": "e4c679206993b45c6727a4ace1d4dcff6df0ded2b80b56b27b8c86741be63fe7"
+    },
+    {
+      "name": "tools/cfr-0.152.jar",
+      "url": "https://www.benf.org/other/cfr/cfr-0.152.jar",
+      "bytes": 2162315,
+      "sha256": "f686e8f3ded377d7bc87d216a90e9e9512df4156e75b06c655a16648ae8765b2"
+    }
+  ],
+  "flowdist_mirror_check": {
+    "scope": "All files tracked in pinned Bitbucket upstream commit",
+    "tracked_files": 4284,
+    "different_or_missing_in_github_mirror": [
+      "README.md"
+    ]
+  }
+}
