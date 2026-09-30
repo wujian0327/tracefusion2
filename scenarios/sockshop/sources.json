@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-09-30",
+  "deployment_reference": "https://github.com/MirrorTaint/MirrorTaint/blob/54fcbfc5bb3a0d7cd30309098355d999553a861b/Benchmarks/microservices-demo-orig.yml",
+  "application_source_refs": {
+    "front-end": {
+      "repository": "https://github.com/microservices-demo/front-end",
+      "tag": "0.3.12",
+      "source_commit": "b2308a3ecc70b9ac97b93ce73985e57d5d0c186b"
+    },
+    "user": {
+      "repository": "https://github.com/microservices-demo/user",
+      "tag": "0.4.4",
+      "source_commit": "1714eca3ba643b9e2b9cd6c7e5a384bf89a20d8b"
+    },
+    "carts": {
+      "repository": "https://github.com/microservices-demo/carts",
+      "tag": "0.4.8",
+      "source_commit": "d0a55c9f483269034ab9f2473c1a738b2d7d422b"
+    },
+    "orders": {
+      "repository": "https://github.com/microservices-demo/orders",
+      "tag": "0.4.7",
+      "source_commit": "e97ec6530811c92babbcb4227cf2d77896b5c26d"
+    },
+    "payment": {
+      "repository": "https://github.com/microservices-demo/payment",
+      "tag": "0.4.3",
+      "source_commit": "923c8b030364fd4e217c54cd1e30150b7cad4266"
+    },
+    "shipping": {
+      "repository": "https://github.com/microservices-demo/shipping",
+      "tag": "0.4.8",
+      "source_commit": "c3bc9015fdbfce1265370502c4fd19b45120550e"
+    },
+    "queue-master": {
+      "repository": "https://github.com/microservices-demo/queue-master",
+      "tag": "0.3.1",
+      "source_commit": "ca72773d51ca4676306e6c5f25835990f3753748"
+    }
+  },
+  "image_source_mapping": "Source tags inspected; a matching tag name does not prove the downloaded image was built from that commit. images.json captures available image VCS labels and registry digests.",
+  "database_image_source_mapping": "user-db:0.4.0 source commit not verified; mongo:3.4 and rabbitmq:3.6.8 are upstream image tags; runtime digests recorded on run",
+  "validation_status": "No Docker available in authoring environment; live deployment pending"
+}
