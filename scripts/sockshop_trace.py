@@ -19,6 +19,7 @@ import zipfile
 
 import sockshop as base
 from trace_validation import validate_all
+from http_dataset import export_dataset
 
 ROOT = base.ROOT
 HOOKS = ROOT / 'instrumentation/sockshop'
@@ -137,12 +138,12 @@ def read_collector(port):
         return json.load(response)
 
 
-def collect(out, requests, client_spans, port, timeout):
+def collect(out, requests, client_spans, port, timeout, scope='full'):
     deadline, previous, stable_since = time.monotonic() + timeout, None, None
-    report = validate_all([], requests)
+    report = validate_all([], requests, scope=scope)
     while time.monotonic() < deadline:
         spans = read_collector(port) + client_spans
-        report = validate_all(spans, requests)
+        report = validate_all(spans, requests, scope=scope)
         base.save(out / 'oracle' / 'spans.json', spans)
         base.save(out / 'oracle' / 'callgraphs.json', report)
         # Allow late agent batches to arrive before accepting the snapshot.
@@ -176,6 +177,7 @@ def main():
     parser.add_argument('--concurrency', type=int, default=2)
     parser.add_argument('--ready-timeout', type=int, default=300)
     parser.add_argument('--trace-timeout', type=int, default=30)
+    parser.add_argument('--scope', choices=['synchronous-http', 'full'], default='synchronous-http')
     args = parser.parse_args()
     if not re.fullmatch('[a-z0-9][a-z0-9_-]*', args.project):
         parser.error('invalid project name')
@@ -201,6 +203,7 @@ def main():
     deployment = None
     requests, client_spans = [], []
     result = {'status': 'failed', 'stage': 'deployment', 'project': args.project,
+              'evaluation_scope': args.scope,
               'field_lineage_oracle': False, 'requested_orders': args.requests,
               'concurrency': args.concurrency}
     try:
@@ -211,6 +214,7 @@ def main():
             'code_sha256': {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
                            for p in [HOOKS / 'node-tracing.js', HOOKS / 'trace_gateway.py',
                                      Path(__file__), ROOT / 'scripts/trace_validation.py',
+                                     ROOT / 'scripts/http_dataset.py',
                                      ROOT / 'scripts/sockshop.py']}})
         shutil.copyfile(ROOT / 'scenarios/sockshop/sources.json', out / 'sources.json')
         agent = prepare_agent(out, args.agent_jar)
@@ -234,7 +238,8 @@ def main():
         base.save(out / 'oracle' / 'orders.json', requests)
         result['completed_orders'] = len(requests)
         result['stage'] = 'trace-validation'
-        report = collect(out, requests, client_spans, os.environ.get('TF2_TRACE_PORT', '18082'), args.trace_timeout)
+        report = collect(out, requests, client_spans, os.environ.get('TF2_TRACE_PORT', '18082'),
+                         args.trace_timeout, scope=args.scope)
         result['trace_validation'] = report['status']
         result['execution_status'] = report['execution_status']
         result['overlapping_order_interval_pairs'] = report['overlapping_order_interval_pairs']
@@ -256,8 +261,11 @@ def main():
             try:
                 final_spans = read_collector(os.environ.get('TF2_TRACE_PORT', '18082')) + client_spans
                 base.save(out / 'oracle' / 'spans-final.json', final_spans)
-                final_report = validate_all(final_spans, requests)
+                final_report = validate_all(final_spans, requests, scope=args.scope)
                 base.save(out / 'oracle' / 'callgraphs.json', final_report)
+                full_report = validate_all(final_spans, requests, scope='full')
+                base.save(out / 'oracle' / 'full-callgraphs.json', full_report)
+                result['full_trace_execution_status'] = full_report['execution_status']
                 result['trace_validation'] = final_report['status']
                 result['execution_status'] = final_report['execution_status']
                 if result['status'] == 'passed' and final_report['status'] != 'passed':
@@ -266,6 +274,13 @@ def main():
                 elif result['status'] == 'passed' and final_report['execution_status'] == 'failed':
                     result.update(status='failed', stage='application-runtime',
                                   error='Late spans contain application errors; trace structure passed')
+                if requests and len(requests) == args.requests:
+                    try:
+                        result['http_dataset'] = export_dataset(out, out / 'http-evaluation')
+                    except Exception as exc:
+                        result['http_dataset_error'] = str(exc)
+                        if result['status'] == 'passed':
+                            result.update(status='failed', stage='http-dataset')
             except Exception as exc:
                 result['final_collection_error'] = str(exc)
                 if result['status'] == 'passed':

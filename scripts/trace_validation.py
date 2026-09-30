@@ -5,6 +5,7 @@ from urllib.parse import urlsplit
 EXPECTED_EDGES = {('test-client', 'front-end'), ('front-end', 'user'),
                   ('front-end', 'orders'), ('orders', 'user'), ('orders', 'carts'),
                   ('orders', 'payment'), ('orders', 'shipping'), ('shipping', 'queue-master')}
+HTTP_SERVICES = {'front-end', 'orders', 'user', 'carts', 'payment', 'shipping'}
 
 
 def service(span):
@@ -16,9 +17,42 @@ def target(span):
     return urlsplit(tags.get('http.url', tags.get('url.full', tags.get('http.target', '')))).path
 
 
-def validate_trace(spans, request, forbidden_ids=()):
+def select_http_scope(spans, trace_id, root_id):
+    """Keep HTTP operations and their ancestors up to the client root.
+
+    Message boundaries prune asynchronous descendants; unknown/missing parents
+    remain visible to the structural validator rather than being repaired.
+    """
+    index = {s['id']: s for s in spans if s.get('traceId') == trace_id}
+    keep = {root_id}
+    for ident, s in index.items():
+        tags = s.get('tags', {})
+        if service(s) not in HTTP_SERVICES or s.get('kind') not in ('CLIENT', 'SERVER'):
+            continue
+        if not tags.get('http.method', tags.get('http.request.method')):
+            continue
+        trail, cursor, asynchronous = set(), ident, False
+        while cursor in index and cursor not in trail:
+            ancestor = index[cursor]
+            if ancestor.get('kind') in ('PRODUCER', 'CONSUMER') or service(ancestor) == 'queue-master':
+                asynchronous = True
+                break
+            trail.add(cursor)
+            if cursor == root_id:
+                break
+            cursor = ancestor.get('parentId')
+        if not asynchronous:
+            keep.update(trail)
+    return [s for s in spans if s.get('traceId') == trace_id and s.get('id') in keep]
+
+
+def validate_trace(spans, request, forbidden_ids=(), scope='full'):
+    if scope not in ('full', 'synchronous-http'):
+        raise ValueError('Unknown evaluation scope')
     trace_id, root_id = request['trace_id'], request['span_id']
     selected = [s for s in spans if s.get('traceId') == trace_id]
+    if scope == 'synchronous-http':
+        selected = select_http_scope(spans, trace_id, root_id)
     errors, runtime_errors, index = [], [], {}
     for s in selected:
         ident = s.get('id', '')
@@ -67,7 +101,8 @@ def validate_trace(spans, request, forbidden_ids=()):
                 errors.append('cycle: ' + ident); break
             seen.add(cursor)
             cursor = index[cursor].get('parentId')
-    missing = EXPECTED_EDGES - edges
+    expected_edges = EXPECTED_EDGES - ({('shipping', 'queue-master')} if scope == 'synchronous-http' else set())
+    missing = expected_edges - edges
     if missing:
         errors.append('missing service edges: ' + repr(sorted(missing)))
     # These endpoints distinguish independent user reads in the fan-out.
@@ -89,7 +124,7 @@ def validate_trace(spans, request, forbidden_ids=()):
                 linked = True
             seen.add(cursor)
             cursor = index[cursor].get('parentId')
-    if not linked:
+    if not linked and scope == 'full':
         errors.append('no queue consumer linked to a shipping producer')
     return {'trace_id': trace_id, 'status': 'passed' if not errors else 'incomplete',
             'execution_status': 'failed' if runtime_errors else 'no_recorded_errors',
@@ -101,12 +136,12 @@ def validate_trace(spans, request, forbidden_ids=()):
             'spans': list(index.values())}
 
 
-def validate_all(spans, requests):
+def validate_all(spans, requests, scope='full'):
     reports = []
     for request in requests:
         others = [r[k] for r in requests if r['trace_id'] != request['trace_id']
                   for k in ('customer_id', 'address_id', 'card_id')]
-        reports.append(validate_trace(spans, request, others))
+        reports.append(validate_trace(spans, request, others, scope=scope))
     unique = len({r['trace_id'] for r in requests}) == len(requests)
     passed = bool(reports) and unique and all(r['status'] == 'passed' for r in reports)
     intervals = []
@@ -122,7 +157,7 @@ def validate_all(spans, requests):
             'execution_status': ('failed' if any(r['runtime_errors'] for r in reports)
                                  else 'no_recorded_errors' if reports else 'unknown'),
             'overlapping_order_interval_pairs': overlaps,
-            'scope': 'instrumented service calls, including RabbitMQ; not field lineage or Go database operations',
+            'scope': scope,
             'interpretation': 'collection consistency and expected-path coverage checks; not a proof of exhaustive instrumentation',
             'orders': reports}
 
@@ -134,12 +169,13 @@ def main():
     import zipfile
     parser = argparse.ArgumentParser(description=main.__doc__)
     parser.add_argument('bundle')
+    parser.add_argument('--scope', choices=['full', 'synchronous-http'], default='full')
     args = parser.parse_args()
     with zipfile.ZipFile(args.bundle) as archive:
         requests = json.loads(archive.read('oracle/orders.json'))
         name = ('oracle/spans-final.json' if 'oracle/spans-final.json' in archive.namelist()
                 else 'oracle/spans.json')
-        report = validate_all(json.loads(archive.read(name)), requests)
+        report = validate_all(json.loads(archive.read(name)), requests, scope=args.scope)
     summary = {k: v for k, v in report.items() if k != 'orders'}
     summary['orders'] = [{k: v for k, v in r.items() if k not in ('spans', 'span_edges')}
                          for r in report['orders']]

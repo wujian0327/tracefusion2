@@ -2,9 +2,23 @@
 
 当前阶段：**面向微服务聚合 API 敏感响应的调用链溯源**。
 
-先采集 trace/span，核验请求关联和跨服务调用关系。字段编号、字段传播埋点和完整血缘图暂缓；当前不报告算法溯源准确率。
+先采集 trace/span，核验请求关联和跨服务调用关系。字段编号、字段传播埋点和完整血缘图暂缓；当前只提供流程验证用的简单时间基线，不把小样本结果作为论文主算法结论。
 
 11 组件基础版已经通过一次用户主机订单验证。新增追踪版保留业务镜像，增加 2 个入口代理与 1 个采集器，共 14 个容器；用户回传的两笔重叠订单已通过调用图结构与路径覆盖检查；同时发现 queue-master 的 Docker worker 启动失败，尚不能作为无故障的完整配送基线。
+
+## 本轮：同步 HTTP 还原与评测
+
+已有 ZIP 可以直接用于导出观测、运行时间基线和评分，无需重新部署：
+
+```bash
+python3 scripts/http_dataset.py /path/to/运行结果.zip --out artifacts/http-v1
+python3 scripts/http_baseline.py artifacts/http-v1/algorithm-input --out artifacts/http-v1/prediction.json
+python3 scripts/http_score.py --reference artifacts/http-v1/oracle/reference.json --prediction artifacts/http-v1/prediction.json --out artifacts/http-v1/metrics.json
+```
+
+算法仅读取 `algorithm-input/`，真值保存在 `oracle/`。当前输入是去除关联标识的 HTTP 插桩观测，尚不是独立抓包。
+队列/worker 分支不参与本阶段 HTTP 评分，其原始 span 和运行错误继续保留。
+详见 [HTTP 评测范围、数据格式与指标](docs/http-evaluation.md)。
 
 ## 本轮：采集订单调用链
 
@@ -13,7 +27,7 @@ git pull
 python3 scripts/sockshop_trace.py run
 ```
 
-默认运行 2 个并发测试流程，检查真实 span 的父子关系、订单分支与发货消息关联。
+默认运行 2 个并发测试流程，按 `--scope synchronous-http` 检查订单 HTTP 分支，并自动导出 `http-evaluation/`。完整消息链和 worker 错误另存 `oracle/full-callgraphs.json`；`--scope full` 可恢复全链验收。
 成功或失败都请返回 `artifacts/sockshop-trace-*.zip`。
 第一次下载官方 Java agent 1.32.0，需要能访问 GitHub。
 

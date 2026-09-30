@@ -17,7 +17,7 @@ git pull
 python3 scripts/sockshop_trace.py run
 ```
 
-默认启动 2 个并发测试流程，每个流程使用独立客户、会话和购物车，均执行注册、创建地址/卡片、预置购物车、卡片预览、创建订单。只对最终的创建订单 trace 做路径覆盖验收；其他请求与健康检查的 span 也保留在原始采集中。
+默认启动 2 个并发测试流程，每个流程使用独立客户、会话和购物车，均执行注册、创建地址/卡片、预置购物车、卡片预览、创建订单。默认只对最终创建订单 trace 的同步 HTTP 范围做路径覆盖验收；其他请求与健康检查的 span 也保留在原始采集中。
 
 ```bash
 # 一个流程便于定位启动/传播问题
@@ -60,7 +60,7 @@ user/payment 的 span **不是 Go 进程内部执行 span**，也不记录 Go→
 - 根 span 正确，所有记录到的子 span 都有父节点，无环、无冲突 ID。
 - front-end→user/orders，以及 orders→user/carts/payment/shipping 的实际边存在。
 - user 的客户、地址和卡片读取，以及 carts 的购物项接口被记录。
-- queue-master 的 CONSUMER span 与 shipping 的 PRODUCER span 通过父链相连。
+- 仅 `--scope full` 要求 queue-master 的 CONSUMER span 与 shipping 的 PRODUCER span 通过父链相连。
 - 不包含另一测试客户/地址/卡片 ID 的请求路径。
 - 分别报告结构检查和执行结果：缺失父节点等导致结构 incomplete；HTTP/应用错误记录在 runtime_errors，并使 execution_status=failed。
 
@@ -68,7 +68,7 @@ user/payment 的 span **不是 Go 进程内部执行 span**，也不记录 Go→
 
 默认并发启动不保证两个 `POST /orders` 一定在时间上重叠；`overlapping_order_interval_pairs` 根据同一测试客户端时钟统计实际重叠。为 0 时不能宣称已经覆盖订单并发，应该提高请求数后检查。
 
-`oracle/callgraphs.json` 中 `status=passed` 仅表示已采集记录满足上述结构一致性与覆盖检查，**不是数学意义上的无遗漏证明，也不是算法准确率**。固定预期边只用于发现缺口；不会写入观测图。缺失消息链、导出丢失导致的路径缺口或丢失父节点时保留 `incomplete`，不按业务拓扑修补。被正确记录的失败操作属于真实调用链，保留节点和父子边，单独标记 execution_status=failed；最外层 result.json 仍为 failed，不把业务故障改成成功。
+`oracle/callgraphs.json` 中 `status=passed` 仅表示已采集记录满足上述结构一致性与覆盖检查，**不是数学意义上的无遗漏证明，也不是算法准确率**。固定预期边只用于发现缺口；不会写入观测图。缺失消息链、导出丢失导致的路径缺口或丢失父节点时保留 `incomplete`，不按业务拓扑修补。被正确记录的失败操作属于真实调用链，保留节点和父子边，单独标记 execution_status=failed；若错误发生在所选 evaluation_scope 内，最外层 result.json 为 failed。默认同步 HTTP 范围之外的队列错误保存在 full-callgraphs.json，并报告 full_trace_execution_status=failed；范围内通过不代表整个系统无故障。
 
 输出 `artifacts/sockshop-trace-*.zip`，包括：
 
@@ -85,7 +85,7 @@ user/payment 的 span **不是 Go 进程内部执行 span**，也不记录 Go→
 
 诊断 ZIP 不包含约几十 MB 的 agent JAR，但本地运行目录会保留它供容器挂载。不要在容器停止前删除或移动本次运行目录。
 
-所有 trace/span、客户端关联表、含 ID 的原始日志都是**真值/诊断数据**。后续评测不依赖 trace 的重建算法时，须另行导出移除 Header、日志、文件名及元数据中关联标识的输入；本提交没有把这些原始文件宣称为可直接使用的算法输入。
+所有 trace/span、客户端关联表、含 ID 的原始日志都是**真值/诊断数据**。后续评测不依赖 trace 的重建算法时，须另行导出移除 Header、日志、文件名及元数据中关联标识的输入；白名单观测导出已实现，见 [HTTP 评测说明](http-evaluation.md)；这些原始文件不能直接作为算法输入。
 
 ## 依据与状态
 
