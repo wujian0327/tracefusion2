@@ -117,7 +117,9 @@ def main():
             except OSError as exc:
                 stats['statistics_error'] = str(exc)
             sock.close()
-        if bpf:
+        # BCC __len__ counts lazily opened tables. A loaded module can be falsey
+        # before its first table lookup; that does not mean initialization failed.
+        if bpf is not None:
             try:
                 stats['filter_accepted_packets'] = int(bpf['counters'][ctypes.c_int(0)].value)
                 stats['fragmented_packets'] = int(bpf['counters'][ctypes.c_int(1)].value)

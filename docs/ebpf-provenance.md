@@ -133,7 +133,13 @@ python3 scripts/sockshop_ebpf.py analyze --out artifacts/sockshop-ebpf-日期-�
 python3 -m unittest discover -s tests -v
 ```
 
-本次开发环境完成了 TCP/HTTP 合成数据包回放和图查询测试，包括乱序、重传、缺失、chunked、同值来源、并发候选和失败状态检查。**开发环境没有 Docker、BCC 和可用的 eBPF 编译条件，尚未验证内核程序实际加载、网桥可见性和真实 Sock Shop 流量。**用户主机运行是首轮实测，不是复现已经完成的结果。
+开发环境完成了 TCP/HTTP 合成数据包回放和图查询测试，包括乱序、重传、缺失、chunked、同值来源、并发候选和失败状态检查。开发环境没有 Docker、BCC 和可用的 eBPF 编译条件；内核加载与真实采集由用户主机验证。
+
+2026-09-30 用户回传 `sockshop-ebpf-20260930-195218-9ce1.zip`：WSL2 内核 `6.18.40.1-microsoft-standard-WSL2`、Ubuntu 24.04.3 LTS，真实 eBPF 程序成功挂接实验网桥，完成 1 笔订单。保存 217 个包，socket 报告丢包为 0，恢复 21 组 HTTP 请求响应，无已知重组错误。订单正文一致性及选定下游覆盖检查全部通过，4 个查询终点全部观测到；离线重放原始 PCAP 可完全复现 transactions、field-graph 和 queries。
+
+该次运行仍保留 `incomplete`：采集器使用 `if bpf` 判断初始化状态，但 BCC 的 `__len__` 返回已打开的 Python table 缓存大小，尚未读取 table 时对象可能为假，导致计数读取被跳过，`fragmented_packets` 留为 `null`。已改为 `bpf is not None`，并用假值但已初始化的 BPF 对象复现故障、验证修复。**这次旧结果缺失的内核计数不能离线补回，不将 null 改成 0；修复后的实际计数需要重新采集。**
+
+首轮还展示了真实歧义：卡号/CCV 同时出现在 User 的 customer 聚合响应和独立 card 响应中；街道同时出现在 customer 聚合响应和 address 响应中。算法保留这些同值候选，尚不能据此判断 Orders 实际采用哪次读取。它验证了边界证据持久化与候选溯源的可执行性，没有测出字段血缘正确率。
 
 ## 方法参考
 

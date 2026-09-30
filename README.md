@@ -16,7 +16,7 @@ sudo /usr/bin/python3 scripts/sockshop_ebpf.py run
 
 默认用独立项目 `tracefusion2-ebpf`、端口 **28080/28081** 运行 1 笔订单。保存原始 PCAP、HTTP 正文、字段候选图和采集质量检查。完成或失败都请返回 `artifacts/sockshop-ebpf-*.zip`。
 
-**已完成离线合成数据包测试，尚未在开发环境实际加载 eBPF 或部署 Docker；需要用户主机完成首轮验证。**`capture_verified` 只表示选定 HTTP 采集检查通过，字段血缘准确率尚未测量。
+**用户主机已完成首轮真实 eBPF 采集：217 个包、21 组 HTTP 请求响应，4 个目标字段均生成候选子图。**该次运行的正文和选定路径检查通过，但因采集器遗漏读取 BPF 分片计数，整体仍为 `incomplete`；计数读取已修复，等待重新实测。`capture_verified` 只表示选定 HTTP 采集检查通过，字段血缘准确率尚未测量。
 
 ## 既有实验状态
 

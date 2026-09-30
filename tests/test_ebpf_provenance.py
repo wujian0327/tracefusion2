@@ -38,6 +38,54 @@ def transaction(ident, client, server, start, end, request, response):
             'request': m(request, start, start + 1), 'response': m(response, end - 1, end)}
 
 
+class RecorderTests(unittest.TestCase):
+    def test_falsey_loaded_bpf_still_persists_counters_on_clean_stop(self):
+        # BCC's __len__ counts lazily opened tables, not loaded programs.
+        class LoadedBPF:
+            def __len__(self):
+                return 0
+
+            def load_func(self, *args):
+                return mock.Mock(sock=123)
+
+            def __getitem__(self, name):
+                self_name = name
+                class Table:
+                    def __getitem__(self, key):
+                        assert self_name == 'counters'
+                        return mock.Mock(value=(217, 0)[key.value])
+                return Table()
+
+        loaded = LoadedBPF()
+        self.assertFalse(bool(loaded))
+        handlers = {}
+        sock = mock.Mock()
+        sock.getsockopt.side_effect = lambda level, option, *args: (
+            struct.pack('II', 217, 0) if level == 263 else 8388608)
+        def stop_capture(*args):
+            handlers[capture.signal.SIGINT]()
+            raise socket.timeout()
+        sock.recvmsg.side_effect = stop_capture
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            services = root / 'services.json'
+            services.write_text(json.dumps({'ip_to_service': {'10.0.0.2': 'front-end'}}))
+            argv = ['ebpf_capture.py', '--interface', 'test-bridge', '--services', str(services),
+                    '--out', str(root / 'capture')]
+            with mock.patch.object(sys, 'argv', argv), \
+                 mock.patch.dict(sys.modules, {'bcc': mock.Mock(BPF=mock.Mock(return_value=loaded))}), \
+                 mock.patch.object(capture.os, 'geteuid', return_value=0), \
+                 mock.patch.object(capture.socket, 'socket', return_value=sock), \
+                 mock.patch.object(capture.socket, 'if_nametoindex', return_value=1), \
+                 mock.patch.object(capture.signal, 'signal', side_effect=lambda sig, fn: handlers.update({sig: fn})):
+                self.assertEqual(capture.main(), 0)
+            stats = json.loads((root / 'capture/capture.json').read_text())
+            self.assertEqual(stats['status'], 'stopped')
+            self.assertEqual(stats['fragmented_packets'], 0)
+            self.assertEqual(stats['filter_accepted_packets'], 217)
+            self.assertEqual(stats['socket_drops'], 0)
+
+
 class PreflightTests(unittest.TestCase):
     def test_missing_compose_blocks_run_even_when_docker_and_bcc_exist(self):
         with mock.patch.object(runner.shutil, 'which', return_value='/usr/bin/docker'), \
