@@ -2,9 +2,21 @@
 
 当前阶段：**面向微服务聚合 API 敏感数据暴露的动态数据溯源验证**。
 
-新增 eBPF 采集与持久化原型：记录真实 HTTP 通信，离线恢复请求响应与字段传播候选。原有 trace/span 和调用链基线保留为前期实验设施；候选关系不等于字段血缘真值。
+当前验证主线改为 **eBPF 程序级动态插桩：观察指定赋值的读写与寄存器传播**。此前 HTTP 抓包、trace/span 和调用链基线保留为前期实验设施。
 
-## 当前：eBPF 数据记录与溯源候选验证
+## 当前：程序内部赋值的 uprobe 验证
+
+在原生 C 机器指令处挂 eBPF 探针，验证敏感字段复制、同值普通字段复制和 XOR 变换。普通业务赋值函数没有加入日志、标签或探针调用。只支持明确的 x86-64 直线指令子集，不是通用语言无关污点追踪。
+
+```bash
+sudo apt-get install -y gcc binutils
+git pull origin main
+sudo /usr/bin/python3 scripts/uprobe_assignment.py run
+```
+
+不需要 Docker。仍需系统 Python BCC；成功或失败请返回 `artifacts/uprobe-assignment-*.zip`。已在开发环境编译执行测试程序并验证离线分析，实际 uprobe 采集尚待用户主机实测。见 [程序级赋值验证说明](docs/uprobe-assignment.md)。
+
+## 前期：eBPF 网络数据记录与溯源候选验证
 
 需要原生 x86-64 Linux、rootful Docker、Compose v2 和系统 Python BCC。Ubuntu/Debian 的依赖安装与范围说明见 [eBPF 验证说明](docs/ebpf-provenance.md)。
 
