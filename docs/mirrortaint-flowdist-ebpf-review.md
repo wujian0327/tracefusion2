@@ -48,6 +48,8 @@ MirrorTaint 的“non-intrusive”指避免修改类字段、方法签名等元�
 
 可借鉴的是字段/对象身份建模、影子状态、库函数摘要和服务边界关联。不能直接继承的是任意语言覆盖、任意异步通信下的完整来源链，以及完整的历史版本追踪。论文也明确不支持隐式流；已有对象共享和模型缺口仍影响精度。
 
+后续核查补充：公开 JAR 的 `com.shadow.taint.agent.A.B.P` 集合包含具体的类名、方法名和签名，例如 Sock Shop 的 `OrdersController.newOrder`、`ItemsController.addToCart`；`J.C.E`（日志名 `FacadeRequestSourceTransformer`）匹配这些集合后才插入 `tagFacade`。普通传播指令通过字节码访问器自动处理，但这个入口识别路径有应用特定配置，不能把论文的自动 sourcing/sinking 概括成任意新增接口都零配置可用。
+
 ## 3. FlowDist：用执行证据逐步筛选依赖图
 
 ### 两阶段的实际含义

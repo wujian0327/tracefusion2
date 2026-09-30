@@ -1,0 +1,2 @@
+# Optional development ISA-emulation tests only; host BCC capture does not need it.
+unicorn==2.1.4

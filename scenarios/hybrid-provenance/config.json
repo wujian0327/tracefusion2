@@ -1,0 +1,9 @@
+{
+  "abi": "linux-x86_64-sysv",
+  "functions": ["choose_value", "overwrite_value", "alias_value", "transform_value"],
+  "input_fields": ["secret", "public_value", "noise"],
+  "output_fields": ["value", "audit"],
+  "sink_field": "value",
+  "sensitive_fields": ["secret"],
+  "scope": "one thread, nonrecursive leaf functions, acyclic CFG, explicit contiguous uint32 field layouts; data dependencies only"
+}

@@ -2,9 +2,20 @@
 
 当前阶段：**面向微服务聚合 API 敏感数据暴露的动态数据溯源验证**。
 
-当前验证主线改为 **eBPF 程序级动态插桩：观察指定赋值的读写与寄存器传播**。此前 HTTP 抓包、trace/span 和调用链基线保留为前期实验设施。
+当前验证主线：**静态候选依赖分析 + 自动选择 eBPF 观测位置 + 动态来源重建**。此前 HTTP 抓包、trace/span 和调用链基线保留为前期实验设施。
 
-## 当前：程序内部赋值的 uprobe 验证
+## 当前：静动态结合的最小闭环
+
+先分析编译后二进制的控制流与字段读写依赖，自动生成观测位置，再通过执行路径、寄存器和内存证据筛选来源。四类受控场景覆盖分支选择、覆盖、源码指针选择及计算，共 16 次调用。支持范围是明确的无环原生指令子集。
+
+```bash
+git pull origin main
+sudo /usr/bin/python3 scripts/hybrid_provenance.py run
+```
+
+沿用已有 BCC 环境，无需 Docker。成功或失败请返回 `artifacts/hybrid-provenance-*.zip`。开发端 60 项测试通过；新采集器的真实内核运行待本轮主机验证。详情见 [静动态验证说明](docs/hybrid-provenance.md)。
+
+## 已验证：程序内部赋值的 uprobe 可观测性
 
 在原生 C 机器指令处挂 eBPF 探针，验证敏感字段复制、同值普通字段复制和 XOR 变换。普通业务赋值函数没有加入日志、标签或探针调用。只支持明确的 x86-64 直线指令子集，不是通用语言无关污点追踪。
 
@@ -115,7 +126,9 @@ python3 -m unittest discover -s tests -v
 
 ## 文档与验证状态
 
-- [当前程序内部赋值验证](docs/uprobe-assignment.md)
+- [当前静动态结合验证](docs/hybrid-provenance.md)
+- [MirrorTaint、FlowDist 算法与 eBPF 边界](docs/mirrortaint-flowdist-ebpf-review.md)
+- [已完成的程序内部赋值验证](docs/uprobe-assignment.md)
 - [前期 eBPF 网络数据验证](docs/ebpf-provenance.md)
 - [前期调用链采集范围](docs/sockshop-tracing.md)
 - [原始场景与候选字段路径（字段级设计暂缓）](docs/sockshop-scenario.md)
@@ -123,4 +136,4 @@ python3 -m unittest discover -s tests -v
 - [源码版本与镜像依据](scenarios/sockshop/sources.json)
 - [本地验证记录](docs/validation.md)
 
-本阶段保留原项目业务路径，未创建受控缺陷/修复版本。程序级探针已在受控 C 赋值上验证可行；下一步聚焦真实字段复制或序列化路径，逐步检验分支、对象布局与优化对来源恢复的影响。
+Sock Shop 业务路径保持原样。本轮新增独立 C 夹具验证自动探针规划和动态消歧；此前程序级探针已在简单赋值上验证可行，新闭环尚待主机 eBPF 运行。
