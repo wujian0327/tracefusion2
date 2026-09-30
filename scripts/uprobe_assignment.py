@@ -92,7 +92,7 @@ def build(out):
     return binary, plans
 
 
-def bpf_source(pid, plans):
+def bpf_source(plans):
     source = r'''
 #include <uapi/linux/ptrace.h>
 struct input_data { u32 secret; u32 public_value; };
@@ -102,15 +102,22 @@ struct event_t {
     s32 source_error, destination_error;
 };
 BPF_HASH(sequence, u64, u64, 16);
-BPF_ARRAY(metrics, u64, 3);
+BPF_ARRAY(metrics, u64, 4);
+BPF_ARRAY(entry_hits, u64, 3);
 BPF_PERF_OUTPUT(events);
 static __always_inline void count(u32 index) {
     u64 *value = metrics.lookup(&index);
     if (value) __sync_fetch_and_add(value, 1);
 }
+static __always_inline void entry(u32 function) {
+    u64 *value = entry_hits.lookup(&function);
+    if (value) __sync_fetch_and_add(value, 1);
+}
 static __always_inline int record(struct pt_regs *ctx, u32 function, u32 stage) {
+    count(3);
     u64 tid = bpf_get_current_pid_tgid();
-    if ((tid >> 32) != TARGET_PID) return 0;
+    /* Scope is enforced by attach_uprobe(pid=child_pid), not by comparing
+     * a namespace-local subprocess PID with this kernel PID/TGID. */
     u64 zero = 0, *seq = sequence.lookup_or_try_init(&tid, &zero);
     if (!seq) { count(2); return 0; }
     if (stage == 0) *seq += 1;
@@ -127,11 +134,30 @@ static __always_inline int record(struct pt_regs *ctx, u32 function, u32 stage) 
     if (events.perf_submit(ctx, &e, sizeof(e)) < 0) count(1);
     return 0;
 }
-'''.replace('TARGET_PID', str(pid))
+'''
     for fid, plan in enumerate(plans):
-        for stage in range(len(plan['instructions'])):
-            source += '\nint probe_%d_%d(struct pt_regs *ctx) { return record(ctx, %d, %d); }\n' % (fid, stage, fid, stage)
+        source += '\nint entry_%d(struct pt_regs *ctx) { entry(%d); return 0; }\n' % (fid, fid)
+        for stage, instruction in enumerate(plan['instructions']):
+            entry_call = 'entry(%d); ' % fid if instruction['offset'] == 0 else ''
+            source += '\nint probe_%d_%d(struct pt_regs *ctx) { %sreturn record(ctx, %d, %d); }\n' % (fid, stage, entry_call, fid, stage)
     return source
+
+
+def attach_probes(bpf, binary, plans, child_pid):
+    if child_pid <= 0:
+        raise ValueError('A positive child PID is required; global attachment is forbidden')
+    attached = []
+    for fid, plan in enumerate(plans):
+        points = [(stage, instruction['offset'], 'probe_%d_%d' % (fid, stage))
+                  for stage, instruction in enumerate(plan['instructions'])]
+        if plan['instructions'][0]['offset'] != 0:
+            points.insert(0, ('entry', 0, 'entry_%d' % fid))
+        for stage, offset, handler in points:
+            bpf.attach_uprobe(name=str(binary), sym=plan['function'], sym_off=offset,
+                              fn_name=handler, pid=child_pid)
+            attached.append({'function': plan['function'], 'stage': stage, 'offset': offset,
+                             'handler': handler, 'pid': child_pid})
+    return attached
 
 
 def infer(events, plans):
@@ -188,7 +214,8 @@ def evaluate(inferred, oracle, stats):
             'passed': observed.get('function') == expected['function']
                       and observed.get('source_field') == expected['expected_field']
                       and observed.get('new_value') == expected['output']})
-    clean = (stats.get('lost_events') == 0 and stats.get('submit_errors') == 0
+    clean = (stats.get('received_events', 0) > 0
+             and stats.get('lost_events') == 0 and stats.get('submit_errors') == 0
              and stats.get('state_errors') == 0 and stats.get('attempted_events') == stats.get('received_events')
              and stats.get('process_returncode') == 0)
     passed = bool(checks) and len(rows) == len(oracle) and all(c['passed'] for c in checks) and clean and not inferred['issues']
@@ -198,11 +225,14 @@ def evaluate(inferred, oracle, stats):
 
 
 def record(binary, plans, out):
-    from bcc import BPF
+    import bcc
+    BPF = bcc.BPF
     process = bpf = None
     events = []
     stats = {'lost_events': 0, 'received_events': 0, 'attempted_events': None,
-             'submit_errors': None, 'state_errors': None, 'process_returncode': None}
+             'submit_errors': None, 'state_errors': None, 'raw_instruction_hits': None,
+             'entry_hits': {}, 'process_returncode': None, 'bcc_version': getattr(bcc, '__version__', 'unknown'),
+             'scope_enforcement': 'attach_uprobe PID filter; no cross-namespace numeric PID comparison'}
     try:
         with (out / 'program.stdout.jsonl').open('w') as stdout, (out / 'program.stderr.log').open('w') as stderr:
             process = subprocess.Popen([str(binary), '--wait'], stdout=stdout, stderr=stderr)
@@ -217,13 +247,22 @@ def record(binary, plans, out):
                 if time.monotonic() > deadline:
                     raise RuntimeError('Demo did not stop for attachment')
                 time.sleep(0.02)
-            source = bpf_source(process.pid, plans)
+            proc = Path('/proc') / str(process.pid)
+            status_lines = (proc / 'status').read_text().splitlines()
+            save(out / 'target-process.json', {
+                'subprocess_pid': process.pid,
+                'target_status': [line for line in status_lines if line.split(':')[0] in
+                                  ('Name', 'Pid', 'Tgid', 'NSpid', 'NStgid')],
+                'target_pid_namespace': os.readlink(proc / 'ns/pid'),
+                'collector_pid_namespace': os.readlink('/proc/self/ns/pid'),
+                'executable': os.readlink(proc / 'exe')})
+            (out / 'target-maps.txt').write_text((proc / 'maps').read_text())
+            source = bpf_source(plans)
             (out / 'collector.bpf.c').write_text(source)
             bpf = BPF(text=source)
-            for fid, plan in enumerate(plans):
-                for stage, instruction in enumerate(plan['instructions']):
-                    bpf.attach_uprobe(name=str(binary), sym=plan['function'],
-                        sym_off=instruction['offset'], fn_name='probe_%d_%d' % (fid, stage), pid=process.pid)
+            attached = attach_probes(bpf, binary, plans, process.pid)
+            save(out / 'attached-probes.json', attached)
+            stats['attached_probes'] = len(attached)
             with (out / 'events.jsonl').open('w') as stream:
                 def receive(cpu, data, size):
                     obj = bpf['events'].event(data)
@@ -247,10 +286,13 @@ def record(binary, plans, out):
         if process is not None and process.poll() is None:
             process.kill(); process.wait()
         stats['received_events'] = len(events)
+        stats['observed_kernel_tgids'] = sorted({event['pid_tid'] >> 32 for event in events})
         if bpf is not None:
             try:
-                for index, name in enumerate(('attempted_events', 'submit_errors', 'state_errors')):
+                for index, name in enumerate(('attempted_events', 'submit_errors', 'state_errors', 'raw_instruction_hits')):
                     stats[name] = int(bpf['metrics'][ctypes.c_int(index)].value)
+                stats['entry_hits'] = {plan['function']: int(bpf['entry_hits'][ctypes.c_int(fid)].value)
+                                       for fid, plan in enumerate(plans)}
             except Exception as exc:
                 stats['statistics_error'] = str(exc)
             try:
@@ -299,7 +341,11 @@ def main():
             evaluation = evaluate(inferred, oracle, stats)
             save(out / 'evaluation.json', evaluation)
             report.update(status=evaluation['status'], stage='complete', events=len(events),
-                          assignments=len(inferred['assignments']), kernel_probes_tested=True)
+                          assignments=len(inferred['assignments']), kernel_attach_completed=True,
+                          kernel_probe_execution_observed=bool(stats.get('raw_instruction_hits')))
+            if not events:
+                report['diagnostic'] = ('No instruction events; inspect capture.json entry_hits/raw_instruction_hits, '
+                                        'attached-probes.json and target-process.json. Attachment alone is not execution proof.')
     except Exception as exc:
         report['error'] = '%s: %s' % (type(exc).__name__, exc)
         print(report['error'], file=sys.stderr)

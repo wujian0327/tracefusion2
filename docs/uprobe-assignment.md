@@ -59,6 +59,8 @@ python3 -m unittest discover -s tests -q
 | `collector.bpf.c`、`collector.log` | 生成的 BPF 程序及编译/挂接诊断 |
 | `events.jsonl` | 实时保存的指令寄存器/内存事件 |
 | `capture.json` | 事件计数、提交错误、丢事件、目标进程退出状态 |
+| `attached-probes.json` | 各指令和入口诊断探针的实际挂接参数，全部限定目标子进程 |
+| `target-process.json`、`target-maps.txt` | 目标 PID/命名空间、可执行文件和地址映射诊断 |
 | `assignments.json` | 仅使用探针事件及指令模型恢复的局部依赖 |
 | `program.stdout.jsonl` | 测试程序独立输出，仅供最终评估 |
 | `evaluation.json`、`result.json` | 六个受控样例的验证状态及失败阶段 |
@@ -66,6 +68,12 @@ python3 -m unittest discover -s tests -q
 分析函数 `infer(events, plans)` 不接收程序 stdout，也不依靠源值相等决定来源。最终 `evaluate` 才读取已知测试场景的预期源字段。缺事件、重复事件、读内存失败或寄存器/内存与指令矛盾时拒绝生成对应赋值记录。
 
 开发环境已实际编译执行 C 测试程序，并测试指令定位、同值不同来源、XOR 和异常事件处理；没有 BCC，**尚未实测本轮 uprobe 内核加载与事件采集**。不把合成事件测试当成实际赋值采集成功。
+
+2026-09-30 首轮用户回传 `uprobe-assignment-20260930-200345-5029.zip`：程序完成六次赋值，编译/挂接调用没有报错，但 `events.jsonl` 为空，`attempted_events=0`。这次结果尚未证明任何赋值被采到，不能用测试程序 stdout 代替探针证据。
+
+检查发现旧采集器把 Python `subprocess.pid` 直接与 `bpf_get_current_pid_tgid()` 的内核 TGID 比较，在 PID 命名空间中存在误过滤风险。已移除该多余比较，采集范围仍由每次 `attach_uprobe(pid=目标子进程)` 强制限制，没有改为全系统探针。旧包缺少过滤前计数和命名空间记录，**尚不能断言 PID 不一致就是这次零事件的已证实原因**。
+
+新版增加函数入口命中计数 `entry_hits` 和指令处理器最前面的 `raw_instruction_hits`，记录目标命名空间和收到事件的内核 TGID。CET `endbr64` 存在时独立探测函数入口；否则复用第一条指令的探针，避免重复挂接同一个位置。入口有命中而指令为零时继续检查偏移；入口与指令均为零时检查挂接与执行上下文。零事件不再显示 `capture_clean=true`。修复和诊断仍需用户主机复测。
 
 ## 接下来如何扩展
 

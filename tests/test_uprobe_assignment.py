@@ -6,6 +6,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import uprobe_assignment as app
@@ -103,6 +104,30 @@ class InstructionTests(unittest.TestCase):
         for key in ('lost_events', 'submit_errors', 'state_errors', 'process_returncode'):
             with self.subTest(key=key):
                 self.assertEqual(app.evaluate(inferred, oracle, dict(stats, **{key: 1}))['status'], 'incomplete')
+
+    def test_empty_capture_is_not_clean_even_when_loss_counters_are_zero(self):
+        empty = app.infer([], self.plans)
+        stats = dict(lost_events=0, submit_errors=0, state_errors=0, attempted_events=0,
+                     received_events=0, process_returncode=0)
+        result = app.evaluate(empty, [], stats)
+        self.assertEqual(result['status'], 'incomplete')
+        self.assertFalse(result['capture_clean'])
+
+    def test_all_instruction_and_diagnostic_probes_stay_bound_to_child(self):
+        for cet in (False, True):
+            plans = copy.deepcopy(self.plans)
+            if cet:
+                for p in plans:
+                    for instruction in p['instructions']:
+                        instruction['offset'] += 4
+            bpf = mock.Mock()
+            attached = app.attach_probes(bpf, Path('/tmp/controlled-demo'), plans, 64014)
+            self.assertEqual(len(attached), 13 if cet else 10)
+            points = [(call.kwargs['sym'], call.kwargs['sym_off']) for call in bpf.attach_uprobe.call_args_list]
+            self.assertEqual(len(points), len(set(points)))
+            self.assertTrue(all(call.kwargs['pid'] == 64014 for call in bpf.attach_uprobe.call_args_list))
+            with self.assertRaises(ValueError):
+                app.attach_probes(bpf, Path('/tmp/controlled-demo'), plans, -1)
 
     @unittest.skipUnless(shutil.which('gcc') and shutil.which('objdump'), 'gcc/binutils required')
     def test_actual_optimized_binary_and_independent_fixture(self):
