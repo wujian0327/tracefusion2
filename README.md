@@ -14,7 +14,7 @@ git pull origin main
 sudo /usr/bin/python3 scripts/uprobe_assignment.py run
 ```
 
-不需要 Docker。仍需系统 Python BCC；成功或失败请返回 `artifacts/uprobe-assignment-*.zip`。已在开发环境编译执行测试程序并验证离线分析，实际 uprobe 采集尚待用户主机实测。见 [程序级赋值验证说明](docs/uprobe-assignment.md)。
+不需要 Docker。仍需系统 Python BCC；成功或失败请返回 `artifacts/uprobe-assignment-*.zip`。**用户主机已实测通过：20 条指令事件、6 次赋值、无报告丢事件或内存读取错误，同值不同来源和 XOR 变换均通过检查。**离线重放完全复现结果；结论限于该受控原生 C 指令子集。见 [程序级赋值验证说明](docs/uprobe-assignment.md)。
 
 ## 前期：eBPF 网络数据记录与溯源候选验证
 
@@ -115,11 +115,12 @@ python3 -m unittest discover -s tests -v
 
 ## 文档与验证状态
 
-- [当前 eBPF 数据溯源验证](docs/ebpf-provenance.md)
+- [当前程序内部赋值验证](docs/uprobe-assignment.md)
+- [前期 eBPF 网络数据验证](docs/ebpf-provenance.md)
 - [前期调用链采集范围](docs/sockshop-tracing.md)
 - [原始场景与候选字段路径（字段级设计暂缓）](docs/sockshop-scenario.md)
 - [部署配置](scenarios/sockshop/compose.json)（JSON 是 Compose 支持的 YAML 子集）
 - [源码版本与镜像依据](scenarios/sockshop/sources.json)
 - [本地验证记录](docs/validation.md)
 
-本阶段保留原项目业务路径，未创建受控缺陷/修复版本。下一步先验证 eBPF 的消息采集和候选数据关系，再决定更精细的依赖分析。
+本阶段保留原项目业务路径，未创建受控缺陷/修复版本。程序级探针已在受控 C 赋值上验证可行；下一步聚焦真实字段复制或序列化路径，逐步检验分支、对象布局与优化对来源恢复的影响。
