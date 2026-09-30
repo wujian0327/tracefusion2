@@ -52,6 +52,7 @@ class Client:
     def __init__(self, out):
         self.out = out
         self.events = []
+        self.headers = {}
         self.opener = urllib.request.build_opener(
             urllib.request.ProxyHandler({}),
             urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
@@ -59,7 +60,7 @@ class Client:
     def request(self, method, url, body=None, label='request', redact=False):
         encoded = None if body is None else json.dumps(body).encode()
         req = urllib.request.Request(url, data=encoded, method=method,
-                                     headers={'Content-Type': 'application/json'})
+                                     headers=dict({'Content-Type': 'application/json'}, **self.headers))
         try:
             with self.opener.open(req, timeout=20) as response:
                 status, raw = response.status, response.read().decode('utf-8', errors='replace')
@@ -123,8 +124,8 @@ def require_id(value, label):
     return ident
 
 
-def smoke(out, front, cart):
-    client = Client(out)
+def smoke(out, front, cart, client=None):
+    client = client or Client(out)
     token = secrets.token_hex(6)
     fixture = {'username': 'tf2_' + token, 'firstName': 'TF2_' + token,
                'lastName': 'Synthetic',
@@ -173,9 +174,9 @@ hosts.forEach(function(host){var finished=false;
 
 
 class Deployment:
-    def __init__(self, args, out):
+    def __init__(self, args, out, compose_file=COMPOSE):
         self.args, self.out = args, out
-        self.file = COMPOSE
+        self.file = compose_file
 
     def command(self, cmd, timeout=60, check=True):
         with (self.out / 'commands.log').open('a', encoding='utf-8') as log:
@@ -196,7 +197,7 @@ class Deployment:
         self.command(['docker', 'version'])
         self.command(['docker', 'compose', 'version'])
         self.compose('config', '--quiet')
-        spec = json.loads(COMPOSE.read_text())
+        spec = json.loads(self.file.read_text())
         manifest = {}
         for service, cfg in spec['services'].items():
             image = cfg['image']

@@ -1,5 +1,7 @@
 # Sock Shop：订单确认响应中的字段暴露验证
 
+> 范围更新（2026-09-30）：当前只做调用链溯源；本文后续字段血缘设计是候选方向，暂不实施。当前实现见 [调用链采集说明](sockshop-tracing.md)。
+
 ## 固定范围
 
 主要入口是原有 Front-end 的 `POST /orders`，目标是其响应中的 `card.longNum`、`card.ccv`，并记录 `address.street`、`customer.firstName` 作为辅助传播字段。当前只提交一笔订单，未测试并发或计算准确率。

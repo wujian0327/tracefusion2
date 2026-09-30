@@ -1,11 +1,30 @@
 # TraceFusion 2
 
-研究方向：**面向微服务聚合 API 敏感数据暴露的跨服务字段血缘重建**。
+当前阶段：**面向微服务聚合 API 敏感响应的调用链溯源**。
 
-当前阶段是实验场景验证。仓库提供 Sock Shop 的 11 组件部署包、合成数据初始化和订单响应检查。
-尚未实现血缘重建算法、跨服务字段采集或独立执行级真值，也不报告溯源准确率。
+先采集 trace/span，核验请求关联和跨服务调用关系。字段编号、字段传播埋点和完整血缘图暂缓；当前不报告算法溯源准确率。
 
-## 快速运行
+11 组件基础版已经通过一次用户主机订单验证。新增追踪版保留业务镜像，增加 2 个入口代理与 1 个采集器，共 14 个容器；Java、Node 和消息传播的完整部署仍待实际运行验证。
+
+## 本轮：采集订单调用链
+
+```bash
+git pull
+python3 scripts/sockshop_trace.py run
+```
+
+默认运行 2 个并发测试流程，检查真实 span 的父子关系、订单分支与发货消息关联。
+成功或失败都请返回 `artifacts/sockshop-trace-*.zip`。
+第一次下载官方 Java agent 1.32.0，需要能访问 GitHub。
+
+详细范围、命令、14 组件组成、结果解释及真值隔离见 [调用链采集说明](docs/sockshop-tracing.md)。
+
+```bash
+python3 scripts/sockshop_trace.py down
+python3 scripts/sockshop_trace.py check
+```
+
+## 基础版：仅验证订单场景
 
 需要 Docker Engine、Docker Compose v2 和 Python 3.9+。当前镜像固定为历史版本，并使用 `linux/amd64`；建议先在 x86-64 Linux 上运行。ARM 机器需要 Docker 支持 amd64 模拟。
 
@@ -54,9 +73,10 @@ python3 -m unittest discover -s tests -v
 
 ## 文档与验证状态
 
-- [场景范围、数据流与后续真值设计](docs/sockshop-scenario.md)
+- [当前调用链采集范围](docs/sockshop-tracing.md)
+- [原始场景与候选字段路径（字段级设计暂缓）](docs/sockshop-scenario.md)
 - [部署配置](scenarios/sockshop/compose.json)（JSON 是 Compose 支持的 YAML 子集）
 - [源码版本与镜像依据](scenarios/sockshop/sources.json)
 - [本地验证记录](docs/validation.md)
 
-本阶段保留原项目业务路径，未创建受控缺陷/修复版本。先确认固定镜像实际行为，再决定边界过滤补丁和真值采集位置。
+本阶段保留原项目业务路径，未创建受控缺陷/修复版本。下一步根据真实 trace 的覆盖情况完善调用链采集。
