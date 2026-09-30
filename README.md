@@ -1,12 +1,28 @@
 # TraceFusion 2
 
-当前阶段：**面向微服务聚合 API 敏感响应的调用链溯源**。
+当前阶段：**面向微服务聚合 API 敏感数据暴露的动态数据溯源验证**。
 
-先采集 trace/span，核验请求关联和跨服务调用关系。字段编号、字段传播埋点和完整血缘图暂缓；当前只提供流程验证用的简单时间基线，不把小样本结果作为论文主算法结论。
+新增 eBPF 采集与持久化原型：记录真实 HTTP 通信，离线恢复请求响应与字段传播候选。原有 trace/span 和调用链基线保留为前期实验设施；候选关系不等于字段血缘真值。
+
+## 当前：eBPF 数据记录与溯源候选验证
+
+需要原生 x86-64 Linux、rootful Docker、Compose v2 和系统 Python BCC。Ubuntu/Debian 的依赖安装与范围说明见 [eBPF 验证说明](docs/ebpf-provenance.md)。
+
+```bash
+git pull
+sudo /usr/bin/python3 scripts/sockshop_ebpf.py check
+sudo /usr/bin/python3 scripts/sockshop_ebpf.py run
+```
+
+默认用独立项目 `tracefusion2-ebpf`、端口 **28080/28081** 运行 1 笔订单。保存原始 PCAP、HTTP 正文、字段候选图和采集质量检查。完成或失败都请返回 `artifacts/sockshop-ebpf-*.zip`。
+
+**已完成离线合成数据包测试，尚未在开发环境实际加载 eBPF 或部署 Docker；需要用户主机完成首轮验证。**`capture_verified` 只表示选定 HTTP 采集检查通过，字段血缘准确率尚未测量。
+
+## 既有实验状态
 
 11 组件基础版已经通过一次用户主机订单验证。新增追踪版保留业务镜像，增加 2 个入口代理与 1 个采集器，共 14 个容器；用户回传的两笔重叠订单已通过调用图结构与路径覆盖检查；同时发现 queue-master 的 Docker worker 启动失败，尚不能作为无故障的完整配送基线。
 
-## 本轮：同步 HTTP 还原与评测
+## 前期：同步 HTTP 还原与评测
 
 已有 ZIP 可以直接用于导出观测、运行时间基线和评分，无需重新部署：
 
@@ -20,7 +36,7 @@ python3 scripts/http_score.py --reference artifacts/http-v1/oracle/reference.jso
 队列/worker 分支不参与本阶段 HTTP 评分，其原始 span 和运行错误继续保留。
 详见 [HTTP 评测范围、数据格式与指标](docs/http-evaluation.md)。
 
-## 本轮：采集订单调用链
+## 前期：采集订单调用链
 
 ```bash
 git pull
@@ -87,10 +103,11 @@ python3 -m unittest discover -s tests -v
 
 ## 文档与验证状态
 
-- [当前调用链采集范围](docs/sockshop-tracing.md)
+- [当前 eBPF 数据溯源验证](docs/ebpf-provenance.md)
+- [前期调用链采集范围](docs/sockshop-tracing.md)
 - [原始场景与候选字段路径（字段级设计暂缓）](docs/sockshop-scenario.md)
 - [部署配置](scenarios/sockshop/compose.json)（JSON 是 Compose 支持的 YAML 子集）
 - [源码版本与镜像依据](scenarios/sockshop/sources.json)
 - [本地验证记录](docs/validation.md)
 
-本阶段保留原项目业务路径，未创建受控缺陷/修复版本。下一步根据真实 trace 的覆盖情况完善调用链采集。
+本阶段保留原项目业务路径，未创建受控缺陷/修复版本。下一步先验证 eBPF 的消息采集和候选数据关系，再决定更精细的依赖分析。
