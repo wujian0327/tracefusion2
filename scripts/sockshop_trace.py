@@ -236,12 +236,17 @@ def main():
         result['stage'] = 'trace-validation'
         report = collect(out, requests, client_spans, os.environ.get('TF2_TRACE_PORT', '18082'), args.trace_timeout)
         result['trace_validation'] = report['status']
+        result['execution_status'] = report['execution_status']
         result['overlapping_order_interval_pairs'] = report['overlapping_order_interval_pairs']
         result['order_errors'] = failures
         if failures or len(requests) != args.requests:
             raise RuntimeError('Some order fixtures failed; inspect requests/ and compose.log')
         if report['status'] != 'passed':
             raise RuntimeError('Trace collection is incomplete; inspect oracle/callgraphs.json. No missing edges were inferred.')
+        if report['execution_status'] == 'failed':
+            result['stage'] = 'application-runtime'
+            raise RuntimeError('Trace structure passed, but recorded application operations failed; '
+                               'inspect runtime_errors in oracle/callgraphs.json and compose.log.')
         result.update(status='passed', stage='complete')
     except Exception as exc:
         result['error'] = str(exc)
@@ -254,9 +259,13 @@ def main():
                 final_report = validate_all(final_spans, requests)
                 base.save(out / 'oracle' / 'callgraphs.json', final_report)
                 result['trace_validation'] = final_report['status']
+                result['execution_status'] = final_report['execution_status']
                 if result['status'] == 'passed' and final_report['status'] != 'passed':
                     result.update(status='failed', stage='trace-validation',
                                   error='Late spans failed final trace validation')
+                elif result['status'] == 'passed' and final_report['execution_status'] == 'failed':
+                    result.update(status='failed', stage='application-runtime',
+                                  error='Late spans contain application errors; trace structure passed')
             except Exception as exc:
                 result['final_collection_error'] = str(exc)
                 if result['status'] == 'passed':

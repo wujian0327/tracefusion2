@@ -41,5 +41,5 @@
   },
   "image_source_mapping": "Source tags inspected; a matching tag name does not prove the downloaded image was built from that commit. images.json captures available image VCS labels and registry digests.",
   "database_image_source_mapping": "user-db:0.4.0 source commit not verified; mongo:3.4 and rabbitmq:3.6.8 are upstream image tags; runtime digests recorded on run",
-  "validation_status": "Baseline 11-component order smoke passed on user host (sockshop-20260930-172440-405c.zip); trace-enabled 14-component deployment is pending live verification"
+  "validation_status": "Baseline order smoke passed; two overlapping orders in sockshop-trace-20260930-175156-cac0.zip pass trace structure/coverage checks, but queue-master worker operations fail because Docker socket is absent. Trace structure and application execution are reported separately."
 }

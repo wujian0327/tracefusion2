@@ -14,7 +14,7 @@
 - 存储：user-db、carts-db、orders-db。
 - 消息：rabbitmq、queue-master。
 
-移除 edge-router（直接发布 Front-end 的 8079 端口）、catalogue / catalogue-db（经原有 Carts API 初始化购物项）、user-sim（由本包脚本发起请求）。不挂载 Docker socket。
+移除 edge-router（直接发布 Front-end 的 8079 端口）、catalogue / catalogue-db（经原有 Carts API 初始化购物项）、user-sim（由本包脚本发起请求）。不挂载 Docker socket。后续追踪发现 queue-master 消费消息后还会通过该 socket 启动演示 worker，因此当前裁剪未满足该分支依赖；“收到任务”不能作为完整配送成功的依据。
 
 保留真实 payment、shipping 和队列消费者，不使用 mock 代替服务。就绪检查验证五个内部应用的 health 状态，以及 `shipping-task` 队列存在消费者；这并不是对每条配送消息已被处理的证明。
 

@@ -62,13 +62,13 @@ user/payment 的 span **不是 Go 进程内部执行 span**，也不记录 Go→
 - user 的客户、地址和卡片读取，以及 carts 的购物项接口被记录。
 - queue-master 的 CONSUMER span 与 shipping 的 PRODUCER span 通过父链相连。
 - 不包含另一测试客户/地址/卡片 ID 的请求路径。
-- 记录的 HTTP/追踪错误会使验收失败。
+- 分别报告结构检查和执行结果：缺失父节点等导致结构 incomplete；HTTP/应用错误记录在 runtime_errors，并使 execution_status=failed。
 
 每个 HTTP 调用有独立 span，重复调用不合并。`service_edges` 只是便于查看的服务聚合视图；精细的调用实例边保存在 `span_edges`。
 
 默认并发启动不保证两个 `POST /orders` 一定在时间上重叠；`overlapping_order_interval_pairs` 根据同一测试客户端时钟统计实际重叠。为 0 时不能宣称已经覆盖订单并发，应该提高请求数后检查。
 
-`status=passed` 表示已采集记录满足上述一致性与覆盖检查，**不是数学意义上的无遗漏证明，也不是算法准确率**。固定预期边只用于发现缺口；不会写入观测图。缺失消息链、导出失败或丢失父节点时保留 `incomplete`，不按业务拓扑修补。
+`oracle/callgraphs.json` 中 `status=passed` 仅表示已采集记录满足上述结构一致性与覆盖检查，**不是数学意义上的无遗漏证明，也不是算法准确率**。固定预期边只用于发现缺口；不会写入观测图。缺失消息链、导出丢失导致的路径缺口或丢失父节点时保留 `incomplete`，不按业务拓扑修补。被正确记录的失败操作属于真实调用链，保留节点和父子边，单独标记 execution_status=failed；最外层 result.json 仍为 failed，不把业务故障改成成功。
 
 输出 `artifacts/sockshop-trace-*.zip`，包括：
 
@@ -94,4 +94,16 @@ user/payment 的 span **不是 Go 进程内部执行 span**，也不记录 Go→
 - [agent 1.32.0 导出依赖](https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/v1.32.0/javaagent-tooling/build.gradle.kts)：包含 Zipkin exporter。
 - [前端固定版本 Dockerfile](https://github.com/microservices-demo/front-end/blob/0.3.12/Dockerfile)：Node 4，工作目录 `/usr/src/app`。
 
-无 Docker 的编写环境已经验证自定义 HTTP 组件和图检查器；Java agent 在这些旧镜像中能否完整覆盖线程、HTTP 和队列，需要用户实际运行。这些部分不因官方库支持声明就被标成已跑通。
+用户结果包 `sockshop-trace-20260930-175156-cac0.zip` 已观测到两笔订单的实际 HTTP 与 RabbitMQ 上下文传播。分别有 31/34 个 span，结构与预期覆盖检查通过；queue-master 后续 Docker worker 操作失败。详见 [验证记录](validation.md)。不能据此称所有路径已覆盖或完整配送无故障。
+
+## 离线复核已有结果包
+
+```bash
+python3 scripts/trace_validation.py /path/to/sockshop-trace-20260930-175156-cac0.zip
+```
+
+直接读取原 ZIP，不修改原始结果、不重新运行 Docker。输出结构 status、execution_status、runtime_errors、真实服务边和 span 数。结构不完整或存在运行错误时仍返回退出码 1。
+
+已知部署缺口：queue-master:0.3.1 的 ShippingTaskHandler 在收到消息后无条件调用 DockerSpawner.init()/spawn()，尝试拉取 worker 镜像并通过 Docker socket 创建容器。本部署没有挂载该 socket，因此收到消息不等于 worker 已成功运行。本次报告修复只区分追踪结构与应用执行状态，没有修复该运行依赖，也没有隐藏或删除相关 span。
+
+源码依据：[ShippingTaskHandler](https://github.com/microservices-demo/queue-master/blob/ca72773d51ca4676306e6c5f25835990f3753748/src/main/java/works/weave/socks/queuemaster/ShippingTaskHandler.java)、[DockerSpawner](https://github.com/microservices-demo/queue-master/blob/ca72773d51ca4676306e6c5f25835990f3753748/src/main/java/works/weave/socks/queuemaster/DockerSpawner.java)。

@@ -19,7 +19,7 @@ def target(span):
 def validate_trace(spans, request, forbidden_ids=()):
     trace_id, root_id = request['trace_id'], request['span_id']
     selected = [s for s in spans if s.get('traceId') == trace_id]
-    errors, index = [], {}
+    errors, runtime_errors, index = [], [], {}
     for s in selected:
         ident = s.get('id', '')
         if not re.fullmatch('[0-9a-f]{16}', ident) or not int(ident, 16):
@@ -32,14 +32,21 @@ def validate_trace(spans, request, forbidden_ids=()):
         if not isinstance(s.get('duration'), (int, float)) or s['duration'] < 0:
             errors.append('missing/invalid duration: ' + ident)
         tags = s.get('tags', {})
-        if tags.get('error') or tags.get('otel.status_code') == 'ERROR':
-            errors.append('error span: ' + ident)
+        reasons = []
+        # Zipkin represents an error with an empty-valued tag as well.
+        if 'error' in tags or tags.get('otel.status_code') == 'ERROR':
+            reasons.append('error span')
         code = tags.get('http.status_code', tags.get('http.response.status_code', '200'))
         try:
             if int(code) >= 400:
-                errors.append('HTTP error span: ' + ident)
+                reasons.append('HTTP status ' + str(code))
         except (ValueError, TypeError):
             errors.append('invalid HTTP status: ' + ident)
+        if reasons:
+            runtime_errors.append({'span_id': ident, 'service': service(s),
+                                   'name': s.get('name'), 'kind': s.get('kind'),
+                                   'url': tags.get('http.url', tags.get('url.full')),
+                                   'reasons': reasons})
         if any(other in target(s) for other in forbidden_ids):
             errors.append('other fixture ID inside this trace: ' + ident)
     root = index.get(root_id)
@@ -85,6 +92,8 @@ def validate_trace(spans, request, forbidden_ids=()):
     if not linked:
         errors.append('no queue consumer linked to a shipping producer')
     return {'trace_id': trace_id, 'status': 'passed' if not errors else 'incomplete',
+            'execution_status': 'failed' if runtime_errors else 'no_recorded_errors',
+            'runtime_errors': list({e['span_id']: e for e in runtime_errors}.values()),
             'span_count': len(index), 'errors': sorted(set(errors)),
             'service_edges': [list(e) for e in sorted(edges)],
             'span_edges': [{'parent': s['parentId'], 'child': s['id']} for s in index.values()
@@ -110,7 +119,33 @@ def validate_all(spans, requests):
     overlaps = sum(max(a[0], b[0]) < min(a[1], b[1])
                    for i, a in enumerate(intervals) for b in intervals[i + 1:])
     return {'status': 'passed' if passed else 'incomplete', 'unique_order_trace_ids': unique,
+            'execution_status': ('failed' if any(r['runtime_errors'] for r in reports)
+                                 else 'no_recorded_errors' if reports else 'unknown'),
             'overlapping_order_interval_pairs': overlaps,
             'scope': 'instrumented service calls, including RabbitMQ; not field lineage or Go database operations',
             'interpretation': 'collection consistency and expected-path coverage checks; not a proof of exhaustive instrumentation',
             'orders': reports}
+
+
+def main():
+    """Recheck an existing ZIP without changing its contents or rerunning Docker."""
+    import argparse
+    import json
+    import zipfile
+    parser = argparse.ArgumentParser(description=main.__doc__)
+    parser.add_argument('bundle')
+    args = parser.parse_args()
+    with zipfile.ZipFile(args.bundle) as archive:
+        requests = json.loads(archive.read('oracle/orders.json'))
+        name = ('oracle/spans-final.json' if 'oracle/spans-final.json' in archive.namelist()
+                else 'oracle/spans.json')
+        report = validate_all(json.loads(archive.read(name)), requests)
+    summary = {k: v for k, v in report.items() if k != 'orders'}
+    summary['orders'] = [{k: v for k, v in r.items() if k not in ('spans', 'span_edges')}
+                         for r in report['orders']]
+    print(json.dumps(summary, ensure_ascii=False, indent=2))
+    return 0 if report['status'] == 'passed' and report['execution_status'] == 'no_recorded_errors' else 1
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

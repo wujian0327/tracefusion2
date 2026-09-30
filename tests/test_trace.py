@@ -76,13 +76,27 @@ class GraphTests(unittest.TestCase):
         other = copy.deepcopy(spans[-1]); other['name'] = 'different'
         self.assertEqual(validate_trace(spans + [other], request)['status'], 'incomplete')
 
-    def test_queue_requires_producer_ancestor_and_error_spans_fail(self):
+    def test_queue_requires_producer_ancestor(self):
         spans, request = graph()
         spans[-1]['parentId'] = spans[9]['id']
         self.assertEqual(validate_trace(spans, request)['status'], 'incomplete')
+
+    def test_runtime_failure_does_not_imply_a_missing_trace_edge(self):
         spans, request = graph()
         spans[5]['tags']['http.status_code'] = '500'
-        self.assertEqual(validate_trace(spans, request)['status'], 'incomplete')
+        report = validate_trace(spans, request)
+        self.assertEqual(report['status'], 'passed')
+        self.assertEqual(report['execution_status'], 'failed')
+        self.assertEqual(report['errors'], [])
+        self.assertEqual(report['runtime_errors'][0]['span_id'], spans[5]['id'])
+
+    def test_zipkin_empty_error_tag_is_preserved_as_runtime_failure(self):
+        spans, request = graph()
+        spans[-1]['tags']['error'] = ''
+        report = validate_all(spans, [request])
+        self.assertEqual(report['status'], 'passed')
+        self.assertEqual(report['execution_status'], 'failed')
+        self.assertEqual(report['orders'][0]['runtime_errors'][0]['span_id'], spans[-1]['id'])
 
     def test_no_orders_cannot_pass(self):
         self.assertEqual(validate_all([], [])['status'], 'incomplete')
