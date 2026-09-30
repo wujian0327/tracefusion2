@@ -5,6 +5,7 @@ import struct
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
@@ -35,6 +36,28 @@ def transaction(ident, client, server, start, end, request, response):
         return {'json': value, 'start_us': a, 'end_us': b, 'packet_ids': [a, b]}
     return {'id': ident, 'client': client, 'server': server, 'method': 'POST', 'target': '/orders',
             'request': m(request, start, start + 1), 'response': m(response, end - 1, end)}
+
+
+class PreflightTests(unittest.TestCase):
+    def test_missing_compose_blocks_run_even_when_docker_and_bcc_exist(self):
+        with mock.patch.object(runner.shutil, 'which', return_value='/usr/bin/docker'), \
+             mock.patch.object(runner.os, 'geteuid', return_value=0), \
+             mock.patch.object(runner.platform, 'machine', return_value='x86_64'), \
+             mock.patch.object(runner.sys, 'platform', 'linux'), \
+             mock.patch.dict(sys.modules, {'bcc': mock.Mock(BPF=object)}), \
+             mock.patch.object(runner.subprocess, 'run') as command:
+            command.return_value = mock.Mock(returncode=1, stdout='docker: unknown command: docker compose')
+            report = runner.preflight()
+            self.assertTrue(report['docker'])
+            self.assertTrue(report['bcc_importable'])
+            self.assertFalse(report['ready_for_kernel_load_attempt'])
+            self.assertIn('sudo docker compose version', report['compose_help'])
+            command.return_value = mock.Mock(returncode=0, stdout='Docker Compose version v2.39.2')
+            self.assertTrue(runner.preflight()['ready_for_kernel_load_attempt'])
+            command.side_effect = runner.subprocess.TimeoutExpired(['docker', 'compose', 'version'], 15)
+            report = runner.preflight()
+            self.assertFalse(report['ready_for_kernel_load_attempt'])
+            self.assertIn('compose_error', report)
 
 
 class ReassemblyTests(unittest.TestCase):

@@ -30,7 +30,7 @@ sudo /usr/bin/python3 scripts/sockshop_ebpf.py check
 sudo /usr/bin/python3 scripts/sockshop_ebpf.py run
 ```
 
-`check` 只检查 Python/BCC、root、Docker 命令等前置条件，**不代表 eBPF 已经加载成功**。`run` 才会实际编译、加载、挂接探针。缺少内核功能、头文件或权限时，会记录失败原因，不退回其他采集方式。
+`check` 检查 Python/BCC、root、Docker 命令及当前用户能否运行 `docker compose version`，**不代表 eBPF 已经加载成功**。`run` 才会实际编译、加载、挂接探针。缺少内核功能、头文件或权限时，会记录失败原因，不退回其他采集方式。
 
 默认执行 **1 笔订单、并发 1**，先排查采集正确性。它不会停止原来的 `tracefusion2-sockshop` 项目，也不会清空数据库卷。服务保持运行，方便检查。
 
@@ -56,6 +56,29 @@ sudo /usr/bin/python3 scripts/sockshop_ebpf.py down
 ```
 
 `down` 仅停止该独立项目，不删除卷。自定义 `--project` 后，停止时也要传同一个项目名。
+
+### Compose troubleshooting
+
+如果报 `docker: unknown command: docker compose`，表示执行脚本的用户无法使用 Compose CLI 插件。先分别执行：
+
+```bash
+docker compose version
+sudo docker compose version
+```
+
+如果仅第一条成功，插件可能只安装在普通用户的 `~/.docker/cli-plugins`，sudo 后不可见；应使用系统级安装。只有 `docker-compose`（带连字符）可用也不满足当前脚本要求，脚本没有切换到旧版 Compose v1。
+
+Ubuntu/Debian **已经配置 Docker 官方 apt 软件源**时，安装方式为：
+
+```bash
+sudo apt-get update
+sudo apt-get install -y docker-compose-plugin
+sudo docker compose version
+```
+
+如果找不到该软件包，不要卸载已有 Docker。按 [Docker 官方 Compose 插件安装说明](https://docs.docker.com/compose/install/linux/) 配置适合发行版的软件源，或使用其系统级手动安装步骤；系统级手动路径为 `/usr/local/lib/docker/cli-plugins`。不同发行版仓库的包名可能不同。
+
+确认 `sudo docker compose version` 成功后，重新运行 `check` 和 `run`。前置检查只读取 Compose 版本，不安装软件、不修改 Docker 配置。
 
 ## 保存的信息
 

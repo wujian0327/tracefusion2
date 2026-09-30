@@ -26,7 +26,23 @@ APP_SERVICES = {'front-end', 'user', 'carts', 'orders', 'payment', 'shipping'}
 def preflight():
     findings = {'platform': platform.platform(), 'python': sys.executable,
                 'root': hasattr(os, 'geteuid') and os.geteuid() == 0,
-                'docker': bool(shutil.which('docker')), 'bcc_importable': False}
+                'docker': bool(shutil.which('docker')), 'compose_available': False,
+                'bcc_importable': False}
+    if findings['docker']:
+        try:
+            result = subprocess.run(['docker', 'compose', 'version'],
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=15)
+            findings['compose_available'] = result.returncode == 0
+            findings['compose_version_output'] = result.stdout.strip()
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            findings['compose_error'] = str(exc)
+        if not findings['compose_available']:
+            findings['compose_help'] = (
+                'The Docker Compose CLI plugin must work as the same user running this script. '
+                'Verify with sudo docker compose version. If only docker compose version works '
+                'without sudo, the plugin may be installed only for your user. Install it '
+                'system-wide; see docs/ebpf-provenance.md#compose-troubleshooting. '
+                'The standalone docker-compose command is not used by this runner.')
     try:
         from bcc import BPF  # noqa: F401
         findings['bcc_importable'] = True
@@ -34,7 +50,7 @@ def preflight():
         findings['bcc_error'] = str(exc)
     findings['compatible_host'] = sys.platform == 'linux' and platform.machine() in ('x86_64', 'amd64')
     findings['ready_for_kernel_load_attempt'] = all(findings[k] for k in (
-        'root', 'docker', 'bcc_importable', 'compatible_host'))
+        'root', 'docker', 'compose_available', 'bcc_importable', 'compatible_host'))
     findings['note'] = 'Import checks do not prove BPF compilation/attachment; run performs that check.'
     return findings
 
@@ -169,6 +185,8 @@ def main():
     try:
         report = preflight(); base.save(out / 'preflight.json', report)
         if not report['ready_for_kernel_load_attempt']:
+            if report.get('compose_help'):
+                raise RuntimeError(report['compose_help'])
             raise RuntimeError('Preflight failed; inspect preflight.json and docs/ebpf-provenance.md')
         deployment = base.Deployment(args, out)
         context = json.loads(deployment.command(['docker', 'context', 'inspect']).stdout)[0]
