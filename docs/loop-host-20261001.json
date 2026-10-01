@@ -1,0 +1,495 @@
+{
+  "bundle": "loop-provenance-20261001-174750-56fd.zip",
+  "bundle_sha256": "109c8848ddc2acd8fce6f1504f44b31303d1b755a8433522695f7efe7332a215",
+  "binary_sha256": "9e20fb34ddc4a2ee93545b5d8aec6f6b53bb43b6ad293a075e588e50de27ddd4",
+  "implementation_commit": "8c243f57436a11f821f06796d04af30e18f7042e",
+  "checks": {
+    "source_and_binary_hashes": true,
+    "scenario_matches_repository": true,
+    "plans_regenerated_from_elf": true,
+    "generated_collector_matches": true,
+    "probe_attachments_match_plan": true,
+    "runtime_bases_rederived_from_elf_and_maps": true,
+    "all_event_ips_match": true,
+    "all_memory_reads_succeeded": true,
+    "inference_replay_identical": true,
+    "evaluation_replay_identical": true,
+    "final_graph_read_instances_match_oracle": true
+  },
+  "functions": 3,
+  "probe_locations": 47,
+  "scope_instructions": 47,
+  "events": 428,
+  "root_calls": 24,
+  "counts": [
+    0,
+    1,
+    2,
+    4
+  ],
+  "examples": [
+    {
+      "function": "loop_transform",
+      "count": 4,
+      "total_reads": 1,
+      "contributing_reads": [
+        "input.secret@read1"
+      ]
+    },
+    {
+      "function": "loop_overwrite",
+      "count": 4,
+      "total_reads": 4,
+      "contributing_reads": [
+        "input.public_value@read4"
+      ]
+    },
+    {
+      "function": "loop_accumulate",
+      "count": 4,
+      "total_reads": 4,
+      "contributing_reads": [
+        "input.public_value@read3",
+        "input.public_value@read4",
+        "input.secret@read1",
+        "input.secret@read2"
+      ]
+    }
+  ],
+  "capture": {
+    "backend": "ebpf",
+    "lost_events": 0,
+    "submit_errors": 0,
+    "state_errors": 0,
+    "attempted_events": 428,
+    "raw_probe_hits": 428,
+    "process_returncode": 0,
+    "bcc_version": "0.29.1",
+    "received_events": 428,
+    "observed_kernel_tgids": [
+      18690
+    ]
+  },
+  "evaluation": {
+    "passed": true,
+    "capture_clean": true,
+    "checks": [
+      {
+        "sequence": 1,
+        "function": "loop_transform",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "expected_read_instances": [
+          "input.secret@read1"
+        ],
+        "observed_read_instances": [
+          "input.secret@read1"
+        ]
+      },
+      {
+        "sequence": 2,
+        "function": "loop_transform",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "expected_read_instances": [
+          "input.secret@read1"
+        ],
+        "observed_read_instances": [
+          "input.secret@read1"
+        ]
+      },
+      {
+        "sequence": 3,
+        "function": "loop_transform",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "expected_read_instances": [
+          "input.secret@read1"
+        ],
+        "observed_read_instances": [
+          "input.secret@read1"
+        ]
+      },
+      {
+        "sequence": 4,
+        "function": "loop_transform",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "expected_read_instances": [
+          "input.secret@read1"
+        ],
+        "observed_read_instances": [
+          "input.secret@read1"
+        ]
+      },
+      {
+        "sequence": 5,
+        "function": "loop_overwrite",
+        "passed": true,
+        "expected_sources": [],
+        "observed_sources": [],
+        "expected_read_instances": [],
+        "observed_read_instances": []
+      },
+      {
+        "sequence": 6,
+        "function": "loop_overwrite",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "expected_read_instances": [
+          "input.secret@read1"
+        ],
+        "observed_read_instances": [
+          "input.secret@read1"
+        ]
+      },
+      {
+        "sequence": 7,
+        "function": "loop_overwrite",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "expected_read_instances": [
+          "input.secret@read2"
+        ],
+        "observed_read_instances": [
+          "input.secret@read2"
+        ]
+      },
+      {
+        "sequence": 8,
+        "function": "loop_overwrite",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value"
+        ],
+        "observed_sources": [
+          "input.public_value"
+        ],
+        "expected_read_instances": [
+          "input.public_value@read4"
+        ],
+        "observed_read_instances": [
+          "input.public_value@read4"
+        ]
+      },
+      {
+        "sequence": 9,
+        "function": "loop_accumulate",
+        "passed": true,
+        "expected_sources": [],
+        "observed_sources": [],
+        "expected_read_instances": [],
+        "observed_read_instances": []
+      },
+      {
+        "sequence": 10,
+        "function": "loop_accumulate",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "expected_read_instances": [
+          "input.secret@read1"
+        ],
+        "observed_read_instances": [
+          "input.secret@read1"
+        ]
+      },
+      {
+        "sequence": 11,
+        "function": "loop_accumulate",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "expected_read_instances": [
+          "input.secret@read1",
+          "input.secret@read2"
+        ],
+        "observed_read_instances": [
+          "input.secret@read1",
+          "input.secret@read2"
+        ]
+      },
+      {
+        "sequence": 12,
+        "function": "loop_accumulate",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value",
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.public_value",
+          "input.secret"
+        ],
+        "expected_read_instances": [
+          "input.public_value@read3",
+          "input.public_value@read4",
+          "input.secret@read1",
+          "input.secret@read2"
+        ],
+        "observed_read_instances": [
+          "input.public_value@read3",
+          "input.public_value@read4",
+          "input.secret@read1",
+          "input.secret@read2"
+        ]
+      },
+      {
+        "sequence": 13,
+        "function": "loop_transform",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "expected_read_instances": [
+          "input.secret@read1"
+        ],
+        "observed_read_instances": [
+          "input.secret@read1"
+        ]
+      },
+      {
+        "sequence": 14,
+        "function": "loop_transform",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "expected_read_instances": [
+          "input.secret@read1"
+        ],
+        "observed_read_instances": [
+          "input.secret@read1"
+        ]
+      },
+      {
+        "sequence": 15,
+        "function": "loop_transform",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "expected_read_instances": [
+          "input.secret@read1"
+        ],
+        "observed_read_instances": [
+          "input.secret@read1"
+        ]
+      },
+      {
+        "sequence": 16,
+        "function": "loop_transform",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "expected_read_instances": [
+          "input.secret@read1"
+        ],
+        "observed_read_instances": [
+          "input.secret@read1"
+        ]
+      },
+      {
+        "sequence": 17,
+        "function": "loop_overwrite",
+        "passed": true,
+        "expected_sources": [],
+        "observed_sources": [],
+        "expected_read_instances": [],
+        "observed_read_instances": []
+      },
+      {
+        "sequence": 18,
+        "function": "loop_overwrite",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "expected_read_instances": [
+          "input.secret@read1"
+        ],
+        "observed_read_instances": [
+          "input.secret@read1"
+        ]
+      },
+      {
+        "sequence": 19,
+        "function": "loop_overwrite",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "expected_read_instances": [
+          "input.secret@read2"
+        ],
+        "observed_read_instances": [
+          "input.secret@read2"
+        ]
+      },
+      {
+        "sequence": 20,
+        "function": "loop_overwrite",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value"
+        ],
+        "observed_sources": [
+          "input.public_value"
+        ],
+        "expected_read_instances": [
+          "input.public_value@read4"
+        ],
+        "observed_read_instances": [
+          "input.public_value@read4"
+        ]
+      },
+      {
+        "sequence": 21,
+        "function": "loop_accumulate",
+        "passed": true,
+        "expected_sources": [],
+        "observed_sources": [],
+        "expected_read_instances": [],
+        "observed_read_instances": []
+      },
+      {
+        "sequence": 22,
+        "function": "loop_accumulate",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "expected_read_instances": [
+          "input.secret@read1"
+        ],
+        "observed_read_instances": [
+          "input.secret@read1"
+        ]
+      },
+      {
+        "sequence": 23,
+        "function": "loop_accumulate",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "expected_read_instances": [
+          "input.secret@read1",
+          "input.secret@read2"
+        ],
+        "observed_read_instances": [
+          "input.secret@read1",
+          "input.secret@read2"
+        ]
+      },
+      {
+        "sequence": 24,
+        "function": "loop_accumulate",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value",
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.public_value",
+          "input.secret"
+        ],
+        "expected_read_instances": [
+          "input.public_value@read3",
+          "input.public_value@read4",
+          "input.secret@read1",
+          "input.secret@read2"
+        ],
+        "observed_read_instances": [
+          "input.public_value@read3",
+          "input.public_value@read4",
+          "input.secret@read1",
+          "input.secret@read2"
+        ]
+      }
+    ],
+    "dynamic_source_relations": {
+      "tp": 22,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "resolved_calls": 24,
+    "expected_calls": 24,
+    "inference_issues": 0,
+    "unexpected_calls": 0,
+    "scope": "fixture field and executed-read identity accuracy; not database read operations or complete graph edge recall",
+    "read_instance_relations": {
+      "tp": 28,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+    }
+  },
+  "scope": "Controlled leaf loops; executed input-memory read identities, not database queries, loop-plus-call combinations, full graph-edge accuracy or performance claims."
+}
