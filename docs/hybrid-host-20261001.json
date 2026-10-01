@@ -1,0 +1,186 @@
+{
+  "bundle_sha256": "b32f3a8110938df401248b92f48bd0f1a413afe3e034de783af525a331b350c7",
+  "binary_sha256": "b3ae0e3165f2fc23d896cc7302bda98ec6795fb39b6e25f105eee0f0e61453f8",
+  "source_matches_repository": {
+    "config.json": true,
+    "main.c": true,
+    "model.h": true,
+    "operations.c": true
+  },
+  "regenerated_plan_matches": true,
+  "regenerated_collector_matches": true,
+  "replayed_inference_matches": true,
+  "replayed_evaluation_matches": true,
+  "all_event_addresses_verified": true,
+  "events": 88,
+  "attached_probes": 26,
+  "calls": 16,
+  "pid_tid_count": 1,
+  "capture": {
+    "backend": "ebpf",
+    "lost_events": 0,
+    "submit_errors": 0,
+    "state_errors": 0,
+    "attempted_events": 88,
+    "raw_probe_hits": 88,
+    "process_returncode": 0,
+    "bcc_version": "0.29.1",
+    "received_events": 88,
+    "observed_kernel_tgids": [
+      3304
+    ]
+  },
+  "metrics": {
+    "static_source_relations": {
+      "tp": 20,
+      "fp": 8,
+      "fn": 0,
+      "precision": 0.7142857142857143,
+      "recall": 1.0
+    },
+    "dynamic_source_relations": {
+      "tp": 20,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+    }
+  },
+  "first_round": [
+    {
+      "call": 1,
+      "function": "choose_value",
+      "sources": [
+        "input.public_value"
+      ],
+      "value": 424242,
+      "offsets": [
+        0,
+        13,
+        15,
+        22,
+        25,
+        27
+      ]
+    },
+    {
+      "call": 2,
+      "function": "choose_value",
+      "sources": [
+        "input.secret"
+      ],
+      "value": 424242,
+      "offsets": [
+        0,
+        13,
+        15,
+        17,
+        19,
+        21
+      ]
+    },
+    {
+      "call": 3,
+      "function": "overwrite_value",
+      "sources": [
+        "input.public_value"
+      ],
+      "value": 424242,
+      "offsets": [
+        0,
+        17,
+        20,
+        22
+      ]
+    },
+    {
+      "call": 4,
+      "function": "overwrite_value",
+      "sources": [
+        "input.public_value"
+      ],
+      "value": 424242,
+      "offsets": [
+        0,
+        17,
+        20,
+        22
+      ]
+    },
+    {
+      "call": 5,
+      "function": "alias_value",
+      "sources": [
+        "input.public_value"
+      ],
+      "value": 424242,
+      "offsets": [
+        0,
+        4,
+        6,
+        13,
+        10,
+        12
+      ]
+    },
+    {
+      "call": 6,
+      "function": "alias_value",
+      "sources": [
+        "input.secret"
+      ],
+      "value": 424242,
+      "offsets": [
+        0,
+        4,
+        6,
+        8,
+        10,
+        12
+      ]
+    },
+    {
+      "call": 7,
+      "function": "transform_value",
+      "sources": [
+        "input.public_value",
+        "input.secret"
+      ],
+      "value": 848537,
+      "offsets": [
+        0,
+        4,
+        6,
+        9,
+        12,
+        14
+      ]
+    },
+    {
+      "call": 8,
+      "function": "transform_value",
+      "sources": [
+        "input.public_value",
+        "input.secret"
+      ],
+      "value": 848537,
+      "offsets": [
+        0,
+        4,
+        6,
+        9,
+        12,
+        14
+      ]
+    }
+  ],
+  "review_date": "2026-10-01",
+  "bundle_name": "hybrid-provenance-20261001-163416-1c83.zip",
+  "analyzer_commit": "2d78ee4f3fa3322f2f71de16728a385dde9f7a25",
+  "scope": "16 controlled native leaf-function invocations; source relation accuracy, not general lineage or microservice accuracy",
+  "uploaded_executable_run_by_reviewer": false,
+  "analyzer_sha256": {
+    "hybrid_model.py": "03f6181e6f95b3db072345949247fde872d7004f9974246dc9f7803664e64e96",
+    "hybrid_provenance.py": "717e7eeb9720b053ba3979776ad574433912146c6e3ce4d0a6005f7dc571984f"
+  }
+}

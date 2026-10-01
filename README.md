@@ -13,7 +13,7 @@ git pull origin main
 sudo /usr/bin/python3 scripts/hybrid_provenance.py run
 ```
 
-沿用已有 BCC 环境，无需 Docker。成功或失败请返回 `artifacts/hybrid-provenance-*.zip`。开发端 60 项测试通过；新采集器的真实内核运行待本轮主机验证。详情见 [静动态验证说明](docs/hybrid-provenance.md)。
+沿用已有 BCC 环境，无需 Docker。成功或失败请返回 `artifacts/hybrid-provenance-*.zip`。开发端 60 项测试通过；**2026-10-01 用户主机真实采集通过：26 个探针、88 条事件、16 次调用，无报告丢事件或读取错误。**独立重建探针计划并重放结果一致；准确率仅针对本轮受控来源关系。详情见 [静动态验证说明](docs/hybrid-provenance.md)。
 
 ## 已验证：程序内部赋值的 uprobe 可观测性
 
@@ -136,4 +136,4 @@ python3 -m unittest discover -s tests -v
 - [源码版本与镜像依据](scenarios/sockshop/sources.json)
 - [本地验证记录](docs/validation.md)
 
-Sock Shop 业务路径保持原样。本轮新增独立 C 夹具验证自动探针规划和动态消歧；此前程序级探针已在简单赋值上验证可行，新闭环尚待主机 eBPF 运行。
+Sock Shop 业务路径保持原样。本轮新增独立 C 夹具验证自动探针规划和动态消歧；此前程序级探针已在简单赋值上验证可行，新闭环已通过本轮主机 eBPF 验证，仍限于受控单线程原生叶函数。
