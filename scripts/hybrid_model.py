@@ -5,6 +5,7 @@ instruction subset, not a general disassembler, alias analyzer or C frontend.
 """
 import re
 from dataclasses import dataclass
+from language_adapters import get_adapter
 
 REGS = ['rax', 'rbx', 'rcx', 'rdx', 'rsi', 'rdi', 'rbp', 'rsp'] + ['r%d' % i for i in range(8, 16)]
 REG32 = dict(zip(['eax', 'ebx', 'ecx', 'edx', 'esi', 'edi', 'ebp', 'esp'], REGS[:8]))
@@ -21,15 +22,7 @@ def require(condition, message):
 
 
 def validate_config(c):
-    require(c['abi'] == 'linux-x86_64-sysv', 'Unsupported ABI')
-    for key in ('input_fields', 'output_fields'):
-        fields = c[key]
-        require(0 < len(fields) <= 8 and len(set(fields)) == len(fields), 'Invalid field schema')
-        require(all(re.fullmatch(r'[A-Za-z_]\w*', f) for f in fields), 'Invalid field name')
-    require(c['sink_field'] in c['output_fields'], 'Unknown sink field')
-    require(set(c['sensitive_fields']) <= set(c['input_fields']), 'Unknown sensitive field')
-    require(0 < len(c['functions']) <= 16 and len(set(c['functions'])) == len(c['functions']), 'Invalid function scope')
-    require(all(re.fullmatch(r'[A-Za-z_]\w*', f) for f in c['functions']), 'Invalid function symbol')
+    get_adapter(c)
 
 
 def operand(text):
@@ -126,6 +119,7 @@ def static_plan(function, config):
     CFG branches are conservatively enumerated. Control/address edges support
     probe planning; reported sources are explicit DATA dependencies only.
     """
+    adapter = get_adapter(config)
     by_offset = {n['offset']: n for n in function['instructions']}
     all_edges, candidates, path_records = set(), set(), []
     sources = ['input.' + f for f in config['input_fields']]
@@ -138,13 +132,11 @@ def static_plan(function, config):
     for path in function['paths']:
         edges = set()
         regs = {r: Value(refs=frozenset({'unknown:' + r})) for r in REGS}
-        regs.update(rsi=Value(refs=frozenset({'arg.input'}), address=('input', 0)),
-                    rdi=Value(refs=frozenset({'arg.output'}), address=('output', 0)),
-                    rdx=Value(frozenset({'arg.select'}), frozenset({'arg.select'})))
-        memory = {('input', i * 4): Value(frozenset({s}), frozenset({s})) for i, s in enumerate(sources)}
-        for i, field in enumerate(config['output_fields']):
-            name = 'initial:output.' + field
-            memory['output', i * 4] = Value(frozenset({name}), frozenset({name}))
+        regs.update({r: Value(**seed) for r,seed in adapter.seeds().items()})
+        memory = {('input', f.offset): Value(frozenset({'input.'+f.name}), frozenset({'input.'+f.name})) for f in adapter.layout(config,'input').fields}
+        for field in adapter.layout(config,'output').fields:
+            name = 'initial:output.' + field.name
+            memory['output', field.offset] = Value(frozenset({name}), frozenset({name}))
             graph_nodes[name] = {'kind': 'initial-output'}
         flags = Value()
 
@@ -203,7 +195,7 @@ def static_plan(function, config):
                 edges.update((r, nid, 'control') for r in flags.refs)
                 for nxt in node['successors']:
                     edges.add((nid, instruction_ids[nxt], 'control'))
-        final = memory['output', sink_index * 4]
+        final = memory['output', adapter.layout(config,'output').field(config['sink_field']).offset]
         require(not any(s.startswith('initial:') for s in final.origins), 'Sink is not assigned on every candidate path')
         candidates.update(final.origins)
         sink_id = 'sink:%x' % path[-1]
@@ -261,14 +253,17 @@ def branch_taken(op, flags):
 class Machine:
     """Validate modeled execution against registers/memory at observed points."""
     def __init__(self, event, config):
+        self.adapter = get_adapter(config)
+        self.adapter.check_entry(event, REGS)
         self.regs = dict(zip(REGS, event['regs']))
         self.flags = event['flags'] & CCMASK
         self.src, self.dst = event['src_addr'], event['dst_addr']
         require(self.src % 4 == self.dst % 4 == 0, 'Unaligned boundary regions are unsupported')
-        require(not (self.src < self.dst + 4 * len(event['outputs']) and
-                     self.dst < self.src + 4 * len(event['inputs'])), 'Input/output regions overlap')
-        self.memory = {self.src + 4 * i: value for i, value in enumerate(event['inputs'])}
-        self.memory.update({self.dst + 4 * i: value for i, value in enumerate(event['outputs'])})
+        self.layouts = {r: self.adapter.layout(config,r) for r in ('input','output')}
+        require(not (self.src < self.dst + self.layouts['output'].size and
+                     self.dst < self.src + self.layouts['input'].size), 'Input/output regions overlap')
+        self.memory = {self.src + f.offset: value for f,value in zip(self.layouts['input'].fields,event['inputs'])}
+        self.memory.update({self.dst + f.offset: value for f,value in zip(self.layouts['output'].fields,event['outputs'])})
         self.config = config
 
     def read(self, arg):
@@ -285,7 +280,7 @@ class Machine:
             self.regs[arg['reg']] = value & (MASK32 if arg['width'] == 32 else MASK64)
         else:
             addr = (self.regs[arg['reg']] + arg['offset']) & MASK64
-            require(addr in {self.dst + i * 4 for i in range(len(self.config['output_fields']))}, 'Unmodeled destination')
+            require(addr in {self.dst + f.offset for f in self.layouts['output'].fields}, 'Unmodeled destination')
             self.memory[addr] = value & MASK32
 
     def check(self, event, offset, base):
@@ -294,8 +289,8 @@ class Machine:
         require(event['ip'] == base + offset, 'Instruction address contradicts plan')
         require(event['regs'] == [self.regs[r] for r in REGS], 'Register state contradicts decoded execution')
         require((event['flags'] & CCMASK) == self.flags, 'Condition flags contradict decoded execution')
-        require(event['inputs'] == [self.memory[self.src + i * 4] for i in range(len(self.config['input_fields']))], 'Input memory changed')
-        require(event['outputs'] == [self.memory[self.dst + i * 4] for i in range(len(self.config['output_fields']))], 'Output memory contradicts decoded execution')
+        require(event['inputs'] == [self.memory[self.src + f.offset] for f in self.layouts['input'].fields], 'Input memory changed')
+        require(event['outputs'] == [self.memory[self.dst + f.offset] for f in self.layouts['output'].fields], 'Output memory contradicts decoded execution')
 
     def step(self, node):
         op, args = node['op'], node['args']
@@ -326,12 +321,13 @@ def infer(events, plans, config, runtime_bases=None):
     Addresses optionally checked against the actual /proc executable mapping.
     Unknown/missing paths become issues rather than invented provenance edges.
     """
-    if len({e['pid_tid'] for e in events}) > 1:
+    adapter = get_adapter(config)
+    try:
+        adapter.context.validate(events, REGS)
+    except (ValueError,KeyError,IndexError):
         return {'results': [], 'issues': [{'error': 'Multiple execution contexts are outside this pilot scope'}],
                 'oracle_used_for_inference': False}
-    groups = {}
-    for e in events:
-        groups.setdefault((e['pid_tid'], e['call_id']), []).append(e)
+    groups = adapter.context.group(events)
     accepted, issues = [], []
     for (tid, call), rows in sorted(groups.items(), key=lambda item: item[1][0]['timestamp']):
         try:

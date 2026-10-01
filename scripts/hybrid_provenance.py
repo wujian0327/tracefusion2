@@ -21,6 +21,7 @@ import time
 import zipfile
 
 from hybrid_model import REGS, decode_function, infer, require, static_plan, validate_config
+from language_adapters import get_adapter
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -32,16 +33,18 @@ def save(path, value):
 def build(scenario, out, planner=None, source_generator=None, extra_flags=()):
     config = json.loads((scenario / 'config.json').read_text())
     validate_config(config)
+    adapter = get_adapter(config)
+    require(adapter.name == 'c-sysv-u32', 'C compiler runner requires the C adapter')
     copied = out / 'sources'
     copied.mkdir()
     for name in ('config.json', 'main.c', 'operations.c', 'model.h'):
         shutil.copyfile(scenario / name, copied / name)
     assertions = ['#include <stddef.h>', '#include "model.h"']
     for region in ('input', 'output'):
-        fields = config[region + '_fields']
-        assertions.append('_Static_assert(sizeof(struct %s) == %d, "schema size mismatch");' % (region, len(fields) * 4))
-        for index, field in enumerate(fields):
-            assertions.append('_Static_assert(offsetof(struct %s, %s) == %d && sizeof(((struct %s *)0)->%s) == 4, "schema field mismatch");' % (region, field, index * 4, region, field))
+        layout = adapter.layout(config,region)
+        assertions.append('_Static_assert(sizeof(struct %s) == %d, "schema size mismatch");' % (region, layout.size))
+        for field in layout.fields:
+            assertions.append('_Static_assert(offsetof(struct %s, %s) == %d && sizeof(((struct %s *)0)->%s) == %d, "schema field mismatch");' % (region, field.name, field.offset, region, field.name, field.width))
     (copied / 'layout_check.c').write_text('\n'.join(assertions) + '\n')
     binary = out / 'hybrid-demo'
     command = ['gcc', '-O1', '-g', '-fPIE', '-pie', '-fno-if-conversion', '-fno-if-conversion2',
@@ -61,6 +64,7 @@ def build(scenario, out, planner=None, source_generator=None, extra_flags=()):
     plans = planner(asm, symbols, config) if planner else [static_plan(decode_function(f, asm, symbols), config) for f in config['functions']]
     save(out / 'probe-plan.json', plans)
     save(out / 'config.json', config)
+    save(out / 'adapter.json', adapter.describe(config))
     save(out / 'build-identity.json', {'binary_sha256': hashlib.sha256(binary.read_bytes()).hexdigest(),
         'gcc': subprocess.check_output(['gcc', '--version'], text=True).splitlines()[0],
         'sources': {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in copied.iterdir()}})
@@ -69,6 +73,7 @@ def build(scenario, out, planner=None, source_generator=None, extra_flags=()):
 
 
 def bpf_source(plans, config):
+    adapter = get_adapter(config)
     source = r'''
 #include <uapi/linux/ptrace.h>
 struct state_t { u64 call, step, src, dst; u32 active, fid; };
@@ -87,13 +92,13 @@ static __always_inline void count(u32 k) {
 }
 static __always_inline int record(struct pt_regs *ctx, u32 fid, u32 offset, u32 is_ret) {
     count(3);
-    u64 tid = bpf_get_current_pid_tgid();
+    u64 tid = CONTEXT_KEY;
     struct state_t zero = {}, *s = states.lookup_or_try_init(&tid, &zero);
     if (!s) { count(2); return 0; }
     if (offset == 0) {
         if (s->active) count(2);
         s->call += 1; s->step = 0; s->active = 1; s->fid = fid;
-        s->src = PT_REGS_PARM2(ctx); s->dst = PT_REGS_PARM1(ctx);
+        s->src = INPUT_POINTER; s->dst = OUTPUT_POINTER;
     }
     if (!s->active || s->fid != fid) { count(2); return 0; }
     struct event_t e = {};
@@ -113,7 +118,8 @@ static __always_inline int record(struct pt_regs *ctx, u32 fid, u32 offset, u32 
     if (is_ret) s->active = 0;
     return 0;
 }
-'''.replace('INPUT_BYTES', str(4 * len(config['input_fields']))).replace('OUTPUT_BYTES', str(4 * len(config['output_fields'])))
+'''.replace('INPUT_BYTES', str(adapter.layout(config,'input').size)).replace('OUTPUT_BYTES', str(adapter.layout(config,'output').size))
+    source = source.replace('INPUT_POINTER',adapter.bpf_pointer('input')).replace('OUTPUT_POINTER',adapter.bpf_pointer('output')).replace('CONTEXT_KEY',adapter.context.bpf_key())
     for fid, plan in enumerate(plans):
         ins = {n['offset']: n for n in plan['instructions']}
         for off in plan['probe_offsets']:
@@ -135,6 +141,36 @@ def wait_stopped(process, timeout=10):
     raise RuntimeError('Target did not stop for attachment')
 
 
+def resolve_runtime_bases(elf, maps, executable, plans):
+    """Resolve ELF load bias from PT_LOAD and the executable's offset-zero map.
+
+    Both Go's nonzero link addresses and the existing C PIE layout are valid.
+    This is object-format handling, not a language-specific dependency rule.
+    """
+    require(elf[:6] == b'\x7fELF\x02\x01' and struct.unpack_from('<H', elf, 16)[0] in (2,3), 'Expected little-endian ELF64 executable')
+    phoff = struct.unpack_from('<Q', elf, 32)[0]
+    entsize, number = struct.unpack_from('<HH', elf, 54)
+    segments = [struct.unpack_from('<IIQQQQQQ', elf, phoff+i*entsize) for i in range(number)]
+    first = [s for s in segments if s[0] == 1 and s[2] == 0]
+    require(len(first) == 1 and first[0][3] % 4096 == 0, 'Unsupported ELF first load segment')
+    entries = []
+    for line in maps.splitlines():
+        parts = line.split(maxsplit=5)
+        if len(parts) == 6 and parts[5] == executable:
+            start,end = (int(v,16) for v in parts[0].split('-'))
+            entries.append((start,end,int(parts[2],16),parts[1]))
+    starts = [a for a,b,off,perm in entries if off == 0]
+    require(len(starts) == 1, 'Cannot uniquely resolve executable mapping')
+    bias = starts[0]-first[0][3]
+    require(struct.unpack_from('<H',elf,16)[0] != 2 or bias == 0, 'Unexpected ET_EXEC relocation')
+    bases = {p['function']: bias+p['symbol_address'] for p in plans}
+    for p in plans:
+        for off in p['probe_offsets']:
+            ip = bases[p['function']]+off
+            require(any(a <= ip < b and 'x' in perm for a,b,offset,perm in entries), 'Probe address outside executable mapping')
+    return bases
+
+
 def runtime_metadata(process, binary, plans, out):
     proc = Path('/proc') / str(process.pid)
     maps = (proc / 'maps').read_text()
@@ -142,21 +178,7 @@ def runtime_metadata(process, binary, plans, out):
     save(out / 'target-process.json', {'subprocess_pid': process.pid,
         'target_status': [l for l in (proc / 'status').read_text().splitlines() if l.split(':')[0] in ('Name', 'Pid', 'Tgid', 'NSpid', 'NStgid')],
         'target_pid_namespace': os.readlink(proc / 'ns/pid'), 'executable': os.readlink(proc / 'exe')})
-    # This runner explicitly builds PIE with the first PT_LOAD at vaddr/offset 0.
-    # Refuse other layouts rather than guessing a relocation base.
-    elf = binary.read_bytes()
-    require(elf[:6] == b'\x7fELF\x02\x01' and struct.unpack_from('<H', elf, 16)[0] == 3, 'Expected little-endian ELF64 PIE')
-    phoff = struct.unpack_from('<Q', elf, 32)[0]
-    entsize, number = struct.unpack_from('<HH', elf, 54)
-    segments = [struct.unpack_from('<IIQQQQQQ', elf, phoff + i * entsize) for i in range(number)]
-    require(any(s[0] == 1 and s[2] == 0 and s[3] == 0 for s in segments), 'Unsupported PIE segment layout')
-    starts = []
-    for line in maps.splitlines():
-        parts = line.split(maxsplit=5)
-        if len(parts) == 6 and parts[5] == str(binary) and int(parts[2], 16) == 0:
-            starts.append(int(parts[0].split('-')[0], 16))
-    require(len(starts) == 1, 'Cannot uniquely resolve executable mapping')
-    bases = {p['function']: starts[0] + p['symbol_address'] for p in plans}
+    bases = resolve_runtime_bases(binary.read_bytes(), maps, str(binary), plans)
     save(out / 'runtime-bases.json', bases)
     return bases
 
@@ -172,6 +194,18 @@ def attach_probes(bpf, binary, plans, pid):
     return attached
 
 
+def attachment_threads(pid, config):
+    policy = get_adapter(config).context
+    if not policy.attach_existing_tasks: return [pid]
+    # The Go fixture pins its user goroutine before SIGSTOP. It may be on a
+    # thread other than the process leader. Attach only this stopped child's
+    # existing tasks; never use a global pid=-1 probe.
+    taskdir = Path('/proc')/str(pid)/'task'
+    tids = sorted(int(p.name) for p in taskdir.iterdir() if p.name.isdecimal())
+    require(pid > 0 and pid in tids and len(tids) <= 128, 'Invalid target task snapshot')
+    return tids
+
+
 def record_bpf(binary, plans, config, out, source_generator=None):
     import bcc
     process = bpf = None
@@ -185,7 +219,10 @@ def record_bpf(binary, plans, config, out, source_generator=None):
             wait_stopped(process)
             bases = runtime_metadata(process, binary, plans, out)
             bpf = bcc.BPF(text=(source_generator or bpf_source)(plans, config))
-            attached = attach_probes(bpf, binary, plans, process.pid)
+            tids = attachment_threads(process.pid, config)
+            save(out/'attachment-threads.json', tids)
+            attached = []
+            for tid in tids: attached.extend(attach_probes(bpf, binary, plans, tid))
             save(out / 'attached-probes.json', attached)
             with (out / 'events.jsonl').open('w') as stream:
                 def receive(cpu, data, size):
@@ -261,7 +298,7 @@ def evaluate(inferred, oracle, stats, plans):
             'scope': 'fixture-specific source relation accuracy; not statement-edge recall or microservice accuracy'}
 
 
-def main(default_scenario=None, prefix='hybrid-provenance', build_fn=build, record_fn=record_bpf, infer_fn=infer, evaluate_fn=evaluate):
+def main(default_scenario=None, prefix='hybrid-provenance', build_fn=build, record_fn=record_bpf, infer_fn=infer, evaluate_fn=evaluate, required_tools=('gcc','objdump','nm')):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action', choices=['build', 'run'])
     parser.add_argument('--scenario', type=Path, default=default_scenario or ROOT / 'scenarios/hybrid-provenance')
@@ -273,7 +310,7 @@ def main(default_scenario=None, prefix='hybrid-provenance', build_fn=build, reco
               'platform': platform.platform()}
     try:
         require(sys.platform == 'linux' and platform.machine() == 'x86_64', 'Linux x86-64 only')
-        require(all(shutil.which(t) for t in ('gcc', 'objdump', 'nm')), 'Install gcc and binutils')
+        require(all(shutil.which(t) for t in required_tools), 'Missing build tools: ' + ', '.join(t for t in required_tools if not shutil.which(t)))
         binary, plans, config = build_fn(args.scenario.resolve(), out)
         if args.action == 'build':
             report.update(status='build_verified', stage='complete')

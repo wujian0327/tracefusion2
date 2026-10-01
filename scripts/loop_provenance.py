@@ -13,6 +13,8 @@ import hybrid_provenance as common
 import interproc_provenance as collector
 from interproc_model import Machine, STACK_WORDS, decode, symbolic_path
 from hybrid_model import BRANCHES, require, validate_config
+from language_adapters import get_adapter
+from interproc_model import REGS
 
 MAX_EXECUTED_STEPS = 4096
 
@@ -37,10 +39,12 @@ def plan_program(assembly, symbols, config):
 
 def infer(events, plans, config, runtime_bases):
     require(runtime_bases is not None, 'Executable mapping required')
-    if len({e['pid_tid'] for e in events}) > 1:
-        return dict(results=[], issues=[dict(error='Multiple threads unsupported')], oracle_used_for_inference=False)
-    groups, results, issues = {}, [], []
-    for e in events: groups.setdefault((e['pid_tid'], e['call_id']), []).append(e)
+    adapter = get_adapter(config)
+    try:
+        adapter.context.validate(events, REGS)
+    except (ValueError,KeyError,IndexError) as exc:
+        return dict(results=[], issues=[dict(error=str(exc))], oracle_used_for_inference=False)
+    groups, results, issues = adapter.context.group(events), [], []
     functions = {p['function']: p for p in plans}
     for (tid, call), rows in sorted(groups.items()):
         try:

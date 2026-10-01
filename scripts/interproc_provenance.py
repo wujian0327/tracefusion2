@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """Cross-function native provenance pilot: build or run with system Python BCC."""
 from functools import partial
+from language_adapters import get_adapter
 
 import hybrid_provenance as common
 from interproc_model import MAX_DEPTH, REGS, STACK_BYTES, STACK_WORDS, infer, plan_program
 
 
 def bpf_source(plans, config):
+    adapter = get_adapter(config)
     if MAX_DEPTH < 1 or MAX_DEPTH & (MAX_DEPTH - 1):
         raise ValueError('BPF frame indexing requires a power-of-two MAX_DEPTH')
     source = r'''
@@ -39,7 +41,7 @@ static __always_inline u64 frame_slot(u64 index) {
 }
 static __always_inline int record(struct pt_regs *ctx, u32 fid, u32 offset, u32 is_ret, u32 is_root) {
     count(3);
-    u64 tid = bpf_get_current_pid_tgid();
+    u64 tid = CONTEXT_KEY;
     struct state_t zero = {}, *s = states.lookup_or_try_init(&tid, &zero);
     if (!s) { count(2); return 0; }
     u32 d = s->depth;
@@ -47,7 +49,7 @@ static __always_inline int record(struct pt_regs *ctx, u32 fid, u32 offset, u32 
         if (is_root) {
             if (d != 0) { count(2); return 0; }
             s->call += 1; s->step = 0; s->root = fid;
-            s->src = PT_REGS_PARM2(ctx); s->dst = PT_REGS_PARM1(ctx);
+            s->src = INPUT_POINTER; s->dst = OUTPUT_POINTER;
             s->root_sp = ctx->sp;
         } else if (d == 0) { count(2); return 0; }
         if (d >= MAX_DEPTH) { count(2); return 0; }
@@ -76,7 +78,9 @@ REGISTER_ASSIGNMENTS
 '''
     fields = ['ax','bx','cx','dx','si','di','bp','sp'] + ['r%d'%i for i in range(8,16)]
     substitutions = dict(MAX_DEPTH=str(MAX_DEPTH),STACK_WORDS=str(STACK_WORDS),STACK_BYTES=str(STACK_BYTES),
-                         INPUT_BYTES=str(4*len(config['input_fields'])),OUTPUT_BYTES=str(4*len(config['output_fields'])),
+                         INPUT_BYTES=str(adapter.layout(config,'input').size),OUTPUT_BYTES=str(adapter.layout(config,'output').size),
+                         INPUT_POINTER=adapter.bpf_pointer('input'),OUTPUT_POINTER=adapter.bpf_pointer('output'),
+                         CONTEXT_KEY=adapter.context.bpf_key(),
                          REGISTER_ASSIGNMENTS='\n'.join('    e->regs[%d] = ctx->%s;'%(i,f) for i,f in enumerate(fields)))
     for name,value in substitutions.items(): source=source.replace(name,value)
     for fid,p in enumerate(plans):

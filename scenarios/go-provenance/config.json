@@ -1,0 +1,10 @@
+{
+  "adapter": "go-amd64-u32-leaf",
+  "abi": "go-amd64-abiinternal",
+  "functions": ["main.goSelect", "main.goOverwrite", "main.goMerge"],
+  "input_fields": ["secret", "public_value", "noise"],
+  "output_fields": ["value", "audit"],
+  "sink_field": "value",
+  "sensitive_fields": ["secret"],
+  "scope": "pure Go leaf functions; one pinned user goroutine; fixed uint32 layout; no calls, goroutine migration or stack growth in observed scope"
+}

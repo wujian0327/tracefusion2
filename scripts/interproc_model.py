@@ -7,14 +7,16 @@ memory. Root ABI is (output*, input*, int); helpers are discovered automatically
 import re
 import struct
 from dataclasses import dataclass
+from language_adapters import get_adapter, C
 
 from hybrid_model import REGS, REG32, BRANCHES, MASK32, MASK64, CCMASK, require, branch_taken, validate_config
 
 STACK_BYTES = 256
 STACK_WORDS = STACK_BYTES // 8 + 1
 MAX_DEPTH = 8
-ARG_REGS = ('rdi', 'rsi', 'rdx', 'rcx', 'r8', 'r9')
-SAVED_REGS = ('rbx', 'rbp', 'r12', 'r13', 'r14', 'r15')
+# Backward-compatible test constants; execution uses the selected adapter.
+ARG_REGS = C.argument_registers
+SAVED_REGS = C.saved_registers
 
 
 def operand(text):
@@ -132,17 +134,16 @@ class Sym:
 
 def symbolic_path(path, functions, config, distinguish_reads=False):
     """Context-qualified definitions; exact stores kill earlier field versions."""
+    adapter = get_adapter(config)
+    layouts = {r: adapter.layout(config,r) for r in ('input','output')}
     edges, nodes, source_reads = set(), {}, []
     regs = {r: Sym(frozenset({'unmodeled:' + r}), frozenset({'initial:' + r})) for r in REGS}
-    regs.update(rdi=Sym(refs=frozenset({'arg.output'}), address=('output', 0)),
-                rsi=Sym(refs=frozenset({'arg.input'}), address=('input', 0)),
-                rsp=Sym(refs=frozenset({'arg.stack'}), address=('stack', 0)),
-                rdx=Sym(frozenset({'arg.select'}), frozenset({'arg.select'})))
+    regs.update({r: Sym(**seed) for r,seed in adapter.seeds(include_stack=True).items()})
     memory = {}
     for region in ('input', 'output'):
-        for i, field in enumerate(config[region + '_fields']):
-            label = ('input.' if region == 'input' else 'initial:output.') + field
-            memory[region, i*4, 4] = Sym(frozenset({label}), frozenset({label}))
+        for field in layouts[region].fields:
+            label = ('input.' if region == 'input' else 'initial:output.') + field.name
+            memory[region, field.offset, field.width] = Sym(frozenset({label}), frozenset({label}))
             nodes[label] = dict(kind='boundary', field=label)
     flags, returns = Sym(), []
     maps = {name: {n['offset']: n for n in p['instructions']} for name, p in functions.items()}
@@ -165,7 +166,8 @@ def symbolic_path(path, functions, config, distinguish_reads=False):
         if region == 'stack':
             require(-STACK_BYTES <= off and off+width <= 8 and off % width == 0, 'Stack access outside bounded aligned region')
         else:
-            require(region in ('input', 'output') and width == 4 and off % 4 == 0 and 0 <= off < 4*len(config[region+'_fields']), 'Memory outside field schema')
+            require(region in layouts, 'Memory outside field schema')
+            layouts[region].at(off, width)
 
     def store(addr, width, value):
         region, off = addr; check_region(region, off, width)
@@ -189,7 +191,7 @@ def symbolic_path(path, functions, config, distinguish_reads=False):
         addr = address(arg)
         value = load(addr, arg['width']//8)
         if distinguish_reads and addr[0] == 'input':
-            field = 'input.' + config['input_fields'][addr[1]//4]
+            field = 'input.' + layouts['input'].at(addr[1],arg['width']//8).name
             read_id = '%s@read%d' % (field, len(source_reads)+1)
             source_reads.append(dict(id=read_id, field=field, ordinal=len(source_reads)+1, instruction=nid))
             nodes[read_id] = dict(kind='source-read', field=field, ordinal=len(source_reads), instruction=nid)
@@ -257,7 +259,7 @@ def symbolic_path(path, functions, config, distinguish_reads=False):
             resume = functions[step['function']]['symbol_address'] + n['next']
             adjust_stack(-8, nid); store(regs['rsp'].address, 8, Sym(refs=frozenset({nid}), address=('code', resume)))
             returns.append(resume)
-            for reg in ARG_REGS:
+            for reg in adapter.argument_registers:
                 value = regs[reg]; arg_id = nid + '/arg:' + reg
                 nodes[arg_id] = dict(kind='argument-transfer', register=reg, callsite=nid, callee=n['callee'])
                 dependencies([value], arg_id, 'argument')
@@ -267,8 +269,8 @@ def symbolic_path(path, functions, config, distinguish_reads=False):
                 ret = load(regs['rsp'].address, 8)
                 require(ret.address == ('code', returns.pop()), 'Return address overwritten')
                 dependencies([ret], nid, 'control'); adjust_stack(8, nid)
-                value = regs['rax']; dependencies([value], nid, 'return')
-                regs['rax'] = Sym(value.origins, frozenset({nid}), value.address, value.number)
+                value = regs[adapter.return_register]; dependencies([value], nid, 'return')
+                regs[adapter.return_register] = Sym(value.origins, frozenset({nid}), value.address, value.number)
             else: require(regs['rsp'].address == ('stack', 0), 'Root stack unbalanced')
         elif op in BRANCHES:
             require(flags.refs, 'Branch without modeled flags'); dependencies([flags], nid, 'control')
@@ -276,7 +278,8 @@ def symbolic_path(path, functions, config, distinguish_reads=False):
                 target = n['target'] if branch_taken(op, flags.number) else n['next']
                 if path[index+1]['function'] != step['function'] or path[index+1]['offset'] != target:
                     return None  # Proven infeasible from constants, not workload/oracle.
-    final = memory['output', 4*config['output_fields'].index(config['sink_field']), 4]
+    sink_field = layouts['output'].field(config['sink_field'])
+    final = memory['output', sink_field.offset, sink_field.width]
     require(all(not s.startswith(('unmodeled:', 'initial:')) for s in final.origins), 'Unmodeled or unwritten sink origin')
     sink = path[0]['function'] + '|sink'
     nodes[sink] = dict(kind='sink', field=config['sink_field'])
@@ -289,6 +292,7 @@ def symbolic_path(path, functions, config, distinguish_reads=False):
 
 def plan_program(assembly, symbols, config):
     validate_config(config)
+    require(not get_adapter(config).leaf_only, 'This adapter is limited to the leaf replay planner')
     functions, active = {}, set()
     by_address = {}
     for name, (address, size) in symbols.items(): by_address.setdefault(address, []).append(name)
@@ -344,12 +348,15 @@ def plan_program(assembly, symbols, config):
 
 class Machine:
     def __init__(self, event, config):
+        self.adapter = get_adapter(config)
+        self.adapter.check_entry(event, REGS)
+        self.layouts = {r: self.adapter.layout(config,r) for r in ('input','output')}
         self.regs = dict(zip(REGS,event['regs'])); self.initial = dict(self.regs)
         self.flags = event['flags'] & CCMASK
         self.src, self.dst, self.sp = event['src_addr'], event['dst_addr'], event['root_sp']
         require(self.sp == self.regs['rsp'] and self.sp % 8 == 0, 'Invalid root stack')
         require(self.src % 4 == self.dst % 4 == 0, 'Unaligned fields')
-        ranges = [(self.src,4*len(config['input_fields'])),(self.dst,4*len(config['output_fields'])),(self.sp-STACK_BYTES,STACK_BYTES+8)]
+        ranges = [(self.src,self.layouts['input'].size),(self.dst,self.layouts['output'].size),(self.sp-STACK_BYTES,STACK_BYTES+8)]
         require(all(not (a < b+nb and b < a+na) for i,(a,na) in enumerate(ranges) for b,nb in ranges[i+1:]), 'Boundary memory regions overlap')
         self.memory, self.stack_written, self.returns = {}, set(), []
         self.config = config
@@ -364,7 +371,7 @@ class Machine:
         return int.from_bytes(bytes(self.memory[address+i] for i in range(width)), 'little')
 
     def write_mem(self, address, width, value):
-        output = self.dst <= address and address+width <= self.dst+4*len(self.config['output_fields'])
+        output = self.dst <= address and address+width <= self.dst+self.layouts['output'].size
         stack = self.sp-STACK_BYTES <= address and address+width <= self.sp
         require(output or stack, 'Write outside output/stack regions')
         for i,b in enumerate((value & ((1<<(width*8))-1)).to_bytes(width,'little')):
@@ -388,8 +395,8 @@ class Machine:
         require(event['ip']==bases[step['function']]+step['offset'],'Instruction IP mismatch')
         require(event['regs']==[self.regs[r] for r in REGS],'Register state mismatch')
         require((event['flags'] & CCMASK)==self.flags,'Condition flags mismatch')
-        for name,base in [('inputs',self.src),('outputs',self.dst)]:
-            require(event[name]==[self.read_mem(base+4*i,4) for i in range(len(event[name]))],name+' changed unexpectedly')
+        for name,base,region in [('inputs',self.src,'input'),('outputs',self.dst,'output')]:
+            require(event[name]==[self.read_mem(base+f.offset,f.width) for f in self.layouts[region].fields],name+' changed unexpectedly')
         raw = struct.pack('<'+'Q'*len(event['stack']),*event['stack'])
         require(all(raw[a-(self.sp-STACK_BYTES)]==self.memory[a] for a in self.stack_written),'Written stack/return-address state mismatch')
 
@@ -404,7 +411,7 @@ class Machine:
                 ret = self.read_mem(self.regs['rsp'],8)
                 require(ret==self.returns.pop(),'Return address mismatch')
                 self.regs['rsp'] += 8; return ret
-            require(all(self.regs[r]==self.initial[r] for r in (*SAVED_REGS,'rsp')),'Unbalanced root stack/callee-saved registers')
+            require(all(self.regs[r]==self.initial[r] for r in (*self.adapter.saved_registers,'rsp')),'Unbalanced root stack/callee-saved registers')
             return None
         if op in BRANCHES: return bases[fn]+(node['target'] if branch_taken(op,self.flags) else node['next'])
         if op=='jmp': return bases[fn]+node['target']
@@ -427,10 +434,12 @@ class Machine:
 
 def infer(events,plans,config,runtime_bases):
     require(runtime_bases is not None,'Executable mapping required for cross-function replay')
-    if len({e['pid_tid'] for e in events})>1:
+    adapter = get_adapter(config)
+    try:
+        adapter.context.validate(events, REGS)
+    except (ValueError,KeyError,IndexError):
         return dict(results=[],issues=[dict(error='Multiple threads unsupported')],oracle_used_for_inference=False)
-    groups={}
-    for e in events: groups.setdefault((e['pid_tid'],e['call_id']),[]).append(e)
+    groups=adapter.context.group(events)
     results,issues=[],[]
     maps={p['function']:{n['offset']:n for n in p['instructions']} for p in plans}
     for (tid,call),rows in sorted(groups.items()):

@@ -13,6 +13,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 import hybrid_provenance as common
 import interproc_model as model
 import interproc_provenance as app
+from language_adapters import get_adapter
 try:
     import unicorn as uc
     from unicorn import x86_const as x86
@@ -23,6 +24,7 @@ SCENARIO=common.ROOT/'scenarios/interproc-provenance'
 
 
 def emulated_events(binary,plans,config,selections=(0,1)):
+    adapter=get_adapter(config)
     elf=binary.read_bytes();phoff=struct.unpack_from('<Q',elf,32)[0]
     size,count=struct.unpack_from('<HH',elf,54)
     segments=[struct.unpack_from('<IIQQQQQQ',elf,phoff+i*size) for i in range(count)]
@@ -49,10 +51,10 @@ def emulated_events(binary,plans,config,selections=(0,1)):
                 cpu.mem_write(src,struct.pack('<'+'I'*len(config['input_fields']),*(values[f] for f in config['input_fields'])))
                 cpu.mem_write(dst,struct.pack('<II',0xdeadbeef,0))
                 cpu.mem_write(root_sp,struct.pack('<Q',stop))
-                cpu.reg_write(x86.UC_X86_REG_RSI,src);cpu.reg_write(x86.UC_X86_REG_RDI,dst)
-                cpu.reg_write(x86.UC_X86_REG_RDX,select);cpu.reg_write(x86.UC_X86_REG_RSP,root_sp)
+                for reg,value in [(adapter.input_register,src),(adapter.output_register,dst),(adapter.selector_register,select),('rsp',root_sp)]:
+                    cpu.reg_write(getattr(x86,'UC_X86_REG_'+reg.upper()),value)
                 # Nonzero callee-saved values expose incorrect push/pop restoration.
-                for i,r in enumerate(model.SAVED_REGS):cpu.reg_write(getattr(x86,'UC_X86_REG_'+r.upper()),0xabc000+i)
+                for i,r in enumerate(adapter.saved_registers):cpu.reg_write(getattr(x86,'UC_X86_REG_'+r.upper()),0xabc000+i)
                 frames=[];sequence=[0]
                 def observe(machine,address,size,user):
                     if address not in points:return

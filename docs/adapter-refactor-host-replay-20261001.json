@@ -1,0 +1,47 @@
+{
+  "adapter": "c-sysv-u32",
+  "replays": [
+    {
+      "mode": "hybrid",
+      "bundle": "hybrid-provenance-20261001-163416-1c83.zip",
+      "bundle_sha256": "b32f3a8110938df401248b92f48bd0f1a413afe3e034de783af525a331b350c7",
+      "events": 88,
+      "calls": 16,
+      "binary_hash_verified": true,
+      "regenerated_plans_identical": true,
+      "generated_bpf_identical": true,
+      "runtime_bases_identical": true,
+      "inference_identical": true,
+      "evaluation_identical": true
+    },
+    {
+      "mode": "interproc",
+      "bundle": "interproc-provenance-20261001-172324-9371.zip",
+      "bundle_sha256": "e60cabac9e79c9b284e66ee7597ec5ca4121e2b0a5e86fb980af9c8a270f9ff3",
+      "events": 448,
+      "calls": 12,
+      "binary_hash_verified": true,
+      "regenerated_plans_identical": true,
+      "generated_bpf_identical": true,
+      "runtime_bases_identical": true,
+      "inference_identical": true,
+      "evaluation_identical": true
+    },
+    {
+      "mode": "loop",
+      "bundle": "loop-provenance-20261001-174750-56fd.zip",
+      "bundle_sha256": "109c8848ddc2acd8fce6f1504f44b31303d1b755a8433522695f7efe7332a215",
+      "events": 428,
+      "calls": 24,
+      "binary_hash_verified": true,
+      "regenerated_plans_identical": true,
+      "generated_bpf_identical": true,
+      "runtime_bases_identical": true,
+      "inference_identical": true,
+      "evaluation_identical": true
+    }
+  ],
+  "total_events": 964,
+  "total_calls": 52,
+  "new_go_capture_tested": false
+}
