@@ -1,0 +1,202 @@
+{
+  "bundle": "interproc-provenance-20261001-172324-9371.zip",
+  "bundle_sha256": "e60cabac9e79c9b284e66ee7597ec5ca4121e2b0a5e86fb980af9c8a270f9ff3",
+  "binary_sha256": "84590b0bbfb916a63daf90c66f9bc0836aa98acbd0d43caf273d3bb7fc8b0468",
+  "collector_fix_commit": "5c5bc8f3d4f0ea3bc57f0b08ce4a69cadc26a838",
+  "checks": {
+    "source_and_binary_hashes": true,
+    "scenario_matches_repository": true,
+    "plans_regenerated_from_elf": true,
+    "generated_collector_matches": true,
+    "probe_attachments_match_plan": true,
+    "runtime_bases_rederived_from_elf_and_maps": true,
+    "all_event_ips_match": true,
+    "all_memory_reads_succeeded": true,
+    "inference_replay_identical": true,
+    "evaluation_replay_identical": true,
+    "repeated_call_contexts_and_overwrite_verified": true
+  },
+  "functions": 9,
+  "probe_locations": 81,
+  "scope_instructions": 82,
+  "events": 448,
+  "root_calls": 12,
+  "function_entries": 72,
+  "maximum_depth": 3,
+  "capture": {
+    "backend": "ebpf",
+    "lost_events": 0,
+    "submit_errors": 0,
+    "state_errors": 0,
+    "attempted_events": 448,
+    "raw_probe_hits": 448,
+    "process_returncode": 0,
+    "bcc_version": "0.29.1",
+    "received_events": 448,
+    "observed_kernel_tgids": [
+      13308
+    ]
+  },
+  "evaluation": {
+    "passed": true,
+    "capture_clean": true,
+    "checks": [
+      {
+        "sequence": 1,
+        "function": "pipeline_branch",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value"
+        ],
+        "observed_sources": [
+          "input.public_value"
+        ]
+      },
+      {
+        "sequence": 2,
+        "function": "pipeline_branch",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ]
+      },
+      {
+        "sequence": 3,
+        "function": "pipeline_repeat",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value"
+        ],
+        "observed_sources": [
+          "input.public_value"
+        ]
+      },
+      {
+        "sequence": 4,
+        "function": "pipeline_repeat",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value"
+        ],
+        "observed_sources": [
+          "input.public_value"
+        ]
+      },
+      {
+        "sequence": 5,
+        "function": "pipeline_merge",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value"
+        ],
+        "observed_sources": [
+          "input.public_value"
+        ]
+      },
+      {
+        "sequence": 6,
+        "function": "pipeline_merge",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value",
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.public_value",
+          "input.secret"
+        ]
+      },
+      {
+        "sequence": 7,
+        "function": "pipeline_branch",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value"
+        ],
+        "observed_sources": [
+          "input.public_value"
+        ]
+      },
+      {
+        "sequence": 8,
+        "function": "pipeline_branch",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ]
+      },
+      {
+        "sequence": 9,
+        "function": "pipeline_repeat",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value"
+        ],
+        "observed_sources": [
+          "input.public_value"
+        ]
+      },
+      {
+        "sequence": 10,
+        "function": "pipeline_repeat",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value"
+        ],
+        "observed_sources": [
+          "input.public_value"
+        ]
+      },
+      {
+        "sequence": 11,
+        "function": "pipeline_merge",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value"
+        ],
+        "observed_sources": [
+          "input.public_value"
+        ]
+      },
+      {
+        "sequence": 12,
+        "function": "pipeline_merge",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value",
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.public_value",
+          "input.secret"
+        ]
+      }
+    ],
+    "static_source_relations": {
+      "tp": 14,
+      "fp": 6,
+      "fn": 0,
+      "precision": 0.7,
+      "recall": 1.0
+    },
+    "dynamic_source_relations": {
+      "tp": 14,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "resolved_calls": 12,
+    "expected_calls": 12,
+    "inference_issues": 0,
+    "unexpected_calls": 0,
+    "scope": "fixture-specific source relation accuracy; not statement-edge recall or microservice accuracy"
+  },
+  "scope": "Controlled single-thread native C direct-call subset; not general language, cross-service, edge-recall or performance validation."
+}
