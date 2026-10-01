@@ -1,0 +1,9 @@
+{
+  "abi": "linux-x86_64-sysv",
+  "functions": ["loop_transform", "loop_overwrite", "loop_accumulate"],
+  "input_fields": ["secret", "public_value", "noise"],
+  "output_fields": ["value", "audit"],
+  "sink_field": "value",
+  "sensitive_fields": ["secret"],
+  "scope": "single-thread leaf loops; immutable input fields; explicit dependencies and executed load instances"
+}

@@ -130,9 +130,9 @@ class Sym:
     number: int | None = None
 
 
-def symbolic_path(path, functions, config):
+def symbolic_path(path, functions, config, distinguish_reads=False):
     """Context-qualified definitions; exact stores kill earlier field versions."""
-    edges, nodes = set(), {}
+    edges, nodes, source_reads = set(), {}, []
     regs = {r: Sym(frozenset({'unmodeled:' + r}), frozenset({'initial:' + r})) for r in REGS}
     regs.update(rdi=Sym(refs=frozenset({'arg.output'}), address=('output', 0)),
                 rsi=Sym(refs=frozenset({'arg.input'}), address=('input', 0)),
@@ -186,7 +186,15 @@ def symbolic_path(path, functions, config):
         if arg['kind'] == 'imm': return Sym(number=arg['value'] & ((1 << arg['width'])-1))
         if arg['kind'] == 'reg': return regs[arg['reg']]
         dependencies([regs[arg['reg']]], nid, 'address')
-        return load(address(arg), arg['width']//8)
+        addr = address(arg)
+        value = load(addr, arg['width']//8)
+        if distinguish_reads and addr[0] == 'input':
+            field = 'input.' + config['input_fields'][addr[1]//4]
+            read_id = '%s@read%d' % (field, len(source_reads)+1)
+            source_reads.append(dict(id=read_id, field=field, ordinal=len(source_reads)+1, instruction=nid))
+            nodes[read_id] = dict(kind='source-read', field=field, ordinal=len(source_reads), instruction=nid)
+            return Sym(frozenset({read_id}), frozenset({read_id}), value.address, value.number)
+        return value
 
     def adjust_stack(delta, nid):
         current = regs['rsp']; require(current.address is not None and current.address[0] == 'stack', 'Lost stack identity')
@@ -273,8 +281,10 @@ def symbolic_path(path, functions, config):
     sink = path[0]['function'] + '|sink'
     nodes[sink] = dict(kind='sink', field=config['sink_field'])
     dependencies([final], sink)
-    return dict(steps=path, sources=sorted(final.origins), sink_node=sink, nodes=nodes,
-                edges=[dict(source=a, target=b, kind=k) for a,b,k in sorted(edges)])
+    result = dict(steps=path, sources=sorted(final.origins), sink_node=sink, nodes=nodes,
+                  edges=[dict(source=a, target=b, kind=k) for a,b,k in sorted(edges)])
+    if distinguish_reads: result['source_reads'] = source_reads
+    return result
 
 
 def plan_program(assembly, symbols, config):

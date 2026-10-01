@@ -22,7 +22,7 @@ except ImportError:
 SCENARIO=common.ROOT/'scenarios/interproc-provenance'
 
 
-def emulated_events(binary,plans,config):
+def emulated_events(binary,plans,config,selections=(0,1)):
     elf=binary.read_bytes();phoff=struct.unpack_from('<Q',elf,32)[0]
     size,count=struct.unpack_from('<HH',elf,54)
     segments=[struct.unpack_from('<IIQQQQQQ',elf,phoff+i*size) for i in range(count)]
@@ -33,7 +33,7 @@ def emulated_events(binary,plans,config):
     roots=[(fid,p) for fid,p in enumerate(plans) if p['is_root']]
     for round_id in range(2):
         for rootid,root in roots:
-            for select in (0,1):
+            for select in selections:
                 call+=1;cpu=uc.Uc(uc.UC_ARCH_X86,uc.UC_MODE_64)
                 mapped=set()
                 for s in segments:
