@@ -7,6 +7,8 @@ from interproc_model import MAX_DEPTH, REGS, STACK_BYTES, STACK_WORDS, infer, pl
 
 
 def bpf_source(plans, config):
+    if MAX_DEPTH < 1 or MAX_DEPTH & (MAX_DEPTH - 1):
+        raise ValueError('BPF frame indexing requires a power-of-two MAX_DEPTH')
     source = r'''
 #include <uapi/linux/ptrace.h>
 struct state_t {
@@ -28,6 +30,13 @@ static __always_inline void count(u32 k) {
     u64 *v = metrics.lookup(&k);
     if (v) __sync_fetch_and_add(v, 1);
 }
+static __always_inline u64 frame_slot(u64 index) {
+    /* Keep a local bound visible to the verifier after LLVM range folding.
+     * The caller still rejects invalid depths; this mask is not recovery.
+     * The barrier prevents LLVM eliminating the mask using caller checks. */
+    asm volatile("" : "+r"(index));
+    return index & (MAX_DEPTH - 1);
+}
 static __always_inline int record(struct pt_regs *ctx, u32 fid, u32 offset, u32 is_ret, u32 is_root) {
     count(3);
     u64 tid = bpf_get_current_pid_tgid();
@@ -42,10 +51,10 @@ static __always_inline int record(struct pt_regs *ctx, u32 fid, u32 offset, u32 
             s->root_sp = ctx->sp;
         } else if (d == 0) { count(2); return 0; }
         if (d >= MAX_DEPTH) { count(2); return 0; }
-        s->frames[d] = fid; d += 1; s->depth = d;
+        s->frames[frame_slot(d)] = fid; d += 1; s->depth = d;
     }
     if (d == 0 || d > MAX_DEPTH) { count(2); return 0; }
-    if (s->frames[d-1] != fid) { count(2); return 0; }
+    if (s->frames[frame_slot(d-1)] != fid) { count(2); return 0; }
     u32 key = 0;
     struct event_t *e = scratch.lookup(&key);
     if (!e) { count(2); return 0; }
