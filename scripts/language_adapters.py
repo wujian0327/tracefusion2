@@ -39,7 +39,6 @@ class FieldLayout:
 class ExecutionPolicy:
     name: str
     identity_register: str | None = None
-    attach_existing_tasks: bool = False
 
     def identity(self, event, registers):
         identity = (event['pid_tid'],)
@@ -128,7 +127,7 @@ C = NativeAdapter('c-sysv-u32', 'linux-x86_64-sysv', 'rsi', 'rdi', 'rdx',
     ExecutionPolicy('single-os-thread'), r'[A-Za-z_]\w*')
 GO = NativeAdapter('go-amd64-u32-leaf', 'go-amd64-abiinternal', 'rbx', 'rax', 'rcx',
     ('rax','rbx','rcx','rdi','rsi','r8','r9','r10','r11'), ('rbp','r14'),
-    ExecutionPolicy('single-pinned-goroutine', 'r14', True), r'main\.[A-Za-z_]\w*', leaf_only=True)
+    ExecutionPolicy('single-pinned-goroutine', 'r14'), r'main\.[A-Za-z_]\w*', leaf_only=True)
 ADAPTERS = {a.name: a for a in (C, GO)}
 
 

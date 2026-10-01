@@ -195,15 +195,14 @@ def attach_probes(bpf, binary, plans, pid):
 
 
 def attachment_threads(pid, config):
-    policy = get_adapter(config).context
-    if not policy.attach_existing_tasks: return [pid]
-    # The Go fixture pins its user goroutine before SIGSTOP. It may be on a
-    # thread other than the process leader. Attach only this stopped child's
-    # existing tasks; never use a global pid=-1 probe.
-    taskdir = Path('/proc')/str(pid)/'task'
-    tids = sorted(int(p.name) for p in taskdir.iterdir() if p.name.isdecimal())
-    require(pid > 0 and pid in tids and len(tids) <= 128, 'Invalid target task snapshot')
-    return tids
+    get_adapter(config)
+    require(pid > 0, 'Global probe attachment is forbidden')
+    # Register each physical location once with the child PID. Per-task
+    # enumeration is not a safe BCC filter strategy: the uploaded Go run with
+    # six registrations produced six callbacks for each executed location.
+    # Execution identity is checked in observations, independently of how
+    # many OS threads the Go runtime created. Never repair this by deduping.
+    return [pid]
 
 
 def record_bpf(binary, plans, config, out, source_generator=None):

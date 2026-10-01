@@ -59,13 +59,15 @@ def build(scenario, out):
         result = subprocess.run(command,env=env,capture_output=True,text=True,timeout=180)
         common.save(out/'build.json',dict(command=command,returncode=result.returncode,stdout=result.stdout,stderr=result.stderr,compiler=version))
         result.check_returncode()
+        # `go tool nm` may itself build a tool and repopulate GOCACHE. Keep
+        # the cache through symbol extraction, then clean on success/failure.
+        nm = subprocess.check_output(['go','tool','nm','-size',str(binary)],env=env,text=True)
+        (out/'symbols.txt').write_text(nm)
     finally:
         # Cache is reproducible and must not bloat the diagnostic result bundle.
         shutil.rmtree(out/'go-cache',ignore_errors=True)
     assembly = subprocess.check_output(['objdump','-d','-M','intel','--no-show-raw-insn',str(binary)],text=True)
     (out/'disassembly.txt').write_text(assembly)
-    nm = subprocess.check_output(['go','tool','nm','-size',str(binary)],env=env,text=True)
-    (out/'symbols.txt').write_text(nm)
     common.save(out/'build-identity.json',dict(binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest(),
         go=version,sources={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in copied.iterdir()}))
     plans = core.plan_program(assembly,parse_nm(nm),config)

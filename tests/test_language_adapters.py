@@ -7,6 +7,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import Mock, patch
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 import hybrid_provenance as common
@@ -20,6 +21,44 @@ GO_SCENARIO = common.ROOT/'scenarios/go-provenance'
 
 
 class AdapterContracts(unittest.TestCase):
+    def test_go_probe_locations_registered_once_with_multiple_runtime_tasks(self):
+        config=json.loads((GO_SCENARIO/'config.json').read_text())
+        plan=[dict(function='main.goSelect',probe_offsets=[0,2,4,7,9])]
+        bpf=Mock()
+        with patch.object(Path,'iterdir',return_value=iter(Path(str(i)) for i in range(100,106))):
+            tids=common.attachment_threads(100,config)
+            attached=[]
+            for tid in tids:attached.extend(common.attach_probes(bpf,Path('/child'),plan,tid))
+        self.assertEqual(tids,[100])
+        self.assertEqual(len(attached),5)
+        self.assertEqual(bpf.attach_uprobe.call_count,5)
+        self.assertEqual({r['pid'] for r in attached},{100})
+        with self.assertRaises(ValueError):common.attachment_threads(-1,config)
+
+    def test_go_cache_removed_after_symbol_tool_success_or_failure(self):
+        config=json.loads((GO_SCENARIO/'config.json').read_text())
+        for fail_nm in (False,True):
+            with self.subTest(fail_nm=fail_nm),tempfile.TemporaryDirectory() as d:
+                out=Path(d);cache=out/'go-cache'
+                def compile_stub(command,**kwargs):
+                    cache.mkdir();(cache/'build-marker').write_text('build')
+                    (out/'hybrid-demo').write_bytes(b'fixture-builder-test-only')
+                    return subprocess.CompletedProcess(command,0,'','')
+                def output_stub(command,**kwargs):
+                    if command[:2]==['go','version']:return 'go version go1.25.4 linux/amd64\n'
+                    if command[:3]==['go','tool','nm']:
+                        self.assertTrue((cache/'build-marker').exists())
+                        (cache/'nm-marker').write_text('nm')
+                        if fail_nm:raise subprocess.CalledProcessError(1,command)
+                        return ''.join('%x 1 T %s\n'%(0x1000+i*16,n) for i,n in enumerate(config['functions']))
+                    if command[0]=='objdump':return ''.join('%x: ret\n'%(0x1000+i*16) for i in range(3))
+                    raise AssertionError(command)
+                with patch.object(go.shutil,'which',return_value='/go'),patch.object(go.subprocess,'run',side_effect=compile_stub),patch.object(go.subprocess,'check_output',side_effect=output_stub):
+                    if fail_nm:
+                        with self.assertRaises(subprocess.CalledProcessError):go.build(GO_SCENARIO,out)
+                    else:go.build(GO_SCENARIO,out)
+                self.assertFalse(cache.exists())
+
     def test_legacy_config_and_layout(self):
         config=json.loads((common.ROOT/'scenarios/interproc-provenance/config.json').read_text())
         self.assertEqual(get_adapter(config),C)

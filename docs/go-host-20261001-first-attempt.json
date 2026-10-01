@@ -1,0 +1,205 @@
+{
+  "bundle": "go-provenance-20261001-181341-4f69.zip",
+  "binary_sha256": "44438d0db339f41a680df53c9a9d8d9e0bea595951c6dfb772f2099741124154",
+  "compiler": "go version go1.25.4 linux/amd64",
+  "checks": {
+    "binary_and_source_hashes": true,
+    "regenerated_plan": true,
+    "regenerated_bpf": true,
+    "runtime_bases": true,
+    "original_inference_and_score": true
+  },
+  "host_capture": {
+    "passed": false,
+    "stats": {
+      "backend": "ebpf",
+      "lost_events": 0,
+      "submit_errors": 0,
+      "state_errors": 120,
+      "attempted_events": 252,
+      "raw_probe_hits": 372,
+      "process_returncode": 0,
+      "bcc_version": "0.29.1",
+      "received_events": 252,
+      "observed_kernel_tgids": [
+        25599
+      ]
+    },
+    "attachment_targets": 6,
+    "probe_locations": 19,
+    "registrations": 114,
+    "consecutive_identical_observation_groups": {
+      "1": 24,
+      "6": 38
+    },
+    "identity_comparison_excludes": [
+      "timestamp",
+      "sequence"
+    ]
+  },
+  "independent_machine_emulation": {
+    "engine": "Unicorn",
+    "input": "actual uploaded Go ELF; original host oracle used only for scoring",
+    "kernel_ebpf": false,
+    "events": 62,
+    "evaluation": {
+      "passed": true,
+      "capture_clean": true,
+      "checks": [
+        {
+          "sequence": 1,
+          "function": "main.goSelect",
+          "passed": true,
+          "expected_sources": [
+            "input.public_value"
+          ],
+          "observed_sources": [
+            "input.public_value"
+          ]
+        },
+        {
+          "sequence": 2,
+          "function": "main.goSelect",
+          "passed": true,
+          "expected_sources": [
+            "input.secret"
+          ],
+          "observed_sources": [
+            "input.secret"
+          ]
+        },
+        {
+          "sequence": 3,
+          "function": "main.goOverwrite",
+          "passed": true,
+          "expected_sources": [
+            "input.public_value"
+          ],
+          "observed_sources": [
+            "input.public_value"
+          ]
+        },
+        {
+          "sequence": 4,
+          "function": "main.goOverwrite",
+          "passed": true,
+          "expected_sources": [
+            "input.public_value"
+          ],
+          "observed_sources": [
+            "input.public_value"
+          ]
+        },
+        {
+          "sequence": 5,
+          "function": "main.goMerge",
+          "passed": true,
+          "expected_sources": [
+            "input.public_value",
+            "input.secret"
+          ],
+          "observed_sources": [
+            "input.public_value",
+            "input.secret"
+          ]
+        },
+        {
+          "sequence": 6,
+          "function": "main.goMerge",
+          "passed": true,
+          "expected_sources": [
+            "input.public_value",
+            "input.secret"
+          ],
+          "observed_sources": [
+            "input.public_value",
+            "input.secret"
+          ]
+        },
+        {
+          "sequence": 7,
+          "function": "main.goSelect",
+          "passed": true,
+          "expected_sources": [
+            "input.public_value"
+          ],
+          "observed_sources": [
+            "input.public_value"
+          ]
+        },
+        {
+          "sequence": 8,
+          "function": "main.goSelect",
+          "passed": true,
+          "expected_sources": [
+            "input.secret"
+          ],
+          "observed_sources": [
+            "input.secret"
+          ]
+        },
+        {
+          "sequence": 9,
+          "function": "main.goOverwrite",
+          "passed": true,
+          "expected_sources": [
+            "input.public_value"
+          ],
+          "observed_sources": [
+            "input.public_value"
+          ]
+        },
+        {
+          "sequence": 10,
+          "function": "main.goOverwrite",
+          "passed": true,
+          "expected_sources": [
+            "input.public_value"
+          ],
+          "observed_sources": [
+            "input.public_value"
+          ]
+        },
+        {
+          "sequence": 11,
+          "function": "main.goMerge",
+          "passed": true,
+          "expected_sources": [
+            "input.public_value",
+            "input.secret"
+          ],
+          "observed_sources": [
+            "input.public_value",
+            "input.secret"
+          ]
+        },
+        {
+          "sequence": 12,
+          "function": "main.goMerge",
+          "passed": true,
+          "expected_sources": [
+            "input.public_value",
+            "input.secret"
+          ],
+          "observed_sources": [
+            "input.public_value",
+            "input.secret"
+          ]
+        }
+      ],
+      "dynamic_source_relations": {
+        "tp": 16,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "resolved_calls": 12,
+      "expected_calls": 12,
+      "inference_issues": 0,
+      "unexpected_calls": 0,
+      "scope": "Go leaf fixture field accuracy; executed loads may be optimized; no database or scheduler coverage"
+    }
+  },
+  "fixed_collector_host_validation": "pending rerun; simulated results do not validate corrected kernel capture"
+}
