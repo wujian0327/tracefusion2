@@ -29,7 +29,7 @@ def save(path, value):
     path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + '\n')
 
 
-def build(scenario, out):
+def build(scenario, out, planner=None, source_generator=None, extra_flags=()):
     config = json.loads((scenario / 'config.json').read_text())
     validate_config(config)
     copied = out / 'sources'
@@ -46,7 +46,7 @@ def build(scenario, out):
     binary = out / 'hybrid-demo'
     command = ['gcc', '-O1', '-g', '-fPIE', '-pie', '-fno-if-conversion', '-fno-if-conversion2',
                '-fno-inline', '-fno-lto', '-fno-ipa-icf', '-fno-stack-protector',
-               '-o', str(binary), str(copied / 'main.c'), str(copied / 'operations.c'), str(copied / 'layout_check.c')]
+               *extra_flags, '-o', str(binary), str(copied / 'main.c'), str(copied / 'operations.c'), str(copied / 'layout_check.c')]
     result = subprocess.run(command, capture_output=True, text=True)
     save(out / 'build.json', dict(command=command, returncode=result.returncode, stdout=result.stdout, stderr=result.stderr))
     result.check_returncode()
@@ -58,13 +58,13 @@ def build(scenario, out):
         words = line.split()
         if len(words) == 4 and words[2] in ('t', 'T'):
             symbols[words[3]] = int(words[0], 16), int(words[1], 16)
-    plans = [static_plan(decode_function(f, asm, symbols), config) for f in config['functions']]
+    plans = planner(asm, symbols, config) if planner else [static_plan(decode_function(f, asm, symbols), config) for f in config['functions']]
     save(out / 'probe-plan.json', plans)
     save(out / 'config.json', config)
     save(out / 'build-identity.json', {'binary_sha256': hashlib.sha256(binary.read_bytes()).hexdigest(),
         'gcc': subprocess.check_output(['gcc', '--version'], text=True).splitlines()[0],
         'sources': {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in copied.iterdir()}})
-    (out / 'collector.bpf.c').write_text(bpf_source(plans, config))
+    (out / 'collector.bpf.c').write_text((source_generator or bpf_source)(plans, config))
     return binary, plans, config
 
 
@@ -172,7 +172,7 @@ def attach_probes(bpf, binary, plans, pid):
     return attached
 
 
-def record_bpf(binary, plans, config, out):
+def record_bpf(binary, plans, config, out, source_generator=None):
     import bcc
     process = bpf = None
     events, bases = [], {}
@@ -184,15 +184,17 @@ def record_bpf(binary, plans, config, out):
             process = subprocess.Popen([str(binary), '--wait'], stdout=stdout, stderr=stderr)
             wait_stopped(process)
             bases = runtime_metadata(process, binary, plans, out)
-            bpf = bcc.BPF(text=bpf_source(plans, config))
+            bpf = bcc.BPF(text=(source_generator or bpf_source)(plans, config))
             attached = attach_probes(bpf, binary, plans, process.pid)
             save(out / 'attached-probes.json', attached)
             with (out / 'events.jsonl').open('w') as stream:
                 def receive(cpu, data, size):
                     obj = bpf['events'].event(data)
-                    event = {name: int(getattr(obj, name)) for name, _ in obj._fields_ if name not in ('regs', 'inputs', 'outputs')}
+                    event = {name: int(getattr(obj, name)) for name, _ in obj._fields_ if name not in ('regs', 'inputs', 'outputs', 'stack')}
                     event.update(regs=list(obj.regs), inputs=list(obj.inputs)[:len(config['input_fields'])],
                                  outputs=list(obj.outputs)[:len(config['output_fields'])])
+                    if hasattr(obj, 'stack'):
+                        event['stack'] = list(obj.stack)
                     events.append(event)
                     stream.write(json.dumps(event) + '\n'); stream.flush()
                 def lost(cpu, n):
@@ -259,20 +261,20 @@ def evaluate(inferred, oracle, stats, plans):
             'scope': 'fixture-specific source relation accuracy; not statement-edge recall or microservice accuracy'}
 
 
-def main():
+def main(default_scenario=None, prefix='hybrid-provenance', build_fn=build, record_fn=record_bpf, infer_fn=infer):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action', choices=['build', 'run'])
-    parser.add_argument('--scenario', type=Path, default=ROOT / 'scenarios/hybrid-provenance')
+    parser.add_argument('--scenario', type=Path, default=default_scenario or ROOT / 'scenarios/hybrid-provenance')
     parser.add_argument('--out', type=Path)
     args = parser.parse_args()
-    out = (args.out or ROOT / 'artifacts' / ('hybrid-provenance-' + dt.datetime.now().strftime('%Y%m%d-%H%M%S') + '-' + secrets.token_hex(2))).resolve()
+    out = (args.out or ROOT / 'artifacts' / (prefix + '-' + dt.datetime.now().strftime('%Y%m%d-%H%M%S') + '-' + secrets.token_hex(2))).resolve()
     out.mkdir(parents=True, exist_ok=False); os.chmod(out, 0o700)
     report = {'status': 'failed', 'action': args.action, 'stage': 'build', 'kernel_ebpf_tested': False,
               'platform': platform.platform()}
     try:
         require(sys.platform == 'linux' and platform.machine() == 'x86_64', 'Linux x86-64 only')
         require(all(shutil.which(t) for t in ('gcc', 'objdump', 'nm')), 'Install gcc and binutils')
-        binary, plans, config = build(args.scenario.resolve(), out)
+        binary, plans, config = build_fn(args.scenario.resolve(), out)
         if args.action == 'build':
             report.update(status='build_verified', stage='complete')
         else:
@@ -282,12 +284,12 @@ def main():
                 fd = os.dup(2)
                 try:
                     sys.stderr.flush(); os.dup2(log.fileno(), 2)
-                    events, stats, bases = record_bpf(binary, plans, config, out)
+                    events, stats, bases = record_fn(binary, plans, config, out)
                 finally:
                     sys.stderr.flush(); os.dup2(fd, 2); os.close(fd)
             report['kernel_ebpf_tested'] = bool(stats.get('raw_probe_hits'))
             report['stage'] = 'inference'
-            inferred = infer(events, plans, config, bases)
+            inferred = infer_fn(events, plans, config, bases)
             save(out / 'inferred.json', inferred)
             # Evaluation alone opens the independent harness oracle.
             oracle = [json.loads(l) for l in (out / 'program.stdout.jsonl').read_text().splitlines()]

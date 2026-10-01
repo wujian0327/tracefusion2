@@ -1,0 +1,9 @@
+{
+  "abi": "linux-x86_64-sysv",
+  "functions": ["pipeline_branch", "pipeline_repeat", "pipeline_merge"],
+  "input_fields": ["secret", "public_value", "noise"],
+  "output_fields": ["value", "audit"],
+  "sink_field": "value",
+  "sensitive_fields": ["secret"],
+  "scope": "single-threaded, direct acyclic calls; bounded stack; explicit data dependencies"
+}

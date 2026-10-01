@@ -4,7 +4,18 @@
 
 当前验证主线：**静态候选依赖分析 + 自动选择 eBPF 观测位置 + 动态来源重建**。此前 HTTP 抓包、trace/span 和调用链基线保留为前期实验设施。
 
-## 当前：静动态结合的最小闭环
+## 当前：跨函数来源传播验证
+
+在单函数闭环的基础上，新增自动发现直接调用、参数/返回值传播、栈暂存与恢复，以及同一辅助函数多次调用的上下文区分。本地 66 项测试通过；**本版真实 eBPF 运行待主机验证**。
+
+```bash
+git pull origin main
+sudo /usr/bin/python3 scripts/interproc_provenance.py run
+```
+
+无需 Docker，沿用现有 BCC 环境。成功或失败请返回 `artifacts/interproc-provenance-*.zip`。本轮共 12 次入口调用，说明见 [跨函数验证](docs/interproc-provenance.md)。
+
+## 已验证：单函数静动态最小闭环
 
 先分析编译后二进制的控制流与字段读写依赖，自动生成观测位置，再通过执行路径、寄存器和内存证据筛选来源。四类受控场景覆盖分支选择、覆盖、源码指针选择及计算，共 16 次调用。支持范围是明确的无环原生指令子集。
 
@@ -126,7 +137,8 @@ python3 -m unittest discover -s tests -v
 
 ## 文档与验证状态
 
-- [当前静动态结合验证](docs/hybrid-provenance.md)
+- [当前跨函数来源传播验证](docs/interproc-provenance.md)
+- [已通过主机验证的单函数闭环](docs/hybrid-provenance.md)
 - [MirrorTaint、FlowDist 算法与 eBPF 边界](docs/mirrortaint-flowdist-ebpf-review.md)
 - [已完成的程序内部赋值验证](docs/uprobe-assignment.md)
 - [前期 eBPF 网络数据验证](docs/ebpf-provenance.md)
@@ -136,4 +148,4 @@ python3 -m unittest discover -s tests -v
 - [源码版本与镜像依据](scenarios/sockshop/sources.json)
 - [本地验证记录](docs/validation.md)
 
-Sock Shop 业务路径保持原样。本轮新增独立 C 夹具验证自动探针规划和动态消歧；此前程序级探针已在简单赋值上验证可行，新闭环已通过本轮主机 eBPF 验证，仍限于受控单线程原生叶函数。
+Sock Shop 业务路径保持原样。单函数闭环已通过主机验证；当前用独立 C 夹具扩展到受控直接调用，尚未接入真实微服务字段传播。
