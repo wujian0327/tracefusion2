@@ -32,7 +32,7 @@ def operand(text):
     raise ValueError('Unsupported operand: ' + text)
 
 
-def decode(name, assembly, symbols):
+def decode(name, assembly, symbols, special_instructions=None):
     base, size = symbols[name]
     instructions = []
     for line in assembly.splitlines():
@@ -42,6 +42,12 @@ def decode(name, assembly, symbols):
         asm = ' '.join(match[2].split()).split(' #')[0]
         op, _, args = asm.partition(' ')
         node = dict(function=name, offset=int(match[1], 16)-base, asm=asm, op=op, args=[])
+        special = (special_instructions or {}).get(node['offset'])
+        if special:
+            node.update(special)
+            instructions.append(node)
+            if node['op'] == 'unsupported_runtime': break
+            continue
         if op in BRANCHES | {'jmp', 'call'}:
             target = re.fullmatch(r'([0-9a-f]+)(?: <[^>]+>)?', args)
             require(target is not None, 'Indirect calls/jumps are unsupported')
@@ -78,7 +84,7 @@ def decode(name, assembly, symbols):
         if n['op'] in BRANCHES | {'jmp'}:
             n['target'] = n['target_address'] - base
             require(n['target'] in offsets, 'Jump leaves function; tail calls unsupported')
-        if n['op'] not in ('ret', 'jmp'):
+        if n['op'] not in ('ret', 'jmp', 'unsupported_runtime'):
             require(nxt is not None, 'Fallthrough leaves function')
     return dict(function=name, symbol_address=base, symbol_size=size, instructions=instructions)
 
@@ -92,6 +98,7 @@ def enumerate_paths(root, functions):
         require(key not in seen, 'Loops are unsupported')
         require(len(path) < 512 and len(paths) < 128, 'Bounded path budget exceeded')
         n = maps[name][off]
+        if n['op'] == 'unsupported_runtime': return
         sid = '/'.join(context) + '|' + name + ':%x' % off
         step = dict(function=name, offset=off, context=list(context), depth=len(returns)+1, id=sid)
         path = path + [step]; seen = seen | {key}
@@ -164,7 +171,7 @@ def symbolic_path(path, functions, config, distinguish_reads=False):
 
     def check_region(region, off, width):
         if region == 'stack':
-            require(-STACK_BYTES <= off and off+width <= 8 and off % width == 0, 'Stack access outside bounded aligned region')
+            require(-STACK_BYTES <= off and off+width <= 8+adapter.stack_above and off % width == 0, 'Stack access outside bounded aligned region')
         else:
             require(region in layouts, 'Memory outside field schema')
             layouts[region].at(off, width)
@@ -172,6 +179,7 @@ def symbolic_path(path, functions, config, distinguish_reads=False):
     def store(addr, width, value):
         region, off = addr; check_region(region, off, width)
         require(region != 'input', 'Writes to input unsupported')
+        require(region != 'stack' or off+width <= 0 or off >= 8, 'Root return address write unsupported')
         for key in list(memory):
             r, o, w = key
             if r == region and off < o+w and o < off+width:
@@ -213,7 +221,11 @@ def symbolic_path(path, functions, config, distinguish_reads=False):
     for index, step in enumerate(path):
         n = maps[step['function']][step['offset']]; nid = step['id']; op = n['op']
         nodes[nid] = dict(function=step['function'], offset=step['offset'], context=step['context'], depth=step['depth'], asm=n['asm'])
-        if op in ('mov', 'lea', 'xor', 'add', 'sub', 'test', 'cmp'):
+        if op == 'guard_cmp':
+            require(adapter.runtime_guard_offset == n['guard_offset'], 'Unconfigured runtime guard')
+            flags = Sym(refs=frozenset({nid}))
+            nodes[nid]['kind'] = 'runtime-stack-check'
+        elif op in ('mov', 'lea', 'xor', 'add', 'sub', 'test', 'cmp'):
             a, b = n['args']; width = a['width']
             if a.get('reg') == 'rsp' and a['kind'] == 'reg':
                 adjust_stack(b['value'] * (-1 if op == 'sub' else 1), nid); flags = Sym(refs=frozenset({nid}))
@@ -290,7 +302,7 @@ def symbolic_path(path, functions, config, distinguish_reads=False):
     return result
 
 
-def plan_program(assembly, symbols, config):
+def plan_program(assembly, symbols, config, decoder=decode):
     validate_config(config)
     require(not get_adapter(config).leaf_only, 'This adapter is limited to the leaf replay planner')
     functions, active = {}, set()
@@ -301,7 +313,7 @@ def plan_program(assembly, symbols, config):
         require(name not in active, 'Recursion is unsupported')
         if name in functions: return
         require(name in symbols and len(functions) < 32, 'Unknown callee or function limit exceeded')
-        active.add(name); f = decode(name, assembly, symbols)
+        active.add(name); f = decoder(name, assembly, symbols)
         for n in f['instructions']:
             if n['op'] == 'call':
                 names = by_address.get(n['target_address'], [])
@@ -312,7 +324,7 @@ def plan_program(assembly, symbols, config):
         functions[name] = f; active.remove(name)
     for root in config['functions']: discover(root)
     plans = [functions[n] for n in config['functions']] + [functions[n] for n in sorted(set(functions)-set(config['functions']))]
-    selected = {n: {0} | {i['offset'] for i in p['instructions'] if i['op']=='ret'} for n,p in functions.items()}
+    selected = {n: {0} | {i['offset'] for i in p['instructions'] if i['op'] in ('ret','guard_cmp','unsupported_runtime')} for n,p in functions.items()}
     for p in plans:
         p.update(is_root=p['function'] in config['functions'], paths=[], static_sources=[])
     for root in config['functions']:
@@ -356,7 +368,7 @@ class Machine:
         self.src, self.dst, self.sp = event['src_addr'], event['dst_addr'], event['root_sp']
         require(self.sp == self.regs['rsp'] and self.sp % 8 == 0, 'Invalid root stack')
         require(self.src % 4 == self.dst % 4 == 0, 'Unaligned fields')
-        ranges = [(self.src,self.layouts['input'].size),(self.dst,self.layouts['output'].size),(self.sp-STACK_BYTES,STACK_BYTES+8)]
+        ranges = [(self.src,self.layouts['input'].size),(self.dst,self.layouts['output'].size),(self.sp-STACK_BYTES,STACK_BYTES+8+self.adapter.stack_above)]
         require(all(not (a < b+nb and b < a+na) for i,(a,na) in enumerate(ranges) for b,nb in ranges[i+1:]), 'Boundary memory regions overlap')
         self.memory, self.stack_written, self.returns = {}, set(), []
         self.config = config
@@ -372,7 +384,7 @@ class Machine:
 
     def write_mem(self, address, width, value):
         output = self.dst <= address and address+width <= self.dst+self.layouts['output'].size
-        stack = self.sp-STACK_BYTES <= address and address+width <= self.sp
+        stack = self.sp-STACK_BYTES <= address and address+width <= self.sp+8+self.adapter.stack_above and (address+width <= self.sp or address >= self.sp+8)
         require(output or stack, 'Write outside output/stack regions')
         for i,b in enumerate((value & ((1<<(width*8))-1)).to_bytes(width,'little')):
             self.memory[address+i] = b
@@ -390,6 +402,9 @@ class Machine:
 
     def check(self,event,step,bases):
         require(event['source_error']==event['destination_error']==event['stack_error']==0,'User memory read failed')
+        if self.adapter.runtime_guard_offset is not None:
+            require(event['runtime_guard_error'] == 0, 'Runtime stack guard read failed')
+            self.runtime_guard = event['runtime_guard']
         require((event['src_addr'],event['dst_addr'],event['root_sp'])==(self.src,self.dst,self.sp),'Boundary addresses changed')
         require(event['depth']==step['depth'],'Call depth contradicts path')
         require(event['ip']==bases[step['function']]+step['offset'],'Instruction IP mismatch')
@@ -402,6 +417,11 @@ class Machine:
 
     def step(self,node,bases):
         op,args,fn = node['op'],node['args'],node['function']
+        if op == 'unsupported_runtime': raise ValueError('Runtime stack-growth/preemption path unsupported')
+        if op == 'guard_cmp':
+            require(self.adapter.runtime_guard_offset == node['guard_offset'], 'Unconfigured runtime guard')
+            self.flags = flags_for('cmp',self.regs[node['compare_register']],self.runtime_guard,64)
+            return bases[fn]+node['next']
         if op=='call':
             ret = bases[fn]+node['next']; self.regs['rsp'] -= 8
             self.write_mem(self.regs['rsp'],8,ret); self.returns.append(ret)
@@ -451,8 +471,10 @@ def infer(events,plans,config,runtime_bases):
             root=plans[rid]
             require(all(r['root']==rid and 0<=r['function']<len(plans) for r in rows),'Mixed roots or unknown functions')
             require(all(rows[i]['timestamp']<=rows[i+1]['timestamp'] for i in range(len(rows)-1)),'Non-monotonic sequence')
-            require(all(len(r['regs'])==16 and len(r['inputs'])==len(config['input_fields']) and len(r['outputs'])==len(config['output_fields']) and len(r['stack'])==STACK_WORDS for r in rows),'Observation shape mismatch')
+            require(all(len(r['regs'])==16 and len(r['inputs'])==len(config['input_fields']) and len(r['outputs'])==len(config['output_fields']) and len(r['stack'])==STACK_WORDS+adapter.stack_above//8 for r in rows),'Observation shape mismatch')
             schedule=[[plans[r['function']]['function'],r['offset'],r['depth']] for r in rows]
+            require(not any(maps[fn].get(off,{}).get('op') == 'unsupported_runtime' for fn,off,depth in schedule),
+                    'Runtime stack-growth/preemption path observed; this invocation is unsupported')
             candidates=[p for p in root['paths'] if p['schedule']==schedule]
             require(candidates,'Observed call/return path outside plan')
             survivors=[]

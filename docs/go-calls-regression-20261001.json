@@ -1,0 +1,48 @@
+{
+  "purpose": "Compatibility audit after Go calls extension",
+  "replays": [
+    {
+      "package": "hybrid-host-review-20261001",
+      "events": 88,
+      "calls": 16,
+      "binary_hash_verified": true,
+      "plans_identical": true,
+      "bpf_identical": true,
+      "inference_identical": true,
+      "evaluation_identical": true
+    },
+    {
+      "package": "interproc-host-review-172324",
+      "events": 448,
+      "calls": 12,
+      "binary_hash_verified": true,
+      "plans_identical": true,
+      "bpf_identical": true,
+      "inference_identical": true,
+      "evaluation_identical": true
+    },
+    {
+      "package": "loop-host-review-174750",
+      "events": 428,
+      "calls": 24,
+      "binary_hash_verified": true,
+      "plans_identical": true,
+      "bpf_identical": true,
+      "inference_identical": true,
+      "evaluation_identical": true
+    },
+    {
+      "package": "go-host-review-182405",
+      "events": 62,
+      "calls": 12,
+      "binary_hash_verified": true,
+      "plans_identical": true,
+      "bpf_identical": true,
+      "inference_identical": true,
+      "evaluation_identical": true
+    }
+  ],
+  "total_events": 1026,
+  "total_calls": 64,
+  "new_go_cross_function_host_capture_tested": false
+}

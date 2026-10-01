@@ -4,7 +4,7 @@ V1 is deliberately uint32-only. Layout, ABI and execution identity live here;
 the x86 instruction interpreter and provenance graph remain shared. This is
 not a source-language frontend or a generic runtime decoder.
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import re
 
 
@@ -77,6 +77,8 @@ class NativeAdapter:
     function_pattern: str
     leaf_only: bool = False
     return_register: str = 'rax'
+    stack_above: int = 0
+    runtime_guard_offset: int | None = None
 
     def validate(self, config):
         require(config['abi'] == self.abi, 'ABI does not match selected language adapter')
@@ -116,10 +118,14 @@ class NativeAdapter:
         return 'ctx->' + fields.get(reg, reg)
 
     def describe(self, config):
-        return dict(name=self.name, abi=self.abi, context_policy=self.context.name,
+        result = dict(name=self.name, abi=self.abi, context_policy=self.context.name,
                     input_register=self.input_register, output_register=self.output_register,
                     selector_register=self.selector_register, return_register=self.return_register, leaf_only=self.leaf_only,
                     fields={r:[vars(f) for f in self.layout(config,r).fields] for r in ('input','output')})
+        if self.runtime_guard_offset is not None:
+            result.update(runtime_guard_offset=self.runtime_guard_offset, stack_spill_bytes=self.stack_above,
+                          runtime_policy='observe guard; reject executed growth/preemption slow path')
+        return result
 
 
 C = NativeAdapter('c-sysv-u32', 'linux-x86_64-sysv', 'rsi', 'rdi', 'rdx',
@@ -128,7 +134,9 @@ C = NativeAdapter('c-sysv-u32', 'linux-x86_64-sysv', 'rsi', 'rdi', 'rdx',
 GO = NativeAdapter('go-amd64-u32-leaf', 'go-amd64-abiinternal', 'rbx', 'rax', 'rcx',
     ('rax','rbx','rcx','rdi','rsi','r8','r9','r10','r11'), ('rbp','r14'),
     ExecutionPolicy('single-pinned-goroutine', 'r14'), r'main\.[A-Za-z_]\w*', leaf_only=True)
-ADAPTERS = {a.name: a for a in (C, GO)}
+GO_CALLS = replace(GO, name='go-amd64-u32-calls', leaf_only=False,
+                   stack_above=32, runtime_guard_offset=16)
+ADAPTERS = {a.name: a for a in (C, GO, GO_CALLS)}
 
 
 def get_adapter(config):

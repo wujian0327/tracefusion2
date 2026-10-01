@@ -10,7 +10,7 @@ import subprocess
 import hybrid_provenance as common
 import loop_provenance as core
 import interproc_provenance as collector
-from language_adapters import GO, get_adapter, require
+from language_adapters import GO, GO_CALLS, get_adapter, require
 
 
 def parse_nm(text):
@@ -26,7 +26,7 @@ def parse_nm(text):
 def layout_assertions(config):
     lines = ['package main', 'import "unsafe"']
     for region in ('input','output'):
-        layout = GO.layout(config,region)
+        layout = get_adapter(config).layout(config,region)
         checks = [(f'int(unsafe.Sizeof({region}{{}}))',layout.size)]
         for field in layout.fields:
             checks += [(f'int(unsafe.Offsetof({region}{{}}.{field.name}))',field.offset),
@@ -37,9 +37,11 @@ def layout_assertions(config):
     return '\n'.join(lines)+'\n'
 
 
-def build(scenario, out):
+def build(scenario, out, planner=None):
     config = json.loads((scenario/'config.json').read_text())
-    require(get_adapter(config) == GO, 'Go builder requires the Go adapter')
+    adapter = get_adapter(config)
+    require(adapter in (GO, GO_CALLS), 'Go builder requires the Go adapter')
+    require(adapter == GO or planner is not None, 'Go calls require the explicit cross-function planner')
     require(shutil.which('go') is not None, 'Install Go and make it visible to the user running this command')
     copied = out/'sources'; copied.mkdir()
     for name in ('config.json','main.go','operations.go'): shutil.copyfile(scenario/name,copied/name)
@@ -50,7 +52,7 @@ def build(scenario, out):
     match = re.search(r'\bgo1\.(\d+)(?:\.|\s)',version)
     require(match is not None and 22 <= int(match[1]) <= 26,
             'Pilot requires a Go 1.22-1.26 toolchain; actual version is recorded, not assumed validated')
-    common.save(out/'adapter.json',dict(GO.describe(config),compiler=version,
+    common.save(out/'adapter.json',dict(adapter.describe(config),compiler=version,
                                       capture_status='requires host validation for this build'))
     binary = out/'hybrid-demo'
     command = ['go','build','-buildmode=pie','-gcflags=-l','-o',str(binary),
@@ -70,9 +72,9 @@ def build(scenario, out):
     (out/'disassembly.txt').write_text(assembly)
     common.save(out/'build-identity.json',dict(binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest(),
         go=version,sources={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in copied.iterdir()}))
-    plans = core.plan_program(assembly,parse_nm(nm),config)
-    # Go runtime calls (including morestack) are explicitly rejected by the
-    # leaf planner rather than skipped. Do not inject nosplit/cgo to hide them.
+    plans = (planner or core.plan_program)(assembly,parse_nm(nm),config)
+    # The default planner rejects calls. The explicit calls planner observes
+    # stack checks and rejects executed slow paths; neither inserts nosplit.
     common.save(out/'probe-plan.json',plans); common.save(out/'config.json',config)
     (out/'collector.bpf.c').write_text(collector.bpf_source(plans,config))
     return binary,plans,config

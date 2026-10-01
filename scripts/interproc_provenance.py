@@ -77,7 +77,12 @@ REGISTER_ASSIGNMENTS
 }
 '''
     fields = ['ax','bx','cx','dx','si','di','bp','sp'] + ['r%d'%i for i in range(8,16)]
-    substitutions = dict(MAX_DEPTH=str(MAX_DEPTH),STACK_WORDS=str(STACK_WORDS),STACK_BYTES=str(STACK_BYTES),
+    if adapter.runtime_guard_offset is not None:
+        source = source.replace('s32 source_error, destination_error, stack_error;',
+                                's32 source_error, destination_error, stack_error;\n    u64 runtime_guard; s32 runtime_guard_error;')
+        source = source.replace('    count(0);',
+            '    e->runtime_guard_error = bpf_probe_read_user(&e->runtime_guard, sizeof(e->runtime_guard), (void *)(ctx->r14 + %d));\n    count(0);' % adapter.runtime_guard_offset)
+    substitutions = dict(MAX_DEPTH=str(MAX_DEPTH),STACK_WORDS=str(STACK_WORDS+adapter.stack_above//8),STACK_BYTES=str(STACK_BYTES),
                          INPUT_BYTES=str(adapter.layout(config,'input').size),OUTPUT_BYTES=str(adapter.layout(config,'output').size),
                          INPUT_POINTER=adapter.bpf_pointer('input'),OUTPUT_POINTER=adapter.bpf_pointer('output'),
                          CONTEXT_KEY=adapter.context.bpf_key(),

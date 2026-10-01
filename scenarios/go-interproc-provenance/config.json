@@ -1,0 +1,10 @@
+{
+  "adapter": "go-amd64-u32-calls",
+  "abi": "go-amd64-abiinternal",
+  "functions": ["main.goCallSelect", "main.goCallOverwrite", "main.goCallMerge"],
+  "input_fields": ["secret", "public_value", "noise"],
+  "output_fields": ["value", "audit"],
+  "sink_field": "value",
+  "sensitive_fields": ["secret"],
+  "scope": "pure Go direct calls; one pinned goroutine; uint32 fields; observed stack checks; reject stack growth, preemption slow path, recursion and cycles"
+}

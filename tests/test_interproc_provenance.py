@@ -23,7 +23,7 @@ except ImportError:
 SCENARIO=common.ROOT/'scenarios/interproc-provenance'
 
 
-def emulated_events(binary,plans,config,selections=(0,1)):
+def emulated_events(binary,plans,config,selections=(0,1),runtime_guard=None):
     adapter=get_adapter(config)
     elf=binary.read_bytes();phoff=struct.unpack_from('<Q',elf,32)[0]
     size,count=struct.unpack_from('<HH',elf,54)
@@ -55,7 +55,13 @@ def emulated_events(binary,plans,config,selections=(0,1)):
                     cpu.reg_write(getattr(x86,'UC_X86_REG_'+reg.upper()),value)
                 # Nonzero callee-saved values expose incorrect push/pop restoration.
                 for i,r in enumerate(adapter.saved_registers):cpu.reg_write(getattr(x86,'UC_X86_REG_'+r.upper()),0xabc000+i)
+                if adapter.runtime_guard_offset is not None:
+                    goroutine=0x6000000;cpu.mem_map(goroutine,4096)
+                    guard=stack+256 if runtime_guard is None else runtime_guard
+                    cpu.mem_write(goroutine+adapter.runtime_guard_offset,struct.pack('<Q',guard))
+                    cpu.reg_write(x86.UC_X86_REG_R14,goroutine)
                 frames=[];sequence=[0]
+                rejected=[False]
                 def observe(machine,address,size,user):
                     if address not in points:return
                     fid,off=points[address];p=plans[fid]
@@ -68,12 +74,16 @@ def emulated_events(binary,plans,config,selections=(0,1)):
                         function=fid,offset=off,source_error=0,destination_error=0,stack_error=0,
                         inputs=list(struct.unpack('<'+'I'*len(config['input_fields']),machine.mem_read(src,4*len(config['input_fields'])))),
                         outputs=list(struct.unpack('<'+'I'*len(config['output_fields']),machine.mem_read(dst,4*len(config['output_fields'])))),
-                        stack=list(struct.unpack('<'+'Q'*model.STACK_WORDS,machine.mem_read(root_sp-model.STACK_BYTES,model.STACK_WORDS*8))))
+                        stack=list(struct.unpack('<'+'Q'*(model.STACK_WORDS+adapter.stack_above//8),machine.mem_read(root_sp-model.STACK_BYTES,model.STACK_WORDS*8+adapter.stack_above))))
+                    if adapter.runtime_guard_offset is not None:
+                        event.update(runtime_guard=int.from_bytes(machine.mem_read(machine.reg_read(x86.UC_X86_REG_R14)+adapter.runtime_guard_offset,8),'little'),runtime_guard_error=0)
                     events.append(event);sequence[0]+=1
                     if instructions[p['function']][off]['op']=='ret':frames.pop()
+                    if instructions[p['function']][off]['op']=='unsupported_runtime':
+                        rejected[0]=True;machine.emu_stop()
                 cpu.hook_add(uc.UC_HOOK_CODE,observe)
                 cpu.emu_start(bases[root['function']],stop,timeout=1000000,count=5000)
-                assert cpu.reg_read(x86.UC_X86_REG_RIP)==stop and not frames
+                assert rejected[0] or (cpu.reg_read(x86.UC_X86_REG_RIP)==stop and not frames)
     return events,bases
 
 
