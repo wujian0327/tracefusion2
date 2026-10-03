@@ -4,7 +4,21 @@
 
 当前验证主线：**静态候选依赖分析 + 自动选择 eBPF 观测位置 + 动态来源重建**。此前 HTTP 抓包、trace/span 和调用链基线保留为前期实验设施。
 
-## 当前：真实 Gin Web API 场景（主机采集已通过）
+## 当前：Gin 并发请求状态隔离（待主机采集验证）
+
+新增每批 4 个、共 28 个并发请求，输入对象和采集状态按请求隔离。通过阶段同步确保请求交错，并使用独立评估对应表匹配客户端请求；不依赖发送/完成顺序或 JSON 值配对。仍保留请求内 `LockOSThread`，线程迁移和子 goroutine 传播暂缓。
+
+**实际构建、并发 HTTP 与本地交错重建测试已通过；新的 BPF 内核采集尚待验证。**旧串行主机包的 446 条事件完整重放一致。
+
+```bash
+git pull --ff-only origin main
+sudo env "PATH=$PATH" GOPROXY=https://goproxy.cn,direct \
+  /usr/bin/python3 scripts/gin_concurrent_provenance.py run
+```
+
+返回 `artifacts/gin-concurrent-provenance-*.zip`，旧入口不用重跑。详见 [并发场景、身份匹配和验证范围](docs/gin-concurrent-provenance.md)。
+
+## 已验证：真实 Gin Web API 串行场景
 
 新增普通 Go 结构体 + `c.JSON` 的 `GET /account/summary`。自动发送 14 个串行请求，连接文件读取、业务计算、标准库 JSON 序列化和 Gin 响应写入。覆盖双来源加工、常量覆盖、同值换源、0/UINT32_MAX，以及连接复用和新建连接。
 
@@ -243,7 +257,8 @@ python3 -m unittest discover -s tests -v
 
 ## 文档与验证状态
 
-- [当前 Gin Web API 来源验证](docs/gin-api-provenance.md)
+- [当前 Gin 并发请求状态隔离验证](docs/gin-concurrent-provenance.md)
+- [已通过主机验证的 Gin 串行 Web API 来源](docs/gin-api-provenance.md)
 - [已通过主机验证的 JSON 标准输出来源验证](docs/json-output-provenance.md)
 - [已通过主机验证的 Go 真实文件读取来源](docs/go-read-provenance.md)
 - [已通过主机验证的 C 文件读取来源](docs/read-provenance.md)

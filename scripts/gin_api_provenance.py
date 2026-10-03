@@ -100,7 +100,7 @@ int gin_writer_exit(struct pt_regs *ctx) {
     return source
 
 
-def build(scenario, out):
+def build(scenario, out, *, source_generator=None):
     config = json.loads((scenario/'config.json').read_text())
     require(config['gin_api']['model']=='gin-struct-u32-v1', 'Unknown Gin summary model')
     copied=out/'sources';copied.mkdir()
@@ -138,7 +138,7 @@ def build(scenario, out):
     common.save(out/'adapter.json',dict(go.get_adapter(config).describe(config),compiler=version,
         framework='Gin '+gin['Version'],capture_status='requires host BPF validation'))
     common.save(out/'probe-plan.json',plans);common.save(out/'config.json',config)
-    (out/'collector.bpf.c').write_text(bpf_source(plans,config))
+    (out/'collector.bpf.c').write_text((source_generator or bpf_source)(plans,config))
     return binary,plans,config
 
 
@@ -161,7 +161,7 @@ def client(out):
         common.save(out/'client-responses.json',rows)
 
 
-def record(binary,plans,config,out):
+def record(binary,plans,config,out, *, source_generator=None, client_script=None):
     manifest={};driver=None
     with (out/'client.log').open('w') as log:
         def setup(bpf,process,binary,plans,config,out):
@@ -178,9 +178,9 @@ def record(binary,plans,config,out):
             common.save(out/'gin-attachments.json',attached)
             # The listener exists before SIGSTOP; the serial client blocks until
             # the common collector opens perf buffers and resumes the server.
-            driver=subprocess.Popen([sys.executable,str(Path(__file__).resolve()),'client',str(out)],stdout=log,stderr=log)
+            driver=subprocess.Popen([sys.executable,str(Path(client_script or __file__).resolve()),'client',str(out)],stdout=log,stderr=log)
         try:
-            events,stats,bases=common.record_bpf(binary,plans,config,out,source_generator=bpf_source,setup_fn=setup)
+            events,stats,bases=common.record_bpf(binary,plans,config,out,source_generator=source_generator or bpf_source,setup_fn=setup)
             require(driver.wait(timeout=12)==0,'HTTP client failed; see client.log')
         finally:
             if driver is not None and driver.poll() is None:driver.kill();driver.wait()

@@ -24,7 +24,7 @@ from test_interproc_provenance import uc, x86
 SCENARIO=app.common.ROOT/'scenarios/read-provenance'
 
 
-def execute(binary, plans, config, function, values, selector, call_id):
+def execute(binary, plans, config, function, values, selector, call_id, *, memory_base=0, goroutine_address=None):
     elf=binary.read_bytes(); phoff=struct.unpack_from('<Q',elf,32)[0]
     phsize,phnum=struct.unpack_from('<HH',elf,54)
     cpu=uc.Uc(uc.UC_ARCH_X86,uc.UC_MODE_64); mapped=set(); bias=0x1000000
@@ -35,7 +35,7 @@ def execute(binary, plans, config, function, values, selector, call_id):
         for page in range(start&~4095,(start+segment[6]+4095)&~4095,4096):
             if page not in mapped:cpu.mem_map(page,4096);mapped.add(page)
         cpu.mem_write(start,elf[segment[2]:segment[2]+segment[5]])
-    src,dst,stack,stop=0x2000000,0x3000000,0x4000000,0x5000000
+    src,dst,stack,stop=(memory_base+a for a in (0x2000000,0x3000000,0x4000000,0x5000000))
     for address in (src,dst,stack,stop):cpu.mem_map(address,4096)
     root_sp=stack+2040
     cpu.mem_write(src,struct.pack('<III',*values));cpu.mem_write(dst,struct.pack('<II',0xdeadbeef,0))
@@ -45,7 +45,7 @@ def execute(binary, plans, config, function, values, selector, call_id):
         cpu.reg_write(getattr(x86,'UC_X86_REG_'+reg.upper()),value)
     for i,r in enumerate(adapter.saved_registers):cpu.reg_write(getattr(x86,'UC_X86_REG_'+r.upper()),0xabc000+i)
     if adapter.runtime_guard_offset is not None:
-        goroutine=0x6000000;cpu.mem_map(goroutine,4096)
+        goroutine=goroutine_address or (memory_base+0x6000000);cpu.mem_map(goroutine,4096)
         cpu.mem_write(goroutine+adapter.runtime_guard_offset,struct.pack('<Q',stack+256))
         cpu.reg_write(x86.UC_X86_REG_R14,goroutine)
     stack_words=model.STACK_WORDS+adapter.stack_above//8

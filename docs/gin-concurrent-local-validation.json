@@ -1,0 +1,119 @@
+{
+  "status": "local_validation_passed_host_bpf_pending",
+  "kernel_ebpf_tested": false,
+  "build_identity": {
+    "binary_sha256": "411817144e83d3b576b923a4638c2aa98c4686c68ef0991e190a05c46d78d6dc",
+    "go": "go1.25.4",
+    "gin": "v1.11.0",
+    "sources": {
+      "go.mod": "01f58e102456152ad443400c5f73adecff5f1b67179d95f8cdcd0cacaded4310",
+      "main.go": "ee232f719b6b449b1ef564ba29022a76321df4285a5ae1e2482e5dd2635b21aa",
+      "operations.go": "b2375f6873984bcaea66492503dd9c9ff707d9cc1fe17002a26be2798d3cb423",
+      "go.sum": "f5c48e466f1b1dac24757ef272ce6b281fc37acbbe13456fc5c258565c85439e",
+      "layout_check.go": "ab7df18fe3cbe5e2440f909e458486ca473558e6b062faa5db0e390f290a30bb",
+      "config.json": "a02f3036a11fdb5f51168e34503d419ca3cd67cb4947fa9892474b413e3cb3ec"
+    },
+    "gin_source_sha256": {
+      "render/json.go": "fa3d00b7dcbc6af8cfab53d99eb2adf21951230109376b06d6dce263fa41fd11",
+      "response_writer.go": "0145937323ee030ddd933a169dbb271b3e8bab3d180a2ad6eb85cdab538f77a3",
+      "codec/json/json.go": "e5f9ca595f98cd59a4dbf2e5a69a952ccfdee0a5fe14e106bfd207d23d9d89af",
+      "codec/json/api.go": "8415df4e9bb8eeeebdfb9998c0c1c95bd2f0707d1c144b5293943a8d36033425",
+      "codec/json/go_json.go": "e97717cdc11968e29118767937309f4f5c1d4586b26ed975bc15a02ce47f9f20",
+      "codec/json/sonic.go": "3a80faca223df055f6a6bc0f00aeb21a5cf7860efee6c1b7f892151740a3ad4f",
+      "codec/json/jsoniter.go": "eb34e50d9c14ae6ec407a90ee5262b3950c4add20c7f24892e31f3420b9f29d9"
+    },
+    "build_tags": [
+      "nomsgpack"
+    ],
+    "inlining": false
+  },
+  "static_planning": {
+    "instruction_probes": 53,
+    "boundary_plan": {
+      "request": {
+        "function": "main.serveAccount",
+        "entry_offset": 10,
+        "return_offsets": [
+          586
+        ],
+        "policy": "fast-path entry and RET instruction uprobes; no uretprobe; workload internals not instruction-replayed"
+      },
+      "render": {
+        "function": "github.com/gin-gonic/gin/render.WriteJSON",
+        "entry_offset": 10,
+        "return_offsets": [
+          115,
+          152
+        ],
+        "policy": "fast-path entry and RET instruction uprobes; no uretprobe; workload internals not instruction-replayed"
+      },
+      "marshal": {
+        "function": "encoding/json.Marshal",
+        "entry_offset": 15,
+        "return_offsets": [
+          405,
+          483,
+          522
+        ],
+        "policy": "fast-path entry and RET instruction uprobes; no uretprobe; workload internals not instruction-replayed"
+      },
+      "writer": {
+        "function": "github.com/gin-gonic/gin.(*responseWriter).Write",
+        "entry_offset": 6,
+        "return_offsets": [
+          89
+        ],
+        "policy": "fast-path entry and RET instruction uprobes; no uretprobe; workload internals not instruction-replayed"
+      }
+    }
+  },
+  "concurrent_tests": {
+    "passed": 10,
+    "failed": 0,
+    "skipped": 0,
+    "real_http_requests": 28,
+    "concurrency": 4,
+    "batches": 7,
+    "compiled_instruction_execution": "Unicorn",
+    "transport": "Synthetic interleaved boundary events; not BPF events",
+    "generated_collector_test": "Native C++ shim executes shared instruction handler, scope lifecycle and raw syscall handlers with mocked maps/helpers"
+  },
+  "locally_checked": {
+    "requests": 28,
+    "compute_calls": 36,
+    "read_operations": 56,
+    "source_relations": {
+      "tp": 28,
+      "fp": 0,
+      "fn": 0
+    },
+    "client_ticket_differs_from_request_id": true,
+    "overlap_and_phase_order_in_all_batches": true,
+    "per_request_counters_reset": true,
+    "same_bytes_wrong_request_offset_rejected_by_evaluation": true,
+    "shared_live_input_rejected": true,
+    "reordered_perf_delivery_preserves_results": true,
+    "cross_cpu_timestamp_order_not_assumed": true
+  },
+  "serial_regressions": {
+    "passed": 9,
+    "failed": 0,
+    "skipped": 0,
+    "includes_real_http": true
+  },
+  "prior_host_replay": {
+    "bundle": "gin-api-provenance-20261003-160056-611b.zip",
+    "events": 446,
+    "requests": 14,
+    "collector_source_unchanged": true,
+    "complete_inference_equal": true,
+    "complete_evaluation_equal": true
+  },
+  "limits": [
+    "new BCC compilation/verification/attachment/capture still pending on user host",
+    "pinned OS thread within each request; no migration",
+    "no child-goroutine propagation or shared mutable objects",
+    "fixed uint32 JSON summary and Gin writer acceptance, not kernel socket lineage",
+    "evaluation-only retained-input-address mapping joins client tickets; inference never reads it"
+  ]
+}

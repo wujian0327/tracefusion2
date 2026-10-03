@@ -26,22 +26,25 @@ def _namespace(value,prefix):
     return value
 
 
-def bind(events,plans,config,runtime):
+def bind(events,plans,config,runtime, *, group_requests=None):
     try:
         require(config['gin_api']['model']=='gin-struct-u32-v1' and config['sink_field']=='Balance','Unsupported JSON model')
         require(0<len(events)<=100000,'Empty or oversized Gin history')
         rows=sorted(events,key=lambda e:e['observation_sequence'])
         require([e['observation_sequence'] for e in rows]==list(range(len(rows))), 'Missing or duplicate observation sequence')
-        require(all(a['timestamp']<=b['timestamp'] for a,b in zip(rows,rows[1:])), 'Non-monotonic observations')
-        groups=[];current=[]
-        for e in rows:
-            if e['kind']==3:
-                require(not current and e['request_id']==len(groups)+1,'Overlapping or missing request boundary')
-            require(current or e['kind']==3,'Event outside request')
-            require(e['request_id']==len(groups)+1,'Event belongs to another request')
-            current.append(e)
-            if e['kind']==4:groups.append(current);current=[]
-        require(groups and not current,'Unclosed request')
+        if group_requests is None:
+            require(all(a['timestamp']<=b['timestamp'] for a,b in zip(rows,rows[1:])), 'Non-monotonic observations')
+            groups=[];current=[]
+            for e in rows:
+                if e['kind']==3:
+                    require(not current and e['request_id']==len(groups)+1,'Overlapping or missing request boundary')
+                require(current or e['kind']==3,'Event outside request')
+                require(e['request_id']==len(groups)+1,'Event belongs to another request')
+                current.append(e)
+                if e['kind']==4:groups.append(current);current=[]
+            require(groups and not current,'Unclosed request')
+        else:
+            groups=group_requests(rows)
         outputs=[];computations=[];operations=[]
         for request in groups:
             rid=request[0]['request_id'];prefix='request:%d:'%rid
