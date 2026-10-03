@@ -1,0 +1,487 @@
+{
+  "bundle": "go-loop-provenance-20261003-131127-ed7e.zip",
+  "bundle_sha256": "0d4aa2249b60bb58f5d1a39a41527d1cca62fbda74ead405d9e3af67ae9d594d",
+  "verified_code_commit": "df0fcc51cc7d12af1f95a39083c13fd5c48bc56b",
+  "binary_sha256": "f8701f0e77eaef82a7dac0221403177674be7cf74fff05d662f36c0311c6fac7",
+  "compiler": "go version go1.25.4 linux/amd64",
+  "host_result": {
+    "status": "ebpf_checks_passed",
+    "action": "run",
+    "stage": "complete",
+    "kernel_ebpf_tested": true,
+    "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "events": 456,
+    "results": 24
+  },
+  "capture": {
+    "backend": "ebpf",
+    "lost_events": 0,
+    "submit_errors": 0,
+    "state_errors": 0,
+    "attempted_events": 456,
+    "raw_probe_hits": 456,
+    "process_returncode": 0,
+    "bcc_version": "0.29.1",
+    "received_events": 456,
+    "observed_kernel_tgids": [
+      13798
+    ]
+  },
+  "checks": {
+    "binary_and_source_hashes": true,
+    "fixture_sources_match_repository": true,
+    "layout_assertions": true,
+    "regenerated_plan_from_elf": true,
+    "generated_bpf": true,
+    "derived_runtime_bases": true,
+    "unique_probe_attachments": true,
+    "full_raw_inference_replay": true,
+    "full_evaluation_replay": true,
+    "all_memory_reads_succeeded": true,
+    "single_nonzero_goroutine_identity": true,
+    "equal_input_values": true,
+    "zero_and_repeated_execution": true,
+    "overwrite_last_contributor": true,
+    "accumulation_all_contributors": true,
+    "transformation_distinct_versions": true
+  },
+  "observations": {
+    "functions": 3,
+    "probe_locations": 41,
+    "maximum_depth": 1,
+    "executed_opcodes": {
+      "add": 28,
+      "cmp": 94,
+      "inc": 42,
+      "ja": 22,
+      "jae": 28,
+      "jbe": 44,
+      "jmp": 52,
+      "mov": 68,
+      "nop": 8,
+      "ret": 24,
+      "xor": 46
+    }
+  },
+  "evaluation": {
+    "passed": true,
+    "capture_clean": true,
+    "checks": [
+      {
+        "sequence": 1,
+        "function": "main.goLoopTransform",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "count": 0,
+        "observed_backward_edges": 0,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 2,
+        "function": "main.goLoopTransform",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "count": 1,
+        "observed_backward_edges": 1,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 3,
+        "function": "main.goLoopTransform",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "count": 2,
+        "observed_backward_edges": 2,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 4,
+        "function": "main.goLoopTransform",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "count": 4,
+        "observed_backward_edges": 4,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 5,
+        "function": "main.goLoopOverwrite",
+        "passed": true,
+        "expected_sources": [],
+        "observed_sources": [],
+        "count": 0,
+        "observed_backward_edges": 0,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 6,
+        "function": "main.goLoopOverwrite",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "count": 1,
+        "observed_backward_edges": 1,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 7,
+        "function": "main.goLoopOverwrite",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "count": 2,
+        "observed_backward_edges": 2,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 8,
+        "function": "main.goLoopOverwrite",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value"
+        ],
+        "observed_sources": [
+          "input.public_value"
+        ],
+        "count": 4,
+        "observed_backward_edges": 4,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 9,
+        "function": "main.goLoopAccumulate",
+        "passed": true,
+        "expected_sources": [],
+        "observed_sources": [],
+        "count": 0,
+        "observed_backward_edges": 0,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 10,
+        "function": "main.goLoopAccumulate",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "count": 1,
+        "observed_backward_edges": 1,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 11,
+        "function": "main.goLoopAccumulate",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "count": 2,
+        "observed_backward_edges": 2,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 12,
+        "function": "main.goLoopAccumulate",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value",
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.public_value",
+          "input.secret"
+        ],
+        "count": 4,
+        "observed_backward_edges": 4,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 13,
+        "function": "main.goLoopTransform",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "count": 0,
+        "observed_backward_edges": 0,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 14,
+        "function": "main.goLoopTransform",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "count": 1,
+        "observed_backward_edges": 1,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 15,
+        "function": "main.goLoopTransform",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "count": 2,
+        "observed_backward_edges": 2,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 16,
+        "function": "main.goLoopTransform",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "count": 4,
+        "observed_backward_edges": 4,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 17,
+        "function": "main.goLoopOverwrite",
+        "passed": true,
+        "expected_sources": [],
+        "observed_sources": [],
+        "count": 0,
+        "observed_backward_edges": 0,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 18,
+        "function": "main.goLoopOverwrite",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "count": 1,
+        "observed_backward_edges": 1,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 19,
+        "function": "main.goLoopOverwrite",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "count": 2,
+        "observed_backward_edges": 2,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 20,
+        "function": "main.goLoopOverwrite",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value"
+        ],
+        "observed_sources": [
+          "input.public_value"
+        ],
+        "count": 4,
+        "observed_backward_edges": 4,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 21,
+        "function": "main.goLoopAccumulate",
+        "passed": true,
+        "expected_sources": [],
+        "observed_sources": [],
+        "count": 0,
+        "observed_backward_edges": 0,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 22,
+        "function": "main.goLoopAccumulate",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "count": 1,
+        "observed_backward_edges": 1,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 23,
+        "function": "main.goLoopAccumulate",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ],
+        "count": 2,
+        "observed_backward_edges": 2,
+        "repeated_execution_verified": true
+      },
+      {
+        "sequence": 24,
+        "function": "main.goLoopAccumulate",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value",
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.public_value",
+          "input.secret"
+        ],
+        "count": 4,
+        "observed_backward_edges": 4,
+        "repeated_execution_verified": true
+      }
+    ],
+    "dynamic_source_relations": {
+      "tp": 22,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "resolved_calls": 24,
+    "expected_calls": 24,
+    "inference_issues": 0,
+    "unexpected_calls": 0,
+    "scope": "Go leaf-loop fixture field/value accuracy and repeated-execution evidence; load ordinals are reported but not scored against source iterations"
+  },
+  "examples": [
+    {
+      "function": "main.goLoopTransform",
+      "count": 0,
+      "value": 424242,
+      "sources": [
+        "input.secret"
+      ],
+      "total_source_reads": 1,
+      "contributing_reads": [
+        "input.secret@read1"
+      ]
+    },
+    {
+      "function": "main.goLoopTransform",
+      "count": 4,
+      "value": 424274,
+      "sources": [
+        "input.secret"
+      ],
+      "total_source_reads": 1,
+      "contributing_reads": [
+        "input.secret@read1"
+      ]
+    },
+    {
+      "function": "main.goLoopOverwrite",
+      "count": 0,
+      "value": 42,
+      "sources": [],
+      "total_source_reads": 0,
+      "contributing_reads": []
+    },
+    {
+      "function": "main.goLoopOverwrite",
+      "count": 4,
+      "value": 424242,
+      "sources": [
+        "input.public_value"
+      ],
+      "total_source_reads": 4,
+      "contributing_reads": [
+        "input.public_value@read4"
+      ]
+    },
+    {
+      "function": "main.goLoopAccumulate",
+      "count": 0,
+      "value": 0,
+      "sources": [],
+      "total_source_reads": 0,
+      "contributing_reads": []
+    },
+    {
+      "function": "main.goLoopAccumulate",
+      "count": 4,
+      "value": 1696968,
+      "sources": [
+        "input.public_value",
+        "input.secret"
+      ],
+      "total_source_reads": 4,
+      "contributing_reads": [
+        "input.public_value@read3",
+        "input.public_value@read4",
+        "input.secret@read1",
+        "input.secret@read2"
+      ]
+    }
+  ],
+  "independent_machine_emulation": {
+    "engine": "Unicorn",
+    "input": "actual uploaded Go 1.25.4 ELF",
+    "kernel_ebpf": false,
+    "events": 456,
+    "calls": 24,
+    "passed": true
+  },
+  "scope": "Fixed uint32 fields and pinned goroutine; field/value accuracy for leaf loops. Read-instance examples are specific to this compiled binary, not a compiler-independent source iteration oracle. No looped helper calls or general runtime coverage."
+}
