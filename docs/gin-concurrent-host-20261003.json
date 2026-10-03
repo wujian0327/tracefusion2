@@ -1,0 +1,737 @@
+{
+  "status": "concurrent_host_capture_verified",
+  "kernel_ebpf_tested": true,
+  "bundle": "gin-concurrent-provenance-20261003-162228-db7e.zip",
+  "bundle_sha256": "1b5581f92b81f5d1e5c7e4b11fa73aab138cf6a28ea381d879a728ad2b2746f2",
+  "binary_sha256": "98a00c181b224bb84574a2630325f129a50afeb4ae486798344fba97bb9ca9a7",
+  "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "go": "go1.25.4",
+  "gin": "v1.11.0",
+  "bcc": "0.29.1",
+  "events": 892,
+  "requests": 28,
+  "compute_calls": 36,
+  "read_operations": 56,
+  "event_kind_counts": {
+    "3": 28,
+    "1": 56,
+    "2": 56,
+    "0": 556,
+    "6": 28,
+    "7": 28,
+    "8": 28,
+    "10": 28,
+    "11": 28,
+    "9": 28,
+    "4": 28
+  },
+  "capture": {
+    "backend": "ebpf",
+    "lost_events": 0,
+    "submit_errors": 0,
+    "state_errors": 0,
+    "attempted_events": 892,
+    "raw_probe_hits": 892,
+    "process_returncode": 0,
+    "bcc_version": "0.29.1",
+    "perf_buffer_pages_per_cpu": 1024,
+    "perf_buffer_bytes_per_cpu": 4194304,
+    "received_events": 892,
+    "observed_kernel_tgids": [
+      31810
+    ],
+    "submit_error_errnos": {}
+  },
+  "nonzero_error_events": {
+    "source_error": 0,
+    "destination_error": 0,
+    "stack_error": 0,
+    "runtime_guard_error": 0,
+    "read_error": 0,
+    "error_type": 0
+  },
+  "source_relations": {
+    "tp": 28,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  "concurrency": {
+    "max_active_scopes": 4,
+    "request_switches": 418
+  },
+  "concurrency_note": "request_switches counts adjacent globally numbered observations belonging to different requests; it is not an OS context-switch count",
+  "distinct_tids": 8,
+  "distinct_g_addresses": 14,
+  "ticket_differs_from_request_id": 19,
+  "tids_reused_across_requests": 6,
+  "verification": {
+    "binary_and_source_hashes": true,
+    "fixture_sources_match_repository": true,
+    "framework_hashes_match_local_pinned_build": true,
+    "probe_plan_reconstructed": true,
+    "boundary_plan_reconstructed": true,
+    "collector_source_matches": true,
+    "complete_inference_replay_equal": true,
+    "complete_evaluation_replay_equal": true,
+    "all_client_bodies_match": true,
+    "all_request_local_sequences_contiguous": true,
+    "every_request_has_single_tid_and_g": true,
+    "graph_edges_have_endpoints": true,
+    "request_node_ids_unique": true,
+    "read_and_call_counters_restart_per_request": true,
+    "same_value_overwrite_and_constant_overwrite_verified": true
+  },
+  "batches": [
+    {
+      "tickets": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "distinct_tids": 4,
+      "distinct_g_addresses": 4,
+      "common_scope_overlap_ns": 1225561,
+      "overlap_and_phase_order_verified": true
+    },
+    {
+      "tickets": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "distinct_tids": 4,
+      "distinct_g_addresses": 4,
+      "common_scope_overlap_ns": 660487,
+      "overlap_and_phase_order_verified": true
+    },
+    {
+      "tickets": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "distinct_tids": 4,
+      "distinct_g_addresses": 4,
+      "common_scope_overlap_ns": 587292,
+      "overlap_and_phase_order_verified": true
+    },
+    {
+      "tickets": [
+        13,
+        14,
+        15,
+        16
+      ],
+      "distinct_tids": 4,
+      "distinct_g_addresses": 4,
+      "common_scope_overlap_ns": 566000,
+      "overlap_and_phase_order_verified": true
+    },
+    {
+      "tickets": [
+        17,
+        18,
+        19,
+        20
+      ],
+      "distinct_tids": 4,
+      "distinct_g_addresses": 4,
+      "common_scope_overlap_ns": 752461,
+      "overlap_and_phase_order_verified": true
+    },
+    {
+      "tickets": [
+        21,
+        22,
+        23,
+        24
+      ],
+      "distinct_tids": 4,
+      "distinct_g_addresses": 4,
+      "common_scope_overlap_ns": 732643,
+      "overlap_and_phase_order_verified": true
+    },
+    {
+      "tickets": [
+        25,
+        26,
+        27,
+        28
+      ],
+      "distinct_tids": 4,
+      "distinct_g_addresses": 4,
+      "common_scope_overlap_ns": 693832,
+      "overlap_and_phase_order_verified": true
+    }
+  ],
+  "request_details": [
+    {
+      "ticket": 1,
+      "request_id": 1,
+      "mode": "left",
+      "pid_tid": 136622909717570,
+      "g_address": 824634782080,
+      "value": 424298,
+      "external_sources": [
+        {
+          "file": "a.bin",
+          "offset": 0,
+          "io_id": 1
+        }
+      ],
+      "events": 32,
+      "scope_interval": {
+        "entry": 0,
+        "exit": 120
+      }
+    },
+    {
+      "ticket": 2,
+      "request_id": 4,
+      "mode": "right",
+      "pid_tid": 136622909717604,
+      "g_address": 824634781184,
+      "value": 424242,
+      "external_sources": [
+        {
+          "file": "b.bin",
+          "offset": 16,
+          "io_id": 2
+        }
+      ],
+      "events": 29,
+      "scope_interval": {
+        "entry": 9,
+        "exit": 125
+      }
+    },
+    {
+      "ticket": 3,
+      "request_id": 3,
+      "mode": "merge",
+      "pid_tid": 136622909717572,
+      "g_address": 824634781632,
+      "value": 848540,
+      "external_sources": [
+        {
+          "file": "a.bin",
+          "offset": 32,
+          "io_id": 1
+        },
+        {
+          "file": "b.bin",
+          "offset": 32,
+          "io_id": 2
+        }
+      ],
+      "events": 38,
+      "scope_interval": {
+        "entry": 6,
+        "exit": 132
+      }
+    },
+    {
+      "ticket": 4,
+      "request_id": 2,
+      "mode": "overwrite",
+      "pid_tid": 136622909717573,
+      "g_address": 824634780736,
+      "value": 42,
+      "external_sources": [],
+      "events": 34,
+      "scope_interval": {
+        "entry": 1,
+        "exit": 114
+      }
+    },
+    {
+      "ticket": 5,
+      "request_id": 7,
+      "mode": "same",
+      "pid_tid": 136622909717604,
+      "g_address": 824634781184,
+      "value": 424242,
+      "external_sources": [
+        {
+          "file": "b.bin",
+          "offset": 64,
+          "io_id": 2
+        }
+      ],
+      "events": 32,
+      "scope_interval": {
+        "entry": 139,
+        "exit": 233
+      }
+    },
+    {
+      "ticket": 6,
+      "request_id": 6,
+      "mode": "zero",
+      "pid_tid": 136622909717573,
+      "g_address": 824636875648,
+      "value": 0,
+      "external_sources": [
+        {
+          "file": "b.bin",
+          "offset": 88,
+          "io_id": 2
+        }
+      ],
+      "events": 29,
+      "scope_interval": {
+        "entry": 136,
+        "exit": 242
+      }
+    },
+    {
+      "ticket": 7,
+      "request_id": 8,
+      "mode": "max",
+      "pid_tid": 136622909717606,
+      "g_address": 824636876096,
+      "value": 4294967295,
+      "external_sources": [
+        {
+          "file": "b.bin",
+          "offset": 108,
+          "io_id": 2
+        }
+      ],
+      "events": 29,
+      "scope_interval": {
+        "entry": 140,
+        "exit": 250
+      }
+    },
+    {
+      "ticket": 8,
+      "request_id": 5,
+      "mode": "left",
+      "pid_tid": 136622909717574,
+      "g_address": 824635942208,
+      "value": 424298,
+      "external_sources": [
+        {
+          "file": "a.bin",
+          "offset": 112,
+          "io_id": 1
+        }
+      ],
+      "events": 32,
+      "scope_interval": {
+        "entry": 133,
+        "exit": 254
+      }
+    },
+    {
+      "ticket": 9,
+      "request_id": 9,
+      "mode": "right",
+      "pid_tid": 136622909717572,
+      "g_address": 824636875648,
+      "value": 424242,
+      "external_sources": [
+        {
+          "file": "b.bin",
+          "offset": 128,
+          "io_id": 2
+        }
+      ],
+      "events": 29,
+      "scope_interval": {
+        "entry": 255,
+        "exit": 376
+      }
+    },
+    {
+      "ticket": 10,
+      "request_id": 11,
+      "mode": "merge",
+      "pid_tid": 136622909717574,
+      "g_address": 824635942208,
+      "value": 848540,
+      "external_sources": [
+        {
+          "file": "a.bin",
+          "offset": 144,
+          "io_id": 1
+        },
+        {
+          "file": "b.bin",
+          "offset": 144,
+          "io_id": 2
+        }
+      ],
+      "events": 38,
+      "scope_interval": {
+        "entry": 261,
+        "exit": 380
+      }
+    },
+    {
+      "ticket": 11,
+      "request_id": 12,
+      "mode": "overwrite",
+      "pid_tid": 136622909717604,
+      "g_address": 824636876096,
+      "value": 42,
+      "external_sources": [],
+      "events": 34,
+      "scope_interval": {
+        "entry": 262,
+        "exit": 387
+      }
+    },
+    {
+      "ticket": 12,
+      "request_id": 10,
+      "mode": "same",
+      "pid_tid": 136622909717573,
+      "g_address": 824636876544,
+      "value": 424242,
+      "external_sources": [
+        {
+          "file": "b.bin",
+          "offset": 176,
+          "io_id": 2
+        }
+      ],
+      "events": 32,
+      "scope_interval": {
+        "entry": 258,
+        "exit": 366
+      }
+    },
+    {
+      "ticket": 13,
+      "request_id": 14,
+      "mode": "zero",
+      "pid_tid": 136622909717608,
+      "g_address": 824636877440,
+      "value": 0,
+      "external_sources": [
+        {
+          "file": "b.bin",
+          "offset": 200,
+          "io_id": 2
+        }
+      ],
+      "events": 29,
+      "scope_interval": {
+        "entry": 391,
+        "exit": 499
+      }
+    },
+    {
+      "ticket": 14,
+      "request_id": 16,
+      "mode": "max",
+      "pid_tid": 136622909717574,
+      "g_address": 824635942656,
+      "value": 4294967295,
+      "external_sources": [
+        {
+          "file": "b.bin",
+          "offset": 220,
+          "io_id": 2
+        }
+      ],
+      "events": 29,
+      "scope_interval": {
+        "entry": 397,
+        "exit": 506
+      }
+    },
+    {
+      "ticket": 15,
+      "request_id": 13,
+      "mode": "left",
+      "pid_tid": 136622909717604,
+      "g_address": 824636876096,
+      "value": 424298,
+      "external_sources": [
+        {
+          "file": "a.bin",
+          "offset": 224,
+          "io_id": 1
+        }
+      ],
+      "events": 32,
+      "scope_interval": {
+        "entry": 388,
+        "exit": 485
+      }
+    },
+    {
+      "ticket": 16,
+      "request_id": 15,
+      "mode": "right",
+      "pid_tid": 136622909717606,
+      "g_address": 824634781184,
+      "value": 424242,
+      "external_sources": [
+        {
+          "file": "b.bin",
+          "offset": 240,
+          "io_id": 2
+        }
+      ],
+      "events": 29,
+      "scope_interval": {
+        "entry": 393,
+        "exit": 492
+      }
+    },
+    {
+      "ticket": 17,
+      "request_id": 17,
+      "mode": "merge",
+      "pid_tid": 136622909717572,
+      "g_address": 824635942656,
+      "value": 848540,
+      "external_sources": [
+        {
+          "file": "a.bin",
+          "offset": 256,
+          "io_id": 1
+        },
+        {
+          "file": "b.bin",
+          "offset": 256,
+          "io_id": 2
+        }
+      ],
+      "events": 38,
+      "scope_interval": {
+        "entry": 507,
+        "exit": 639
+      }
+    },
+    {
+      "ticket": 18,
+      "request_id": 19,
+      "mode": "overwrite",
+      "pid_tid": 136622909717606,
+      "g_address": 824635943552,
+      "value": 42,
+      "external_sources": [],
+      "events": 34,
+      "scope_interval": {
+        "entry": 513,
+        "exit": 618
+      }
+    },
+    {
+      "ticket": 19,
+      "request_id": 20,
+      "mode": "same",
+      "pid_tid": 136622909717574,
+      "g_address": 824636877440,
+      "value": 424242,
+      "external_sources": [
+        {
+          "file": "b.bin",
+          "offset": 288,
+          "io_id": 2
+        }
+      ],
+      "events": 32,
+      "scope_interval": {
+        "entry": 514,
+        "exit": 632
+      }
+    },
+    {
+      "ticket": 20,
+      "request_id": 18,
+      "mode": "zero",
+      "pid_tid": 136622909717608,
+      "g_address": 824636877888,
+      "value": 0,
+      "external_sources": [
+        {
+          "file": "b.bin",
+          "offset": 312,
+          "io_id": 2
+        }
+      ],
+      "events": 29,
+      "scope_interval": {
+        "entry": 510,
+        "exit": 627
+      }
+    },
+    {
+      "ticket": 21,
+      "request_id": 21,
+      "mode": "max",
+      "pid_tid": 136622909717604,
+      "g_address": 824635944448,
+      "value": 4294967295,
+      "external_sources": [
+        {
+          "file": "b.bin",
+          "offset": 332,
+          "io_id": 2
+        }
+      ],
+      "events": 29,
+      "scope_interval": {
+        "entry": 640,
+        "exit": 767
+      }
+    },
+    {
+      "ticket": 22,
+      "request_id": 22,
+      "mode": "left",
+      "pid_tid": 136622909717608,
+      "g_address": 824636877888,
+      "value": 424298,
+      "external_sources": [
+        {
+          "file": "a.bin",
+          "offset": 336,
+          "io_id": 1
+        }
+      ],
+      "events": 32,
+      "scope_interval": {
+        "entry": 643,
+        "exit": 754
+      }
+    },
+    {
+      "ticket": 23,
+      "request_id": 23,
+      "mode": "right",
+      "pid_tid": 136622909717574,
+      "g_address": 824636877440,
+      "value": 424242,
+      "external_sources": [
+        {
+          "file": "b.bin",
+          "offset": 352,
+          "io_id": 2
+        }
+      ],
+      "events": 29,
+      "scope_interval": {
+        "entry": 646,
+        "exit": 760
+      }
+    },
+    {
+      "ticket": 24,
+      "request_id": 24,
+      "mode": "merge",
+      "pid_tid": 136622909717572,
+      "g_address": 824634781184,
+      "value": 848540,
+      "external_sources": [
+        {
+          "file": "a.bin",
+          "offset": 368,
+          "io_id": 1
+        },
+        {
+          "file": "b.bin",
+          "offset": 368,
+          "io_id": 2
+        }
+      ],
+      "events": 38,
+      "scope_interval": {
+        "entry": 649,
+        "exit": 752
+      }
+    },
+    {
+      "ticket": 25,
+      "request_id": 28,
+      "mode": "overwrite",
+      "pid_tid": 136622909717606,
+      "g_address": 824636876544,
+      "value": 42,
+      "external_sources": [],
+      "events": 34,
+      "scope_interval": {
+        "entry": 777,
+        "exit": 870
+      }
+    },
+    {
+      "ticket": 26,
+      "request_id": 25,
+      "mode": "same",
+      "pid_tid": 136622909717607,
+      "g_address": 824636878784,
+      "value": 424242,
+      "external_sources": [
+        {
+          "file": "b.bin",
+          "offset": 400,
+          "io_id": 2
+        }
+      ],
+      "events": 32,
+      "scope_interval": {
+        "entry": 768,
+        "exit": 881
+      }
+    },
+    {
+      "ticket": 27,
+      "request_id": 26,
+      "mode": "zero",
+      "pid_tid": 136622909717604,
+      "g_address": 824635944448,
+      "value": 0,
+      "external_sources": [
+        {
+          "file": "b.bin",
+          "offset": 424,
+          "io_id": 2
+        }
+      ],
+      "events": 29,
+      "scope_interval": {
+        "entry": 770,
+        "exit": 891
+      }
+    },
+    {
+      "ticket": 28,
+      "request_id": 27,
+      "mode": "max",
+      "pid_tid": 136622909717574,
+      "g_address": 824635942208,
+      "value": 4294967295,
+      "external_sources": [
+        {
+          "file": "b.bin",
+          "offset": 444,
+          "io_id": 2
+        }
+      ],
+      "events": 29,
+      "scope_interval": {
+        "entry": 774,
+        "exit": 884
+      }
+    }
+  ],
+  "limits": [
+    "four concurrently active pinned requests with fixture phase barriers",
+    "fixed uint32 JSON summary; no general JSON or database coverage",
+    "evaluation-only retained-input-address mapping joins client tickets",
+    "no request-internal thread migration, child goroutine propagation or shared mutable objects",
+    "writer acceptance plus independent client receipt; no kernel socket lineage or throughput/overhead conclusion"
+  ]
+}
