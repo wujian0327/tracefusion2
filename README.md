@@ -6,7 +6,7 @@
 
 ## 当前：Go 真实文件读取来源适配
 
-使用 `syscall.Pread`，复用 C 的读取实例、字节版本和来源绑定核心，保持 18 次计算、34 次读取尝试的同一组场景。新增 syscall 边界的实际 goroutine 身份采集，以及 Go 工作负载入口/RET 指令挂接。**本地 Go ABI 汇编夹具通过；真实 Go 编译和 BCC/eBPF 采集待主机验证。**
+使用 `syscall.Pread`，复用 C 的读取实例、字节版本和来源绑定核心，保持 18 次计算、34 次读取尝试的同一组场景。新增 syscall 边界的实际 goroutine 身份采集，以及 Go 工作负载入口/RET 指令挂接。**2026-10-03 真实 Go 1.25.4 / BCC 0.29.1 采集通过：400 条事件、18 次计算、34 次读取，字段与精确读取来源均 TP=18/FP=0/FN=0；原始事件完整重放一致。**报告丢失、提交、状态和内存读取错误均为 0，见 [Go 读取主机核验](docs/go-read-provenance-host-20261003.json)。
 
 ```bash
 git pull origin main
@@ -25,7 +25,7 @@ git pull origin main
 sudo /usr/bin/python3 scripts/read_provenance.py run
 ```
 
-本轮已验证完成，以上命令保留用于复现，输出 `artifacts/read-provenance-*.zip`。读取发生在计算根函数之前，文件不可变且输入只由 pread 写入；尚未接入 Go 读取、数据库或网络输出。完整套件 117 项通过、4 项 Go 编译测试跳过、3 项旧 HTTP 测试受环境 socket 权限阻止；八个旧真实包共 4062 条事件、148 次调用重放一致。详见 [读取边界与验证范围](docs/read-provenance.md)。旧实验不用重跑。
+本轮已验证完成，以上命令保留用于复现，输出 `artifacts/read-provenance-*.zip`。读取发生在计算根函数之前，文件不可变且输入只由 pread 写入；Go 读取已由上方新入口验证，尚未接入数据库或网络输出。完整套件 117 项通过、4 项 Go 编译测试跳过、3 项旧 HTTP 测试受环境 socket 权限阻止；八个旧真实包共 4062 条事件、148 次调用重放一致。详见 [读取边界与验证范围](docs/read-provenance.md)。旧实验不用重跑。
 
 ## 已验证：C / Go 循环中的函数调用
 

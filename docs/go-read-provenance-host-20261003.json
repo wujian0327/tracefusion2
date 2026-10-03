@@ -1,0 +1,261 @@
+{
+  "bundle": "go-read-provenance-20261003-150644-1291.zip",
+  "bundle_sha256": "47cbafb1143940b1f51adfcb5a2b7b34a13a1fb4bd204d3f1e7344de28b5fe72",
+  "matching_code_commit": "2217d929c7de48963a565ee823ecfd414f4fc961",
+  "binary_sha256": "b4d2806eae0f232c41779d971778656fbf0f0b4d3d4bc03f3a50358f51bf2e9d",
+  "compiler": "go version go1.25.4 linux/amd64",
+  "host_result": {
+    "status": "ebpf_checks_passed",
+    "action": "run",
+    "stage": "complete",
+    "kernel_ebpf_tested": true,
+    "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "events": 400,
+    "results": 18
+  },
+  "capture": {
+    "backend": "ebpf",
+    "lost_events": 0,
+    "submit_errors": 0,
+    "state_errors": 0,
+    "attempted_events": 400,
+    "raw_probe_hits": 400,
+    "process_returncode": 0,
+    "bcc_version": "0.29.1",
+    "perf_buffer_pages_per_cpu": 1024,
+    "perf_buffer_bytes_per_cpu": 4194304,
+    "received_events": 400,
+    "observed_kernel_tgids": [
+      12507
+    ],
+    "submit_error_errnos": {}
+  },
+  "checks": {
+    "binary_hash": true,
+    "source_hashes": true,
+    "fixture_matches_repository": true,
+    "plan_regenerated_from_elf": true,
+    "scope_plan_regenerated_from_elf": true,
+    "generated_bpf_identical": true,
+    "runtime_bases_match_maps": true,
+    "unique_instruction_attachments": true,
+    "scope_attachments_match": true,
+    "file_snapshot_consistent": true,
+    "full_raw_inference_replay": true,
+    "full_evaluation_replay": true,
+    "all_capture_checks_passed": true,
+    "all_events_accounted": true,
+    "memory_reads_succeeded": true,
+    "single_observed_execution_identity": true,
+    "read_outcomes": true,
+    "same_value_different_files": true,
+    "merge_has_two_read_sources": true,
+    "buffer_overwrite_last_read": true,
+    "offset_change": true,
+    "failed_read_and_eof_preserve_old_version": true,
+    "fallback_has_no_external_origin": true,
+    "same_file_same_offset_new_read_instance": true,
+    "read_result_edges_present": true,
+    "host_truth_matches_independent_native_c_oracle": true,
+    "independent_actual_elf_execution": true
+  },
+  "observations": {
+    "event_kinds": {
+      "3": 1,
+      "1": 34,
+      "2": 34,
+      "0": 330,
+      "4": 1
+    },
+    "instruction_probe_locations": 50,
+    "workload_uprobes": 2,
+    "read_operations": 34,
+    "successful_reads": 28,
+    "failed_reads": 4,
+    "eof_reads": 2,
+    "runner_pid": 44053,
+    "observed_kernel_tgids": [
+      12507
+    ],
+    "maximum_call_depth": 2,
+    "execution_identity": "Same nonzero observed R14 and kernel pid_tid across scope, read and compute events"
+  },
+  "evaluation": {
+    "passed": true,
+    "capture_clean": true,
+    "dynamic_source_relations": {
+      "tp": 18,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "resolved_calls": 18,
+    "expected_calls": 18,
+    "inference_issues": 0,
+    "unexpected_calls": 0,
+    "scope": "Fixture output, input-field origins and exact read-operation/file-offset sources; no general database or graph-edge accuracy claim",
+    "external_source_relations": {
+      "tp": 18,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "read_operations": 34,
+    "expected_read_operations": 34
+  },
+  "examples": [
+    {
+      "case": 0,
+      "function": "main.goSelectValue",
+      "value": 424298,
+      "input_field_sources": [
+        "input.left"
+      ],
+      "external_sources": [
+        {
+          "io_id": 1,
+          "file_name": "a.bin",
+          "file_offset": 0,
+          "length": 4
+        }
+      ]
+    },
+    {
+      "case": 1,
+      "function": "main.goSelectValue",
+      "value": 424242,
+      "input_field_sources": [
+        "input.right"
+      ],
+      "external_sources": [
+        {
+          "io_id": 4,
+          "file_name": "b.bin",
+          "file_offset": 0,
+          "length": 4
+        }
+      ]
+    },
+    {
+      "case": 2,
+      "function": "main.goMergeValues",
+      "value": 848540,
+      "input_field_sources": [
+        "input.left",
+        "input.right"
+      ],
+      "external_sources": [
+        {
+          "io_id": 5,
+          "file_name": "a.bin",
+          "file_offset": 0,
+          "length": 4
+        },
+        {
+          "io_id": 6,
+          "file_name": "b.bin",
+          "file_offset": 0,
+          "length": 4
+        }
+      ]
+    },
+    {
+      "case": 3,
+      "function": "main.goSelectValue",
+      "value": 424298,
+      "input_field_sources": [
+        "input.left"
+      ],
+      "external_sources": [
+        {
+          "io_id": 8,
+          "file_name": "b.bin",
+          "file_offset": 0,
+          "length": 4
+        }
+      ]
+    },
+    {
+      "case": 4,
+      "function": "main.goSelectValue",
+      "value": 424297,
+      "input_field_sources": [
+        "input.left"
+      ],
+      "external_sources": [
+        {
+          "io_id": 10,
+          "file_name": "a.bin",
+          "file_offset": 4,
+          "length": 4
+        }
+      ]
+    },
+    {
+      "case": 5,
+      "function": "main.goSelectValue",
+      "value": 424298,
+      "input_field_sources": [
+        "input.left"
+      ],
+      "external_sources": [
+        {
+          "io_id": 11,
+          "file_name": "a.bin",
+          "file_offset": 0,
+          "length": 4
+        }
+      ]
+    },
+    {
+      "case": 6,
+      "function": "main.goSelectValue",
+      "value": 424298,
+      "input_field_sources": [
+        "input.left"
+      ],
+      "external_sources": [
+        {
+          "io_id": 13,
+          "file_name": "a.bin",
+          "file_offset": 0,
+          "length": 4
+        }
+      ]
+    },
+    {
+      "case": 7,
+      "function": "main.goFallbackValue",
+      "value": 42,
+      "input_field_sources": [],
+      "external_sources": []
+    },
+    {
+      "case": 8,
+      "function": "main.goSelectValue",
+      "value": 424298,
+      "input_field_sources": [
+        "input.left"
+      ],
+      "external_sources": [
+        {
+          "io_id": 17,
+          "file_name": "a.bin",
+          "file_offset": 0,
+          "length": 4
+        }
+      ]
+    }
+  ],
+  "independent_execution": {
+    "input": "Uploaded actual Go ELF with independent real-file pread harness and Unicorn instruction execution; native C oracle agrees with host truth",
+    "kernel_ebpf": false,
+    "events": 400,
+    "root_calls": 18,
+    "read_operations": 34,
+    "passed": true
+  },
+  "scope": "Preopened immutable regular files and pread-only global source buffer writes before fixed uint32-field computation, pinned thread and one observed goroutine. File identities checked for consistency against captured /proc metadata; deleted fixture files were not independently restatted. No general database, serialization, network sink, cross-service provenance, concurrent goroutines or graph-edge accuracy claim."
+}
