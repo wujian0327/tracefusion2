@@ -1,0 +1,400 @@
+{
+  "runs": [
+    {
+      "bundle": "loop-calls-provenance-20261003-133426-1059.zip",
+      "bundle_sha256": "0b05513d9871d7926c932ab002a854a95ac1909fb276bb5eb9c632a443778b9b",
+      "verified_code_commit": "3547cbdc6217c8f870f3de8479e453b7b8e6c81f",
+      "binary_sha256": "e4b33a502dbd29a4125fa0aec013c9d8740d451b24bda0739da1412843e3f25f",
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "host_result": {
+        "status": "ebpf_checks_passed",
+        "action": "run",
+        "stage": "complete",
+        "kernel_ebpf_tested": true,
+        "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+        "events": 940,
+        "results": 24
+      },
+      "capture": {
+        "backend": "ebpf",
+        "lost_events": 0,
+        "submit_errors": 0,
+        "state_errors": 0,
+        "attempted_events": 940,
+        "raw_probe_hits": 940,
+        "process_returncode": 0,
+        "bcc_version": "0.29.1",
+        "perf_buffer_pages_per_cpu": 1024,
+        "perf_buffer_bytes_per_cpu": 4194304,
+        "received_events": 940,
+        "observed_kernel_tgids": [
+          21006
+        ],
+        "submit_error_errnos": {}
+      },
+      "checks": {
+        "binary_and_source_hashes": true,
+        "fixture_sources_match_repository": true,
+        "regenerated_plans_from_elf": true,
+        "generated_bpf": true,
+        "derived_runtime_bases": true,
+        "unique_probe_attachments": true,
+        "full_raw_inference_replay": true,
+        "full_evaluation_replay": true,
+        "all_received_memory_reads_succeeded": true,
+        "all_resolved_calls_match_oracle": true,
+        "event_accounting": true,
+        "capture_clean_and_all_calls_passed": true,
+        "all_hits_accounted": true,
+        "same_value_sources": true,
+        "single_execution_identity": true,
+        "zero_iterations_no_helper_or_input_reads": true,
+        "overwrite_last_contribution": true,
+        "four_distinct_same_callsite_instances": true,
+        "accumulation_all_contributions": true,
+        "nested_parentage_and_returns": true,
+        "call_intervals_nested": true
+      },
+      "probe_locations": 92,
+      "functions": 5,
+      "evaluation": {
+        "passed": true,
+        "capture_clean": true,
+        "dynamic_source_relations": {
+          "tp": 22,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0
+        },
+        "resolved_calls": 24,
+        "expected_calls": 24,
+        "inference_issues": 0,
+        "unexpected_calls": 0,
+        "scope": "fixture field/value accuracy, dynamic helper-call count and repeated execution; no compiler-independent load ordinal scoring"
+      },
+      "issues": [],
+      "independent_machine_emulation": {
+        "input": "actual uploaded ELF",
+        "engine": "Unicorn",
+        "kernel_ebpf": false,
+        "events": 940,
+        "calls": 24,
+        "passed": true,
+        "guard_policy": "ordinary fast-path synthetic stack guard; does not reproduce scheduling"
+      },
+      "scope": "Passed bounded C/Go looped-direct-call fixture capture and raw replay. No general Go runtime support, cross-service claims, performance claims or complete graph-edge accuracy measurement.",
+      "examples": [
+        {
+          "call_id": 1,
+          "function": "loop_call_overwrite",
+          "value": 42,
+          "sources": [],
+          "argument_sources": [],
+          "helper_calls": 0,
+          "maximum_depth": 1,
+          "contributing_reads": []
+        },
+        {
+          "call_id": 4,
+          "function": "loop_call_overwrite",
+          "value": 424242,
+          "sources": [
+            "input.public_value"
+          ],
+          "argument_sources": [],
+          "helper_calls": 4,
+          "maximum_depth": 2,
+          "contributing_reads": [
+            {
+              "id": "input.public_value@read4",
+              "call_instance": "call4"
+            }
+          ]
+        },
+        {
+          "call_id": 5,
+          "function": "loop_call_accumulate",
+          "value": 0,
+          "sources": [],
+          "argument_sources": [
+            "arg.select"
+          ],
+          "helper_calls": 0,
+          "maximum_depth": 1,
+          "contributing_reads": []
+        },
+        {
+          "call_id": 8,
+          "function": "loop_call_accumulate",
+          "value": 1696968,
+          "sources": [
+            "input.public_value",
+            "input.secret"
+          ],
+          "argument_sources": [],
+          "helper_calls": 4,
+          "maximum_depth": 2,
+          "contributing_reads": [
+            {
+              "id": "input.public_value@read3",
+              "call_instance": "call3"
+            },
+            {
+              "id": "input.public_value@read4",
+              "call_instance": "call4"
+            },
+            {
+              "id": "input.secret@read1",
+              "call_instance": "call1"
+            },
+            {
+              "id": "input.secret@read2",
+              "call_instance": "call2"
+            }
+          ]
+        },
+        {
+          "call_id": 9,
+          "function": "loop_call_transform",
+          "value": 0,
+          "sources": [],
+          "argument_sources": [
+            "arg.select"
+          ],
+          "helper_calls": 0,
+          "maximum_depth": 1,
+          "contributing_reads": []
+        },
+        {
+          "call_id": 12,
+          "function": "loop_call_transform",
+          "value": 1697180,
+          "sources": [
+            "input.public_value",
+            "input.secret"
+          ],
+          "argument_sources": [],
+          "helper_calls": 8,
+          "maximum_depth": 3,
+          "contributing_reads": [
+            {
+              "id": "input.public_value@read3",
+              "call_instance": "call6"
+            },
+            {
+              "id": "input.public_value@read4",
+              "call_instance": "call8"
+            },
+            {
+              "id": "input.secret@read1",
+              "call_instance": "call2"
+            },
+            {
+              "id": "input.secret@read2",
+              "call_instance": "call4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bundle": "go-loop-calls-provenance-20261003-133445-09a1.zip",
+      "bundle_sha256": "b42b3d41b0bfa1528c6b28f6fda94b839250e7527f46d227f327881a74e38f3d",
+      "verified_code_commit": "3547cbdc6217c8f870f3de8479e453b7b8e6c81f",
+      "binary_sha256": "efd538d973c8b97c99c5529560c529f1b0ea841ab168ea5723173e43cb4462ce",
+      "compiler": "go version go1.25.4 linux/amd64",
+      "host_result": {
+        "status": "ebpf_checks_passed",
+        "action": "run",
+        "stage": "complete",
+        "kernel_ebpf_tested": true,
+        "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+        "events": 1276,
+        "results": 24
+      },
+      "capture": {
+        "backend": "ebpf",
+        "lost_events": 0,
+        "submit_errors": 0,
+        "state_errors": 0,
+        "attempted_events": 1276,
+        "raw_probe_hits": 1276,
+        "process_returncode": 0,
+        "bcc_version": "0.29.1",
+        "perf_buffer_pages_per_cpu": 1024,
+        "perf_buffer_bytes_per_cpu": 4194304,
+        "received_events": 1276,
+        "observed_kernel_tgids": [
+          23084
+        ],
+        "submit_error_errnos": {}
+      },
+      "checks": {
+        "binary_and_source_hashes": true,
+        "fixture_sources_match_repository": true,
+        "regenerated_plans_from_elf": true,
+        "generated_bpf": true,
+        "derived_runtime_bases": true,
+        "unique_probe_attachments": true,
+        "full_raw_inference_replay": true,
+        "full_evaluation_replay": true,
+        "all_received_memory_reads_succeeded": true,
+        "all_resolved_calls_match_oracle": true,
+        "event_accounting": true,
+        "capture_clean_and_all_calls_passed": true,
+        "all_hits_accounted": true,
+        "same_value_sources": true,
+        "single_execution_identity": true,
+        "zero_iterations_no_helper_or_input_reads": true,
+        "overwrite_last_contribution": true,
+        "four_distinct_same_callsite_instances": true,
+        "accumulation_all_contributions": true,
+        "nested_parentage_and_returns": true,
+        "call_intervals_nested": true
+      },
+      "probe_locations": 105,
+      "functions": 5,
+      "evaluation": {
+        "passed": true,
+        "capture_clean": true,
+        "dynamic_source_relations": {
+          "tp": 22,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0
+        },
+        "resolved_calls": 24,
+        "expected_calls": 24,
+        "inference_issues": 0,
+        "unexpected_calls": 0,
+        "scope": "fixture field/value accuracy, dynamic helper-call count and repeated execution; no compiler-independent load ordinal scoring"
+      },
+      "issues": [],
+      "independent_machine_emulation": {
+        "input": "actual uploaded ELF",
+        "engine": "Unicorn",
+        "kernel_ebpf": false,
+        "events": 1276,
+        "calls": 24,
+        "passed": true,
+        "guard_policy": "ordinary fast-path synthetic stack guard; does not reproduce scheduling"
+      },
+      "scope": "Passed bounded C/Go looped-direct-call fixture capture and raw replay. No general Go runtime support, cross-service claims, performance claims or complete graph-edge accuracy measurement.",
+      "examples": [
+        {
+          "call_id": 1,
+          "function": "main.goLoopCallOverwrite",
+          "value": 42,
+          "sources": [],
+          "argument_sources": [],
+          "helper_calls": 0,
+          "maximum_depth": 1,
+          "contributing_reads": []
+        },
+        {
+          "call_id": 4,
+          "function": "main.goLoopCallOverwrite",
+          "value": 424242,
+          "sources": [
+            "input.public_value"
+          ],
+          "argument_sources": [],
+          "helper_calls": 4,
+          "maximum_depth": 2,
+          "contributing_reads": [
+            {
+              "id": "input.public_value@read4",
+              "call_instance": "call4"
+            }
+          ]
+        },
+        {
+          "call_id": 5,
+          "function": "main.goLoopCallAccumulate",
+          "value": 0,
+          "sources": [],
+          "argument_sources": [],
+          "helper_calls": 0,
+          "maximum_depth": 1,
+          "contributing_reads": []
+        },
+        {
+          "call_id": 8,
+          "function": "main.goLoopCallAccumulate",
+          "value": 1696968,
+          "sources": [
+            "input.public_value",
+            "input.secret"
+          ],
+          "argument_sources": [],
+          "helper_calls": 4,
+          "maximum_depth": 2,
+          "contributing_reads": [
+            {
+              "id": "input.public_value@read3",
+              "call_instance": "call3"
+            },
+            {
+              "id": "input.public_value@read4",
+              "call_instance": "call4"
+            },
+            {
+              "id": "input.secret@read1",
+              "call_instance": "call1"
+            },
+            {
+              "id": "input.secret@read2",
+              "call_instance": "call2"
+            }
+          ]
+        },
+        {
+          "call_id": 9,
+          "function": "main.goLoopCallTransform",
+          "value": 0,
+          "sources": [],
+          "argument_sources": [],
+          "helper_calls": 0,
+          "maximum_depth": 1,
+          "contributing_reads": []
+        },
+        {
+          "call_id": 12,
+          "function": "main.goLoopCallTransform",
+          "value": 1697180,
+          "sources": [
+            "input.public_value",
+            "input.secret"
+          ],
+          "argument_sources": [],
+          "helper_calls": 8,
+          "maximum_depth": 3,
+          "contributing_reads": [
+            {
+              "id": "input.public_value@read3",
+              "call_instance": "call6"
+            },
+            {
+              "id": "input.public_value@read4",
+              "call_instance": "call8"
+            },
+            {
+              "id": "input.secret@read1",
+              "call_instance": "call2"
+            },
+            {
+              "id": "input.secret@read2",
+              "call_instance": "call4"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "host_capture_passed": true,
+  "total_events": 2216,
+  "total_root_calls": 48,
+  "conclusion": "Both retry captures passed. No submission/loss/state/memory-read errors reported. Go runtime slow path did not execute in this run; rejection policy remains unchanged."
+}
