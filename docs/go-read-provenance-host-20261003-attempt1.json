@@ -1,0 +1,67 @@
+{
+  "bundle": "go-read-provenance-20261003-150416-50d4.zip",
+  "bundle_sha256": "b8cb77b33bc7b660c60c9fcaf423c637ae8d2343c94615f6b588038075987a9e",
+  "matching_code_commit": "ec38dc1478fd4efc6a3d992f26d676a3b12ab2e4",
+  "compiler": "go version go1.25.4 linux/amd64",
+  "binary_sha256": "1e6875f2541738861aaa754e5b97e2b227d61f9816442e6d1c8490dc37bfe344",
+  "host_result": {
+    "status": "failed",
+    "action": "run",
+    "stage": "capture",
+    "kernel_ebpf_tested": false,
+    "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "error": "Exception: Failed to compile BPF module <text>"
+  },
+  "capture": {
+    "backend": "ebpf",
+    "lost_events": 0,
+    "submit_errors": null,
+    "state_errors": null,
+    "attempted_events": null,
+    "raw_probe_hits": null,
+    "process_returncode": null,
+    "bcc_version": "0.29.1",
+    "perf_buffer_pages_per_cpu": 1024,
+    "perf_buffer_bytes_per_cpu": 4194304,
+    "received_events": 0,
+    "observed_kernel_tgids": []
+  },
+  "checks": {
+    "binary_hash": true,
+    "source_hashes": true,
+    "fixture_matches_repository": true,
+    "plan_regenerated_from_actual_elf": true,
+    "scope_plan_regenerated_from_actual_elf": true,
+    "generated_bpf_changes_only_raw_context_name": true
+  },
+  "diagnosis": {
+    "stage": "BPF C compilation, before event collection",
+    "error": "RAW_TRACEPOINT_PROBE exposes ctx but callback referenced args",
+    "bcc_version": "0.29.1",
+    "macro_source": "https://github.com/iovisor/bcc/blob/v0.29.1/src/cc/export/helpers.h",
+    "test_gap": "Native shim incorrectly declared args too; now matches upstream ctx and reproduces old failure"
+  },
+  "independent_execution": {
+    "input": "Uploaded actual Go ELF computation roots; Python real-pread history and Unicorn machine execution; independent native C oracle",
+    "kernel_ebpf": false,
+    "events": 400,
+    "root_calls": 18,
+    "read_operations": 34,
+    "passed": true,
+    "external_source_relations": {
+      "tp": 18,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+    }
+  },
+  "fix_validation": {
+    "targeted_tests": 18,
+    "passed": 17,
+    "skipped": 1,
+    "skip_reason": "Local Go compiler unavailable",
+    "corrected_bpf_kernel_load": "pending host rerun"
+  },
+  "scope": "Go build and static plans verified; no host raw events or host provenance accuracy result. Emulated events must not be described as eBPF capture."
+}

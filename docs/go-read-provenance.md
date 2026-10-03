@@ -4,7 +4,7 @@
 
 新增 Go 文件读取入口，复用 C 已验证的 `read_boundaries.py`：读取返回字节的版本、字段来源绑定、覆盖和反向依赖图没有另写 Go 规则。场景与 C 一致：**18 次计算、34 次读取尝试，九类行为各运行两个偏移轮次。**
 
-**本地独立 Go ABI 汇编夹具及真实文件操作通过，真实 Go 编译和 BCC/eBPF 采集待主机验证。**开发环境没有 Go 编译器，不将汇编夹具称为 Go 编译输出。
+**主机 Go 1.25.4 编译及静态计划生成已通过；首次 BPF 编译失败，修正后等待主机重跑。**开发环境没有 Go 编译器；已对上传的真实 Go ELF 另做独立指令执行，不将此结果称为 eBPF 采集。
 
 ```bash
 cd ~/tracefusion2
@@ -13,6 +13,14 @@ sudo env "PATH=$PATH" /usr/bin/python3 scripts/go_read_provenance.py run
 ```
 
 无需 Docker，沿用当前 Go、binutils 和系统 Python BCC。成功或失败都返回 `artifacts/go-read-provenance-*.zip`。已经通过的 C 文件读取和旧 C/Go 场景不用重跑。
+
+## 首次主机运行与修复（2026-10-03）
+
+上传包 `go-read-provenance-20261003-150416-50d4.zip` 在采集阶段失败，收到 0 条事件。Go 编译成功，但 BCC 0.29.1 报 `use of undeclared identifier 'args'`。[BCC 官方宏](https://github.com/iovisor/bcc/blob/v0.29.1/src/cc/export/helpers.h) 中普通 `TRACEPOINT_PROBE` 的参数名为 `args`，`RAW_TRACEPOINT_PROBE` 的参数名为 `ctx`；生成的 raw 回调误用了前者。
+
+修复只修改两个 raw 回调中的上下文引用，保持原有参数解码和来源推断。原本本地 C++ 测试壳也将 raw 宏错误声明成了 `args`，掩盖了缺陷。现在测试宏与 BCC 官方定义一致：修正测试后旧生成代码编译失败，修正生成器后通过。定向 C/Go 读取测试共 18 项，17 项通过，1 项因本地无 Go 编译器跳过。这个测试仍不代替 BPF verifier 和实际加载。
+
+对上传的真实 Go ELF 复核了二进制/源码哈希、仓库场景一致性、指令与范围计划；用该 ELF 的计算函数配合独立 Python 真实文件读取和 Unicorn 执行，与原生 C 真值比较，18 次计算、34 次读取来源正确。此处 400 条事件是测试构造的，**不是失败主机包采到的事件**。诊断与验证记录见 [首次主机报告](go-read-provenance-host-20261003-attempt1.json)。
 
 ## Go 读取接口及数据范围
 
@@ -50,7 +58,7 @@ Go 采集端额外处理两点：
 
 完整套件 132 项：124 项通过，5 项真实 Go 编译测试跳过，3 项既有 HTTP 测试被当前环境的 socket 权限阻止。九个旧真实包共 **4378 条事件、166 次计算调用**，重新生成计划并重放完整推断/评分，均与原包一致；C 读取 BPF 源码也保持一致。见 [旧包回归](go-read-regression-20261003.json)。
 
-主机运行仍需确认：实际 Go 编译输出在支持的指令/栈检查范围内，raw tracepoint 可以加载，以及 syscall 边界取得的 G 身份与计算事件一致。失败会保留完整诊断包，不自动降级为只按线程关联。
+上传的 Go 编译输出已通过静态计划及独立计算执行检查。主机重跑仍需确认：修正后的 raw tracepoint 可以加载，以及 syscall 边界取得的 G 身份与计算事件一致。失败会保留完整诊断包，不自动降级为只按线程关联。
 
 ## 边界
 

@@ -232,28 +232,30 @@ int traced_pread_exit(void *ctx,read_exit_args *args) {
     ++exits; observed_return=args->ret; observed_context=ctx; read_state.value.pending=0; return 0;
 }
 int reject_lifecycle(void*) { ++rejected; return 0; }
-#define RAW_TRACEPOINT_PROBE(name) int test_##name(bpf_raw_tracepoint_args *args)
+// Match BCC v0.29.1 src/cc/export/helpers.h, including its ctx parameter.
+#define RAW_TRACEPOINT_PROBE(event) \
+int raw_tracepoint__##event(struct bpf_raw_tracepoint_args *ctx)
 '''
         main=r'''
 int main() {
     pt_regs regs{0x6000000,static_cast<u64>(-1),0x2000000,4,8,0xdeadbeef,__NR_pread64};
     bpf_raw_tracepoint_args ctx{{reinterpret_cast<u64>(&regs),__NR_pread64}};
-    test_sys_enter(&ctx);
+    raw_tracepoint__sys_enter(&ctx);
     assert(entries==1 && observed.fd==-1 && observed.buf==0x2000000);
     assert(observed.count==4 && observed.pos==8 && observed_context==&ctx);
     assert(boundary_current_g.value==0x6000000);
     regs.r14=0x7000000; ctx.args[1]=static_cast<u64>(-9);
-    test_sys_exit(&ctx);
+    raw_tracepoint__sys_exit(&ctx);
     assert(exits==1 && observed_return==-9 && observed_context==&ctx);
     assert(boundary_current_g.value==0x7000000); // sampled again, not copied
-    ctx.args[1]=__NR_write;test_sys_enter(&ctx);assert(entries==1);
-    ctx.args[1]=__NR_close;test_sys_enter(&ctx);assert(rejected==1);
-    active=false;test_sys_enter(&ctx);assert(rejected==1);active=true;
-    ctx.args[1]=__NR_pread64;read_failure=true;test_sys_enter(&ctx);
+    ctx.args[1]=__NR_write;raw_tracepoint__sys_enter(&ctx);assert(entries==1);
+    ctx.args[1]=__NR_close;raw_tracepoint__sys_enter(&ctx);assert(rejected==1);
+    active=false;raw_tracepoint__sys_enter(&ctx);assert(rejected==1);active=true;
+    ctx.args[1]=__NR_pread64;read_failure=true;raw_tracepoint__sys_enter(&ctx);
     assert(errors==1 && entries==1);read_failure=false;
-    regs.r14=0;test_sys_enter(&ctx);assert(errors==2 && entries==1);
+    regs.r14=0;raw_tracepoint__sys_enter(&ctx);assert(errors==2 && entries==1);
     regs.r14=0x6000000;read_state.value.pending=1;regs.orig_ax=__NR_write;
-    test_sys_exit(&ctx);assert(errors==3 && exits==1);
+    raw_tracepoint__sys_exit(&ctx);assert(errors==3 && exits==1);
 }
 '''
         folder=Path(self.tmp.name)/'raw-shim';folder.mkdir()

@@ -86,14 +86,14 @@ static __always_inline int read_user_regs(struct bpf_raw_tracepoint_args *ctx, s
 }
 RAW_TRACEPOINT_PROBE(sys_enter) {
     if (!in_read_scope()) return 0;
-    u64 nr=args->args[1];
+    u64 nr=ctx->args[1];
     if (nr!=__NR_pread64 && nr!=__NR_close && nr!=__NR_dup2 && nr!=__NR_dup3) return 0;
     struct pt_regs regs={};
-    if (read_user_regs(args,&regs)<0) return 0;
-    if (nr!=__NR_pread64) return reject_lifecycle(args);
+    if (read_user_regs(ctx,&regs)<0) return 0;
+    if (nr!=__NR_pread64) return reject_lifecycle(ctx);
     struct read_enter_args decoded={};
     decoded.fd=regs.di; decoded.buf=regs.si; decoded.count=regs.dx; decoded.pos=regs.r10;
-    return traced_pread_enter(args,&decoded);
+    return traced_pread_enter(ctx,&decoded);
 }
 RAW_TRACEPOINT_PROBE(sys_exit) {
     if (!in_read_scope()) return 0;
@@ -102,10 +102,10 @@ RAW_TRACEPOINT_PROBE(sys_exit) {
     u32 key=0; struct read_state_t *s=read_state.lookup(&key);
     if (!s || !s->pending) return 0;
     struct pt_regs regs={};
-    if (read_user_regs(args,&regs)<0) return 0;
+    if (read_user_regs(ctx,&regs)<0) return 0;
     if (regs.orig_ax!=__NR_pread64) { count(2); return 0; }
-    struct read_exit_args decoded={}; decoded.ret=(s64)args->args[1];
-    return traced_pread_exit(args,&decoded);
+    struct read_exit_args decoded={}; decoded.ret=(s64)ctx->args[1];
+    return traced_pread_exit(ctx,&decoded);
 }
 '''
     return source
