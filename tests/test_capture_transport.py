@@ -16,13 +16,15 @@ import hybrid_provenance as common
 class Event(ctypes.Structure):
     _fields_ = [('pid_tid', ctypes.c_uint64), ('sequence', ctypes.c_uint64),
                 ('regs', ctypes.c_uint64 * 16), ('inputs', ctypes.c_uint32 * 8),
-                ('outputs', ctypes.c_uint32 * 8), ('stack', ctypes.c_uint64 * 32)]
+                ('outputs', ctypes.c_uint32 * 8), ('stack', ctypes.c_uint64 * 32),
+                ('read_data', ctypes.c_ubyte * 32)]
 
 
 class CaptureTransportTests(unittest.TestCase):
-    def capture(self, submit_errors=0, lost_events=0, errno_map=True):
+    def capture(self, submit_errors=0, lost_events=0, errno_map=True, use_setup=False):
         timeline = []
         objects = [Event(pid_tid=(123 << 32) | 123, sequence=i) for i in range(2)]
+        for obj in objects: obj.read_data[0] = 255
 
         class Process:
             pid = 123
@@ -87,12 +89,14 @@ class CaptureTransportTests(unittest.TestCase):
                  patch.object(common, 'runtime_metadata', return_value={}), \
                  patch.object(common, 'attach_probes', return_value=[]):
                 events, stats, _ = common.record_bpf(out / 'demo', [], config, out,
-                    source_generator=lambda *_: 'BPF_HASH(submit_errnos, s32, u64, 32);' if errno_map else '')
+                    source_generator=lambda *_: 'BPF_HASH(submit_errnos, s32, u64, 32);' if errno_map else '',
+                    setup_fn=(lambda *args: timeline.append('setup')) if use_setup else None)
             self.assertEqual([e['sequence'] for e in events], [0, 1])
+            self.assertTrue(all(e['read_data'] == [255] + [0]*31 for e in events))
             self.assertEqual([json.loads(l) for l in (out / 'events.jsonl').read_text().splitlines()], events)
             self.assertEqual(json.loads((out / 'capture.json').read_text()), stats)
         self.assertEqual(bpf.polls, 4)  # one active poll plus three exit drains
-        self.assertEqual(timeline, ['open', 'resume', 'cleanup'])
+        self.assertEqual(timeline, (['setup'] if use_setup else []) + ['open', 'resume', 'cleanup'])
         self.assertEqual(bpf.buffer.pages, 1024)
         return stats
 
@@ -110,6 +114,9 @@ class CaptureTransportTests(unittest.TestCase):
         self.assertEqual(stats['lost_events'], 4)
         self.assertEqual(stats['received_events'], 2)
         self.assertFalse(common.evaluate({'results': [], 'issues': []}, [], stats, [])['capture_clean'])
+
+    def test_optional_boundary_setup_precedes_resume_and_serializes_bytes(self):
+        self.capture(use_setup=True)
 
     def test_legacy_collector_without_errno_map(self):
         stats = self.capture(errno_map=False)

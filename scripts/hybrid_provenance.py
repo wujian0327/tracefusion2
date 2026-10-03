@@ -208,7 +208,7 @@ def attachment_threads(pid, config):
     return [pid]
 
 
-def record_bpf(binary, plans, config, out, source_generator=None):
+def record_bpf(binary, plans, config, out, source_generator=None, setup_fn=None):
     import bcc
     process = bpf = None
     events, bases = [], {}
@@ -226,6 +226,8 @@ def record_bpf(binary, plans, config, out, source_generator=None):
             source = (source_generator or bpf_source)(plans, config)
             submit_errno_enabled = 'BPF_HASH(submit_errnos,' in source
             bpf = bcc.BPF(text=source)
+            if setup_fn is not None:
+                setup_fn(bpf, process, binary, plans, config, out)
             tids = attachment_threads(process.pid, config)
             save(out/'attachment-threads.json', tids)
             attached = []
@@ -234,7 +236,8 @@ def record_bpf(binary, plans, config, out, source_generator=None):
             with (out / 'events.jsonl').open('w') as stream:
                 def receive(cpu, data, size):
                     obj = bpf['events'].event(data)
-                    event = {name: int(getattr(obj, name)) for name, _ in obj._fields_ if name not in ('regs', 'inputs', 'outputs', 'stack')}
+                    event = {name: list(getattr(obj, name)) if isinstance(getattr(obj, name), ctypes.Array)
+                             else int(getattr(obj, name)) for name, _ in obj._fields_}
                     event.update(regs=list(obj.regs), inputs=list(obj.inputs)[:len(config['input_fields'])],
                                  outputs=list(obj.outputs)[:len(config['output_fields'])])
                     if hasattr(obj, 'stack'):

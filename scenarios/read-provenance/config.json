@@ -1,0 +1,10 @@
+{
+  "abi": "linux-x86_64-sysv",
+  "functions": ["select_value", "merge_values", "fallback_value"],
+  "input_fields": ["left", "right", "noise"],
+  "output_fields": ["value", "audit"],
+  "sink_field": "value",
+  "sensitive_fields": ["left"],
+  "read_boundary": {"api": "pread64", "scope_function": "run_workload", "maximum_bytes": 32},
+  "scope": "C preopened immutable regular files, pread-only buffer writers before compute roots, one thread; no concurrent mutation or fd reuse"
+}

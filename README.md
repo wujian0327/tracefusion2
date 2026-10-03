@@ -4,7 +4,19 @@
 
 当前验证主线：**静态候选依赖分析 + 自动选择 eBPF 观测位置 + 动态来源重建**。此前 HTTP 抓包、trace/span 和调用链基线保留为前期实验设施。
 
-## 当前：C / Go 循环中的函数调用已通过真实采集
+## 当前：C 真实文件读取来源验证
+
+将预先放好的输入字段推进到真实 `pread64` 返回：区分文件、偏移和读取实例，再接入已有加工/调用依赖图。覆盖同值异源、合并、缓冲区覆盖、失败和 EOF，共 18 次计算入口、34 次读取尝试。**本地编译、实际文件操作和独立指令验证通过；真实 BCC/eBPF 采集待主机运行。**
+
+```bash
+git pull origin main
+sudo /usr/bin/python3 scripts/read_provenance.py run
+```
+
+返回 `artifacts/read-provenance-*.zip`。读取发生在计算根函数之前，文件不可变且输入只由 pread 写入；尚未接入 Go 读取、数据库或网络输出。完整套件 117 项通过、4 项 Go 编译测试跳过、3 项旧 HTTP 测试受环境 socket 权限阻止；八个旧真实包共 4062 条事件、148 次调用重放一致。详见 [读取边界与验证范围](docs/read-provenance.md)。旧实验不用重跑。
+
+## 已验证：C / Go 循环中的函数调用
+
 
 新增 C、Go 两套普通源码夹具，共用动态调用栈和循环重放逻辑。每种语言验证零/单/多次迭代、覆盖、累积及三层嵌套调用，共 24 次根调用。**2026-10-03 修复后真实采集通过：C 940 条、Go 1276 条事件，各 24 次根调用，字段来源各 TP=22/FP=0/FN=0。报告丢失、提交、状态和内存读取错误均为 0，原始事件完整重放一致。**已核查重复调用实例、覆盖消除、累积贡献及三层父子关系；见 [重跑审计](docs/loop-calls-host-retry-20261003.json)。
 
@@ -196,7 +208,8 @@ python3 -m unittest discover -s tests -v
 
 ## 文档与验证状态
 
-- [当前 C / Go 循环与函数调用验证](docs/loop-calls-provenance.md)
+- [当前真实文件读取来源验证](docs/read-provenance.md)
+- [已通过主机验证的 C / Go 循环与函数调用](docs/loop-calls-provenance.md)
 - [已通过主机验证的跨函数来源传播](docs/interproc-provenance.md)
 - [已通过主机验证的单函数闭环](docs/hybrid-provenance.md)
 - [MirrorTaint、FlowDist 算法与 eBPF 边界](docs/mirrortaint-flowdist-ebpf-review.md)
