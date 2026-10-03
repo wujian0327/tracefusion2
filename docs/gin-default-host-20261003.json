@@ -1,0 +1,77 @@
+{
+  "status": "default_scheduler_host_capture_verified",
+  "kernel_ebpf_tested": true,
+  "events": 892,
+  "requests": 28,
+  "compute_calls": 36,
+  "read_operations": 56,
+  "source_relations": {
+    "tp": 28,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  "natural_scheduling": {
+    "max_active_scopes": 4,
+    "overlapping_request_pairs": 31,
+    "overlapping_pairs_with_distinct_observed_threads": 31,
+    "observed_thread_count": 7,
+    "migrated_requests": 0,
+    "observed_thread_transitions": 0
+  },
+  "scheduler_summary": {
+    "default_scheduler_verified": true,
+    "no_scheduler_environment_overrides": true,
+    "multi_p_configured": true
+  },
+  "nonzero_error_events": {
+    "source_error": 0,
+    "destination_error": 0,
+    "stack_error": 0,
+    "runtime_guard_error": 0,
+    "read_error": 0,
+    "error_type": 0
+  },
+  "capture_summary": {
+    "lost_events": 0,
+    "submit_errors": 0,
+    "state_errors": 0,
+    "attempted_events": 892,
+    "raw_probe_hits": 892,
+    "received_events": 892,
+    "process_returncode": 0
+  },
+  "verification": {
+    "binary_and_source_hashes": true,
+    "fixture_sources_match_repository": true,
+    "framework_hashes_match_pinned_build": true,
+    "disassembly_and_probe_plans_reconstructed": true,
+    "runtime_bases_reconstructed": true,
+    "attachments_match": true,
+    "collector_source_matches": true,
+    "complete_inference_replay_equal": true,
+    "complete_evaluation_replay_equal": true,
+    "all_client_bodies_match": true,
+    "exact_read_offsets_and_same_value_overwrite_verified": true,
+    "constant_overwrite_and_merge_verified": true,
+    "request_local_sequences_contiguous": true,
+    "read_and_call_counters_restart": true,
+    "graph_ids_unique_and_edges_have_endpoints": true,
+    "overlap_pairs_agree_between_timestamps_and_global_sequence": true,
+    "peak_overlap_independently_verified": true
+  },
+  "observed_migration": {
+    "migrated_requests": 0,
+    "observed_thread_transitions": 0,
+    "compute_invocations_with_in_call_migration": 0
+  },
+  "limits": [
+    "fixed 28-request uint32 fixture with four client workers; no general Gin application claim",
+    "default scheduler concurrency observed, but no natural per-request thread migration occurred in this capture",
+    "scope overlap and multiple observed threads do not prove simultaneous execution on multiple CPUs",
+    "fixed compiler/framework versions with inlining disabled; explicit business functions and JSON summary",
+    "no child goroutine propagation, shared mutable objects, business stack relocation, arbitrary JSON, database or performance evaluation"
+  ],
+  "published_scope": "Aggregate validation only; no exact host configuration, runtime identifiers, addresses, mappings, artifact hashes or platform details"
+}
