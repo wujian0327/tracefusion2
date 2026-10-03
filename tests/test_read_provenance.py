@@ -44,6 +44,11 @@ def execute(binary, plans, config, function, values, selector, call_id):
     for reg,value in [(adapter.input_register,src),(adapter.output_register,dst),(adapter.selector_register,selector),('rsp',root_sp)]:
         cpu.reg_write(getattr(x86,'UC_X86_REG_'+reg.upper()),value)
     for i,r in enumerate(adapter.saved_registers):cpu.reg_write(getattr(x86,'UC_X86_REG_'+r.upper()),0xabc000+i)
+    if adapter.runtime_guard_offset is not None:
+        goroutine=0x6000000;cpu.mem_map(goroutine,4096)
+        cpu.mem_write(goroutine+adapter.runtime_guard_offset,struct.pack('<Q',stack+256))
+        cpu.reg_write(x86.UC_X86_REG_R14,goroutine)
+    stack_words=model.STACK_WORDS+adapter.stack_above//8
     bases={p['function']:bias+p['symbol_address'] for p in plans}
     points={bases[p['function']]+n['offset']:(fid,n) for fid,p in enumerate(plans) for n in p['instructions']}
     root_id=next(i for i,p in enumerate(plans) if p['function']==function)
@@ -57,8 +62,10 @@ def execute(binary, plans, config, function, values, selector, call_id):
             root=root_id,depth=len(frames),function=fid,offset=n['offset'],src_addr=src,dst_addr=dst,root_sp=root_sp,ip=address,
             flags=machine.reg_read(x86.UC_X86_REG_EFLAGS),regs=[machine.reg_read(getattr(x86,'UC_X86_REG_'+r.upper())) for r in model.REGS],
             inputs=list(struct.unpack('<III',machine.mem_read(src,12))),outputs=list(struct.unpack('<II',machine.mem_read(dst,8))),
-            stack=list(struct.unpack('<'+'Q'*model.STACK_WORDS,machine.mem_read(root_sp-model.STACK_BYTES,model.STACK_WORDS*8))),
+            stack=list(struct.unpack('<'+'Q'*stack_words,machine.mem_read(root_sp-model.STACK_BYTES,stack_words*8))),
             source_error=0,destination_error=0,stack_error=0))
+        if adapter.runtime_guard_offset is not None:
+            events[-1].update(runtime_guard=stack+256,runtime_guard_error=0)
         if n['op']=='ret':frames.pop()
     cpu.hook_add(uc.UC_HOOK_CODE,observe)
     cpu.emu_start(bases[function],stop,count=4096)
@@ -106,7 +113,10 @@ def make_history(binary,plans,config):
                     rows.extend(events)
         finally:os.close(a);os.close(b)
     rows.append(observation(boundary.SCOPE_EXIT))
-    for i,event in enumerate(rows):event.update(observation_sequence=i,timestamp=i+1)
+    for i,event in enumerate(rows):
+        event.update(observation_sequence=i,timestamp=i+1)
+        if get_adapter(config).context.identity_register and event['kind']!=0:
+            event['regs']=[0]*16;event['regs'][14]=0x6000000
     return rows,dict(functions=bases,read_files=files)
 
 

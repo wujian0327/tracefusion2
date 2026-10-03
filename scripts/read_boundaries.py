@@ -23,6 +23,9 @@ def bind(events, plans, config, runtime):
         require(rows[0]['kind'] == SCOPE_ENTER and rows[-1]['kind'] == SCOPE_EXIT, 'Missing workload boundary')
         require(sum(e['kind'] == SCOPE_ENTER for e in rows) == sum(e['kind'] == SCOPE_EXIT for e in rows) == 1, 'Repeated workload scope')
         require(len({e['pid_tid'] for e in rows}) == 1, 'Multiple read execution contexts unsupported')
+        # Include syscall and scope events in the adapter identity check. A
+        # fixed OS thread alone is insufficient for a Go read history.
+        get_adapter(config).context.validate(rows, core.model.REGS)
         require(all(a['timestamp'] <= b['timestamp'] for a,b in zip(rows, rows[1:])), 'Non-monotonic observation order')
         files = runtime['read_files']; memory = {}; pending = None; operations = []; snapshots = {}; active = None
         instructions = {(fid,n['offset']): n for fid,p in enumerate(plans) for n in p['instructions']}

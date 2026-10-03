@@ -143,20 +143,23 @@ def snapshot_files(pid, proc_root=Path('/proc')):
     return files
 
 
-def record(binary,plans,config,out):
+def record(binary,plans,config,out,source_generator=None,scope_attacher=None):
     manifest = {}
     def setup(bpf,process,binary,plans,config,out):
         manifest.update(snapshot_files(process.pid))
         require(manifest, 'No preopened regular file descriptors')
         common.save(out/'read-files.json',manifest)
         name = config['read_boundary']['scope_function']
-        bpf.attach_uprobe(name=str(binary),sym=name,fn_name='read_scope_enter',pid=process.pid)
-        bpf.attach_uretprobe(name=str(binary),sym=name,fn_name='read_scope_exit',pid=process.pid)
-        common.save(out/'read-boundary-attachments.json',dict(scope_function=name,pid=process.pid,
-            entry='read_scope_enter',return_probe='read_scope_exit',
-            tracepoints=['sys_enter_pread64','sys_exit_pread64','sys_enter_close','sys_enter_dup2','sys_enter_dup3'],
-            filter='kernel pid_tid learned at PID-scoped workload entry; single-thread scope'))
-    events,stats,bases = common.record_bpf(binary,plans,config,out,source_generator=bpf_source,setup_fn=setup)
+        if scope_attacher is not None:
+            scope_attacher(bpf,process,binary,plans,config,out)
+        else:
+            bpf.attach_uprobe(name=str(binary),sym=name,fn_name='read_scope_enter',pid=process.pid)
+            bpf.attach_uretprobe(name=str(binary),sym=name,fn_name='read_scope_exit',pid=process.pid)
+            common.save(out/'read-boundary-attachments.json',dict(scope_function=name,pid=process.pid,
+                entry='read_scope_enter',return_probe='read_scope_exit',
+                tracepoints=['sys_enter_pread64','sys_exit_pread64','sys_enter_close','sys_enter_dup2','sys_enter_dup3'],
+                filter='kernel pid_tid learned at PID-scoped workload entry; single-thread scope'))
+    events,stats,bases = common.record_bpf(binary,plans,config,out,source_generator=source_generator or bpf_source,setup_fn=setup)
     runtime = dict(functions=bases,read_files=manifest)
     common.save(out/'runtime-bases.json',runtime)
     return events,stats,runtime

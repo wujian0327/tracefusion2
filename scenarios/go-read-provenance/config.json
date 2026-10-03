@@ -1,0 +1,11 @@
+{
+  "adapter": "go-amd64-u32-calls",
+  "abi": "go-amd64-abiinternal",
+  "functions": ["main.goSelectValue", "main.goMergeValues", "main.goFallbackValue"],
+  "input_fields": ["left", "right", "noise"],
+  "output_fields": ["value", "audit"],
+  "sink_field": "value",
+  "sensitive_fields": ["left"],
+  "read_boundary": {"api": "pread64", "scope_function": "main.runWorkload", "maximum_bytes": 32},
+  "scope": "Go syscall.Pread into a fixed global buffer; immutable preopened files, pinned goroutine, read-before-compute"
+}

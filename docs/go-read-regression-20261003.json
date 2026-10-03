@@ -1,0 +1,109 @@
+{
+  "scope": "Nine complete host captures replayed after Go reader adaptation and all-event execution identity checks; default C read BPF remains byte-identical.",
+  "runs": [
+    {
+      "package": "hybrid-host-review-20261001",
+      "events": 88,
+      "root_calls": 16,
+      "checks": {
+        "binary_hash": true,
+        "plan_identical": true,
+        "inference_identical": true,
+        "evaluation_identical": true
+      }
+    },
+    {
+      "package": "interproc-host-review-172324",
+      "events": 448,
+      "root_calls": 12,
+      "checks": {
+        "binary_hash": true,
+        "plan_identical": true,
+        "inference_identical": true,
+        "evaluation_identical": true
+      }
+    },
+    {
+      "package": "loop-host-review-174750",
+      "events": 428,
+      "root_calls": 24,
+      "checks": {
+        "binary_hash": true,
+        "plan_identical": true,
+        "inference_identical": true,
+        "evaluation_identical": true
+      }
+    },
+    {
+      "package": "go-host-review-182405",
+      "events": 62,
+      "root_calls": 12,
+      "checks": {
+        "binary_hash": true,
+        "plan_identical": true,
+        "inference_identical": true,
+        "evaluation_identical": true
+      }
+    },
+    {
+      "package": "go-interproc-host-review-20261003",
+      "events": 364,
+      "root_calls": 12,
+      "checks": {
+        "binary_hash": true,
+        "plan_identical": true,
+        "inference_identical": true,
+        "evaluation_identical": true
+      }
+    },
+    {
+      "package": "go-loop-host-review-20261003",
+      "events": 456,
+      "root_calls": 24,
+      "checks": {
+        "binary_hash": true,
+        "plan_identical": true,
+        "inference_identical": true,
+        "evaluation_identical": true
+      }
+    },
+    {
+      "package": "c-loop-calls-retry-review-20261003",
+      "events": 940,
+      "root_calls": 24,
+      "checks": {
+        "binary_hash": true,
+        "plan_identical": true,
+        "inference_identical": true,
+        "evaluation_identical": true
+      }
+    },
+    {
+      "package": "go-loop-calls-retry-review-20261003",
+      "events": 1276,
+      "root_calls": 24,
+      "checks": {
+        "binary_hash": true,
+        "plan_identical": true,
+        "inference_identical": true,
+        "evaluation_identical": true
+      }
+    },
+    {
+      "package": "read-host-review-20261003",
+      "events": 316,
+      "root_calls": 18,
+      "read_operations": 34,
+      "checks": {
+        "binary_hash": true,
+        "plan_identical": true,
+        "bpf_identical": true,
+        "inference_identical": true,
+        "evaluation_identical": true
+      }
+    }
+  ],
+  "total_events": 4378,
+  "total_root_calls": 166,
+  "go_read_kernel_tested": false
+}

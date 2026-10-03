@@ -37,7 +37,7 @@ def layout_assertions(config):
     return '\n'.join(lines)+'\n'
 
 
-def build(scenario, out, planner=None):
+def build(scenario, out, planner=None, source_generator=None):
     config = json.loads((scenario/'config.json').read_text())
     adapter = get_adapter(config)
     require(adapter in (GO, GO_CALLS), 'Go builder requires the Go adapter')
@@ -76,7 +76,7 @@ def build(scenario, out, planner=None):
     # The default planner rejects calls. The explicit calls planner observes
     # stack checks and rejects executed slow paths; neither inserts nosplit.
     common.save(out/'probe-plan.json',plans); common.save(out/'config.json',config)
-    (out/'collector.bpf.c').write_text(collector.bpf_source(plans,config))
+    (out/'collector.bpf.c').write_text((source_generator or collector.bpf_source)(plans,config))
     return binary,plans,config
 
 

@@ -4,7 +4,19 @@
 
 当前验证主线：**静态候选依赖分析 + 自动选择 eBPF 观测位置 + 动态来源重建**。此前 HTTP 抓包、trace/span 和调用链基线保留为前期实验设施。
 
-## 当前：C 真实文件读取来源已通过主机验证
+## 当前：Go 真实文件读取来源适配
+
+使用 `syscall.Pread`，复用 C 的读取实例、字节版本和来源绑定核心，保持 18 次计算、34 次读取尝试的同一组场景。新增 syscall 边界的实际 goroutine 身份采集，以及 Go 工作负载入口/RET 指令挂接。**本地 Go ABI 汇编夹具通过；真实 Go 编译和 BCC/eBPF 采集待主机验证。**
+
+```bash
+git pull origin main
+sudo env "PATH=$PATH" /usr/bin/python3 scripts/go_read_provenance.py run
+```
+
+返回 `artifacts/go-read-provenance-*.zip`。完整套件 124 项通过、5 项因缺少 Go 编译器跳过、3 项旧 HTTP 测试受环境 socket 权限阻止；九个旧真实包共 4378 条事件、166 次调用重放一致。旧实验不用重跑。详见 [Go 读取接口、适配条件与验证](docs/go-read-provenance.md)。
+
+## 已验证：C 真实文件读取来源
+
 
 将预先放好的输入字段推进到真实 `pread64` 返回：区分文件、偏移和读取实例，再接入已有加工/调用依赖图。覆盖同值异源、合并、缓冲区覆盖、失败和 EOF，共 18 次计算入口、34 次读取尝试。**2026-10-03 真实 BCC/eBPF 采集通过：316 条事件、18 次计算入口、34 次读取尝试，字段来源与读取操作来源均 TP=18/FP=0/FN=0，完整原始事件重放一致。报告丢失、提交、状态和读取错误均为 0。**详见 [主机核验记录](docs/read-provenance-host-20261003.json)。
 
@@ -208,7 +220,8 @@ python3 -m unittest discover -s tests -v
 
 ## 文档与验证状态
 
-- [当前真实文件读取来源验证](docs/read-provenance.md)
+- [当前 Go 真实文件读取来源适配](docs/go-read-provenance.md)
+- [已通过主机验证的 C 文件读取来源](docs/read-provenance.md)
 - [已通过主机验证的 C / Go 循环与函数调用](docs/loop-calls-provenance.md)
 - [已通过主机验证的跨函数来源传播](docs/interproc-provenance.md)
 - [已通过主机验证的单函数闭环](docs/hybrid-provenance.md)
