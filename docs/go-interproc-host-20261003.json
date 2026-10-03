@@ -1,0 +1,230 @@
+{
+  "bundle": "go-interproc-provenance-20261003-124206-bae3.zip",
+  "bundle_sha256": "fbb970212e779fac87c5dc36e9f6404c15656141444ac5592f1eb9830e484cb2",
+  "verified_code_commit": "7995e335fabf7b2f507ef84e1585d94b27881b4f",
+  "binary_sha256": "3504d633c1cfe36be23b87abba7394fc936a8d554a98e6acefec4d10b01e5918",
+  "compiler": "go version go1.25.4 linux/amd64",
+  "host_result": {
+    "status": "ebpf_checks_passed",
+    "action": "run",
+    "stage": "complete",
+    "kernel_ebpf_tested": true,
+    "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "events": 364,
+    "results": 12
+  },
+  "capture": {
+    "backend": "ebpf",
+    "lost_events": 0,
+    "submit_errors": 0,
+    "state_errors": 0,
+    "attempted_events": 364,
+    "raw_probe_hits": 364,
+    "process_returncode": 0,
+    "bcc_version": "0.29.1",
+    "received_events": 364,
+    "observed_kernel_tgids": [
+      5459
+    ]
+  },
+  "checks": {
+    "binary_and_source_hashes": true,
+    "fixture_sources_match_repository": true,
+    "layout_assertions": true,
+    "regenerated_plan_from_actual_elf": true,
+    "generated_bpf": true,
+    "derived_runtime_bases": true,
+    "unique_probe_attachments": true,
+    "full_raw_inference_replay": true,
+    "full_evaluation_replay": true,
+    "all_memory_and_guard_reads_succeeded": true,
+    "single_nonzero_goroutine_identity": true,
+    "equal_input_and_output_values_with_distinct_sources": true,
+    "repeated_helper_contexts_and_overwrite_kill": true,
+    "argument_and_return_edges": true
+  },
+  "observations": {
+    "functions": 5,
+    "probe_locations": 72,
+    "function_entries": 40,
+    "maximum_depth": 3,
+    "stack_guard_checks": 20,
+    "slow_path_entries": 0
+  },
+  "evaluation": {
+    "passed": true,
+    "capture_clean": true,
+    "checks": [
+      {
+        "sequence": 1,
+        "function": "main.goCallSelect",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value"
+        ],
+        "observed_sources": [
+          "input.public_value"
+        ]
+      },
+      {
+        "sequence": 2,
+        "function": "main.goCallSelect",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ]
+      },
+      {
+        "sequence": 3,
+        "function": "main.goCallOverwrite",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value"
+        ],
+        "observed_sources": [
+          "input.public_value"
+        ]
+      },
+      {
+        "sequence": 4,
+        "function": "main.goCallOverwrite",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value"
+        ],
+        "observed_sources": [
+          "input.public_value"
+        ]
+      },
+      {
+        "sequence": 5,
+        "function": "main.goCallMerge",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value",
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.public_value",
+          "input.secret"
+        ]
+      },
+      {
+        "sequence": 6,
+        "function": "main.goCallMerge",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value",
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.public_value",
+          "input.secret"
+        ]
+      },
+      {
+        "sequence": 7,
+        "function": "main.goCallSelect",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value"
+        ],
+        "observed_sources": [
+          "input.public_value"
+        ]
+      },
+      {
+        "sequence": 8,
+        "function": "main.goCallSelect",
+        "passed": true,
+        "expected_sources": [
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.secret"
+        ]
+      },
+      {
+        "sequence": 9,
+        "function": "main.goCallOverwrite",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value"
+        ],
+        "observed_sources": [
+          "input.public_value"
+        ]
+      },
+      {
+        "sequence": 10,
+        "function": "main.goCallOverwrite",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value"
+        ],
+        "observed_sources": [
+          "input.public_value"
+        ]
+      },
+      {
+        "sequence": 11,
+        "function": "main.goCallMerge",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value",
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.public_value",
+          "input.secret"
+        ]
+      },
+      {
+        "sequence": 12,
+        "function": "main.goCallMerge",
+        "passed": true,
+        "expected_sources": [
+          "input.public_value",
+          "input.secret"
+        ],
+        "observed_sources": [
+          "input.public_value",
+          "input.secret"
+        ]
+      }
+    ],
+    "static_source_relations": {
+      "tp": 16,
+      "fp": 4,
+      "fn": 0,
+      "precision": 0.8,
+      "recall": 1.0
+    },
+    "dynamic_source_relations": {
+      "tp": 16,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "resolved_calls": 12,
+    "expected_calls": 12,
+    "inference_issues": 0,
+    "unexpected_calls": 0,
+    "scope": "Go fixed-field acyclic direct-call fixture; guard fast path only; no general runtime or database coverage"
+  },
+  "independent_machine_emulation": {
+    "engine": "Unicorn",
+    "input": "actual uploaded Go 1.25.4 ELF",
+    "kernel_ebpf": false,
+    "events": 364,
+    "fast_path_calls": 12,
+    "fast_path_passed": true,
+    "forced_slow_path_rejected_calls": 12,
+    "note": "Forced slow path is an independent simulation only; real host capture exercised fast paths."
+  },
+  "scope": "Fixed uint32 fields, application direct calls and pinned goroutine; not general Go runtime, database or cross-service provenance"
+}
