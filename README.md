@@ -6,7 +6,7 @@
 
 ## 当前：共用核心扩展到循环中的函数调用
 
-新增 C、Go 两套普通源码夹具，共用动态调用栈和循环重放逻辑。每种语言验证零/单/多次迭代、覆盖、累积及三层嵌套调用，共 24 次根调用。**本地 C 编译/原生执行和独立指令模拟通过；Go 本地证据为独立汇编夹具，真实 Go 编译和两个新场景的内核采集待主机验证。**
+新增 C、Go 两套普通源码夹具，共用动态调用栈和循环重放逻辑。每种语言验证零/单/多次迭代、覆盖、累积及三层嵌套调用，共 24 次根调用。**首轮真实采集未通过：C / Go 分别有 301 / 466 次事件提交失败，Go 第一笔另进入运行时抢占慢路径。完整重建的 17 / 13 次调用均匹配真值。已扩大采集缓冲、减少逐事件刷盘，并调整 Go 夹具启动，等待重跑。**
 
 ```bash
 git pull origin main
@@ -14,7 +14,7 @@ sudo /usr/bin/python3 scripts/loop_calls_provenance.py run
 sudo env "PATH=$PATH" /usr/bin/python3 scripts/go_loop_calls_provenance.py run
 ```
 
-返回 `artifacts/loop-calls-provenance-*.zip` 和 `artifacts/go-loop-calls-provenance-*.zip`。完整套件 110 项：103 项通过，4 项 Go 编译测试跳过，3 项旧 HTTP 测试受环境 socket 权限阻止。六个旧真实包共 1846 条事件、100 次根调用重放一致，旧实验不用重跑。详见 [循环与调用共用核心](docs/loop-calls-provenance.md)。
+返回 `artifacts/loop-calls-provenance-*.zip` 和 `artifacts/go-loop-calls-provenance-*.zip`。修复后完整套件 113 项：106 项通过，4 项 Go 编译测试跳过，3 项旧 HTTP 测试受环境 socket 权限阻止。两个本次真实二进制另经独立模拟，各 24 次调用通过；不替代内核采集。旧实验不用重跑。详见 [循环与调用共用核心](docs/loop-calls-provenance.md)。
 
 ## 已验证：Go 单函数循环真实采集
 

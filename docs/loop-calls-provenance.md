@@ -2,7 +2,7 @@
 
 ## 当前状态与运行
 
-新增 `loop_calls_provenance.py`，将循环的逐事件重放与跨函数调用栈合在同一引擎中。C 和 Go 共用计划发现、动态调用实例、指令依赖和反向来源提取；Go 入口只接入已有 ABI、编译及栈保护解码。**本地验证完成，两个新场景的真实 eBPF 采集均待用户主机验证。**
+新增 `loop_calls_provenance.py`，将循环的逐事件重放与跨函数调用栈合在同一引擎中。C 和 Go 共用计划发现、动态调用实例、指令依赖和反向来源提取；Go 入口只接入已有 ABI、编译及栈保护解码。**2026-10-03 首轮真实采集均为 incomplete：事件提交失败，Go 首次调用另有运行时抢占慢路径。已修复采集缓冲及夹具启动流程，等待重新采集；不将完整子集或模拟执行算作整轮主机通过。**
 
 ```bash
 cd ~/tracefusion2
@@ -12,6 +12,29 @@ sudo env "PATH=$PATH" /usr/bin/python3 scripts/go_loop_calls_provenance.py run
 ```
 
 无需 Docker，沿用原来的 GCC、Go、binutils 和系统 Python BCC。成功或失败均请返回 `artifacts/loop-calls-provenance-*.zip` 与 `artifacts/go-loop-calls-provenance-*.zip`。旧实验不用重跑。
+
+## 首轮主机结果与修复
+
+两个上传包均对应 `54649d6245237eebe279e034f9d320ee95ea4acf` 的夹具、计划及采集源码。核对 ELF/源码哈希、从 ELF 重建探针计划及运行地址、核查唯一挂接后，从原始事件重新推断和评分，完整 JSON 均与包内一致。审计见 [主机记录](loop-calls-host-20261003.json)。
+
+| 项目 | C | Go 1.25.4 |
+| --- | --- | --- |
+| 探针位置 | 92 | 105 |
+| 原始命中 / 尝试提交 | 940 / 940 | 1279 / 1278 |
+| 收到事件 / 提交失败 | 639 / 301 | 812 / 466 |
+| 报告 lost_events / 状态错误 | 0 / 0 | 0 / 1 |
+| 完整重建 | 17 / 24 | 13 / 24 |
+| 完整重建调用的值、字段来源及 helper 次数 | 均匹配 | 均匹配 |
+
+两包均满足 `attempted_events = received_events + submit_errors`。`lost_events=0` 不能说明没有丢失：perf 提交失败已单独计数。收到的输入、输出、栈及 Go guard 读取均无错误。缺失调用和慢路径仍然让整体评分失败，当前召回率不能脱离采集缺失解读成算法准确率。
+
+提交失败集中在毫秒级突发期间，原采集器每 CPU 仅 64 页 perf 缓冲，回调还逐事件 flush 文件，怀疑消费者排空速度不足。旧包没有记录失败 errno，不能仅凭包内容断言所有失败都是 ENOSPC。修复将缓冲改为 **每 CPU 1024 页**（4 KiB 页时为 4 MiB），去掉逐事件 flush，退出后显式 flush/fsync，继续排空尾部事件。`capture.json` 记录实际缓冲页数/字节数；跨函数 BPF 新增 `submit_error_errnos` 计数，以便复现时确认具体错误。没有降低事件量、过滤失败调用或放松评分条件。
+
+Go 第一条事件的 guard 为 `0xfffffffffffffade`，等于 Go 1.25.4 的 `stackPreempt`（`uintptrMask & -1314`，见 [官方源码](https://github.com/golang/go/blob/go1.25.4/src/runtime/stack.go)）。因此确认是运行时抢占慢路径，不能声称已支持该路径。夹具现在于 SIGSTOP 恢复后、进入目标函数前调用一次 `runtime.Gosched()`，让挂接等待期间挂起的调度请求有机会在观测范围外处理。仍保留 `LockOSThread`、正常栈保护和观测范围内的慢路径拒绝；这不是一般抢占/扩栈支持，也不保证后续不会再次抢占。
+
+另对两个包内的真实二进制分别用 Unicorn 独立执行：C 940 条模拟事件、Go 1276 条模拟事件，各 24 次调用均通过字段/值/helper 次数检查。Go 使用合成正常栈 guard，不模拟运行时调度；因此该结果证明此次真实 Go 编译输出在限定快路径下可重建，不能替代重新采集。
+
+修复后新增 3 项模拟 BCC 传输测试通过，覆盖恢复前打开缓冲、退出后尾部事件持久化和错误计数保留。完整套件 113 项：106 项通过、4 项因缺少 Go 编译器跳过、3 项旧 HTTP 测试因环境禁止 socket 而报错。新 BPF errno 记录及 Go 启动变更尚待真实主机验证。
 
 ## 场景和独立真值
 

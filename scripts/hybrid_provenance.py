@@ -24,6 +24,9 @@ from hybrid_model import REGS, decode_function, infer, require, static_plan, val
 from language_adapters import get_adapter
 
 ROOT = Path(__file__).resolve().parents[1]
+# Per CPU, excluding the metadata page. The loop/call fixtures can emit a
+# sub-10ms burst larger than the former 64-page buffer before Python drains it.
+PERF_BUFFER_PAGES = 1024
 
 
 def save(path, value):
@@ -211,13 +214,18 @@ def record_bpf(binary, plans, config, out, source_generator=None):
     events, bases = [], {}
     stats = {'backend': 'ebpf', 'lost_events': 0, 'submit_errors': None, 'state_errors': None,
              'attempted_events': None, 'raw_probe_hits': None, 'process_returncode': None,
-             'bcc_version': getattr(bcc, '__version__', 'unknown')}
+             'bcc_version': getattr(bcc, '__version__', 'unknown'),
+             'perf_buffer_pages_per_cpu': PERF_BUFFER_PAGES,
+             'perf_buffer_bytes_per_cpu': PERF_BUFFER_PAGES * os.sysconf('SC_PAGE_SIZE')}
+    submit_errno_enabled = False
     try:
         with (out / 'program.stdout.jsonl').open('w') as stdout, (out / 'program.stderr.log').open('w') as stderr:
             process = subprocess.Popen([str(binary), '--wait'], stdout=stdout, stderr=stderr)
             wait_stopped(process)
             bases = runtime_metadata(process, binary, plans, out)
-            bpf = bcc.BPF(text=(source_generator or bpf_source)(plans, config))
+            source = (source_generator or bpf_source)(plans, config)
+            submit_errno_enabled = 'BPF_HASH(submit_errnos,' in source
+            bpf = bcc.BPF(text=source)
             tids = attachment_threads(process.pid, config)
             save(out/'attachment-threads.json', tids)
             attached = []
@@ -232,10 +240,12 @@ def record_bpf(binary, plans, config, out, source_generator=None):
                     if hasattr(obj, 'stack'):
                         event['stack'] = list(obj.stack)
                     events.append(event)
-                    stream.write(json.dumps(event) + '\n'); stream.flush()
+                    # Buffer file writes while draining the perf ring. Per-event
+                    # flushes slow the consumer; the file is flushed/fsynced below.
+                    stream.write(json.dumps(event) + '\n')
                 def lost(cpu, n):
                     stats['lost_events'] += n
-                bpf['events'].open_perf_buffer(receive, lost_cb=lost, page_cnt=64)
+                bpf['events'].open_perf_buffer(receive, lost_cb=lost, page_cnt=PERF_BUFFER_PAGES)
                 process.send_signal(signal.SIGCONT)
                 deadline = time.monotonic() + 20
                 while process.poll() is None:
@@ -244,6 +254,7 @@ def record_bpf(binary, plans, config, out, source_generator=None):
                         raise RuntimeError('Target timed out')
                 for _ in range(3):
                     bpf.perf_buffer_poll(timeout=100)
+                stream.flush()
                 os.fsync(stream.fileno())
             stats['process_returncode'] = process.returncode
     finally:
@@ -255,6 +266,9 @@ def record_bpf(binary, plans, config, out, source_generator=None):
             try:
                 for i, key in enumerate(('attempted_events', 'submit_errors', 'state_errors', 'raw_probe_hits')):
                     stats[key] = int(bpf['metrics'][ctypes.c_int(i)].value)
+                if submit_errno_enabled:
+                    stats['submit_error_errnos'] = {str(k.value): int(v.value)
+                                                   for k, v in bpf['submit_errnos'].items()}
             except Exception as exc:
                 stats['statistics_error'] = str(exc)
             try:

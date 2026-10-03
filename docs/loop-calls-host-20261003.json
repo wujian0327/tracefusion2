@@ -1,0 +1,227 @@
+{
+  "runs": [
+    {
+      "bundle": "loop-calls-provenance-20261003-132901-1e21.zip",
+      "bundle_sha256": "b5d1b3c992b837acf08e88c62f2bb363bc6d9857b00b74f0b1eaddd250a83cfd",
+      "verified_code_commit": "54649d6245237eebe279e034f9d320ee95ea4acf",
+      "binary_sha256": "c64dcc8ecda3dd832bb0699ba093fc38fa70238e89003e44b82406d99e97a90a",
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "host_result": {
+        "status": "incomplete",
+        "action": "run",
+        "stage": "complete",
+        "kernel_ebpf_tested": true,
+        "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+        "events": 639,
+        "results": 17
+      },
+      "capture": {
+        "backend": "ebpf",
+        "lost_events": 0,
+        "submit_errors": 301,
+        "state_errors": 0,
+        "attempted_events": 940,
+        "raw_probe_hits": 940,
+        "process_returncode": 0,
+        "bcc_version": "0.29.1",
+        "received_events": 639,
+        "observed_kernel_tgids": [
+          17670
+        ]
+      },
+      "checks": {
+        "binary_and_source_hashes": true,
+        "fixture_sources_match_repository": true,
+        "regenerated_plans_from_elf": true,
+        "generated_bpf": true,
+        "derived_runtime_bases": true,
+        "unique_probe_attachments": true,
+        "full_raw_inference_replay": true,
+        "full_evaluation_replay": true,
+        "all_received_memory_reads_succeeded": true,
+        "all_resolved_calls_match_oracle": true,
+        "event_accounting": true
+      },
+      "probe_locations": 92,
+      "functions": 5,
+      "evaluation": {
+        "passed": false,
+        "capture_clean": false,
+        "dynamic_source_relations": {
+          "tp": 14,
+          "fp": 0,
+          "fn": 8,
+          "precision": 1.0,
+          "recall": 0.6363636363636364
+        },
+        "resolved_calls": 17,
+        "expected_calls": 24,
+        "inference_issues": 2,
+        "unexpected_calls": 0,
+        "scope": "fixture field/value accuracy, dynamic helper-call count and repeated execution; no compiler-independent load ordinal scoring"
+      },
+      "issues": [
+        {
+          "pid_tid": 75892072137990,
+          "call_id": 18,
+          "error": "Missing or duplicate sequence"
+        },
+        {
+          "pid_tid": 75892072137990,
+          "call_id": 19,
+          "error": "Missing or duplicate sequence"
+        }
+      ],
+      "independent_machine_emulation": {
+        "input": "actual uploaded ELF",
+        "engine": "Unicorn",
+        "kernel_ebpf": false,
+        "events": 940,
+        "calls": 24,
+        "passed": true,
+        "guard_policy": "ordinary fast-path synthetic stack guard; does not reproduce scheduling"
+      },
+      "scope": "Incomplete host capture; resolved-call correctness is conditional on received complete histories and is not full fixture success. No missing events were repaired."
+    },
+    {
+      "bundle": "go-loop-calls-provenance-20261003-132920-0b57.zip",
+      "bundle_sha256": "cb4fcc9752ae671c9e77ea7c90b2b8c3e45b73dce9bab94adbf7b8dfb3966895",
+      "verified_code_commit": "54649d6245237eebe279e034f9d320ee95ea4acf",
+      "binary_sha256": "2fcd18704f37e64ee1ab426daf184758b2254c1cab0eddf502f49ee739c129a2",
+      "compiler": "go version go1.25.4 linux/amd64",
+      "host_result": {
+        "status": "incomplete",
+        "action": "run",
+        "stage": "complete",
+        "kernel_ebpf_tested": true,
+        "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+        "events": 812,
+        "results": 13
+      },
+      "capture": {
+        "backend": "ebpf",
+        "lost_events": 0,
+        "submit_errors": 466,
+        "state_errors": 1,
+        "attempted_events": 1278,
+        "raw_probe_hits": 1279,
+        "process_returncode": 0,
+        "bcc_version": "0.29.1",
+        "received_events": 812,
+        "observed_kernel_tgids": [
+          19740
+        ]
+      },
+      "checks": {
+        "binary_and_source_hashes": true,
+        "fixture_sources_match_repository": true,
+        "regenerated_plans_from_elf": true,
+        "generated_bpf": true,
+        "derived_runtime_bases": true,
+        "unique_probe_attachments": true,
+        "full_raw_inference_replay": true,
+        "full_evaluation_replay": true,
+        "all_received_memory_reads_succeeded": true,
+        "all_resolved_calls_match_oracle": true,
+        "event_accounting": true
+      },
+      "probe_locations": 105,
+      "functions": 5,
+      "evaluation": {
+        "passed": false,
+        "capture_clean": false,
+        "dynamic_source_relations": {
+          "tp": 12,
+          "fp": 0,
+          "fn": 10,
+          "precision": 1.0,
+          "recall": 0.5454545454545454
+        },
+        "resolved_calls": 13,
+        "expected_calls": 24,
+        "inference_issues": 11,
+        "unexpected_calls": 0,
+        "scope": "fixture field/value accuracy, dynamic helper-call count and repeated execution; no compiler-independent load ordinal scoring"
+      },
+      "issues": [
+        {
+          "pid_tid": 84782654442780,
+          "call_id": 1,
+          "error": "Runtime stack-growth/preemption path observed; invocation unsupported"
+        },
+        {
+          "pid_tid": 84782654442780,
+          "call_id": 15,
+          "error": "Missing or duplicate sequence"
+        },
+        {
+          "pid_tid": 84782654442780,
+          "call_id": 16,
+          "error": "Missing or duplicate sequence"
+        },
+        {
+          "pid_tid": 84782654442780,
+          "call_id": 17,
+          "error": "Missing or duplicate sequence"
+        },
+        {
+          "pid_tid": 84782654442780,
+          "call_id": 18,
+          "error": "Missing or duplicate sequence"
+        },
+        {
+          "pid_tid": 84782654442780,
+          "call_id": 19,
+          "error": "Missing or duplicate sequence"
+        },
+        {
+          "pid_tid": 84782654442780,
+          "call_id": 20,
+          "error": "Missing or duplicate sequence"
+        },
+        {
+          "pid_tid": 84782654442780,
+          "call_id": 21,
+          "error": "Missing or duplicate sequence"
+        },
+        {
+          "pid_tid": 84782654442780,
+          "call_id": 22,
+          "error": "Missing or duplicate sequence"
+        },
+        {
+          "pid_tid": 84782654442780,
+          "call_id": 23,
+          "error": "Missing or duplicate sequence"
+        },
+        {
+          "pid_tid": 84782654442780,
+          "call_id": 24,
+          "error": "Missing or duplicate sequence"
+        }
+      ],
+      "independent_machine_emulation": {
+        "input": "actual uploaded ELF",
+        "engine": "Unicorn",
+        "kernel_ebpf": false,
+        "events": 1276,
+        "calls": 24,
+        "passed": true,
+        "guard_policy": "ordinary fast-path synthetic stack guard; does not reproduce scheduling"
+      },
+      "scope": "Incomplete host capture; resolved-call correctness is conditional on received complete histories and is not full fixture success. No missing events were repaired.",
+      "first_call_runtime_guard": {
+        "value": 18446744073709550302,
+        "hex": "0xfffffffffffffade",
+        "matches_go1254_stack_preempt": true,
+        "slow_path_offset": 85,
+        "source": "https://github.com/golang/go/blob/go1.25.4/src/runtime/stack.go"
+      }
+    }
+  ],
+  "host_capture_passed": false,
+  "diagnosis": {
+    "submit_failures": "Both captures have exact attempted = received + submit_errors accounting. Perf buffer pressure is suspected; old collector did not record submission errno.",
+    "go_first_call": "Observed guard equals Go 1.25.4 stackPreempt sentinel; runtime preemption slow path is outside the declared supported scope."
+  }
+}

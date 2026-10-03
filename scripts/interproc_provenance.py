@@ -25,6 +25,7 @@ struct event_t {
 };
 BPF_HASH(states, u64, struct state_t, 64);
 BPF_ARRAY(metrics, u64, 4);
+BPF_HASH(submit_errnos, s32, u64, 32);
 /* The event is larger than 512 bytes: do not allocate it on the BPF stack. */
 BPF_PERCPU_ARRAY(scratch, struct event_t, 1);
 BPF_PERF_OUTPUT(events);
@@ -71,7 +72,14 @@ REGISTER_ASSIGNMENTS
     e->destination_error = bpf_probe_read_user(e->outputs, OUTPUT_BYTES, (void *)s->dst);
     e->stack_error = bpf_probe_read_user(e->stack, sizeof(e->stack), (void *)(s->root_sp-STACK_BYTES));
     count(0);
-    if (events.perf_submit(ctx, e, sizeof(*e)) < 0) count(1);
+    int submitted = events.perf_submit(ctx, e, sizeof(*e));
+    if (submitted < 0) {
+        count(1);
+        s32 error = -submitted;
+        u64 zero_errors = 0;
+        u64 *errors = submit_errnos.lookup_or_try_init(&error, &zero_errors);
+        if (errors) __sync_fetch_and_add(errors, 1);
+    }
     if (is_ret) s->depth = d-1;
     return 0;
 }

@@ -13,6 +13,10 @@ func main() {
 	if len(os.Args) == 2 && os.Args[1] == "--wait" {
 		if err := syscall.Kill(os.Getpid(), syscall.SIGSTOP); err != nil { panic(err) }
 	}
+	// Probe compilation/attachment happens while stopped. Yield after resume
+	// so a pending runtime preemption is handled outside the observed roots.
+	// Stack guards remain enabled; a slow path inside a root still fails.
+	runtime.Gosched()
 	functions := []func(*output, *input, uint32){goLoopCallOverwrite, goLoopCallAccumulate, goLoopCallTransform}
 	names := []string{"main.goLoopCallOverwrite", "main.goLoopCallAccumulate", "main.goLoopCallTransform"}
 	counts := []uint32{0, 1, 2, 4}
