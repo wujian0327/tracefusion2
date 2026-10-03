@@ -1,0 +1,10 @@
+{
+  "adapter": "go-amd64-u32-calls",
+  "abi": "go-amd64-abiinternal",
+  "functions": ["main.goLoopCallOverwrite", "main.goLoopCallAccumulate", "main.goLoopCallTransform"],
+  "input_fields": ["secret", "public_value", "noise"],
+  "output_fields": ["value", "audit"],
+  "sink_field": "value",
+  "sensitive_fields": ["secret"],
+  "scope": "Go loops with repeated and nested direct calls; fixed uint32 fields; pinned goroutine; reject observed runtime slow path"
+}

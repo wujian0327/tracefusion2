@@ -1,0 +1,9 @@
+{
+  "abi": "linux-x86_64-sysv",
+  "functions": ["loop_call_overwrite", "loop_call_accumulate", "loop_call_transform"],
+  "input_fields": ["secret", "public_value", "noise"],
+  "output_fields": ["value", "audit"],
+  "sink_field": "value",
+  "sensitive_fields": ["secret"],
+  "scope": "C loops with repeated and nested direct calls; immutable input; single OS thread"
+}

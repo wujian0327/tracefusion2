@@ -4,9 +4,21 @@
 
 当前验证主线：**静态候选依赖分析 + 自动选择 eBPF 观测位置 + 动态来源重建**。此前 HTTP 抓包、trace/span 和调用链基线保留为前期实验设施。
 
-## 当前：Go 单函数循环真实采集验证通过
+## 当前：共用核心扩展到循环中的函数调用
 
-新增零次、一次、两次和四次迭代，覆盖加工、重复覆盖与累积，共 24 次入口调用。复用已有 Go 适配器和动态循环重放核心。**2026-10-03 用户主机 Go 1.25.4 / BCC 0.29.1 真实采集通过：41 个探针、456 条事件、24 次调用，字段来源 TP=22/FP=0/FN=0，原始事件重放一致。**报告丢失、提交、状态及读取错误均为 0。详见 [主机审计](docs/go-loop-host-20261003.json)。循环中调用 helper 尚未覆盖。
+新增 C、Go 两套普通源码夹具，共用动态调用栈和循环重放逻辑。每种语言验证零/单/多次迭代、覆盖、累积及三层嵌套调用，共 24 次根调用。**本地 C 编译/原生执行和独立指令模拟通过；Go 本地证据为独立汇编夹具，真实 Go 编译和两个新场景的内核采集待主机验证。**
+
+```bash
+git pull origin main
+sudo /usr/bin/python3 scripts/loop_calls_provenance.py run
+sudo env "PATH=$PATH" /usr/bin/python3 scripts/go_loop_calls_provenance.py run
+```
+
+返回 `artifacts/loop-calls-provenance-*.zip` 和 `artifacts/go-loop-calls-provenance-*.zip`。完整套件 110 项：103 项通过，4 项 Go 编译测试跳过，3 项旧 HTTP 测试受环境 socket 权限阻止。六个旧真实包共 1846 条事件、100 次根调用重放一致，旧实验不用重跑。详见 [循环与调用共用核心](docs/loop-calls-provenance.md)。
+
+## 已验证：Go 单函数循环真实采集
+
+新增零次、一次、两次和四次迭代，覆盖加工、重复覆盖与累积，共 24 次入口调用。复用已有 Go 适配器和动态循环重放核心。**2026-10-03 用户主机 Go 1.25.4 / BCC 0.29.1 真实采集通过：41 个探针、456 条事件、24 次调用，字段来源 TP=22/FP=0/FN=0，原始事件重放一致。**报告丢失、提交、状态及读取错误均为 0。详见 [主机审计](docs/go-loop-host-20261003.json)。该旧入口仅覆盖单函数；循环调用由上方新入口验证。
 
 ```bash
 git pull origin main
@@ -184,7 +196,8 @@ python3 -m unittest discover -s tests -v
 
 ## 文档与验证状态
 
-- [当前跨函数来源传播验证](docs/interproc-provenance.md)
+- [当前 C / Go 循环与函数调用验证](docs/loop-calls-provenance.md)
+- [已通过主机验证的跨函数来源传播](docs/interproc-provenance.md)
 - [已通过主机验证的单函数闭环](docs/hybrid-provenance.md)
 - [MirrorTaint、FlowDist 算法与 eBPF 边界](docs/mirrortaint-flowdist-ebpf-review.md)
 - [已完成的程序内部赋值验证](docs/uprobe-assignment.md)
@@ -195,4 +208,4 @@ python3 -m unittest discover -s tests -v
 - [源码版本与镜像依据](scenarios/sockshop/sources.json)
 - [本地验证记录](docs/validation.md)
 
-Sock Shop 业务路径保持原样。单函数闭环已通过主机验证；当前用独立 C 夹具扩展到受控直接调用，尚未接入真实微服务字段传播。
+Sock Shop 业务路径保持原样。C / Go 单函数循环与无环跨函数场景已通过主机验证；当前扩展到循环中的直接调用，尚未接入真实微服务字段传播。

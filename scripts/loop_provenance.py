@@ -37,6 +37,28 @@ def plan_program(assembly, symbols, config):
     return plans
 
 
+def reconstruct(path, functions, config, tid, call, argument_sources=()):
+    """Shared executed definitions, read instances and backward dependency slice."""
+    analyzed = symbolic_path(path, functions, config, distinguish_reads=True)
+    require(analyzed is not None, 'Symbolic constant branch contradicts observed path')
+    read_map = {r['id']: r for r in analyzed['source_reads']}
+    require(all(s in read_map or s in argument_sources for s in analyzed['sources']), 'Sink depends on a non-read boundary')
+    contributing = [read_map[s] for s in analyzed['sources'] if s in read_map]
+    edges = analyzed['edges']; keep = {analyzed['sink_node']}
+    kinds = {'data', 'address', 'argument', 'return'}
+    while True:
+        before = len(keep)
+        keep.update(e['source'] for e in edges if e['target'] in keep and e['kind'] in kinds)
+        if len(keep) == before: break
+    prefix = '%s:%s:' % (tid, call)
+    graph = dict(nodes=[dict(id=prefix+n, local_node=n, **analyzed['nodes'].get(n, dict(kind='boundary')))
+                        for n in sorted(keep)],
+                 edges=[dict(source=prefix+e['source'], target=prefix+e['target'], kind=e['kind'])
+                        for e in edges if e['source'] in keep and e['target'] in keep and e['kind'] in kinds],
+                 identity_scope='root invocation + executed instruction ordinal; source read ordinal within root')
+    return analyzed, read_map, contributing, graph
+
+
 def infer(events, plans, config, runtime_bases):
     require(runtime_bases is not None, 'Executable mapping required')
     adapter = get_adapter(config)
@@ -75,23 +97,7 @@ def infer(events, plans, config, runtime_bases):
                 require(nxt == expected, 'Executed CFG edge disagrees with events or incomplete return')
                 if nxt is not None and nxt <= runtime_bases[name]+off: backedges += 1
                 path.append(step)
-            analyzed = symbolic_path(path, functions, config, distinguish_reads=True)
-            require(analyzed is not None, 'Symbolic constant branch contradicts observed path')
-            read_map = {r['id']: r for r in analyzed['source_reads']}
-            require(all(s in read_map for s in analyzed['sources']), 'Sink depends on a non-read boundary')
-            contributing = [read_map[s] for s in analyzed['sources']]
-            edges = analyzed['edges']; keep = {analyzed['sink_node']}
-            kinds = {'data', 'address', 'argument', 'return'}
-            while True:
-                before = len(keep)
-                keep.update(e['source'] for e in edges if e['target'] in keep and e['kind'] in kinds)
-                if len(keep) == before: break
-            prefix = '%s:%s:' % (tid, call)
-            graph = dict(nodes=[dict(id=prefix+n, local_node=n, **analyzed['nodes'].get(n, dict(kind='boundary')))
-                                for n in sorted(keep)],
-                         edges=[dict(source=prefix+e['source'], target=prefix+e['target'], kind=e['kind'])
-                                for e in edges if e['source'] in keep and e['target'] in keep and e['kind'] in kinds],
-                         identity_scope='root invocation + executed instruction ordinal; source read ordinal within root')
+            analyzed, read_map, contributing, graph = reconstruct(path, functions, config, tid, call)
             results.append(dict(pid_tid=tid, call_id=call, function=name, status='resolved',
                                 sources=sorted({r['field'] for r in contributing}), static_sources=[],
                                 value=rows[-1]['outputs'][config['output_fields'].index(config['sink_field'])],

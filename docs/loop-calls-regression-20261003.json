@@ -1,0 +1,68 @@
+{
+  "purpose": "Compatibility after extracting shared executed provenance reconstruction and adding looped calls",
+  "replays": [
+    {
+      "package": "hybrid-host-review-20261001",
+      "events": 88,
+      "calls": 16,
+      "binary_hash_verified": true,
+      "regenerated_plans_identical": true,
+      "bpf_identical": true,
+      "full_inference_identical": true,
+      "full_evaluation_identical": true
+    },
+    {
+      "package": "interproc-host-review-172324",
+      "events": 448,
+      "calls": 12,
+      "binary_hash_verified": true,
+      "regenerated_plans_identical": true,
+      "bpf_identical": true,
+      "full_inference_identical": true,
+      "full_evaluation_identical": true
+    },
+    {
+      "package": "loop-host-review-174750",
+      "events": 428,
+      "calls": 24,
+      "binary_hash_verified": true,
+      "regenerated_plans_identical": true,
+      "bpf_identical": true,
+      "full_inference_identical": true,
+      "full_evaluation_identical": true
+    },
+    {
+      "package": "go-host-review-182405",
+      "events": 62,
+      "calls": 12,
+      "binary_hash_verified": true,
+      "regenerated_plans_identical": true,
+      "bpf_identical": true,
+      "full_inference_identical": true,
+      "full_evaluation_identical": true
+    },
+    {
+      "package": "go-interproc-host-review-20261003",
+      "events": 364,
+      "calls": 12,
+      "binary_hash_verified": true,
+      "regenerated_plans_identical": true,
+      "bpf_identical": true,
+      "full_inference_identical": true,
+      "full_evaluation_identical": true
+    },
+    {
+      "package": "go-loop-host-review-20261003",
+      "events": 456,
+      "calls": 24,
+      "binary_hash_verified": true,
+      "regenerated_plans_identical": true,
+      "bpf_identical": true,
+      "full_inference_identical": true,
+      "full_evaluation_identical": true
+    }
+  ],
+  "total_events": 1846,
+  "total_calls": 100,
+  "new_looped_call_host_capture_tested": false
+}
