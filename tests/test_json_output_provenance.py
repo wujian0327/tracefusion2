@@ -195,6 +195,14 @@ bool active=true,read_failure=false;int hits=0,errors=0;event_t scratch{};std::v
 bool in_read_scope() {return active;}
 void count(u32 key) {if(key==3)++hits;else if(key==2)++errors;else assert(false);}
 int bpf_probe_read_user(void *dst,unsigned size,void *src) {if(read_failure)return -14;std::memcpy(dst,src,size);return 0;}
+int string_reads=0;
+int bpf_probe_read_user_str(void *dst,unsigned size,void *src) {
+    assert(size==32);++string_reads;
+    if(read_failure)return -14;
+    auto *d=static_cast<unsigned char*>(dst);auto *s=static_cast<unsigned char*>(src);
+    for(unsigned i=0;i<size-1;++i) {d[i]=s[i];if(!d[i])return i+1;}
+    d[size-1]=0;return size;
+}
 event_t *boundary_event(u32 kind) {scratch={};scratch.kind=kind;return &scratch;}
 int emit_boundary(void *,event_t *e) {emitted.push_back(*e);return 0;}
 """
@@ -209,6 +217,10 @@ int main() {
     json_format_exit(&ctx);
     assert(emitted.back().kind==7 && emitted.back().returned==n);
     assert(std::memcmp(emitted.back().read_data,buffer,n+1)==0);
+    assert(emitted.back().read_error==0 && string_reads==1);
+    // C returns an int; upper AX bits must never become a helper length.
+    json_format_enter(&ctx);ctx.ax=0xffffffff00000000ULL|static_cast<u64>(n);
+    json_format_exit(&ctx);assert(emitted.back().returned==n && emitted.back().read_error==0);
     struct tracepoint__syscalls__sys_enter_write entry{1,ctx.di,static_cast<u64>(n)};
     struct tracepoint__syscalls__sys_exit_write exit{n};
     tracepoint__syscalls__sys_enter_write(&entry);tracepoint__syscalls__sys_exit_write(&exit);
@@ -221,6 +233,14 @@ int main() {
     read_failure=true;json_format_enter(&ctx);assert(emitted.back().source_error==-14);
     ctx.ax=n;json_format_exit(&ctx);assert(emitted.back().read_error==-14);
     read_failure=false;json_format_exit(&ctx);assert(errors==1);
+    // Early NUL contradicts the formatter length; an unterminated string
+    // at the capacity boundary must not be mistaken for complete evidence.
+    buffer[1]=0;json_format_enter(&ctx);ctx.ax=n;json_format_exit(&ctx);
+    assert(emitted.back().read_error==-1);
+    std::memset(buffer,'x',sizeof(buffer));json_format_enter(&ctx);ctx.ax=31;json_format_exit(&ctx);
+    assert(emitted.back().read_error==-1);
+    int before_strings=string_reads;json_format_enter(&ctx);ctx.ax=32;json_format_exit(&ctx);
+    assert(emitted.back().read_error==-1 && string_reads==before_strings);
     entry.count=33;tracepoint__syscalls__sys_enter_write(&entry);assert(emitted.back().read_error==-1);
     tracepoint__syscalls__sys_exit_write(&exit);
     auto before=emitted.size();active=false;json_format_enter(&ctx);

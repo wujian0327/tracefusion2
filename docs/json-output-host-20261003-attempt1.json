@@ -1,0 +1,68 @@
+{
+  "bundle": "json-output-provenance-20261003-153618-047a.zip",
+  "bundle_sha256": "af6e128366e4619f3a1f1eabc793b351bc867a5a3c9141d697621cb5abf09809",
+  "matching_code_commit": "e0f098092fc84746147486e1c1b9597f3f09be9a",
+  "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "binary_sha256": "52778d6c6e7f327404cdfb9ef98a9732f9c63dc12a87854949fbe6daffdea19b",
+  "host_result": {
+    "status": "failed",
+    "action": "run",
+    "stage": "capture",
+    "kernel_ebpf_tested": false,
+    "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "error": "Exception: Failed to load BPF program b'json_format_exit': Permission denied"
+  },
+  "capture": {
+    "backend": "ebpf",
+    "lost_events": 0,
+    "submit_errors": 0,
+    "state_errors": 0,
+    "attempted_events": 0,
+    "raw_probe_hits": 0,
+    "process_returncode": null,
+    "bcc_version": "0.29.1",
+    "perf_buffer_pages_per_cpu": 1024,
+    "perf_buffer_bytes_per_cpu": 4194304,
+    "received_events": 0,
+    "observed_kernel_tgids": [],
+    "submit_error_errnos": {}
+  },
+  "checks": {
+    "binary_hash": true,
+    "source_hashes": true,
+    "fixture_matches_repository": true,
+    "plan_regenerated_from_elf": true,
+    "bpf_changes_only_serializer_snapshot": true
+  },
+  "diagnosis": {
+    "stage": "BPF verifier rejected json_format_exit before target resumed",
+    "verifier_error": "R2 min value is negative, either use unsigned or 'var &= const'",
+    "details": "Verifier bounded sign-extended 32-bit return in R1, but helper size used original unbounded AX in R2 plus one. Permission denied here is program rejection, not missing sudo.",
+    "fix": "bpf_probe_read_user_str with constant 32-byte capacity; verify positive nontruncated copied length equals formatter return plus NUL",
+    "helper_reference": "https://github.com/torvalds/linux/blob/v6.18/include/uapi/linux/bpf.h"
+  },
+  "independent_execution": {
+    "kernel_ebpf": false,
+    "input": "Uploaded actual C ELF computation roots, Python real pread, Unicorn and independent native fixture stdout/oracle",
+    "events": 500,
+    "computations": 25,
+    "read_attempts": 42,
+    "formats": 24,
+    "write_attempts": 23,
+    "emitted_fields": 22,
+    "passed": true
+  },
+  "fix_validation": {
+    "targeted_tests": 11,
+    "passed": 11,
+    "generated_callback_cases": [
+      "int return with nonzero upper AX bits",
+      "constant helper size",
+      "early NUL length mismatch",
+      "unterminated capacity-sized string rejected",
+      "out-of-range return rejected",
+      "negative helper return preserved"
+    ],
+    "kernel_verifier": "Pending user host rerun; native helper shim is not a verifier test"
+  }
+}

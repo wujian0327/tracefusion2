@@ -4,7 +4,7 @@
 
 本轮增加 C 入口，验证 **真实 pread 返回 → 已观测的计算/调用 → JSON 数字字段 → 成功的 stdout write**。业务输出只包含一行一个的 `{"value":424298}`；评估真值在工作负载结束后写入 stderr，独立保存为 `oracle.json`。推断器只接收事件、计划、配置和文件身份，不读取 stdout 或 oracle。
 
-**本地编译、原生输出和独立指令执行已通过；新探针的真实 BCC/eBPF 加载与采集尚待主机验证。**
+**本地编译、原生输出和独立指令执行已通过。首次主机运行在 `json_format_exit` 加载时被 BPF verifier 拒绝，未采到事件；读取长度处理已修复，待主机重跑。**
 
 ```bash
 cd ~/tracefusion2
@@ -13,6 +13,14 @@ sudo /usr/bin/python3 scripts/json_output_provenance.py run
 ```
 
 返回 `artifacts/json-output-provenance-*.zip`，成功或失败都保留。旧 C/Go 读取场景无需重跑。本轮没有新增 Go JSON 采集适配器。
+
+## 首次主机加载失败与修复（2026-10-03）
+
+包 `json-output-provenance-20261003-153618-047a.zip` 的程序编译成功，但 verifier 报 `R2 min value is negative`，拒绝加载 `json_format_exit`。错误外层的 `Permission denied` 不表示缺少 sudo；这里是探针程序未通过内核安全检查。目标尚未恢复执行，收到 0 条事件，没有真实输出溯源结果。
+
+日志中，对 C `int` 返回值的范围检查约束了符号扩展后的 R1，但传给内存读取 helper 的长度来自原始 AX 对应的 R2 加一，验证器仍认为它无安全上界。修复改用 `bpf_probe_read_user_str`，helper 上限为编译期常量 32；检查其返回长度包含 NUL、没有达到截断边界，并且等于格式化返回值加一。推断器仍核对完整 JSON 字节与模型一致。该 helper 到 NUL 即停止，不主动记录终止符之后的缓冲区内容；事件预先清零。
+
+扩展 native 回调测试覆盖 C 返回寄存器高位非零、提前 NUL、未终止字符串、读取错误和越界返回，11 项定向测试通过。这不是 BPF verifier 实测，修正后的内核加载仍待重跑。对上传实际 ELF 重建计划及独立指令执行也通过；其中模拟的 500 条事件不能当成主机采集。详见 [首次主机诊断](json-output-host-20261003-attempt1.json)。
 
 ## 本轮实际追踪的内容
 

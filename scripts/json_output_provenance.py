@@ -43,8 +43,11 @@ int json_format_exit(struct pt_regs *ctx) {
     e->outputs[0]=s->value; e->source_error=s->error; e->requested=32;
     e->returned=(s32)ctx->ax;
     if (e->returned>=0 && e->returned<32) {
-        u32 size=e->returned+1;
-        e->read_error=bpf_probe_read_user(e->read_data,size,(void *)s->buffer);
+        /* Keep the helper's size constant. A checked signed int return can
+         * still leave the original 64-bit AX unbounded in verifier state. */
+        s32 copied=bpf_probe_read_user_str(e->read_data,sizeof(e->read_data),(void *)s->buffer);
+        e->read_error=copied<0 ? copied :
+            (copied>0 && copied<32 && copied==e->returned+1 ? 0 : -1);
     } else e->read_error=-1;
     return emit_boundary(ctx,e);
 }
