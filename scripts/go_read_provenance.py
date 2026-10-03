@@ -11,9 +11,10 @@ import read_boundaries as boundaries
 from language_adapters import GO_CALLS, get_adapter, require
 
 
-def scope_plan(assembly, symbols, config):
-    name = config['read_boundary']['scope_function']
-    require(re.fullmatch(GO_CALLS.function_pattern,name) and name in symbols and name not in config['functions'], 'Invalid Go workload scope')
+def scope_plan(assembly, symbols, config, *, function=None):
+    # External library boundaries are explicitly named by a versioned adapter.
+    name = function or config['read_boundary']['scope_function']
+    require((function is not None or re.fullmatch(GO_CALLS.function_pattern,name)) and name in symbols and name not in config['functions'], 'Invalid Go workload scope')
     base,size = symbols[name]
     rows=[]
     for line in assembly.splitlines():

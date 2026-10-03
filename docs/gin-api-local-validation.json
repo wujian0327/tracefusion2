@@ -1,0 +1,133 @@
+{
+  "status": "local_validation_passed_host_bpf_pending",
+  "kernel_ebpf_tested": false,
+  "kernel_limit": "BCC Python bindings are unavailable in this execution environment; verifier, attachment, event loss and runtime overhead remain untested for Gin.",
+  "build_identity": {
+    "binary_sha256": "0cb1619fc019421796d2657a255c6e0aa9adf97a01ff3577fe6f6af2d722d9f0",
+    "go": "go1.25.4",
+    "gin": "v1.11.0",
+    "sources": {
+      "go.mod": "01f58e102456152ad443400c5f73adecff5f1b67179d95f8cdcd0cacaded4310",
+      "main.go": "aad03ea9427ba531078ef2183cad8fe3c3d27de459b0e605488b38a2aa590b23",
+      "operations.go": "b2375f6873984bcaea66492503dd9c9ff707d9cc1fe17002a26be2798d3cb423",
+      "go.sum": "f5c48e466f1b1dac24757ef272ce6b281fc37acbbe13456fc5c258565c85439e",
+      "layout_check.go": "ab7df18fe3cbe5e2440f909e458486ca473558e6b062faa5db0e390f290a30bb",
+      "config.json": "67a069b5edb4c0b9cc977de47d5c29b5e9c800c9675fbd1a3378a813e8873b7a"
+    },
+    "gin_source_sha256": {
+      "render/json.go": "fa3d00b7dcbc6af8cfab53d99eb2adf21951230109376b06d6dce263fa41fd11",
+      "response_writer.go": "0145937323ee030ddd933a169dbb271b3e8bab3d180a2ad6eb85cdab538f77a3",
+      "codec/json/json.go": "e5f9ca595f98cd59a4dbf2e5a69a952ccfdee0a5fe14e106bfd207d23d9d89af",
+      "codec/json/api.go": "8415df4e9bb8eeeebdfb9998c0c1c95bd2f0707d1c144b5293943a8d36033425",
+      "codec/json/go_json.go": "e97717cdc11968e29118767937309f4f5c1d4586b26ed975bc15a02ce47f9f20",
+      "codec/json/sonic.go": "3a80faca223df055f6a6bc0f00aeb21a5cf7860efee6c1b7f892151740a3ad4f",
+      "codec/json/jsoniter.go": "eb34e50d9c14ae6ec407a90ee5262b3950c4add20c7f24892e31f3420b9f29d9"
+    },
+    "build_tags": [
+      "nomsgpack"
+    ],
+    "inlining": false
+  },
+  "static_planning": {
+    "business_functions": [
+      "main.goSelectValue",
+      "main.goMergeValues",
+      "main.goFallbackValue",
+      "main.goCopyLeft",
+      "main.readRight",
+      "main.transformLeft"
+    ],
+    "instruction_probes": 53,
+    "boundary_probes": 11,
+    "boundaries": {
+      "request": {
+        "function": "main.serveAccount",
+        "entry_offset": 10,
+        "return_offsets": [
+          504
+        ],
+        "policy": "fast-path entry and RET instruction uprobes; no uretprobe; workload internals not instruction-replayed"
+      },
+      "render": {
+        "function": "github.com/gin-gonic/gin/render.WriteJSON",
+        "entry_offset": 10,
+        "return_offsets": [
+          115,
+          152
+        ],
+        "policy": "fast-path entry and RET instruction uprobes; no uretprobe; workload internals not instruction-replayed"
+      },
+      "marshal": {
+        "function": "encoding/json.Marshal",
+        "entry_offset": 15,
+        "return_offsets": [
+          405,
+          483,
+          522
+        ],
+        "policy": "fast-path entry and RET instruction uprobes; no uretprobe; workload internals not instruction-replayed"
+      },
+      "writer": {
+        "function": "github.com/gin-gonic/gin.(*responseWriter).Write",
+        "entry_offset": 6,
+        "return_offsets": [
+          89
+        ],
+        "policy": "fast-path entry and RET instruction uprobes; no uretprobe; workload internals not instruction-replayed"
+      }
+    }
+  },
+  "gin_tests": {
+    "passed": 9,
+    "failed": 0,
+    "skipped": 0,
+    "command": "GIN_PROVENANCE_BUILD=<successful build directory> python3 -m unittest discover -s tests -p test_gin_api_provenance.py -v",
+    "native_http_requests": 14,
+    "real_gin_http": true,
+    "independent_compiled_business_instruction_execution": "Unicorn",
+    "boundary_event_transport": "synthetic in local inference tests, not eBPF",
+    "native_generated_handler_test": "C++ shim of Go ABI boundary handlers with mocked BPF maps/helpers"
+  },
+  "expected_and_locally_checked": {
+    "requests": 14,
+    "compute_calls": 18,
+    "read_operations": 28,
+    "output_source_relations": {
+      "tp": 14,
+      "fp": 0,
+      "fn": 0
+    },
+    "scope": "fixture source accuracy; no general graph-edge recall claim"
+  },
+  "regressions": {
+    "modules": [
+      "test_go_read_provenance",
+      "test_read_provenance",
+      "test_json_output_provenance"
+    ],
+    "passed": 28,
+    "failed": 0,
+    "skipped": 1,
+    "skip_reason": "Legacy optional real-Go compilation test was not enabled in this regression command (Go absent from that command PATH); pinned real Gin compilation checked separately."
+  },
+  "negative_checks": [
+    "lost or duplicate observations",
+    "unclosed or reordered framework boundaries",
+    "G/context switch",
+    "wrong request ID",
+    "object address/type/value mismatch",
+    "JSON snapshot failure/oversize",
+    "different writer or slice address",
+    "serialization/write error",
+    "short write",
+    "client body mismatch",
+    "reported capture loss"
+  ],
+  "limitations": [
+    "serial requests with fixture mutex and LockOSThread",
+    "immutable preopened files and pread-only input writes",
+    "fixed balance uint32 and explicit serialization summary",
+    "sink is Gin writer acceptance; actual client body checked independently",
+    "not a general concurrent/multiservice/JSON/database implementation"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "adapter": "go-amd64-u32-calls",
+  "abi": "go-amd64-abiinternal",
+  "functions": [
+    "main.goSelectValue",
+    "main.goMergeValues",
+    "main.goFallbackValue",
+    "main.goCopyLeft"
+  ],
+  "input_fields": [
+    "left",
+    "right",
+    "noise"
+  ],
+  "output_fields": [
+    "Balance",
+    "Audit"
+  ],
+  "sink_field": "Balance",
+  "sensitive_fields": [
+    "left"
+  ],
+  "read_boundary": {
+    "api": "pread64",
+    "scope_function": "main.serveAccount",
+    "maximum_bytes": 32
+  },
+  "scope": "Single Gin service, serial HTTP/1.1 loopback requests, per-request pinned thread/G; pread -> observed computation -> encoding/json summary -> Gin ResponseWriter.Write, client bytes verified only during evaluation",
+  "gin_api": {
+    "gin_version": "v1.11.0",
+    "go_version": "go1.25.4",
+    "field": "balance",
+    "model": "gin-struct-u32-v1",
+    "maximum_bytes": 32,
+    "requests": 14,
+    "serial_requests": true,
+    "pinned_request_thread": true
+  }
+}
