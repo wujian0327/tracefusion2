@@ -4,6 +4,20 @@
 
 当前验证主线：**静态候选依赖分析 + 自动选择 eBPF 观测位置 + 动态来源重建**。此前 HTTP 抓包、trace/span 和调用链基线保留为前期实验设施。
 
+## 当前：Gin 默认调度下的自然并发（待主机采集验证）
+
+新增默认运行时调度场景：请求不固定线程，不设置 `GOMAXPROCS`，没有辅助迁移 goroutine、阶段汇合或人为延时。保留相同业务和真实 `c.JSON`，完整复用已验证的 G/请求采集状态。
+
+本地构建、真实 HTTP 和重建测试已通过，新的 eBPF 采集尚待验证。评估分别检查来源正确、默认调度条件和实际请求重叠；自然迁移次数按实报告，不强制每个请求换线程，也不把完全串行的结果当作并发通过。
+
+```bash
+git pull --ff-only origin main
+sudo env "PATH=$PATH" GOPROXY=https://goproxy.cn,direct \
+  /usr/bin/python3 scripts/gin_default_provenance.py run
+```
+
+返回 `artifacts/gin-default-provenance-*.zip`，旧入口不用重跑。详见 [默认调度场景与验收范围](docs/gin-default-provenance.md)。固定字段、显式 JSON 摘要和关闭内联的限制仍保留。
+
 ## 已验证：Gin 请求内线程迁移
 
 新增不固定请求线程的 Gin 场景，采集状态通过实际 G 地址与请求实例接续；同一线程可先后承载多个请求，原始线程号始终保留。测试主动诱发读取之间、计算到 JSON 之间的迁移，要求 28 个请求都提供实际换线程证据，不能只凭响应正确判定通过。

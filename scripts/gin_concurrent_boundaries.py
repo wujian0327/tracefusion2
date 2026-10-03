@@ -73,7 +73,7 @@ def bind(events,plans,config,runtime, *, group_requests=None, context_policy=Non
         return dict(results=[],compute_results=[],read_operations=[],issues=[dict(error=str(exc))],boundary_issues=[dict(error=str(exc))],oracle_used_for_inference=False)
 
 
-def evaluate(inferred,oracle,stats,plans):
+def evaluate(inferred,oracle,stats,plans, *, require_phase_barriers=True):
     checks=[];tp=fp=fn=0;by_input={r['input_addr']:r for r in inferred['results']}
     modes=['left','right','merge','overwrite','same','zero','max']*4
     shape=(len(oracle)==28 and {r['ticket'] for r in oracle}==set(range(1,29))
@@ -110,9 +110,10 @@ def evaluate(inferred,oracle,stats,plans):
     clean=bool(stats.get('received_events')) and all(stats.get(k)==0 for k in ('lost_events','submit_errors','state_errors','process_returncode'))
     clean=clean and stats.get('attempted_events')==stats.get('received_events')
     passed=(shape and clean and not inferred['issues'] and all(c['passed'] for c in checks) and
-            all(b['overlap_and_phase_order_verified'] for b in batches) and
-            len(inferred['compute_results'])==36 and len(inferred['read_operations'])==56 and
-            inferred.get('concurrency',{}).get('max_active_scopes')==4)
+            len(inferred['compute_results'])==36 and len(inferred['read_operations'])==56)
+    if require_phase_barriers:
+        passed=(passed and all(b['overlap_and_phase_order_verified'] for b in batches) and
+                inferred.get('concurrency',{}).get('max_active_scopes')==4)
     return dict(passed=passed,capture_clean=clean,requests=len(inferred['results']),expected_requests=28,
                 compute_calls=len(inferred['compute_results']),read_operations=len(inferred['read_operations']),
                 checks=checks,batches=batches,concurrency=inferred.get('concurrency',{}),

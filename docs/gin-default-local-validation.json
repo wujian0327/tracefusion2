@@ -1,0 +1,56 @@
+{
+  "status": "local_validation_passed_host_bpf_pending",
+  "kernel_ebpf_tested": false,
+  "tests": {
+    "passed": 8,
+    "failed": 0,
+    "skipped": 0
+  },
+  "real_http": {
+    "requests": 28,
+    "all_bodies_and_statuses_match": true,
+    "content_types_match": true,
+    "default_scheduler_metadata_valid": true,
+    "actual_kernel_scope_overlap_tested": false
+  },
+  "collector": {
+    "reuses_host_verified_migration_collector": true,
+    "generated_source_unchanged_for_same_plans": true
+  },
+  "reconstruction": {
+    "real_go_instructions_executed": true,
+    "two_overlapping_requests_without_phase_barriers_pass": true,
+    "zero_migration_not_misreported_as_failure": true,
+    "serial_trace_rejected_as_concurrency_coverage": true,
+    "observed_migration_preserved": true,
+    "environment_override_rejected": true,
+    "wrong_source_offset_rejected": true,
+    "wrong_g_or_sequence_rejected": true,
+    "capture_errors_rejected": true,
+    "source_relations": {
+      "tp": 28,
+      "fp": 0,
+      "fn": 0
+    }
+  },
+  "historical_replay": {
+    "fixed_thread_concurrent": {
+      "events": 892,
+      "complete_inference_equal": true,
+      "complete_evaluation_equal": true
+    },
+    "forced_migration": {
+      "events": 892,
+      "complete_inference_equal": true,
+      "complete_evaluation_equal": true
+    }
+  },
+  "limits": [
+    "new default-scheduler scene still requires real BCC/eBPF host capture",
+    "HTTP completion alone does not prove server scope overlap or thread migration",
+    "no server scheduling fixture; client concurrency remains bounded at four",
+    "fixed business functions and uint32 JSON summary; compiler inlining remains disabled",
+    "no arbitrary Gin application, child goroutine propagation, shared mutable memory, stack relocation or performance claim"
+  ],
+  "published_scope": "Aggregate validation only; no runtime identifiers, host metadata, addresses or artifact hashes"
+}

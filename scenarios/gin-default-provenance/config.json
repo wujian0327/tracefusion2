@@ -1,0 +1,44 @@
+{
+  "adapter": "go-amd64-u32-calls",
+  "abi": "go-amd64-abiinternal",
+  "functions": [
+    "main.goSelectValue",
+    "main.goMergeValues",
+    "main.goFallbackValue",
+    "main.goCopyLeft"
+  ],
+  "input_fields": [
+    "left",
+    "right",
+    "noise"
+  ],
+  "output_fields": [
+    "Balance",
+    "Audit"
+  ],
+  "sink_field": "Balance",
+  "sensitive_fields": [
+    "left"
+  ],
+  "read_boundary": {
+    "api": "pread64",
+    "scope_function": "main.serveAccount",
+    "maximum_bytes": 32
+  },
+  "scope": "Natural concurrent Gin requests with default Go runtime scheduling; private buffers and fixed JSON summary",
+  "gin_api": {
+    "gin_version": "v1.11.0",
+    "go_version": "go1.25.4",
+    "field": "balance",
+    "model": "gin-struct-u32-v1",
+    "maximum_bytes": 32,
+    "requests": 28,
+    "serial_requests": false,
+    "pinned_request_thread": false,
+    "concurrency": 4,
+    "batches": 7,
+    "execution_identity": "process-g-request-v1",
+    "scheduling": "runtime-default",
+    "phase_barriers": false
+  }
+}
