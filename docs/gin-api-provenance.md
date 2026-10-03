@@ -4,7 +4,11 @@
 
 在真实 Gin 服务上使用普通响应结构体和 `c.JSON`，验证固定字段 `$.balance` 从文件读取、计算到 HTTP 响应写入的来源。沿用已有 C/Go 的机器指令重放与读取实例绑定核心，新增 Go/Gin 边界适配和请求分组。
 
-**本地实际 Go/Gin 编译、真实 HTTP 请求及独立模拟验证已通过；Gin 场景的 BCC 编译、内核挂接和真实事件完整性仍待用户主机运行。**不能把本地模拟事件称为真实 eBPF 结果。旧 C/Go 已通过的主机实验也不能代替这次新边界的验证。
+**2026-10-03 用户主机真实 BCC/eBPF 采集通过，原始事件已完整重放核验。**环境为 WSL2 Linux amd64、Go 1.25.4、Gin 1.11.0、BCC 0.29.1。共 446 条事件、14 个请求、18 次计算、28 次读取；最终输出来源关系 TP=14/FP=0/FN=0，全部客户端正文与重建结果及独立预期一致。报告丢失、提交、状态和内存读取错误均为 0。详见 [主机核验记录](gin-api-host-20261003.json)。本轮无需重跑。
+
+核查了同值覆盖确实由 a.bin 切换到 b.bin、常量覆盖消除外部来源，以及加工合并保留两个来源。探针计划、BPF 源码、二进制/源文件哈希、全部推断结果和评估结果均重新核对；结果图的边端点存在且跨请求节点 ID 不冲突。
+
+本次各请求内 TID/G 地址一致，请求间出现 4 个 TID，而观测到的 G 地址相同。这说明不能把 G 地址当作请求 ID，也不能仅凭地址认定 goroutine 生命周期相同；当前按明确的请求范围分组。串行固定线程条件仍然保留，不据此声称支持请求内迁移或一般并发。
 
 ## 运行
 
@@ -14,6 +18,13 @@
 git pull --ff-only origin main
 go version
 sudo env "PATH=$PATH" /usr/bin/python3 scripts/gin_api_provenance.py run
+```
+
+如果下载依赖时访问 `proxy.golang.org` 超时，可在本次命令中显式传入模块代理，确保 sudo 后的构建进程也收到该配置。本轮首次失败停在这一下载阶段，换代理后才完成采集。
+
+```bash
+sudo env "PATH=$PATH" GOPROXY=https://goproxy.cn,direct \
+  /usr/bin/python3 scripts/gin_api_provenance.py run
 ```
 
 runner 拒绝其他 Go 版本，避免未经验证的 ABI/编译差异被当成兼容。构建使用 `CGO_ENABLED=0`、PIE、`-gcflags=all=-l` 和 `nomsgpack`，标准库 JSON 后端；没有启用其他 JSON 编译标签。保持正常优化，只禁用内联以保留边界。

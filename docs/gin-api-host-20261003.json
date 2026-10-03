@@ -1,0 +1,296 @@
+{
+  "status": "host_capture_verified",
+  "kernel_ebpf_tested": true,
+  "bundle": "gin-api-provenance-20261003-160056-611b.zip",
+  "bundle_sha256": "55adc3aa989d7cffde3df8b096da19b09d6e01278f4e48a6eb9e20dce2c48ff4",
+  "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "go": "go1.25.4",
+  "gin": "v1.11.0",
+  "bcc": "0.29.1",
+  "binary_sha256": "1ea35fd4c38b357e596a23e99c719196cea8c7de987955e28fdf3ff7e8a77395",
+  "events": 446,
+  "event_kind_counts": {
+    "3": 14,
+    "1": 28,
+    "2": 28,
+    "0": 278,
+    "6": 14,
+    "7": 14,
+    "8": 14,
+    "10": 14,
+    "11": 14,
+    "9": 14,
+    "4": 14
+  },
+  "requests": 14,
+  "compute_calls": 18,
+  "read_operations": 28,
+  "source_relations": {
+    "tp": 14,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  "capture": {
+    "backend": "ebpf",
+    "lost_events": 0,
+    "submit_errors": 0,
+    "state_errors": 0,
+    "attempted_events": 446,
+    "raw_probe_hits": 446,
+    "process_returncode": 0,
+    "bcc_version": "0.29.1",
+    "perf_buffer_pages_per_cpu": 1024,
+    "perf_buffer_bytes_per_cpu": 4194304,
+    "received_events": 446,
+    "observed_kernel_tgids": [
+      27048
+    ],
+    "submit_error_errnos": {}
+  },
+  "nonzero_error_events": {
+    "source_error": 0,
+    "destination_error": 0,
+    "stack_error": 0,
+    "runtime_guard_error": 0,
+    "read_error": 0,
+    "error_type": 0
+  },
+  "verification": {
+    "binary_and_source_hashes": true,
+    "probe_plan_reconstructed": true,
+    "boundary_plan_reconstructed": true,
+    "collector_source_matches": true,
+    "complete_inference_replay_equal": true,
+    "evaluation_replay_equal": true,
+    "all_client_bodies_match": true,
+    "graph_edges_have_endpoints": true,
+    "request_node_ids_unique": true,
+    "equal_value_overwrite_changes_source": true,
+    "constant_overwrite_removes_external_source": true
+  },
+  "request_details": [
+    {
+      "request_id": 1,
+      "mode": "left",
+      "value": 424298,
+      "sources": [
+        "a.bin"
+      ],
+      "pid_tids": [
+        116170275449260
+      ],
+      "goroutines": [
+        824636039616
+      ],
+      "events": 32
+    },
+    {
+      "request_id": 2,
+      "mode": "right",
+      "value": 424242,
+      "sources": [
+        "b.bin"
+      ],
+      "pid_tids": [
+        116170275449259
+      ],
+      "goroutines": [
+        824636039616
+      ],
+      "events": 29
+    },
+    {
+      "request_id": 3,
+      "mode": "merge",
+      "value": 848540,
+      "sources": [
+        "a.bin",
+        "b.bin"
+      ],
+      "pid_tids": [
+        116170275449256
+      ],
+      "goroutines": [
+        824636039616
+      ],
+      "events": 38
+    },
+    {
+      "request_id": 4,
+      "mode": "overwrite",
+      "value": 42,
+      "sources": [],
+      "pid_tids": [
+        116170275449258
+      ],
+      "goroutines": [
+        824636039616
+      ],
+      "events": 34
+    },
+    {
+      "request_id": 5,
+      "mode": "same",
+      "value": 424242,
+      "sources": [
+        "b.bin"
+      ],
+      "pid_tids": [
+        116170275449260
+      ],
+      "goroutines": [
+        824636039616
+      ],
+      "events": 32
+    },
+    {
+      "request_id": 6,
+      "mode": "zero",
+      "value": 0,
+      "sources": [
+        "b.bin"
+      ],
+      "pid_tids": [
+        116170275449256
+      ],
+      "goroutines": [
+        824636039616
+      ],
+      "events": 29
+    },
+    {
+      "request_id": 7,
+      "mode": "max",
+      "value": 4294967295,
+      "sources": [
+        "b.bin"
+      ],
+      "pid_tids": [
+        116170275449258
+      ],
+      "goroutines": [
+        824636039616
+      ],
+      "events": 29
+    },
+    {
+      "request_id": 8,
+      "mode": "left",
+      "value": 424298,
+      "sources": [
+        "a.bin"
+      ],
+      "pid_tids": [
+        116170275449259
+      ],
+      "goroutines": [
+        824636039616
+      ],
+      "events": 32
+    },
+    {
+      "request_id": 9,
+      "mode": "right",
+      "value": 424242,
+      "sources": [
+        "b.bin"
+      ],
+      "pid_tids": [
+        116170275449260
+      ],
+      "goroutines": [
+        824636039616
+      ],
+      "events": 29
+    },
+    {
+      "request_id": 10,
+      "mode": "merge",
+      "value": 848540,
+      "sources": [
+        "a.bin",
+        "b.bin"
+      ],
+      "pid_tids": [
+        116170275449259
+      ],
+      "goroutines": [
+        824636039616
+      ],
+      "events": 38
+    },
+    {
+      "request_id": 11,
+      "mode": "overwrite",
+      "value": 42,
+      "sources": [],
+      "pid_tids": [
+        116170275449260
+      ],
+      "goroutines": [
+        824636039616
+      ],
+      "events": 34
+    },
+    {
+      "request_id": 12,
+      "mode": "same",
+      "value": 424242,
+      "sources": [
+        "b.bin"
+      ],
+      "pid_tids": [
+        116170275449260
+      ],
+      "goroutines": [
+        824636039616
+      ],
+      "events": 32
+    },
+    {
+      "request_id": 13,
+      "mode": "zero",
+      "value": 0,
+      "sources": [
+        "b.bin"
+      ],
+      "pid_tids": [
+        116170275449256
+      ],
+      "goroutines": [
+        824636039616
+      ],
+      "events": 29
+    },
+    {
+      "request_id": 14,
+      "mode": "max",
+      "value": 4294967295,
+      "sources": [
+        "b.bin"
+      ],
+      "pid_tids": [
+        116170275449260
+      ],
+      "goroutines": [
+        824636039616
+      ],
+      "events": 29
+    }
+  ],
+  "limits": [
+    "serial requests with LockOSThread",
+    "fixed uint32 balance field and explicit JSON summary",
+    "immutable files, not database reads",
+    "Gin writer acceptance; client receipt independently checked, no kernel socket lineage",
+    "no concurrent/multiservice claim"
+  ],
+  "execution_context_observations": {
+    "distinct_pid_tids": 4,
+    "distinct_observed_g_addresses": 1,
+    "one_tid_and_g_address_within_each_request": true,
+    "interpretation": "TID varies between requests. The same observed G address is reused; this does not establish goroutine lifetime identity. Request boundaries, not G address, separate provenance."
+  }
+}

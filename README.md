@@ -4,18 +4,18 @@
 
 当前验证主线：**静态候选依赖分析 + 自动选择 eBPF 观测位置 + 动态来源重建**。此前 HTTP 抓包、trace/span 和调用链基线保留为前期实验设施。
 
-## 当前：真实 Gin Web API 场景（待主机采集验证）
+## 当前：真实 Gin Web API 场景（主机采集已通过）
 
 新增普通 Go 结构体 + `c.JSON` 的 `GET /account/summary`。自动发送 14 个串行请求，连接文件读取、业务计算、标准库 JSON 序列化和 Gin 响应写入。覆盖双来源加工、常量覆盖、同值换源、0/UINT32_MAX，以及连接复用和新建连接。
 
-**实际 Go 1.25.4 / Gin 1.11.0 构建、真实 HTTP 请求和本地独立验证已通过；本场景的真实 BCC/eBPF 采集尚待主机运行。**首次只支持固定 `balance` uint32 字段和显式 JSON 摘要，不声称完整跟踪框架或支持一般并发。
+**2026-10-03 真实 Go 1.25.4 / Gin 1.11.0 / BCC 0.29.1 采集通过：446 条事件、14 个请求、18 次计算、28 次读取，输出来源关系 TP=14/FP=0/FN=0。**原始事件重建及评估完整重放一致，14 个客户端正文均一致；报告丢失、提交、状态和内存读取错误均为 0。见 [主机核验](docs/gin-api-host-20261003.json)。当前只支持固定 `balance` uint32 字段和显式 JSON 摘要，不声称完整跟踪框架或支持一般并发。
 
 ```bash
 git pull --ff-only origin main
 sudo env "PATH=$PATH" /usr/bin/python3 scripts/gin_api_provenance.py run
 ```
 
-固定 Go 1.25.4，首次构建需要下载依赖，无需 Docker。返回整个 `artifacts/gin-api-provenance-*.zip`，旧实验无需重跑。详见 [Gin 场景、运行方法与边界](docs/gin-api-provenance.md)。
+本轮已通过，无需重跑；以上命令用于复现。固定 Go 1.25.4，首次构建需要下载依赖，无需 Docker。输出整个 `artifacts/gin-api-provenance-*.zip`。详见 [Gin 场景、运行方法与边界](docs/gin-api-provenance.md)。
 
 ## 已验证：JSON 标准输出来源验证
 
