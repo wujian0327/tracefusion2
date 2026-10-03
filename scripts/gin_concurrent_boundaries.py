@@ -31,8 +31,8 @@ def groups(rows):
     return [closed[k] for k in sorted(closed)]
 
 
-def bind(events,plans,config,runtime):
-    result=shared.bind(events,plans,config,runtime,group_requests=groups)
+def bind(events,plans,config,runtime, *, group_requests=None, context_policy=None):
+    result=shared.bind(events,plans,config,runtime,group_requests=group_requests or groups,context_policy=context_policy)
     if result['issues']:return result
     try:
         require(config['gin_api']['serial_requests'] is False,'Concurrent scope adapter not configured')

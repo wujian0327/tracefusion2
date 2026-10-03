@@ -4,6 +4,20 @@
 
 当前验证主线：**静态候选依赖分析 + 自动选择 eBPF 观测位置 + 动态来源重建**。此前 HTTP 抓包、trace/span 和调用链基线保留为前期实验设施。
 
+## 当前：Gin 请求内线程迁移（待主机采集验证）
+
+新增不固定请求线程的 Gin 场景，采集状态通过实际 G 地址与请求实例接续；同一线程可先后承载多个请求，原始线程号始终保留。测试主动诱发读取之间、计算到 JSON 之间的迁移，要求 28 个请求都提供实际换线程证据，不能只凭响应正确判定通过。
+
+**本地编译、真实 HTTP、迁移重建与原生采集器模拟已通过；新的 BPF 内核采集尚待验证。**6 个旧主机包共 4270 条事件完整重放一致。调度夹具使用 `GOMAXPROCS(1)` 和占用旧线程的辅助 goroutine；请求自身不调用 `LockOSThread`。不据此声称覆盖一般调度、子 goroutine 传播或性能。
+
+```bash
+git pull --ff-only origin main
+sudo env "PATH=$PATH" GOPROXY=https://goproxy.cn,direct \
+  /usr/bin/python3 scripts/gin_migration_provenance.py run
+```
+
+返回 `artifacts/gin-migration-provenance-*.zip`；旧入口无需重跑。详见 [迁移身份、覆盖门槛与边界](docs/gin-migration-provenance.md)。
+
 ## 已验证：Gin 并发请求状态隔离
 
 新增每批 4 个、共 28 个并发请求，输入对象和采集状态按请求隔离。通过阶段同步确保请求交错，并使用独立评估对应表匹配客户端请求；不依赖发送/完成顺序或 JSON 值配对。仍保留请求内 `LockOSThread`，线程迁移和子 goroutine 传播暂缓。

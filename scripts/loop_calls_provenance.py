@@ -53,17 +53,18 @@ def plan_program(assembly, symbols, config, decoder=model.decode):
     return plans
 
 
-def infer(events, plans, config, runtime_bases):
+def infer(events, plans, config, runtime_bases, *, context_policy=None):
     require(runtime_bases is not None, 'Executable mapping required')
     adapter=get_adapter(config)
-    try:adapter.context.validate(events,model.REGS)
+    context=context_policy or adapter.context
+    try:context.validate(events,model.REGS)
     except (ValueError,KeyError,IndexError) as exc:
         return dict(results=[],issues=[dict(error=str(exc))],oracle_used_for_inference=False)
     functions={p['function']:p for p in plans}
     ids={p['function']:i for i,p in enumerate(plans)}
     maps={i:{n['offset']:n for n in p['instructions']} for i,p in enumerate(plans)}
     results,issues=[],[]
-    for (tid,call),rows in sorted(adapter.context.group(events).items()):
+    for (tid,call),rows in sorted(context.group(events).items()):
         try:
             require(len(rows)<=MAX_EXECUTED_STEPS, 'Executed instruction budget exceeded; no partial result')
             rows.sort(key=lambda r:r['sequence'])
@@ -119,7 +120,7 @@ def infer(events, plans, config, runtime_bases):
             for node in graph['nodes']:
                 if node.get('kind')=='source-read':node['call_instance']=step_calls[node['instruction']]
             graph['identity_scope']='root invocation + dynamic call instance + executed instruction ordinal'
-            results.append(dict(pid_tid=tid,call_id=call,function=name,status='resolved',
+            results.append(dict(**context.result_identity(tid,rows),call_id=call,function=name,status='resolved',
                 sources=sorted({r['field'] for r in contributing}),static_sources=[],
                 argument_sources=sorted(s for s in analyzed['sources'] if s=='arg.select'),
                 value=rows[-1]['outputs'][config['output_fields'].index(config['sink_field'])],sink='output.'+config['sink_field'],
@@ -129,7 +130,7 @@ def infer(events, plans, config, runtime_bases):
                              contributing_source_reads=len(contributing),
                              instruction_visits={'%s:%x'%k:v for k,v in sorted(visits.items())}),dependency_graph=graph))
         except (ValueError,KeyError,IndexError,TypeError,struct.error) as exc:
-            issues.append(dict(pid_tid=tid,call_id=call,error=str(exc)))
+            issues.append(dict(**context.result_identity(tid,rows),call_id=call,error=str(exc)))
     return dict(results=results,issues=issues,oracle_used_for_inference=False,
                 scope='single execution identity; CFG loops and nonrecursive direct calls; observed stack/return checks; explicit executed read dependencies')
 

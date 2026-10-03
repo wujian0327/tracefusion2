@@ -26,7 +26,7 @@ def _namespace(value,prefix):
     return value
 
 
-def bind(events,plans,config,runtime, *, group_requests=None):
+def bind(events,plans,config,runtime, *, group_requests=None, context_policy=None):
     try:
         require(config['gin_api']['model']=='gin-struct-u32-v1' and config['sink_field']=='Balance','Unsupported JSON model')
         require(0<len(events)<=100000,'Empty or oversized Gin history')
@@ -48,8 +48,8 @@ def bind(events,plans,config,runtime, *, group_requests=None):
         outputs=[];computations=[];operations=[]
         for request in groups:
             rid=request[0]['request_id'];prefix='request:%d:'%rid
-            require(len({e['pid_tid'] for e in request})==1,'OS-thread migration unsupported')
-            get_adapter(config).context.validate(request,reads.core.model.REGS)
+            context = context_policy or get_adapter(config).context
+            context.validate(request,reads.core.model.REGS)
             framework=[e for e in request if e['kind']>=6]
             require([e['kind'] for e in framework]==[6,7,8,10,11,9],'Missing, nested or reordered Gin boundaries')
             r,m,mret,w,wret,rret=framework
@@ -59,7 +59,7 @@ def bind(events,plans,config,runtime, *, group_requests=None):
                     'Computation must finish before serialization; no intervening writes supported')
             projected=[dict(e) for e in request if e['kind']<6]
             for index,e in enumerate(projected):e['observation_sequence']=index
-            result=reads.bind(projected,plans,config,runtime)
+            result=reads.bind(projected,plans,config,runtime,context_policy=context)
             require(not result['issues'],'Read/computation inference failed: '+str(result['issues']))
             compute=[e for e in request if e['kind']==0]
             latest=compute[-1]

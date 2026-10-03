@@ -1,0 +1,123 @@
+{
+  "status": "local_validation_passed_host_bpf_pending",
+  "kernel_ebpf_tested": false,
+  "go": "go1.25.4",
+  "gin": "v1.11.0",
+  "fixture_binary_sha256": "0fee1ea48d879ce0e2681f404a514b7f43bad55b68968d29b91fef9bc782f5bf",
+  "fixture_build_identity": {
+    "binary_sha256": "0fee1ea48d879ce0e2681f404a514b7f43bad55b68968d29b91fef9bc782f5bf",
+    "go": "go1.25.4",
+    "gin": "v1.11.0",
+    "sources": {
+      "go.mod": "01f58e102456152ad443400c5f73adecff5f1b67179d95f8cdcd0cacaded4310",
+      "main.go": "c8c5c234ed287285c9bf338fb987ec15aebc2d0dfdbd578b9117c4121ecab4ca",
+      "operations.go": "b2375f6873984bcaea66492503dd9c9ff707d9cc1fe17002a26be2798d3cb423",
+      "go.sum": "f5c48e466f1b1dac24757ef272ce6b281fc37acbbe13456fc5c258565c85439e",
+      "layout_check.go": "ab7df18fe3cbe5e2440f909e458486ca473558e6b062faa5db0e390f290a30bb",
+      "config.json": "12c8c438870fb5a6b3626cb4bd4b741ee462792f989830e763d72eef827cd6ad"
+    },
+    "gin_source_sha256": {
+      "render/json.go": "fa3d00b7dcbc6af8cfab53d99eb2adf21951230109376b06d6dce263fa41fd11",
+      "response_writer.go": "0145937323ee030ddd933a169dbb271b3e8bab3d180a2ad6eb85cdab538f77a3",
+      "codec/json/json.go": "e5f9ca595f98cd59a4dbf2e5a69a952ccfdee0a5fe14e106bfd207d23d9d89af",
+      "codec/json/api.go": "8415df4e9bb8eeeebdfb9998c0c1c95bd2f0707d1c144b5293943a8d36033425",
+      "codec/json/go_json.go": "e97717cdc11968e29118767937309f4f5c1d4586b26ed975bc15a02ce47f9f20",
+      "codec/json/sonic.go": "3a80faca223df055f6a6bc0f00aeb21a5cf7860efee6c1b7f892151740a3ad4f",
+      "codec/json/jsoniter.go": "eb34e50d9c14ae6ec407a90ee5262b3950c4add20c7f24892e31f3420b9f29d9"
+    },
+    "build_tags": [
+      "nomsgpack"
+    ],
+    "inlining": false
+  },
+  "tests": {
+    "migration_suite": {
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0
+    },
+    "language_adapters": {
+      "passed": 9,
+      "failed": 0,
+      "skipped": 1,
+      "skip_reason": "optional legacy Go build test: compiler not on test PATH; new fixture actually built with pinned Go"
+    }
+  },
+  "real_http": {
+    "requests": 28,
+    "concurrency": 4,
+    "requests_pinned": false,
+    "gomaxprocs": 1,
+    "independent_phase_tid_checks": true,
+    "all_client_bodies_match": true,
+    "evidence": "ordinary HTTP execution plus evaluation-only phase_tids; not kernel BPF"
+  },
+  "synthetic_migration": {
+    "real_go_instruction_execution": true,
+    "requests": 28,
+    "concurrent_shared_threads": true,
+    "migration_inside_computation": true,
+    "missing_migration_rejected": true,
+    "source_relations": {
+      "tp": 28,
+      "fp": 0,
+      "fn": 0
+    },
+    "raw_tid_preserved": true
+  },
+  "native_collector_shim": {
+    "complete_generated_source_executed": true,
+    "g_scoped_reads": true,
+    "request_scoped_call_state": true,
+    "g_reuse_resets_state": true,
+    "wrong_process_filtered": true,
+    "syscall_pair_tid_checked": true,
+    "kernel_verifier_tested": false
+  },
+  "historical_host_replay": [
+    {
+      "bundle": "gin-host-review-20261003-attempt2",
+      "events": 446,
+      "results": 14,
+      "complete_inference_replay_equal": true
+    },
+    {
+      "bundle": "gin-concurrent-host-review-20261003",
+      "events": 892,
+      "results": 28,
+      "complete_inference_replay_equal": true
+    },
+    {
+      "bundle": "read-host-review-20261003",
+      "events": 316,
+      "results": 18,
+      "complete_inference_replay_equal": true
+    },
+    {
+      "bundle": "go-read-host-retry-review-20261003",
+      "events": 400,
+      "results": 18,
+      "complete_inference_replay_equal": true
+    },
+    {
+      "bundle": "c-loop-calls-retry-review-20261003",
+      "events": 940,
+      "results": 24,
+      "complete_inference_replay_equal": true
+    },
+    {
+      "bundle": "go-loop-calls-retry-review-20261003",
+      "events": 1276,
+      "results": 24,
+      "complete_inference_replay_equal": true
+    }
+  ],
+  "limits": [
+    "host BCC compilation/attachment/capture must still run",
+    "controlled single-P scheduler with auxiliary locked goroutines; request goroutines remain unpinned",
+    "real HTTP phase evidence is evaluation-only; acceptance requires actual BPF thread transitions",
+    "in-computation migration tested only by synthetic events/native shim",
+    "no stack relocation in observed business instructions, child goroutine propagation, shared mutable memory, general JSON or performance claim"
+  ],
+  "release_build_metadata_verified": true
+}

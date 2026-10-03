@@ -60,6 +60,15 @@ class ExecutionPolicy:
         for e in events: groups.setdefault((e['pid_tid'], e['call_id']), []).append(e)
         return groups
 
+    def key(self, event):
+        return event['pid_tid']
+
+    def result_key(self, result):
+        return result['pid_tid']
+
+    def result_identity(self, key, events):
+        return dict(pid_tid=key)
+
     def bpf_key(self):
         return 'bpf_get_current_pid_tgid()'
 

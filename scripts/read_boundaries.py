@@ -15,17 +15,18 @@ INSTRUCTION, READ_ENTER, READ_EXIT, SCOPE_ENTER, SCOPE_EXIT, INVALIDATE = range(
 MAX_READ_BYTES = 32
 
 
-def bind(events, plans, config, runtime):
+def bind(events, plans, config, runtime, *, context_policy=None):
     try:
         require(events and len(events) <= 20000, 'Empty or oversized read history')
         rows = sorted(events, key=lambda e: e['observation_sequence'])
         require([e['observation_sequence'] for e in rows] == list(range(len(rows))), 'Missing or duplicate global observation sequence')
         require(rows[0]['kind'] == SCOPE_ENTER and rows[-1]['kind'] == SCOPE_EXIT, 'Missing workload boundary')
         require(sum(e['kind'] == SCOPE_ENTER for e in rows) == sum(e['kind'] == SCOPE_EXIT for e in rows) == 1, 'Repeated workload scope')
-        require(len({e['pid_tid'] for e in rows}) == 1, 'Multiple read execution contexts unsupported')
+        context = context_policy or get_adapter(config).context
+        require(len({context.key(e) for e in rows}) == 1, 'Multiple read execution contexts unsupported')
         # Include syscall and scope events in the adapter identity check. A
         # fixed OS thread alone is insufficient for a Go read history.
-        get_adapter(config).context.validate(rows, core.model.REGS)
+        context.validate(rows, core.model.REGS)
         require(all(a['timestamp'] <= b['timestamp'] for a,b in zip(rows, rows[1:])), 'Non-monotonic observation order')
         files = runtime['read_files']; memory = {}; pending = None; operations = []; snapshots = {}; active = None
         instructions = {(fid,n['offset']): n for fid,p in enumerate(plans) for n in p['instructions']}
@@ -45,7 +46,7 @@ def bind(events, plans, config, runtime):
                 require(-4095 <= returned <= event['requested'], 'Invalid syscall return')
                 require(event['read_error'] == 0 and len(event['read_data']) == MAX_READ_BYTES, 'Read result snapshot failed')
                 file = files.get(str(event['fd']))
-                op = dict(io_id=event['io_id'], id='%s:pread:%s' % (event['pid_tid'],event['io_id']),
+                op = dict(io_id=event['io_id'], id='%s:pread:%s' % (context.key(event),event['io_id']),
                           api='pread64', fd=event['fd'], file=file, file_offset=event['file_offset'],
                           requested=event['requested'], returned=returned, buffer_addr=event['buffer_addr'],
                           entry_sequence=pending['observation_sequence'], exit_sequence=event['observation_sequence'],
@@ -60,11 +61,11 @@ def bind(events, plans, config, runtime):
                 require(pending is None, 'Computation overlaps pending read')
                 if active is None:
                     require(event['sequence'] == 0 and event['offset'] == 0 and event['depth'] == 1, 'Missing compute entry')
-                    key = (event['pid_tid'],event['call_id'])
+                    key = (context.key(event),event['call_id'])
                     require(key not in snapshots, 'Repeated compute invocation')
                     active = key
                     snapshots[key] = (dict(memory), event, len(operations))
-                require(active == (event['pid_tid'],event['call_id']), 'Interleaved compute invocations')
+                require(active == (context.key(event),event['call_id']), 'Interleaved compute invocations')
                 compute.append(event)
                 node = instructions[event['function'],event['offset']]
                 if node['op'] == 'ret' and event['depth'] == 1: active = None
@@ -72,11 +73,11 @@ def bind(events, plans, config, runtime):
                 raise ValueError('Unsupported descriptor lifecycle or boundary event')
         require(active is None and pending is None, 'Unclosed read or compute invocation')
         require(operations and compute, 'No reads or computations observed')
-        inferred = core.infer(compute, plans, config, runtime['functions'])
+        inferred = core.infer(compute, plans, config, runtime['functions'], context_policy=context)
         require(not inferred['issues'], 'Machine replay failed: ' + str(inferred['issues']))
         layout = get_adapter(config).layout(config,'input')
         for result in inferred['results']:
-            memory, first, attempts = snapshots[result['pid_tid'],result['call_id']]
+            memory, first, attempts = snapshots[context.result_key(result),result['call_id']]
             sources = {}; graph = result['dependency_graph']; added = set()
             for read in result['contributing_reads']:
                 field = layout.field(read['field'].removeprefix('input.'))
