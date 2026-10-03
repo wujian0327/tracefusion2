@@ -17,6 +17,7 @@ MAX_DEPTH = 8
 # Backward-compatible test constants; execution uses the selected adapter.
 ARG_REGS = C.argument_registers
 SAVED_REGS = C.saved_registers
+CMOVS = {'cmov'+op[1:]: op for op in BRANCHES}
 
 
 def operand(text):
@@ -52,6 +53,18 @@ def decode(name, assembly, symbols, special_instructions=None):
             target = re.fullmatch(r'([0-9a-f]+)(?: <[^>]+>)?', args)
             require(target is not None, 'Indirect calls/jumps are unsupported')
             node['target_address'] = int(target[1], 16)
+        elif op in ('inc', 'dec'):
+            arg = operand(args)
+            require(arg['kind'] == 'reg' and arg['width'] == 32, 'Only 32-bit register INC/DEC supported')
+            node['args'] = [arg]
+        elif op in CMOVS:
+            parts = args.split(','); require(len(parts) == 2, 'Expected two CMOV operands')
+            a,b = map(operand,parts)
+            require(a['kind'] == 'reg' and a['width'] == 32 and b['kind'] in ('reg','mem') and b['width'] == 32,
+                    'Only 32-bit register/memory CMOV supported')
+            node['args'] = [a,b]
+        elif op == 'xchg' and args == 'ax,ax':
+            node['op'] = 'nop'  # Go uses the 66 90 encoding for instruction padding.
         elif op in ('push', 'pop'):
             arg = operand(args)
             require(arg['kind'] == 'reg' and arg['width'] == 64 and arg['reg'] != 'rsp', 'Only 64-bit register push/pop supported')
@@ -225,6 +238,32 @@ def symbolic_path(path, functions, config, distinguish_reads=False):
             require(adapter.runtime_guard_offset == n['guard_offset'], 'Unconfigured runtime guard')
             flags = Sym(refs=frozenset({nid}))
             nodes[nid]['kind'] = 'runtime-stack-check'
+        elif op in ('inc','dec'):
+            arg = n['args'][0]; value = read(arg,nid)
+            require(value.address is None, 'Pointer INC/DEC unsupported')
+            dependencies([value],nid)
+            # INC/DEC preserve CF; it is not equivalent to ADD/SUB for flags.
+            dependencies([flags],nid,'control')
+            number = None if value.number is None else (value.number+(1 if op=='inc' else -1)) & MASK32
+            new_flags = None if value.number is None or flags.number is None else ((flags_for('add' if op=='inc' else 'sub',value.number,1,32) & ~1) | (flags.number & 1))
+            flags = Sym(refs=frozenset({nid}),number=new_flags)
+            regs[arg['reg']] = Sym(value.origins,frozenset({nid}),number=number)
+        elif op in CMOVS:
+            a,b = n['args']; old = read(a,nid); source = read(b,nid)
+            # A memory-source CMOV reads memory even when the condition fails.
+            # Only the selected value contributes data to the destination.
+            require(flags.refs, 'CMOV without modeled flags')
+            taken = step.get('condition_taken')
+            if flags.number is not None:
+                predicted = branch_taken(CMOVS[op],flags.number)
+                require(taken is None or taken == predicted, 'CMOV condition contradicts constants')
+                taken = predicted
+            require(isinstance(taken,bool), 'CMOV needs a constant condition or validated dynamic flags')
+            value = source if taken else old
+            require(value.address is None, 'CMOV pointer truncation unsupported')
+            dependencies([value],nid); dependencies([flags],nid,'control')
+            regs[a['reg']] = Sym(value.origins,frozenset({nid}),number=None if value.number is None else value.number & MASK32)
+            nodes[nid]['condition_taken'] = taken
         elif op in ('mov', 'lea', 'xor', 'add', 'sub', 'test', 'cmp'):
             a, b = n['args']; width = a['width']
             if a.get('reg') == 'rsp' and a['kind'] == 'reg':
@@ -439,6 +478,13 @@ class Machine:
             value=self.read(args[0]); self.regs['rsp']-=8; self.write_mem(self.regs['rsp'],8,value)
         elif op=='pop':
             self.write(args[0],self.read_mem(self.regs['rsp'],8)); self.regs['rsp']+=8
+        elif op in ('inc','dec'):
+            arg=args[0];left=self.read(arg)
+            self.flags=(flags_for('add' if op=='inc' else 'sub',left,1,32) & ~1) | (self.flags & 1)
+            self.write(arg,left+(1 if op=='inc' else -1))
+        elif op in CMOVS:
+            a,b=args;source=self.read(b)
+            self.write(a,source if branch_taken(CMOVS[op],self.flags) else self.read(a))
         elif op in ('mov','lea','xor','add','sub','test','cmp'):
             a,b=args
             if op=='lea': result=self.address(b)

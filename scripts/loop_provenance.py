@@ -11,8 +11,8 @@ import struct
 
 import hybrid_provenance as common
 import interproc_provenance as collector
-from interproc_model import Machine, STACK_WORDS, decode, symbolic_path
-from hybrid_model import BRANCHES, require, validate_config
+from interproc_model import Machine, STACK_WORDS, CMOVS, decode, symbolic_path
+from hybrid_model import BRANCHES, branch_taken, require, validate_config
 from language_adapters import get_adapter
 from interproc_model import REGS
 
@@ -68,6 +68,8 @@ def infer(events, plans, config, runtime_bases):
                 step = dict(function=name, offset=off, context=[name], depth=1,
                             id='%s|%x@exec%d' % (name, off, i), occurrence=visits[off])
                 machine.check(event, step, runtime_bases)
+                if instructions[off]['op'] in CMOVS:
+                    step['condition_taken'] = branch_taken(CMOVS[instructions[off]['op']],machine.flags)
                 nxt = machine.step(instructions[off], runtime_bases)
                 expected = None if i+1 == len(rows) else runtime_bases[name]+rows[i+1]['offset']
                 require(nxt == expected, 'Executed CFG edge disagrees with events or incomplete return')
