@@ -314,7 +314,7 @@ def evaluate(inferred, oracle, stats, plans):
             'scope': 'fixture-specific source relation accuracy; not statement-edge recall or microservice accuracy'}
 
 
-def main(default_scenario=None, prefix='hybrid-provenance', build_fn=build, record_fn=record_bpf, infer_fn=infer, evaluate_fn=evaluate, required_tools=('gcc','objdump','nm')):
+def main(default_scenario=None, prefix='hybrid-provenance', build_fn=build, record_fn=record_bpf, infer_fn=infer, evaluate_fn=evaluate, required_tools=('gcc','objdump','nm'), oracle_loader=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action', choices=['build', 'run'])
     parser.add_argument('--scenario', type=Path, default=default_scenario or ROOT / 'scenarios/hybrid-provenance')
@@ -345,7 +345,7 @@ def main(default_scenario=None, prefix='hybrid-provenance', build_fn=build, reco
             inferred = infer_fn(events, plans, config, bases)
             save(out / 'inferred.json', inferred)
             # Evaluation alone opens the independent harness oracle.
-            oracle = [json.loads(l) for l in (out / 'program.stdout.jsonl').read_text().splitlines()]
+            oracle = oracle_loader(out) if oracle_loader else [json.loads(l) for l in (out / 'program.stdout.jsonl').read_text().splitlines()]
             evaluation = evaluate_fn(inferred, oracle, stats, plans)
             save(out / 'evaluation.json', evaluation)
             report.update(stage='complete', events=len(events), results=len(inferred['results']),

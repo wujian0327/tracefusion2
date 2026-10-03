@@ -4,7 +4,17 @@
 
 当前验证主线：**静态候选依赖分析 + 自动选择 eBPF 观测位置 + 动态来源重建**。此前 HTTP 抓包、trace/span 和调用链基线保留为前期实验设施。
 
-## 当前：Go 真实文件读取来源适配
+## 当前：JSON 标准输出来源验证
+
+新增 C 场景，连接真实文件读取、计算加工、显式 JSON 序列化规则与成功的 stdout `write`。业务输出为 `{"value":…}`，测试真值在范围外单独写入 stderr。覆盖常量覆盖、同字节 JSON 缓冲区换源、写入失败以及 0/UINT32_MAX。**本地 11 项新测试通过；新入口的真实 BCC/eBPF 采集待主机验证。**
+
+```bash
+sudo /usr/bin/python3 scripts/json_output_provenance.py run
+```
+
+返回 `artifacts/json-output-provenance-*.zip`。场景包含 25 次计算、42 次读取、24 次格式化、23 次写入尝试和 22 条成功 JSON 输出。序列化使用明确的 uint32 规则，尚未逐指令分析 libc 或支持任意 JSON。旧 C/Go 读取场景不用重跑。详见 [JSON 输出模型、真值与范围](docs/json-output-provenance.md)。
+
+## Go 真实文件读取来源适配
 
 使用 `syscall.Pread`，复用 C 的读取实例、字节版本和来源绑定核心，保持 18 次计算、34 次读取尝试的同一组场景。新增 syscall 边界的实际 goroutine 身份采集，以及 Go 工作负载入口/RET 指令挂接。**2026-10-03 真实 Go 1.25.4 / BCC 0.29.1 采集通过：400 条事件、18 次计算、34 次读取，字段与精确读取来源均 TP=18/FP=0/FN=0；原始事件完整重放一致。**报告丢失、提交、状态和内存读取错误均为 0，见 [Go 读取主机核验](docs/go-read-provenance-host-20261003.json)。
 
@@ -220,7 +230,8 @@ python3 -m unittest discover -s tests -v
 
 ## 文档与验证状态
 
-- [当前 Go 真实文件读取来源适配](docs/go-read-provenance.md)
+- [当前 JSON 标准输出来源验证](docs/json-output-provenance.md)
+- [已通过主机验证的 Go 真实文件读取来源](docs/go-read-provenance.md)
 - [已通过主机验证的 C 文件读取来源](docs/read-provenance.md)
 - [已通过主机验证的 C / Go 循环与函数调用](docs/loop-calls-provenance.md)
 - [已通过主机验证的跨函数来源传播](docs/interproc-provenance.md)

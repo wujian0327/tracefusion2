@@ -1,0 +1,56 @@
+{
+  "status": "local_validation_passed_host_capture_pending",
+  "kernel_ebpf_tested": false,
+  "validation": "Native C executable emits actual JSON stdout and separate stderr oracle; real Python pread histories and Unicorn execute its computation instructions; JSON test encoding uses Python json independently of inference",
+  "counts": {
+    "computations": 25,
+    "read_attempts": 42,
+    "formats": 24,
+    "write_attempts": 23,
+    "emitted_fields": 22,
+    "synthetic_events": 500,
+    "synthetic_event_kinds": {
+      "3": 1,
+      "1": 42,
+      "2": 42,
+      "0": 320,
+      "6": 24,
+      "7": 24,
+      "8": 23,
+      "9": 23,
+      "4": 1
+    }
+  },
+  "source_relations": {
+    "tp": 21,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  "actual_stdout_matches": true,
+  "new_tests": {
+    "total": 11,
+    "passed": 11
+  },
+  "full_suite": {
+    "total": 143,
+    "passed": 135,
+    "skipped": 5,
+    "errors": 3,
+    "skip_reason": "No local Go compiler",
+    "error_reason": "Existing test_trace.HttpIntegrationTests blocked by socket permissions"
+  },
+  "generated_callback_test": "Generated C boundary callbacks executed with native C++ stubs for maps/helpers and BCC-compatible ordinary tracepoint macros; not verifier evidence",
+  "old_read_bpf_unchanged": {
+    "read-host-review-20261003": true,
+    "go-read-host-retry-review-20261003": true
+  },
+  "limitations": [
+    "Explicit json-u32-value-v1 serializer summary; snprintf internals not replayed",
+    "Observed roots and formatter must be exclusive writers with immutable handoffs",
+    "Partial writes/truncation/unknown fds rejected; failed write creates no emitted source relation",
+    "C runner only; Go serialization and general JSON strings/nested objects not implemented",
+    "No network delivery or cross-service attribution claim"
+  ]
+}

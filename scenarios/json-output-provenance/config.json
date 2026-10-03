@@ -1,0 +1,34 @@
+{
+  "abi": "linux-x86_64-sysv",
+  "functions": [
+    "select_value",
+    "merge_values",
+    "fallback_value",
+    "copy_left"
+  ],
+  "input_fields": [
+    "left",
+    "right",
+    "noise"
+  ],
+  "output_fields": [
+    "value",
+    "audit"
+  ],
+  "sink_field": "value",
+  "sensitive_fields": [
+    "left"
+  ],
+  "read_boundary": {
+    "api": "pread64",
+    "scope_function": "run_workload",
+    "maximum_bytes": 32
+  },
+  "scope": "C single-thread pread -> fixed u32 computation -> explicit JSON serializer summary -> stdout write; immutable handoff and exclusive buffer writers, no generic libc/JSON analysis",
+  "json_output": {
+    "serializer": "format_json",
+    "model": "json-u32-value-v1",
+    "capacity": 32,
+    "fd": 1
+  }
+}
