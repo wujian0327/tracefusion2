@@ -4,11 +4,13 @@
 
 当前验证主线：**静态候选依赖分析 + 自动选择 eBPF 观测位置 + 动态来源重建**。此前 HTTP 抓包、trace/span 和调用链基线保留为前期实验设施。
 
-## 当前：Gin 请求内线程迁移（待主机采集验证）
+## 已验证：Gin 请求内线程迁移
 
 新增不固定请求线程的 Gin 场景，采集状态通过实际 G 地址与请求实例接续；同一线程可先后承载多个请求，原始线程号始终保留。测试主动诱发读取之间、计算到 JSON 之间的迁移，要求 28 个请求都提供实际换线程证据，不能只凭响应正确判定通过。
 
-**本地编译、真实 HTTP、迁移重建与原生采集器模拟已通过；新的 BPF 内核采集尚待验证。**6 个旧主机包共 4270 条事件完整重放一致。调度夹具使用 `GOMAXPROCS(1)` 和占用旧线程的辅助 goroutine；请求自身不调用 `LockOSThread`。不据此声称覆盖一般调度、子 goroutine 传播或性能。
+**2026-10-03 固定版本场景的真实 eBPF 迁移采集通过：892 条事件、28 个请求、36 次计算、56 次读取，输出来源关系 TP=28/FP=0/FN=0。**28 个请求均观察到读取之间、计算到 JSON 之间的线程变化；原始事件重建与评估完整重放一致，全部客户端正文匹配，报告丢失、提交、状态及读取错误均为 0。见 [主机核验](docs/gin-migration-host-20261003.json)。
+
+调度夹具使用 `GOMAXPROCS(1)` 和占用旧线程的辅助 goroutine；请求自身不调用 `LockOSThread`。本包没有出现单次计算函数执行中途迁移，不据此声称覆盖该时机、一般调度、子 goroutine 传播或性能。此前 6 个旧主机包共 4270 条事件完整重放一致。
 
 ```bash
 git pull --ff-only origin main
@@ -16,7 +18,7 @@ sudo env "PATH=$PATH" GOPROXY=https://goproxy.cn,direct \
   /usr/bin/python3 scripts/gin_migration_provenance.py run
 ```
 
-返回 `artifacts/gin-migration-provenance-*.zip`；旧入口无需重跑。详见 [迁移身份、覆盖门槛与边界](docs/gin-migration-provenance.md)。
+本轮已通过，无需重跑；以上命令用于复现，输出 `artifacts/gin-migration-provenance-*.zip`。详见 [迁移身份、覆盖门槛与边界](docs/gin-migration-provenance.md)。
 
 ## 已验证：Gin 并发请求状态隔离
 

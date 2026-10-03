@@ -1,0 +1,88 @@
+{
+  "status": "migration_host_capture_verified",
+  "kernel_ebpf_tested": true,
+  "events": 892,
+  "requests": 28,
+  "compute_calls": 36,
+  "read_operations": 56,
+  "event_kind_counts": {
+    "3": 28,
+    "1": 56,
+    "2": 56,
+    "0": 556,
+    "6": 28,
+    "7": 28,
+    "8": 28,
+    "10": 28,
+    "11": 28,
+    "9": 28,
+    "4": 28
+  },
+  "nonzero_error_events": {
+    "source_error": 0,
+    "destination_error": 0,
+    "stack_error": 0,
+    "runtime_guard_error": 0,
+    "read_error": 0,
+    "error_type": 0
+  },
+  "source_relations": {
+    "tp": 28,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  "concurrency": {
+    "max_active_scopes": 4,
+    "request_switches": 90
+  },
+  "migration": {
+    "migrated_requests": 28,
+    "observed_thread_transitions": 105,
+    "requests_with_different_read_threads": 28,
+    "requests_with_compute_to_render_migration": 28,
+    "compute_invocations_with_in_call_migration": 0
+  },
+  "transition_note": "Thread transitions count TID changes between adjacent observations of one request, not every scheduling event. request_switches counts different requests in adjacent globally numbered observations.",
+  "verification": {
+    "binary_and_source_hashes": true,
+    "fixture_sources_match_repository": true,
+    "framework_hashes_match_local_pinned_build": true,
+    "executable_disassembly_verified": true,
+    "probe_plan_reconstructed": true,
+    "boundary_plan_reconstructed": true,
+    "runtime_bases_reconstructed": true,
+    "collector_source_matches": true,
+    "attachments_match": true,
+    "complete_inference_replay_equal": true,
+    "complete_evaluation_replay_equal": true,
+    "all_client_bodies_match": true,
+    "all_request_local_sequences_contiguous": true,
+    "every_request_has_single_g_and_multiple_tids": true,
+    "graph_edges_have_endpoints": true,
+    "request_node_ids_unique": true,
+    "read_and_call_counters_restart_per_request": true,
+    "same_value_overwrite_and_constant_overwrite_verified": true,
+    "independent_phase_tid_bijection": true
+  },
+  "limits": [
+    "four overlapping requests; GOMAXPROCS=1 and auxiliary locked goroutines induce migration; not unrestricted scheduler or performance validation",
+    "migration observed between reads and from computation to JSON; no in-call migration observed in this host capture",
+    "fixed uint32 JSON summary; no general JSON or database coverage",
+    "evaluation-only retained-input-address mapping joins client tickets",
+    "no child goroutine propagation, shared mutable objects or business stack relocation",
+    "writer acceptance plus independent client receipt; no kernel socket lineage"
+  ],
+  "capture_summary": {
+    "lost_events": 0,
+    "submit_errors": 0,
+    "state_errors": 0,
+    "attempted_events": 892,
+    "raw_probe_hits": 892,
+    "process_returncode": 0,
+    "received_events": 892
+  },
+  "batches_verified": 7,
+  "published_scope": "Aggregate validation only. No host or runtime identifiers, addresses, mappings, artifact filenames, hashes, or platform details are published."
+}
