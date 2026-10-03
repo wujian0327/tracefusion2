@@ -1,0 +1,132 @@
+{
+  "bundle": "json-output-provenance-20261003-153903-01b5.zip",
+  "bundle_sha256": "6fc12c270ff9e7ab1c50d78624395dcfb88e38895c068c6de320f9be78dc6359",
+  "matching_code_commit": "5d6c41b46d512dbe8b7eed9b44689a63b3bf1c53",
+  "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "binary_sha256": "57f115a72061a4ffd1f9e83abc1066460d1472236f6dc82508a280525954a42e",
+  "host_result": {
+    "status": "ebpf_checks_passed",
+    "action": "run",
+    "stage": "complete",
+    "kernel_ebpf_tested": true,
+    "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "events": 500,
+    "results": 25
+  },
+  "capture": {
+    "backend": "ebpf",
+    "lost_events": 0,
+    "submit_errors": 0,
+    "state_errors": 0,
+    "attempted_events": 500,
+    "raw_probe_hits": 500,
+    "process_returncode": 0,
+    "bcc_version": "0.29.1",
+    "perf_buffer_pages_per_cpu": 1024,
+    "perf_buffer_bytes_per_cpu": 4194304,
+    "received_events": 500,
+    "observed_kernel_tgids": [
+      18793
+    ],
+    "submit_error_errnos": {}
+  },
+  "checks": {
+    "binary_hash": true,
+    "source_hashes": true,
+    "fixture_matches_repository": true,
+    "plan_regenerated_from_elf": true,
+    "generated_bpf_identical": true,
+    "runtime_bases_match_maps": true,
+    "unique_instruction_attachments": true,
+    "json_boundary_attachments": true,
+    "file_snapshot_consistent": true,
+    "stdout_snapshot_names_capture_artifact": true,
+    "oracle_matches_separate_stderr": true,
+    "full_raw_inference_replay": true,
+    "full_evaluation_replay": true,
+    "all_capture_checks_passed": true,
+    "all_events_accounted": true,
+    "memory_reads_succeeded": true,
+    "single_execution_identity": true,
+    "read_outcomes": true,
+    "stdout_bytes_match_observed_writes": true,
+    "stdout_only_business_json": true,
+    "constant_overwrite_removes_source": true,
+    "equal_json_bytes_different_sources": true,
+    "equal_buffer_reuse_selects_latest_version": true,
+    "failed_write_not_emitted": true,
+    "zero_and_unsigned_max": true,
+    "merge_retains_two_read_sources": true,
+    "each_output_has_summary_and_write_edges": true,
+    "number_byte_ranges_match": true,
+    "host_stdout_and_oracle_match_independent_native_execution": true,
+    "independent_actual_elf_execution": true
+  },
+  "observations": {
+    "event_kinds": {
+      "3": 1,
+      "1": 42,
+      "2": 42,
+      "0": 320,
+      "6": 24,
+      "7": 24,
+      "8": 23,
+      "9": 23,
+      "4": 1
+    },
+    "instruction_probe_locations": 42,
+    "boundary_probes": 4,
+    "computation_calls": 25,
+    "read_attempts": 42,
+    "formats": 24,
+    "write_attempts": 23,
+    "failed_writes": 1,
+    "emitted_json_fields": 22,
+    "stdout_bytes": 361
+  },
+  "evaluation": {
+    "passed": true,
+    "capture_clean": true,
+    "dynamic_source_relations": {
+      "tp": 24,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "resolved_calls": 25,
+    "expected_calls": 25,
+    "inference_issues": 0,
+    "unexpected_calls": 0,
+    "scope": "Fixture read/compute sources and emitted JSON $.value origins, with explicit serializer summary; not generic JSON or full graph-edge accuracy",
+    "external_source_relations": {
+      "tp": 24,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "read_operations": 42,
+    "expected_read_operations": 42,
+    "output_source_relations": {
+      "tp": 21,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "formats": 24,
+    "expected_formats": 24,
+    "writes": 23,
+    "expected_writes": 23,
+    "emitted_json_fields": 22,
+    "stdout_bytes_match": true
+  },
+  "independent_execution": {
+    "kernel_ebpf": false,
+    "input": "Uploaded C ELF roots executed by Unicorn with independent Python real pread and JSON encoding; host oracle/stdout compared with native fixture execution",
+    "events": 500,
+    "passed": true
+  },
+  "scope": "Fixed key value and uint32 JSON summary; single thread, immutable handoffs and exclusive observed result/JSON writers. stdout fd identity checked against captured metadata, not restatted remotely. No dynamic key, generic serializer, snprintf instruction history, partial-write assembly, Go JSON, network delivery or cross-service claim."
+}

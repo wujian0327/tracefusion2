@@ -6,7 +6,7 @@
 
 ## 当前：JSON 标准输出来源验证
 
-新增 C 场景，连接真实文件读取、计算加工、显式 JSON 序列化规则与成功的 stdout `write`。业务输出为 `{"value":…}`，测试真值在范围外单独写入 stderr。覆盖常量覆盖、同字节 JSON 缓冲区换源、写入失败以及 0/UINT32_MAX。**本地 11 项新测试通过；新入口的真实 BCC/eBPF 采集待主机验证。**
+新增 C 场景，连接真实文件读取、计算加工、显式 JSON 序列化规则与成功的 stdout `write`。业务输出为 `{"value":…}`，测试真值在范围外单独写入 stderr。覆盖常量覆盖、同字节 JSON 缓冲区换源、写入失败以及 0/UINT32_MAX。**2026-10-03 修正版真实 BCC/eBPF 采集通过：500 条事件，22 条实际 JSON 输出，输出来源关系 TP=21/FP=0/FN=0。**原始事件完整重放一致，361 字节 stdout 与成功写入记录及独立预期完全相同；报告丢失、提交、状态与内存读取错误均为 0。见 [主机核验](docs/json-output-host-20261003.json)。
 
 ```bash
 sudo /usr/bin/python3 scripts/json_output_provenance.py run
