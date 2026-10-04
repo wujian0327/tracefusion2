@@ -29,11 +29,12 @@ VARIANTS=('assign','partial','overwrite')
 SCENARIO=ROOT/'scenarios/gin-byte-provenance'
 
 
-def build(out,variant):
+def build(out,variant,*,scenario=SCENARIO,planner=plan_binary,extra_sources=()):
     out.mkdir(parents=True);src=out/'sources';src.mkdir()
     for name in ('go.mod','go.sum'):
         shutil.copyfile(ROOT/'scenarios/gin-default-provenance'/name,src/name)
-    shutil.copyfile(SCENARIO/'main.go',src/'main.go')
+    shutil.copyfile(scenario/'main.go',src/'main.go')
+    for name in extra_sources:shutil.copyfile(scenario/name,src/name)
     shutil.copyfile(ROOT/'scenarios/go-byte-provenance'/(variant+'.go'),src/'operations.go')
     go=os.environ.get('TRACEFUSION_GO') or shutil.which('go');require(go,'Go not visible')
     env=dict(os.environ,GOOS='linux',GOARCH='amd64',CGO_ENABLED='0',GO111MODULE='on',
@@ -51,7 +52,7 @@ def build(out,variant):
     save(out/'identity.json',dict(binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest(),go=version,gin=gin['Version'],
         source_sha256={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in src.iterdir()},
         framework_sha256={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in files}))
-    plan=plan_binary(binary,go,env,out);save(out/'plan.json',plan)
+    plan=planner(binary,go,env,out);save(out/'plan.json',plan)
     # Exercise the actual planner -> transport interface before launching a
     # target or importing BCC. Placeholder PID/namespace: generation only.
     preview=gin_byte_capture.source(plan,1,SimpleNamespace(st_dev=0,st_ino=0))

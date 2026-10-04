@@ -78,7 +78,7 @@ def decode_record(data,size,sites):
     return decode(raw,sites[raw.site])
 
 
-def collect(binary,plan,input_bytes,out,transport=None,driver=None):
+def collect(binary,plan,input_bytes,out,transport=None,driver=None,timeout_seconds=30):
     # Alternate event layouts can reuse process lifecycle, namespace filtering,
     # perf draining and loss accounting without changing string experiments.
     make_source=source if transport is None else transport.source
@@ -115,7 +115,7 @@ def collect(binary,plan,input_bytes,out,transport=None,driver=None):
             from concurrent.futures import ThreadPoolExecutor
             pool=ThreadPoolExecutor(max_workers=1)
             driven=pool.submit(driver,out)
-        deadline=time.monotonic()+30
+        deadline=time.monotonic()+timeout_seconds
         while proc.poll() is None:
             bpf.perf_buffer_poll(timeout=100)
             if driven is not None and driven.done():driven.result()
