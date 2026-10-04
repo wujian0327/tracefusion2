@@ -78,7 +78,13 @@ def decode_record(data,size,sites):
     return decode(raw,sites[raw.site])
 
 
-def collect(binary,plan,input_bytes,out):
+def collect(binary,plan,input_bytes,out,transport=None):
+    # Alternate event layouts can reuse process lifecycle, namespace filtering,
+    # perf draining and loss accounting without changing string experiments.
+    make_source=source if transport is None else transport.source
+    probes_for=physical_probes if transport is None else transport.physical_probes
+    decode_event=decode_record if transport is None else transport.decode_record
+    record_type=Raw if transport is None else transport.Raw
     out.mkdir()
     errors=[];records=[];lost=[0];stats={};sizes={};proc=None;bpf=None
     stdout=(out/'target.stdout').open('wb');stderr=(out/'target.stderr').open('wb')
@@ -90,17 +96,17 @@ def collect(binary,plan,input_bytes,out):
         proc=subprocess.Popen([str(binary)],stdin=subprocess.PIPE,stdout=stdout,stderr=stderr)
         ns=Path(f'/proc/{proc.pid}/ns/pid').stat()
         metadata.update(target_pid=proc.pid,namespace={'dev':ns.st_dev,'ino':ns.st_ino},pinned_thread=False)
-        code=source(plan,proc.pid,ns);(out/'collector.c').write_text(code)
+        code=make_source(plan,proc.pid,ns);(out/'collector.c').write_text(code)
         bpf=bcc.BPF(text=code)
-        for probe in physical_probes(plan):
+        for probe in probes_for(plan):
             # ET_EXEC: BCC addr is the virtual address, not the ELF file offset.
             bpf.attach_uprobe(name=str(binary),addr=probe['address'],fn_name=probe['name'],pid=-1)
-        metadata['physical_probes']=len(physical_probes(plan))
+        metadata['physical_probes']=len(probes_for(plan))
         sites={s['id']:s for s in plan['sites']}
         def callback(cpu,data,size):
             sizes[str(size)]=sizes.get(str(size),0)+1
             try:
-                e=decode_record(data,size,sites);e['sequence']=len(records);records.append(e)
+                e=decode_event(data,size,sites);e['sequence']=len(records);records.append(e)
             except Exception as exc:errors.append('decode: '+repr(exc))
         def lost_callback(cpu,n):lost[0]+=n
         bpf['events'].open_perf_buffer(callback,page_cnt=64,lost_cb=lost_callback)
@@ -127,7 +133,7 @@ def collect(binary,plan,input_bytes,out):
         stdout.close();stderr.close()
     doc={'backend':'ebpf-bcc','binary_sha256':plan['binary_sha256'],'capture_errors':errors,
          'returncode':proc.returncode if proc else None,'stats':stats,'events':records,
-         'diagnostics':dict(metadata,sample_sizes=sizes,structure_size=ct.sizeof(Raw))}
+         'diagnostics':dict(metadata,sample_sizes=sizes,structure_size=ct.sizeof(record_type))}
     (out/'events.json').write_text(json.dumps(doc,indent=2)+'\n')
     print(json.dumps({'events':len(records),'errors':errors,'stats':stats}),flush=True)
     return doc

@@ -1,0 +1,190 @@
+"""Language-neutral bounded byte instruction replay and dynamic dependency graph.
+
+ABI normalization belongs to go_byte_adapter. Reuse the existing integer core's
+symbolic value, condition-code calculation and branch rules, and shared slicing.
+"""
+import json
+from interproc_model import Sym, flags_for
+from hybrid_model import branch_taken, BRANCHES, require
+from lineage_graph import backward_nodes
+
+MASK64=(1<<64)-1
+
+
+def snapshot(value):
+    data=bytes.fromhex(value['hex']);ptr=value['pointer']
+    require(ptr>0 and value['key']==f'{ptr:x}:{len(data)}','Snapshot identity mismatch')
+    return ptr,data
+
+
+class ByteMachine:
+    def __init__(self,plan,entry,source,destination,nodes,edges):
+        self.plan=plan;self.nodes=nodes;self.edges=edges;self.source=source
+        self.src,self.input_bytes=source['pointer'],source['bytes']
+        self.dst,self.initial_bytes=destination
+        self.regs={};self.memory={};self.written=set();self.flags=None;self.steps=[]
+        self.pc=plan['entry'];self.halted=False
+        self.instructions={n['address']:n for n in plan['instructions']}
+        for reg,value in ((plan['abi']['dst_register'],self.dst),(plan['abi']['src_register'],self.src)):
+            nid='entry:'+reg;nodes[nid]={'id':nid,'kind':'abi-address','value':value}
+            self.regs[reg]=Sym(number=value,refs=frozenset({nid}))
+        for i,b in enumerate(self.input_bytes):
+            nid=source['id']+'/byte:'+str(i)
+            nodes[nid]={'id':nid,'kind':'source-byte','source':source['id'],'byte':i,'value':b}
+            edges.append({'source':source['id'],'target':nid,'kind':'data'})
+            self.memory[self.src+i]=Sym(number=b,refs=frozenset({nid}),origins=frozenset({(source['id'],i)}))
+        for i,b in enumerate(self.initial_bytes):
+            nid='initial-output:'+str(i);nodes[nid]={'id':nid,'kind':'initial-output','byte':i,'value':b}
+            self.memory[self.dst+i]=Sym(number=b,refs=frozenset({nid}))
+        self.verify(entry)
+
+    def verify(self,event):
+        for reg,value in self.regs.items():
+            require(event['registers'][reg]==value.number,'Register replay mismatch: '+reg)
+
+    def reg(self,name):
+        require(name in self.regs,'Read of unmodeled initial register: '+name)
+        return self.regs[name]
+
+    def address(self,arg):
+        base=self.reg(arg['base']);index=self.reg(arg['index']) if arg.get('index') else Sym(number=0)
+        return Sym(number=(base.number+index.number*arg['scale']+arg['offset'])&MASK64,
+                   refs=base.refs|index.refs,origins=base.origins|index.origins)
+
+    def read(self,arg,event=None):
+        if arg['kind']=='imm':return Sym(number=arg['value']&((1<<arg['width'])-1))
+        if arg['kind']=='reg':
+            a=self.reg(arg['reg']);return Sym(number=a.number&((1<<arg['width'])-1),refs=a.refs,origins=a.origins)
+        address=self.address(arg).number
+        require(arg['width']==8 and address in self.memory,'Memory read outside declared byte regions')
+        value=self.memory[address]
+        if event is not None:
+            ptr,data=snapshot(event['values']['load'])
+            require(ptr==address and data==bytes([value.number]),'Observed byte load contradicts memory replay')
+        return value
+
+    def link(self,values,nid,kind='data'):
+        for parent in sorted(set().union(*(v.refs for v in values))):
+            self.edges.append({'source':parent,'target':nid,'kind':kind})
+
+    def result(self,nid,value,inputs):
+        self.link(inputs,nid)
+        return Sym(number=value,refs=frozenset({nid}),origins=frozenset().union(*(v.origins for v in inputs)))
+
+    def write_register(self,arg,value):
+        width=arg['width'];number=value.number&((1<<width)-1)
+        require(width in (32,64),'Partial register writes unsupported')
+        self.regs[arg['reg']]=Sym(number=number,refs=value.refs,origins=value.origins)
+
+    def step(self,event):
+        require(not self.halted and len(self.steps)<self.plan['max_steps'],'Execution exceeds bound or continues after RET')
+        n=self.instructions[self.pc]
+        require(event['site']==n['site'],'Observed instruction order disagrees with CFG replay')
+        self.verify(event)
+        op=n['op'];args=n['args'];nid='step:'+str(len(self.steps));next_pc=n['next']
+        node={'id':nid,'kind':'instruction','address':n['address'],'asm':n['asm'],'step':len(self.steps)}
+        self.nodes[nid]=node;self.steps.append(dict(node,event_sequence=event['sequence']))
+        if op=='movzx':
+            value=self.read(args[0],event);node['read_address']=self.address(args[0]).number
+            self.link([self.address(args[0])],nid,'address')
+            self.write_register(args[1],self.result(nid,value.number,[value]))
+        elif op=='mov':
+            value=self.read(args[0]);value=self.result(nid,value.number,[value])
+            if args[1]['kind']=='reg':self.write_register(args[1],value)
+            else:
+                address=self.address(args[1]);self.link([address],nid,'address')
+                require(self.dst<=address.number<self.dst+4,'Store outside output region')
+                self.memory[address.number]=Sym(number=value.number&255,refs=value.refs,origins=value.origins)
+                self.written.add(address.number);node['write_address']=address.number
+        elif op=='lea':
+            value=self.address(args[0]);self.write_register(args[1],self.result(nid,value.number,[value]))
+        elif op in ('xor','add','sub'):
+            width=n['width'];mask=(1<<width)-1
+            if op=='xor' and args[0]==args[1]:
+                value=0;inputs=[];left=right=0
+            else:
+                right=self.read(args[0]);left=self.read(args[1]);inputs=[left,right]
+                value=((left.number^right.number) if op=='xor' else (left.number+right.number) if op=='add' else (left.number-right.number))&mask
+                left,right=left.number,right.number
+            self.flags=flags_for(op,left,right,width)
+            self.write_register(args[1],self.result(nid,value,inputs))
+        elif op=='inc':
+            old=self.read(args[0]);width=n['width'];value=(old.number+1)&((1<<width)-1)
+            # INC preserves CF. JL uses SF/OF, but preserve the complete modeled flags.
+            old_carry=(self.flags or 0)&1
+            self.flags=(flags_for('add',old.number,1,width)&~1)|old_carry
+            self.write_register(args[0],self.result(nid,value,[old]))
+        elif op in ('cmp','test'):
+            a=self.read(args[0]);b=self.read(args[1],event if op=='test' else None)
+            self.flags=flags_for('cmp' if op=='cmp' else 'test',a.number,b.number,n['width'])
+            self.link([a,b],nid,'control')
+        elif op in BRANCHES:
+            require(self.flags is not None,'Branch uses unmodeled flags')
+            if branch_taken(op,self.flags):next_pc=n['target']
+        elif op=='jmp':next_pc=n['target']
+        elif op=='ret':self.halted=True
+        elif op!='nop':raise ValueError('Unimplemented IR instruction: '+op)
+        self.pc=next_pc
+        self.steps[-1].update(node)
+
+
+def infer(document,plan):
+    try:
+        require(not document.get('capture_errors') and document.get('returncode')==0,'Capture failed')
+        require(document['binary_sha256']==plan['binary_sha256'],'Binary hash mismatch')
+        events=sorted(document['events'],key=lambda e:(e['timestamp'],e['sequence']))
+        require(events and len({e['sequence'] for e in events})==len(events),'Empty or duplicate events')
+        stats=document['stats']
+        require(stats['submitted']==len(events) and not any(stats[k] for k in ('lost','read_errors','submit_errors')),'Incomplete transport')
+        require(len({(e['pid'],e['g']) for e in events})==1 and all(e['g'] for e in events),'Requires one process/goroutine')
+        specs={s['id']:s for s in plan['sites']}
+        for e in events:
+            s=specs[e['site']];require((e['op'],e['phase'])==(s['op'],s['phase']),'Site contract mismatch')
+        root=[e for e in events if e['op']!='instruction']
+        require([e['site'] for e in root]==plan['root_order'],'Missing or extra boundary events')
+        require(events[:7]==root[:7] and events[-3:]==root[-3:],'Instruction evidence outside transform interval')
+        execution=events[7:-3]
+        require(execution and all(e['op']=='instruction' for e in execution),'Missing leaf execution')
+        nodes={};edges=[];reads=[]
+        for i in range(3):
+            before,after=root[2*i:2*i+2];sid='source:'+str(i+1)
+            pointer,data=snapshot(after['values']['value']);_,path=snapshot(before['values']['path'])
+            require(len(data)==4,'Source must return four bytes')
+            require(all(pointer+4<=s['pointer'] or s['pointer']+4<=pointer for s in reads),'Source regions overlap')
+            reads.append({'id':sid,'pointer':pointer,'bytes':data})
+            nodes[sid]={'id':sid,'kind':'source','path':path.decode(),'length':4}
+        work=root[6];src,src_bytes=snapshot(work['values']['src']);dst,dst_bytes=snapshot(work['values']['dst'])
+        require(len(src_bytes)==len(dst_bytes)==4,'Work ABI region length mismatch')
+        candidates=[s for s in reads if s['pointer']==src and s['bytes']==src_bytes]
+        require(len(candidates)==1,'Work input has no consistent observed read definition')
+        require(all(dst+4<=s['pointer'] or s['pointer']+4<=dst for s in reads),'Output overlaps source')
+        require(work['registers'][plan['abi']['dst_register']]==dst and work['registers'][plan['abi']['src_register']]==src,'Work ABI registers disagree')
+        machine=ByteMachine(plan,execution[0],candidates[0],(dst,dst_bytes),nodes,edges)
+        for e in execution:machine.step(e)
+        require(machine.halted and machine.written==set(range(dst,dst+4)),'Missing return or incompletely defined output')
+        machine.verify(root[7])
+        pointer,data=snapshot(root[8]['values']['value'])
+        actual=bytes(machine.memory[dst+i].number for i in range(4))
+        require(pointer==dst and data==actual,'JSON input disagrees with replayed stores')
+        _,encoded=snapshot(root[9]['values']['json']);output=json.loads(encoded)
+        require(isinstance(output,dict) and set(output)=={'result'} and isinstance(output['result'],str)
+                and output['result'].encode()==actual,'JSON value contradicts observed byte output')
+        byte_sources=[]
+        for i in range(4):
+            value=machine.memory[dst+i];nid='output-byte:'+str(i)
+            nodes[nid]={'id':nid,'kind':'output-byte','byte':i,'value':value.number}
+            machine.link([value],nid)
+            byte_sources.append({'output_byte':i,'origins':[{'source':s,'byte':j} for s,j in sorted(value.origins)]})
+            edges.append({'source':nid,'target':'json:1','kind':'data'})
+        nodes['json:1']={'id':'json:1','kind':'json-summary'}
+        nodes['output:result']={'id':'output:result','kind':'output-field','value':output['result']}
+        edges.append({'source':'json:1','target':'output:result','kind':'data'})
+        keep=backward_nodes(edges,['output:result'],{'data'})
+        origins=sorted(n for n in keep if nodes[n]['kind']=='source')
+        return {'status':'resolved_under_instruction_model','sources':origins,
+                'noncontributing_reads':[s['id'] for s in reads if s['id'] not in keep],
+                'output':output,'byte_sources':byte_sources,'instruction_steps':machine.steps,
+                'graph':{'nodes':[nodes[n] for n in sorted(keep)],'edges':[e for e in edges if e['kind']=='data' and e['source'] in keep and e['target'] in keep]},
+                'scope':'Leaf instructions derive byte dependencies; configured read/JSON boundaries; explicit data only; four-byte separate buffers; no transform summary'}
+    except (ValueError,KeyError,TypeError,UnicodeError) as exc:
+        return {'status':'unknown','reason':str(exc)}
