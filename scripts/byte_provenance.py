@@ -18,21 +18,25 @@ def snapshot(value):
 
 
 class ByteMachine:
-    def __init__(self,plan,entry,source,destination,nodes,edges):
+    def __init__(self,plan,entry,source,destination,nodes,edges,auxiliary=None):
         self.plan=plan;self.nodes=nodes;self.edges=edges;self.source=source
         self.src,self.input_bytes=source['pointer'],source['bytes']
         self.dst,self.initial_bytes=destination
         self.regs={};self.memory={};self.written=set();self.flags=None;self.steps=[]
+        self.write_version=0;self.source_versions=[];self.write_sources=set()
         self.pc=plan['entry'];self.halted=False
         self.instructions={n['address']:n for n in plan['instructions']}
-        for reg,value in ((plan['abi']['dst_register'],self.dst),(plan['abi']['src_register'],self.src)):
+        bindings=[(plan['abi']['dst_register'],self.dst),(plan['abi']['src_register'],self.src)]
+        if auxiliary:bindings.append((plan['abi']['aux_register'],auxiliary['pointer']))
+        for reg,value in bindings:
             nid='entry:'+reg;nodes[nid]={'id':nid,'kind':'abi-address','value':value}
             self.regs[reg]=Sym(number=value,refs=frozenset({nid}))
-        for i,b in enumerate(self.input_bytes):
-            nid=source['id']+'/byte:'+str(i)
-            nodes[nid]={'id':nid,'kind':'source-byte','source':source['id'],'byte':i,'value':b}
-            edges.append({'source':source['id'],'target':nid,'kind':'data'})
-            self.memory[self.src+i]=Sym(number=b,refs=frozenset({nid}),origins=frozenset({(source['id'],i)}))
+        for definition in [source]+([auxiliary] if auxiliary else []):
+            for i,b in enumerate(definition['bytes']):
+                nid=definition['id']+'/byte:'+str(i)
+                nodes[nid]={'id':nid,'kind':'source-byte','source':definition['id'],'byte':i,'value':b}
+                edges.append({'source':definition['id'],'target':nid,'kind':'data'})
+                self.memory[definition['pointer']+i]=Sym(number=b,refs=frozenset({nid}),origins=frozenset({(definition['id'],i)}))
         for i,b in enumerate(self.initial_bytes):
             nid='initial-output:'+str(i);nodes[nid]={'id':nid,'kind':'initial-output','byte':i,'value':b}
             self.memory[self.dst+i]=Sym(number=b,refs=frozenset({nid}))
@@ -96,6 +100,15 @@ class ByteMachine:
                 require(self.dst<=address.number<self.dst+4,'Store outside output region')
                 self.memory[address.number]=Sym(number=value.number&255,refs=value.refs,origins=value.origins)
                 self.written.add(address.number);node['write_address']=address.number
+                self.write_version+=1;self.write_sources.update(s for s,_ in value.origins)
+                # Report object-level source changes. Cells retain last-writer
+                # definitions internally so partial overwrites do not erase
+                # the origin of portions that have not yet been replaced.
+                if len(self.written)==4:
+                    current=sorted({s for i in range(4) for s,_ in self.memory[self.dst+i].origins})
+                    if not self.source_versions or self.source_versions[-1]['sources']!=current:
+                        self.source_versions.append({'write_version':self.write_version,'after_step':node['step'],
+                            'sources':current,'output_hex':bytes(self.memory[self.dst+i].number for i in range(4)).hex()})
         elif op=='lea':
             value=self.address(args[0]);self.write_register(args[1],self.result(nid,value.number,[value]))
         elif op in ('xor','add','sub'):
@@ -159,7 +172,13 @@ def infer(document,plan):
         require(len(candidates)==1,'Work input has no consistent observed read definition')
         require(all(dst+4<=s['pointer'] or s['pointer']+4<=dst for s in reads),'Output overlaps source')
         require(work['registers'][plan['abi']['dst_register']]==dst and work['registers'][plan['abi']['src_register']]==src,'Work ABI registers disagree')
-        machine=ByteMachine(plan,execution[0],candidates[0],(dst,dst_bytes),nodes,edges)
+        auxiliary=None
+        if 'aux_register' in plan['abi']:
+            aux_pointer=work['registers'][plan['abi']['aux_register']]
+            matches=[s for s in reads if s['pointer']==aux_pointer]
+            require(len(matches)==1 and aux_pointer!=src,'Auxiliary input has no distinct observed read definition')
+            auxiliary=matches[0]
+        machine=ByteMachine(plan,execution[0],candidates[0],(dst,dst_bytes),nodes,edges,auxiliary)
         for e in execution:machine.step(e)
         require(machine.halted and machine.written==set(range(dst,dst+4)),'Missing return or incompletely defined output')
         machine.verify(root[7])
@@ -182,6 +201,9 @@ def infer(document,plan):
         keep=backward_nodes(edges,['output:result'],{'data'})
         origins=sorted(n for n in keep if nodes[n]['kind']=='source')
         return {'status':'resolved_under_instruction_model','sources':origins,
+                'source_versions':machine.source_versions,
+                'overwritten_sources':sorted(machine.write_sources-set(origins)),
+                'total_writes':machine.write_version,
                 'noncontributing_reads':[s['id'] for s in reads if s['id'] not in keep],
                 'output':output,'byte_sources':byte_sources,'instruction_steps':machine.steps,
                 'graph':{'nodes':[nodes[n] for n in sorted(keep)],'edges':[e for e in edges if e['kind']=='data' and e['source'] in keep and e['target'] in keep]},

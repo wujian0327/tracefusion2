@@ -13,7 +13,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 from go_byte_adapter import assembly_rows,decode_function,REGISTERS
 from byte_provenance import infer
 from byte_capture import Raw,HEADER,source,decode_record
-from go_byte_provenance import score,negative_checks,evaluate_pairs
+from go_byte_provenance import score,negative_checks,evaluate_pairs,evaluate_assignment,fixtures
 
 
 def evidence(reverse=False,use_c=False):
@@ -82,7 +82,91 @@ def evidence(reverse=False,use_c=False):
     return doc,plan,oracle
 
 
+def assignment_evidence(overwrite=False,use_c=False):
+    """Explicit two-phase write trace, independent of the inference machine."""
+    base,_,_=evidence(use_c=use_c)
+    variant='overwrite' if overwrite else 'assign'
+    ir=decode_function(assembly_rows((Path(__file__).parent/'fixtures'/('go-byte-'+variant+'.asm')).read_text()))
+    sites=[]
+    for pair,op in enumerate(['source','source','source','work','json']):
+        for phase in ('pre','post'):
+            sites.append({'id':len(sites),'op':op,'phase':phase,'pair':pair,'address':0x8000+len(sites),'snapshots':{}})
+    for n in ir:
+        n['site']=len(sites)
+        sites.append({'id':n['site'],'op':'instruction','phase':'step','pair':-1,'address':n['address'],'snapshots':{}})
+    plan={'sites':sites,'instructions':ir,'entry':ir[0]['address'],'root_order':list(range(10)),
+          'event_order':list(range(len(sites))),'max_steps':256,'binary_sha256':variant,
+          'abi':{'dst_register':'rax','src_register':'rbx','aux_register':'rcx'}}
+    events=deepcopy(base['events'][:6]);regs=dict(base['events'][6]['registers']);regs['rcx']=0x2000
+    src=0x3000 if use_c else 0x1000;aux=0x2000;dst=0x4000;data=b'SAME';output=bytearray(4)
+    def value(ptr,data):return {'pointer':ptr,'hex':data.hex(),'key':f'{ptr:x}:{len(data)}'}
+    def emit(sid,values=None):
+        s=sites[sid];i=len(events)
+        events.append(dict(site=sid,op=s['op'],phase=s['phase'],timestamp=i,sequence=i,
+            pid=1,tid=2+i%2,g=0x888,registers=dict(regs),values=values or {}))
+    emit(6,{'src':value(src,data),'dst':value(dst,bytes(output))})
+    phases=[ir[:9],ir[9:18]] if overwrite else [ir[:9]]
+    for phase,body in enumerate(phases):
+        def step(index,values=None):emit(body[index]['site'],values)
+        counter='rdx' if overwrite else 'rcx'
+        step(0);regs[counter]=0;step(1)
+        for i in range(5):
+            step(7);step(8)
+            if i==4:break
+            step(2,{'load':value(dst,bytes(output[:1]))})
+            pointer=aux if phase else src
+            step(3,{'load':value(pointer,data[:1])})
+            step(4,{'load':value(pointer+i,data[i:i+1])})
+            reg=('rbx' if phase else 'rsi') if overwrite else 'rdx';regs[reg]=data[i]
+            step(5);output[i]=data[i]
+            step(6);regs[counter]=i+1
+    emit(ir[-1]['site']);emit(7)
+    emit(8,{'value':value(dst,bytes(output))})
+    emit(9,{'json':value(0x9000,json.dumps({'result':'SAME'}).encode())})
+    doc={'binary_sha256':variant,'events':events,'returncode':0,'capture_errors':[],
+         'stats':{'submitted':len(events),'read_errors':0,'submit_errors':0,'lost':0}}
+    return doc,plan
+
+
 class ByteProvenanceTests(unittest.TestCase):
+    def test_assignment_and_full_overwrite_with_equal_values(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out=Path(tmp);fixtures(out,'assignment')
+            oracle={o['case']:o for o in json.loads((out/'oracle.json').read_text())}
+            results={};documents={};outputs={}
+            for overwrite in (False,True):
+                for use_c in (False,True):
+                    name=('overwrite' if overwrite else 'assign')+('_c' if use_c else '_a')
+                    doc,plan=assignment_evidence(overwrite,use_c);result=infer(doc,plan)
+                    self.assertTrue(score(result,oracle[name])['passed'],result)
+                    self.assertEqual(len(result['instruction_steps']),65 if overwrite else 33)
+                    self.assertEqual(result['total_writes'],8 if overwrite else 4)
+                    if overwrite:
+                        self.assertEqual([v['write_version'] for v in result['source_versions']],[4,5,8])
+                        self.assertEqual(result['sources'],['source:2'])
+                        self.assertTrue(all(c['passed'] for c in negative_checks(doc,plan,include_overwrite=True)))
+                    results[name]=result;documents[name]=doc;outputs[name]=result['output']
+            self.assertTrue(evaluate_assignment(results,documents,outputs)['passed'])
+
+    def test_source_scoring_rejects_stale_origin_without_byte_oracle(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out=Path(tmp);fixtures(out,'assignment')
+            oracle=next(o for o in json.loads((out/'oracle.json').read_text()) if o['case']=='overwrite_a')
+            self.assertNotIn('byte_sources',oracle)
+            doc,plan=assignment_evidence(True,False);result=infer(doc,plan)
+            result['sources']=['source:1','source:2']
+            scored=score(result,oracle)
+            self.assertFalse(scored['passed']);self.assertEqual(scored['source_relations']['fp'],1)
+
+    def test_auxiliary_argument_can_be_unused_but_must_be_bound(self):
+        doc,plan,oracle=evidence()
+        plan['abi']['aux_register']='rcx'
+        doc['events'][6]['registers']['rcx']=0x2000
+        doc['events'][7]['registers']['rcx']=0x2000
+        self.assertTrue(score(infer(doc,plan),oracle)['passed'])
+        doc['events'][6]['registers']['rcx']=0x9999
+        self.assertEqual(infer(doc,plan)['status'],'unknown')
+
     def test_both_compiled_loops_and_runtime_source_choices(self):
         results={};documents={};outputs={}
         for reverse in (False,True):

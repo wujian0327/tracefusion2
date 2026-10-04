@@ -107,10 +107,10 @@ def plan_binary(binary,go,env,out):
         if n['op']=='test':snapshots={'load':{'address':n['args'][1],'length':1}}
         n['site']=site(n,'instruction','step',-1,snapshots)
     (out/'disassembly.txt').write_text('\n'.join(texts))
-    return {'adapter':'go-amd64-byte-instructions-v1','binary':str(binary),
+    return {'adapter':'go-amd64-byte-instructions-v2','binary':str(binary),
             'binary_sha256':hashlib.sha256(data).hexdigest(),'sites':sites,
             'event_order':[s['id'] for s in sites], # physical attachment order, not the dynamic trace
             'root_order':list(range(10)),'instructions':ir,'entry':ir[0]['address'],
-            'abi':{'dst_register':'rax','src_register':'rbx'},
+            'abi':{'dst_register':'rax','src_register':'rbx','aux_register':'rcx'},
             'region_bytes':4,'max_steps':256,
             'scope':'Configured boundaries; automatic leaf instruction/CFG decoding; one request/goroutine; separate four-byte regions'}

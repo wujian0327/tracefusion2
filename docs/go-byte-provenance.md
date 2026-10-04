@@ -2,6 +2,8 @@
 
 这个独立实验验证：不给 `transform` 手写输入输出依赖摘要，能否通过编译后的指令和真实执行观测，恢复每个输出字节来自哪次读取、哪个输入字节。原有 `go-string-provenance` 场景保留。
 
+当前优先推进来源集合与赋值覆盖，运行 `run --suite assignment`，见 [来源集合与同值覆盖验证](go-assignment-provenance.md)。本文保留正序/反序指令实验作为底层机制验证；其命令默认选择 `instruction` 套件。两套场景共用三参数加工 ABI，正序/反序目标不使用第三个输入 B。
+
 ## 运行
 
 与此前环境一致：Linux amd64、Go 1.25.4/1.25.5、能导入 BCC 的系统 Python。无需 Docker。

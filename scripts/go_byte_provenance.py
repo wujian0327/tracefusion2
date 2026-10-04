@@ -20,6 +20,7 @@ from hybrid_provenance import ROOT, save
 from string_capture import collect
 
 SCENARIO=ROOT/'scenarios/go-byte-provenance'
+SUITES={'instruction':('forward','reverse'),'assignment':('assign','overwrite')}
 
 
 def build(out,variant):
@@ -44,44 +45,61 @@ def build(out,variant):
     return plan
 
 
-def fixtures(out):
+def fixtures(out,suite='instruction'):
     folder=out/'inputs';folder.mkdir()
     for field in ('A','B','C'):(folder/(field+'.txt')).write_bytes(b'SAME')
     entries=[]
-    for variant in ('forward','reverse'):
-        indices=[0,1,2,3] if variant=='forward' else [3,2,1,0]
+    for variant in SUITES[suite]:
+        indices=[3,2,1,0] if variant=='reverse' else [0,1,2,3]
         for selected in ('a','c'):
             name=variant+'_'+selected;request={f:str(folder/(f+'.txt')) for f in ('A','B','C')}
             request['UseC']=selected=='c';save(folder/(name+'.json'),request)
-            source='source:3' if selected=='c' else 'source:1'
-            entries.append({'case':name,'variant':variant,'sources':[source],
+            initial='source:3' if selected=='c' else 'source:1'
+            source='source:2' if variant=='overwrite' else initial
+            expected={'case':name,'variant':variant,'sources':[source],
                 'excluded':[s for s in ('source:1','source:2','source:3') if s!=source],
-                'output':{'result':bytes(b'SAME'[i]^0x20 for i in indices).decode()},
-                'byte_sources':[{'output_byte':i,'origins':[{'source':source,'byte':j}]} for i,j in enumerate(indices)]})
+                'output':{'result':bytes(b'SAME'[i]^(0x20 if suite=='instruction' else 0) for i in indices).decode()}}
+            if suite=='instruction':
+                expected['byte_sources']=[{'output_byte':i,'origins':[{'source':source,'byte':j}]} for i,j in enumerate(indices)]
+            else:
+                expected.update(source_versions=[[initial],sorted([initial,'source:2']),['source:2']] if variant=='overwrite' else [[initial]],
+                    overwritten_sources=[initial] if variant=='overwrite' else [],total_writes=8 if variant=='overwrite' else 4)
+            entries.append(expected)
     save(out/'oracle.json',entries)
     return [(o['case'],o['variant']) for o in entries]
 
 
 def score(result,expected):
     if result['status']!='resolved_under_instruction_model':return {'passed':False,'reason':result}
-    actual={(r['output_byte'],o['source'],o['byte']) for r in result['byte_sources'] for o in r['origins']}
-    wanted={(r['output_byte'],o['source'],o['byte']) for r in expected['byte_sources'] for o in r['origins']}
+    actual=set(result['sources']);wanted=set(expected['sources'])
     tp,fp,fn=len(actual&wanted),len(actual-wanted),len(wanted-actual)
+    metrics={'source_relations':{'tp':tp,'fp':fp,'fn':fn,'precision':tp/max(1,tp+fp),'recall':tp/max(1,tp+fn)}}
     checks={'sources_match':result['sources']==expected['sources'],
             'excluded_match':result['noncontributing_reads']==expected['excluded'],
-            'output_matches':result['output']==expected['output'],
-            'byte_mapping_matches':result['byte_sources']==expected['byte_sources']}
-    return {'passed':all(checks.values()),**checks,
-            'byte_origin_relations':{'tp':tp,'fp':fp,'fn':fn,'precision':tp/max(1,tp+fp),'recall':tp/max(1,tp+fn)},
+            'output_matches':result['output']==expected['output']}
+    if 'byte_sources' in expected:
+        actual={(r['output_byte'],o['source'],o['byte']) for r in result['byte_sources'] for o in r['origins']}
+        wanted={(r['output_byte'],o['source'],o['byte']) for r in expected['byte_sources'] for o in r['origins']}
+        tp,fp,fn=len(actual&wanted),len(actual-wanted),len(wanted-actual)
+        checks['byte_mapping_matches']=result['byte_sources']==expected['byte_sources']
+        metrics['byte_origin_relations']={'tp':tp,'fp':fp,'fn':fn,'precision':tp/max(1,tp+fp),'recall':tp/max(1,tp+fn)}
+    if 'source_versions' in expected:
+        checks.update(source_versions_match=[v['sources'] for v in result['source_versions']]==expected['source_versions'],
+            old_origins_removed=result['overwritten_sources']==expected['overwritten_sources'],
+            writes_match=result['total_writes']==expected['total_writes'],
+            same_value_versions=all(v['output_hex']==b'SAME'.hex() for v in result['source_versions']))
+    return {'passed':all(checks.values()),**checks,**metrics,
             'replayed_instructions':len(result['instruction_steps'])}
 
 
-def negative_checks(document,plan):
+def negative_checks(document,plan,include_overwrite=False):
     if infer(document,plan)['status']!='resolved_under_instruction_model':
         return [{'case':'baseline','passed':False}]
     results=[]
     loads={n['site'] for n in plan['instructions'] if n['op']=='movzx'}
-    for name in ('capture_loss','missing_instruction','wrong_register','wrong_load','unbound_input','wrong_json'):
+    names=['capture_loss','missing_instruction','wrong_register','wrong_load','unbound_input','wrong_json']
+    if include_overwrite:names.append('missing_final_store')
+    for name in names:
         bad=deepcopy(document)
         ordered=sorted(bad['events'],key=lambda e:(e['timestamp'],e['sequence']))
         if name=='capture_loss':bad['capture_errors']=['injected loss']
@@ -96,6 +114,10 @@ def negative_checks(document,plan):
         elif name=='unbound_input':
             value=next(e for e in ordered if e['op']=='work' and e['phase']=='pre')['values']['src']
             value['pointer']=123;value['key']='7b:4'
+        elif name=='missing_final_store':
+            stores={n['site'] for n in plan['instructions'] if n['op']=='mov' and n['args'][1]['kind']=='mem'}
+            victim=next(e for e in reversed(ordered) if e['site'] in stores)
+            bad['events'].remove(victim)
         else:
             value=next(e for e in ordered if e['op']=='json' and e['phase']=='post')['values']['json']
             data=b'{"result":"NOPE"}';value['hex']=data.hex();value['key']=f'{value["pointer"]:x}:{len(data)}'
@@ -123,12 +145,30 @@ def evaluate_pairs(results,documents,outputs):
     return {'passed':all(all(c.values()) for c in checks.values()),'checks':checks}
 
 
-def run(out):
+def evaluate_assignment(results,documents,outputs):
+    checks={}
+    for variant in ('assign','overwrite'):
+        a,c=variant+'_a',variant+'_c'
+        checks[variant]={'same_binary':documents[a]['binary_sha256']==documents[c]['binary_sha256'],
+                        'same_output':outputs[a]==outputs[c]}
+    for selected in ('a','c'):
+        before,after='assign_'+selected,'overwrite_'+selected
+        source='source:3' if selected=='c' else 'source:1'
+        checks[selected]={
+            'initial_origin':results[before].get('sources')==[source],
+            'final_origin':results[after].get('sources')==['source:2'],
+            'old_origin_removed':results[after].get('overwritten_sources')==[source],
+            'unchanged_output':outputs[before]==outputs[after],
+        }
+    return {'passed':all(all(c.values()) for c in checks.values()),'checks':checks}
+
+
+def run(out,suite='instruction'):
     ok=False
     try:
         save(out/'environment.json',{'platform':platform.platform(),'python':sys.executable,'root':os.geteuid()==0})
-        plans={v:build(out/v,v) for v in ('forward','reverse')}
-        cases=fixtures(out);documents={};inferred={};outputs={}
+        plans={v:build(out/v,v) for v in SUITES[suite]}
+        cases=fixtures(out,suite);documents={};inferred={};outputs={}
         for name,variant in cases:
             print('Collecting '+name,flush=True)
             with (out/(name+'.log')).open('w') as log:
@@ -143,11 +183,13 @@ def run(out):
         # Oracle and variant-specific expected index order enter only evaluation.
         oracle=json.loads((out/'oracle.json').read_text())
         scored=[dict(case=o['case'],**score(inferred[o['case']],o),program_output_matches=outputs[o['case']]==o['output']) for o in oracle]
-        negatives=negative_checks(documents['reverse_c'],plans['reverse'])
-        pairs=evaluate_pairs(inferred,documents,outputs)
+        negative_variant=SUITES[suite][-1]
+        negatives=negative_checks(documents[negative_variant+'_c'],plans[negative_variant],include_overwrite=suite=='assignment')
+        pairs=(evaluate_assignment if suite=='assignment' else evaluate_pairs)(inferred,documents,outputs)
         ok=all(r['passed'] and r['program_output_matches'] for r in scored) and all(n['passed'] for n in negatives) and pairs['passed']
-        report={'all_passed':ok,'cases':scored,'negative_checks':negatives,'pairs':pairs,
-                'scope':'Controlled leaf instruction replay; byte-origin accuracy on four runs; no arbitrary Go/library coverage claim'}
+        report={'all_passed':ok,'suite':suite,'cases':scored,'negative_checks':negatives,'pairs':pairs,
+                'scope':('Source-set propagation and full overwrite on four controlled runs; byte cells are internal evidence'
+                         if suite=='assignment' else 'Controlled leaf instruction replay; byte-origin accuracy on four runs; no arbitrary Go/library coverage claim')}
         save(out/'evaluation.json',report);print(json.dumps(report),flush=True)
     except Exception:
         error=traceback.format_exc();(out/'runner-error.txt').write_text(error);print(error,file=sys.stderr)
@@ -166,7 +208,7 @@ def run(out):
 def main():
     p=argparse.ArgumentParser();sub=p.add_subparsers(dest='command',required=True)
     for name in ('build','run'):
-        s=sub.add_parser(name);s.add_argument('--output',type=Path)
+        s=sub.add_parser(name);s.add_argument('--output',type=Path);s.add_argument('--suite',choices=SUITES,default='instruction')
     s=sub.add_parser('collect');s.add_argument('--plan',type=Path,required=True);s.add_argument('--input',type=Path,required=True);s.add_argument('--output',type=Path,required=True)
     s=sub.add_parser('analyze');s.add_argument('--plan',type=Path,required=True);s.add_argument('--events',type=Path,required=True)
     args=p.parse_args()
@@ -178,9 +220,9 @@ def main():
     out=(args.output or ROOT/'artifacts'/('go-byte-provenance-'+datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S-%f'))).resolve()
     out.mkdir(parents=True,exist_ok=False)
     if args.command=='build':
-        for variant in ('forward','reverse'):
+        for variant in SUITES[args.suite]:
             plan=build(out/variant,variant);print(json.dumps({'variant':variant,'sites':len(plan['sites']),'instructions':len(plan['instructions'])}))
         print('Build output: '+str(out));return 0
-    return run(out)
+    return run(out,args.suite)
 
 if __name__=='__main__':raise SystemExit(main())

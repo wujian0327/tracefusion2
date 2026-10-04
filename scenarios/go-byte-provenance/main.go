@@ -34,7 +34,7 @@ func run(aPath, bPath, cPath string, useC bool) []byte {
  selected := a
  if useC { selected = c }
  output := new([4]byte)
- transform(output, selected)
+ transform(output, selected, b)
  encoded := marshalResult(output)
  runtime.KeepAlive(a)
  runtime.KeepAlive(b)
