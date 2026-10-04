@@ -1,8 +1,10 @@
 from copy import deepcopy
 import json
+import os
 from pathlib import Path
 from types import SimpleNamespace
 import sys
+import tempfile
 import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 from test_go_byte_provenance import assignment_evidence
@@ -21,7 +23,7 @@ def evidence(variant='partial',use_c=False,g=0x888,offset=0,ticket=1):
         return sid
     scope_pre=site('scope','pre');scope_post=site('scope','post')
     marshal_pre=site('marshal','pre');writer_pre=site('writer','pre');writer_post=site('writer','post');render_post=site('render','post')
-    plan.update(scope_entry=scope_pre,scope_exits=[scope_post])
+    plan.update(scope_entry=scope_pre,scope_exits=[scope_post],event_order=[s['id'] for s in sites])
     events=doc['events']
     def val(p,b):return dict(pointer=p,hex=b.hex(),key=f'{p:x}:{len(b)}')
     def make(sid):
@@ -119,5 +121,27 @@ class GinByteTests(unittest.TestCase):
         self.assertIn('gin_active.delete(&g)',generated)
         self.assertNotIn('gin_active.lookup(&tid)',generated)
         self.assertNotIn('IS_EXIT',generated)
+
+    def test_incomplete_attachment_order_rejected_before_bcc(self):
+        for change in ('missing','omitted','duplicate'):
+            _,p=evidence()
+            if change=='missing':del p['event_order']
+            elif change=='omitted':p['event_order'].pop()
+            else:p['event_order'][-1]=p['event_order'][0]
+            with self.assertRaisesRegex(ValueError,'every logical site'):
+                gin_byte_capture.source(p,1,SimpleNamespace(st_dev=0,st_ino=0))
+
+    @unittest.skipUnless(os.environ.get('GIN_BYTE_BUILD'),'Set GIN_BYTE_BUILD to a built integration directory')
+    def test_actual_binary_plans_generate_complete_collectors(self):
+        from gin_byte_adapter import plan_binary
+        go=os.environ.get('TRACEFUSION_GO','go')
+        root=Path(os.environ['GIN_BYTE_BUILD']).resolve()
+        for variant in ('assign','partial','overwrite'):
+            with tempfile.TemporaryDirectory() as tmp:
+                plan=plan_binary(root/variant/'gin-byte-target',go,dict(os.environ),Path(tmp))
+                code=gin_byte_capture.source(plan,1,SimpleNamespace(st_dev=0,st_ino=0))
+                attached=[s['id'] for p in gin_byte_capture.physical_probes(plan) for s in p['sites']]
+                self.assertEqual(sorted(attached),sorted(s['id'] for s in plan['sites']))
+                for sid in attached:self.assertEqual(code.count(f'logical_{sid}(ctx);'),1)
 
 if __name__=='__main__':unittest.main()

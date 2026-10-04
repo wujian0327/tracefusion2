@@ -56,7 +56,8 @@ def plan_binary(binary,go,env,out):
         n['site']=add(n,'instruction','step',snapshots)
     (out/'disassembly.txt').write_text('\n'.join(texts))
     return dict(adapter='gin-byte-array-v1',binary=str(binary),binary_sha256=hashlib.sha256(data).hexdigest(),
-        sites=sites,instructions=ir,entry=ir[0]['address'],root_order=list(range(8))+[render_entry],
+        sites=sites,event_order=[s['id'] for s in sites],
+        instructions=ir,entry=ir[0]['address'],root_order=list(range(8))+[render_entry],
         abi={'dst_register':'rax','src_register':'rbx','aux_register':'rcx'},region_bytes=4,max_steps=256,
         json_model='gin-byte-array-v1',scope_entry=scope_entry,scope_exits=scope_exits,scopes=scopes,
         scope='Default Gin scheduling; process/G/scope lifetimes; fixed four-byte array JSON summary')

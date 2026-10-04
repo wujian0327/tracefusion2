@@ -14,6 +14,7 @@ import subprocess
 import sys
 import time
 import traceback
+from types import SimpleNamespace
 import zipfile
 
 from hybrid_provenance import ROOT,save
@@ -50,7 +51,12 @@ def build(out,variant):
     save(out/'identity.json',dict(binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest(),go=version,gin=gin['Version'],
         source_sha256={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in src.iterdir()},
         framework_sha256={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in files}))
-    plan=plan_binary(binary,go,env,out);save(out/'plan.json',plan);return plan
+    plan=plan_binary(binary,go,env,out);save(out/'plan.json',plan)
+    # Exercise the actual planner -> transport interface before launching a
+    # target or importing BCC. Placeholder PID/namespace: generation only.
+    preview=gin_byte_capture.source(plan,1,SimpleNamespace(st_dev=0,st_ino=0))
+    (out/'collector.preview.c').write_text(preview)
+    return plan
 
 
 def fixtures(out):
