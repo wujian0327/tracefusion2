@@ -8,6 +8,7 @@ closed; it never truncates a history and returns a partial success.
 from collections import Counter
 from functools import partial
 import struct
+from lineage_graph import backward_nodes
 
 import hybrid_provenance as common
 import interproc_provenance as collector
@@ -44,12 +45,9 @@ def reconstruct(path, functions, config, tid, call, argument_sources=()):
     read_map = {r['id']: r for r in analyzed['source_reads']}
     require(all(s in read_map or s in argument_sources for s in analyzed['sources']), 'Sink depends on a non-read boundary')
     contributing = [read_map[s] for s in analyzed['sources'] if s in read_map]
-    edges = analyzed['edges']; keep = {analyzed['sink_node']}
+    edges = analyzed['edges']
     kinds = {'data', 'address', 'argument', 'return'}
-    while True:
-        before = len(keep)
-        keep.update(e['source'] for e in edges if e['target'] in keep and e['kind'] in kinds)
-        if len(keep) == before: break
+    keep = backward_nodes(edges, [analyzed['sink_node']], kinds)
     prefix = '%s:%s:' % (tid, call)
     graph = dict(nodes=[dict(id=prefix+n, local_node=n, **analyzed['nodes'].get(n, dict(kind='boundary')))
                         for n in sorted(keep)],
