@@ -14,7 +14,7 @@ from lineage_graph import backward_nodes
 from value_lineage import infer
 from go_string_adapter import SUMMARY, physical_probes
 from string_capture import Raw, HEADER, decode_record, source
-from go_string_provenance import score, negative_checks
+from go_string_provenance import score, negative_checks, fixtures, branch_pair_checks
 
 
 def sample(equal=False):
@@ -58,6 +58,29 @@ class StringLineageTests(unittest.TestCase):
         result=infer(doc,plan)
         self.assertEqual(result['sources'],['source:2','source:3'])
         self.assertFalse(score(result,oracle)['passed'])
+
+    def test_branch_pair_requires_actual_source_switch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out=Path(tmp)
+            self.assertEqual(len(fixtures(out)),5)
+            oracle={o['case']:o for o in json.loads((out/'oracle.json').read_text())}
+            names=('branch_phone','branch_other')
+            requests={n:json.loads((out/'inputs'/n/'request.json').read_text()) for n in names}
+            self.assertEqual(oracle[names[0]]['result'],oracle[names[1]]['result'])
+            self.assertEqual(oracle[names[0]]['sources'],['source:1','source:2'])
+            self.assertEqual(oracle[names[1]]['sources'],['source:2','source:3'])
+            self.assertEqual(Path(requests[names[0]]['Phone']).read_bytes(),Path(requests[names[1]]['Other']).read_bytes())
+            docs={};results={};outputs={}
+            for name in names:
+                doc,plan,_=sample(True)
+                if name=='branch_other':
+                    next(e for e in doc['events'] if e['op']=='concat' and e['phase']=='pre')['values']['right']['key']='c'
+                docs[name]=doc;results[name]=infer(doc,plan)
+                outputs[name]={'result':'SAMESAME'}
+            self.assertTrue(branch_pair_checks(results,docs,requests,outputs)['passed'])
+            # Identical JSON is insufficient if both runs claim the same source.
+            results['branch_other']=deepcopy(results['branch_phone'])
+            self.assertFalse(branch_pair_checks(results,docs,requests,outputs)['passed'])
 
     def test_alias_missing_or_changed_evidence_is_unknown(self):
         for mutation in ('alias','changed','empty','wrong_hash','other_g','lost'):

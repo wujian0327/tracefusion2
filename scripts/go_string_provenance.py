@@ -44,18 +44,25 @@ def build(out):
 
 def fixtures(out):
     entries=[]
-    for name,phone,prefix,other in [('ordinary','13800138000','+86','UNUSED'),
-                                    ('equal_values','SAME','SAME','SAME'),
-                                    ('json_escaping','user"\\id','地区:','user"\\id')]:
+    for name,phone,prefix,other,use_other in [('ordinary','13800138000','+86','UNUSED',False),
+                                    ('equal_values','SAME','SAME','SAME',False),
+                                    ('json_escaping','user"\\id','地区:','user"\\id',False),
+                                    ('branch_phone','SAME','+86','SAME',False),
+                                    ('branch_other','SAME','+86','SAME',True)]:
         folder=out/'inputs'/name;folder.mkdir(parents=True)
-        request={}
+        # Paired runs use the same files; only the request selector changes.
+        data_folder=out/'inputs'/'branch_data' if name.startswith('branch_') else folder
+        data_folder.mkdir(exist_ok=True)
+        request={'UseOther':use_other}
         for field,text in [('Phone',phone),('Prefix',prefix),('Other',other)]:
-            path=folder/(field.lower()+'.txt');path.write_text(text)
+            path=data_folder/(field.lower()+'.txt');path.write_text(text)
             request[field]=str(path)
         save(folder/'request.json',request)
-        entries.append({'case':name,'sources':['source:1','source:2'],'excluded':['source:3'],
-                        'result':prefix+phone,
-                        'edges':[['source:2','concat:1','left'],['source:1','concat:1','right'],
+        chosen='source:3' if use_other else 'source:1'
+        entries.append({'case':name,'sources':sorted(['source:2',chosen]),
+                        'excluded':['source:1' if use_other else 'source:3'],
+                        'result':prefix+(other if use_other else phone),
+                        'edges':[['source:2','concat:1','left'],[chosen,'concat:1','right'],
                                  ['concat:1','json:1','value'],['json:1','output:result','result']]})
     save(out/'oracle.json',entries)
     return [e['case'] for e in entries]
@@ -96,6 +103,23 @@ def score(inferred,expected):
             'modeled_graph_edges':{'tp':etp,'fp':efp,'fn':efn},'output_matches':output==expected['result']}
 
 
+def branch_pair_checks(inferred,documents,requests,outputs):
+    a,b='branch_phone','branch_other'
+    ra,rb=requests[a],requests[b]
+    checks={
+        'same_input_paths':all(ra[k]==rb[k] for k in ('Phone','Prefix','Other')),
+        'different_selector':ra['UseOther'] is False and rb['UseOther'] is True,
+        'same_binary':documents[a]['binary_sha256']==documents[b]['binary_sha256'],
+        'same_output':outputs[a]==outputs[b],
+        'same_observed_sites':[e['site'] for e in sorted(documents[a]['events'],key=lambda e:(e['timestamp'],e['sequence']))]
+                              ==[e['site'] for e in sorted(documents[b]['events'],key=lambda e:(e['timestamp'],e['sequence']))],
+        'sources_follow_selection':inferred[a].get('sources')==['source:1','source:2']
+                                    and inferred[b].get('sources')==['source:2','source:3'],
+    }
+    return {'passed':all(checks.values()),'checks':checks,
+            'scope':'Observed value dependencies; selector/control dependence is not included'}
+
+
 def run(out):
     ok=False
     try:
@@ -116,14 +140,18 @@ def run(out):
         # Inference above neither receives nor opens the independent oracle.
         oracle=json.loads((out/'oracle.json').read_text())
         comparisons=[dict(case=o['case'],**score(inferred[o['case']],o)) for o in oracle]
+        outputs={};requests={}
         for o in oracle:
             output=json.loads((out/o['case']/'target.stdout').read_text())
+            outputs[o['case']]=output
+            requests[o['case']]=json.loads((out/'inputs'/o['case']/'request.json').read_text())
             comparisons[cases.index(o['case'])]['program_output_matches']=output=={'result':o['result']}
+        pair=branch_pair_checks(inferred,documents,requests,outputs)
         negatives=negative_checks(documents['equal_values'],plan)
-        ok=all(x['passed'] and x['program_output_matches'] for x in comparisons) and all(x['passed'] for x in negatives)
-        save(out/'evaluation.json',{'all_passed':ok,'cases':comparisons,'negative_checks':negatives,
-             'scope':'Three controlled cases; modeled API operation edges, not complete instruction/byte lineage accuracy'})
-        print(json.dumps({'all_passed':ok,'cases':comparisons,'negative_checks':len(negatives)}),flush=True)
+        ok=all(x['passed'] and x['program_output_matches'] for x in comparisons) and all(x['passed'] for x in negatives) and pair['passed']
+        save(out/'evaluation.json',{'all_passed':ok,'cases':comparisons,'negative_checks':negatives,'branch_pair':pair,
+             'scope':'Five controlled cases; modeled API operation edges, not complete instruction/byte lineage accuracy'})
+        print(json.dumps({'all_passed':ok,'cases':comparisons,'negative_checks':len(negatives),'branch_pair':pair}),flush=True)
     except Exception:
         error=traceback.format_exc();(out/'runner-error.txt').write_text(error);print(error,file=sys.stderr)
     finally:
