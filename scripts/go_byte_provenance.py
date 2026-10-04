@@ -20,7 +20,7 @@ from hybrid_provenance import ROOT, save
 from string_capture import collect
 
 SCENARIO=ROOT/'scenarios/go-byte-provenance'
-SUITES={'instruction':('forward','reverse'),'assignment':('assign','overwrite')}
+SUITES={'instruction':('forward','reverse'),'assignment':('assign','partial','overwrite')}
 
 
 def build(out,variant):
@@ -56,14 +56,19 @@ def fixtures(out,suite='instruction'):
             request['UseC']=selected=='c';save(folder/(name+'.json'),request)
             initial='source:3' if selected=='c' else 'source:1'
             source='source:2' if variant=='overwrite' else initial
-            expected={'case':name,'variant':variant,'sources':[source],
-                'excluded':[s for s in ('source:1','source:2','source:3') if s!=source],
+            sources=sorted([initial,'source:2']) if variant=='partial' else [source]
+            expected={'case':name,'variant':variant,'sources':sources,
+                'excluded':[s for s in ('source:1','source:2','source:3') if s not in sources],
                 'output':{'result':bytes(b'SAME'[i]^(0x20 if suite=='instruction' else 0) for i in indices).decode()}}
             if suite=='instruction':
                 expected['byte_sources']=[{'output_byte':i,'origins':[{'source':source,'byte':j}]} for i,j in enumerate(indices)]
             else:
-                expected.update(source_versions=[[initial],sorted([initial,'source:2']),['source:2']] if variant=='overwrite' else [[initial]],
-                    overwritten_sources=[initial] if variant=='overwrite' else [],total_writes=8 if variant=='overwrite' else 4)
+                versions=[[initial]]
+                if variant in ('partial','overwrite'):versions.append(sorted([initial,'source:2']))
+                if variant=='overwrite':versions.append(['source:2'])
+                expected.update(source_versions=versions,
+                    overwritten_sources=[initial] if variant=='overwrite' else [],
+                    total_writes={'assign':4,'partial':6,'overwrite':8}[variant])
             entries.append(expected)
     save(out/'oracle.json',entries)
     return [(o['case'],o['variant']) for o in entries]
@@ -147,18 +152,20 @@ def evaluate_pairs(results,documents,outputs):
 
 def evaluate_assignment(results,documents,outputs):
     checks={}
-    for variant in ('assign','overwrite'):
+    for variant in SUITES['assignment']:
         a,c=variant+'_a',variant+'_c'
         checks[variant]={'same_binary':documents[a]['binary_sha256']==documents[c]['binary_sha256'],
                         'same_output':outputs[a]==outputs[c]}
     for selected in ('a','c'):
-        before,after='assign_'+selected,'overwrite_'+selected
+        before,middle,after='assign_'+selected,'partial_'+selected,'overwrite_'+selected
         source='source:3' if selected=='c' else 'source:1'
         checks[selected]={
             'initial_origin':results[before].get('sources')==[source],
+            'partial_origins':results[middle].get('sources')==sorted([source,'source:2']),
+            'partial_keeps_old_origin':results[middle].get('overwritten_sources')==[],
             'final_origin':results[after].get('sources')==['source:2'],
             'old_origin_removed':results[after].get('overwritten_sources')==[source],
-            'unchanged_output':outputs[before]==outputs[after],
+            'unchanged_output':outputs[before]==outputs[middle]==outputs[after],
         }
     return {'passed':all(all(c.values()) for c in checks.values()),'checks':checks}
 
@@ -188,7 +195,7 @@ def run(out,suite='instruction'):
         pairs=(evaluate_assignment if suite=='assignment' else evaluate_pairs)(inferred,documents,outputs)
         ok=all(r['passed'] and r['program_output_matches'] for r in scored) and all(n['passed'] for n in negatives) and pairs['passed']
         report={'all_passed':ok,'suite':suite,'cases':scored,'negative_checks':negatives,'pairs':pairs,
-                'scope':('Source-set propagation and full overwrite on four controlled runs; byte cells are internal evidence'
+                'scope':('Source-set propagation, partial and full overwrite on six controlled runs; byte cells are internal evidence'
                          if suite=='assignment' else 'Controlled leaf instruction replay; byte-origin accuracy on four runs; no arbitrary Go/library coverage claim')}
         save(out/'evaluation.json',report);print(json.dumps(report),flush=True)
     except Exception:

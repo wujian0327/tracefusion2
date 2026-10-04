@@ -82,10 +82,11 @@ def evidence(reverse=False,use_c=False):
     return doc,plan,oracle
 
 
-def assignment_evidence(overwrite=False,use_c=False):
+def assignment_evidence(overwrite=False,use_c=False,partial=False):
     """Explicit two-phase write trace, independent of the inference machine."""
     base,_,_=evidence(use_c=use_c)
-    variant='overwrite' if overwrite else 'assign'
+    variant='partial' if partial else ('overwrite' if overwrite else 'assign')
+    two_phases=overwrite or partial
     ir=decode_function(assembly_rows((Path(__file__).parent/'fixtures'/('go-byte-'+variant+'.asm')).read_text()))
     sites=[]
     for pair,op in enumerate(['source','source','source','work','json']):
@@ -105,19 +106,20 @@ def assignment_evidence(overwrite=False,use_c=False):
         events.append(dict(site=sid,op=s['op'],phase=s['phase'],timestamp=i,sequence=i,
             pid=1,tid=2+i%2,g=0x888,registers=dict(regs),values=values or {}))
     emit(6,{'src':value(src,data),'dst':value(dst,bytes(output))})
-    phases=[ir[:9],ir[9:18]] if overwrite else [ir[:9]]
+    phases=[ir[:9],ir[9:18]] if two_phases else [ir[:9]]
     for phase,body in enumerate(phases):
         def step(index,values=None):emit(body[index]['site'],values)
-        counter='rdx' if overwrite else 'rcx'
+        counter='rdx' if two_phases else 'rcx'
         step(0);regs[counter]=0;step(1)
-        for i in range(5):
+        count=2 if partial and phase else 4
+        for i in range(count+1):
             step(7);step(8)
-            if i==4:break
+            if i==count:break
             step(2,{'load':value(dst,bytes(output[:1]))})
             pointer=aux if phase else src
             step(3,{'load':value(pointer,data[:1])})
             step(4,{'load':value(pointer+i,data[i:i+1])})
-            reg=('rbx' if phase else 'rsi') if overwrite else 'rdx';regs[reg]=data[i]
+            reg=('rbx' if phase else 'rsi') if two_phases else 'rdx';regs[reg]=data[i]
             step(5);output[i]=data[i]
             step(6);regs[counter]=i+1
     emit(ir[-1]['site']);emit(7)
@@ -129,24 +131,37 @@ def assignment_evidence(overwrite=False,use_c=False):
 
 
 class ByteProvenanceTests(unittest.TestCase):
-    def test_assignment_and_full_overwrite_with_equal_values(self):
+    def test_assignment_partial_and_full_overwrite_with_equal_values(self):
         with tempfile.TemporaryDirectory() as tmp:
             out=Path(tmp);fixtures(out,'assignment')
             oracle={o['case']:o for o in json.loads((out/'oracle.json').read_text())}
             results={};documents={};outputs={}
-            for overwrite in (False,True):
+            for variant in ('assign','partial','overwrite'):
                 for use_c in (False,True):
-                    name=('overwrite' if overwrite else 'assign')+('_c' if use_c else '_a')
-                    doc,plan=assignment_evidence(overwrite,use_c);result=infer(doc,plan)
+                    name=variant+('_c' if use_c else '_a')
+                    doc,plan=assignment_evidence(variant=='overwrite',use_c,partial=variant=='partial');result=infer(doc,plan)
                     self.assertTrue(score(result,oracle[name])['passed'],result)
-                    self.assertEqual(len(result['instruction_steps']),65 if overwrite else 33)
-                    self.assertEqual(result['total_writes'],8 if overwrite else 4)
-                    if overwrite:
+                    self.assertEqual(len(result['instruction_steps']),{'assign':33,'partial':51,'overwrite':65}[variant])
+                    self.assertEqual(result['total_writes'],{'assign':4,'partial':6,'overwrite':8}[variant])
+                    if variant=='partial':
+                        self.assertEqual([v['write_version'] for v in result['source_versions']],[4,5])
+                        self.assertEqual(result['overwritten_sources'],[])
+                        self.assertEqual(result['sources'],sorted(['source:3' if use_c else 'source:1','source:2']))
+                    if variant=='overwrite':
                         self.assertEqual([v['write_version'] for v in result['source_versions']],[4,5,8])
                         self.assertEqual(result['sources'],['source:2'])
                         self.assertTrue(all(c['passed'] for c in negative_checks(doc,plan,include_overwrite=True)))
                     results[name]=result;documents[name]=doc;outputs[name]=result['output']
             self.assertTrue(evaluate_assignment(results,documents,outputs)['passed'])
+
+    def test_partial_overwrite_scoring_rejects_premature_origin_removal(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out=Path(tmp);fixtures(out,'assignment')
+            oracle=next(o for o in json.loads((out/'oracle.json').read_text()) if o['case']=='partial_a')
+            doc,plan=assignment_evidence(partial=True);result=infer(doc,plan)
+            result['sources']=['source:2']
+            scored=score(result,oracle)
+            self.assertFalse(scored['passed']);self.assertEqual(scored['source_relations']['fn'],1)
 
     def test_source_scoring_rejects_stale_origin_without_byte_oracle(self):
         with tempfile.TemporaryDirectory() as tmp:
