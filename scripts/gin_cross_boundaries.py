@@ -32,12 +32,16 @@ def bind_service(document,plan):
             if role=='upstream':continue
             reads=[e for e in group if e['op']=='source']
             before,after=reads[:2]
-            outgoing=text_value(before,'trace');require(trace_key(outgoing)==trace_key(incoming),'Forwarding context changed')
             http=[e for e in group if e['op'] in ('http_header','http_body','decode')]
             require([(e['op'],e['phase']) for e in http]==[
                 ('http_header','pre'),('http_header','post'),('http_body','pre'),('http_body','post'),('decode','pre'),('decode','post')],
                 'Incomplete HTTP receive/decode boundaries')
             header,_,_,received,decode,decoded=http
+            outgoing=text_value(header,'trace')
+            if plan.get('trace_mode','forward')=='otel':
+                require(trace_key(outgoing)[0]==trace_key(incoming)[0],'HTTP client changed trace ID')
+            else:
+                require(outgoing==text_value(before,'trace') and trace_key(outgoing)==trace_key(incoming),'Forwarding context changed')
             require(text_value(header,'key').lower()=='traceparent' and text_value(header,'trace')==outgoing,'Outgoing HTTP header mismatch')
             require(before['timestamp']<=http[0]['timestamp']<=http[-1]['timestamp']<=after['timestamp'],'Receive events outside remote read')
             rp,body=snapshot(received['values']['body']);dp,consumed=snapshot(decode['values']['body'])

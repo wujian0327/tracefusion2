@@ -29,10 +29,11 @@ VARIANTS=('assign','partial','overwrite')
 SCENARIO=ROOT/'scenarios/gin-byte-provenance'
 
 
-def build(out,variant,*,scenario=SCENARIO,planner=plan_binary,extra_sources=()):
+def build(out,variant,*,scenario=SCENARIO,planner=plan_binary,extra_sources=(),expected_modules=None):
     out.mkdir(parents=True);src=out/'sources';src.mkdir()
     for name in ('go.mod','go.sum'):
-        shutil.copyfile(ROOT/'scenarios/gin-default-provenance'/name,src/name)
+        modules=scenario if (scenario/'go.mod').exists() else ROOT/'scenarios/gin-default-provenance'
+        shutil.copyfile(modules/name,src/name)
     shutil.copyfile(scenario/'main.go',src/'main.go')
     for name in extra_sources:shutil.copyfile(scenario/name,src/name)
     shutil.copyfile(ROOT/'scenarios/go-byte-provenance'/(variant+'.go'),src/'operations.go')
@@ -48,6 +49,15 @@ def build(out,variant,*,scenario=SCENARIO,planner=plan_binary,extra_sources=()):
     proc.check_returncode()
     gin=json.loads(subprocess.check_output([go,'list','-m','-json','github.com/gin-gonic/gin'],cwd=src,env=env,text=True))
     require(gin['Version']=='v1.11.0' and 'Replace' not in gin,'Unexpected Gin module')
+    if expected_modules:
+        inventory=subprocess.check_output([go,'list','-m','-json','all'],cwd=src,env=env,text=True)
+        (out/'modules.jsonl').write_text(inventory)
+        found={};remaining=inventory.strip();decoder=json.JSONDecoder()
+        while remaining:
+            module,end=decoder.raw_decode(remaining);found[module['Path']]=module;remaining=remaining[end:].strip()
+        for name,wanted in expected_modules.items():
+            require(name in found and found[name].get('Version')==wanted and 'Replace' not in found[name],
+                    'Unexpected tracing dependency: '+name)
     root=Path(gin['Dir']);files=[root/'render/json.go',root/'response_writer.go',*(root/'codec/json').glob('*.go')]
     save(out/'identity.json',dict(binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest(),go=version,gin=gin['Version'],
         source_sha256={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in src.iterdir()},

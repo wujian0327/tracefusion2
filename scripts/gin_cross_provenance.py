@@ -123,7 +123,19 @@ def worker(plan_path,input_path,out,role):
     return int(bool(doc['capture_errors']) or doc['returncode']!=0)
 
 
-def run(out):
+def analyze_pair(pair,plans,captures,variant):
+    locals_={}
+    for role in ('upstream','downstream'):
+        document=json.loads((captures[role]/'events.json').read_text())
+        locals_[role]=bind_service(document,plans[role]);save(captures[role]/'inference.json',locals_[role])
+    joined=stitch(locals_['upstream'],locals_['downstream']);save(pair/'joined.json',joined)
+    report=evaluate(joined,locals_,json.loads((captures['downstream']/'client-responses.json').read_text()),plans,variant,captures)
+    negatives=negative_checks(locals_['upstream'],locals_['downstream']) if all(v['status']=='resolved' for v in locals_.values()) else []
+    report['negative_checks']=negatives;report['passed']=report['passed'] and len(negatives)==5 and all(n['passed'] for n in negatives)
+    return report
+
+
+def run(out,*,build_fn=build_role,worker_script=__file__,startup_fn=None,analyze_fn=analyze_pair):
     passed=False
     try:
         reports=[]
@@ -132,13 +144,15 @@ def run(out):
             try:
                 for role in ('upstream','downstream'):
                     print('Building '+variant+'/'+role,flush=True)
-                    plans[role]=build_role(pair/role,role,variant);fixtures(pair/role);captures[role]=pair/role/'capture'
+                    plans[role]=build_fn(pair/role,role,variant);fixtures(pair/role);captures[role]=pair/role/'capture'
                 for role in ('upstream','downstream'):
                     upstream=readiness(captures['upstream'],procs['upstream'])['address'] if role=='downstream' else ''
-                    boot=pair/role/'startup.json';save(boot,dict(Inputs=str(pair/role/'inputs'),Upstream=upstream))
+                    boot=pair/role/'startup.json';settings=dict(Inputs=str(pair/role/'inputs'),Upstream=upstream)
+                    if startup_fn:settings.update(startup_fn(role,pair,captures))
+                    save(boot,settings)
                     log=(pair/(role+'.log')).open('w');logs.append(log)
                     print('Collecting '+variant+'/'+role,flush=True)
-                    procs[role]=subprocess.Popen([sys.executable,__file__,'collect','--plan',str(pair/role/'plan.json'),
+                    procs[role]=subprocess.Popen([sys.executable,str(worker_script),'collect','--plan',str(pair/role/'plan.json'),
                         '--input',str(boot),'--output',str(captures[role]),'--role',role],stdout=log,stderr=subprocess.STDOUT)
                 for role in ('downstream','upstream'):
                     require(procs[role].wait(timeout=110)==0,'Collector failed: '+str(pair/(role+'.log')))
@@ -149,14 +163,7 @@ def run(out):
                         try:process.wait(timeout=10)
                         except subprocess.TimeoutExpired:process.kill();process.wait()
                 for log in logs:log.close()
-            locals_={}
-            for role in ('upstream','downstream'):
-                document=json.loads((captures[role]/'events.json').read_text())
-                locals_[role]=bind_service(document,plans[role]);save(captures[role]/'inference.json',locals_[role])
-            joined=stitch(locals_['upstream'],locals_['downstream']);save(pair/'joined.json',joined)
-            report=evaluate(joined,locals_,json.loads((captures['downstream']/'client-responses.json').read_text()),plans,variant,captures)
-            negatives=negative_checks(locals_['upstream'],locals_['downstream']) if all(v['status']=='resolved' for v in locals_.values()) else []
-            report['negative_checks']=negatives;report['passed']=report['passed'] and len(negatives)==5 and all(n['passed'] for n in negatives)
+            report=analyze_fn(pair,plans,captures,variant)
             save(pair/'evaluation.json',report);reports.append(dict(variant=variant,**report))
         passed=all(r['passed'] for r in reports);save(out/'evaluation.json',dict(all_passed=passed,variants=reports))
         print(json.dumps({'all_passed':passed,'downstream_requests':24,'upstream_requests':24}),flush=True)

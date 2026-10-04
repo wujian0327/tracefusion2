@@ -1,5 +1,10 @@
 # TraceFusion 2
 
+## 当前待主机验收：双 Gin 服务与 OpenTelemetry
+
+使用 OpenTelemetry SDK、otelgin 与 otelhttp 生成真实调用 span，导出本地 JSONL；外部来源分析复用现有赋值/覆盖核心，核对两端收发与解码证据后拼接来源图。六个目标的探针计划和真实 HTTP/SDK 测试已通过，新版本 eBPF 采集尚待主机验证。运行方法与明确边界见 [双服务 OTel 实验](docs/gin-otel-provenance.md)。
+
+
 当前阶段：**面向微服务聚合 API 敏感数据暴露的动态数据溯源验证**。
 
 当前验证主线：**静态候选依赖分析 + 自动选择 eBPF 观测位置 + 动态来源重建**。此前 HTTP 抓包、trace/span 和调用链基线保留为前期实验设施。

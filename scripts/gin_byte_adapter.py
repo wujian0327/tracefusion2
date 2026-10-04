@@ -10,7 +10,7 @@ from gin_api_provenance import BOUNDARIES
 from hybrid_model import require
 
 
-def plan_binary(binary,go,env,out,*,cross_role=None):
+def plan_binary(binary,go,env,out,*,cross_role=None,tracing='forward'):
     data=binary.read_bytes();sites=[];texts=[]
     nm=subprocess.check_output([go,'tool','nm','-size',str(binary)],env=env,text=True)
     assembly=subprocess.check_output(['objdump','-d','-M','intel','--no-show-raw-insn',str(binary)],text=True)
@@ -34,11 +34,14 @@ def plan_binary(binary,go,env,out,*,cross_role=None):
         contracts['github.com/gin-gonic/gin.(*Context).GetHeader']=('trace',{}, {'trace':{'pointer':'rax','length_reg':'rbx'}})
         if cross_role=='downstream':
             contracts['main.readRemote']=('source',{'path':{'pointer':'rax','length_reg':'rbx'},'trace':{'pointer':'rcx','length_reg':'rdi'}},{'value':{'pointer':'rax','length':4}})
+            if tracing=='otel':
+                contracts['main.readRemote']=('source',{'path':{'pointer':'rcx','length_reg':'rdi'}},{'value':{'pointer':'rax','length':4}})
     for row in root:
         if not row['asm'].startswith('CALL '):continue
         name=row['asm'].split(None,1)[1].removesuffix('(SB)').removeprefix('local.')
         if name in ('runtime.newobject','runtime.morestack_noctxt.abi0','github.com/gin-gonic/gin.(*Context).JSON'):continue
         if cross_role=='downstream' and name=='main.remoteURL':continue
+        if tracing=='otel' and name=='net/http.(*Request).Context':continue
         require(name in contracts,'Unmodeled business call: '+name)
         op,pre,post=contracts[name];ops.append(op)
         pair=[add(row,op,'pre',pre),add(by_addr[row['address']+len(bytes.fromhex(row['code']))],op,'post',post)]
@@ -51,6 +54,7 @@ def plan_binary(binary,go,env,out,*,cross_role=None):
             'io.ReadAll':('http_body',{}, {'body':{'pointer':'rax','length_reg':'rbx'}}),
             'encoding/json.Unmarshal':('decode',{'body':{'pointer':'rax','length_reg':'rbx'}},{}),
         }
+        if tracing=='otel':del transfer['net/http.Header.Set']
         for row in remote:
             if not row['asm'].startswith('CALL '):continue
             name=row['asm'].split(None,1)[1].removesuffix('(SB)').removeprefix('local.')
@@ -65,6 +69,9 @@ def plan_binary(binary,go,env,out,*,cross_role=None):
         entry=add(lookup[base+scope['entry_offset']],enter_op,'pre',enter_snap)
         exits=[add(lookup[base+off],exit_op,'post',exit_snap) for off in scope['return_offsets']]
         return entry,exits
+    if cross_role=='downstream' and tracing=='otel':
+        boundary('go.opentelemetry.io/otel/propagation.HeaderCarrier.Set','http_header',
+                 {'key':{'pointer':'rbx','length_reg':'rcx'},'trace':{'pointer':'rdi','length_reg':'rsi'}},'http_header',{})
     scope_entry,scope_exits=boundary('main.run','scope',{},'scope',{})
     render_entry,_=boundary(BOUNDARIES['render'],'json',{'value':{'pointer':'rdi','length':4}},'render',{})
     boundary(BOUNDARIES['marshal'],'marshal',{'value':{'pointer':'rbx','length':4}},'json',{'json':{'pointer':'rax','length_reg':'rbx'}})
@@ -82,4 +89,5 @@ def plan_binary(binary,go,env,out,*,cross_role=None):
         abi={'dst_register':'rax','src_register':'rbx','aux_register':'rcx'},region_bytes=4,max_steps=256,
         json_model='gin-byte-array-v1',scope_entry=scope_entry,scope_exits=scope_exits,scopes=scopes,
         cross_role=cross_role,
+        trace_mode=tracing,
         scope='Default Gin scheduling; process/G/scope lifetimes; fixed four-byte array JSON summary')
