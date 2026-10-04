@@ -11,41 +11,57 @@ import unittest
 from types import SimpleNamespace
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 from lineage_graph import backward_nodes
-from value_lineage import infer
+from value_lineage import infer, byte_origins
 from go_string_adapter import SUMMARY, physical_probes
 from string_capture import Raw, HEADER, decode_record, source
-from go_string_provenance import score, negative_checks, fixtures, branch_pair_checks, copy_negative_checks, copy_checks
+from go_string_provenance import score, negative_checks, fixtures, branch_pair_checks, copy_negative_checks, copy_checks, trim_negative_checks, trim_checks
 
 
-def sample(equal=False,copy_value=False,use_other=False):
-    pairs=['scope','source','source','source']+(['copy'] if copy_value else [])+['concat','json']
+def sample(equal=False,copy_value=False,use_other=False,trim_value=False):
+    pairs=['scope','source','source','source']+(['copy'] if copy_value else [])+(['trim'] if trim_value else [])+['concat','json']
     sites=[{'id':2*p+i,'pair':p,'op':op,'phase':phase,'address':100+2*p+i,
             'values':SUMMARY[op][phase]}
            for p,op in enumerate(pairs) for i,phase in enumerate(('pre','post'))]
     sites[-2]['address']=sites[-3]['address']
     order=[0]+list(range(2,len(sites)))+[1]
     plan={'binary_sha256':'hash','sites':sites,'event_order':order,
-          'allowed_event_orders':[order,[sid for sid in order if sites[sid]['op']!='copy']]}
-    def value(key,data):return {'key':key,'hex':data.encode().hex()}
+          'allowed_event_orders':[[sid for sid in order if sites[sid]['op'] not in omitted]
+                                  for omitted in ({'copy','trim'},{'trim'},{'copy'},set())]}
+    def value(key,data):
+        if trim_value:
+            pointers={'a':0x1000,'b':0x2000,'c':0x3000,'copied':0x4000,
+                      'trimmed':(0x4000 if copy_value else 0x3000 if use_other else 0x1000)+2}
+            if key in pointers:key=f'{pointers[key]:x}:{len(data.encode())}'
+        return {'key':key,'hex':data.encode().hex()}
     a,b,c=('SAME','SAME','SAME') if equal else ('13800138000','+86','UNUSED')
     selected=c if use_other else a;key='c' if use_other else 'a'
-    operand='copied' if copy_value else key
-    ci=10 if copy_value else 8
+    original=selected
+    before_trim='copied' if copy_value else key
+    operand='trimmed' if trim_value else before_trim
+    if trim_value:selected=selected[2:]
+    ci=8+2*int(copy_value)+2*int(trim_value)
     values={2:{'path':value('p1','phone.txt')},3:{'value':value('a',a)},
             4:{'path':value('p2','prefix.txt')},5:{'value':value('b',b)},
             6:{'path':value('p3','other.txt')},7:{'value':value('c',c)},
             ci:{'left':value('b',b),'right':value(operand,selected)},ci+1:{'value':value('ab',b+selected)},
             ci+2:{'value':value('ab',b+selected)},ci+3:{'json':value('j',json.dumps({'result':b+selected}))}}
-    if copy_value:values.update({8:{'value':value(key,selected)},9:{'value':value(operand,selected)}})
+    if copy_value:values.update({8:{'value':value(key,original)},9:{'value':value('copied',original)}})
+    if trim_value:
+        ti=8+2*int(copy_value)
+        values.update({ti:{'value':value(before_trim,original),'prefix':value('prefix','SA')},ti+1:{'value':value('trimmed',selected)}})
     events=[dict(site=sid,op=sites[sid]['op'],phase=sites[sid]['phase'],pid=11,tid=22+(i%2),g=33,
                  timestamp=i,sequence=i,values=values.get(sid,{})) for i,sid in enumerate(plan['event_order'])]
     doc={'binary_sha256':'hash','capture_errors':[],'returncode':0,'events':events,
          'stats':{'submitted':len(events),'submit_errors':0,'read_errors':0,'lost':0}}
     parent='source:3' if use_other else 'source:1'
+    dependency=parent;edges=[]
+    if copy_value:edges.append([dependency,'copy:1','input']);dependency='copy:1'
+    if trim_value:edges.append([dependency,'trim:1','input']);dependency='trim:1'
     oracle={'sources':sorted([parent,'source:2']),'excluded':['source:1' if use_other else 'source:3'],'result':b+selected,
-            'edges':([[parent,'copy:1','input']] if copy_value else [])+
-                    [['source:2','concat:1','left'],['copy:1' if copy_value else parent,'concat:1','right'],
+            'edges':edges+[['source:2','concat:1','left'],[dependency,'concat:1','right'],
                      ['concat:1','json:1','value'],['json:1','output:result','result']]}
+    if trim_value:oracle['source_byte_ranges']=sorted([{'source':parent,'ranges':[[2,len(original.encode())]]},
+        {'source':'source:2','ranges':[[0,len(b.encode())]]}],key=lambda x:x['source'])
     return doc,plan,oracle
 
 
@@ -71,7 +87,7 @@ class StringLineageTests(unittest.TestCase):
     def test_branch_pair_requires_actual_source_switch(self):
         with tempfile.TemporaryDirectory() as tmp:
             out=Path(tmp)
-            self.assertEqual(len(fixtures(out)),7)
+            self.assertEqual(len(fixtures(out)),11)
             oracle={o['case']:o for o in json.loads((out/'oracle.json').read_text())}
             names=('branch_phone','branch_other')
             requests={n:json.loads((out/'inputs'/n/'request.json').read_text()) for n in names}
@@ -112,6 +128,50 @@ class StringLineageTests(unittest.TestCase):
         self.assertTrue(all(c['passed'] for c in checks),checks)
         missing=next(c for c in checks if c['case']=='missing_copy_pair')
         self.assertEqual(missing['actual']['reason'],'Operand has no observed definition')
+
+    def test_trim_maps_retained_bytes_through_copy_and_concat(self):
+        for copied in (False,True):
+            for other in (False,True):
+                doc,plan,oracle=sample(equal=True,copy_value=copied,use_other=other,trim_value=True)
+                result=infer(doc,plan)
+                self.assertTrue(score(result,oracle)['passed'],result)
+                self.assertEqual(len(result['graph']['edges']),6 if copied else 5)
+                node=next(n for n in result['graph']['nodes'] if n['kind']=='trim')
+                self.assertEqual(node['input_byte_range'],[2,4])
+                self.assertTrue(all(c['passed'] for c in trim_negative_checks(doc,plan)))
+                # Right source/edges with the wrong byte range must fail scoring.
+                next(x for x in result['source_byte_ranges'] if x['source']==('source:3' if other else 'source:1'))['ranges']=[[0,4]]
+                self.assertFalse(score(result,oracle)['passed'])
+
+    def test_trim_rejects_missing_definition_and_unsupported_prefix(self):
+        doc,plan,_=sample(equal=True,trim_value=True)
+        missing=next(c for c in trim_negative_checks(doc,plan) if c['case']=='missing_trim_pair')
+        self.assertEqual(missing['actual']['reason'],'Operand has no observed definition')
+        pre=next(e for e in doc['events'] if e['op']=='trim' and e['phase']=='pre')
+        pre['values']['prefix']['hex']=b'XX'.hex()
+        self.assertEqual(infer(doc,plan)['status'],'unknown')
+
+    def test_byte_mapping_merges_ranges_and_rejects_gaps(self):
+        nodes={'s':{'kind':'source','length':8},'sink':{'kind':'output-field'}}
+        maps={'sink':[('s',0,2,1),('s',2,4,3)]}
+        self.assertEqual(byte_origins(nodes,maps,'sink',4),[{'source':'s','ranges':[[1,5]]}])
+        with self.assertRaisesRegex(ValueError,'Incomplete byte mapping'):
+            byte_origins(nodes,maps,'sink',5)
+
+    def test_trim_comparison_requires_changed_output_and_retained_sources(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out=Path(tmp);fixtures(out)
+            docs={};results={};requests={};outputs={}
+            for prefix in ('branch','copy','trim','copy_trim'):
+                for suffix in ('phone','other'):
+                    name=prefix+'_'+suffix
+                    doc,plan,_=sample(equal=True,copy_value='copy' in prefix,use_other=suffix=='other',trim_value='trim' in prefix)
+                    docs[name]=doc;results[name]=infer(doc,plan)
+                    requests[name]=json.loads((out/'inputs'/name/'request.json').read_text())
+                    outputs[name]={'result':'SAMEME' if 'trim' in prefix else 'SAMESAME'}
+            self.assertTrue(trim_checks(results,docs,requests,outputs)['passed'])
+            outputs['trim_other']=outputs['branch_other']
+            self.assertFalse(trim_checks(results,docs,requests,outputs)['passed'])
 
     def test_copy_comparison_requires_new_storage_and_unchanged_origin(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -44,30 +44,40 @@ def build(out):
 
 def fixtures(out):
     entries=[]
-    for name,phone,prefix,other,use_other,copy_value in [('ordinary','13800138000','+86','UNUSED',False,False),
-                                    ('equal_values','SAME','SAME','SAME',False,False),
-                                    ('json_escaping','user"\\id','地区:','user"\\id',False,False),
-                                    ('branch_phone','SAME','+86','SAME',False,False),
-                                    ('branch_other','SAME','+86','SAME',True,False),
-                                    ('copy_phone','SAME','+86','SAME',False,True),
-                                    ('copy_other','SAME','+86','SAME',True,True)]:
+    for name,phone,prefix,other,use_other,copy_value,trim_value in [('ordinary','13800138000','+86','UNUSED',False,False,False),
+                                    ('equal_values','SAME','SAME','SAME',False,False,False),
+                                    ('json_escaping','user"\\id','地区:','user"\\id',False,False,False),
+                                    ('branch_phone','SAME','+86','SAME',False,False,False),
+                                    ('branch_other','SAME','+86','SAME',True,False,False),
+                                    ('copy_phone','SAME','+86','SAME',False,True,False),
+                                    ('copy_other','SAME','+86','SAME',True,True,False),
+                                    ('trim_phone','SAME','+86','SAME',False,False,True),
+                                    ('trim_other','SAME','+86','SAME',True,False,True),
+                                    ('copy_trim_phone','SAME','+86','SAME',False,True,True),
+                                    ('copy_trim_other','SAME','+86','SAME',True,True,True)]:
         folder=out/'inputs'/name;folder.mkdir(parents=True)
         # Paired runs use the same files; only the request selector changes.
-        data_folder=out/'inputs'/'branch_data' if name.startswith(('branch_','copy_')) else folder
+        data_folder=out/'inputs'/'branch_data' if name.startswith(('branch_','copy_','trim_')) else folder
         data_folder.mkdir(exist_ok=True)
-        request={'UseOther':use_other,'CopyValue':copy_value}
+        request={'UseOther':use_other,'CopyValue':copy_value,'TrimValue':trim_value}
         for field,text in [('Phone',phone),('Prefix',prefix),('Other',other)]:
             path=data_folder/(field.lower()+'.txt');path.write_text(text)
             request[field]=str(path)
         save(folder/'request.json',request)
         chosen='source:3' if use_other else 'source:1'
-        operand='copy:1' if copy_value else chosen
-        entries.append({'case':name,'sources':sorted(['source:2',chosen]),
+        operand=chosen;edges=[]
+        if copy_value:edges.append([operand,'copy:1','input']);operand='copy:1'
+        if trim_value:edges.append([operand,'trim:1','input']);operand='trim:1'
+        selected=other if use_other else phone
+        expected={'case':name,'sources':sorted(['source:2',chosen]),
                         'excluded':['source:1' if use_other else 'source:3'],
-                        'result':prefix+(other if use_other else phone),
-                        'edges':([[chosen,'copy:1','input']] if copy_value else [])+
-                                [['source:2','concat:1','left'],[operand,'concat:1','right'],
-                                 ['concat:1','json:1','value'],['json:1','output:result','result']]})
+                        'result':prefix+(selected[2:] if trim_value else selected),
+                        'edges':edges+[['source:2','concat:1','left'],[operand,'concat:1','right'],
+                                 ['concat:1','json:1','value'],['json:1','output:result','result']]}
+        if trim_value:
+            expected['source_byte_ranges']=sorted([{'source':chosen,'ranges':[[2,len(selected.encode())]]},
+                {'source':'source:2','ranges':[[0,len(prefix.encode())]]}],key=lambda x:x['source'])
+        entries.append(expected)
     save(out/'oracle.json',entries)
     return [e['case'] for e in entries]
 
@@ -102,9 +112,13 @@ def score(inferred,expected):
     output=next(n['value'] for n in inferred['graph']['nodes'] if n['id']=='output:result')
     tp,fp,fn=len(actual&wanted),len(actual-wanted),len(wanted-actual)
     etp,efp,efn=len(aedges&wedges),len(aedges-wedges),len(wedges-aedges)
-    return {'passed':not(fp or fn or efp or efn) and output==expected['result'] and set(inferred['noncontributing_reads'])==set(expected['excluded']),
+    result={'passed':not(fp or fn or efp or efn) and output==expected['result'] and set(inferred['noncontributing_reads'])==set(expected['excluded']),
             'source_relations':{'tp':tp,'fp':fp,'fn':fn,'precision':tp/max(1,tp+fp),'recall':tp/max(1,tp+fn)},
             'modeled_graph_edges':{'tp':etp,'fp':efp,'fn':efn},'output_matches':output==expected['result']}
+    if 'source_byte_ranges' in expected:
+        result['byte_ranges_match']=inferred.get('source_byte_ranges')==expected['source_byte_ranges']
+        result['passed']=result['passed'] and result['byte_ranges_match']
+    return result
 
 
 def copy_negative_checks(doc,plan):
@@ -161,6 +175,44 @@ def copy_checks(inferred,documents,requests,outputs):
     return {'passed':pair['passed'] and all(all(c.values()) for c in checks.values()),'pair':pair,'comparisons':checks}
 
 
+def trim_negative_checks(doc,plan):
+    if infer(doc,plan)['status']!='resolved_under_configured_summaries':
+        return [{'case':'trim_baseline','passed':False,'reason':'Valid trim baseline required'}]
+    results=[]
+    for name in ('missing_trim_pair','wrong_trim_bytes','wrong_trim_address','unknown_trim_input'):
+        bad=deepcopy(doc)
+        if name=='missing_trim_pair':bad['events']=[e for e in bad['events'] if e['op']!='trim']
+        elif name=='unknown_trim_input':
+            next(e for e in bad['events'] if e['op']=='trim' and e['phase']=='pre')['values']['value']['key']='not-observed'
+        else:
+            value=next(e for e in bad['events'] if e['op']=='trim' and e['phase']=='post')['values']['value']
+            if name=='wrong_trim_bytes':value['hex']=b'XX'.hex()
+            else:value['key']='1234:2'
+        bad['stats']['submitted']=len(bad['events'])
+        result=infer(bad,plan)
+        results.append({'case':name,'passed':result['status']=='unknown','actual':result})
+    return results
+
+
+def trim_checks(inferred,documents,requests,outputs):
+    pairs={p:branch_pair_checks(inferred,documents,requests,outputs,prefix=p) for p in ('trim','copy_trim')}
+    checks={}
+    for prefix,base in (('trim','branch'),('copy_trim','copy')):
+        for suffix in ('phone','other'):
+            name=prefix+'_'+suffix;baseline=base+'_'+suffix
+            nodes=inferred[name].get('graph',{}).get('nodes',[])
+            trims=[n for n in nodes if n['kind']=='trim']
+            checks[name]={
+                'retained_range':len(trims)==1 and trims[0]['input_byte_range']==[2,4],
+                'same_sources':bool(inferred[name].get('sources')) and inferred[name].get('sources')==inferred[baseline].get('sources'),
+                'content_changed':outputs[name]!=outputs[baseline],
+                'same_binary':documents[name]['binary_sha256']==documents[baseline]['binary_sha256'],
+                'same_inputs':all(requests[name][k]==requests[baseline][k] for k in ('Phone','Prefix','Other','UseOther','CopyValue')),
+                'trim_requested':requests[name]['TrimValue'] is True and requests[baseline]['TrimValue'] is False,
+            }
+    return {'passed':all(p['passed'] for p in pairs.values()) and all(all(c.values()) for c in checks.values()),'pairs':pairs,'comparisons':checks}
+
+
 def run(out):
     ok=False
     try:
@@ -189,11 +241,12 @@ def run(out):
             comparisons[cases.index(o['case'])]['program_output_matches']=output=={'result':o['result']}
         pair=branch_pair_checks(inferred,documents,requests,outputs)
         copies=copy_checks(inferred,documents,requests,outputs)
-        negatives=negative_checks(documents['equal_values'],plan)+copy_negative_checks(documents['copy_other'],plan)
-        ok=all(x['passed'] and x['program_output_matches'] for x in comparisons) and all(x['passed'] for x in negatives) and pair['passed'] and copies['passed']
-        save(out/'evaluation.json',{'all_passed':ok,'cases':comparisons,'negative_checks':negatives,'branch_pair':pair,'copy_checks':copies,
-             'scope':'Seven controlled cases; modeled API operation edges, not complete instruction/byte lineage accuracy'})
-        print(json.dumps({'all_passed':ok,'cases':comparisons,'negative_checks':len(negatives),'branch_pair':pair,'copy_checks':copies}),flush=True)
+        trims=trim_checks(inferred,documents,requests,outputs)
+        negatives=negative_checks(documents['equal_values'],plan)+copy_negative_checks(documents['copy_other'],plan)+trim_negative_checks(documents['copy_trim_other'],plan)
+        ok=all(x['passed'] and x['program_output_matches'] for x in comparisons) and all(x['passed'] for x in negatives) and pair['passed'] and copies['passed'] and trims['passed']
+        save(out/'evaluation.json',{'all_passed':ok,'cases':comparisons,'negative_checks':negatives,'branch_pair':pair,'copy_checks':copies,'trim_checks':trims,
+             'scope':'Eleven controlled cases; configured operation edges and retained byte ranges; not arbitrary instruction lineage'})
+        print(json.dumps({'all_passed':ok,'cases':comparisons,'negative_checks':len(negatives),'branch_pair':pair,'copy_checks':copies,'trim_checks':trims}),flush=True)
     except Exception:
         error=traceback.format_exc();(out/'runner-error.txt').write_text(error);print(error,file=sys.stderr)
     finally:

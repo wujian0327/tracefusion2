@@ -9,12 +9,14 @@ from go_provenance import parse_nm
 SUMMARY = {
  'source': {'pre': {'path':('ax','bx')}, 'post': {'value':('ax','bx')}},
  'copy': {'pre': {'value':('ax','bx')}, 'post': {'value':('ax','bx')}},
+ 'trim': {'pre': {'value':('ax','bx'),'prefix':('cx','di')}, 'post': {'value':('ax','bx')}},
  'concat': {'pre': {'left':('bx','cx'),'right':('di','si')}, 'post': {'value':('ax','bx')}},
  'json': {'pre': {'value':('ax','bx')}, 'post': {'json':('ax','bx')}},
  'scope': {'pre':{},'post':{}},
 }
 CALLS = {'main.main': {'main.run':'scope'}, 'main.run': {
- 'main.readValue':'source', 'strings.Clone':'copy', 'runtime.concatstring2':'concat', 'main.marshalResult':'json'}}
+ 'main.readValue':'source', 'strings.Clone':'copy', 'strings.TrimPrefix':'trim',
+ 'runtime.concatstring2':'concat', 'main.marshalResult':'json'}}
 
 def physical_probes(plan):
     groups={}
@@ -64,8 +66,8 @@ def plan_binary(binary, go, env, out):
                 raise ValueError('Unmodeled root call: '+callee)
             if callee not in targets:continue
             if code[0]!=0xe8 or addr+len(code) not in addresses:raise ValueError('Expected direct CALL/continuation')
-            if targets[callee]=='copy' and addr+len(code) in jump_targets:
-                raise ValueError('Copy continuation is also a branch target; unsupported probe ambiguity')
+            if targets[callee] in ('copy','trim') and addr+len(code) in jump_targets:
+                raise ValueError('Optional operation continuation is also a branch target; unsupported probe ambiguity')
             if caller=='main.run':root_ops.append(targets[callee])
             pair=len(sites)//2
             for phase,address in [('pre',addr),('post',addr+len(code))]:
@@ -76,17 +78,19 @@ def plan_binary(binary, go, env, out):
                               'caller_address':symbols[caller][0],'location':loc,
                               'values':SUMMARY[targets[callee]][phase]})
     (out/'disassembly.txt').write_text('\n'.join(all_assembly))
-    if (len(sites),root_ops) not in [(12,['source','source','source','concat','json']),
-                                    (14,['source','source','source','copy','concat','json'])]:
+    shapes=[['source']*3+middle+['concat','json'] for middle in ([],['copy'],['trim'],['copy','trim'])]
+    if root_ops not in shapes or len(sites)!=2*(len(root_ops)+1):
         raise ValueError('Root operation shape changed; review binary before changing contract')
     order=[0]+list(range(2,len(sites)))+[1]
-    without_copy=[sid for sid in order if sites[sid]['op']!='copy']
-    orders=[order] if without_copy==order else [without_copy,order]
-    return {'adapter':'go-amd64-string-summaries-v2','binary':str(binary),
+    orders=[]
+    for omitted in ({'copy','trim'},{'trim'},{'copy'},set()):
+        candidate=[sid for sid in order if sites[sid]['op'] not in omitted]
+        if candidate not in orders:orders.append(candidate)
+    return {'adapter':'go-amd64-string-summaries-v3','binary':str(binary),
             'binary_sha256':hashlib.sha256(data).hexdigest(),'sites':sites,'event_order':order,
             'allowed_event_orders':orders,
             'calls':calls,'summaries':SUMMARY,'json_field':'result','snapshot_limit':512,
-            'scope':'Three source API returns; optional strings.Clone; nonempty immutable strings; concatstring2 and fixed JSON wrapper; one root/goroutine'}
+            'scope':'Three source API returns; optional Clone/TrimPrefix; nonempty immutable strings; concatstring2 and fixed JSON wrapper; one root/goroutine'}
 
 
 def decode(raw, spec):
