@@ -8,12 +8,13 @@ from go_provenance import parse_nm
 # Byte-string registers: (pointer, length), in Go ABIInternal.
 SUMMARY = {
  'source': {'pre': {'path':('ax','bx')}, 'post': {'value':('ax','bx')}},
+ 'copy': {'pre': {'value':('ax','bx')}, 'post': {'value':('ax','bx')}},
  'concat': {'pre': {'left':('bx','cx'),'right':('di','si')}, 'post': {'value':('ax','bx')}},
  'json': {'pre': {'value':('ax','bx')}, 'post': {'json':('ax','bx')}},
  'scope': {'pre':{},'post':{}},
 }
 CALLS = {'main.main': {'main.run':'scope'}, 'main.run': {
- 'main.readValue':'source', 'runtime.concatstring2':'concat', 'main.marshalResult':'json'}}
+ 'main.readValue':'source', 'strings.Clone':'copy', 'runtime.concatstring2':'concat', 'main.marshalResult':'json'}}
 
 def physical_probes(plan):
     groups={}
@@ -50,6 +51,10 @@ def plan_binary(binary, go, env, out):
             m=re.match(r'\s*(\S+:\d+)\s+(0x[0-9a-f]+)\s+([0-9a-f]+)\s+(.+)',line)
             if m: instructions.append((m[1],int(m[2],16),bytes.fromhex(m[3]),m[4].strip()))
         addresses={a for _,a,_,_ in instructions}
+        jump_targets=set()
+        for _,_,_,ins in instructions:
+            branch=re.match(r'(?:J\w+|LOOP\w*)\s+(0x[0-9a-f]+)\b',ins)
+            if branch:jump_targets.add(int(branch[1],16))
         for loc,addr,code,ins in instructions:
             parts=ins.split(None,1)
             if not parts or parts[0]!='CALL':continue
@@ -59,6 +64,8 @@ def plan_binary(binary, go, env, out):
                 raise ValueError('Unmodeled root call: '+callee)
             if callee not in targets:continue
             if code[0]!=0xe8 or addr+len(code) not in addresses:raise ValueError('Expected direct CALL/continuation')
+            if targets[callee]=='copy' and addr+len(code) in jump_targets:
+                raise ValueError('Copy continuation is also a branch target; unsupported probe ambiguity')
             if caller=='main.run':root_ops.append(targets[callee])
             pair=len(sites)//2
             for phase,address in [('pre',addr),('post',addr+len(code))]:
@@ -69,13 +76,17 @@ def plan_binary(binary, go, env, out):
                               'caller_address':symbols[caller][0],'location':loc,
                               'values':SUMMARY[targets[callee]][phase]})
     (out/'disassembly.txt').write_text('\n'.join(all_assembly))
-    if len(sites)!=12 or root_ops!=['source','source','source','concat','json']:
+    if (len(sites),root_ops) not in [(12,['source','source','source','concat','json']),
+                                    (14,['source','source','source','copy','concat','json'])]:
         raise ValueError('Root operation shape changed; review binary before changing contract')
-    order=[0]+list(range(2,12))+[1]
-    return {'adapter':'go-amd64-string-summaries-v1','binary':str(binary),
+    order=[0]+list(range(2,len(sites)))+[1]
+    without_copy=[sid for sid in order if sites[sid]['op']!='copy']
+    orders=[order] if without_copy==order else [without_copy,order]
+    return {'adapter':'go-amd64-string-summaries-v2','binary':str(binary),
             'binary_sha256':hashlib.sha256(data).hexdigest(),'sites':sites,'event_order':order,
+            'allowed_event_orders':orders,
             'calls':calls,'summaries':SUMMARY,'json_field':'result','snapshot_limit':512,
-            'scope':'Three source API returns; nonempty immutable strings; concatstring2 and fixed JSON wrapper; one root/goroutine'}
+            'scope':'Three source API returns; optional strings.Clone; nonempty immutable strings; concatstring2 and fixed JSON wrapper; one root/goroutine'}
 
 
 def decode(raw, spec):

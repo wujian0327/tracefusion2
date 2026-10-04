@@ -44,25 +44,29 @@ def build(out):
 
 def fixtures(out):
     entries=[]
-    for name,phone,prefix,other,use_other in [('ordinary','13800138000','+86','UNUSED',False),
-                                    ('equal_values','SAME','SAME','SAME',False),
-                                    ('json_escaping','user"\\id','地区:','user"\\id',False),
-                                    ('branch_phone','SAME','+86','SAME',False),
-                                    ('branch_other','SAME','+86','SAME',True)]:
+    for name,phone,prefix,other,use_other,copy_value in [('ordinary','13800138000','+86','UNUSED',False,False),
+                                    ('equal_values','SAME','SAME','SAME',False,False),
+                                    ('json_escaping','user"\\id','地区:','user"\\id',False,False),
+                                    ('branch_phone','SAME','+86','SAME',False,False),
+                                    ('branch_other','SAME','+86','SAME',True,False),
+                                    ('copy_phone','SAME','+86','SAME',False,True),
+                                    ('copy_other','SAME','+86','SAME',True,True)]:
         folder=out/'inputs'/name;folder.mkdir(parents=True)
         # Paired runs use the same files; only the request selector changes.
-        data_folder=out/'inputs'/'branch_data' if name.startswith('branch_') else folder
+        data_folder=out/'inputs'/'branch_data' if name.startswith(('branch_','copy_')) else folder
         data_folder.mkdir(exist_ok=True)
-        request={'UseOther':use_other}
+        request={'UseOther':use_other,'CopyValue':copy_value}
         for field,text in [('Phone',phone),('Prefix',prefix),('Other',other)]:
             path=data_folder/(field.lower()+'.txt');path.write_text(text)
             request[field]=str(path)
         save(folder/'request.json',request)
         chosen='source:3' if use_other else 'source:1'
+        operand='copy:1' if copy_value else chosen
         entries.append({'case':name,'sources':sorted(['source:2',chosen]),
                         'excluded':['source:1' if use_other else 'source:3'],
                         'result':prefix+(other if use_other else phone),
-                        'edges':[['source:2','concat:1','left'],[chosen,'concat:1','right'],
+                        'edges':([[chosen,'copy:1','input']] if copy_value else [])+
+                                [['source:2','concat:1','left'],[operand,'concat:1','right'],
                                  ['concat:1','json:1','value'],['json:1','output:result','result']]})
     save(out/'oracle.json',entries)
     return [e['case'] for e in entries]
@@ -103,8 +107,27 @@ def score(inferred,expected):
             'modeled_graph_edges':{'tp':etp,'fp':efp,'fn':efn},'output_matches':output==expected['result']}
 
 
-def branch_pair_checks(inferred,documents,requests,outputs):
-    a,b='branch_phone','branch_other'
+def copy_negative_checks(doc,plan):
+    if infer(doc,plan)['status']!='resolved_under_configured_summaries':
+        return [{'case':'copy_baseline','passed':False,'reason':'Valid copy baseline required'}]
+    results=[]
+    for name in ('missing_copy_pair','changed_copy_bytes','reused_copy_identity'):
+        bad=deepcopy(doc)
+        if name=='missing_copy_pair':
+            bad['events']=[e for e in bad['events'] if e['op']!='copy']
+        else:
+            before=next(e for e in bad['events'] if e['op']=='copy' and e['phase']=='pre')['values']['value']
+            after=next(e for e in bad['events'] if e['op']=='copy' and e['phase']=='post')['values']['value']
+            if name=='changed_copy_bytes':after['hex']=b'WRONG'.hex()
+            else:after['key']=before['key']
+        bad['stats']['submitted']=len(bad['events'])
+        result=infer(bad,plan)
+        results.append({'case':name,'passed':result['status']=='unknown','actual':result})
+    return results
+
+
+def branch_pair_checks(inferred,documents,requests,outputs,prefix='branch'):
+    a,b=prefix+'_phone',prefix+'_other'
     ra,rb=requests[a],requests[b]
     checks={
         'same_input_paths':all(ra[k]==rb[k] for k in ('Phone','Prefix','Other')),
@@ -118,6 +141,24 @@ def branch_pair_checks(inferred,documents,requests,outputs):
     }
     return {'passed':all(checks.values()),'checks':checks,
             'scope':'Observed value dependencies; selector/control dependence is not included'}
+
+
+def copy_checks(inferred,documents,requests,outputs):
+    pair=branch_pair_checks(inferred,documents,requests,outputs,prefix='copy')
+    checks={}
+    for suffix in ('phone','other'):
+        name='copy_'+suffix;baseline='branch_'+suffix
+        nodes=inferred[name].get('graph',{}).get('nodes',[])
+        copies=[n for n in nodes if n['kind']=='copy']
+        checks[name]={
+            'new_storage':len(copies)==1 and copies[0]['input_identity']!=copies[0]['output_identity'],
+            'same_sources':bool(inferred[name].get('sources')) and inferred[name].get('sources')==inferred[baseline].get('sources'),
+            'same_output':outputs[name]==outputs[baseline],
+            'same_binary':documents[name]['binary_sha256']==documents[baseline]['binary_sha256'],
+            'same_read_inputs':all(requests[name][k]==requests[baseline][k] for k in ('Phone','Prefix','Other','UseOther')),
+            'copy_requested':requests[name]['CopyValue'] is True and requests[baseline]['CopyValue'] is False,
+        }
+    return {'passed':pair['passed'] and all(all(c.values()) for c in checks.values()),'pair':pair,'comparisons':checks}
 
 
 def run(out):
@@ -147,11 +188,12 @@ def run(out):
             requests[o['case']]=json.loads((out/'inputs'/o['case']/'request.json').read_text())
             comparisons[cases.index(o['case'])]['program_output_matches']=output=={'result':o['result']}
         pair=branch_pair_checks(inferred,documents,requests,outputs)
-        negatives=negative_checks(documents['equal_values'],plan)
-        ok=all(x['passed'] and x['program_output_matches'] for x in comparisons) and all(x['passed'] for x in negatives) and pair['passed']
-        save(out/'evaluation.json',{'all_passed':ok,'cases':comparisons,'negative_checks':negatives,'branch_pair':pair,
-             'scope':'Five controlled cases; modeled API operation edges, not complete instruction/byte lineage accuracy'})
-        print(json.dumps({'all_passed':ok,'cases':comparisons,'negative_checks':len(negatives),'branch_pair':pair}),flush=True)
+        copies=copy_checks(inferred,documents,requests,outputs)
+        negatives=negative_checks(documents['equal_values'],plan)+copy_negative_checks(documents['copy_other'],plan)
+        ok=all(x['passed'] and x['program_output_matches'] for x in comparisons) and all(x['passed'] for x in negatives) and pair['passed'] and copies['passed']
+        save(out/'evaluation.json',{'all_passed':ok,'cases':comparisons,'negative_checks':negatives,'branch_pair':pair,'copy_checks':copies,
+             'scope':'Seven controlled cases; modeled API operation edges, not complete instruction/byte lineage accuracy'})
+        print(json.dumps({'all_passed':ok,'cases':comparisons,'negative_checks':len(negatives),'branch_pair':pair,'copy_checks':copies}),flush=True)
     except Exception:
         error=traceback.format_exc();(out/'runner-error.txt').write_text(error);print(error,file=sys.stderr)
     finally:

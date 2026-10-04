@@ -27,12 +27,12 @@ def infer(document, plan):
         require(len({e['sequence'] for e in events}) == len(events), 'Duplicate sequence')
         require(len({(e['pid'],e['g']) for e in events}) == 1 and all(e['g'] for e in events), 'Requires one execution goroutine')
         sites = {s['id']:s for s in plan['sites']}
-        # This pilot's root has a fixed operation sequence; reject missing or
-        # extra calls, including a completely absent unused source call.
-        expected = plan['event_order']
-        require([e['site'] for e in events] == expected, 'Missing, extra or reordered operation')
+        # Two declared traces: with/without one optional copy. No selector or
+        # oracle is supplied to inference. Other event omissions are rejected.
+        expected = plan.get('allowed_event_orders', [plan['event_order']])
+        require([e['site'] for e in events] in expected, 'Missing, extra or reordered operation')
         nodes, edges, stack, values = {}, [], [], {}
-        counts = {'source':0,'concat':0,'json':0}
+        counts = {'source':0,'copy':0,'concat':0,'json':0}
         sink = None
         def add_value(key, node, data):
             require(key not in values, 'Aliased/reused value identity unsupported')
@@ -61,6 +61,16 @@ def infer(document, plan):
                 require(1 < len(data) <= 128, 'Source strings must contain 2..128 bytes')
                 node.update(path=raw(before['values']['path']).decode(), length=len(data), sha256=hashlib.sha256(data).hexdigest())
                 add_value(value['key'], nid, data)
+            elif op == 'copy':
+                source = before['values']['value']
+                parent = lookup(source)
+                value = event['values']['value']
+                require(raw(value) == raw(source), 'Copy result contradicts summary')
+                # A supported nonempty Clone must define distinct storage.
+                add_value(value['key'], nid, raw(value))
+                node.update(operation='string-clone', input_identity=source['key'],
+                            output_identity=value['key'], output_length=len(raw(value)))
+                edges.append({'source':parent,'target':nid,'kind':'data','role':'input'})
             elif op == 'concat':
                 left, right = before['values']['left'], before['values']['right']
                 parents = (lookup(left), lookup(right))
@@ -83,7 +93,8 @@ def infer(document, plan):
                 nodes[sink] = {'id':sink,'kind':'output-field','field':'result','value':output['result']}
                 edges.append({'source':nid,'target':sink,'kind':'data','role':'result'})
             nodes[nid] = node
-        require(not stack and counts == {'source':3,'concat':1,'json':1} and sink, 'Incomplete workload')
+        require(not stack and counts['source']==3 and counts['concat']==1 and counts['json']==1
+                and counts['copy'] in (0,1) and sink, 'Incomplete workload')
         keep = backward_nodes(edges, [sink], {'data'})
         origins = sorted(n for n in keep if nodes[n]['kind'] == 'source')
         return {'status':'resolved_under_configured_summaries','sources':origins,
@@ -91,6 +102,7 @@ def infer(document, plan):
                 'noncontributing_reads':[n for n in nodes if nodes[n]['kind']=='source' and n not in keep],
                 'graph':{'nodes':[nodes[n] for n in sorted(keep)],'edges':[e for e in edges if e['source'] in keep and e['target'] in keep]},
                 'observed_graph':{'nodes':list(nodes.values()),'edges':edges},
-                'scope':'Explicit data dependencies; source API returns, immutable strings, configured concat and JSON summaries; not arbitrary Go instruction replay'}
+                'scope':('Explicit data dependencies; source API returns, immutable strings, configured concat and JSON summaries; not arbitrary Go instruction replay'
+                         if not counts['copy'] else 'Explicit data dependencies; source API returns, immutable strings, configured copy, concat and JSON summaries; not arbitrary Go instruction replay')}
     except (ValueError, KeyError, TypeError, UnicodeError) as exc:
         return {'status':'unknown','reason':str(exc)}

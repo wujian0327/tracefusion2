@@ -5,11 +5,13 @@ import (
  "fmt"
  "os"
  "runtime"
+ "strings"
 )
 
 type request struct {
  Phone, Prefix, Other string
  UseOther bool
+ CopyValue bool
 }
 
 // These are ordinary application operations, without provenance IDs/callbacks.
@@ -25,12 +27,13 @@ func marshalResult(value string) []byte {
  return b
 }
 
-func run(phonePath, prefixPath, otherPath string, useOther bool) []byte {
+func run(phonePath, prefixPath, otherPath string, useOther, copyValue bool) []byte {
  phone := readValue(phonePath)
  prefix := readValue(prefixPath)
  other := readValue(otherPath)
  selected := phone
  if useOther { selected = other }
+ if copyValue { selected = strings.Clone(selected) }
  result := prefix + selected
  encoded := marshalResult(result)
  runtime.KeepAlive(phone)
@@ -42,6 +45,6 @@ func run(phonePath, prefixPath, otherPath string, useOther bool) []byte {
 func main() {
  var in request
  if err := json.NewDecoder(os.Stdin).Decode(&in); err != nil { panic(err) }
- encoded := run(in.Phone, in.Prefix, in.Other, in.UseOther)
+ encoded := run(in.Phone, in.Prefix, in.Other, in.UseOther, in.CopyValue)
  fmt.Println(string(encoded))
 }
