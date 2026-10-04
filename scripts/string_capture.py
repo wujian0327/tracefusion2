@@ -78,7 +78,7 @@ def decode_record(data,size,sites):
     return decode(raw,sites[raw.site])
 
 
-def collect(binary,plan,input_bytes,out,transport=None):
+def collect(binary,plan,input_bytes,out,transport=None,driver=None):
     # Alternate event layouts can reuse process lifecycle, namespace filtering,
     # perf draining and loss accounting without changing string experiments.
     make_source=source if transport is None else transport.source
@@ -88,7 +88,7 @@ def collect(binary,plan,input_bytes,out,transport=None):
     out.mkdir()
     errors=[];records=[];lost=[0];stats={};sizes={};proc=None;bpf=None
     stdout=(out/'target.stdout').open('wb');stderr=(out/'target.stderr').open('wb')
-    metadata={}
+    metadata={};pool=None;driven=None
     try:
         if hashlib.sha256(binary.read_bytes()).hexdigest()!=plan['binary_sha256']:raise ValueError('Binary changed')
         import bcc
@@ -111,9 +111,14 @@ def collect(binary,plan,input_bytes,out,transport=None):
         def lost_callback(cpu,n):lost[0]+=n
         bpf['events'].open_perf_buffer(callback,page_cnt=64,lost_cb=lost_callback)
         proc.stdin.write(input_bytes);proc.stdin.close()
+        if driver is not None:
+            from concurrent.futures import ThreadPoolExecutor
+            pool=ThreadPoolExecutor(max_workers=1)
+            driven=pool.submit(driver,out)
         deadline=time.monotonic()+30
         while proc.poll() is None:
             bpf.perf_buffer_poll(timeout=100)
+            if driven is not None and driven.done():driven.result()
             if time.monotonic()>deadline:raise TimeoutError('Target timeout')
         for _ in range(5):bpf.perf_buffer_poll(timeout=50)
         for i,k in enumerate(('submitted','submit_errors','read_errors','probe_hits','namespace_errors','pid_rejections','namespace_differences')):
@@ -121,6 +126,7 @@ def collect(binary,plan,input_bytes,out,transport=None):
         stats['lost']=lost[0]
         if not records:errors.append('No events')
         if stats['submitted']!=len(records) or any(stats[k] for k in ('submit_errors','read_errors','lost')):errors.append('Incomplete capture')
+        if driven is not None:driven.result(timeout=10)
     except Exception as exc:errors.append(repr(exc))
     finally:
         if proc:
@@ -130,6 +136,7 @@ def collect(binary,plan,input_bytes,out,transport=None):
         if bpf:
             try:bpf.cleanup()
             except Exception as exc:errors.append('cleanup: '+repr(exc))
+        if pool:pool.shutdown(wait=True,cancel_futures=True)
         stdout.close();stderr.close()
     doc={'backend':'ebpf-bcc','binary_sha256':plan['binary_sha256'],'capture_errors':errors,
          'returncode':proc.returncode if proc else None,'stats':stats,'events':records,

@@ -186,8 +186,15 @@ def infer(document,plan):
         actual=bytes(machine.memory[dst+i].number for i in range(4))
         require(pointer==dst and data==actual,'JSON input disagrees with replayed stores')
         _,encoded=snapshot(root[9]['values']['json']);output=json.loads(encoded)
-        require(isinstance(output,dict) and set(output)=={'result'} and isinstance(output['result'],str)
-                and output['result'].encode()==actual,'JSON value contradicts observed byte output')
+        model=plan.get('json_model','string-result-v1')
+        if model=='gin-byte-array-v1':
+            require(isinstance(output,dict) and set(output)=={'result'} and
+                    isinstance(output['result'],list) and all(type(b) is int for b in output['result']) and
+                    output['result']==list(actual),'JSON array contradicts observed byte output')
+        else:
+            require(model=='string-result-v1','Unsupported JSON model')
+            require(isinstance(output,dict) and set(output)=={'result'} and isinstance(output['result'],str)
+                    and output['result'].encode()==actual,'JSON value contradicts observed byte output')
         byte_sources=[]
         for i in range(4):
             value=machine.memory[dst+i];nid='output-byte:'+str(i)
