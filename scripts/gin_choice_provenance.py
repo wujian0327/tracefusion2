@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Hidden control-byte experiment: full / boundary / selective observation."""
+"""Control-byte experiment: full / boundary / selective / stable entry snapshot."""
 import argparse
 from copy import deepcopy
 from datetime import datetime,timezone
@@ -42,7 +42,8 @@ def build_role(out,role):
         return build(out,'assign',scenario=src,extra_sources=(role+'.go','tracing.go'),
             operation_source=CHOICE/'choice.go' if role=='downstream' else None,expected_modules=MODULES,
             planner=partial(plan_binary,cross_role=role,tracing='otel',
-                runtime_inputs=[dict(register='rdi',length=1)] if role=='downstream' else None))
+                runtime_inputs=[dict(register='rdi',length=1)] if role=='downstream' else None,
+                runtime_input_ownership='request-private' if role=='downstream' else None))
 
 
 def individual_unknowns(doc,plan):
@@ -92,16 +93,17 @@ def analyze(pair,plans,captures,variant):
             require(row['byte_sources']==expected and row['transfer_contributes']==(not local),'Wrong byte origin')
         negative=negative_checks(locals_['upstream'],locals_['downstream'])+negative_span_checks(locals_['upstream'],locals_['downstream'],spans)
         require(all(n['passed'] for n in negative),'Negative dependency check failed')
-        if mode=='selective':
+        if mode in ('selective','entry'):
             doc=docs['downstream'];plan=plans['downstream'];selected=set(plan['selected_instruction_sites'])
             require(len(selected)==1,'Expected one selected probe site')
-            require(sum(e['site'] in selected for e in doc['events'])==32,'Expected four observed comparisons per request')
+            expected_events=8 if mode=='entry' else 32
+            require(sum(e['site'] in selected for e in doc['events'])==expected_events,'Unexpected number of input observations')
             for failure in ('missing','wrong_pointer','extra'):
                 bad=deepcopy(doc);events=bad['events'];i=next(i for i,e in enumerate(events) if e['site'] in selected)
                 if failure=='missing':events.pop(i)
                 elif failure=='extra':events.insert(i,deepcopy(events[i]))
                 else:
-                    snap=events[i]['values']['load'];snap['pointer']+=1;snap['key']=f"{snap['pointer']:x}:1"
+                    snap=events[i]['values']['control' if mode=='entry' else 'load'];snap['pointer']+=1;snap['key']=f"{snap['pointer']:x}:1"
                 for j,e in enumerate(events):e['sequence']=j
                 bad['stats']['submitted']=len(events)
                 result=bind_service(bad,plan);ok=result['status']=='unknown'
@@ -110,6 +112,7 @@ def analyze(pair,plans,captures,variant):
     report=dict(passed=True,mode=mode,signature=signature,unknown_requests=unknowns,negative_checks=negative,
         capture_counts=counts,concurrency=coverage,spans=sum(map(len,spans.values())),
         expected_behavior='unknown' if mode=='boundary' else 'resolved',inference_status=joined['status'])
+    if mode=='entry':report['entry_stability']=plans['downstream']['entry_stability']
     return report
 
 
@@ -120,7 +123,7 @@ def run(out,build_only=False):
             src=Path(tmp);stage(src);client=build_client(out/'build/client',scenario=src)
         plans={r:build_role(out/'build'/r,r) for r in ('upstream','downstream')}
         if build_only:passed=True;return 0
-        for mode in ('full','boundary','selective'):
+        for mode in ('full','boundary','selective','entry'):
             trial=out/mode;trial.mkdir()
             def builder(directory,role,variant):
                 shutil.copytree(out/'build'/role,directory)
@@ -134,10 +137,11 @@ def run(out,build_only=False):
                 startup_fn=lambda role,pair,caps:dict(Service=role,TraceFile=str(caps[role]/'spans.jsonl'),ClientBinary=str(client)))
             require(rc==0,'Failed '+mode+' trial; inspect '+str(trial/'runner-error.txt'))
             reports[mode]=json.loads((trial/'choice/evaluation.json').read_text())
-        require(reports['full']['signature']==reports['selective']['signature'],'Full/selective origins differ')
+        require(reports['full']['signature']==reports['selective']['signature']==reports['entry']['signature'],'Full/selective/entry origins differ')
         save(out/'comparison.json',dict(all_passed=True,reports=reports,
-            scope='One configured one-byte runtime input, one static comparison site observed four times per request; no automatic global minimum claim'))
-        passed=True;print(json.dumps(dict(all_passed=True,boundary_unknown=8,full_resolved=8,selective_resolved=8)),flush=True)
+            control_observation_events={m:reports[m]['capture_counts']['downstream']['instruction_events'] for m in ('selective','entry')},
+            scope='Compare four per-comparison observations with one entry snapshot, conditional on checked leaf stores and declared private ownership; no global minimum claim'))
+        passed=True;print(json.dumps(dict(all_passed=True,boundary_unknown=8,full_resolved=8,selective_resolved=8,entry_resolved=8)),flush=True)
     except Exception:
         error=traceback.format_exc();(out/'runner-error.txt').write_text(error);print(error,flush=True)
     finally:

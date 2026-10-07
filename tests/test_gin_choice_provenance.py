@@ -18,6 +18,7 @@ from gin_byte_provenance import fixtures
 from gin_cross_provenance import readiness
 from gin_otel_provenance import client
 from gin_otel_boundaries import span_chains,read_spans
+from observation_contract import stable_runtime_input
 import gin_byte_capture
 
 
@@ -31,7 +32,8 @@ def choice_evidence(control=0,use_c=False,**kwargs):
         snaps={'load':{'address':arg,'length':1}} if arg and arg['kind']=='mem' else {}
         p['sites'].append(dict(id=sid,op='instruction',phase='step',pair=-1,address=n['address'],snapshots=snaps))
     p.update(instructions=ir,entry=ir[0]['address'],event_order=[s['id'] for s in p['sites']],
-             runtime_inputs=[dict(register='rdi',length=1)],runtime_input_sites=[n['site'] for n in ir if n['asm'].startswith('CMPB')])
+             runtime_inputs=[dict(register='rdi',length=1)],runtime_input_ownership='request-private',
+             runtime_input_sites=[n['site'] for n in ir if n['asm'].startswith('CMPB')])
     events=[e for e in doc['events'] if e['op']!='instruction']
     pre=next(e for e in events if e['op']=='work' and e['phase']=='pre')
     post=next(e for e in events if e['op']=='work' and e['phase']=='post')
@@ -62,11 +64,59 @@ def choice_evidence(control=0,use_c=False,**kwargs):
 def project(doc,plan,mode):
     p=select_observation(plan,mode);ids={s['id'] for s in p['sites']};d=deepcopy(doc)
     d['events']=[e for e in d['events'] if e['site'] in ids]
+    if mode=='entry':
+        # Synthetic entry snapshot for a fixture whose private control byte
+        # is constant; this does NOT claim an entry sample was captured by BPF.
+        control=next(e['values']['load'] for e in doc['events'] if e['site'] in plan['runtime_input_sites'])
+        next(e for e in d['events'] if e['op']=='instruction')['values']['control']=deepcopy(control)
     for i,e in enumerate(d['events']):e['sequence']=i
     d['stats']['submitted']=len(d['events']);return d,p
 
 
 class ChoiceTests(unittest.TestCase):
+    def test_entry_snapshot_matches_four_comparisons(self):
+        for control in (0,1):
+            d,p=choice_evidence(control);entry,ep=project(d,p,'entry');result=bind(entry,ep)
+            self.assertEqual(result['status'],'resolved',result)
+            full=bind(d,p)
+            self.assertEqual(result['results'][0]['provenance']['byte_sources'],full['results'][0]['provenance']['byte_sources'])
+            steps=result['results'][0]['provenance']['instruction_steps']
+            reused=[s for s in steps if 'runtime_input_evidence' in s]
+            self.assertEqual(len(reused),4)
+            self.assertEqual(len({s['runtime_input_evidence']['event_sequence'] for s in reused}),1)
+            self.assertEqual(sum(e['op']=='instruction' for e in entry['events']),1)
+
+    def test_entry_reuse_rejects_unproven_invariance(self):
+        _,p=choice_evidence()
+        for failure in ('ownership','control_store','alias_store','base_change','call','entry_loop'):
+            bad=deepcopy(p);ir=bad['instructions']
+            store=next(n for n in ir if n['op']=='mov' and n['args'][-1]['kind']=='mem')
+            if failure=='ownership':bad.pop('runtime_input_ownership')
+            elif failure=='control_store':store['args'][-1]['base']='rdi'
+            elif failure=='alias_store':store['args'][-1]['base']='rsi'
+            elif failure=='base_change':ir[0]['args'][-1]['reg']='rax'
+            elif failure=='call':ir[0]['op']='call'
+            else:next(n for n in ir if n['op']=='jmp')['target']=bad['entry']
+            with self.assertRaises(ValueError,msg=failure):select_observation(bad,'entry')
+        # Rechecking the proof in inference prevents trusting a stale certificate.
+        d,p=choice_evidence();d,p=project(d,p,'entry');p['runtime_input_ownership']='shared'
+        self.assertEqual(bind(d,p)['status'],'unknown')
+
+    def test_bad_entry_events_and_runtime_alias_rejected(self):
+        d,p=choice_evidence();doc,plan=project(d,p,'entry')
+        for failure in ('missing','extra','pointer','alias'):
+            bad=deepcopy(doc);events=bad['events'];i=next(i for i,e in enumerate(events) if e['op']=='instruction')
+            if failure=='missing':events.pop(i)
+            elif failure=='extra':events.insert(i,deepcopy(events[i]))
+            elif failure=='pointer':
+                v=events[i]['values']['control'];v['pointer']+=1;v['key']=f"{v['pointer']:x}:1"
+            else:
+                for e in events:
+                    if e['op'] in ('work','instruction'):e['registers']['rdi']=e['registers']['rax']
+            for j,e in enumerate(events):e['sequence']=j
+            bad['stats']['submitted']=len(events)
+            self.assertEqual(bind(bad,plan)['status'],'unknown',failure)
+
     def test_same_boundary_values_different_actual_origins(self):
         projections=[]
         for control in (0,1):
@@ -110,10 +160,15 @@ class ChoiceTests(unittest.TestCase):
         root=Path(os.environ['GIN_CHOICE_BUILD'])/'build'
         for role in ('upstream','downstream'):
             plan=json.loads((root/role/'plan.json').read_text())
-            for mode in ('full','boundary','selective'):
+            for mode in ('full','boundary','selective','entry'):
                 p=select_observation(plan,mode)
                 self.assertTrue(gin_byte_capture.source(p,1,SimpleNamespace(st_dev=0,st_ino=0)))
-                if mode=='selective':self.assertEqual(sum(s['op']=='instruction' for s in p['sites']),int(role=='downstream'))
+                if mode in ('selective','entry'):self.assertEqual(sum(s['op']=='instruction' for s in p['sites']),int(role=='downstream'))
+                if mode=='entry' and role=='downstream':
+                    self.assertEqual(p['entry_stability'],stable_runtime_input(p))
+                    selected=next(s for s in p['sites'] if s['op']=='instruction')
+                    self.assertEqual(selected['address'],p['entry'])
+                    self.assertEqual(selected['snapshots']['control'],dict(pointer='rdi',length=1))
         with tempfile.TemporaryDirectory() as tmp:
             out=Path(tmp);captures={};procs={};logs=[]
             try:

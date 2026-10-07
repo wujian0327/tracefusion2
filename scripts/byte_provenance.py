@@ -7,6 +7,7 @@ import json
 from interproc_model import Sym, flags_for
 from hybrid_model import branch_taken, BRANCHES, require
 from lineage_graph import backward_nodes
+from observation_contract import stable_runtime_input
 
 MASK64=(1<<64)-1
 
@@ -38,6 +39,7 @@ class ByteMachine:
             nid='entry:'+reg;nodes[nid]={'id':nid,'kind':'abi-address','value':value}
             self.regs[reg]=Sym(number=value,refs=frozenset({nid}))
         self.runtime_regions=[]
+        self.runtime_snapshot=None
         for region in plan.get('runtime_inputs',[]):
             require(region==dict(register='rdi',length=1),'Unsupported runtime input contract')
             reg=region['register'];ptr=entry['registers'][reg]
@@ -75,6 +77,12 @@ class ByteMachine:
         address=self.address(arg).number
         if arg['width']==8 and address in self.runtime_regions:
             require(self.instructions[self.pc]['op']=='cmp','Runtime input is supported only as a comparison operand')
+            if self.plan.get('observation_mode')=='entry':
+                if self.runtime_snapshot is None:raise MissingObservation(self.pc)
+                ptr,data,sequence=self.runtime_snapshot
+                require(ptr==address,'Entry input address changed')
+                self.steps[-1]['runtime_input_evidence']=dict(kind='reused-entry-snapshot',event_sequence=sequence)
+                return Sym(number=data[0])
             if event is None:raise MissingObservation(self.pc)
             ptr,data=snapshot(event['values']['load'])
             require(ptr==address and len(data)==1,'Runtime input snapshot mismatch')
@@ -105,6 +113,11 @@ class ByteMachine:
         if event is not None:
             require(event['site']==n['site'],'Observed instruction order disagrees with CFG replay')
             self.verify(event)
+        if self.plan.get('observation_mode')=='entry' and self.runtime_regions and not self.steps:
+            require(event is not None,'Missing entry input event')
+            ptr,data=snapshot(event['values']['control'])
+            require(ptr==self.runtime_regions[0] and len(data)==1,'Entry input snapshot mismatch')
+            self.runtime_snapshot=(ptr,data,event['sequence'])
         op=n['op'];args=n['args'];nid='step:'+str(len(self.steps));next_pc=n['next']
         node={'id':nid,'kind':'instruction','address':n['address'],'asm':n['asm'],'step':len(self.steps)}
         if event is None:node['evidence']='modeled-from-boundaries'
@@ -177,21 +190,28 @@ def infer(document,plan):
         root=[e for e in events if e['op']!='instruction']
         require([e['site'] for e in root]==plan['root_order'],'Missing or extra boundary events')
         mode=plan.get('observation_mode','full')
-        require(mode in ('full','boundary','selective'),'Unknown observation mode')
+        require(mode in ('full','boundary','selective','entry'),'Unknown observation mode')
         if mode=='boundary':
             contract='runtime-byte-input-v1' if plan.get('runtime_inputs') else 'closed-four-byte-leaf-v1'
             require(plan.get('replay_contract')==contract,'Missing boundary replay contract')
             require(events==root and len(root)==10,'Boundary mode accepts no internal events')
             require(not any(s['op']=='instruction' for s in plan['sites']),'Boundary plan still attaches internal probes')
             execution=[]
-        elif mode=='selective':
+        elif mode in ('selective','entry'):
             contract='runtime-byte-input-v1' if plan.get('runtime_inputs') else 'closed-four-byte-leaf-v1'
+            if mode=='entry' and plan.get('runtime_inputs'):
+                contract='stable-runtime-byte-input-v1'
+                require(plan.get('entry_stability')==stable_runtime_input(plan),'Invalid entry stability certificate')
             require(plan.get('replay_contract')==contract,'Missing selective replay contract')
             require(events[:7]==root[:7] and events[-3:]==root[-3:],'Instruction evidence outside transform interval')
             execution=events[7:-3]
             selected=set(plan.get('selected_instruction_sites',[]))
             require(selected=={s['id'] for s in plan['sites'] if s['op']=='instruction'},'Selective attachment contract mismatch')
             require(all(e['op']=='instruction' and e['site'] in selected for e in execution),'Unexpected selective evidence')
+            if mode=='entry':
+                require(len(execution)==int(bool(plan.get('runtime_inputs'))),'Entry mode requires exactly one input event per request')
+                if execution:
+                    require(selected=={plan['instructions'][0]['site']},'Entry probe is not at leaf entry')
         else:
             require(events[:7]==root[:7] and events[-3:]==root[-3:],'Instruction evidence outside transform interval')
             execution=events[7:-3]
@@ -223,7 +243,7 @@ def infer(document,plan):
         machine=ByteMachine(plan,execution[0] if mode=='full' else work,candidates[0],(dst,dst_bytes),nodes,edges,auxiliary)
         if mode=='boundary':
             while not machine.halted:machine.step()
-        elif mode=='selective':
+        elif mode in ('selective','entry'):
             position=0
             while not machine.halted:
                 n=machine.instructions[machine.pc];event=None

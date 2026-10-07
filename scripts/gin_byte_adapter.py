@@ -9,15 +9,22 @@ from go_provenance import parse_nm
 from go_read_provenance import scope_plan
 from gin_api_provenance import BOUNDARIES
 from hybrid_model import require
+from observation_contract import stable_runtime_input
 
 
 def select_observation(plan,mode):
-    require(mode in ('full','boundary','selective'),'Unknown observation mode')
+    require(mode in ('full','boundary','selective','entry'),'Unknown observation mode')
     result=deepcopy(plan)
     require(plan.get('observation_mode','full')=='full','Select from a full plan')
     result['observation_mode']=mode
-    if mode in ('boundary','selective'):
+    if mode in ('boundary','selective','entry'):
         selected=set(plan.get('runtime_input_sites',[])) if mode=='selective' else set()
+        if mode=='entry' and plan.get('runtime_inputs'):
+            result['entry_stability']=stable_runtime_input(plan)
+            selected={plan['instructions'][0]['site']}
+            site=next(s for s in result['sites'] if s['id'] in selected)
+            require(len(site['snapshots'])<2 and 'control' not in site['snapshots'],'No transport slot for entry input')
+            site['snapshots']['control']={'pointer':'rdi','length':1}
         result['sites']=[s for s in result['sites'] if s['op']!='instruction' or s['id'] in selected]
         ids={s['id'] for s in result['sites']}
         result['event_order']=[s for s in result['event_order'] if s in ids]
@@ -25,11 +32,12 @@ def select_observation(plan,mode):
             if n.get('site') not in selected:n.pop('site',None)
         result['selected_instruction_sites']=sorted(selected)
         result['replay_contract']='runtime-byte-input-v1' if plan.get('runtime_inputs') else 'closed-four-byte-leaf-v1'
+        if mode=='entry' and plan.get('runtime_inputs'):result['replay_contract']='stable-runtime-byte-input-v1'
         result['scope']+='; modeled replay between retained observations, within declared input regions'
     return result
 
 
-def plan_binary(binary,go,env,out,*,cross_role=None,tracing='forward',observation='full',runtime_inputs=None):
+def plan_binary(binary,go,env,out,*,cross_role=None,tracing='forward',observation='full',runtime_inputs=None,runtime_input_ownership=None):
     data=binary.read_bytes();sites=[];texts=[]
     nm=subprocess.check_output([go,'tool','nm','-size',str(binary)],env=env,text=True)
     assembly=subprocess.check_output(['objdump','-d','-M','intel','--no-show-raw-insn',str(binary)],text=True)
@@ -116,6 +124,7 @@ def plan_binary(binary,go,env,out,*,cross_role=None,tracing='forward',observatio
     if runtime_inputs:
         require(runtime_inputs==[dict(register='rdi',length=1)],'Only the declared fourth-argument control byte is supported')
         plan['runtime_inputs']=runtime_inputs
+        if runtime_input_ownership:plan['runtime_input_ownership']=runtime_input_ownership
         candidates=[n for n in ir if n['op']=='cmp' and n['args'][0]['kind']=='mem' and
                     n['args'][0]['base']=='rdi' and not n['args'][0]['index'] and n['args'][0]['offset']==0]
         require(len(candidates)==1,'Expected one control-byte comparison site')
