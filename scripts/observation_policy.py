@@ -10,7 +10,7 @@ import json
 from pathlib import Path
 
 from hybrid_model import BRANCHES,require
-from observation_contract import stable_runtime_input,deterministic_runtime_input
+from observation_contract import stable_runtime_input,deterministic_runtime_input,runtime_input_region,runtime_read_operand
 
 UNKNOWN=frozenset({'unknown'})
 SCALAR=frozenset({'scalar'})
@@ -24,7 +24,7 @@ def analyze_inputs(plan):
     abi=plan['abi'];initial={abi['src_register']:frozenset({'src'}),abi['dst_register']:frozenset({'dst'})}
     if 'aux_register' in abi:initial[abi['aux_register']]=frozenset({'aux'})
     if plan.get('runtime_inputs'):
-        require(plan['runtime_inputs']==[dict(register='rdi',length=1)],'Unsupported runtime input contract')
+        runtime_input_region(plan)
         initial['rdi']=frozenset({'control'})
     initial['flags']=UNKNOWN
     states={plan['entry']:initial};queue=deque([plan['entry']]);queued={plan['entry']}
@@ -48,9 +48,7 @@ def analyze_inputs(plan):
             if validate:
                 require(arg['width']==8 and region<=POINTERS,'Unmodeled memory input at '+hex(n['address']))
                 if 'control' in region:
-                    require(region==frozenset({'control'}) and (op=='cmp' or
-                            (op=='movzx' and plan.get('runtime_state_model')=='xor-control-byte-v1')) and arg==args[0] and
-                            arg['base']=='rdi' and not arg.get('index') and arg['offset']==0,
+                    require(region==frozenset({'control'}) and arg==runtime_read_operand(n,plan),
                             'Control read requires an unsupported alias or operation')
                     reads.add(n['address'])
             return SCALAR
@@ -128,7 +126,7 @@ def choose_observation(plan):
         for address in reads:
             node=nodes[address];sid=node['site'];site=sites[sid]
             require(site['op']=='instruction' and site['address']==address and
-                    site['snapshots'].get('load')==dict(address=node['args'][0],length=1),'Missing control-read capture contract')
+                    site['snapshots'].get('load')==dict(address=runtime_read_operand(node,plan),length=1),'Missing control-read capture contract')
             selected.append(sid)
         require(set(selected)==set(plan.get('runtime_input_sites',[])),'Declared runtime probe sites disagree with CFG analysis')
         try:

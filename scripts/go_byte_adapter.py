@@ -50,8 +50,16 @@ def decode_function(rows):
             left,right=args.split(',')
             n.update(op='movzx',args=[operand(left,8),operand(right,32)])
             require(n['args'][0]['kind']=='mem' and n['args'][1]['kind']=='reg','Expected byte load')
-        elif op in ('MOVB','MOVL','MOVQ','LEAQ','XORL','XORQ','SUBQ','ADDQ','CMPQ','CMPL','CMPB','TESTB','INCQ'):
+        elif op in ('MOVB','MOVL','MOVQ','LEAQ','XORL','XORQ','SUBQ','ADDQ','CMPQ','CMPL','CMPB','TESTB','TESTL','TESTQ','INCQ'):
             width={'B':8,'L':32,'Q':64}[op[-1]]
+            # Go objdump can print TESTL SI, SI for 40 84 f6 (TEST SIL,SIL).
+            # For register TEST derive width from the actual opcode, not that mnemonic.
+            if op.startswith('TEST') and '(' not in args:
+                code=bytes.fromhex(row['code']);raw=code[1:] if 0x40<=code[0]<=0x4f else code
+                require(len(raw)==2 and raw[0] in (0x84,0x85) and raw[1]&0xc0==0xc0,'Unsupported register TEST encoding')
+                width=8 if raw[0]==0x84 else 64 if len(code)==3 and code[0]&8 else 32
+                require(not (width==8 and len(code)==2 and (raw[1]&7>=4 or (raw[1]>>3)&7>=4)),
+                        'High byte register TEST unsupported')
             parsed=[operand(a,width) for a in args.split(',')]
             n.update(op=op[:-1].lower(),width=width,args=parsed)
             require(len(parsed)==(1 if op=='INCQ' else 2),'Wrong operand count')
@@ -63,7 +71,7 @@ def decode_function(rows):
             elif n['op']=='cmp':
                 require(all(a['kind'] in ('reg','imm') for a in parsed) or
                         (width==8 and parsed[0]['kind']=='mem' and parsed[1]['kind']=='imm'),'Unsupported comparison')
-            elif n['op']=='test':require(parsed[0]['kind']=='reg' and parsed[1]['kind']=='mem','Unsupported TEST')
+            elif n['op']=='test':require(parsed[0]['kind']=='reg' and parsed[1]['kind'] in ('mem','reg'),'Unsupported TEST')
             else:require(parsed[-1]['kind']=='reg' and all(a['kind'] in ('reg','imm') for a in parsed),'Unsupported arithmetic')
         else:raise ValueError('Unsupported leaf instruction: '+row['asm'])
         result.append(n)
@@ -106,7 +114,7 @@ def plan_binary(binary,go,env,out):
     for n in ir:
         snapshots={}
         if n['op']=='movzx':snapshots={'load':{'address':n['args'][0],'length':1}}
-        if n['op']=='test':snapshots={'load':{'address':n['args'][1],'length':1}}
+        if n['op']=='test' and n['args'][1]['kind']=='mem':snapshots={'load':{'address':n['args'][1],'length':1}}
         n['site']=site(n,'instruction','step',-1,snapshots)
     (out/'disassembly.txt').write_text('\n'.join(texts))
     return {'adapter':'go-amd64-byte-instructions-v2','binary':str(binary),

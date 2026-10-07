@@ -9,7 +9,7 @@ from go_provenance import parse_nm
 from go_read_provenance import scope_plan
 from gin_api_provenance import BOUNDARIES
 from hybrid_model import require
-from observation_contract import stable_runtime_input,deterministic_runtime_input
+from observation_contract import stable_runtime_input,deterministic_runtime_input,runtime_input_region,runtime_read_operand
 from observation_policy import choose_observation
 
 
@@ -46,7 +46,7 @@ def select_observation(plan,mode):
     return result
 
 
-def plan_binary(binary,go,env,out,*,cross_role=None,tracing='forward',observation='full',runtime_inputs=None,runtime_input_ownership=None):
+def plan_binary(binary,go,env,out,*,cross_role=None,tracing='forward',observation='full',runtime_inputs=None,runtime_input_ownership=None,runtime_input_model=None):
     data=binary.read_bytes();sites=[];texts=[]
     nm=subprocess.check_output([go,'tool','nm','-size',str(binary)],env=env,text=True)
     assembly=subprocess.check_output(['objdump','-d','-M','intel','--no-show-raw-insn',str(binary)],text=True)
@@ -117,7 +117,7 @@ def plan_binary(binary,go,env,out,*,cross_role=None,tracing='forward',observatio
     for n in ir:
         snapshots={}
         if n['op']=='movzx':snapshots={'load':{'address':n['args'][0],'length':1}}
-        if n['op']=='test':snapshots={'load':{'address':n['args'][1],'length':1}}
+        if n['op']=='test' and n['args'][1]['kind']=='mem':snapshots={'load':{'address':n['args'][1],'length':1}}
         if n['op']=='cmp' and n['args'][0]['kind']=='mem':snapshots={'load':{'address':n['args'][0],'length':1}}
         n['site']=add(n,'instruction','step',snapshots)
     (out/'disassembly.txt').write_text('\n'.join(texts))
@@ -131,18 +131,18 @@ def plan_binary(binary,go,env,out,*,cross_role=None,tracing='forward',observatio
         scope='Default Gin scheduling; process/G/scope lifetimes; fixed four-byte array JSON summary')
 
     if runtime_inputs:
-        require(runtime_inputs==[dict(register='rdi',length=1)],'Only the declared fourth-argument control byte is supported')
         plan['runtime_inputs']=runtime_inputs
+        if runtime_input_model:plan['runtime_input_model']=runtime_input_model
+        runtime_input_region(plan)
         if runtime_input_ownership:plan['runtime_input_ownership']=runtime_input_ownership
-        candidates=[n for n in ir if n['op'] in ('cmp','movzx') and n['args'][0]['kind']=='mem' and
-                    n['args'][0]['base']=='rdi' and not n['args'][0]['index'] and n['args'][0]['offset']==0]
-        require(sum(n['op']=='cmp' for n in candidates)==1,'Expected one control-byte comparison site')
-        plan['runtime_input_sites']=[n['site'] for n in candidates]
         updates=[n for n in ir if n['op']=='mov' and n['args'][-1]['kind']=='mem' and n['args'][-1]['base']=='rdi']
         if updates:
             plan['runtime_state_model']='xor-control-byte-v1'
             plan['runtime_update_sites']=[n['site'] for n in updates]
             deterministic_runtime_input(plan)
             next(s for s in sites if s['op']=='work' and s['phase']=='post')['snapshots']['control']={'pointer':'rdi','length':1}
+        candidates=[n for n in ir if runtime_read_operand(n,plan) is not None]
+        require(candidates,'No supported runtime input read sites')
+        plan['runtime_input_sites']=[n['site'] for n in candidates]
 
     return select_observation(plan,observation)

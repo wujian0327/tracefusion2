@@ -40,12 +40,6 @@ func readRemote(ctx context.Context, url string) *[4]byte {
  return &decoded.Result
 }
 
-func readControl(c *gin.Context) *byte {
- value := new(byte)
- if c.Query("pick") == "local" { *value = 1 }
- return value
-}
-
 func run(c *gin.Context, aPath, bPath, cPath string, useC bool) {
  parent := c.GetHeader("traceparent")
  url := remoteURL(aPath,useC)

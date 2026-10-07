@@ -8,6 +8,28 @@ from hybrid_model import BRANCHES,require
 from copy import deepcopy
 
 
+def runtime_input_region(plan):
+    """A declared, request-private region; this does not discover ownership."""
+    regions=plan.get('runtime_inputs',[])
+    require(len(regions)==1,'Expected one runtime input region')
+    region=regions[0]
+    require(region==dict(register='rdi',length=1) or
+            (region==dict(register='rdi',length=4) and
+             plan.get('runtime_input_model')=='indexed-control-bytes-v1'),
+            'Unsupported runtime input contract')
+    return region
+
+
+def runtime_read_operand(node,plan):
+    """Identify supported reads; array bounds are checked during replay."""
+    op=node['op'];args=node['args']
+    arg=args[1] if op=='test' else args[0] if op in ('cmp','movzx') else None
+    if not arg or arg.get('kind')!='mem' or arg.get('base')!='rdi':return None
+    if plan.get('runtime_input_model')=='indexed-control-bytes-v1':
+        return arg if arg['width']==8 else None
+    return arg if (op=='cmp' or (op=='movzx' and plan.get('runtime_state_model')=='xor-control-byte-v1')) and not arg.get('index') and arg['offset']==0 else None
+
+
 def deterministic_runtime_input(plan):
     """Certify supported load/XOR-immediate/store updates, not immutability.
 

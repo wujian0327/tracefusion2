@@ -48,6 +48,10 @@ func main() {
     requestCtx,span:=tracer.Start(ctx,"GET /account/summary",trace.WithSpanKind(trace.SpanKindClient),
      trace.WithAttributes(attribute.String("http.request.method","GET"),attribute.String("url.full",url)))
     if ticket%4 >= 2 { url += "&pick=local" } else { url += "&pick=remote" }
+    // Only the indexed-input scenario consumes this query. Equal first/last
+    // digits with different middle digits defeat reusing a single seed.
+    controls := [...]string{"0000","0100","0010","0110","1001","1101","1011","1111"}
+    url += "&controls=" + controls[ticket-1]
     req,err:=http.NewRequestWithContext(requestCtx,http.MethodGet,url,nil);if err!=nil { panic(err) }
     // SDK-owned IDs and standard propagation; no custom trace generator.
     otel.GetTextMapPropagator().Inject(requestCtx,propagation.HeaderCarrier(req.Header))

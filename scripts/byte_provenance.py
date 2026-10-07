@@ -7,7 +7,7 @@ import json
 from interproc_model import Sym, flags_for
 from hybrid_model import branch_taken, BRANCHES, require
 from lineage_graph import backward_nodes
-from observation_contract import stable_runtime_input,deterministic_runtime_input
+from observation_contract import stable_runtime_input,deterministic_runtime_input,runtime_input_region,runtime_read_operand
 
 MASK64=(1<<64)-1
 
@@ -41,12 +41,13 @@ class ByteMachine:
         self.runtime_regions=[]
         self.runtime_snapshot=None
         self.runtime_value=None;self.runtime_updates=[]
+        self.runtime_observed={}
         for region in plan.get('runtime_inputs',[]):
-            require(region==dict(register='rdi',length=1),'Unsupported runtime input contract')
+            require(region==runtime_input_region(plan),'Unsupported runtime input contract')
             reg=region['register'];ptr=entry['registers'][reg]
-            require(ptr>0 and all(not base<=ptr<base+4 for base in
+            require(ptr>0 and ptr+region['length']<=MASK64 and all(ptr+region['length']<=base or base+4<=ptr for base in
                     [self.src,self.dst]+([auxiliary['pointer']] if auxiliary else [])),'Runtime input overlaps data')
-            self.regs[reg]=Sym(number=ptr);self.runtime_regions.append(ptr)
+            self.regs[reg]=Sym(number=ptr);self.runtime_regions.extend(range(ptr,ptr+region['length']))
         for definition in [source]+([auxiliary] if auxiliary else []):
             for i,b in enumerate(definition['bytes']):
                 nid=definition['id']+'/byte:'+str(i)
@@ -76,9 +77,10 @@ class ByteMachine:
         if arg['kind']=='reg':
             a=self.reg(arg['reg']);return Sym(number=a.number&((1<<arg['width'])-1),refs=a.refs,origins=a.origins)
         address=self.address(arg).number
+        if self.plan.get('runtime_inputs') and arg==runtime_read_operand(self.instructions[self.pc],self.plan):
+            require(address in self.runtime_regions,'Runtime input read outside declared region')
         if arg['width']==8 and address in self.runtime_regions:
-            require(self.instructions[self.pc]['op']=='cmp' or
-                    (self.plan.get('runtime_state_model')=='xor-control-byte-v1' and self.instructions[self.pc]['op']=='movzx'),
+            require(arg==runtime_read_operand(self.instructions[self.pc],self.plan),
                     'Unsupported runtime input read')
             if self.plan.get('observation_mode')=='entry_replay':
                 if self.runtime_snapshot is None or self.runtime_value is None:raise MissingObservation(self.pc)
@@ -95,6 +97,11 @@ class ByteMachine:
             if event is None:raise MissingObservation(self.pc)
             ptr,data=snapshot(event['values']['load'])
             require(ptr==address and len(data)==1,'Runtime input snapshot mismatch')
+            if self.plan.get('runtime_input_model')=='indexed-control-bytes-v1':
+                require(self.runtime_observed.get(ptr,data[0])==data[0],'Private control input changed between observations')
+                self.runtime_observed[ptr]=data[0]
+                self.steps[-1]['runtime_input_evidence']=dict(kind='observed-control-byte',
+                    event_sequence=event['sequence'],offset=ptr-self.runtime_regions[0],value=data[0])
             if self.plan.get('runtime_state_model'):
                 if self.runtime_value is None:self.runtime_value=data[0]
                 require(self.runtime_value==data[0],'Observed control byte contradicts modeled updates')
@@ -212,6 +219,9 @@ def infer(document,plan):
         root=[e for e in events if e['op']!='instruction']
         require([e['site'] for e in root]==plan['root_order'],'Missing or extra boundary events')
         mode=plan.get('observation_mode','full')
+        if plan.get('runtime_input_model')=='indexed-control-bytes-v1':
+            runtime_input_region(plan)
+            require(plan.get('runtime_input_ownership')=='request-private','Indexed control input requires private ownership')
         require(mode in ('full','boundary','selective','entry','entry_replay'),'Unknown observation mode')
         if plan.get('runtime_state_model'):deterministic_runtime_input(plan)
         if mode=='boundary':
@@ -264,7 +274,7 @@ def infer(document,plan):
             auxiliary=matches[0]
         for region in plan.get('runtime_inputs',[]):
             register=region['register'];pointer=work['registers'][register]
-            require(all(not s['pointer']<=pointer<s['pointer']+4 for s in reads),'Runtime input aliases an observed source')
+            require(all(pointer+region['length']<=s['pointer'] or s['pointer']+4<=pointer for s in reads),'Runtime input aliases an observed source')
             if mode=='full':require(execution[0]['registers'][register]==pointer,'Runtime input argument changed before leaf entry')
         machine=ByteMachine(plan,execution[0] if mode=='full' else work,candidates[0],(dst,dst_bytes),nodes,edges,auxiliary)
         if mode=='boundary':
