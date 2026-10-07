@@ -122,12 +122,18 @@ def run(out,build_only=False):
         with tempfile.TemporaryDirectory() as tmp:
             src=Path(tmp);stage(src);client=build_client(out/'build/client',scenario=src)
         plans={r:build_role(out/'build'/r,r) for r in ('upstream','downstream')}
+        automatic={r:select_observation(p,'auto') for r,p in plans.items()}
+        require(automatic['upstream']['observation_mode']=='boundary' and automatic['downstream']['observation_mode']=='entry',
+                'Fixture no longer satisfies the expected automatic policy')
+        for role,plan in automatic.items():
+            save(out/'build'/role/'auto-plan.json',plan)
+            save(out/'build'/role/'observation-decision.json',plan['observation_decision'])
         if build_only:passed=True;return 0
         for mode in ('full','boundary','selective','entry'):
             trial=out/mode;trial.mkdir()
             def builder(directory,role,variant):
                 shutil.copytree(out/'build'/role,directory)
-                plan=select_observation(plans[role],mode);plan['binary']=str(directory/'gin-byte-target')
+                plan=select_observation(plans[role],'auto' if mode=='entry' else mode);plan['binary']=str(directory/'gin-byte-target')
                 require(hashlib.sha256(Path(plan['binary']).read_bytes()).hexdigest()==plan['binary_sha256'],'Binary changed')
                 save(directory/'plan.json',plan)
                 (directory/'collector.preview.c').write_text(gin_byte_capture.source(plan,1,SimpleNamespace(st_dev=0,st_ino=0)))

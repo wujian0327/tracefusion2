@@ -10,9 +10,16 @@ from go_read_provenance import scope_plan
 from gin_api_provenance import BOUNDARIES
 from hybrid_model import require
 from observation_contract import stable_runtime_input
+from observation_policy import choose_observation
 
 
 def select_observation(plan,mode):
+    if mode=='auto':
+        decision=choose_observation(plan)
+        require(decision['status']=='selected','Automatic observation selection refused: '+decision['reason'])
+        result=select_observation(plan,decision['mode'])
+        result['observation_decision']=decision
+        return result
     require(mode in ('full','boundary','selective','entry'),'Unknown observation mode')
     result=deepcopy(plan)
     require(plan.get('observation_mode','full')=='full','Select from a full plan')
