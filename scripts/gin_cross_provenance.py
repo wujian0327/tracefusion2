@@ -135,11 +135,11 @@ def analyze_pair(pair,plans,captures,variant):
     return report
 
 
-def run(out,*,build_fn=build_role,worker_script=__file__,startup_fn=None,analyze_fn=analyze_pair,archive_output=True):
+def run(out,*,build_fn=build_role,worker_script=__file__,startup_fn=None,analyze_fn=analyze_pair,archive_output=True,variants=VARIANTS):
     passed=False
     try:
         reports=[]
-        for variant in VARIANTS:
+        for variant in variants:
             pair=out/variant;pair.mkdir();plans={};captures={};procs={};logs=[]
             try:
                 for role in ('upstream','downstream'):
@@ -166,7 +166,7 @@ def run(out,*,build_fn=build_role,worker_script=__file__,startup_fn=None,analyze
             report=analyze_fn(pair,plans,captures,variant)
             save(pair/'evaluation.json',report);reports.append(dict(variant=variant,**report))
         passed=all(r['passed'] for r in reports);save(out/'evaluation.json',dict(all_passed=passed,variants=reports))
-        print(json.dumps({'all_passed':passed,'downstream_requests':24,'upstream_requests':24}),flush=True)
+        print(json.dumps({'all_passed':passed,'downstream_requests':8*len(variants),'upstream_requests':8*len(variants)}),flush=True)
     except Exception:
         error=traceback.format_exc();(out/'runner-error.txt').write_text(error);print(error,file=sys.stderr)
     finally:

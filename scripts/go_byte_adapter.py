@@ -50,7 +50,7 @@ def decode_function(rows):
             left,right=args.split(',')
             n.update(op='movzx',args=[operand(left,8),operand(right,32)])
             require(n['args'][0]['kind']=='mem' and n['args'][1]['kind']=='reg','Expected byte load')
-        elif op in ('MOVB','MOVL','MOVQ','LEAQ','XORL','XORQ','SUBQ','ADDQ','CMPQ','CMPL','TESTB','INCQ'):
+        elif op in ('MOVB','MOVL','MOVQ','LEAQ','XORL','XORQ','SUBQ','ADDQ','CMPQ','CMPL','CMPB','TESTB','INCQ'):
             width={'B':8,'L':32,'Q':64}[op[-1]]
             parsed=[operand(a,width) for a in args.split(',')]
             n.update(op=op[:-1].lower(),width=width,args=parsed)
@@ -60,7 +60,9 @@ def decode_function(rows):
                         (width==8 and parsed[1]['kind']=='mem' and parsed[0]['kind']=='reg'),'Unsupported move/partial register write')
                 require(parsed[0]['kind']!='mem','Loads must use explicit byte MOVZX')
             elif n['op']=='lea':require(parsed[0]['kind']=='mem' and parsed[1]['kind']=='reg','Unsupported LEA')
-            elif n['op']=='cmp':require(all(a['kind'] in ('reg','imm') for a in parsed),'Unsupported comparison')
+            elif n['op']=='cmp':
+                require(all(a['kind'] in ('reg','imm') for a in parsed) or
+                        (width==8 and parsed[0]['kind']=='mem' and parsed[1]['kind']=='imm'),'Unsupported comparison')
             elif n['op']=='test':require(parsed[0]['kind']=='reg' and parsed[1]['kind']=='mem','Unsupported TEST')
             else:require(parsed[-1]['kind']=='reg' and all(a['kind'] in ('reg','imm') for a in parsed),'Unsupported arithmetic')
         else:raise ValueError('Unsupported leaf instruction: '+row['asm'])

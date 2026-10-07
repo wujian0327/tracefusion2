@@ -11,6 +11,12 @@ from lineage_graph import backward_nodes
 MASK64=(1<<64)-1
 
 
+class MissingObservation(ValueError):
+    def __init__(self,address):
+        super().__init__('Missing runtime input observation at instruction '+hex(address))
+        self.address=address
+
+
 def snapshot(value):
     data=bytes.fromhex(value['hex']);ptr=value['pointer']
     require(ptr>0 and value['key']==f'{ptr:x}:{len(data)}','Snapshot identity mismatch')
@@ -31,6 +37,13 @@ class ByteMachine:
         for reg,value in bindings:
             nid='entry:'+reg;nodes[nid]={'id':nid,'kind':'abi-address','value':value}
             self.regs[reg]=Sym(number=value,refs=frozenset({nid}))
+        self.runtime_regions=[]
+        for region in plan.get('runtime_inputs',[]):
+            require(region==dict(register='rdi',length=1),'Unsupported runtime input contract')
+            reg=region['register'];ptr=entry['registers'][reg]
+            require(ptr>0 and all(not base<=ptr<base+4 for base in
+                    [self.src,self.dst]+([auxiliary['pointer']] if auxiliary else [])),'Runtime input overlaps data')
+            self.regs[reg]=Sym(number=ptr);self.runtime_regions.append(ptr)
         for definition in [source]+([auxiliary] if auxiliary else []):
             for i,b in enumerate(definition['bytes']):
                 nid=definition['id']+'/byte:'+str(i)
@@ -60,6 +73,12 @@ class ByteMachine:
         if arg['kind']=='reg':
             a=self.reg(arg['reg']);return Sym(number=a.number&((1<<arg['width'])-1),refs=a.refs,origins=a.origins)
         address=self.address(arg).number
+        if arg['width']==8 and address in self.runtime_regions:
+            require(self.instructions[self.pc]['op']=='cmp','Runtime input is supported only as a comparison operand')
+            if event is None:raise MissingObservation(self.pc)
+            ptr,data=snapshot(event['values']['load'])
+            require(ptr==address and len(data)==1,'Runtime input snapshot mismatch')
+            return Sym(number=data[0])
         require(arg['width']==8 and address in self.memory,'Memory read outside declared byte regions')
         value=self.memory[address]
         if event is not None:
@@ -130,7 +149,7 @@ class ByteMachine:
             self.flags=(flags_for('add',old.number,1,width)&~1)|old_carry
             self.write_register(args[0],self.result(nid,value,[old]))
         elif op in ('cmp','test'):
-            a=self.read(args[0]);b=self.read(args[1],event if op=='test' else None)
+            a=self.read(args[0],event);b=self.read(args[1],event)
             self.flags=flags_for('cmp' if op=='cmp' else 'test',a.number,b.number,n['width'])
             self.link([a,b],nid,'control')
         elif op in BRANCHES:
@@ -158,12 +177,21 @@ def infer(document,plan):
         root=[e for e in events if e['op']!='instruction']
         require([e['site'] for e in root]==plan['root_order'],'Missing or extra boundary events')
         mode=plan.get('observation_mode','full')
-        require(mode in ('full','boundary'),'Unknown observation mode')
+        require(mode in ('full','boundary','selective'),'Unknown observation mode')
         if mode=='boundary':
-            require(plan.get('replay_contract')=='closed-four-byte-leaf-v1','Missing boundary replay contract')
+            contract='runtime-byte-input-v1' if plan.get('runtime_inputs') else 'closed-four-byte-leaf-v1'
+            require(plan.get('replay_contract')==contract,'Missing boundary replay contract')
             require(events==root and len(root)==10,'Boundary mode accepts no internal events')
             require(not any(s['op']=='instruction' for s in plan['sites']),'Boundary plan still attaches internal probes')
             execution=[]
+        elif mode=='selective':
+            contract='runtime-byte-input-v1' if plan.get('runtime_inputs') else 'closed-four-byte-leaf-v1'
+            require(plan.get('replay_contract')==contract,'Missing selective replay contract')
+            require(events[:7]==root[:7] and events[-3:]==root[-3:],'Instruction evidence outside transform interval')
+            execution=events[7:-3]
+            selected=set(plan.get('selected_instruction_sites',[]))
+            require(selected=={s['id'] for s in plan['sites'] if s['op']=='instruction'},'Selective attachment contract mismatch')
+            require(all(e['op']=='instruction' and e['site'] in selected for e in execution),'Unexpected selective evidence')
         else:
             require(events[:7]==root[:7] and events[-3:]==root[-3:],'Instruction evidence outside transform interval')
             execution=events[7:-3]
@@ -188,9 +216,22 @@ def infer(document,plan):
             matches=[s for s in reads if s['pointer']==aux_pointer]
             require(len(matches)==1 and aux_pointer!=src,'Auxiliary input has no distinct observed read definition')
             auxiliary=matches[0]
-        machine=ByteMachine(plan,work if mode=='boundary' else execution[0],candidates[0],(dst,dst_bytes),nodes,edges,auxiliary)
+        for region in plan.get('runtime_inputs',[]):
+            register=region['register'];pointer=work['registers'][register]
+            require(all(not s['pointer']<=pointer<s['pointer']+4 for s in reads),'Runtime input aliases an observed source')
+            if mode=='full':require(execution[0]['registers'][register]==pointer,'Runtime input argument changed before leaf entry')
+        machine=ByteMachine(plan,execution[0] if mode=='full' else work,candidates[0],(dst,dst_bytes),nodes,edges,auxiliary)
         if mode=='boundary':
             while not machine.halted:machine.step()
+        elif mode=='selective':
+            position=0
+            while not machine.halted:
+                n=machine.instructions[machine.pc];event=None
+                if n.get('site') in selected:
+                    require(position<len(execution),'Missing selected instruction event')
+                    event=execution[position];position+=1
+                machine.step(event)
+            require(position==len(execution),'Extra selected instruction events')
         else:
             for e in execution:machine.step(e)
         require(machine.halted and machine.written==set(range(dst,dst+4)),'Missing return or incompletely defined output')
@@ -227,6 +268,8 @@ def infer(document,plan):
                 'noncontributing_reads':[s['id'] for s in reads if s['id'] not in keep],
                 'output':output,'byte_sources':byte_sources,'instruction_steps':machine.steps,'observation_mode':mode,
                 'graph':{'nodes':[nodes[n] for n in sorted(keep)],'edges':[e for e in edges if e['kind']=='data' and e['source'] in keep and e['target'] in keep]},
-                'scope':('Closed leaf reconstructed from entry state and checked at boundaries; assumes no external writes, unmodeled calls, or runtime effects' if mode=='boundary' else 'Leaf instructions derive byte dependencies; configured read/JSON boundaries; explicit data only; four-byte separate buffers; no transform summary')}
+                'scope':('Instruction replay between retained observations; assumes complete declared data inputs, observed runtime control reads, no other external writes/calls; explicit data dependencies only' if mode!='full' else 'Leaf instructions derive byte dependencies; configured read/JSON boundaries; explicit data only; four-byte separate buffers; no transform summary')}
+    except MissingObservation as exc:
+        return {'status':'unknown','reason':str(exc),'needed_instruction_addresses':[exc.address]}
     except (ValueError,KeyError,TypeError,UnicodeError) as exc:
         return {'status':'unknown','reason':str(exc)}

@@ -4,6 +4,8 @@
 
 这不是通用观测点自动选择算法，也不证明任意 Go 程序只观察 if 条件就能准确溯源。
 
+后续对照见[边界证据不足与选择性补采](gin-choice-provenance.md)：固定边界快照未读取控制字节时保留 unknown，再补采比较位置验证实际来源。
+
 ## 主机执行
 
 依赖与[原双 Gin 实验](gin-otel-provenance.md)相同：Linux amd64、系统 Python/BCC、Go 1.25.4。不需要 Docker。执行：

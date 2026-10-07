@@ -12,21 +12,24 @@ from hybrid_model import require
 
 
 def select_observation(plan,mode):
-    require(mode in ('full','boundary'),'Unknown observation mode')
+    require(mode in ('full','boundary','selective'),'Unknown observation mode')
     result=deepcopy(plan)
     require(plan.get('observation_mode','full')=='full','Select from a full plan')
     result['observation_mode']=mode
-    if mode=='boundary':
-        result['sites']=[s for s in result['sites'] if s['op']!='instruction']
+    if mode in ('boundary','selective'):
+        selected=set(plan.get('runtime_input_sites',[])) if mode=='selective' else set()
+        result['sites']=[s for s in result['sites'] if s['op']!='instruction' or s['id'] in selected]
         ids={s['id'] for s in result['sites']}
         result['event_order']=[s for s in result['event_order'] if s in ids]
-        for n in result['instructions']:n.pop('site',None)
-        result['replay_contract']='closed-four-byte-leaf-v1'
-        result['scope']+='; boundary-only observation assumes closed deterministic leaf execution'
+        for n in result['instructions']:
+            if n.get('site') not in selected:n.pop('site',None)
+        result['selected_instruction_sites']=sorted(selected)
+        result['replay_contract']='runtime-byte-input-v1' if plan.get('runtime_inputs') else 'closed-four-byte-leaf-v1'
+        result['scope']+='; modeled replay between retained observations, within declared input regions'
     return result
 
 
-def plan_binary(binary,go,env,out,*,cross_role=None,tracing='forward',observation='full'):
+def plan_binary(binary,go,env,out,*,cross_role=None,tracing='forward',observation='full',runtime_inputs=None):
     data=binary.read_bytes();sites=[];texts=[]
     nm=subprocess.check_output([go,'tool','nm','-size',str(binary)],env=env,text=True)
     assembly=subprocess.check_output(['objdump','-d','-M','intel','--no-show-raw-insn',str(binary)],text=True)
@@ -58,6 +61,7 @@ def plan_binary(binary,go,env,out,*,cross_role=None,tracing='forward',observatio
         if name in ('runtime.newobject','runtime.morestack_noctxt.abi0','github.com/gin-gonic/gin.(*Context).JSON'):continue
         if cross_role=='downstream' and name=='main.remoteURL':continue
         if tracing=='otel' and name=='net/http.(*Request).Context':continue
+        if runtime_inputs and name=='main.readControl':continue
         require(name in contracts,'Unmodeled business call: '+name)
         op,pre,post=contracts[name];ops.append(op)
         pair=[add(row,op,'pre',pre),add(by_addr[row['address']+len(bytes.fromhex(row['code']))],op,'post',post)]
@@ -97,6 +101,7 @@ def plan_binary(binary,go,env,out,*,cross_role=None,tracing='forward',observatio
         snapshots={}
         if n['op']=='movzx':snapshots={'load':{'address':n['args'][0],'length':1}}
         if n['op']=='test':snapshots={'load':{'address':n['args'][1],'length':1}}
+        if n['op']=='cmp' and n['args'][0]['kind']=='mem':snapshots={'load':{'address':n['args'][0],'length':1}}
         n['site']=add(n,'instruction','step',snapshots)
     (out/'disassembly.txt').write_text('\n'.join(texts))
     plan=dict(adapter='gin-byte-array-v1',binary=str(binary),binary_sha256=hashlib.sha256(data).hexdigest(),
@@ -107,5 +112,13 @@ def plan_binary(binary,go,env,out,*,cross_role=None,tracing='forward',observatio
         cross_role=cross_role,
         trace_mode=tracing,
         scope='Default Gin scheduling; process/G/scope lifetimes; fixed four-byte array JSON summary')
+
+    if runtime_inputs:
+        require(runtime_inputs==[dict(register='rdi',length=1)],'Only the declared fourth-argument control byte is supported')
+        plan['runtime_inputs']=runtime_inputs
+        candidates=[n for n in ir if n['op']=='cmp' and n['args'][0]['kind']=='mem' and
+                    n['args'][0]['base']=='rdi' and not n['args'][0]['index'] and n['args'][0]['offset']==0]
+        require(len(candidates)==1,'Expected one control-byte comparison site')
+        plan['runtime_input_sites']=[n['site'] for n in candidates]
 
     return select_observation(plan,observation)

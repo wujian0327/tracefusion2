@@ -37,9 +37,9 @@ def build_role(out,role,variant,observation='full'):
         extra_sources=(role+'.go','tracing.go'),expected_modules=MODULES)
 
 
-def build_client(out):
+def build_client(out,scenario=SCENARIO):
     out.mkdir(parents=True);src=out/'sources';src.mkdir()
-    for name in ('go.mod','go.sum','client.go','tracing.go'):shutil.copyfile(SCENARIO/name,src/name)
+    for name in ('go.mod','go.sum','client.go','tracing.go'):shutil.copyfile(scenario/name,src/name)
     go=os.environ.get('TRACEFUSION_GO') or shutil.which('go');require(go,'Go not visible')
     env=dict(os.environ,GOOS='linux',GOARCH='amd64',CGO_ENABLED='0',GO111MODULE='on',GOTOOLCHAIN='local',
              GOFLAGS='',GOEXPERIMENT='',GOAMD64='v1',GOTELEMETRY='off')
