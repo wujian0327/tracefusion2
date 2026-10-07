@@ -9,7 +9,7 @@ from go_provenance import parse_nm
 from go_read_provenance import scope_plan
 from gin_api_provenance import BOUNDARIES
 from hybrid_model import require
-from observation_contract import stable_runtime_input
+from observation_contract import stable_runtime_input,deterministic_runtime_input
 from observation_policy import choose_observation
 
 
@@ -20,14 +20,15 @@ def select_observation(plan,mode):
         result=select_observation(plan,decision['mode'])
         result['observation_decision']=decision
         return result
-    require(mode in ('full','boundary','selective','entry'),'Unknown observation mode')
+    require(mode in ('full','boundary','selective','entry','entry_replay'),'Unknown observation mode')
     result=deepcopy(plan)
     require(plan.get('observation_mode','full')=='full','Select from a full plan')
     result['observation_mode']=mode
-    if mode in ('boundary','selective','entry'):
+    if mode in ('boundary','selective','entry','entry_replay'):
         selected=set(plan.get('runtime_input_sites',[])) if mode=='selective' else set()
-        if mode=='entry' and plan.get('runtime_inputs'):
-            result['entry_stability']=stable_runtime_input(plan)
+        if mode in ('entry','entry_replay') and plan.get('runtime_inputs'):
+            if mode=='entry':result['entry_stability']=stable_runtime_input(plan)
+            else:result['entry_state_replay']=deterministic_runtime_input(plan)
             selected={plan['instructions'][0]['site']}
             site=next(s for s in result['sites'] if s['id'] in selected)
             require(len(site['snapshots'])<2 and 'control' not in site['snapshots'],'No transport slot for entry input')
@@ -40,6 +41,7 @@ def select_observation(plan,mode):
         result['selected_instruction_sites']=sorted(selected)
         result['replay_contract']='runtime-byte-input-v1' if plan.get('runtime_inputs') else 'closed-four-byte-leaf-v1'
         if mode=='entry' and plan.get('runtime_inputs'):result['replay_contract']='stable-runtime-byte-input-v1'
+        if mode=='entry_replay' and plan.get('runtime_inputs'):result['replay_contract']='evolving-runtime-byte-input-v1'
         result['scope']+='; modeled replay between retained observations, within declared input regions'
     return result
 
@@ -132,9 +134,15 @@ def plan_binary(binary,go,env,out,*,cross_role=None,tracing='forward',observatio
         require(runtime_inputs==[dict(register='rdi',length=1)],'Only the declared fourth-argument control byte is supported')
         plan['runtime_inputs']=runtime_inputs
         if runtime_input_ownership:plan['runtime_input_ownership']=runtime_input_ownership
-        candidates=[n for n in ir if n['op']=='cmp' and n['args'][0]['kind']=='mem' and
+        candidates=[n for n in ir if n['op'] in ('cmp','movzx') and n['args'][0]['kind']=='mem' and
                     n['args'][0]['base']=='rdi' and not n['args'][0]['index'] and n['args'][0]['offset']==0]
-        require(len(candidates)==1,'Expected one control-byte comparison site')
+        require(sum(n['op']=='cmp' for n in candidates)==1,'Expected one control-byte comparison site')
         plan['runtime_input_sites']=[n['site'] for n in candidates]
+        updates=[n for n in ir if n['op']=='mov' and n['args'][-1]['kind']=='mem' and n['args'][-1]['base']=='rdi']
+        if updates:
+            plan['runtime_state_model']='xor-control-byte-v1'
+            plan['runtime_update_sites']=[n['site'] for n in updates]
+            deterministic_runtime_input(plan)
+            next(s for s in sites if s['op']=='work' and s['phase']=='post')['snapshots']['control']={'pointer':'rdi','length':1}
 
     return select_observation(plan,observation)

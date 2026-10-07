@@ -10,7 +10,7 @@ import json
 from pathlib import Path
 
 from hybrid_model import BRANCHES,require
-from observation_contract import stable_runtime_input
+from observation_contract import stable_runtime_input,deterministic_runtime_input
 
 UNKNOWN=frozenset({'unknown'})
 SCALAR=frozenset({'scalar'})
@@ -48,7 +48,8 @@ def analyze_inputs(plan):
             if validate:
                 require(arg['width']==8 and region<=POINTERS,'Unmodeled memory input at '+hex(n['address']))
                 if 'control' in region:
-                    require(region==frozenset({'control'}) and op=='cmp' and arg==args[0] and
+                    require(region==frozenset({'control'}) and (op=='cmp' or
+                            (op=='movzx' and plan.get('runtime_state_model')=='xor-control-byte-v1')) and arg==args[0] and
                             arg['base']=='rdi' and not arg.get('index') and arg['offset']==0,
                             'Control read requires an unsupported alias or operation')
                     reads.add(n['address'])
@@ -57,9 +58,11 @@ def analyze_inputs(plan):
             value=read(args[0]);target=args[1]
             if target['kind']=='reg':out[target['reg']]=value if target['width']==64 else SCALAR
             elif validate:
-                require(op=='mov' and target['width']==8 and address(target)==frozenset({'dst'}),
+                is_control=(plan.get('runtime_state_model')=='xor-control-byte-v1' and address(target)==frozenset({'control'}) and
+                            target['base']=='rdi' and not target.get('index') and target['offset']==0)
+                require(op=='mov' and target['width']==8 and (address(target)==frozenset({'dst'}) or is_control),
                         'Store target is not proven to be in the destination region')
-                stores.add(n['address'])
+                if not is_control:stores.add(n['address'])
         elif op=='lea':
             value=address(args[0])
             if validate:require(value!=UNKNOWN,'Unmodeled address calculation')
@@ -106,10 +109,11 @@ def choose_observation(plan):
         assumptions=['complete configured data regions and instruction model',
                      'no external writes to data buffers during leaf replay',
                      'declared private runtime input when present'],
-        objective='Prefer boundary, then certified entry reuse, then observed reads; not a global minimum')
+        objective='Prefer boundary, certified stable entry, certified state replay, then observed reads; not a global minimum')
     try:
         require(plan.get('observation_mode','full')=='full','Select from a full plan')
         analysis=analyze_inputs(plan);result['analysis']=analysis
+        evolving=deterministic_runtime_input(plan) if plan.get('runtime_state_model') else None
         reads=analysis['runtime_read_addresses']
         if plan.get('runtime_inputs'):
             require(plan.get('runtime_input_ownership')=='request-private',
@@ -134,9 +138,15 @@ def choose_observation(plan):
                     'control' not in entry['snapshots'],'No entry snapshot transport slot')
         except ValueError as exc:
             result['candidates'].append(dict(mode='entry',accepted=False,reason=str(exc)))
-            result['candidates'].append(dict(mode='selective',accepted=True))
-            result.update(status='selected',mode='selective',instruction_sites=sorted(selected),
-                reason='Entry reuse not certified; retain every supported runtime control read')
+            entry=sites[plan['instructions'][0]['site']]
+            if evolving and entry['address']==plan['entry'] and len(entry['snapshots'])<2 and 'control' not in entry['snapshots']:
+                result['candidates'].append(dict(mode='entry_replay',accepted=True))
+                result.update(status='selected',mode='entry_replay',instruction_sites=[entry['id']],entry_state_replay=evolving,
+                    reason='Control changes are modeled; observe its initial value and replay the certified updates')
+            else:
+                result['candidates'].append(dict(mode='selective',accepted=True))
+                result.update(status='selected',mode='selective',instruction_sites=sorted(selected),
+                    reason='Entry reuse not certified; retain every supported runtime control read')
         else:
             result['candidates'].append(dict(mode='entry',accepted=True))
             result.update(status='selected',mode='entry',instruction_sites=[entry['id']],entry_stability=certificate,

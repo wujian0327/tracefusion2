@@ -7,7 +7,7 @@ import json
 from interproc_model import Sym, flags_for
 from hybrid_model import branch_taken, BRANCHES, require
 from lineage_graph import backward_nodes
-from observation_contract import stable_runtime_input
+from observation_contract import stable_runtime_input,deterministic_runtime_input
 
 MASK64=(1<<64)-1
 
@@ -40,6 +40,7 @@ class ByteMachine:
             self.regs[reg]=Sym(number=value,refs=frozenset({nid}))
         self.runtime_regions=[]
         self.runtime_snapshot=None
+        self.runtime_value=None;self.runtime_updates=[]
         for region in plan.get('runtime_inputs',[]):
             require(region==dict(register='rdi',length=1),'Unsupported runtime input contract')
             reg=region['register'];ptr=entry['registers'][reg]
@@ -76,7 +77,15 @@ class ByteMachine:
             a=self.reg(arg['reg']);return Sym(number=a.number&((1<<arg['width'])-1),refs=a.refs,origins=a.origins)
         address=self.address(arg).number
         if arg['width']==8 and address in self.runtime_regions:
-            require(self.instructions[self.pc]['op']=='cmp','Runtime input is supported only as a comparison operand')
+            require(self.instructions[self.pc]['op']=='cmp' or
+                    (self.plan.get('runtime_state_model')=='xor-control-byte-v1' and self.instructions[self.pc]['op']=='movzx'),
+                    'Unsupported runtime input read')
+            if self.plan.get('observation_mode')=='entry_replay':
+                if self.runtime_snapshot is None or self.runtime_value is None:raise MissingObservation(self.pc)
+                require(self.runtime_snapshot[0]==address,'Entry input address changed')
+                self.steps[-1]['runtime_input_evidence']=dict(kind='replayed-control-version',
+                    entry_event_sequence=self.runtime_snapshot[2],version=len(self.runtime_updates),value=self.runtime_value)
+                return Sym(number=self.runtime_value)
             if self.plan.get('observation_mode')=='entry':
                 if self.runtime_snapshot is None:raise MissingObservation(self.pc)
                 ptr,data,sequence=self.runtime_snapshot
@@ -86,6 +95,9 @@ class ByteMachine:
             if event is None:raise MissingObservation(self.pc)
             ptr,data=snapshot(event['values']['load'])
             require(ptr==address and len(data)==1,'Runtime input snapshot mismatch')
+            if self.plan.get('runtime_state_model'):
+                if self.runtime_value is None:self.runtime_value=data[0]
+                require(self.runtime_value==data[0],'Observed control byte contradicts modeled updates')
             return Sym(number=data[0])
         require(arg['width']==8 and address in self.memory,'Memory read outside declared byte regions')
         value=self.memory[address]
@@ -113,11 +125,12 @@ class ByteMachine:
         if event is not None:
             require(event['site']==n['site'],'Observed instruction order disagrees with CFG replay')
             self.verify(event)
-        if self.plan.get('observation_mode')=='entry' and self.runtime_regions and not self.steps:
+        if self.plan.get('observation_mode') in ('entry','entry_replay') and self.runtime_regions and not self.steps:
             require(event is not None,'Missing entry input event')
             ptr,data=snapshot(event['values']['control'])
             require(ptr==self.runtime_regions[0] and len(data)==1,'Entry input snapshot mismatch')
             self.runtime_snapshot=(ptr,data,event['sequence'])
+            self.runtime_value=data[0]
         op=n['op'];args=n['args'];nid='step:'+str(len(self.steps));next_pc=n['next']
         node={'id':nid,'kind':'instruction','address':n['address'],'asm':n['asm'],'step':len(self.steps)}
         if event is None:node['evidence']='modeled-from-boundaries'
@@ -131,6 +144,15 @@ class ByteMachine:
             if args[1]['kind']=='reg':self.write_register(args[1],value)
             else:
                 address=self.address(args[1]);self.link([address],nid,'address')
+                if address.number in self.runtime_regions:
+                    require(self.plan.get('runtime_state_model')=='xor-control-byte-v1' and self.runtime_value is not None,
+                            'Unmodeled control store')
+                    update=dict(version=len(self.runtime_updates)+1,step=node['step'],instruction=n['address'],
+                        before=self.runtime_value,after=value.number&255,event_sequence=event['sequence'] if event else None,
+                        evidence='modeled-control-store')
+                    self.runtime_value=update['after'];self.runtime_updates.append(update);node['control_update']=update
+                    self.pc=next_pc;self.steps[-1].update(node)
+                    return
                 require(self.dst<=address.number<self.dst+4,'Store outside output region')
                 self.memory[address.number]=Sym(number=value.number&255,refs=value.refs,origins=value.origins)
                 self.written.add(address.number);node['write_address']=address.number
@@ -190,25 +212,29 @@ def infer(document,plan):
         root=[e for e in events if e['op']!='instruction']
         require([e['site'] for e in root]==plan['root_order'],'Missing or extra boundary events')
         mode=plan.get('observation_mode','full')
-        require(mode in ('full','boundary','selective','entry'),'Unknown observation mode')
+        require(mode in ('full','boundary','selective','entry','entry_replay'),'Unknown observation mode')
+        if plan.get('runtime_state_model'):deterministic_runtime_input(plan)
         if mode=='boundary':
             contract='runtime-byte-input-v1' if plan.get('runtime_inputs') else 'closed-four-byte-leaf-v1'
             require(plan.get('replay_contract')==contract,'Missing boundary replay contract')
             require(events==root and len(root)==10,'Boundary mode accepts no internal events')
             require(not any(s['op']=='instruction' for s in plan['sites']),'Boundary plan still attaches internal probes')
             execution=[]
-        elif mode in ('selective','entry'):
+        elif mode in ('selective','entry','entry_replay'):
             contract='runtime-byte-input-v1' if plan.get('runtime_inputs') else 'closed-four-byte-leaf-v1'
             if mode=='entry' and plan.get('runtime_inputs'):
                 contract='stable-runtime-byte-input-v1'
                 require(plan.get('entry_stability')==stable_runtime_input(plan),'Invalid entry stability certificate')
+            if mode=='entry_replay' and plan.get('runtime_inputs'):
+                contract='evolving-runtime-byte-input-v1'
+                require(plan.get('entry_state_replay')==deterministic_runtime_input(plan),'Invalid entry state-replay certificate')
             require(plan.get('replay_contract')==contract,'Missing selective replay contract')
             require(events[:7]==root[:7] and events[-3:]==root[-3:],'Instruction evidence outside transform interval')
             execution=events[7:-3]
             selected=set(plan.get('selected_instruction_sites',[]))
             require(selected=={s['id'] for s in plan['sites'] if s['op']=='instruction'},'Selective attachment contract mismatch')
             require(all(e['op']=='instruction' and e['site'] in selected for e in execution),'Unexpected selective evidence')
-            if mode=='entry':
+            if mode in ('entry','entry_replay'):
                 require(len(execution)==int(bool(plan.get('runtime_inputs'))),'Entry mode requires exactly one input event per request')
                 if execution:
                     require(selected=={plan['instructions'][0]['site']},'Entry probe is not at leaf entry')
@@ -243,7 +269,7 @@ def infer(document,plan):
         machine=ByteMachine(plan,execution[0] if mode=='full' else work,candidates[0],(dst,dst_bytes),nodes,edges,auxiliary)
         if mode=='boundary':
             while not machine.halted:machine.step()
-        elif mode in ('selective','entry'):
+        elif mode in ('selective','entry','entry_replay'):
             position=0
             while not machine.halted:
                 n=machine.instructions[machine.pc];event=None
@@ -256,6 +282,9 @@ def infer(document,plan):
             for e in execution:machine.step(e)
         require(machine.halted and machine.written==set(range(dst,dst+4)),'Missing return or incompletely defined output')
         machine.verify(root[7])
+        if plan.get('runtime_state_model'):
+            ptr,data=snapshot(root[7]['values']['control'])
+            require(ptr==machine.runtime_regions[0] and data==bytes([machine.runtime_value]),'Final control state contradicts replay')
         pointer,data=snapshot(root[8]['values']['value'])
         actual=bytes(machine.memory[dst+i].number for i in range(4))
         require(pointer==dst and data==actual,'JSON input disagrees with replayed stores')
@@ -287,6 +316,7 @@ def infer(document,plan):
                 'total_writes':machine.write_version,
                 'noncontributing_reads':[s['id'] for s in reads if s['id'] not in keep],
                 'output':output,'byte_sources':byte_sources,'instruction_steps':machine.steps,'observation_mode':mode,
+                **({'runtime_control_updates':machine.runtime_updates,'final_runtime_control':machine.runtime_value} if plan.get('runtime_state_model') else {}),
                 'graph':{'nodes':[nodes[n] for n in sorted(keep)],'edges':[e for e in edges if e['kind']=='data' and e['source'] in keep and e['target'] in keep]},
                 'scope':('Instruction replay between retained observations; assumes complete declared data inputs, observed runtime control reads, no other external writes/calls; explicit data dependencies only' if mode!='full' else 'Leaf instructions derive byte dependencies; configured read/JSON boundaries; explicit data only; four-byte separate buffers; no transform summary')}
     except MissingObservation as exc:

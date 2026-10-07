@@ -5,6 +5,43 @@ runtime non-alias checks and the declared absence of external writers. They
 do not discover ownership, prove a global minimum, or cover arbitrary code.
 """
 from hybrid_model import BRANCHES,require
+from copy import deepcopy
+
+
+def deterministic_runtime_input(plan):
+    """Certify supported load/XOR-immediate/store updates, not immutability.
+
+    Remove only separately checked update blocks when applying the existing
+    output/alias/ownership rules. No branch may enter halfway into a block.
+    Concrete replay must still validate every register and memory operation.
+    """
+    require(plan.get('runtime_state_model')=='xor-control-byte-v1','Missing deterministic control-state contract')
+    ir=plan['instructions'];blocks=[];removed=set()
+    def control(arg):
+        return arg.get('kind')=='mem' and arg.get('base')=='rdi' and not arg.get('index') and arg.get('offset')==0 and arg.get('width')==8
+    targets={n['target'] for n in ir if 'target' in n}|{plan['entry']}
+    for i,n in enumerate(ir):
+        if n['op']!='mov' or not control(n['args'][-1]):continue
+        require(i>=2,'Incomplete control update block')
+        load,xor=ir[i-2:i];src=n['args'][0]
+        require(src['kind']=='reg' and src['width']==8 and load['op']=='movzx' and control(load['args'][0]) and
+                load['args'][1]==dict(kind='reg',reg=src['reg'],width=32),'Unsupported control update load/store')
+        require(xor['op']=='xor' and xor['width']==32 and xor['args'][1]==load['args'][1] and
+                xor['args'][0]['kind']=='imm' and 0<=xor['args'][0]['value']<=255,'Control update must be a byte XOR constant')
+        require(load['next']==xor['address'] and xor['next']==n['address'] and
+                xor['address'] not in targets and n['address'] not in targets,'Branch enters inside control update')
+        blocks.append(dict(load=load['address'],xor=xor['address'],store=n['address'],constant=xor['args'][0]['value']))
+        removed.update((load['address'],xor['address'],n['address']))
+    require(blocks,'No supported control updates found')
+    shadow=deepcopy(plan)
+    for n in shadow['instructions']:
+        if n['address'] in removed:n.update(op='nop',args=[])
+    stable=stable_runtime_input(shadow)
+    return dict(version='replay-control-byte-v1',entry=plan['entry'],update_blocks=blocks,
+        remaining_leaf_checks=stable,
+        static_fact='Control writes are complete load/XOR-constant/store blocks; other writes satisfy destination rules',
+        runtime_requirements=['initial control observation','complete modeled execution','disjoint data/control regions','final control snapshot matches replay'],
+        assumed_environment='request-private input, no external writer during leaf execution')
 
 
 def stable_runtime_input(plan):

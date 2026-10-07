@@ -18,7 +18,7 @@ from gin_byte_provenance import fixtures
 from gin_cross_provenance import readiness
 from gin_otel_provenance import client
 from gin_otel_boundaries import span_chains,read_spans
-from observation_contract import stable_runtime_input
+from observation_contract import stable_runtime_input,deterministic_runtime_input
 import gin_byte_capture
 
 
@@ -158,14 +158,19 @@ class ChoiceTests(unittest.TestCase):
     @unittest.skipUnless(os.environ.get('GIN_CHOICE_BUILD'),'Set GIN_CHOICE_BUILD for native HTTP and actual probe plans')
     def test_native_http_sdk_and_plans(self):
         root=Path(os.environ['GIN_CHOICE_BUILD'])/'build'
+        toggle=bool(json.loads((root/'downstream/plan.json').read_text()).get('runtime_state_model'))
+        optimized='entry_replay' if toggle else 'entry'
         for role in ('upstream','downstream'):
             plan=json.loads((root/role/'plan.json').read_text())
-            for mode in ('full','boundary','selective','entry'):
+            for mode in ('full','boundary','selective',optimized):
                 p=select_observation(plan,mode)
                 self.assertTrue(gin_byte_capture.source(p,1,SimpleNamespace(st_dev=0,st_ino=0)))
-                if mode in ('selective','entry'):self.assertEqual(sum(s['op']=='instruction' for s in p['sites']),int(role=='downstream'))
-                if mode=='entry' and role=='downstream':
-                    self.assertEqual(p['entry_stability'],stable_runtime_input(p))
+                if mode in ('selective',optimized):
+                    expected=2 if mode=='selective' and toggle else 1
+                    self.assertEqual(sum(s['op']=='instruction' for s in p['sites']),expected*int(role=='downstream'))
+                if mode==optimized and role=='downstream':
+                    if toggle:self.assertEqual(p['entry_state_replay'],deterministic_runtime_input(p))
+                    else:self.assertEqual(p['entry_stability'],stable_runtime_input(p))
                     selected=next(s for s in p['sites'] if s['op']=='instruction')
                     self.assertEqual(selected['address'],p['entry'])
                     self.assertEqual(selected['snapshots']['control'],dict(pointer='rdi',length=1))
@@ -186,6 +191,9 @@ class ChoiceTests(unittest.TestCase):
                 self.assertEqual(len(span_chains(read_spans(captures))),8)
                 for r in responses:
                     expected=b'LOCL' if r['ticket']%4>=2 else b'SAME'
+                    if toggle:
+                        initial=r['ticket']%4>=2
+                        expected=bytes((b'LOCL' if initial^bool(i%2) else b'SAME')[i] for i in range(4))
                     self.assertEqual(json.loads(r['body']),dict(result=list(expected)))
             finally:
                 for proc in procs.values():
