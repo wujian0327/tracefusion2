@@ -25,6 +25,7 @@ type responseRecord struct {
  Status int `json:"status"`
  ContentType string `json:"content_type"`
  Body string `json:"body"`
+ ElapsedNS int64 `json:"elapsed_ns"`
 }
 
 func main() {
@@ -49,10 +50,12 @@ func main() {
     req,err:=http.NewRequestWithContext(requestCtx,http.MethodGet,url,nil);if err!=nil { panic(err) }
     // SDK-owned IDs and standard propagation; no custom trace generator.
     otel.GetTextMapPropagator().Inject(requestCtx,propagation.HeaderCarrier(req.Header))
+    started:=time.Now()
     response,err:=client.Do(req);if err!=nil { span.RecordError(err);span.SetStatus(codes.Error,err.Error());span.End();panic(err) }
     body,err:=io.ReadAll(response.Body);response.Body.Close();if err!=nil { panic(err) }
+    elapsed:=time.Since(started).Nanoseconds()
     span.SetAttributes(attribute.Int("http.response.status_code",response.StatusCode));span.End()
-    row:=responseRecord{ticket,selected,req.Header.Get("traceparent"),response.StatusCode,response.Header.Get("Content-Type"),string(body)}
+    row:=responseRecord{ticket,selected,req.Header.Get("traceparent"),response.StatusCode,response.Header.Get("Content-Type"),string(body),elapsed}
     mu.Lock();rows=append(rows,row);mu.Unlock()
    }
   }(worker)

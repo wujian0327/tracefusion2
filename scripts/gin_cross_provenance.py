@@ -135,7 +135,7 @@ def analyze_pair(pair,plans,captures,variant):
     return report
 
 
-def run(out,*,build_fn=build_role,worker_script=__file__,startup_fn=None,analyze_fn=analyze_pair):
+def run(out,*,build_fn=build_role,worker_script=__file__,startup_fn=None,analyze_fn=analyze_pair,archive_output=True):
     passed=False
     try:
         reports=[]
@@ -170,12 +170,14 @@ def run(out,*,build_fn=build_role,worker_script=__file__,startup_fn=None,analyze
     except Exception:
         error=traceback.format_exc();(out/'runner-error.txt').write_text(error);print(error,file=sys.stderr)
     finally:
-        save(out/'run-status.json',dict(completed=passed));archive=out.with_suffix('.zip')
-        with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:
-            for p in sorted(out.rglob('*')):
-                if p.is_file():z.write(p,p.relative_to(out.parent))
-        if os.geteuid()==0 and os.environ.get('SUDO_UID','').isdigit():os.chown(archive,int(os.environ['SUDO_UID']),int(os.environ['SUDO_GID']))
-        print('Return this archive: '+str(archive),flush=True)
+        save(out/'run-status.json',dict(completed=passed))
+        if archive_output:
+            archive=out.with_suffix('.zip')
+            with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:
+                for p in sorted(out.rglob('*')):
+                    if p.is_file():z.write(p,p.relative_to(out.parent))
+            if os.geteuid()==0 and os.environ.get('SUDO_UID','').isdigit():os.chown(archive,int(os.environ['SUDO_UID']),int(os.environ['SUDO_GID']))
+            print('Return this archive: '+str(archive),flush=True)
     return int(not passed)
 
 

@@ -1,4 +1,5 @@
 """Gin 1.11 boundary adapter reusing the established Go scope planner."""
+from copy import deepcopy
 import hashlib
 import re
 import subprocess
@@ -10,7 +11,22 @@ from gin_api_provenance import BOUNDARIES
 from hybrid_model import require
 
 
-def plan_binary(binary,go,env,out,*,cross_role=None,tracing='forward'):
+def select_observation(plan,mode):
+    require(mode in ('full','boundary'),'Unknown observation mode')
+    result=deepcopy(plan)
+    require(plan.get('observation_mode','full')=='full','Select from a full plan')
+    result['observation_mode']=mode
+    if mode=='boundary':
+        result['sites']=[s for s in result['sites'] if s['op']!='instruction']
+        ids={s['id'] for s in result['sites']}
+        result['event_order']=[s for s in result['event_order'] if s in ids]
+        for n in result['instructions']:n.pop('site',None)
+        result['replay_contract']='closed-four-byte-leaf-v1'
+        result['scope']+='; boundary-only observation assumes closed deterministic leaf execution'
+    return result
+
+
+def plan_binary(binary,go,env,out,*,cross_role=None,tracing='forward',observation='full'):
     data=binary.read_bytes();sites=[];texts=[]
     nm=subprocess.check_output([go,'tool','nm','-size',str(binary)],env=env,text=True)
     assembly=subprocess.check_output(['objdump','-d','-M','intel','--no-show-raw-insn',str(binary)],text=True)
@@ -83,7 +99,7 @@ def plan_binary(binary,go,env,out,*,cross_role=None,tracing='forward'):
         if n['op']=='test':snapshots={'load':{'address':n['args'][1],'length':1}}
         n['site']=add(n,'instruction','step',snapshots)
     (out/'disassembly.txt').write_text('\n'.join(texts))
-    return dict(adapter='gin-byte-array-v1',binary=str(binary),binary_sha256=hashlib.sha256(data).hexdigest(),
+    plan=dict(adapter='gin-byte-array-v1',binary=str(binary),binary_sha256=hashlib.sha256(data).hexdigest(),
         sites=sites,event_order=[s['id'] for s in sites],
         instructions=ir,entry=ir[0]['address'],root_order=core_order+[render_entry],
         abi={'dst_register':'rax','src_register':'rbx','aux_register':'rcx'},region_bytes=4,max_steps=256,
@@ -91,3 +107,5 @@ def plan_binary(binary,go,env,out,*,cross_role=None,tracing='forward'):
         cross_role=cross_role,
         trace_mode=tracing,
         scope='Default Gin scheduling; process/G/scope lifetimes; fixed four-byte array JSON summary')
+
+    return select_observation(plan,observation)

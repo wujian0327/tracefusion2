@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 import shutil
 import signal
+import statistics
 import subprocess
 
 from hybrid_model import require
@@ -30,9 +31,9 @@ MODULES.update({name:'v0.63.0' for name in (
  'go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp')})
 
 
-def build_role(out,role,variant):
+def build_role(out,role,variant,observation='full'):
     return build(out,'assign' if role=='upstream' else variant,scenario=SCENARIO,
-        planner=partial(plan_binary,cross_role=role,tracing='otel'),
+        planner=partial(plan_binary,cross_role=role,tracing='otel',observation=observation),
         extra_sources=(role+'.go','tracing.go'),expected_modules=MODULES)
 
 
@@ -94,20 +95,34 @@ def analyze_pair(pair,plans,captures,variant):
     report.update(negative_checks=negatives,trace_validation=joined.get('trace_validation'),inference_status=joined['status'],
                   inference_reason=joined.get('reason'))
     report['passed']=report['passed'] and len(negatives)==11 and all(n['passed'] for n in negatives)
+    responses=json.loads((captures['downstream']/'client-responses.json').read_text())
+    elapsed=[r.get('elapsed_ns') for r in responses]
+    if elapsed and all(type(n) is int and n>0 for n in elapsed):
+        report['request_timing']=dict(count=len(elapsed),mean_ms=statistics.mean(elapsed)/1e6,
+            median_ms=statistics.median(elapsed)/1e6,min_ms=min(elapsed)/1e6,max_ms=max(elapsed)/1e6,
+            scope='Client HTTP Do through response-body close; eight requests, four workers; cold connections included')
+    report['observation_mode']={r:p.get('observation_mode','full') for r,p in plans.items()}
+    report['capture_counts']={}
+    for role,cap in captures.items():
+        doc=json.loads((cap/'events.json').read_text())
+        report['capture_counts'][role]=dict(events=len(doc['events']),
+            instruction_events=sum(e['op']=='instruction' for e in doc['events']),
+            physical_probes=doc['diagnostics'].get('physical_probes'),logical_sites=len(plans[role]['sites']))
     return report
 
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('command',choices=('build','run','collect'))
     parser.add_argument('--output',type=Path);parser.add_argument('--plan',type=Path);parser.add_argument('--input',type=Path)
-    parser.add_argument('--role',choices=('upstream','downstream'));args=parser.parse_args()
+    parser.add_argument('--role',choices=('upstream','downstream'))
+    parser.add_argument('--observation',choices=('full','boundary'),default='full');args=parser.parse_args()
     if args.command=='collect':return worker(args.plan,args.input,args.output,args.role)
     out=(args.output or ROOT/'artifacts'/('gin-otel-provenance-'+datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S-%f'))).resolve()
     out.mkdir(parents=True,exist_ok=False)
     client_binary=out/'client/otel-client'
     def builder(directory,role,variant):
         if not client_binary.exists():build_client(out/'client')
-        return build_role(directory,role,variant)
+        return build_role(directory,role,variant,args.observation)
     if args.command=='run':
         return run_pair(out,build_fn=builder,worker_script=__file__,analyze_fn=analyze_pair,
             startup_fn=lambda role,pair,captures:dict(Service=role,TraceFile=str(captures[role]/'spans.jsonl'),ClientBinary=str(client_binary)))

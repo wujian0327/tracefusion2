@@ -80,14 +80,16 @@ class ByteMachine:
         require(width in (32,64),'Partial register writes unsupported')
         self.regs[arg['reg']]=Sym(number=number,refs=value.refs,origins=value.origins)
 
-    def step(self,event):
+    def step(self,event=None):
         require(not self.halted and len(self.steps)<self.plan['max_steps'],'Execution exceeds bound or continues after RET')
         n=self.instructions[self.pc]
-        require(event['site']==n['site'],'Observed instruction order disagrees with CFG replay')
-        self.verify(event)
+        if event is not None:
+            require(event['site']==n['site'],'Observed instruction order disagrees with CFG replay')
+            self.verify(event)
         op=n['op'];args=n['args'];nid='step:'+str(len(self.steps));next_pc=n['next']
         node={'id':nid,'kind':'instruction','address':n['address'],'asm':n['asm'],'step':len(self.steps)}
-        self.nodes[nid]=node;self.steps.append(dict(node,event_sequence=event['sequence']))
+        if event is None:node['evidence']='modeled-from-boundaries'
+        self.nodes[nid]=node;self.steps.append(dict(node,event_sequence=event['sequence'] if event is not None else None))
         if op=='movzx':
             value=self.read(args[0],event);node['read_address']=self.address(args[0]).number
             self.link([self.address(args[0])],nid,'address')
@@ -155,9 +157,17 @@ def infer(document,plan):
             s=specs[e['site']];require((e['op'],e['phase'])==(s['op'],s['phase']),'Site contract mismatch')
         root=[e for e in events if e['op']!='instruction']
         require([e['site'] for e in root]==plan['root_order'],'Missing or extra boundary events')
-        require(events[:7]==root[:7] and events[-3:]==root[-3:],'Instruction evidence outside transform interval')
-        execution=events[7:-3]
-        require(execution and all(e['op']=='instruction' for e in execution),'Missing leaf execution')
+        mode=plan.get('observation_mode','full')
+        require(mode in ('full','boundary'),'Unknown observation mode')
+        if mode=='boundary':
+            require(plan.get('replay_contract')=='closed-four-byte-leaf-v1','Missing boundary replay contract')
+            require(events==root and len(root)==10,'Boundary mode accepts no internal events')
+            require(not any(s['op']=='instruction' for s in plan['sites']),'Boundary plan still attaches internal probes')
+            execution=[]
+        else:
+            require(events[:7]==root[:7] and events[-3:]==root[-3:],'Instruction evidence outside transform interval')
+            execution=events[7:-3]
+            require(execution and all(e['op']=='instruction' for e in execution),'Missing leaf execution')
         nodes={};edges=[];reads=[]
         for i in range(3):
             before,after=root[2*i:2*i+2];sid='source:'+str(i+1)
@@ -178,8 +188,11 @@ def infer(document,plan):
             matches=[s for s in reads if s['pointer']==aux_pointer]
             require(len(matches)==1 and aux_pointer!=src,'Auxiliary input has no distinct observed read definition')
             auxiliary=matches[0]
-        machine=ByteMachine(plan,execution[0],candidates[0],(dst,dst_bytes),nodes,edges,auxiliary)
-        for e in execution:machine.step(e)
+        machine=ByteMachine(plan,work if mode=='boundary' else execution[0],candidates[0],(dst,dst_bytes),nodes,edges,auxiliary)
+        if mode=='boundary':
+            while not machine.halted:machine.step()
+        else:
+            for e in execution:machine.step(e)
         require(machine.halted and machine.written==set(range(dst,dst+4)),'Missing return or incompletely defined output')
         machine.verify(root[7])
         pointer,data=snapshot(root[8]['values']['value'])
@@ -212,8 +225,8 @@ def infer(document,plan):
                 'overwritten_sources':sorted(machine.write_sources-set(origins)),
                 'total_writes':machine.write_version,
                 'noncontributing_reads':[s['id'] for s in reads if s['id'] not in keep],
-                'output':output,'byte_sources':byte_sources,'instruction_steps':machine.steps,
+                'output':output,'byte_sources':byte_sources,'instruction_steps':machine.steps,'observation_mode':mode,
                 'graph':{'nodes':[nodes[n] for n in sorted(keep)],'edges':[e for e in edges if e['kind']=='data' and e['source'] in keep and e['target'] in keep]},
-                'scope':'Leaf instructions derive byte dependencies; configured read/JSON boundaries; explicit data only; four-byte separate buffers; no transform summary'}
+                'scope':('Closed leaf reconstructed from entry state and checked at boundaries; assumes no external writes, unmodeled calls, or runtime effects' if mode=='boundary' else 'Leaf instructions derive byte dependencies; configured read/JSON boundaries; explicit data only; four-byte separate buffers; no transform summary')}
     except (ValueError,KeyError,TypeError,UnicodeError) as exc:
         return {'status':'unknown','reason':str(exc)}

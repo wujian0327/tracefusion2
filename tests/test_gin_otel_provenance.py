@@ -78,7 +78,7 @@ class OTelProvenanceTests(unittest.TestCase):
 
     @unittest.skipUnless(os.environ.get('GIN_OTEL_BUILD'),'Set GIN_OTEL_BUILD to built OTel fixture')
     def test_actual_plans_generate_probes(self):
-        from gin_byte_adapter import plan_binary
+        from gin_byte_adapter import plan_binary,select_observation
         root=Path(os.environ['GIN_OTEL_BUILD']).resolve();go=os.environ.get('TRACEFUSION_GO','go')
         for variant in ('assign','partial','overwrite'):
             for role in ('upstream','downstream'):
@@ -86,6 +86,12 @@ class OTelProvenanceTests(unittest.TestCase):
                     plan=plan_binary(root/variant/role/'gin-byte-target',go,dict(os.environ),Path(tmp),cross_role=role,tracing='otel')
                     self.assertTrue(gin_byte_capture.source(plan,1,SimpleNamespace(st_dev=0,st_ino=0)))
                     self.assertEqual(sorted(s['id'] for p in gin_byte_capture.physical_probes(plan) for s in p['sites']),plan['event_order'])
+                    sparse=select_observation(plan,'boundary')
+                    self.assertEqual(sparse['binary_sha256'],plan['binary_sha256'])
+                    self.assertTrue(gin_byte_capture.source(sparse,1,SimpleNamespace(st_dev=0,st_ino=0)))
+                    internal={s['address'] for s in plan['sites'] if s['op']=='instruction'}
+                    retained={s['address'] for p in gin_byte_capture.physical_probes(sparse) for s in p['sites']}
+                    self.assertFalse(internal & retained)
                     if role=='downstream':
                         self.assertIn('go.opentelemetry.io/otel/propagation.HeaderCarrier.Set',plan['scopes'])
                         reads=[s for s in plan['sites'] if s['op']=='source' and s['phase']=='pre']
@@ -116,6 +122,7 @@ class OTelProvenanceTests(unittest.TestCase):
                     self.assertEqual(len({c['downstream_client_span'] for c in chains.values()}),8)
                     for response in responses:
                         self.assertEqual(response['status'],200)
+                        self.assertGreater(response['elapsed_ns'],0)
                         self.assertEqual(json.loads(response['body']),{'result':[83,65,77,69]})
                 finally:
                     for proc in procs.values():
