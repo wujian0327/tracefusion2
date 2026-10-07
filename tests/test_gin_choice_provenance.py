@@ -159,18 +159,20 @@ class ChoiceTests(unittest.TestCase):
     def test_native_http_sdk_and_plans(self):
         root=Path(os.environ['GIN_CHOICE_BUILD'])/'build'
         toggle=bool(json.loads((root/'downstream/plan.json').read_text()).get('runtime_state_model'))
-        inputs=json.loads((root/'downstream/plan.json').read_text()).get('runtime_input_model')=='indexed-control-bytes-v1'
+        indexed_inputs=json.loads((root/'downstream/plan.json').read_text()).get('runtime_input_model')=='indexed-control-bytes-v1'
+        kill=os.environ.get('GIN_KILL_VARIANT')
         optimized='entry_replay' if toggle else 'entry'
-        if inputs:optimized='auto'
+        if indexed_inputs or kill:optimized='auto'
         for role in ('upstream','downstream'):
             plan=json.loads((root/role/'plan.json').read_text())
             for mode in ('full','boundary','selective',optimized):
                 p=select_observation(plan,mode)
                 self.assertTrue(gin_byte_capture.source(p,1,SimpleNamespace(st_dev=0,st_ino=0)))
                 if mode in ('selective',optimized):
-                    expected=2 if inputs or mode=='selective' and toggle else 1
+                    expected=2 if indexed_inputs or mode=='selective' and toggle else 1
+                    if kill=='kill-full' and mode=='auto':expected=0
                     self.assertEqual(sum(s['op']=='instruction' for s in p['sites']),expected*int(role=='downstream'))
-                if mode==optimized and role=='downstream' and not inputs:
+                if mode==optimized and role=='downstream' and not indexed_inputs and not kill:
                     if toggle:self.assertEqual(p['entry_state_replay'],deterministic_runtime_input(p))
                     else:self.assertEqual(p['entry_stability'],stable_runtime_input(p))
                     selected=next(s for s in p['sites'] if s['op']=='instruction')
@@ -196,7 +198,8 @@ class ChoiceTests(unittest.TestCase):
                     if toggle:
                         initial=r['ticket']%4>=2
                         expected=bytes((b'LOCL' if initial^bool(i%2) else b'SAME')[i] for i in range(4))
-                    if inputs:expected=bytes((b'LOCL' if c=='1' else b'SAME')[i] for i,c in enumerate(INPUT_PATTERNS[r['ticket']-1]))
+                    if indexed_inputs:expected=bytes((b'LOCL' if c=='1' else b'SAME')[i] for i,c in enumerate(INPUT_PATTERNS[r['ticket']-1]))
+                    if kill:expected=bytes((b'SAME' if kill=='kill-full' or kill=='kill-partial' and i>=2 else expected)[i] for i in range(4))
                     self.assertEqual(json.loads(r['body']),dict(result=list(expected)))
             finally:
                 for proc in procs.values():

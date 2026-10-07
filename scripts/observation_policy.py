@@ -11,6 +11,7 @@ from pathlib import Path
 
 from hybrid_model import BRANCHES,require
 from observation_contract import stable_runtime_input,deterministic_runtime_input,runtime_input_region,runtime_read_operand
+from output_dependence import analyze_output_dependence
 
 UNKNOWN=frozenset({'unknown'})
 SCALAR=frozenset({'scalar'})
@@ -129,6 +130,18 @@ def choose_observation(plan):
                     site['snapshots'].get('load')==dict(address=runtime_read_operand(node,plan),length=1),'Missing control-read capture contract')
             selected.append(sid)
         require(set(selected)==set(plan.get('runtime_input_sites',[])),'Declared runtime probe sites disagree with CFG analysis')
+        if plan.get('observation_target')=='final-byte-origins-v1':
+            try:
+                dependence=analyze_output_dependence(plan);result['output_dependence']=dependence
+                if dependence['projection'] is not None:
+                    result['candidates'].append(dict(mode='output',accepted=True))
+                    result.update(status='selected',mode='output',instruction_sites=[],
+                        reason='All supported control classes have identical final byte origins; intermediate path is not reconstructed')
+                    return result
+                result['candidates'].append(dict(mode='output',accepted=False,reason='Control still selects final byte origins',
+                    varying_output_bytes=dependence['varying_output_bytes']))
+            except (ValueError,KeyError,TypeError,IndexError) as exc:
+                result['candidates'].append(dict(mode='output',accepted=False,reason=str(exc)))
         try:
             certificate=stable_runtime_input(plan)
             entry=sites[plan['instructions'][0]['site']]

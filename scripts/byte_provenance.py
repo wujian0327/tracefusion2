@@ -8,6 +8,7 @@ from interproc_model import Sym, flags_for
 from hybrid_model import branch_taken, BRANCHES, require
 from lineage_graph import backward_nodes
 from observation_contract import stable_runtime_input,deterministic_runtime_input,runtime_input_region,runtime_read_operand
+from output_dependence import certify_output_projection,apply_output_projection
 
 MASK64=(1<<64)-1
 
@@ -222,9 +223,16 @@ def infer(document,plan):
         if plan.get('runtime_input_model')=='indexed-control-bytes-v1':
             runtime_input_region(plan)
             require(plan.get('runtime_input_ownership')=='request-private','Indexed control input requires private ownership')
-        require(mode in ('full','boundary','selective','entry','entry_replay'),'Unknown observation mode')
+        require(mode in ('full','boundary','selective','entry','entry_replay','output'),'Unknown observation mode')
         if plan.get('runtime_state_model'):deterministic_runtime_input(plan)
-        if mode=='boundary':
+        if mode=='output':
+            require(plan.get('observation_target')=='final-byte-origins-v1' and
+                    plan.get('replay_contract')=='certified-final-byte-origins-v1','Missing final-origin contract')
+            require(plan.get('output_projection')==certify_output_projection(plan),'Invalid output projection certificate')
+            require(events==root and len(root)==10 and not any(s['op']=='instruction' for s in plan['sites']),
+                    'Output projection accepts boundary evidence only')
+            execution=[]
+        elif mode=='boundary':
             contract='runtime-byte-input-v1' if plan.get('runtime_inputs') else 'closed-four-byte-leaf-v1'
             require(plan.get('replay_contract')==contract,'Missing boundary replay contract')
             require(events==root and len(root)==10,'Boundary mode accepts no internal events')
@@ -277,7 +285,8 @@ def infer(document,plan):
             require(all(pointer+region['length']<=s['pointer'] or s['pointer']+4<=pointer for s in reads),'Runtime input aliases an observed source')
             if mode=='full':require(execution[0]['registers'][register]==pointer,'Runtime input argument changed before leaf entry')
         machine=ByteMachine(plan,execution[0] if mode=='full' else work,candidates[0],(dst,dst_bytes),nodes,edges,auxiliary)
-        if mode=='boundary':
+        if mode=='output':apply_output_projection(machine,plan['output_projection'],root[7])
+        elif mode=='boundary':
             while not machine.halted:machine.step()
         elif mode in ('selective','entry','entry_replay'):
             position=0
@@ -291,7 +300,7 @@ def infer(document,plan):
         else:
             for e in execution:machine.step(e)
         require(machine.halted and machine.written==set(range(dst,dst+4)),'Missing return or incompletely defined output')
-        machine.verify(root[7])
+        if mode!='output':machine.verify(root[7])
         if plan.get('runtime_state_model'):
             ptr,data=snapshot(root[7]['values']['control'])
             require(ptr==machine.runtime_regions[0] and data==bytes([machine.runtime_value]),'Final control state contradicts replay')
@@ -328,7 +337,10 @@ def infer(document,plan):
                 'output':output,'byte_sources':byte_sources,'instruction_steps':machine.steps,'observation_mode':mode,
                 **({'runtime_control_updates':machine.runtime_updates,'final_runtime_control':machine.runtime_value} if plan.get('runtime_state_model') else {}),
                 'graph':{'nodes':[nodes[n] for n in sorted(keep)],'edges':[e for e in edges if e['kind']=='data' and e['source'] in keep and e['target'] in keep]},
-                'scope':('Instruction replay between retained observations; assumes complete declared data inputs, observed runtime control reads, no other external writes/calls; explicit data dependencies only' if mode!='full' else 'Leaf instructions derive byte dependencies; configured read/JSON boundaries; explicit data only; four-byte separate buffers; no transform summary')}
+                'scope':('Instruction replay between retained observations; assumes complete declared data inputs, observed runtime control reads, no other external writes/calls; explicit data dependencies only' if mode!='full' else 'Leaf instructions derive byte dependencies; configured read/JSON boundaries; explicit data only; four-byte separate buffers; no transform summary'),
+                **(dict(source_versions=None,overwritten_sources=None,total_writes=None,
+                        execution_history='not_reconstructed',output_projection=plan['output_projection'],
+                        scope='Final byte origins certified over both control classes and bound to observed objects; actual intermediate execution not reconstructed') if mode=='output' else {})}
     except MissingObservation as exc:
         return {'status':'unknown','reason':str(exc),'needed_instruction_addresses':[exc.address]}
     except (ValueError,KeyError,TypeError,UnicodeError) as exc:

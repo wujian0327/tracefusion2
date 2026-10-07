@@ -10,6 +10,7 @@
 
 - `status`：`selected` 或 `unsupported`。
 - `mode`：`boundary`、`entry`、`entry_replay`、`selective`，或拒绝时的 null。
+- 显式指定 `observation_target=final-byte-origins-v1` 时，还可选择 `output`：证明不同控制类别的最终来源一致，省略控制观测，但不恢复实际中间路径。
 - `analysis`：可达指令数、发现的控制输入读取地址、输出写入地址和运行时检查要求。
 - `candidates`、`reason`：候选策略的接受/拒绝理由。
 - `entry_stability`：入口复用所需的充分条件检查结果，仅在选中 entry 时出现。
@@ -91,3 +92,7 @@ python3 -m unittest discover -s tests -p 'test_observation_policy.py' -v
 ## 后续验证：独立输入
 
 `--variant inputs` 增加请求私有的四字节控制数组。自动选择器根据 CFG 识别索引读取，拒绝沿用单字节入口证书，退回到 selective；具体运行与边界见 [gin-inputs-provenance.md](gin-inputs-provenance.md)。这是循环内首次观测不同输入字节，不是循环内新发起 I/O，也不证明逐次采集优于入口整数组快照。
+
+## 后续验证：输出来源与覆盖
+
+`scripts/gin_output_provenance.py run` 对比完整覆盖、部分覆盖和未覆盖。新增受限符号执行与逆序最后写定义分析；只有各控制类别的最终来源完全相同才允许 output 模式。运行方式、证明边界及“未重建中间路径”的结果标记见 [gin-output-provenance.md](gin-output-provenance.md)。

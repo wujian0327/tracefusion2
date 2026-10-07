@@ -29,6 +29,7 @@ import gin_byte_capture
 
 CHOICE=ROOT/'scenarios/gin-choice-provenance'
 INPUT_PATTERNS=('0000','0100','0010','0110','1001','1101','1011','1111')
+KILL_VARIANTS=('kill-full','kill-partial','kill-none')
 
 
 def stage(directory,variant='stable'):
@@ -42,10 +43,11 @@ def build_role(out,role,variant='stable'):
     with tempfile.TemporaryDirectory() as tmp:
         src=Path(tmp);stage(src,variant)
         return build(out,'assign',scenario=src,extra_sources=(role+'.go','tracing.go')+(('control.go',) if role=='downstream' else ()),
-            operation_source=CHOICE/({'toggle':'toggle.go','inputs':'inputs.go'}.get(variant,'choice.go')) if role=='downstream' else None,expected_modules=MODULES,
+            operation_source=CHOICE/({'toggle':'toggle.go','inputs':'inputs.go','kill-full':'kill-full.go','kill-partial':'kill-partial.go'}.get(variant,'choice.go')) if role=='downstream' else None,expected_modules=MODULES,
             planner=partial(plan_binary,cross_role=role,tracing='otel',
                 runtime_inputs=[dict(register='rdi',length=4 if variant=='inputs' else 1)] if role=='downstream' else None,
                 runtime_input_model='indexed-control-bytes-v1' if variant=='inputs' and role=='downstream' else None,
+                observation_target='final-byte-origins-v1' if variant in KILL_VARIANTS else None,
                 runtime_input_ownership='request-private' if role=='downstream' else None))
 
 
@@ -96,9 +98,11 @@ def analyze(pair,plans,captures,variant):
             for i in range(4):
                 local_byte=local ^ bool(i%2) if variant=='toggle' else local
                 if variant=='inputs':local_byte=INPUT_PATTERNS[ticket-1][i]=='1'
+                if variant=='kill-full' or variant=='kill-partial' and i>=2:local_byte=False
                 byte_name='B.txt' if local_byte else ('C.txt' if ticket%2==0 else 'A.txt')
                 expected.append([['downstream' if local_byte else 'upstream',str(ticket),byte_name,i]])
             contributes='0' in INPUT_PATTERNS[ticket-1] if variant=='inputs' else True if variant=='toggle' else not local
+            if variant in ('kill-full','kill-partial'):contributes=True
             require(row['byte_sources']==expected and row['transfer_contributes']==contributes,'Wrong byte origin')
         if variant=='toggle':
             for row in locals_['downstream']['results']:
@@ -111,6 +115,11 @@ def analyze(pair,plans,captures,variant):
                 samples=[s['runtime_input_evidence'] for s in row['provenance']['instruction_steps'] if 'runtime_input_evidence' in s]
                 require([s['offset'] for s in samples]==[0,0,0,1,0,2,0,3],'Missing independent input offsets')
                 require(all(s['kind']=='observed-control-byte' for s in samples),'An independent input was guessed')
+        if mode=='output':
+            require(variant=='kill-full','Unexpected output projection')
+            require(all(r['provenance']['execution_history']=='not_reconstructed' and not r['provenance']['instruction_steps'] and
+                        r['provenance']['total_writes'] is None for r in locals_['downstream']['results']),
+                    'Unobserved execution history was fabricated')
         negative=negative_checks(locals_['upstream'],locals_['downstream'])+negative_span_checks(locals_['upstream'],locals_['downstream'],spans)
         require(all(n['passed'] for n in negative),'Negative dependency check failed')
         if mode in ('selective','entry','entry_replay'):
@@ -153,14 +162,14 @@ def analyze(pair,plans,captures,variant):
     return report
 
 
-def run(out,build_only=False,variant='stable'):
+def run(out,build_only=False,variant='stable',archive_output=True):
     passed=False;reports={}
     try:
         with tempfile.TemporaryDirectory() as tmp:
             src=Path(tmp);stage(src,variant);client=build_client(out/'build/client',scenario=src)
         plans={r:build_role(out/'build'/r,r,variant) for r in ('upstream','downstream')}
-        optimized='auto' if variant=='inputs' else 'entry_replay' if variant=='toggle' else 'entry'
-        expected_mode='selective' if variant=='inputs' else optimized
+        optimized='auto' if variant=='inputs' or variant in KILL_VARIANTS else 'entry_replay' if variant=='toggle' else 'entry'
+        expected_mode='selective' if variant=='inputs' else 'output' if variant=='kill-full' else 'entry' if variant in KILL_VARIANTS else optimized
         automatic={r:select_observation(p,'auto') for r,p in plans.items()}
         require(automatic['upstream']['observation_mode']=='boundary' and automatic['downstream']['observation_mode']==expected_mode,
                 'Fixture no longer satisfies the expected automatic policy')
@@ -179,9 +188,14 @@ def run(out,build_only=False,variant='stable'):
                 except ValueError as exc:rejections.append(dict(mode=mode,refused=True,reason=str(exc)))
             require(len(rejections)==2,'Independent inputs incorrectly accepted by a one-byte entry mode')
             save(out/'entry-rejections.json',rejections)
+        if variant in KILL_VARIANTS:
+            dependence=automatic['downstream']['observation_decision']['output_dependence']
+            require(dependence['varying_output_bytes']==([] if variant=='kill-full' else [0,1] if variant=='kill-partial' else [0,1,2,3]),
+                    'Wrong final-origin dependence analysis')
+            save(out/'output-dependence.json',dependence)
         if build_only:passed=True;return 0
-        fixture=variant if variant in ('toggle','inputs') else 'choice'
-        modes=('full','boundary','auto') if variant=='inputs' else ('full','boundary','selective',optimized)
+        fixture=variant if variant in ('toggle','inputs') or variant in KILL_VARIANTS else 'choice'
+        modes=('full','boundary','auto') if variant=='inputs' or variant in KILL_VARIANTS else ('full','boundary','selective',optimized)
         for mode in modes:
             trial=out/mode;trial.mkdir()
             def builder(directory,role,variant):
@@ -197,17 +211,18 @@ def run(out,build_only=False,variant='stable'):
             require(rc==0,'Failed '+mode+' trial; inspect '+str(trial/'runner-error.txt'))
             reports[mode]=json.loads((trial/fixture/'evaluation.json').read_text())
         require(reports['full']['signature']==reports[optimized]['signature'],'Full/optimized origins differ')
-        if variant!='inputs':require(reports['full']['signature']==reports['selective']['signature'],'Full/selective origins differ')
+        if variant!='inputs' and variant not in KILL_VARIANTS:require(reports['full']['signature']==reports['selective']['signature'],'Full/selective origins differ')
         save(out/'comparison.json',dict(all_passed=True,reports=reports,
-            variant=variant,control_observation_events={m:reports[m]['capture_counts']['downstream']['instruction_events'] for m in (('auto',) if variant=='inputs' else ('selective',optimized))},
-            scope=('Independent private request bytes first observed inside loop; automatic per-read fallback, not loop-time I/O or minimum probes' if variant=='inputs' else
+            variant=variant,control_observation_events={m:reports[m]['capture_counts']['downstream']['instruction_events'] for m in (('auto',) if variant=='inputs' or variant in KILL_VARIANTS else ('selective',optimized))},
+            scope=('Final byte origins under bounded copy proof; actual intermediate execution may be unreconstructed' if variant in KILL_VARIANTS else
+                   'Independent private request bytes first observed inside loop; automatic per-read fallback, not loop-time I/O or minimum probes' if variant=='inputs' else
                    'Compare supported runtime reads with one initial snapshot and modeled state; private ownership and complete update model required; no minimum claim')))
         passed=True;print(json.dumps(dict(all_passed=True,boundary_unknown=8,full_resolved=8,optimized_mode=expected_mode,optimized_resolved=8)),flush=True)
     except Exception:
         error=traceback.format_exc();(out/'runner-error.txt').write_text(error);print(error,flush=True)
     finally:
         save(out/'run-status.json',dict(completed=passed,build_only=build_only))
-        if not build_only:
+        if not build_only and archive_output:
             archive=out.with_suffix('.zip')
             with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:
                 for p in sorted(out.rglob('*')):
@@ -222,9 +237,10 @@ def run(out,build_only=False,variant='stable'):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('command',choices=('build','run'))
-    parser.add_argument('--variant',choices=('stable','toggle','inputs'),default='stable')
+    parser.add_argument('--variant',choices=('stable','toggle','inputs')+KILL_VARIANTS,default='stable')
     parser.add_argument('--output',type=Path);args=parser.parse_args()
     prefix={'toggle':'gin-toggle-provenance-','inputs':'gin-inputs-provenance-'}.get(args.variant,'gin-choice-provenance-')
+    if args.variant in KILL_VARIANTS:prefix='gin-'+args.variant+'-provenance-'
     out=(args.output or ROOT/'artifacts'/(prefix+datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S-%f'))).resolve()
     out.mkdir(parents=True,exist_ok=False)
     return run(out,args.command=='build',args.variant)

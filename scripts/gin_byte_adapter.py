@@ -11,6 +11,7 @@ from gin_api_provenance import BOUNDARIES
 from hybrid_model import require
 from observation_contract import stable_runtime_input,deterministic_runtime_input,runtime_input_region,runtime_read_operand
 from observation_policy import choose_observation
+from output_dependence import certify_output_projection
 
 
 def select_observation(plan,mode):
@@ -20,11 +21,11 @@ def select_observation(plan,mode):
         result=select_observation(plan,decision['mode'])
         result['observation_decision']=decision
         return result
-    require(mode in ('full','boundary','selective','entry','entry_replay'),'Unknown observation mode')
+    require(mode in ('full','boundary','selective','entry','entry_replay','output'),'Unknown observation mode')
     result=deepcopy(plan)
     require(plan.get('observation_mode','full')=='full','Select from a full plan')
     result['observation_mode']=mode
-    if mode in ('boundary','selective','entry','entry_replay'):
+    if mode in ('boundary','selective','entry','entry_replay','output'):
         selected=set(plan.get('runtime_input_sites',[])) if mode=='selective' else set()
         if mode in ('entry','entry_replay') and plan.get('runtime_inputs'):
             if mode=='entry':result['entry_stability']=stable_runtime_input(plan)
@@ -42,11 +43,15 @@ def select_observation(plan,mode):
         result['replay_contract']='runtime-byte-input-v1' if plan.get('runtime_inputs') else 'closed-four-byte-leaf-v1'
         if mode=='entry' and plan.get('runtime_inputs'):result['replay_contract']='stable-runtime-byte-input-v1'
         if mode=='entry_replay' and plan.get('runtime_inputs'):result['replay_contract']='evolving-runtime-byte-input-v1'
+        if mode=='output':
+            require(plan.get('observation_target')=='final-byte-origins-v1','Output projection requires an explicit final-origin target')
+            result['output_projection']=certify_output_projection(plan)
+            result['replay_contract']='certified-final-byte-origins-v1'
         result['scope']+='; modeled replay between retained observations, within declared input regions'
     return result
 
 
-def plan_binary(binary,go,env,out,*,cross_role=None,tracing='forward',observation='full',runtime_inputs=None,runtime_input_ownership=None,runtime_input_model=None):
+def plan_binary(binary,go,env,out,*,cross_role=None,tracing='forward',observation='full',runtime_inputs=None,runtime_input_ownership=None,runtime_input_model=None,observation_target=None):
     data=binary.read_bytes();sites=[];texts=[]
     nm=subprocess.check_output([go,'tool','nm','-size',str(binary)],env=env,text=True)
     assembly=subprocess.check_output(['objdump','-d','-M','intel','--no-show-raw-insn',str(binary)],text=True)
@@ -129,6 +134,7 @@ def plan_binary(binary,go,env,out,*,cross_role=None,tracing='forward',observatio
         cross_role=cross_role,
         trace_mode=tracing,
         scope='Default Gin scheduling; process/G/scope lifetimes; fixed four-byte array JSON summary')
+    if observation_target:plan['observation_target']=observation_target
 
     if runtime_inputs:
         plan['runtime_inputs']=runtime_inputs
