@@ -1,0 +1,430 @@
+{
+  "archive_sha256": "8ba6ae82da8e6996ee3024290e3ce521b6e5b9bc7ee7a611fec7f4d4013342a7",
+  "audited_commit": "4552c5d140bc6b4d1e21b47c0742ffa6dc35f2e8",
+  "passed": true,
+  "raw_events": 3768,
+  "external_requests": 64,
+  "byte_source_checks": 256,
+  "graphs_replayed": 64,
+  "negative_checks": 100,
+  "raw_ir_instructions_checked": 72,
+  "rows": [
+    {
+      "variant": "correlated",
+      "method": "full",
+      "mode": "full",
+      "requests": 8,
+      "downstream": {
+        "events": 716,
+        "instruction_events": 524,
+        "physical_probes": 58,
+        "kernel_stats": {
+          "submitted": 716,
+          "submit_errors": 0,
+          "read_errors": 0,
+          "probe_hits": 1276,
+          "namespace_errors": 0,
+          "pid_rejections": 0,
+          "namespace_differences": 1276,
+          "lost": 0
+        },
+        "serialized_events_bytes": 292580
+      },
+      "upstream": {
+        "events": 144,
+        "instruction_events": 0,
+        "physical_probes": 21,
+        "kernel_stats": {
+          "submitted": 144,
+          "submit_errors": 0,
+          "read_errors": 0,
+          "probe_hits": 480,
+          "namespace_errors": 0,
+          "pid_rejections": 0,
+          "namespace_differences": 480,
+          "lost": 0
+        },
+        "serialized_events_bytes": 67719
+      },
+      "concurrency": {
+        "upstream": {
+          "max_active_scopes": 4,
+          "migrated_requests": 2
+        },
+        "downstream": {
+          "max_active_scopes": 4,
+          "migrated_requests": 7
+        }
+      },
+      "negative_checks": 11
+    },
+    {
+      "variant": "correlated",
+      "method": "origin_sets",
+      "mode": "entry",
+      "requests": 8,
+      "downstream": {
+        "events": 200,
+        "instruction_events": 8,
+        "physical_probes": 28,
+        "kernel_stats": {
+          "submitted": 200,
+          "submit_errors": 0,
+          "read_errors": 0,
+          "probe_hits": 760,
+          "namespace_errors": 0,
+          "pid_rejections": 0,
+          "namespace_differences": 760,
+          "lost": 0
+        },
+        "serialized_events_bytes": 92625
+      },
+      "upstream": {
+        "events": 144,
+        "instruction_events": 0,
+        "physical_probes": 21,
+        "kernel_stats": {
+          "submitted": 144,
+          "submit_errors": 0,
+          "read_errors": 0,
+          "probe_hits": 480,
+          "namespace_errors": 0,
+          "pid_rejections": 0,
+          "namespace_differences": 480,
+          "lost": 0
+        },
+        "serialized_events_bytes": 68145
+      },
+      "concurrency": {
+        "upstream": {
+          "max_active_scopes": 4,
+          "migrated_requests": 1
+        },
+        "downstream": {
+          "max_active_scopes": 4,
+          "migrated_requests": 8
+        }
+      },
+      "negative_checks": 14
+    },
+    {
+      "variant": "correlated",
+      "method": "path_sensitive",
+      "mode": "output",
+      "requests": 8,
+      "downstream": {
+        "events": 192,
+        "instruction_events": 0,
+        "physical_probes": 27,
+        "kernel_stats": {
+          "submitted": 192,
+          "submit_errors": 0,
+          "read_errors": 0,
+          "probe_hits": 752,
+          "namespace_errors": 0,
+          "pid_rejections": 0,
+          "namespace_differences": 752,
+          "lost": 0
+        },
+        "serialized_events_bytes": 89027
+      },
+      "upstream": {
+        "events": 144,
+        "instruction_events": 0,
+        "physical_probes": 21,
+        "kernel_stats": {
+          "submitted": 144,
+          "submit_errors": 0,
+          "read_errors": 0,
+          "probe_hits": 480,
+          "namespace_errors": 0,
+          "pid_rejections": 0,
+          "namespace_differences": 480,
+          "lost": 0
+        },
+        "serialized_events_bytes": 68299
+      },
+      "concurrency": {
+        "upstream": {
+          "max_active_scopes": 3,
+          "migrated_requests": 0
+        },
+        "downstream": {
+          "max_active_scopes": 4,
+          "migrated_requests": 7
+        }
+      },
+      "negative_checks": 11
+    },
+    {
+      "variant": "correlated",
+      "method": "auto",
+      "mode": "output",
+      "requests": 8,
+      "downstream": {
+        "events": 192,
+        "instruction_events": 0,
+        "physical_probes": 27,
+        "kernel_stats": {
+          "submitted": 192,
+          "submit_errors": 0,
+          "read_errors": 0,
+          "probe_hits": 752,
+          "namespace_errors": 0,
+          "pid_rejections": 0,
+          "namespace_differences": 752,
+          "lost": 0
+        },
+        "serialized_events_bytes": 88698
+      },
+      "upstream": {
+        "events": 144,
+        "instruction_events": 0,
+        "physical_probes": 21,
+        "kernel_stats": {
+          "submitted": 144,
+          "submit_errors": 0,
+          "read_errors": 0,
+          "probe_hits": 480,
+          "namespace_errors": 0,
+          "pid_rejections": 0,
+          "namespace_differences": 480,
+          "lost": 0
+        },
+        "serialized_events_bytes": 67775
+      },
+      "concurrency": {
+        "upstream": {
+          "max_active_scopes": 3,
+          "migrated_requests": 1
+        },
+        "downstream": {
+          "max_active_scopes": 4,
+          "migrated_requests": 8
+        }
+      },
+      "negative_checks": 11
+    },
+    {
+      "variant": "correlated-dependent",
+      "method": "full",
+      "mode": "full",
+      "requests": 8,
+      "downstream": {
+        "events": 716,
+        "instruction_events": 524,
+        "physical_probes": 58,
+        "kernel_stats": {
+          "submitted": 716,
+          "submit_errors": 0,
+          "read_errors": 0,
+          "probe_hits": 1276,
+          "namespace_errors": 0,
+          "pid_rejections": 0,
+          "namespace_differences": 1276,
+          "lost": 0
+        },
+        "serialized_events_bytes": 293942
+      },
+      "upstream": {
+        "events": 144,
+        "instruction_events": 0,
+        "physical_probes": 21,
+        "kernel_stats": {
+          "submitted": 144,
+          "submit_errors": 0,
+          "read_errors": 0,
+          "probe_hits": 480,
+          "namespace_errors": 0,
+          "pid_rejections": 0,
+          "namespace_differences": 480,
+          "lost": 0
+        },
+        "serialized_events_bytes": 68910
+      },
+      "concurrency": {
+        "upstream": {
+          "max_active_scopes": 4,
+          "migrated_requests": 1
+        },
+        "downstream": {
+          "max_active_scopes": 4,
+          "migrated_requests": 8
+        }
+      },
+      "negative_checks": 11
+    },
+    {
+      "variant": "correlated-dependent",
+      "method": "origin_sets",
+      "mode": "entry",
+      "requests": 8,
+      "downstream": {
+        "events": 200,
+        "instruction_events": 8,
+        "physical_probes": 28,
+        "kernel_stats": {
+          "submitted": 200,
+          "submit_errors": 0,
+          "read_errors": 0,
+          "probe_hits": 760,
+          "namespace_errors": 0,
+          "pid_rejections": 0,
+          "namespace_differences": 760,
+          "lost": 0
+        },
+        "serialized_events_bytes": 93301
+      },
+      "upstream": {
+        "events": 144,
+        "instruction_events": 0,
+        "physical_probes": 21,
+        "kernel_stats": {
+          "submitted": 144,
+          "submit_errors": 0,
+          "read_errors": 0,
+          "probe_hits": 480,
+          "namespace_errors": 0,
+          "pid_rejections": 0,
+          "namespace_differences": 480,
+          "lost": 0
+        },
+        "serialized_events_bytes": 69183
+      },
+      "concurrency": {
+        "upstream": {
+          "max_active_scopes": 3,
+          "migrated_requests": 1
+        },
+        "downstream": {
+          "max_active_scopes": 4,
+          "migrated_requests": 7
+        }
+      },
+      "negative_checks": 14
+    },
+    {
+      "variant": "correlated-dependent",
+      "method": "path_sensitive",
+      "mode": "entry",
+      "requests": 8,
+      "downstream": {
+        "events": 200,
+        "instruction_events": 8,
+        "physical_probes": 28,
+        "kernel_stats": {
+          "submitted": 200,
+          "submit_errors": 0,
+          "read_errors": 0,
+          "probe_hits": 760,
+          "namespace_errors": 0,
+          "pid_rejections": 0,
+          "namespace_differences": 760,
+          "lost": 0
+        },
+        "serialized_events_bytes": 93465
+      },
+      "upstream": {
+        "events": 144,
+        "instruction_events": 0,
+        "physical_probes": 21,
+        "kernel_stats": {
+          "submitted": 144,
+          "submit_errors": 0,
+          "read_errors": 0,
+          "probe_hits": 480,
+          "namespace_errors": 0,
+          "pid_rejections": 0,
+          "namespace_differences": 480,
+          "lost": 0
+        },
+        "serialized_events_bytes": 69473
+      },
+      "concurrency": {
+        "upstream": {
+          "max_active_scopes": 4,
+          "migrated_requests": 2
+        },
+        "downstream": {
+          "max_active_scopes": 4,
+          "migrated_requests": 8
+        }
+      },
+      "negative_checks": 14
+    },
+    {
+      "variant": "correlated-dependent",
+      "method": "auto",
+      "mode": "entry",
+      "requests": 8,
+      "downstream": {
+        "events": 200,
+        "instruction_events": 8,
+        "physical_probes": 28,
+        "kernel_stats": {
+          "submitted": 200,
+          "submit_errors": 0,
+          "read_errors": 0,
+          "probe_hits": 760,
+          "namespace_errors": 0,
+          "pid_rejections": 0,
+          "namespace_differences": 760,
+          "lost": 0
+        },
+        "serialized_events_bytes": 93110
+      },
+      "upstream": {
+        "events": 144,
+        "instruction_events": 0,
+        "physical_probes": 21,
+        "kernel_stats": {
+          "submitted": 144,
+          "submit_errors": 0,
+          "read_errors": 0,
+          "probe_hits": 480,
+          "namespace_errors": 0,
+          "pid_rejections": 0,
+          "namespace_differences": 480,
+          "lost": 0
+        },
+        "serialized_events_bytes": 69193
+      },
+      "concurrency": {
+        "upstream": {
+          "max_active_scopes": 3,
+          "migrated_requests": 0
+        },
+        "downstream": {
+          "max_active_scopes": 4,
+          "migrated_requests": 8
+        }
+      },
+      "negative_checks": 14
+    }
+  ],
+  "comparison": {
+    "all_passed": true,
+    "host_capture_complete": true,
+    "probe_plans_equal_to_path_sensitive": true,
+    "observations": [
+      {
+        "variant": "correlated",
+        "repeat": 0,
+        "final_origins_equal": true,
+        "current_events": 192,
+        "path_sensitive_events": 192,
+        "current_events_saved_against_path_sensitive": 0
+      },
+      {
+        "variant": "correlated-dependent",
+        "repeat": 0,
+        "final_origins_equal": true,
+        "current_events": 200,
+        "path_sensitive_events": 200,
+        "current_events_saved_against_path_sensitive": 0
+      }
+    ],
+    "conclusion": "No additional observation-selection benefit over this path-sensitive control on these fixtures",
+    "scope": "Bounded four-byte copy scenarios; this result neither proves nor disproves novelty outside the tested model"
+  }
+}

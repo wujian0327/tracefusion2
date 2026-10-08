@@ -1,0 +1,245 @@
+{
+  "upstream": "https://github.com/GoogleCloudPlatform/microservices-demo",
+  "tag": "v0.10.4",
+  "commit": "474d0f2eb73d97525234995a40d7781b7923a07d",
+  "go": "go1.25.4",
+  "main_go_sha256": "862b2c7bba24205db7ed81ec8af7fd9abb960245e3df1c56a1b497d34d4b39c0",
+  "tracked_source_unchanged": true,
+  "builds": {
+    "default": {
+      "binary_sha256": "d5668e6bce805073aab2f452f821745d7e0a2944ff20f52d2e0ad549f379409f",
+      "functions": {
+        "prepOrderItems": {
+          "instructions": 196,
+          "static_calls": 13,
+          "jump_instructions": 19,
+          "call_targets": {
+            "runtime.makeslice(SB)": 1,
+            "runtime.newobject(SB)": 2,
+            "runtime.gcWriteBarrier1(SB)": 1,
+            "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/genproto.(*productCatalogServiceClient).GetProduct(SB)": 1,
+            "main.(*checkoutService).convertCurrency(SB)": 1,
+            "runtime.gcWriteBarrier4(SB)": 1,
+            "runtime.convTstring(SB)": 3,
+            "fmt.Errorf(SB)": 2,
+            "runtime.morestack_noctxt.abi0(SB)": 1
+          },
+          "current_leaf_decoder": {
+            "accepted": false,
+            "first_rejection": "Leaf function outside instruction budget"
+          }
+        },
+        "convertCurrency": {
+          "instructions": 73,
+          "static_calls": 5,
+          "jump_instructions": 6,
+          "call_targets": {
+            "runtime.newobject(SB)": 1,
+            "runtime.gcWriteBarrier2(SB)": 1,
+            "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/genproto.(*currencyServiceClient).Convert(SB)": 1,
+            "fmt.Errorf(SB)": 1,
+            "runtime.morestack_noctxt.abi0(SB)": 1
+          },
+          "current_leaf_decoder": {
+            "accepted": false,
+            "first_rejection": "Leaf function outside instruction budget"
+          }
+        },
+        "PlaceOrder": {
+          "instructions": 565,
+          "static_calls": 39,
+          "jump_instructions": 31,
+          "call_targets": {
+            "runtime.convTstring(SB)": 5,
+            "github.com/sirupsen/logrus.(*Logger).Logf(SB)": 4,
+            "github.com/google/uuid.NewUUID(SB)": 1,
+            "main.(*checkoutService).prepareOrderItemsAndShippingQuoteFromCart(SB)": 1,
+            "CX": 1,
+            "google.golang.org/grpc/status.Errorf(SB)": 4,
+            "runtime.newobject(SB)": 3,
+            "runtime.gcWriteBarrier2(SB)": 2,
+            "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/money.Sum(SB)": 2,
+            "runtime.wbMove(SB)": 2,
+            "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/money.MultiplySlow(SB)": 1,
+            "main.(*checkoutService).chargeCard(SB)": 1,
+            "main.(*checkoutService).shipOrder(SB)": 1,
+            "main.(*checkoutService).emptyUserCart(SB)": 1,
+            "github.com/google/uuid.encodeHex(SB)": 1,
+            "runtime.slicebytetostring(SB)": 1,
+            "runtime.gcWriteBarrier1(SB)": 4,
+            "main.(*checkoutService).sendOrderConfirmation(SB)": 1,
+            "runtime.gopanic(SB)": 2,
+            "runtime.morestack_noctxt.abi0(SB)": 1
+          },
+          "current_leaf_decoder": {
+            "accepted": false,
+            "first_rejection": "Leaf function outside instruction budget"
+          }
+        }
+      }
+    },
+    "noinline": {
+      "binary_sha256": "23528ab81ac82b1a5f462a6951b9e6d80f5b8b73dafd45fe45c24ddc83e26e3f",
+      "functions": {
+        "prepOrderItems": {
+          "instructions": 177,
+          "static_calls": 18,
+          "jump_instructions": 11,
+          "call_targets": {
+            "runtime.makeslice(SB)": 1,
+            "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/genproto.NewProductCatalogServiceClient(SB)": 1,
+            "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/genproto.(*CartItem).GetProductId(SB)": 3,
+            "runtime.newobject(SB)": 2,
+            "runtime.gcWriteBarrier1(SB)": 1,
+            "DX": 1,
+            "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/genproto.(*Product).GetPriceUsd(SB)": 1,
+            "main.(*checkoutService).convertCurrency(SB)": 1,
+            "runtime.gcWriteBarrier4(SB)": 1,
+            "runtime.convTstring(SB)": 3,
+            "fmt.Errorf(SB)": 2,
+            "runtime.morestack_noctxt.abi0(SB)": 1
+          },
+          "current_leaf_decoder": {
+            "accepted": false,
+            "first_rejection": "Leaf function outside instruction budget"
+          }
+        },
+        "convertCurrency": {
+          "instructions": 79,
+          "static_calls": 7,
+          "jump_instructions": 6,
+          "call_targets": {
+            "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/genproto.NewCurrencyServiceClient(SB)": 1,
+            "context.TODO(SB)": 1,
+            "runtime.newobject(SB)": 1,
+            "runtime.gcWriteBarrier2(SB)": 1,
+            "DX": 1,
+            "fmt.Errorf(SB)": 1,
+            "runtime.morestack_noctxt.abi0(SB)": 1
+          },
+          "current_leaf_decoder": {
+            "accepted": false,
+            "first_rejection": "Leaf function outside instruction budget"
+          }
+        },
+        "PlaceOrder": {
+          "instructions": 561,
+          "static_calls": 40,
+          "jump_instructions": 25,
+          "call_targets": {
+            "runtime.convTstring(SB)": 5,
+            "github.com/sirupsen/logrus.(*Logger).Infof(SB)": 3,
+            "github.com/google/uuid.NewUUID(SB)": 1,
+            "main.(*checkoutService).prepareOrderItemsAndShippingQuoteFromCart(SB)": 1,
+            "runtime.newobject(SB)": 3,
+            "runtime.gcWriteBarrier2(SB)": 2,
+            "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/money.Sum(SB)": 2,
+            "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/money.Must(SB)": 2,
+            "runtime.wbMove(SB)": 2,
+            "CX": 1,
+            "google.golang.org/grpc/status.Errorf(SB)": 4,
+            "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/genproto.(*OrderItem).GetItem(SB)": 1,
+            "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/genproto.(*CartItem).GetQuantity(SB)": 1,
+            "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/money.MultiplySlow(SB)": 1,
+            "main.(*checkoutService).chargeCard(SB)": 1,
+            "main.(*checkoutService).shipOrder(SB)": 1,
+            "main.(*checkoutService).emptyUserCart(SB)": 1,
+            "github.com/google/uuid.UUID.String(SB)": 1,
+            "runtime.gcWriteBarrier1(SB)": 4,
+            "main.(*checkoutService).sendOrderConfirmation(SB)": 1,
+            "github.com/sirupsen/logrus.(*Logger).Warnf(SB)": 1,
+            "runtime.morestack_noctxt.abi0(SB)": 1
+          },
+          "current_leaf_decoder": {
+            "accepted": false,
+            "first_rejection": "Leaf function outside instruction budget"
+          }
+        }
+      }
+    }
+  },
+  "runtime": {
+    "all_passed": true,
+    "capture": "test-only gRPC interceptors and server trace contexts; not eBPF",
+    "cases": [
+      {
+        "name": "empty",
+        "input_items": 0,
+        "output_items": 0,
+        "error": false,
+        "product_calls": 0,
+        "currency_calls": 0,
+        "product_same_root": 0,
+        "currency_same_root": 0,
+        "boundary_identity_checks": 0,
+        "equal_values_distinct_instances": false
+      },
+      {
+        "name": "one",
+        "input_items": 1,
+        "output_items": 1,
+        "error": false,
+        "product_calls": 1,
+        "currency_calls": 1,
+        "product_same_root": 1,
+        "currency_same_root": 0,
+        "boundary_identity_checks": 3,
+        "equal_values_distinct_instances": false
+      },
+      {
+        "name": "equal-eight",
+        "input_items": 8,
+        "output_items": 8,
+        "error": false,
+        "product_calls": 8,
+        "currency_calls": 8,
+        "product_same_root": 8,
+        "currency_same_root": 0,
+        "boundary_identity_checks": 24,
+        "equal_values_distinct_instances": true
+      },
+      {
+        "name": "equal-thirty-two",
+        "input_items": 32,
+        "output_items": 32,
+        "error": false,
+        "product_calls": 32,
+        "currency_calls": 32,
+        "product_same_root": 32,
+        "currency_same_root": 0,
+        "boundary_identity_checks": 96,
+        "equal_values_distinct_instances": true
+      },
+      {
+        "name": "product-error-second",
+        "input_items": 4,
+        "output_items": 0,
+        "error": true,
+        "product_calls": 2,
+        "currency_calls": 1,
+        "product_same_root": 2,
+        "currency_same_root": 0,
+        "boundary_identity_checks": 0,
+        "equal_values_distinct_instances": false
+      },
+      {
+        "name": "currency-error-second",
+        "input_items": 4,
+        "output_items": 0,
+        "error": true,
+        "product_calls": 2,
+        "currency_calls": 2,
+        "product_same_root": 2,
+        "currency_same_root": 0,
+        "boundary_identity_checks": 0,
+        "equal_values_distinct_instances": false
+      }
+    ],
+    "claim": "Validate boundary evidence needs and source structure, not TraceFusion provenance coverage",
+    "production_function_modified": false,
+    "remote_peers": "local mock ProductCatalog and Currency peers, not full application deployment"
+  },
+  "tracefusion_bpf_executed": false,
+  "published_baseline_systems_executed": false,
+  "interpretation": "Runtime boundary identity is sufficient in this controlled case; no new algorithm or universal minimum has been demonstrated"
+}
