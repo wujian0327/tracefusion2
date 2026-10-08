@@ -26,7 +26,7 @@ def stack_key(arg):
         return 'stack:' + str(m['offset'])
 
 
-def analyze(rows, function):
+def _analyze(rows, function, stack_effects):
     if not rows:
         raise ValueError('Missing function')
     addresses = {r['address']: i for i, r in enumerate(rows)}
@@ -127,6 +127,8 @@ def analyze(rows, function):
                 raise ValueError('Unsupported destination: ' + dst)
         elif op == 'POPQ':
             out = [args[0]]
+        if rows[i]['address'] in stack_effects:
+            out = sorted(set(out) | slots)
         writes[i] = out
         for key in out:
             definitions[i, key] = f'{rows[i]["address"]:x}:{key}'
@@ -173,7 +175,7 @@ def analyze(rows, function):
         for arg in parsed[i][1]:
             if arg.startswith('$'):
                 nodes['literal:' + arg] = dict(kind='constant', value=int(arg[1:],0), inputs=[])
-    stores, calls, returns, branches, stack_addresses = [], [], [], [], []
+    stores, calls, returns, branches, stack_addresses, stack_reads = [], [], [], [], [], []
     for i in sorted(reachable):
         row = rows[i]
         op, args = parsed[i]
@@ -184,7 +186,9 @@ def analyze(rows, function):
                               arguments={r: refs(i, r) for r in REGS if r not in STABLE}))
         for key in writes[i]:
             node = dict(common, location=key, inputs=[])
-            if op == 'CALL':
+            if key.startswith('stack:') and row['address'] in stack_effects:
+                node.update(kind='unknown_stack_effect',reason=stack_effects[row['address']])
+            elif op == 'CALL':
                 node.update(kind='opaque_call_result' if key == 'AX' else 'call_clobber', callee=callee)
                 if re.fullmatch(r'runtime\.gcWriteBarrier[1-8]', callee) and key == 'R11':
                     node['kind'] = 'barrier_buffer'
@@ -217,6 +221,8 @@ def analyze(rows, function):
             else:
                 node.update(kind='unknown', reason='Stack epilogue')
             nodes[definitions[i, key]] = node
+        if op.startswith('MOV') and stack_key(args[0]):
+            stack_reads.append(dict(common,slot=stack_key(args[0]),inputs=refs(i,args[0])))
         if op.startswith('MOV') and len(args) == 2 and memory(args[1]) and not stack_key(args[1]):
             mem = memory(args[1])
             stores.append(dict(common, memory=mem, value_operand=args[0], value_inputs=refs(i, args[0]),
@@ -229,6 +235,7 @@ def analyze(rows, function):
     return dict(function=function, status='conditional_static_candidates',
                 frame_entry=rows[start]['address'], instructions=len(reachable),
                 nodes=nodes, stores=stores, calls=calls, returns=returns, branches=branches,
+                stack_reads=stack_reads,
                 cfg={str(rows[i]['address']): [rows[j]['address'] for j in successors[i]] for i in sorted(reachable)},
                 assumptions=[
                     'Fixed Go 1.25.4 amd64 ABI; body begins after the fixed frame prologue.',
@@ -240,6 +247,103 @@ def analyze(rows, function):
                     call_memory_effects='Callee/alias validation required before using stack relations as proof',
                     loop_and_branch_binding='Runtime observations required',
                     runtime_capture_complete=False))
+
+
+def _trusted_runtime(callee):
+    return callee in ('runtime.newobject','runtime.makeslice') or bool(
+        re.fullmatch(r'runtime\.gcWriteBarrier[1-8]',callee))
+
+
+def _barrier_store(graph, store):
+    """Only exclude writes proven within the documented fresh barrier buffer."""
+    mem = store['memory']
+    if mem['index'] is not None or mem['offset'] < 0:
+        return False
+    width = {'MOVQ':8,'MOVL':4,'MOVUPS':16}.get(store['asm'].split()[0])
+    ids = terminals(graph,store['base_inputs'])
+    if not ids or width is None:
+        return False
+    for key in ids:
+        node = graph['nodes'][key]
+        if node['kind'] != 'barrier_buffer':
+            return False
+        capacity = int(node['callee'][-1])*8
+        if mem['offset']+width > capacity:
+            return False
+    return True
+
+
+def stack_blockers(graph, roots):
+    """Find invalidated/uninitialized spill definitions in value/address slices."""
+    todo, seen, result = list(roots), set(), set()
+    while todo:
+        key = todo.pop()
+        if key in seen:
+            continue
+        seen.add(key)
+        node = graph['nodes'][key]
+        if node['kind'] in ('unknown_stack_effect','unknown_stack'):
+            result.add(key)
+        for relation in ('inputs','base_inputs','index_inputs','address_inputs'):
+            todo.extend(node.get(relation,[]))
+    return sorted(result)
+
+
+def analyze(rows, function, *, stack_policy='invalidate'):
+    """Recompute reaching definitions after conservative possible stack writes.
+
+    'assume_private' reproduces the previous diagnostic graph only. Default
+    mode invalidates all modeled spill slots at unknown calls and indirect
+    stores. No value-equality check or observed stack address is required to
+    trigger invalidation. Runtime preservation is an explicit trusted contract,
+    not an automatically inferred callee summary.
+    """
+    if stack_policy not in ('invalidate','assume_private'):
+        raise ValueError('Unknown stack policy')
+    graph = _analyze(rows,function,{})
+    if stack_policy == 'assume_private':
+        graph['stack_policy'] = stack_policy
+        return graph
+    effects = {c['address']:'unmodeled_call:'+c['callee'] for c in graph['calls']
+               if not _trusted_runtime(c['callee'])}
+    # Adding clobbers can invalidate a previously apparent barrier-buffer
+    # identity, so re-evaluate until the invalidation set stops growing.
+    rounds = 0
+    while True:
+        graph = _analyze(rows,function,effects)
+        additions = {s['address']:'indirect_store_without_proved_stack_separation'
+                     for s in graph['stores'] if not _barrier_store(graph,s)}
+        updated = effects | additions
+        rounds += 1
+        if updated == effects:
+            break
+        effects = updated
+    graph.update(status='conservative_static_candidates',stack_policy=stack_policy,
+                 memory_effects=[dict(address=a,reason=r) for a,r in sorted(effects.items())],
+                 effect_fixpoint_rounds=rounds)
+    graph['assumptions'] = [a for a in graph['assumptions'] if not a.startswith('Private spill')]
+    graph['assumptions'].append(
+        'Trusted fixed Go runtime: newobject/makeslice preserve caller spill provenance; '
+        'gcWriteBarrierN preserves it and provides an N*8 byte buffer. This is not a binary-verified callee proof.')
+    graph['assumptions'].append(
+        'Normal ABI execution without unobserved asynchronous/unsafe external frame writes; '
+        'stack relocation preserves logical origins, not raw pointer addresses.')
+    graph['obligations']['call_memory_effects'] = (
+        'Unknown calls and unseparated indirect stores invalidate all modeled spill slots')
+    graph['obligations']['trusted_runtime_contracts'] = sorted(
+        {c['callee'] for c in graph['calls'] if _trusted_runtime(c['callee'])})
+    unresolved = []
+    for read in graph['stack_reads']:
+        blockers = stack_blockers(graph,read['inputs'])
+        if blockers:
+            unresolved.append(dict(read,blockers=blockers,
+                remedy='Writer evidence or a justified memory-effect summary is required; a value snapshot alone is insufficient'))
+    graph['obligations']['unresolved_stack_reads'] = unresolved
+    graph['obligations']['stack_alias_contract_verified'] = False
+    for store in graph['stores']:
+        store['value_stack_blockers'] = stack_blockers(graph,store['value_inputs'])
+        store['address_stack_blockers'] = stack_blockers(graph,store['address_inputs'])
+    return graph
 
 
 def terminals(graph, roots):

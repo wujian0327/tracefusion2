@@ -2,6 +2,8 @@
 
 日期：2026-10-08。本轮完成 [研究协议](research-scope.md) 中真实订单函数接入的第一部分：从已有 ELF 提取对象读写和寄存器/栈槽定义依赖。没有运行新的 BPF 采集，没有完成请求实例级来源重建。
 
+**后续更新：默认分析已加入 [未知栈副作用失效处理](checkout-stack-effects.md)。**本文下述成功候选来自上一版私有栈假设下的图，保留为历史对照；新版并不全部认可这些关系。原有 CLI 现在输出 schema 2 的保守图，具体差异见后续记录。
+
 ## 输入与实测结果
 
 输入为此前审计构建的 Online Boutique v0.10.4 原始 `checkoutservice`，Go 1.25.4、Linux/amd64、默认优化，**没有为本轮分析重新编译应用，也没有关闭内联**。ELF SHA256 为 `d5668e6bce805073aab2f452f821745d7e0a2944ff20f52d2e0ad549f379409f`。本轮读取应用的 ELF、符号和其中的 DWARF，不读取应用源码或测试真值。
@@ -73,6 +75,6 @@ python3 experiments/checkout-origin-audit/analyze_binary.py \
 python3 -m unittest discover -s tests -p test_go_object_graph.py -v
 ```
 
-输出文件要求不存在，以免覆盖旧证据。报告保留 CFG、定义节点、写入/调用/返回站点、字段布局以及未履行的义务。输出字段 `allocation_type_binding_complete`、`bpf_capture_executed`、`dynamic_provenance_complete` 均为 false。
+输出文件要求不存在，以免覆盖旧证据。报告保留 CFG、定义节点、写入/调用/返回站点、字段布局以及未履行的义务。当前 CLI 使用后续的保守失效处理；输出字段 `allocation_type_binding_complete`、`bpf_capture_executed`、`dynamic_provenance_complete` 均为 false。
 
 **下一步是约束并验证栈槽/调用副作用，确定对象实例观测接口，再接真实 BPF 采集。**本轮无需用户启动新的主机实验；不能把这份静态图交给旧采集器就声称已跑通真实订单溯源。

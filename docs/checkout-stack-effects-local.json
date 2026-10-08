@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-08",
+  "schema": 2,
+  "status": "conservative_static_candidates",
+  "binary_sha256": "d5668e6bce805073aab2f452f821745d7e0a2944ff20f52d2e0ad549f379409f",
+  "original_elf_unchanged": true,
+  "tests": {
+    "conditional_graph_regressions": 14,
+    "conservative_effect_tests": 12,
+    "all_passed": true
+  },
+  "functions": {
+    "prepOrderItems": {
+      "memory_effect_sites": 12,
+      "effect_fixpoint_rounds": 2,
+      "unresolved_stack_read_sites": 23,
+      "trusted_runtime_contracts": [
+        "runtime.gcWriteBarrier1",
+        "runtime.gcWriteBarrier4",
+        "runtime.makeslice",
+        "runtime.newobject"
+      ]
+    },
+    "convertCurrency": {
+      "memory_effect_sites": 5,
+      "effect_fixpoint_rounds": 2,
+      "unresolved_stack_read_sites": 1,
+      "trusted_runtime_contracts": [
+        "runtime.gcWriteBarrier2",
+        "runtime.newobject"
+      ]
+    }
+  },
+  "bpf_capture_executed": false,
+  "dynamic_provenance_complete": false,
+  "stack_alias_contract_verified": false,
+  "report_sha256": "f5cc3b29a42704d7a3ec85850be20a73d12e8ab8aa3a5f5b1dc7574ca9059777",
+  "interpretation": "Conservative unknown propagation, not proof that these sites actually modify stack slots. Runtime contracts are explicit assumptions.",
+  "local_relations": {
+    "item": {
+      "value_stack_blockers": 1,
+      "address_stack_blockers": 0
+    },
+    "cost": {
+      "value_stack_blockers": 0,
+      "address_stack_blockers": 0
+    },
+    "publication": {
+      "value_stack_blockers": 0,
+      "address_stack_blockers": 2
+    }
+  }
+}

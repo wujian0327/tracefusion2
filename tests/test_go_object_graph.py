@@ -14,7 +14,8 @@ def sample(*instructions):
 
 class ObjectGraphTests(unittest.TestCase):
     def graph(self,*body):
-        return analyze(sample('PUSHQ BP','MOVQ SP, BP','SUBQ $0x20, SP',*body),'fixture')
+        # Historical conditional graph remains a diagnostic comparison only.
+        return analyze(sample('PUSHQ BP','MOVQ SP, BP','SUBQ $0x20, SP',*body),'fixture',stack_policy='assume_private')
 
     def test_overwrite_kills_previous_source(self):
         g=self.graph('MOVQ AX, 0x8(SP)','MOVQ BX, 0x8(SP)',
@@ -82,7 +83,7 @@ class RealCheckoutGraphTests(unittest.TestCase):
         cls.graphs={}
         for name in ('prepOrderItems','convertCurrency'):
             asm=(Path(__file__).parent/'fixtures'/('checkout-default-'+name+'.asm')).read_text()
-            cls.graphs[name]=analyze(assembly_rows(asm),name)
+            cls.graphs[name]=analyze(assembly_rows(asm),name,stack_policy='assume_private')
 
     def test_order_pointer_stores_and_publication(self):
         g=self.graphs['prepOrderItems']
@@ -134,7 +135,7 @@ class RealCheckoutGraphTests(unittest.TestCase):
         self.assertEqual(len(spill),1)
         # Synthetic decoder-level mutation, not claimed to match the ELF.
         spill[0]['asm']='MOVQ $0x0, 0x58(SP)'
-        g=analyze(rows,'mutated')
+        g=analyze(rows,'mutated',stack_policy='assume_private')
         store=next(s for s in g['stores'] if s['asm']=='MOVQ R12, 0x30(AX)')
         ns=[g['nodes'][k] for k in terminals(g,store['value_inputs'])]
         self.assertEqual(len(ns),1)

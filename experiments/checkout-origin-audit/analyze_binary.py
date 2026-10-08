@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extract conditional object graphs from an existing optimized checkout ELF."""
+"""Extract conservative object graphs with explicit unknown stack effects."""
 import argparse
 import hashlib
 import json
@@ -64,10 +64,11 @@ def main():
             store['value_terminals'] = terminals(graph,store['value_inputs'])
             store['address_terminals'] = terminals(graph,store['address_inputs'])
         graphs[name] = graph
-    result = dict(schema=1,binary_sha256=hashlib.sha256(data).hexdigest(),build_info=build_info,
-                  status='conditional_static_candidates',layouts=layouts,graphs=graphs,
+    result = dict(schema=2,binary_sha256=hashlib.sha256(data).hexdigest(),build_info=build_info,
+                  status='conservative_static_candidates',layouts=layouts,graphs=graphs,
                   source_files_read=False,answers_or_runtime_truth_read=False,
                   allocation_type_binding_complete=False,
+                  stack_alias_contract_verified=False,
                   bpf_capture_executed=False,dynamic_provenance_complete=False)
     if binary.read_bytes() != data:
         raise ValueError('Target ELF changed during analysis')
