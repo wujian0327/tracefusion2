@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-08",
+  "status": "conditional_static_candidates",
+  "binary_sha256": "d5668e6bce805073aab2f452f821745d7e0a2944ff20f52d2e0ad549f379409f",
+  "functions": {
+    "prepOrderItems": {
+      "verified_instructions": 196,
+      "body_instructions": 172,
+      "nodes": 309,
+      "stores": 10,
+      "calls": 12,
+      "returns": 3
+    },
+    "convertCurrency": {
+      "verified_instructions": 73,
+      "body_instructions": 54,
+      "nodes": 109,
+      "stores": 5,
+      "calls": 4,
+      "returns": 2
+    }
+  },
+  "layouts": {
+    "CartItem": {
+      "state": 0,
+      "sizeCache": 8,
+      "unknownFields": 16,
+      "ProductId": 40,
+      "Quantity": 56
+    },
+    "CurrencyConversionRequest": {
+      "state": 0,
+      "sizeCache": 8,
+      "unknownFields": 16,
+      "From": 40,
+      "ToCode": 48
+    },
+    "Money": {
+      "state": 0,
+      "sizeCache": 8,
+      "unknownFields": 16,
+      "CurrencyCode": 40,
+      "Units": 56,
+      "Nanos": 64
+    },
+    "OrderItem": {
+      "state": 0,
+      "sizeCache": 8,
+      "unknownFields": 16,
+      "Item": 40,
+      "Cost": 48
+    },
+    "Product": {
+      "state": 0,
+      "sizeCache": 8,
+      "unknownFields": 16,
+      "Id": 40,
+      "Name": 56,
+      "Description": 72,
+      "Picture": 88,
+      "PriceUsd": 104,
+      "Categories": 112
+    }
+  },
+  "unit_and_real_assembly_tests": 14,
+  "tests_passed": true,
+  "expected_rejections": {
+    "noinline": "Indirect call requires target evidence: CALL DX",
+    "missing_dwarf": true
+  },
+  "original_elf_unchanged": true,
+  "allocation_type_binding_complete": false,
+  "stack_alias_contract_verified": false,
+  "bpf_capture_executed": false,
+  "dynamic_provenance_complete": false,
+  "report_sha256": "4ca5258e238b34636b2d5e08b902ef6f2110ef7be6d6ef83bb505ece7dde4a45",
+  "interpretation": "Conditional static candidates only; no dynamic accuracy, deployment generality or performance claim"
+}

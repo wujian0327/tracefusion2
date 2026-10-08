@@ -1,0 +1,14 @@
+{
+  "upstream": "https://github.com/GoogleCloudPlatform/microservices-demo",
+  "commit": "474d0f2eb73d97525234995a40d7781b7923a07d",
+  "tag": "v0.10.4",
+  "upstream_license": "Apache-2.0",
+  "go": "1.25.4",
+  "build": "default optimized; go build -mod=readonly -buildvcs=false",
+  "binary_sha256": "d5668e6bce805073aab2f452f821745d7e0a2944ff20f52d2e0ad549f379409f",
+  "fixture_generation": "go tool objdump; only source path prefix normalized",
+  "fixtures": {
+    "checkout-default-convertCurrency.asm": "4d2a0496e5183501300b9bb70e01ef27abffd37cac1164ef0d141c2040a9b462",
+    "checkout-default-prepOrderItems.asm": "8ff3933a0058ba780028fd2c4467a560b4ae3a126b43c3c30e153aae8ded9759"
+  }
+}
