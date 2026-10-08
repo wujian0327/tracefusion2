@@ -1,5 +1,9 @@
 # TraceFusion 2
 
+## 当前对比：来源观测策略与独立方法基线
+
+新增来源集合、路径敏感分析与当前自动策略的公平对比，复用双 Gin / OTel 场景与相同采集器。五个固定四字节场景的本地构建、机器码来源和 HTTP 检查已通过；路径敏感基线与当前策略选择了相同探针，尚未体现额外观测节省。新一轮 BPF 主机采集待运行，先测两个关联分支用例即可，见 [对比方法、负结果与执行命令](docs/gin-provenance-comparison.md)。
+
 ## 当前待主机验收：双 Gin 服务与 OpenTelemetry
 
 使用 OpenTelemetry SDK、otelgin 与 otelhttp 生成真实调用 span，导出本地 JSONL；外部来源分析复用现有赋值/覆盖核心，核对两端收发与解码证据后拼接来源图。六个目标的探针计划和真实 HTTP/SDK 测试已通过，新版本 eBPF 采集尚待主机验证。运行方法与明确边界见 [双服务 OTel 实验](docs/gin-otel-provenance.md)。

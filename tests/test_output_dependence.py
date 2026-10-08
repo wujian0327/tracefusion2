@@ -20,7 +20,7 @@ except ImportError:
 
 def copy_plan(variant):
     _,p=choice_evidence();p['observation_target']='final-byte-origins-v1'
-    name='choice' if variant=='none' else 'kill-'+variant
+    name='choice' if variant=='none' else variant if variant.startswith('correlated') else 'kill-'+variant
     p['sites']=[s for s in p['sites'] if s['op']!='instruction']
     ir=decode_function(assembly_rows((Path(__file__).parent/'fixtures'/('go-byte-'+name+'.asm')).read_text()))
     for n in ir:
@@ -61,7 +61,7 @@ def executed(variant,control,**kwargs):
         dynamic.append(e)
         if n['op']=='ret':machine.emu_stop()
     engine.hook_add(uc.UC_HOOK_CODE,hook);engine.emu_start(p['entry'],start+0x2000,count=256)
-    assert dynamic[-1]['site']==p['instructions'][-1]['site']
+    assert dynamic[-1]['site']==next(n['site'] for n in p['instructions'] if n['op']=='ret')
     post['registers']={r:engine.reg_read(i) for r,i in registers.items()}
     assert bytes(engine.mem_read(pre['registers']['rax'],4))==b'SAME'
     at=events.index(pre)+1;events[at:at]=dynamic

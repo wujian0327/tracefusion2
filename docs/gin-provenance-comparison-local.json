@@ -1,0 +1,94 @@
+{
+  "date": "2026-10-08",
+  "base_commit": "acc63204703f77ec6b7841fa1461bf3040625459",
+  "passed": true,
+  "tests_run": 33,
+  "tests_skipped": [
+    {
+      "test": "test_native_http_sdk_and_plans (test_gin_choice_provenance.ChoiceTests.test_native_http_sdk_and_plans)",
+      "reason": "Set GIN_CHOICE_BUILD for native HTTP and actual probe plans"
+    },
+    {
+      "test": "test_actual_plans_generate_probes (test_gin_otel_provenance.OTelProvenanceTests.test_actual_plans_generate_probes)",
+      "reason": "Set GIN_OTEL_BUILD to built OTel fixture"
+    },
+    {
+      "test": "test_native_http_and_real_sdk_parentage (test_gin_otel_provenance.OTelProvenanceTests.test_native_http_and_real_sdk_parentage)",
+      "reason": "Set GIN_OTEL_BUILD for native HTTP/SDK integration"
+    }
+  ],
+  "native_http_cases": 5,
+  "native_http_external_requests": 40,
+  "go_version": "go1.25.4",
+  "machine_execution": "Unicorn, five cases x control values 0/1/127/128/255; not kernel capture",
+  "baseline_control_domain_checked": {
+    "minimum": 0,
+    "maximum": 255,
+    "count": 256
+  },
+  "rows": [
+    {
+      "variant": "kill-full",
+      "binary_sha256": "7e3887d63543c9ebbd061d5e0d9477f3c537054667f52574b0fa90ff6d7f7f2d",
+      "instructions": 28,
+      "modes": {
+        "full": "full",
+        "origin_sets": "output",
+        "path_sensitive": "output",
+        "auto": "output"
+      },
+      "same_probes_as_path_sensitive": true
+    },
+    {
+      "variant": "kill-partial",
+      "binary_sha256": "abf7e4a75de02c9e82fe16627ab71a86667c6694f5ce42a9a754527ae0db2973",
+      "instructions": 28,
+      "modes": {
+        "full": "full",
+        "origin_sets": "entry",
+        "path_sensitive": "entry",
+        "auto": "entry"
+      },
+      "same_probes_as_path_sensitive": true
+    },
+    {
+      "variant": "kill-none",
+      "binary_sha256": "fa607bf0d98a38f0b3b8d2d4e92fa176e183994ba78f92f1fca5614e7cda0df2",
+      "instructions": 19,
+      "modes": {
+        "full": "full",
+        "origin_sets": "entry",
+        "path_sensitive": "entry",
+        "auto": "entry"
+      },
+      "same_probes_as_path_sensitive": true
+    },
+    {
+      "variant": "correlated",
+      "binary_sha256": "589c30aa404e35758dd27a5d90aa78c79ae4356e36fb65a1a122b290c7dafd98",
+      "instructions": 31,
+      "modes": {
+        "full": "full",
+        "origin_sets": "entry",
+        "path_sensitive": "output",
+        "auto": "output"
+      },
+      "same_probes_as_path_sensitive": true
+    },
+    {
+      "variant": "correlated-dependent",
+      "binary_sha256": "a0aa5014523382ae2ef71ba82732b595ebd29427898ce949841804bea4b86363",
+      "instructions": 31,
+      "modes": {
+        "full": "full",
+        "origin_sets": "entry",
+        "path_sensitive": "entry",
+        "auto": "entry"
+      },
+      "same_probes_as_path_sensitive": true
+    }
+  ],
+  "kernel_capture_performed": false,
+  "original_paper_artifacts_run": false,
+  "conclusion": "No extra observation-selection reduction over the independent path-sensitive method on these fixtures"
+}

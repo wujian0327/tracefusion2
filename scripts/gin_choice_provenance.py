@@ -30,6 +30,7 @@ import gin_byte_capture
 CHOICE=ROOT/'scenarios/gin-choice-provenance'
 INPUT_PATTERNS=('0000','0100','0010','0110','1001','1101','1011','1111')
 KILL_VARIANTS=('kill-full','kill-partial','kill-none')
+COMPARISON_VARIANTS=KILL_VARIANTS+('correlated','correlated-dependent')
 
 
 def stage(directory,variant='stable'):
@@ -43,11 +44,12 @@ def build_role(out,role,variant='stable'):
     with tempfile.TemporaryDirectory() as tmp:
         src=Path(tmp);stage(src,variant)
         return build(out,'assign',scenario=src,extra_sources=(role+'.go','tracing.go')+(('control.go',) if role=='downstream' else ()),
-            operation_source=CHOICE/({'toggle':'toggle.go','inputs':'inputs.go','kill-full':'kill-full.go','kill-partial':'kill-partial.go'}.get(variant,'choice.go')) if role=='downstream' else None,expected_modules=MODULES,
+            operation_source=CHOICE/({'toggle':'toggle.go','inputs':'inputs.go','kill-full':'kill-full.go','kill-partial':'kill-partial.go',
+                'correlated':'correlated.go','correlated-dependent':'correlated-dependent.go'}.get(variant,'choice.go')) if role=='downstream' else None,expected_modules=MODULES,
             planner=partial(plan_binary,cross_role=role,tracing='otel',
                 runtime_inputs=[dict(register='rdi',length=4 if variant=='inputs' else 1)] if role=='downstream' else None,
                 runtime_input_model='indexed-control-bytes-v1' if variant=='inputs' and role=='downstream' else None,
-                observation_target='final-byte-origins-v1' if variant in KILL_VARIANTS else None,
+                observation_target='final-byte-origins-v1' if variant in COMPARISON_VARIANTS else None,
                 runtime_input_ownership='request-private' if role=='downstream' else None))
 
 
@@ -98,11 +100,11 @@ def analyze(pair,plans,captures,variant):
             for i in range(4):
                 local_byte=local ^ bool(i%2) if variant=='toggle' else local
                 if variant=='inputs':local_byte=INPUT_PATTERNS[ticket-1][i]=='1'
-                if variant=='kill-full' or variant=='kill-partial' and i>=2:local_byte=False
+                if variant in ('kill-full','correlated') or variant=='kill-partial' and i>=2:local_byte=False
                 byte_name='B.txt' if local_byte else ('C.txt' if ticket%2==0 else 'A.txt')
                 expected.append([['downstream' if local_byte else 'upstream',str(ticket),byte_name,i]])
             contributes='0' in INPUT_PATTERNS[ticket-1] if variant=='inputs' else True if variant=='toggle' else not local
-            if variant in ('kill-full','kill-partial'):contributes=True
+            if variant in ('kill-full','kill-partial','correlated'):contributes=True
             require(row['byte_sources']==expected and row['transfer_contributes']==contributes,'Wrong byte origin')
         if variant=='toggle':
             for row in locals_['downstream']['results']:
@@ -116,7 +118,7 @@ def analyze(pair,plans,captures,variant):
                 require([s['offset'] for s in samples]==[0,0,0,1,0,2,0,3],'Missing independent input offsets')
                 require(all(s['kind']=='observed-control-byte' for s in samples),'An independent input was guessed')
         if mode=='output':
-            require(variant=='kill-full','Unexpected output projection')
+            require(variant in ('kill-full','correlated'),'Unexpected output projection')
             require(all(r['provenance']['execution_history']=='not_reconstructed' and not r['provenance']['instruction_steps'] and
                         r['provenance']['total_writes'] is None for r in locals_['downstream']['results']),
                     'Unobserved execution history was fabricated')
