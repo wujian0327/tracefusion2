@@ -1,0 +1,160 @@
+{
+  "date": "2026-10-08",
+  "schema": 3,
+  "binary_sha256": "d5668e6bce805073aab2f452f821745d7e0a2944ff20f52d2e0ad549f379409f",
+  "original_elf_unchanged": true,
+  "tests": {
+    "receiver_summary": 13,
+    "previous_regressions": 26,
+    "total": 39,
+    "all_passed": true
+  },
+  "callee_summaries": {
+    "GetProduct": {
+      "schema": 1,
+      "function": "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/genproto.(*productCatalogServiceClient).GetProduct",
+      "receiver_register": "AX",
+      "status": "conditional_receiver_access_summary",
+      "direct_receiver_reads": [
+        {
+          "address": 11037120,
+          "offset": 0,
+          "width": 8,
+          "node": "a869c0:R8"
+        },
+        {
+          "address": 11037123,
+          "offset": 8,
+          "width": 8,
+          "node": "a869c3:DX"
+        }
+      ],
+      "direct_receiver_writes": [],
+      "receiver_address_escapes": [],
+      "loaded_values_forwarded": [
+        {
+          "address": 11037219,
+          "callee": "DX",
+          "via": "register",
+          "location": "AX"
+        },
+        {
+          "address": 11037219,
+          "callee": "DX",
+          "via": "register",
+          "location": "DX"
+        }
+      ],
+      "unsupported_conditions": [],
+      "direct_receiver_read_only_under_conditions": true,
+      "transitive_no_write_proved": false,
+      "may_preserve_caller_spills": false,
+      "required_conditions": [
+        "Normal fixed Go ABI and compiler stack layout; private local spills are not accessed through hidden aliases.",
+        "Other arguments and values loaded from the receiver must be checked for aliases back to the caller frame.",
+        "No receiver argument is introduced through an unmodeled alternate entry or closure context.",
+        "Unknown downstream call results/effects are not a proof of transitive memory separation."
+      ],
+      "indirect_calls": [
+        {
+          "address": 11037219,
+          "target_register": "DX",
+          "target_load_offsets": [
+            0,
+            24
+          ],
+          "receiver_related_register_loads": {
+            "AX": [
+              8
+            ],
+            "DX": [
+              0,
+              24
+            ]
+          }
+        }
+      ],
+      "calls": 5,
+      "body_instructions": 79,
+      "frame_size": 128,
+      "binary_verified_instructions": 101,
+      "function_code_sha256": "9c2f5a6edbed20ef5616a312aa675f4753e3fde9cc72a90e42d415804f3411db",
+      "caller_call_address": 11255682
+    },
+    "Convert": {
+      "schema": 1,
+      "function": "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/genproto.(*currencyServiceClient).Convert",
+      "receiver_register": "AX",
+      "status": "conditional_receiver_access_summary",
+      "direct_receiver_reads": [
+        {
+          "address": 11038560,
+          "offset": 0,
+          "width": 8,
+          "node": "a86f60:R8"
+        },
+        {
+          "address": 11038563,
+          "offset": 8,
+          "width": 8,
+          "node": "a86f63:DX"
+        }
+      ],
+      "direct_receiver_writes": [],
+      "receiver_address_escapes": [],
+      "loaded_values_forwarded": [
+        {
+          "address": 11038659,
+          "callee": "DX",
+          "via": "register",
+          "location": "AX"
+        },
+        {
+          "address": 11038659,
+          "callee": "DX",
+          "via": "register",
+          "location": "DX"
+        }
+      ],
+      "unsupported_conditions": [],
+      "direct_receiver_read_only_under_conditions": true,
+      "transitive_no_write_proved": false,
+      "may_preserve_caller_spills": false,
+      "required_conditions": [
+        "Normal fixed Go ABI and compiler stack layout; private local spills are not accessed through hidden aliases.",
+        "Other arguments and values loaded from the receiver must be checked for aliases back to the caller frame.",
+        "No receiver argument is introduced through an unmodeled alternate entry or closure context.",
+        "Unknown downstream call results/effects are not a proof of transitive memory separation."
+      ],
+      "indirect_calls": [
+        {
+          "address": 11038659,
+          "target_register": "DX",
+          "target_load_offsets": [
+            0,
+            24
+          ],
+          "receiver_related_register_loads": {
+            "AX": [
+              8
+            ],
+            "DX": [
+              0,
+              24
+            ]
+          }
+        }
+      ],
+      "calls": 5,
+      "body_instructions": 79,
+      "frame_size": 128,
+      "binary_verified_instructions": 101,
+      "function_code_sha256": "e6e94852cf44b626ba89b80568c7b52b297710838ea170d0b58d7a62624fc3ea",
+      "caller_call_address": 11256468
+    }
+  },
+  "caller_unknowns_not_relaxed": true,
+  "bpf_capture_executed": false,
+  "dynamic_provenance_complete": false,
+  "report_sha256": "f445b276f9bb8e4712b025fede56341fac94c4bed1a13447977ed702d4b9882d"
+}

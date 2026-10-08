@@ -26,7 +26,7 @@ def stack_key(arg):
         return 'stack:' + str(m['offset'])
 
 
-def _analyze(rows, function, stack_effects):
+def _analyze(rows, function, stack_effects, allow_indirect_calls=False):
     if not rows:
         raise ValueError('Missing function')
     addresses = {r['address']: i for i, r in enumerate(rows)}
@@ -39,13 +39,17 @@ def _analyze(rows, function, stack_effects):
         args = re.split(r',\s+', arg.strip()) if arg else []
         parsed.append((op, args))
     frames = [i for i, (op, args) in enumerate(parsed)
-              if op == 'SUBQ' and len(args) == 2 and args[1] == 'SP']
+              if op in ('SUBQ','ADDQ') and len(args) == 2 and args[1] == 'SP'
+              and args[0].startswith('$')
+              and ((op == 'SUBQ' and int(args[0][1:],0)>0)
+                   or (op == 'ADDQ' and int(args[0][1:],0)<0))]
     if len(frames) != 1:
         raise ValueError('Requires one fixed stack-frame prologue')
     start = frames[0] + 1
+    frame_size = abs(int(parsed[frames[0]][1][0][1:],0))
     # The compiler stack-growth stub retries entry before the body starts. It is
     # not silently treated as an ordinary call preserving all application state.
-    allowed_prologue = {'LEAQ', 'CMPQ', 'JBE', 'PUSHQ', 'MOVQ', 'SUBQ'}
+    allowed_prologue = {'LEAQ', 'CMPQ', 'JBE', 'PUSHQ', 'MOVQ', 'SUBQ', 'ADDQ'}
     if any(op not in allowed_prologue for op, _ in parsed[:start]):
         raise ValueError('Unsupported frame prologue')
     for op, args in parsed[:start]:
@@ -78,13 +82,15 @@ def _analyze(rows, function, stack_effects):
         successors[i] = nxt
         todo.extend(nxt)
     supported = {'MOVQ', 'MOVL', 'MOVUPS', 'LEAQ', 'XORL', 'XORQ',
-                 'ADDQ', 'SUBQ', 'CMPQ', 'CMPL', 'TESTQ', 'TESTL', 'CALL', 'POPQ', 'RET'}
+                 'ADDQ', 'SUBQ', 'CMPQ', 'CMPL', 'TESTQ', 'TESTL', 'CALL', 'POPQ', 'RET',
+                 'DECQ','NEGQ','SARQ','ANDL'}
     jumps = {'JMP', 'JE', 'JNE', 'JLE', 'JL', 'JGE', 'JG', 'JA', 'JAE', 'JB', 'JBE'}
     for i in reachable:
         op, args = parsed[i]
         if op not in supported | jumps and not op.startswith('NOP'):
             raise ValueError('Unsupported instruction: ' + rows[i]['asm'])
-        if op == 'CALL' and (len(args) != 1 or not args[0].endswith('(SB)')):
+        if op == 'CALL' and (len(args) != 1 or (not args[0].endswith('(SB)') and
+                not (allow_indirect_calls and args[0] in REGS))):
             raise ValueError('Indirect call requires target evidence: ' + rows[i]['asm'])
         if op == 'CALL' and 'morestack' in args[0]:
             raise ValueError('Stack growth inside analyzed body')
@@ -110,10 +116,10 @@ def _analyze(rows, function, stack_effects):
             callee = args[0].removesuffix('(SB)')
             barrier = re.fullmatch(r'runtime\.gcWriteBarrier[1-8]', callee)
             out = ['R11', 'X15'] if barrier else sorted(set(REGS) - STABLE)
-        elif op.startswith('MOV') or op in {'LEAQ', 'XORL', 'XORQ', 'ADDQ', 'SUBQ'}:
-            if len(args) != 2:
+        elif op.startswith('MOV') or op in {'LEAQ', 'XORL', 'XORQ', 'ADDQ', 'SUBQ','DECQ','NEGQ','SARQ','ANDL'}:
+            if len(args) != (1 if op in ('DECQ','NEGQ') else 2):
                 raise ValueError('Invalid operands')
-            dst = args[1]
+            dst = args[-1]
             if dst in REGS:
                 out = [dst]
             elif stack_key(dst):
@@ -183,6 +189,10 @@ def _analyze(rows, function, stack_effects):
         if op == 'CALL':
             callee = args[0].removesuffix('(SB)')
             calls.append(dict(**common, callee=callee,
+                              indirect=not args[0].endswith('(SB)'),
+                              target_inputs=refs(i,args[0]) if not args[0].endswith('(SB)') else [],
+                              potential_stack_arguments={k:sorted(incoming[i][k]) for k in sorted(slots)
+                                                         if int(k.split(':')[1])<frame_size},
                               arguments={r: refs(i, r) for r in REGS if r not in STABLE}))
         for key in writes[i]:
             node = dict(common, location=key, inputs=[])
@@ -216,8 +226,8 @@ def _analyze(rows, function, stack_effects):
                     node['memory'] = mem
                     if mem['base'] == 'SP':
                         stack_addresses.append(dict(common, offset=mem['offset']))
-            elif op in ('ADDQ', 'SUBQ'):
-                node.update(kind='value_transform', inputs=sorted(set(refs(i, args[0]) + refs(i, args[1]))))
+            elif op in ('ADDQ', 'SUBQ','DECQ','NEGQ','SARQ','ANDL'):
+                node.update(kind='value_transform', inputs=sorted({k for arg in args for k in refs(i,arg)}))
             else:
                 node.update(kind='unknown', reason='Stack epilogue')
             nodes[definitions[i, key]] = node
@@ -229,11 +239,11 @@ def _analyze(rows, function, stack_effects):
                                base_inputs=refs(i,mem['base']), index_inputs=refs(i,mem['index']) if mem['index'] else [],
                                address_inputs=refs(i, args[1], True)))
         if op == 'RET':
-            returns.append(dict(common, registers={r: refs(i, r) for r in ('AX','BX','CX','DI','SI')}))
+            returns.append(dict(common, registers={r: refs(i, r) for r in ('AX','BX','CX','DI','SI','R8','R9','R10','R11')}))
         if op in jumps and op != 'JMP':
             branches.append(dict(common, successors=[rows[j]['address'] for j in successors[i]]))
     return dict(function=function, status='conditional_static_candidates',
-                frame_entry=rows[start]['address'], instructions=len(reachable),
+                frame_entry=rows[start]['address'], frame_size=frame_size, instructions=len(reachable),
                 nodes=nodes, stores=stores, calls=calls, returns=returns, branches=branches,
                 stack_reads=stack_reads,
                 cfg={str(rows[i]['address']): [rows[j]['address'] for j in successors[i]] for i in sorted(reachable)},
@@ -289,7 +299,7 @@ def stack_blockers(graph, roots):
     return sorted(result)
 
 
-def analyze(rows, function, *, stack_policy='invalidate'):
+def analyze(rows, function, *, stack_policy='invalidate', allow_indirect_calls=False):
     """Recompute reaching definitions after conservative possible stack writes.
 
     'assume_private' reproduces the previous diagnostic graph only. Default
@@ -300,7 +310,7 @@ def analyze(rows, function, *, stack_policy='invalidate'):
     """
     if stack_policy not in ('invalidate','assume_private'):
         raise ValueError('Unknown stack policy')
-    graph = _analyze(rows,function,{})
+    graph = _analyze(rows,function,{},allow_indirect_calls)
     if stack_policy == 'assume_private':
         graph['stack_policy'] = stack_policy
         return graph
@@ -310,7 +320,7 @@ def analyze(rows, function, *, stack_policy='invalidate'):
     # identity, so re-evaluate until the invalidation set stops growing.
     rounds = 0
     while True:
-        graph = _analyze(rows,function,effects)
+        graph = _analyze(rows,function,effects,allow_indirect_calls)
         additions = {s['address']:'indirect_store_without_proved_stack_separation'
                      for s in graph['stores'] if not _barrier_store(graph,s)}
         updated = effects | additions

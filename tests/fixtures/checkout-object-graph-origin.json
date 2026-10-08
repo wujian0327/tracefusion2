@@ -8,6 +8,8 @@
   "binary_sha256": "d5668e6bce805073aab2f452f821745d7e0a2944ff20f52d2e0ad549f379409f",
   "fixture_generation": "go tool objdump; only source path prefix normalized",
   "fixtures": {
+    "checkout-default-Convert.asm": "3b431f35081191b52d59ebc54f1064927b287560ba5e8bf9d96e8b67e5c73cd4",
+    "checkout-default-GetProduct.asm": "b87c75eb36d56ab5f91804fec6118e92aa80140cb1c76692d9a72d73cee47cfb",
     "checkout-default-convertCurrency.asm": "4d2a0496e5183501300b9bb70e01ef27abffd37cac1164ef0d141c2040a9b462",
     "checkout-default-prepOrderItems.asm": "8ff3933a0058ba780028fd2c4467a560b4ae3a126b43c3c30e153aae8ded9759"
   }

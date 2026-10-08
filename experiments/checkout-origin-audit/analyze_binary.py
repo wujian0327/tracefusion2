@@ -17,6 +17,7 @@ from go_byte_adapter import assembly_rows
 from go_object_graph import analyze, terminals
 from go_string_adapter import file_offset
 from go_provenance import parse_nm
+from go_receiver_summary import summarize_receiver
 
 
 def main():
@@ -41,9 +42,7 @@ def main():
     layouts = json.loads(command([args.go,'run',str(HERE/'inspect_layout.go'),str(binary)] +
         [type_prefix+t for t in ('OrderItem','CartItem','Product','Money','CurrencyConversionRequest')]))
     symbols = parse_nm(command([args.go,'tool','nm','-size',str(binary)]))
-    graphs = {}
-    for name in ('prepOrderItems','convertCurrency'):
-        symbol = 'main.(*checkoutService).' + name
+    def read_function(symbol):
         asm = command([args.go,'tool','objdump','-s','^'+re.escape(symbol)+'$',str(binary)])
         rows = assembly_rows(asm)
         if not rows:
@@ -58,14 +57,32 @@ def main():
                 raise ValueError('ELF/disassembly mismatch')
             if i and rows[i-1]['address']+len(bytes.fromhex(rows[i-1]['code'])) != row['address']:
                 raise ValueError('Gap in disassembly')
+        return rows
+    graphs = {}
+    for name in ('prepOrderItems','convertCurrency'):
+        symbol = 'main.(*checkoutService).' + name
+        rows = read_function(symbol)
         graph = analyze(rows,symbol)
         graph['binary_verified_instructions'] = len(rows)
         for store in graph['stores']:
             store['value_terminals'] = terminals(graph,store['value_inputs'])
             store['address_terminals'] = terminals(graph,store['address_inputs'])
         graphs[name] = graph
-    result = dict(schema=2,binary_sha256=hashlib.sha256(data).hexdigest(),build_info=build_info,
+    callee_summaries = {}
+    for caller, method in (('prepOrderItems','GetProduct'),('convertCurrency','Convert')):
+        candidates = [c for c in graphs[caller]['calls'] if c['callee'].endswith('.'+method)]
+        if len(candidates) != 1:
+            raise ValueError('Expected one RPC wrapper call: '+method)
+        callee = candidates[0]['callee']
+        rows = read_function(callee)
+        summary = summarize_receiver(rows,callee)
+        summary['binary_verified_instructions'] = len(rows)
+        summary['function_code_sha256'] = hashlib.sha256(b''.join(bytes.fromhex(r['code']) for r in rows)).hexdigest()
+        summary['caller_call_address'] = candidates[0]['address']
+        callee_summaries[method] = summary
+    result = dict(schema=3,binary_sha256=hashlib.sha256(data).hexdigest(),build_info=build_info,
                   status='conservative_static_candidates',layouts=layouts,graphs=graphs,
+                  callee_summaries=callee_summaries,
                   source_files_read=False,answers_or_runtime_truth_read=False,
                   allocation_type_binding_complete=False,
                   stack_alias_contract_verified=False,

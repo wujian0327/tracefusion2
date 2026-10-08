@@ -6,6 +6,8 @@
 
 下一里程碑是 Online Boutique 原始订单函数的局部来源重建：优先适配默认优化产物，绑定输入对象、调用返回与输出条目，再进行独立真值和主机 BPF 验收。**目前已实现默认优化二进制的对象候选图及未知栈副作用的保守失效处理，尚未完成精确别名/调用摘要、对象类型绑定或真实函数 BPF 溯源。**详见 [研究范围与验收标准](docs/research-scope.md)、[对象图实现](docs/checkout-object-graph.md) 和 [副作用处理及 26 项本地测试](docs/checkout-stack-effects.md)。
 
+继续提取了两个真实 gRPC 客户端的 [接收者访问摘要](docs/checkout-receiver-summary.md)：识别接收者字段读取及下游指针加载链，39 项本地测试通过。摘要仍带别名条件，没有据此取消保守主图中的未知标记，尚未新增 BPF 验收结果。
+
 ## 真实 Go 函数审计：Online Boutique 订单条目
 
 固定 v0.10.4 的原始结算函数，完成默认/关闭内联构建与六组本地 gRPC 夹具检查。确认需要绑定动态对象与 RPC 返回实例，当前四字节叶函数模型不能直接覆盖；这不是现有强基线的失败证据。尚未对该函数执行 TraceFusion BPF 溯源，详见 [真实函数审计及研究边界](docs/checkout-origin-audit.md)。
