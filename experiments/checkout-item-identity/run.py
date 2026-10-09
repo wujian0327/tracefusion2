@@ -37,6 +37,11 @@ def execute(args,out):
                          input=input,text=True,capture_output=True,timeout=600)
         with (out/'commands.jsonl').open('a') as f:
             f.write(json.dumps(dict(command=list(map(str,argv)),returncode=p.returncode,stdout=p.stdout,stderr=p.stderr))+'\n')
+        if p.returncode:
+            print(f'Command failed ({p.returncode}): {list(map(str,argv))}',file=sys.stderr,flush=True)
+            if p.stdout:print(p.stdout,file=sys.stderr,end='' if p.stdout.endswith('\n') else '\n',flush=True)
+            if p.stderr:print(p.stderr,file=sys.stderr,end='' if p.stderr.endswith('\n') else '\n',flush=True)
+            print('Full command log: '+str(out/'commands.jsonl'),file=sys.stderr,flush=True)
         p.check_returncode();return p.stdout
     if not source.exists():
         source.parent.mkdir(parents=True,exist_ok=True)
