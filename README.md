@@ -8,7 +8,7 @@
 
 已有证据包括：原始 checkout 的 Item/Cost 引用身份查询；受控条件选择与覆盖；原始 `money.Sum` 的字段加工依赖。Sum 的 30 次主机采集已核验，选择性采集与全部分支结果一致，事件数分别为 27 与 78；这不是运行开销改善百分比。详见 [Sum 实验](experiments/checkout-money-sum/README.md)、[引用查询对照](experiments/checkout-item-identity/COMPARISON.md)、[原始业务路径核查](experiments/checkout-origin-audit/BUSINESS_PATHS.md)。
 
-最后一条集成路径固定为：原始 `PlaceOrder` 收到的商品价格与运费字段，经实际金额累计，追到 `chargeCard` 的金额参数。[集成实现与统一正确性命令](experiments/checkout-payment-path/README.md) 已加入，10 个 native 用例及离线语义回归通过；**整段真实 eBPF 采集仍待主机验证，正式性能协议尚未完成**，不把各局部结果合称为完整订单溯源。已有 [双 Gin 方法比较](docs/gin-provenance-comparison.md) 单独支持受控跨服务能力，并保留与路径敏感基线打平的负结果。
+最后一条集成路径固定为：原始 `PlaceOrder` 收到的商品价格与运费字段，经实际金额累计，追到 `chargeCard` 的金额参数。[主机集成结果](experiments/checkout-payment-path/README.md) 已核验：10 个 native 用例、30 次 eBPF 采集，内部观测两组各正确恢复 18/18 个字段查询，TP=285/FP=0/FN=0。事件数从全部分支组 5,059 降为选择性组 4,201（减少 16.96%，不是运行开销改善）。**这条局部金额路径的正确性集成完成；正式性能协议尚未完成。**已有 [双 Gin 方法比较](docs/gin-provenance-comparison.md) 单独支持受控跨服务能力，并保留与路径敏感基线打平的负结果。
 
 下文为历史里程碑，能力仅适用于各自记录的字段、编译和运行条件，不能自动合并为通用系统保证。
 

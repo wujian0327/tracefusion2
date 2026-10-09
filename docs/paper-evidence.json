@@ -90,6 +90,64 @@
       },
       "scope": "Unmodified original money.Sum in test executable; not full checkout or cross-service lineage",
       "original_business_source_unchanged": true
+    },
+    {
+      "uploaded_archive": "checkout-payment-path-20261009-081906-778623.zip",
+      "archive_sha256": "6ee2c57d49a7b470e40b2cc81b161f58695a907b1cd71577cde3d63d7fa38035",
+      "target_sha256": "8f029a8de2b598ac2577529daa7d37932ec0f290532f1efe9159e6f329daea55",
+      "groups": {
+        "selected": {
+          "runs": 10,
+          "events": 4201,
+          "perf_bytes": 890612,
+          "query_fields": 18,
+          "exact_fields": 18,
+          "definite_fields": 18,
+          "wrong_definite_fields": 0,
+          "tp": 285,
+          "fp": 0,
+          "fn": 0,
+          "status_counts": {
+            "exact_data_origins": 9,
+            "no_sink": 1
+          }
+        },
+        "all_branches": {
+          "runs": 10,
+          "events": 5059,
+          "perf_bytes": 1072508,
+          "query_fields": 18,
+          "exact_fields": 18,
+          "definite_fields": 18,
+          "wrong_definite_fields": 0,
+          "tp": 285,
+          "fp": 0,
+          "fn": 0,
+          "status_counts": {
+            "exact_data_origins": 9,
+            "no_sink": 1
+          }
+        },
+        "boundaries": {
+          "runs": 10,
+          "events": 124,
+          "perf_bytes": 26288,
+          "query_fields": 18,
+          "exact_fields": 0,
+          "definite_fields": 0,
+          "wrong_definite_fields": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 285,
+          "status_counts": {
+            "unknown": 9,
+            "no_sink": 1
+          }
+        }
+      },
+      "scope": "Original PlaceOrder preparation-return numeric fields to chargeCard amount argument; local gRPC test peers; not full shop cross-service lineage",
+      "verification_record": "../experiments/checkout-payment-path/host-validation-20261009.json",
+      "performance_protocol_executed": false
     }
   ]
 }
