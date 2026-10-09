@@ -26,7 +26,7 @@ CASES=('empty','one','equal-eight','equal-thirty-two','aliased-input',
 def save(path,doc):path.write_text(json.dumps(doc,indent=2)+'\n')
 
 
-def build_target(args,out):
+def build_target(args,out,fixture_path=None,planner=None):
     require(args.go,'Go 1.25.4 must be on PATH or supplied with --go')
     env=dict(os.environ,GOOS='linux',GOARCH='amd64',CGO_ENABLED='0',GOTOOLCHAIN='local',
              GOTELEMETRY='off',GOFLAGS='',GOEXPERIMENT='',GOAMD64='v1',GO111MODULE='on')
@@ -54,19 +54,20 @@ def build_target(args,out):
     require(command([args.go,'env','GOVERSION']).strip()=='go1.25.4','Use Go 1.25.4')
     before=hashlib.sha256((module/'main.go').read_bytes()).hexdigest()
     fixture=module/'tracefusion_identity_test.go'
-    with fixture.open('xb') as f:f.write((HERE/'identity_test.go').read_bytes())
+    with fixture.open('xb') as f:f.write((fixture_path or HERE/'identity_test.go').read_bytes())
     binary=out/'checkout-identity'
     try:
-        print('Building original checkout function with independent test fixture',flush=True)
+        print('Building controlled variant with independent test fixture' if planner else
+              'Building original checkout function with independent test fixture',flush=True)
         command([args.go,'test','-c','-mod=readonly','-buildvcs=false','-o',binary,'.'])
     finally:fixture.unlink()
     require(before==hashlib.sha256((module/'main.go').read_bytes()).hexdigest(),'Business source changed')
     require(command(['git','status','--porcelain','--untracked-files=no'],source).strip()=='','Upstream tracked files changed')
-    plan=observer.plan_binary(binary,lambda argv:command([args.go,*argv]),
+    plan=(planner or observer.plan_binary)(binary,lambda argv:command([args.go,*argv]),
                               HERE.parent/'checkout-origin-audit/inspect_layout.go',out)
     save(out/'plan.json',plan)
     print(f'Planned {len(plan["sites"])} probe sites; ELF bytes and DWARF checked',flush=True)
-    for strategy in ('boundaries','current','dense_stores'):
+    for strategy in (() if planner else ('boundaries','current','dense_stores')):
         selected=observer.strategy_plan(plan,strategy)
         save(out/('plan-'+strategy+'.json'),selected)
         if 'selection' in selected:save(out/('selection-'+strategy+'.json'),selected['selection'])
