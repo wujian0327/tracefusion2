@@ -1,0 +1,1176 @@
+{
+  "all_passed": true,
+  "bpf_executed": false,
+  "synthetic_events": true,
+  "unicorn_version": "2.1.4",
+  "binary_sha256": "99ca47bf0e7f3a683d6188f98ab145c69e3acb2d22c5746abb59884037e0aed4",
+  "native_fixture_runs": 10,
+  "elf_inference_checks": [
+    {
+      "case": "empty",
+      "barrier": "fast",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "empty",
+      "barrier": "fast",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "empty",
+      "barrier": "fast",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "empty",
+      "barrier": "fast",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "empty",
+      "barrier": "slow",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "empty",
+      "barrier": "slow",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "empty",
+      "barrier": "slow",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "empty",
+      "barrier": "slow",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "empty",
+      "barrier": "alternating",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "empty",
+      "barrier": "alternating",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "empty",
+      "barrier": "alternating",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "empty",
+      "barrier": "alternating",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "one",
+      "barrier": "fast",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "one",
+      "barrier": "fast",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "one",
+      "barrier": "fast",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "one",
+      "barrier": "fast",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "one",
+      "barrier": "slow",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "one",
+      "barrier": "slow",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "one",
+      "barrier": "slow",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "one",
+      "barrier": "slow",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "one",
+      "barrier": "alternating",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "one",
+      "barrier": "alternating",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "one",
+      "barrier": "alternating",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "one",
+      "barrier": "alternating",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "one-repeated",
+      "barrier": "fast",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "one-repeated",
+      "barrier": "fast",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "one-repeated",
+      "barrier": "fast",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "one-repeated",
+      "barrier": "fast",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "one-repeated",
+      "barrier": "slow",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "one-repeated",
+      "barrier": "slow",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "one-repeated",
+      "barrier": "slow",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "one-repeated",
+      "barrier": "slow",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "one-repeated",
+      "barrier": "alternating",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "one-repeated",
+      "barrier": "alternating",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "one-repeated",
+      "barrier": "alternating",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "one-repeated",
+      "barrier": "alternating",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "equal-eight",
+      "barrier": "fast",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "equal-eight",
+      "barrier": "fast",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "equal-eight",
+      "barrier": "fast",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "equal-eight",
+      "barrier": "fast",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "equal-eight",
+      "barrier": "slow",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "equal-eight",
+      "barrier": "slow",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "equal-eight",
+      "barrier": "slow",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "equal-eight",
+      "barrier": "slow",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "equal-eight",
+      "barrier": "alternating",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "equal-eight",
+      "barrier": "alternating",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "equal-eight",
+      "barrier": "alternating",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "equal-eight",
+      "barrier": "alternating",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "equal-eight-repeated",
+      "barrier": "fast",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "equal-eight-repeated",
+      "barrier": "fast",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "equal-eight-repeated",
+      "barrier": "fast",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "equal-eight-repeated",
+      "barrier": "fast",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "equal-eight-repeated",
+      "barrier": "slow",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "equal-eight-repeated",
+      "barrier": "slow",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "equal-eight-repeated",
+      "barrier": "slow",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "equal-eight-repeated",
+      "barrier": "slow",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "equal-eight-repeated",
+      "barrier": "alternating",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "equal-eight-repeated",
+      "barrier": "alternating",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "equal-eight-repeated",
+      "barrier": "alternating",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "equal-eight-repeated",
+      "barrier": "alternating",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two",
+      "barrier": "fast",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two",
+      "barrier": "fast",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two",
+      "barrier": "fast",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two",
+      "barrier": "fast",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two",
+      "barrier": "slow",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two",
+      "barrier": "slow",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two",
+      "barrier": "slow",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two",
+      "barrier": "slow",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two",
+      "barrier": "alternating",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two",
+      "barrier": "alternating",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two",
+      "barrier": "alternating",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two",
+      "barrier": "alternating",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two-repeated",
+      "barrier": "fast",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two-repeated",
+      "barrier": "fast",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two-repeated",
+      "barrier": "fast",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two-repeated",
+      "barrier": "fast",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two-repeated",
+      "barrier": "slow",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two-repeated",
+      "barrier": "slow",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two-repeated",
+      "barrier": "slow",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two-repeated",
+      "barrier": "slow",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two-repeated",
+      "barrier": "alternating",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two-repeated",
+      "barrier": "alternating",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two-repeated",
+      "barrier": "alternating",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "equal-thirty-two-repeated",
+      "barrier": "alternating",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "carry",
+      "barrier": "fast",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "carry",
+      "barrier": "fast",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "carry",
+      "barrier": "fast",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "carry",
+      "barrier": "fast",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "carry",
+      "barrier": "slow",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "carry",
+      "barrier": "slow",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "carry",
+      "barrier": "slow",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "carry",
+      "barrier": "slow",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "carry",
+      "barrier": "alternating",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "carry",
+      "barrier": "alternating",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "carry",
+      "barrier": "alternating",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "carry",
+      "barrier": "alternating",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "preparation-failure",
+      "barrier": "fast",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "preparation-failure",
+      "barrier": "fast",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "preparation-failure",
+      "barrier": "fast",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "preparation-failure",
+      "barrier": "fast",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "preparation-failure",
+      "barrier": "slow",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "preparation-failure",
+      "barrier": "slow",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "preparation-failure",
+      "barrier": "slow",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "preparation-failure",
+      "barrier": "slow",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "preparation-failure",
+      "barrier": "alternating",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "preparation-failure",
+      "barrier": "alternating",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "preparation-failure",
+      "barrier": "alternating",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "preparation-failure",
+      "barrier": "alternating",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "payment-failure",
+      "barrier": "fast",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "payment-failure",
+      "barrier": "fast",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "payment-failure",
+      "barrier": "fast",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "payment-failure",
+      "barrier": "fast",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "payment-failure",
+      "barrier": "slow",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "payment-failure",
+      "barrier": "slow",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "payment-failure",
+      "barrier": "slow",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "payment-failure",
+      "barrier": "slow",
+      "strategy": "boundary_replay",
+      "passed": true
+    },
+    {
+      "case": "payment-failure",
+      "barrier": "alternating",
+      "strategy": "all_branches",
+      "passed": true
+    },
+    {
+      "case": "payment-failure",
+      "barrier": "alternating",
+      "strategy": "selected",
+      "passed": true
+    },
+    {
+      "case": "payment-failure",
+      "barrier": "alternating",
+      "strategy": "path_sensitive_slice",
+      "passed": true
+    },
+    {
+      "case": "payment-failure",
+      "barrier": "alternating",
+      "strategy": "boundary_replay",
+      "passed": true
+    }
+  ],
+  "method_source_sha256": {
+    "compare_methods.py": "94ac796129950ab966db8e3471470969491c212a583b05ec318de138c322e340",
+    "check_methods_local.py": "a985757459254f9ddae9756f83b5f33ea15f81728ac8b20cc1e9ecde00afbff3",
+    "method_baselines.py": "5db4ef26aed821dd562a42acd28cb801fd12649e054b5b4ab4f7c4c467a94343",
+    "independent_machine.py": "4eef81950777c5d617073e799ab79a44e4a506dd612fd1496a3873328a40146c",
+    "independent_replay.py": "0871c9fa64dafcdd887cab536579dcf2c9820e73f8dc7500a423b9a77863727f"
+  },
+  "negative_checks": [
+    {
+      "strategy": "path_sensitive_slice",
+      "name": "lost_event",
+      "passed": true,
+      "kind": "offline_fault_injection"
+    },
+    {
+      "strategy": "path_sensitive_slice",
+      "name": "wrong_g",
+      "passed": true,
+      "kind": "offline_fault_injection"
+    },
+    {
+      "strategy": "path_sensitive_slice",
+      "name": "missing_source_packet",
+      "passed": true,
+      "kind": "offline_fault_injection"
+    },
+    {
+      "strategy": "path_sensitive_slice",
+      "name": "wrong_sink_witness",
+      "passed": true,
+      "kind": "offline_fault_injection"
+    },
+    {
+      "strategy": "path_sensitive_slice",
+      "name": "unsupported_instruction",
+      "passed": true,
+      "kind": "offline_fault_injection"
+    },
+    {
+      "strategy": "path_sensitive_slice",
+      "name": "currency_snapshot_bound",
+      "passed": true,
+      "kind": "offline_fault_injection"
+    },
+    {
+      "strategy": "boundary_replay",
+      "name": "lost_event",
+      "passed": true,
+      "kind": "offline_fault_injection"
+    },
+    {
+      "strategy": "boundary_replay",
+      "name": "wrong_g",
+      "passed": true,
+      "kind": "offline_fault_injection"
+    },
+    {
+      "strategy": "boundary_replay",
+      "name": "missing_source_packet",
+      "passed": true,
+      "kind": "offline_fault_injection"
+    },
+    {
+      "strategy": "boundary_replay",
+      "name": "wrong_sink_witness",
+      "passed": true,
+      "kind": "offline_fault_injection"
+    },
+    {
+      "strategy": "boundary_replay",
+      "name": "unsupported_instruction",
+      "passed": true,
+      "kind": "offline_fault_injection"
+    },
+    {
+      "strategy": "boundary_replay",
+      "name": "currency_snapshot_bound",
+      "passed": true,
+      "kind": "offline_fault_injection"
+    },
+    {
+      "strategy": "boundary_replay",
+      "name": "WB_alternative_application_write",
+      "passed": true,
+      "kind": "offline_fault_injection"
+    }
+  ],
+  "machine_checks": [
+    "same_value_last_write",
+    "arithmetic_union",
+    "constant_kills_definition",
+    "region_width_bound"
+  ],
+  "c_syntax_methods": [
+    "all_branches",
+    "selected",
+    "path_sensitive_slice",
+    "boundary_replay"
+  ],
+  "synthetic_event_counts": [
+    {
+      "case": "empty",
+      "barrier": "fast",
+      "counts": {
+        "all_branches": 54,
+        "selected": 48,
+        "path_sensitive_slice": 47,
+        "boundary_replay": 5
+      },
+      "wb_condition_evaluations": 2
+    },
+    {
+      "case": "empty",
+      "barrier": "slow",
+      "counts": {
+        "all_branches": 59,
+        "selected": 53,
+        "path_sensitive_slice": 52,
+        "boundary_replay": 5
+      },
+      "wb_condition_evaluations": 2
+    },
+    {
+      "case": "empty",
+      "barrier": "alternating",
+      "counts": {
+        "all_branches": 55,
+        "selected": 49,
+        "path_sensitive_slice": 48,
+        "boundary_replay": 5
+      },
+      "wb_condition_evaluations": 2
+    },
+    {
+      "case": "one",
+      "barrier": "fast",
+      "counts": {
+        "all_branches": 100,
+        "selected": 88,
+        "path_sensitive_slice": 86,
+        "boundary_replay": 6
+      },
+      "wb_condition_evaluations": 3
+    },
+    {
+      "case": "one",
+      "barrier": "slow",
+      "counts": {
+        "all_branches": 107,
+        "selected": 95,
+        "path_sensitive_slice": 93,
+        "boundary_replay": 6
+      },
+      "wb_condition_evaluations": 3
+    },
+    {
+      "case": "one",
+      "barrier": "alternating",
+      "counts": {
+        "all_branches": 101,
+        "selected": 89,
+        "path_sensitive_slice": 87,
+        "boundary_replay": 6
+      },
+      "wb_condition_evaluations": 3
+    },
+    {
+      "case": "one-repeated",
+      "barrier": "fast",
+      "counts": {
+        "all_branches": 126,
+        "selected": 102,
+        "path_sensitive_slice": 98,
+        "boundary_replay": 6
+      },
+      "wb_condition_evaluations": 3
+    },
+    {
+      "case": "one-repeated",
+      "barrier": "slow",
+      "counts": {
+        "all_branches": 133,
+        "selected": 109,
+        "path_sensitive_slice": 105,
+        "boundary_replay": 6
+      },
+      "wb_condition_evaluations": 3
+    },
+    {
+      "case": "one-repeated",
+      "barrier": "alternating",
+      "counts": {
+        "all_branches": 127,
+        "selected": 103,
+        "path_sensitive_slice": 99,
+        "boundary_replay": 6
+      },
+      "wb_condition_evaluations": 3
+    },
+    {
+      "case": "equal-eight",
+      "barrier": "fast",
+      "counts": {
+        "all_branches": 422,
+        "selected": 368,
+        "path_sensitive_slice": 359,
+        "boundary_replay": 13
+      },
+      "wb_condition_evaluations": 10
+    },
+    {
+      "case": "equal-eight",
+      "barrier": "slow",
+      "counts": {
+        "all_branches": 443,
+        "selected": 389,
+        "path_sensitive_slice": 380,
+        "boundary_replay": 13
+      },
+      "wb_condition_evaluations": 10
+    },
+    {
+      "case": "equal-eight",
+      "barrier": "alternating",
+      "counts": {
+        "all_branches": 431,
+        "selected": 377,
+        "path_sensitive_slice": 368,
+        "boundary_replay": 13
+      },
+      "wb_condition_evaluations": 10
+    },
+    {
+      "case": "equal-eight-repeated",
+      "barrier": "fast",
+      "counts": {
+        "all_branches": 526,
+        "selected": 424,
+        "path_sensitive_slice": 407,
+        "boundary_replay": 13
+      },
+      "wb_condition_evaluations": 10
+    },
+    {
+      "case": "equal-eight-repeated",
+      "barrier": "slow",
+      "counts": {
+        "all_branches": 547,
+        "selected": 445,
+        "path_sensitive_slice": 428,
+        "boundary_replay": 13
+      },
+      "wb_condition_evaluations": 10
+    },
+    {
+      "case": "equal-eight-repeated",
+      "barrier": "alternating",
+      "counts": {
+        "all_branches": 535,
+        "selected": 433,
+        "path_sensitive_slice": 416,
+        "boundary_replay": 13
+      },
+      "wb_condition_evaluations": 10
+    },
+    {
+      "case": "equal-thirty-two",
+      "barrier": "fast",
+      "counts": {
+        "all_branches": 1526,
+        "selected": 1328,
+        "path_sensitive_slice": 1295,
+        "boundary_replay": 37
+      },
+      "wb_condition_evaluations": 34
+    },
+    {
+      "case": "equal-thirty-two",
+      "barrier": "slow",
+      "counts": {
+        "all_branches": 1595,
+        "selected": 1397,
+        "path_sensitive_slice": 1364,
+        "boundary_replay": 37
+      },
+      "wb_condition_evaluations": 34
+    },
+    {
+      "case": "equal-thirty-two",
+      "barrier": "alternating",
+      "counts": {
+        "all_branches": 1559,
+        "selected": 1361,
+        "path_sensitive_slice": 1328,
+        "boundary_replay": 37
+      },
+      "wb_condition_evaluations": 34
+    },
+    {
+      "case": "equal-thirty-two-repeated",
+      "barrier": "fast",
+      "counts": {
+        "all_branches": 1942,
+        "selected": 1552,
+        "path_sensitive_slice": 1487,
+        "boundary_replay": 37
+      },
+      "wb_condition_evaluations": 34
+    },
+    {
+      "case": "equal-thirty-two-repeated",
+      "barrier": "slow",
+      "counts": {
+        "all_branches": 2011,
+        "selected": 1621,
+        "path_sensitive_slice": 1556,
+        "boundary_replay": 37
+      },
+      "wb_condition_evaluations": 34
+    },
+    {
+      "case": "equal-thirty-two-repeated",
+      "barrier": "alternating",
+      "counts": {
+        "all_branches": 1975,
+        "selected": 1585,
+        "path_sensitive_slice": 1520,
+        "boundary_replay": 37
+      },
+      "wb_condition_evaluations": 34
+    },
+    {
+      "case": "carry",
+      "barrier": "fast",
+      "counts": {
+        "all_branches": 198,
+        "selected": 156,
+        "path_sensitive_slice": 149,
+        "boundary_replay": 7
+      },
+      "wb_condition_evaluations": 4
+    },
+    {
+      "case": "carry",
+      "barrier": "slow",
+      "counts": {
+        "all_branches": 207,
+        "selected": 165,
+        "path_sensitive_slice": 158,
+        "boundary_replay": 7
+      },
+      "wb_condition_evaluations": 4
+    },
+    {
+      "case": "carry",
+      "barrier": "alternating",
+      "counts": {
+        "all_branches": 201,
+        "selected": 159,
+        "path_sensitive_slice": 152,
+        "boundary_replay": 7
+      },
+      "wb_condition_evaluations": 4
+    },
+    {
+      "case": "preparation-failure",
+      "barrier": "fast",
+      "counts": {
+        "all_branches": 2,
+        "selected": 2,
+        "path_sensitive_slice": 2,
+        "boundary_replay": 2
+      },
+      "wb_condition_evaluations": null
+    },
+    {
+      "case": "preparation-failure",
+      "barrier": "slow",
+      "counts": {
+        "all_branches": 2,
+        "selected": 2,
+        "path_sensitive_slice": 2,
+        "boundary_replay": 2
+      },
+      "wb_condition_evaluations": null
+    },
+    {
+      "case": "preparation-failure",
+      "barrier": "alternating",
+      "counts": {
+        "all_branches": 2,
+        "selected": 2,
+        "path_sensitive_slice": 2,
+        "boundary_replay": 2
+      },
+      "wb_condition_evaluations": null
+    },
+    {
+      "case": "payment-failure",
+      "barrier": "fast",
+      "counts": {
+        "all_branches": 172,
+        "selected": 142,
+        "path_sensitive_slice": 137,
+        "boundary_replay": 7
+      },
+      "wb_condition_evaluations": 4
+    },
+    {
+      "case": "payment-failure",
+      "barrier": "slow",
+      "counts": {
+        "all_branches": 181,
+        "selected": 151,
+        "path_sensitive_slice": 146,
+        "boundary_replay": 7
+      },
+      "wb_condition_evaluations": 4
+    },
+    {
+      "case": "payment-failure",
+      "barrier": "alternating",
+      "counts": {
+        "all_branches": 175,
+        "selected": 145,
+        "path_sensitive_slice": 140,
+        "boundary_replay": 7
+      },
+      "wb_condition_evaluations": 4
+    }
+  ],
+  "scope": "Unicorn executes actual ELF bytes; external runtime contracts are substituted. These are not host event/performance results.",
+  "missing_BCC_archive_gate": {
+    "passed": true,
+    "bpf_executed": false,
+    "fixed_query_denominators": {
+      "all_branches": 18,
+      "selected": 18,
+      "path_sensitive_slice": 18,
+      "boundary_replay": 18
+    },
+    "attempted_captures": 1,
+    "all_passed": false
+  },
+  "date": "2026-10-09",
+  "validation_scope": "local native and ELF/runtime-contract substitution; no new host BPF or formal performance results"
+}
