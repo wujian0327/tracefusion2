@@ -8,6 +8,7 @@ import copy
 import re
 from go_object_graph import memory
 from hybrid_model import require
+from path_observation import select_branches
 
 REGS=set('AX BX CX DX SI DI R8 R9 R10 R11 R12 R13 R14 R15 SP BP'.split())
 LOW={'AL':'AX','BL':'BX','CL':'CX','DL':'DX'}
@@ -117,18 +118,7 @@ def analyze(rows,field_offset,max_paths=32,object_size=None):
         walk(next_addr[pc],state,edges,trail)
     walk(entry,dict(regs={'AX':('input',0),'BX':('input',1)},stack={},sinks=[],loads=[],allocations=[],frame_closed=False),[],[])
     require(paths,'No modeled return paths')
-    def separates(selected):
-        groups={}
-        for path in paths:
-            signature=tuple((e['address'],e['taken']) for e in path['branches'] if e['address'] in selected)
-            groups.setdefault(signature,set()).add((path['sink']['input_index'],path['sink']['offset']))
-        return all(len(values)==1 for values in groups.values())
-    selected=set(branches)
-    require(separates(selected),'Control observations cannot distinguish field dependencies')
-    # Deterministic deletion yields an inclusion-minimal set in this finite
-    # path model, not a globally optimal observation policy.
-    for branch in sorted(branches,reverse=True):
-        if separates(selected-{branch}):selected.remove(branch)
+    selected=select_branches(paths,branches,lambda p:(p['sink']['input_index'],p['sink']['offset']))
     return dict(entry=entry,frame_size=frame_size,paths=paths,branches=[branches[a] for a in sorted(branches)],
                 selected_branches=sorted(selected),reachable_addresses=sorted(visited),
                 assumptions=['Go amd64 ABI input pointers AX/BX; immutable live input objects during one invocation',

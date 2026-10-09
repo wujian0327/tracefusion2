@@ -57,7 +57,7 @@ def build_target(args,out,fixture_path=None,planner=None):
     with fixture.open('xb') as f:f.write((fixture_path or HERE/'identity_test.go').read_bytes())
     binary=out/'checkout-identity'
     try:
-        print('Building controlled variant with independent test fixture' if planner else
+        print('Building target with supplied planner and independent test fixture' if planner else
               'Building original checkout function with independent test fixture',flush=True)
         command([args.go,'test','-c','-mod=readonly','-buildvcs=false','-o',binary,'.'])
     finally:fixture.unlink()

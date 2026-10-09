@@ -67,3 +67,6 @@ python3 experiments/checkout-origin-audit/audit_business_paths.py \
 输出目录须不存在。脚本检查固定上游提交、源码干净、Go 版本，正常构建生产二进制，输出六个函数的汇编、ELF 校验后的清单和命令日志。`business-paths-reference.json` 保存本次结果；不同构建路径可能导致 ELF 哈希不同，应重新核对本次产物，而不是复用旧偏移。
 
 本次检查无需让用户再跑 eBPF。待原始 Sum 的字段模型和独立真值验证就绪，再安排新的主机实验。
+
+
+后续实现进度：已新增 [原始 Sum 实验](../checkout-money-sum/README.md)，补充有限整数依赖模型与 Go 值参数适配。本地编译、十个原生用例和单元测试通过，主机 eBPF 结果仍待验证。本核查中的“尚未接入”描述的是核查当时状态。
