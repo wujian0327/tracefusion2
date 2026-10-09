@@ -8,6 +8,7 @@ import (
 	pb "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/genproto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/connectivity"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 	"io"
@@ -16,6 +17,7 @@ import (
 	"runtime"
 	"sync"
 	"testing"
+	"time"
 	"unsafe"
 )
 
@@ -112,6 +114,20 @@ func TestTraceFusionItemIdentity(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer conn.Close()
+	// Establish the transport before the measured order call. Do not warm the
+	// target function: observation still covers exactly one invocation/process.
+	connectCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	conn.Connect()
+	for {
+		state := conn.GetState()
+		if state == connectivity.Ready {
+			break
+		}
+		if !conn.WaitForStateChange(connectCtx, state) {
+			t.Fatal("RPC transport not ready", connectCtx.Err())
+		}
+	}
 	service := &checkoutService{productCatalogSvcConn: conn, currencySvcConn: conn}
 	inputs := make([]*pb.CartItem, n)
 	for i := range inputs {
@@ -120,7 +136,9 @@ func TestTraceFusionItemIdentity(t *testing.T) {
 	if name == "aliased-input" {
 		inputs[2] = inputs[0]
 	}
+	started := time.Now()
 	result, err := service.prepOrderItems(context.Background(), inputs, "EUR")
+	callElapsed := time.Since(started).Nanoseconds()
 	if (err != nil) != (fail != "") {
 		t.Fatal("unexpected error", err)
 	}
@@ -185,6 +203,8 @@ func TestTraceFusionItemIdentity(t *testing.T) {
 			"cost": uint64(uintptr(unsafe.Pointer(v.Cost))), "cost_source_candidates": costCandidates})
 	}
 	doc := map[string]interface{}{"case": name, "inputs": inputPointers, "error": err != nil, "outputs": output, "conversions": conversionRows, "kind": "independent-test-truth-not-BPF"}
+	doc["call_elapsed_ns"] = callElapsed
+	doc["timing_scope"] = "one prepOrderItems call including local RPCs and truth interceptor; transport connected beforehand; BPF setup and truth serialization excluded"
 	data, err := json.MarshalIndent(doc, "", "  ")
 	if err != nil {
 		t.Fatal(err)

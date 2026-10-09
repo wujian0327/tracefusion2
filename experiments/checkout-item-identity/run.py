@@ -26,7 +26,7 @@ CASES=('empty','one','equal-eight','equal-thirty-two','aliased-input',
 def save(path,doc):path.write_text(json.dumps(doc,indent=2)+'\n')
 
 
-def execute(args,out):
+def build_target(args,out):
     require(args.go,'Go 1.25.4 must be on PATH or supplied with --go')
     env=dict(os.environ,GOOS='linux',GOARCH='amd64',CGO_ENABLED='0',GOTOOLCHAIN='local',
              GOTELEMETRY='off',GOFLAGS='',GOEXPERIMENT='',GOAMD64='v1',GO111MODULE='on')
@@ -66,6 +66,19 @@ def execute(args,out):
                               HERE.parent/'checkout-origin-audit/inspect_layout.go',out)
     save(out/'plan.json',plan)
     print(f'Planned {len(plan["sites"])} probe sites; ELF bytes and DWARF checked',flush=True)
+    for strategy in ('boundaries','current','dense_stores'):
+        selected=observer.strategy_plan(plan,strategy)
+        save(out/('plan-'+strategy+'.json'),selected)
+        print(f'{strategy}: {len(selected["sites"])} probe sites',flush=True)
+    return binary,plan,before,command
+
+
+def execute(args,out):
+    binary,plan,before,command=build_target(args,out)
+    if args.mode=='compare':
+        from benchmark import compare
+        compare(args,out,binary,plan,command,CASES)
+        return
     rows=[]
     for case in CASES:
         folder=out/case;folder.mkdir()
@@ -98,11 +111,15 @@ def execute(args,out):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('mode',choices=('build','run'))
+    parser.add_argument('mode',choices=('build','run','compare'))
     parser.add_argument('--checkout',type=Path)
     parser.add_argument('--go',default=os.environ.get('TRACEFUSION_GO') or shutil.which('go'))
     parser.add_argument('--output',type=Path)
+    parser.add_argument('--repeats',type=int,default=5,help='Measured comparison rounds (default 5)')
+    parser.add_argument('--warmups',type=int,default=1,help='Unmeasured fresh-process rounds (default 1)')
+    parser.add_argument('--seed',type=int,default=20261009,help='Reproducible within-round strategy shuffle')
     args=parser.parse_args()
+    require(args.repeats>=3 and args.warmups>=0,'Use at least 3 measured rounds and nonnegative warmups')
     out=(args.output or ROOT/'artifacts'/('checkout-item-identity-'+datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S-%f'))).resolve()
     out.mkdir(parents=True,exist_ok=False)
     try:execute(args,out)

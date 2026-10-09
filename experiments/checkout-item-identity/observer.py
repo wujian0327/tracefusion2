@@ -1,10 +1,11 @@
 """Bounded reference identity observation, not heap write-history reconstruction."""
 import ctypes as ct
+import copy
 import hashlib
 import json
 import re
 from go_byte_adapter import assembly_rows, GO_REGS, PT_REGS
-from go_object_graph import analyze
+from go_object_graph import analyze, memory
 from go_string_adapter import file_offset, physical_probes
 from hybrid_model import require
 from string_capture import HEADER
@@ -69,12 +70,45 @@ def plan_binary(binary, command, layout_reader, out):
     for r in graph['returns']:
         add(r['address'], 'exit')
     require(len({s['address'] for s in sites}) == len(sites), 'Overlapping probes')
+    # A deliberately explicit denser control: all reachable MOVQ register-to-
+    # memory stores in this function, including spills and write-barrier stores.
+    # This is not full-program instruction tracing or a taint baseline.
+    inventory=[]
+    for row in rows:
+        if str(row['address']) not in graph['cfg']:continue
+        op,_,args=row['asm'].partition(' ')
+        operands=re.split(r',\s+',args)
+        if op!='MOVQ' or len(operands)!=2 or operands[0] not in GO_REGS:continue
+        mem=memory(operands[1])
+        if not mem or mem['base'] not in GO_REGS or (mem['index'] and mem['index'] not in GO_REGS):continue
+        inventory.append(dict(address=row['address'],file_offset=file_offset(data,row['address']),
+                              asm=row['asm'],kind='store_operand',memory=mem,value=operands[0]))
     return dict(schema_version=2,binary_sha256=hashlib.sha256(data).hexdigest(), function=FUNCTION,
                 go='go1.25.4', item_offset=offsets['Item'], cost_offset=offsets['Cost'], layout=layout, max_items=LIMIT,
-                sites=sites, event_order=[s['id'] for s in sites],
+                sites=sites, event_order=[s['id'] for s in sites], store_inventory=inventory,
                 scope='One call/process; live object reference identity only; not field contents or write history',
                 abi={'input_slice':'DI/SI', 'output_slice':'AX/BX', 'error':'DI/SI', 'goroutine':'R14',
                      'conversion_input':'DI', 'conversion_result':'AX', 'conversion_error':'BX/CX'})
+
+
+def strategy_plan(plan,strategy):
+    require(plan.get('schema_version')==2,'Strategy comparison requires Item/Cost v2')
+    require(strategy in ('boundaries','current','dense_stores'),'Unknown strategy')
+    result=copy.deepcopy(plan)
+    result['strategy']=strategy
+    result['operand_witnesses']=strategy!='boundaries'
+    if strategy=='boundaries':
+        result['sites']=[s for s in result['sites'] if s['kind']!='field_operand']
+    elif strategy=='dense_stores':
+        require('store_inventory' in plan,'Missing static store inventory')
+        addresses={s['address'] for s in result['sites']}
+        next_id=max(s['id'] for s in result['sites'])+1
+        for candidate in plan['store_inventory']:
+            if candidate['address'] in addresses:continue
+            result['sites'].append(dict(candidate,id=next_id));next_id+=1
+            addresses.add(candidate['address'])
+    result['event_order']=[s['id'] for s in result['sites']]
+    return result
 
 
 class Raw(ct.Structure):
@@ -115,6 +149,11 @@ static __always_inline u64 readptr(struct event_t *e,u64 address) {
             code = f'e->a={reg(s["base"])};e->b={reg(s["value"])};'
         elif kind=='conversion_enter':code='e->a=ctx->di;'
         elif kind=='conversion_return':code='e->a=ctx->ax;e->b=ctx->bx;e->c=ctx->cx;'
+        elif kind=='store_operand':
+            mem=s['memory'];address=reg(mem['base'])
+            if mem['index']:address+=f'+{reg(mem["index"])}*{mem["scale"]}'
+            address+=f'+({mem["offset"]})'
+            code=f'e->a={address};e->b={reg(s["value"])};'
         elif kind=='publication':
             code = f'e->a={reg(s["base"])};e->n={reg(s["index"])};if(e->n>=32)e->error=1;else {{e->b=readptr(e,e->a+8*e->n);e->c=e->b?readptr(e,e->b+{plan["item_offset"]}):0;e->d=e->b?readptr(e,e->b+{plan["cost_offset"]}):0;}}'
         else:raise ValueError('Unknown probe kind')
@@ -138,6 +177,8 @@ def decode_record(data,size,sites):
 
 def infer(plan,doc):
     with_cost=plan.get('schema_version',1)==2
+    operand_witnesses=plan.get('operand_witnesses',True)
+    require(operand_witnesses or plan.get('strategy')=='boundaries','Undeclared omission of operand evidence')
     require(plan.get('schema_version',1) in (1,2),'Unsupported plan schema')
     require(doc['binary_sha256']==plan['binary_sha256'],'Wrong binary')
     require(not doc['capture_errors'] and doc['returncode']==0,'Capture/target failed')
@@ -172,15 +213,17 @@ def infer(plan,doc):
         elif e['kind']=='publication':
             require(e['n']<LIMIT and e['a'] and e['b'] and e['c'],'Invalid publication')
             witness=latest.get((e['b'],'Item'))
-            require(witness is not None and witness['b']==e['c'],'Missing/mismatching latest observed field operand')
+            if operand_witnesses:require(witness is not None and witness['b']==e['c'],'Missing/mismatching latest observed field operand')
             publication=dict(e)
             if with_cost:
                 require(pending is None and e['d'],'Publication during conversion or nil Cost')
                 witness=latest.get((e['b'],'Cost'))
-                require(witness is not None and witness['b']==e['d'],'Missing/mismatching Cost operand')
+                if operand_witnesses:require(witness is not None and witness['b']==e['d'],'Missing/mismatching Cost operand')
                 publication['cost_candidates']=[i for i,c in enumerate(conversions) if not c['error'] and c['result']==e['d']]
             publications[e['a'],e['n']]=publication
             publication_count+=1
+        elif e['kind']=='store_operand' and plan.get('strategy')=='dense_stores':
+            pass # Additional store observations are not needed for the identity query.
         else:raise ValueError('Unexpected intermediate boundary')
     require(pending is None,'Unfinished conversion call')
     failed=bool(exit['b'])
