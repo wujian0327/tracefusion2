@@ -89,7 +89,25 @@ func TestTraceFusionItemIdentity(t *testing.T) {
 	pb.RegisterCurrencyServiceServer(server, peer)
 	go server.Serve(listener)
 	defer server.Stop()
-	conn, err := grpc.NewClient(listener.Addr().String(), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	// Independent truth at the test client's RPC boundary. These references also
+	// keep objects alive; addresses are not treated as lifetime-independent IDs.
+	type conversionTruth struct {
+		Input  *pb.Money
+		Reply  *pb.Money
+		Failed bool
+	}
+	var conversionMu sync.Mutex
+	conversions := []conversionTruth{}
+	interceptor := func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoke grpc.UnaryInvoker, opts ...grpc.CallOption) error {
+		err := invoke(ctx, method, req, reply, cc, opts...)
+		if request, ok := req.(*pb.CurrencyConversionRequest); ok {
+			conversionMu.Lock()
+			conversions = append(conversions, conversionTruth{request.From, reply.(*pb.Money), err != nil})
+			conversionMu.Unlock()
+		}
+		return err
+	}
+	conn, err := grpc.NewClient(listener.Addr().String(), grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithUnaryInterceptor(interceptor))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -114,6 +132,33 @@ func TestTraceFusionItemIdentity(t *testing.T) {
 	}
 	inputPointers := []uint64{}
 	output := []map[string]interface{}{}
+	conversionMu.Lock()
+	defer conversionMu.Unlock()
+	expectedConversions := n
+	if fail == "product" {
+		expectedConversions = 1
+	}
+	if fail == "currency" {
+		expectedConversions = 2
+	}
+	if len(conversions) != expectedConversions {
+		t.Fatal("unexpected conversion count")
+	}
+	conversionRows := []map[string]interface{}{}
+	seenReplies := map[*pb.Money]bool{}
+	for _, c := range conversions {
+		var resultPointer uint64
+		if !c.Failed {
+			if seenReplies[c.Reply] {
+				t.Fatal("successful RPC replies unexpectedly aliased")
+			}
+			seenReplies[c.Reply] = true
+			resultPointer = uint64(uintptr(unsafe.Pointer(c.Reply)))
+		}
+		// The original convertCurrency wrapper returns nil on error; a failed
+		// RPC's allocated reply is not a successful wrapper-return source.
+		conversionRows = append(conversionRows, map[string]interface{}{"input": uint64(uintptr(unsafe.Pointer(c.Input))), "result": resultPointer, "error": c.Failed})
+	}
 	for _, v := range inputs {
 		inputPointers = append(inputPointers, uint64(uintptr(unsafe.Pointer(v))))
 	}
@@ -127,9 +172,19 @@ func TestTraceFusionItemIdentity(t *testing.T) {
 				candidates = append(candidates, j)
 			}
 		}
-		output = append(output, map[string]interface{}{"object": uint64(uintptr(unsafe.Pointer(v))), "item": uint64(uintptr(unsafe.Pointer(v.Item))), "source_candidates": candidates})
+		costCandidates := []int{}
+		for j, c := range conversions {
+			if !c.Failed && v.Cost == c.Reply {
+				costCandidates = append(costCandidates, j)
+			}
+		}
+		if len(costCandidates) != 1 || costCandidates[0] != i || v.Cost.Units != 14 || v.Cost.CurrencyCode != "EUR" {
+			t.Fatal("upstream Cost relation or fixture value changed")
+		}
+		output = append(output, map[string]interface{}{"object": uint64(uintptr(unsafe.Pointer(v))), "item": uint64(uintptr(unsafe.Pointer(v.Item))), "source_candidates": candidates,
+			"cost": uint64(uintptr(unsafe.Pointer(v.Cost))), "cost_source_candidates": costCandidates})
 	}
-	doc := map[string]interface{}{"case": name, "inputs": inputPointers, "error": err != nil, "outputs": output, "kind": "independent-test-truth-not-BPF"}
+	doc := map[string]interface{}{"case": name, "inputs": inputPointers, "error": err != nil, "outputs": output, "conversions": conversionRows, "kind": "independent-test-truth-not-BPF"}
 	data, err := json.MarshalIndent(doc, "", "  ")
 	if err != nil {
 		t.Fatal(err)
@@ -139,4 +194,5 @@ func TestTraceFusionItemIdentity(t *testing.T) {
 	}
 	runtime.KeepAlive(inputs)
 	runtime.KeepAlive(result)
+	runtime.KeepAlive(conversions)
 }

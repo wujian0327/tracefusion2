@@ -12,6 +12,7 @@ from string_capture import HEADER
 LIMIT = 32
 FUNCTION = 'github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice.(*checkoutService).prepOrderItems'
 TYPE = 'github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/genproto.OrderItem'
+CONVERT = FUNCTION.rsplit('.',1)[0]+'.convertCurrency'
 
 
 def plan_binary(binary, command, layout_reader, out):
@@ -25,9 +26,11 @@ def plan_binary(binary, command, layout_reader, out):
         code = bytes.fromhex(row['code'])
         require(data[offset:offset+len(code)] == code, 'Instruction bytes differ')
     layout = json.loads(command(['run', str(layout_reader), str(binary), TYPE]))[TYPE]
-    fields = [f for f in layout['fields'] if f['name'] == 'Item' and f['size'] == 8]
-    require(len(fields) == 1, 'Missing pointer-sized Item field')
-    offset = fields[0]['offset']
+    offsets = {}
+    for name in ('Item','Cost'):
+        fields = [f for f in layout['fields'] if f['name'] == name and f['size'] == 8]
+        require(len(fields) == 1, 'Missing pointer-sized '+name+' field')
+        offsets[name] = fields[0]['offset']
     graph = analyze(rows, FUNCTION, allow_indirect_calls=True)
     by_addr = {r['address']: r for r in rows}
     sites = []
@@ -37,12 +40,22 @@ def plan_binary(binary, command, layout_reader, out):
                           kind=kind, asm=r['asm'], **kw))
     add(graph['frame_entry'], 'entry')
     stores = graph['stores']
-    candidates = [s for s in stores if s['asm'].startswith('MOVQ ') and
-                  s['memory']['offset'] == offset and not s['memory']['index'] and
-                  s['value_operand'] in GO_REGS and s['memory']['base'] not in ('SP','BP')]
-    require(candidates, 'No candidate Item-offset stores')
-    for s in candidates:
-        add(s['address'], 'field_operand', base=s['memory']['base'], value=s['value_operand'])
+    for field,offset in offsets.items():
+        candidates = [s for s in stores if s['asm'].startswith('MOVQ ') and
+                      s['memory']['offset'] == offset and not s['memory']['index'] and
+                      s['value_operand'] in GO_REGS and s['memory']['base'] not in ('SP','BP')]
+        require(candidates, 'No candidate '+field+'-offset stores')
+        for s in candidates:
+            add(s['address'], 'field_operand', field=field, base=s['memory']['base'], value=s['value_operand'])
+    calls = [r for r in rows if r['asm']=='CALL '+CONVERT+'(SB)']
+    require(len(calls)==1,'Requires one direct convertCurrency call site')
+    call=calls[0]
+    require(bytes.fromhex(call['code'])[0]==0xe8,'Expected direct CALL encoding')
+    continuation=call['address']+len(bytes.fromhex(call['code']))
+    incoming=[int(a) for a,targets in graph['cfg'].items() if continuation in targets]
+    require(incoming==[call['address']],'Conversion continuation has another predecessor')
+    add(call['address'],'conversion_enter')
+    add(continuation,'conversion_return',call_address=call['address'])
     publications = [s for s in stores if s['asm'].startswith('MOVQ ') and
                     s['memory']['index'] and s['memory']['scale'] == 8 and
                     s['value_operand'] in GO_REGS and s['memory']['offset'] == 0]
@@ -56,23 +69,24 @@ def plan_binary(binary, command, layout_reader, out):
     for r in graph['returns']:
         add(r['address'], 'exit')
     require(len({s['address'] for s in sites}) == len(sites), 'Overlapping probes')
-    return dict(binary_sha256=hashlib.sha256(data).hexdigest(), function=FUNCTION,
-                go='go1.25.4', item_offset=offset, layout=layout, max_items=LIMIT,
+    return dict(schema_version=2,binary_sha256=hashlib.sha256(data).hexdigest(), function=FUNCTION,
+                go='go1.25.4', item_offset=offsets['Item'], cost_offset=offsets['Cost'], layout=layout, max_items=LIMIT,
                 sites=sites, event_order=[s['id'] for s in sites],
                 scope='One call/process; live object reference identity only; not field contents or write history',
-                abi={'input_slice':'DI/SI', 'output_slice':'AX/BX', 'error':'DI/SI', 'goroutine':'R14'})
+                abi={'input_slice':'DI/SI', 'output_slice':'AX/BX', 'error':'DI/SI', 'goroutine':'R14',
+                     'conversion_input':'DI', 'conversion_result':'AX', 'conversion_error':'BX/CX'})
 
 
 class Raw(ct.Structure):
-    _fields_ = [(k,ct.c_uint64) for k in ('timestamp','pid_tid','g','a','b','c','n')] + [
+    _fields_ = [(k,ct.c_uint64) for k in ('timestamp','pid_tid','g','a','b','c','d','n')] + [
         ('site',ct.c_uint32), ('error',ct.c_uint32),
-        ('values',ct.c_uint64*LIMIT), ('items',ct.c_uint64*LIMIT)]
+        ('values',ct.c_uint64*LIMIT), ('items',ct.c_uint64*LIMIT), ('costs',ct.c_uint64*LIMIT)]
 
 
 def source(plan, pid, namespace):
     # Reuse namespace filtering, counters, zeroing and perf submission unchanged.
     header = re.sub(r'struct event_t \{.*?\};',
-        'struct event_t { u64 timestamp,pid_tid,g,a,b,c,n; u32 site,error; u64 values[32],items[32]; };',
+        'struct event_t { u64 timestamp,pid_tid,g,a,b,c,d,n; u32 site,error; u64 values[32],items[32],costs[32]; };',
         HEADER, count=1, flags=re.S)
     start = header.index('static __always_inline void snapshot(')
     end = header.index('static __always_inline struct event_t *begin',start)
@@ -93,12 +107,17 @@ static __always_inline u64 readptr(struct event_t *e,u64 address) {
  for(int i=0;i<32;i++) { if(i<e->n) {
  e->values[i]=readptr(e,e->a+8*i);
 '''
-            if kind=='exit':code+=f'e->items[i]=e->values[i]?readptr(e,e->values[i]+{plan["item_offset"]}):0;'
+            if kind=='exit':
+                code+=f'e->items[i]=e->values[i]?readptr(e,e->values[i]+{plan["item_offset"]}):0;'
+                code+=f'e->costs[i]=e->values[i]?readptr(e,e->values[i]+{plan["cost_offset"]}):0;'
             code += '} }'
         elif kind=='field_operand':
             code = f'e->a={reg(s["base"])};e->b={reg(s["value"])};'
-        else:
-            code = f'e->a={reg(s["base"])};e->n={reg(s["index"])};if(e->n>=32)e->error=1;else {{e->b=readptr(e,e->a+8*e->n);e->c=e->b?readptr(e,e->b+{plan["item_offset"]}):0;}}'
+        elif kind=='conversion_enter':code='e->a=ctx->di;'
+        elif kind=='conversion_return':code='e->a=ctx->ax;e->b=ctx->bx;e->c=ctx->cx;'
+        elif kind=='publication':
+            code = f'e->a={reg(s["base"])};e->n={reg(s["index"])};if(e->n>=32)e->error=1;else {{e->b=readptr(e,e->a+8*e->n);e->c=e->b?readptr(e,e->b+{plan["item_offset"]}):0;e->d=e->b?readptr(e,e->b+{plan["cost_offset"]}):0;}}'
+        else:raise ValueError('Unknown probe kind')
         header += f'\nint probe_{s["id"]}(struct pt_regs *ctx) {{ struct event_t *e=begin(ctx,{s["id"]});if(!e)return 0;{code}\nsubmit(ctx,e);return 0;}}\n'
     return header
 
@@ -108,15 +127,18 @@ def decode_record(data,size,sites):
     require(size in (n,padded), f'Event layout mismatch: {size}, expected {n}/{padded}')
     raw=Raw.from_buffer_copy(ct.string_at(data,n))
     require(raw.site in sites and not raw.error, 'Unknown site or failed memory read')
-    doc={k:int(getattr(raw,k)) for k in ('timestamp','pid_tid','g','a','b','c','n','site')}
+    doc={k:int(getattr(raw,k)) for k in ('timestamp','pid_tid','g','a','b','c','d','n','site')}
     doc['kind']=sites[raw.site]['kind']
     require(raw.n<=LIMIT,'Snapshot exceeds item limit')
     doc['values']=list(raw.values)[:raw.n] if doc['kind'] in ('entry','exit') else []
     doc['items']=list(raw.items)[:raw.n] if doc['kind']=='exit' else []
+    doc['costs']=list(raw.costs)[:raw.n] if doc['kind']=='exit' else []
     return doc
 
 
 def infer(plan,doc):
+    with_cost=plan.get('schema_version',1)==2
+    require(plan.get('schema_version',1) in (1,2),'Unsupported plan schema')
     require(doc['binary_sha256']==plan['binary_sha256'],'Wrong binary')
     require(not doc['capture_errors'] and doc['returncode']==0,'Capture/target failed')
     events=sorted(doc['events'],key=lambda e:e['timestamp'])
@@ -133,16 +155,34 @@ def infer(plan,doc):
     inputs=entry['values']
     require(entry['n']==len(inputs)<=LIMIT and all(inputs),'Invalid input snapshot')
     require(exit['n']==len(exit['values'])==len(exit['items']) and exit['n']<=LIMIT,'Invalid output snapshot')
+    if with_cost:require(len(exit['costs'])==exit['n'],'Invalid Cost snapshot')
     latest={};publications={};publication_count=0
+    conversions=[];pending=None
     for e in events[1:-1]:
-        if e['kind']=='field_operand':latest[e['a']]=e
+        if e['kind']=='field_operand':latest[e['a'],sites[e['site']].get('field','Item')]=e
+        elif with_cost and e['kind']=='conversion_enter':
+            require(pending is None and e['a'] and len(conversions)<LIMIT,'Invalid/nested conversion entry')
+            pending=e
+        elif with_cost and e['kind']=='conversion_return':
+            require(pending is not None,'Conversion return without entry')
+            failed=bool(e['b'])
+            require((failed and e['a']==0) or (not failed and e['a']!=0),'Unsupported conversion return')
+            conversions.append(dict(input=pending['a'],result=e['a'],error=failed))
+            pending=None
         elif e['kind']=='publication':
             require(e['n']<LIMIT and e['a'] and e['b'] and e['c'],'Invalid publication')
-            witness=latest.get(e['b'])
+            witness=latest.get((e['b'],'Item'))
             require(witness is not None and witness['b']==e['c'],'Missing/mismatching latest observed field operand')
-            publications[e['a'],e['n']]=e
+            publication=dict(e)
+            if with_cost:
+                require(pending is None and e['d'],'Publication during conversion or nil Cost')
+                witness=latest.get((e['b'],'Cost'))
+                require(witness is not None and witness['b']==e['d'],'Missing/mismatching Cost operand')
+                publication['cost_candidates']=[i for i,c in enumerate(conversions) if not c['error'] and c['result']==e['d']]
+            publications[e['a'],e['n']]=publication
             publication_count+=1
         else:raise ValueError('Unexpected intermediate boundary')
+    require(pending is None,'Unfinished conversion call')
     failed=bool(exit['b'])
     require(not failed or exit['n']==0,'Partial output on error')
     outputs=[]
@@ -152,14 +192,30 @@ def infer(plan,doc):
         candidates=[j for j,v in enumerate(inputs) if v==item]
         outputs.append(dict(object=obj,item=item,source_candidates=candidates,
             status='exact_reference' if len(candidates)==1 else 'ambiguous_input_position' if candidates else 'unknown'))
-    return dict(inputs=inputs,error=failed,outputs=outputs,publications=publication_count,
+        if with_cost:
+            require(p['d']==exit['costs'][i],'Final Cost differs from publication')
+            candidates=p['cost_candidates']
+            outputs[-1].update(cost=exit['costs'][i],cost_source_candidates=candidates,
+                cost_status='exact_reference' if len(candidates)==1 else 'ambiguous_conversion_instance' if candidates else 'unknown')
+    result=dict(inputs=inputs,error=failed,outputs=outputs,publications=publication_count,
                 observed_threads=len({e['pid_tid'] for e in events}),
                 claim='Final Item reference identity; no attribution of contents, input slot reads, or complete write history')
+    if with_cost:
+        result.update(conversions=conversions,claim='Final Item and Cost reference identity; Cost candidates are prior successful conversion returns; no numeric computation or complete write history')
+    return result
 
 
 def evaluate(inference, truth):
     require(inference['inputs']==truth['inputs'] and inference['error']==truth['error'],'Boundary truth differs')
-    actual=[{k:o[k] for k in ('object','item','source_candidates')} for o in inference['outputs']]
+    keys=('object','item','source_candidates')
+    if 'conversions' in inference:
+        require(inference['conversions']==truth['conversions'],'Conversion boundary truth differs')
+        keys+=('cost','cost_source_candidates')
+    actual=[{k:o[k] for k in keys} for o in inference['outputs']]
     require(actual==truth['outputs'],'Reference attribution differs from independent truth')
-    return dict(case=truth['case'],passed=True,outputs=len(actual),
+    result=dict(case=truth['case'],passed=True,outputs=len(actual),
                 ambiguous=sum(o['status']=='ambiguous_input_position' for o in inference['outputs']))
+    if 'conversions' in inference:
+        result.update(conversions=len(inference['conversions']),cost_outputs=len(actual),
+                      cost_ambiguous=sum(o['cost_status']=='ambiguous_conversion_instance' for o in inference['outputs']))
+    return result

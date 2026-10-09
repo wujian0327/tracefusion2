@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build or collect one-call checkout Item-reference experiments; archive failures too."""
+"""Build or collect one-call checkout Item/Cost identity experiments; archive failures too."""
 import argparse
 from datetime import datetime, timezone
 import hashlib
@@ -74,7 +74,8 @@ def execute(args,out):
         if args.mode=='build':
             command([binary],extra=extra,input='x')
             doc=json.loads(truth.read_text())
-            rows.append(dict(case=case,native_fixture_passed=True,outputs=len(doc['outputs'])))
+            rows.append(dict(case=case,native_fixture_passed=True,outputs=len(doc['outputs']),
+                             conversions=len(doc['conversions'])))
         else:
             print('Collecting '+case,flush=True)
             previous={k:os.environ.get(k) for k in extra}
@@ -88,7 +89,7 @@ def execute(args,out):
             inference=observer.infer(plan,captured)
             save(folder/'inference.json',inference)
             rows.append(observer.evaluate(inference,json.loads(truth.read_text())))
-    report=dict(mode=args.mode,cases=rows,all_passed=True,bpf_executed=args.mode=='run',
+    report=dict(mode=args.mode,schema_version=plan['schema_version'],cases=rows,all_passed=True,bpf_executed=args.mode=='run',
                 upstream_commit=COMMIT,main_go_sha256=before,tracked_source_unchanged=True,
                 scope=plan['scope'],deployment='test executable; local mock gRPC peers; not full shop or production binary')
     save(out/'summary.json',report)
