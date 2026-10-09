@@ -104,10 +104,13 @@ def analyze(rows,field_offset,max_paths=32,object_size=None):
         elif op.startswith('NOP'):pass
         elif op=='RET':
             require(state['frame_closed'],'Return without modeled frame teardown')
-            require(len(state['sinks'])==1 and len(state['allocations'])==1,'Requires one completed sink store per path')
-            sink=state['sinks'][0]
+            require(state['sinks'] and len(state['allocations'])==1,'Requires completed sink stores to one fresh object')
+            # Every accepted store covers the same entire field of the sole
+            # fresh allocation. A later exact store kills its previous origin.
+            # Partial/unknown/aliased writes are rejected in assign(), not skipped.
+            sink=state['sinks'][-1]
             require(reg('AX')==('allocation',sink['object']),'Return is not the sink fresh object')
-            paths.append(dict(id=len(paths),branches=edges,loads=state['loads'],sink=sink,return_address=pc))
+            paths.append(dict(id=len(paths),branches=edges,loads=state['loads'],writes=state['sinks'],sink=sink,return_address=pc))
             return
         else:raise ValueError('Unsupported instruction: '+by_addr[pc]['asm'])
         require(pc in next_addr,'Fallthrough outside function')
@@ -130,5 +133,5 @@ def analyze(rows,field_offset,max_paths=32,object_size=None):
                 selected_branches=sorted(selected),reachable_addresses=sorted(visited),
                 assumptions=['Go amd64 ABI input pointers AX/BX; immutable live input objects during one invocation',
                     'Trusted runtime.newobject preserves caller spill origins and returns fresh storage for the configured object layout',
-                    'Only modeled acyclic exact field copies, one fresh allocation and one sink field store per path',
+                    'Only modeled acyclic exact field copies to one field of one fresh allocation; last full store determines its returned origin',
                     'No unobserved unsafe/concurrent mutation or asynchronous frame writes'])

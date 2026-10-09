@@ -14,9 +14,9 @@ FUNCTION='github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice.
 TYPE='github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/genproto.Money'
 
 
-def plan_binary(binary,command,reader,out):
+def plan_binary(binary,command,reader,out,function=FUNCTION):
     data=binary.read_bytes()
-    asm=command(['tool','objdump','-s','^'+re.escape(FUNCTION)+'$',str(binary)])
+    asm=command(['tool','objdump','-s','^'+re.escape(function)+'$',str(binary)])
     (out/'function.asm').write_text(asm);rows=assembly_rows(asm)
     require(rows,'Missing optimized function; no fallback to source interpretation')
     for row in rows:
@@ -32,21 +32,23 @@ def plan_binary(binary,command,reader,out):
                           kind=kind,asm=by_addr[address]['asm'],**kw))
     add(flow['entry'],'entry')
     for branch in flow['branches']:
-        if branch['address'] in flow['selected_branches']:add(branch['address'],'branch',op=branch['op'])
+        add(branch['address'],'branch',op=branch['op'])
     for address in sorted({p['return_address'] for p in flow['paths']}):add(address,'exit')
     require(len({s['address'] for s in sites})==len(sites),'Overlapping observation sites')
     (out/'field-flow.json').write_text(json.dumps(flow,indent=2)+'\n')
-    return dict(adapter='bounded-go-field-choice-v1',binary_sha256=hashlib.sha256(data).hexdigest(),
-                function=FUNCTION,go='go1.25.4',field='Units',field_offset=field_offset,layout=layout,
-                flow=flow,sites=sites,event_order=[s['id'] for s in sites],strategy='selected',
+    selected=[s for s in sites if s['kind']!='branch' or s['address'] in flow['selected_branches']]
+    return dict(adapter='bounded-go-field-choice-v2',binary_sha256=hashlib.sha256(data).hexdigest(),
+                function=function,go='go1.25.4',field='Units',field_offset=field_offset,layout=layout,
+                flow=flow,all_sites=sites,sites=selected,event_order=[s['id'] for s in selected],strategy='selected',
                 scope='Controlled variant; acyclic immutable int64 field copy to one fresh object; not original checkout logic',
                 abi={'inputs':['AX','BX'],'result':'AX','goroutine':'R14','branch_flags':'x86 RFLAGS ZF'})
 
 
 def strategy_plan(plan,strategy):
-    require(strategy in ('selected','boundaries'),'Unknown field-choice policy')
+    require(strategy in ('selected','boundaries','all_branches'),'Unknown field-choice policy')
     result=copy.deepcopy(plan);result['strategy']=strategy
     if strategy=='boundaries':result['sites']=[s for s in result['sites'] if s['kind']!='branch']
+    if strategy=='all_branches':result['sites']=copy.deepcopy(plan['all_sites'])
     result['event_order']=[s['id'] for s in result['sites']]
     return result
 
@@ -131,7 +133,7 @@ def infer(plan,doc):
 def evaluate(plan,inferred,truth):
     for key in ('input_objects','input_values','output_object','output_value'):
         require(inferred[key]==truth[key],'Boundary truth differs: '+key)
-    if plan['strategy']=='selected':
+    if plan['strategy'] in ('selected','all_branches'):
         require(inferred['status']=='exact_field_source' and inferred['source_candidates']==truth['source_candidates'],'Selected source differs from independent truth')
         require(inferred['source_field_addresses']==[truth['source_field_address']],'Field address differs')
     else:

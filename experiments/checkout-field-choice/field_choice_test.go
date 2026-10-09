@@ -12,6 +12,7 @@ import (
 	"net"
 	"os"
 	"runtime"
+	"strings"
 	"testing"
 	"unsafe"
 )
@@ -19,6 +20,23 @@ import (
 // An ordinary function value retains a separately callable optimized function;
 // no noinline directive or disabled compiler optimization is used.
 var fieldSelector = chooseUnits
+var overwriteSelector = overwriteUnits
+
+// Both conditions and all field stores survive the pinned optimized build.
+// The first choice is killed by the final full-field assignment on both arms.
+func overwriteUnits(a, b *pb.Money, firstB, finalB bool) *pb.Money {
+	out := &pb.Money{CurrencyCode: "EUR"}
+	out.Units = a.Units
+	if firstB {
+		out.Units = b.Units
+	}
+	if finalB {
+		out.Units = b.Units
+	} else {
+		out.Units = a.Units
+	}
+	return out
+}
 
 func chooseUnits(a, b *pb.Money, useB bool) *pb.Money {
 	out := &pb.Money{CurrencyCode: "EUR"}
@@ -51,18 +69,30 @@ func (*choicePeer) Convert(ctx context.Context, r *pb.CurrencyConversionRequest)
 
 func TestFieldChoice(t *testing.T) {
 	name := os.Getenv("TRACEFUSION_IDENTITY_CASE")
+	overwrite := os.Getenv("TRACEFUSION_FIELD_VARIANT") == "overwrite"
+	firstB := false
 	useB, different := false, false
-	switch name {
-	case "equal-a":
-	case "equal-b":
-		useB = true
-	case "different-a":
-		different = true
-	case "different-b":
-		different = true
-		useB = true
-	default:
-		t.Fatal("unknown case", name)
+	if overwrite {
+		parts := strings.Split(name, "-")
+		if len(parts) != 2 || (parts[0] != "equal" && parts[0] != "different") ||
+			(parts[1] != "aa" && parts[1] != "ab" && parts[1] != "ba" && parts[1] != "bb") {
+			t.Fatal("unknown overwrite case", name)
+		}
+		different = parts[0] == "different"
+		firstB, useB = parts[1][0] == 'b', parts[1][1] == 'b'
+	} else {
+		switch name {
+		case "equal-a":
+		case "equal-b":
+			useB = true
+		case "different-a":
+			different = true
+		case "different-b":
+			different = true
+			useB = true
+		default:
+			t.Fatal("unknown case", name)
+		}
 	}
 	listener, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
@@ -93,7 +123,12 @@ func TestFieldChoice(t *testing.T) {
 	if a == b {
 		t.Fatal("RPC replies must be distinct live objects")
 	}
-	result := fieldSelector(a, b, useB)
+	var result *pb.Money
+	if overwrite {
+		result = overwriteSelector(a, b, firstB, useB)
+	} else {
+		result = fieldSelector(a, b, useB)
+	}
 	expected, index := a, 0
 	if useB {
 		expected = b
