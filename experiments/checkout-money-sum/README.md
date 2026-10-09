@@ -66,4 +66,4 @@ python3 experiments/checkout-money-sum/run.py build
 python3 -m unittest discover -s experiments/checkout-money-sum -p 'test_*.py' -v
 ```
 
-支持 `--checkout`、`--go` 和 `--output`。本地已完成：原始函数正常优化编译、ELF/DWARF/保存指令校验、十个原生用例及 15 项单元测试；此前字段选择/覆盖的 17 项测试通过。**尚未执行本实验的主机 eBPF 采集，不能将本地 build 成功说成动态溯源已通过。**
+支持 `--checkout`、`--go` 和 `--output`。本地已完成：原始函数正常优化编译、ELF/DWARF/保存指令校验、十个原生用例及 15 项单元测试；此前字段选择/覆盖的 17 项测试通过。**主机 eBPF 验证已完成**：`checkout-money-sum-20261009-032140-383206.zip` 的 30 次采集、125 个事件已逐项重放；181 条汇编指令与 ELF 一致，静态模型重新推导一致，30 份采集程序核对一致。selected / all_branches 各七个成功用例精确归因、三个错误输入正确识别；boundaries 七个成功用例保留歧义、三个错误输入正确识别。未报告丢事件、读取、提交或 namespace 错误。三组事件总数依次为 27 / 78 / 20；约 65.4% 是 selected 相对 all_branches 的本组事件减少比例，不是耗时或 CPU 改善。
