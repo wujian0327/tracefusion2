@@ -1,0 +1,27 @@
+{
+  "kind": "local_protocol_validation_not_checkout_or_kernel_evidence",
+  "date": "2026-10-09",
+  "base_commit": "8bd66b5643516390c13c135f4c49aeef555d075c",
+  "python": "3.12.14",
+  "payment_replay_and_performance_tests": 22,
+  "existing_sum_numeric_tests": 15,
+  "tests_passed": true,
+  "checks": [
+    "same-G serial invocations use fresh replay state and distinct source-return identity",
+    "missing completion, whole invocation, cross-G events and duplicate timestamps rejected",
+    "raw perf sample encode/decode, truncation and global counter consistency checked",
+    "warmup cut and fixed measured-query denominator checked",
+    "wrong field truth saves failed evaluation before refusing performance summary",
+    "paired blocks, nearest-rank percentiles and unavailable-metric handling checked",
+    "fake gated subprocess verifies phase control, standalone collector entry and failure diagnostics",
+    "Python syntax, CLI entry and git diff whitespace checked"
+  ],
+  "native_checkout_build_attempted": true,
+  "native_checkout_build_passed": false,
+  "build_blocker": "Go 1.25.4 is not installed in this workspace",
+  "go_fixture_compiled": false,
+  "bcc_compiled": false,
+  "bpf_attached": false,
+  "performance_protocol_executed": false,
+  "scope": "Python semantic/protocol tests use synthetic events and fake gated executables; no original business, BPF or performance success is claimed"
+}
