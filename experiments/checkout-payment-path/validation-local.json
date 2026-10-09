@@ -1,0 +1,32 @@
+{
+  "kind": "local_validation_not_kernel_evidence",
+  "date": "2026-10-09",
+  "upstream_commit": "474d0f2eb73d97525234995a40d7781b7923a07d",
+  "main_go_sha256": "862b2c7bba24205db7ed81ec8af7fd9abb960245e3df1c56a1b497d34d4b39c0",
+  "money_go_sha256": "c7e81c0e8e24cafce6ccf35b9846d76cea114969998355db34d01169687e67f3",
+  "binary_sha256": "5dbd18659ef91e781aab4d054a8567cb090a19c85d8ee65010032230a2101821",
+  "fixture_sha256": "0cf40702241a85f5e37a47f0c5023c1dbd81428f8c41f18d6360bf5c3f24d171",
+  "native_cases": [
+    "empty",
+    "one",
+    "one-repeated",
+    "equal-eight",
+    "equal-eight-repeated",
+    "equal-thirty-two",
+    "equal-thirty-two-repeated",
+    "carry",
+    "preparation-failure",
+    "payment-failure"
+  ],
+  "native_all_passed": true,
+  "semantic_replay_tests": 7,
+  "existing_numeric_tests": 15,
+  "selected_static_probe_sites": 106,
+  "all_branch_static_probe_sites": 114,
+  "elf_and_dwarf_checked": true,
+  "c_syntax_layout_stub_checked": true,
+  "bcc_compiled": false,
+  "bpf_attached": false,
+  "original_business_dynamic_provenance_validated": false,
+  "performance_protocol_executed": false
+}

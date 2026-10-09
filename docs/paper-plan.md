@@ -4,6 +4,8 @@
 
 主体初稿已开始撰写，见 [paper-draft.md](paper-draft.md)；当前是带明确缺口的工作稿，不代表三个交付项已全部完成。
 
+集成进度：已加入 [checkout-payment-path](../experiments/checkout-payment-path/README.md)，连接原始 PlaceOrder、MultiplySlow 与共享 Sum 模型；本地 10 个 native 用例和离线语义回归通过。整段 BPF 结果待主机验证，统一稳态性能协议仍未完成；不将实现存在等同于实证通过。
+
 ## 论文回答什么
 
 **在无需修改业务源码或离线重写可执行文件、观测受限的条件下，如何重建输出字段在本次执行中的实际来源依赖，并避免采集对该查询无用的执行细节？**

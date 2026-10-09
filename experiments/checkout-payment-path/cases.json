@@ -1,0 +1,12 @@
+[
+ {"Name":"empty","Items":0,"Quantity":1},
+ {"Name":"one","Items":1,"Quantity":1},
+ {"Name":"one-repeated","Items":1,"Quantity":3},
+ {"Name":"equal-eight","Items":8,"Quantity":1},
+ {"Name":"equal-eight-repeated","Items":8,"Quantity":2},
+ {"Name":"equal-thirty-two","Items":32,"Quantity":1},
+ {"Name":"equal-thirty-two-repeated","Items":32,"Quantity":2},
+ {"Name":"carry","Items":2,"Quantity":3,"Carry":true},
+ {"Name":"preparation-failure","Items":2,"Quantity":1,"PreparationFailure":true},
+ {"Name":"payment-failure","Items":2,"Quantity":2,"PaymentFailure":true}
+]
