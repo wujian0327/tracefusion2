@@ -1,0 +1,95 @@
+{
+  "date": "2026-10-09",
+  "scope": "Archive-derived counts; inference/static replay checks reported in corresponding experiment READMEs and conversation. Not a universal correctness or performance result.",
+  "records": [
+    {
+      "uploaded_archive": "checkout-field-choice-20261009-023504-014180.zip",
+      "archive_sha256": "5922156a47929b7cb699225e5fa55c0b78289c2ef91fae33faf02d88a8a0207a",
+      "archive_root": "checkout-field-choice-20261009-023504-014180/",
+      "target_sha256": "19fc8d04e653ad8ecac56478d36250ca53d6298d52ebf9bb4e7bca0a000935bd",
+      "groups": {
+        "selected": {
+          "runs": 4,
+          "events": 12,
+          "status_counts": {
+            "exact_field_source": 4
+          }
+        },
+        "boundaries": {
+          "runs": 4,
+          "events": 8,
+          "status_counts": {
+            "ambiguous": 4
+          }
+        }
+      },
+      "scope": "Controlled variant; acyclic immutable int64 field copy to one fresh object; not original checkout logic",
+      "original_business_source_unchanged": true
+    },
+    {
+      "uploaded_archive": "checkout-field-overwrite-20261009-025731-295542(1).zip",
+      "archive_sha256": "99e27a1c9b5bf55a15e137572351451b6db8ab8f8d3bc2ad73360d23cb7611ba",
+      "archive_root": "checkout-field-overwrite-20261009-025731-295542/",
+      "target_sha256": "350fe2625243cbfec570e6478e189a817f696c198296905e94ff41c4d2befc84",
+      "groups": {
+        "selected": {
+          "runs": 8,
+          "events": 24,
+          "status_counts": {
+            "exact_field_source": 8
+          }
+        },
+        "all_branches": {
+          "runs": 8,
+          "events": 32,
+          "status_counts": {
+            "exact_field_source": 8
+          }
+        },
+        "boundaries": {
+          "runs": 8,
+          "events": 16,
+          "status_counts": {
+            "ambiguous": 8
+          }
+        }
+      },
+      "scope": "Controlled variant; acyclic immutable int64 field copy to one fresh object; not original checkout logic",
+      "original_business_source_unchanged": true
+    },
+    {
+      "uploaded_archive": "checkout-money-sum-20261009-032140-383206.zip",
+      "archive_sha256": "0ad82cacb3683363ca0c24848173c9832ce0f04a87a9af2b13a2c95679c69d0e",
+      "archive_root": "checkout-money-sum-20261009-032140-383206/",
+      "target_sha256": "55b49c4ba8f00d59bbb473e25c0c27e97584f4c06ab7db6b307781603bb342ed",
+      "groups": {
+        "selected": {
+          "runs": 10,
+          "events": 27,
+          "status_counts": {
+            "exact_data_origins": 7,
+            "rejected_input": 3
+          }
+        },
+        "all_branches": {
+          "runs": 10,
+          "events": 78,
+          "status_counts": {
+            "exact_data_origins": 7,
+            "rejected_input": 3
+          }
+        },
+        "boundaries": {
+          "runs": 10,
+          "events": 20,
+          "status_counts": {
+            "ambiguous": 7,
+            "rejected_input": 3
+          }
+        }
+      },
+      "scope": "Unmodified original money.Sum in test executable; not full checkout or cross-service lineage",
+      "original_business_source_unchanged": true
+    }
+  ]
+}
