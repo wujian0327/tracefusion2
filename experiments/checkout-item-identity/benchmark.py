@@ -124,7 +124,7 @@ def compare(args,out,binary,plan,command,cases):
         strategies=summarize(rows),
         scope='Same Item/Cost reference query in one function; three probe policies, no whole-program taint comparison',
         timing='Single function wall time including local RPCs/truth interception; transport preconnected; BPF compilation, attachment and truth-file serialization excluded',
-        limitations=['Manual query-specific boundary policy, not proven minimal or a new automatic selection algorithm',
+        limitations=['Query-specific evidence semantics configured by hand; dependency-driven site selection is not proven globally minimal or a novel general selection algorithm',
                      'Dense control includes reachable MOVQ register-to-memory stores only, not all instructions/writes/callees',
                      'All policies use the same fixed-size event record; payload bytes exclude perf headers and other kernel/collector costs',
                      'Fresh process per sample, single request, local mock peers; no throughput/concurrent-service claim',

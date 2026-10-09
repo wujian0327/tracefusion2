@@ -69,6 +69,7 @@ def build_target(args,out):
     for strategy in ('boundaries','current','dense_stores'):
         selected=observer.strategy_plan(plan,strategy)
         save(out/('plan-'+strategy+'.json'),selected)
+        if 'selection' in selected:save(out/('selection-'+strategy+'.json'),selected['selection'])
         print(f'{strategy}: {len(selected["sites"])} probe sites',flush=True)
     return binary,plan,before,command
 

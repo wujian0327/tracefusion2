@@ -9,6 +9,7 @@ from go_object_graph import analyze, memory
 from go_string_adapter import file_offset, physical_probes
 from hybrid_model import require
 from string_capture import HEADER
+from selection_rules import automatic_plan, validate_plan
 
 LIMIT = 32
 FUNCTION = 'github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice.(*checkoutService).prepOrderItems'
@@ -98,7 +99,7 @@ def strategy_plan(plan,strategy):
     result['strategy']=strategy
     result['operand_witnesses']=strategy!='boundaries'
     if strategy=='boundaries':
-        result['sites']=[s for s in result['sites'] if s['kind']!='field_operand']
+        return automatic_plan(plan)
     elif strategy=='dense_stores':
         require('store_inventory' in plan,'Missing static store inventory')
         addresses={s['address'] for s in result['sites']}
@@ -118,6 +119,7 @@ class Raw(ct.Structure):
 
 
 def source(plan, pid, namespace):
+    if 'selection' in plan:validate_plan(plan)
     # Reuse namespace filtering, counters, zeroing and perf submission unchanged.
     header = re.sub(r'struct event_t \{.*?\};',
         'struct event_t { u64 timestamp,pid_tid,g,a,b,c,d,n; u32 site,error; u64 values[32],items[32],costs[32]; };',
@@ -176,6 +178,7 @@ def decode_record(data,size,sites):
 
 
 def infer(plan,doc):
+    if 'selection' in plan:validate_plan(plan)
     with_cost=plan.get('schema_version',1)==2
     operand_witnesses=plan.get('operand_witnesses',True)
     require(operand_witnesses or plan.get('strategy')=='boundaries','Undeclared omission of operand evidence')
