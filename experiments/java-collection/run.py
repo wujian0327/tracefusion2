@@ -166,11 +166,26 @@ def run(args):
     finally:
         (target / "validation.json").write_text(json.dumps(result, indent=2) + "\n")
         shutil.copytree(HERE, target / "source", ignore=shutil.ignore_patterns("__pycache__"))
+        inference_error = None
+        inference_status = "not_run" if args.with_inference else "not_requested"
+        if args.with_inference and result["status"] == "pass":
+            try:
+                from check_inference import evaluate
+                report = evaluate(target, target / "inference")
+                inference_status = report["status"]
+                print(json.dumps({"inference_status": report["status"], "correct_queries": report["correct_queries"],
+                                  "total_queries": report["total_queries"]}))
+            except Exception as e:
+                inference_error = e
+                inference_status = "failed"
         archive = shutil.make_archive(str(target), "zip", target.parent, target.name)
-        print(json.dumps({"status": result["status"], "directory": str(target), "archive": archive}, indent=2))
+        print(json.dumps({"status": "failed" if inference_error else result["status"],
+                          "inference_status": inference_status, "directory": str(target), "archive": archive}, indent=2))
+        if inference_error is not None: raise inference_error
 
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--jdk", help="JDK root containing bin/java and bin/javac")
+    p.add_argument("--with-inference", action="store_true", help="also reconstruct and score declared field-source queries")
     run(p.parse_args())

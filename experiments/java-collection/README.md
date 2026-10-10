@@ -1,6 +1,6 @@
 # Java 字节码采集原型
 
-这是 TraceFusion 的**新增 JVM 采集前端试验**。使用标准 `-javaagent` 和固定 ASM 9.7.1，在类加载时自动插入记录逻辑；业务方法没有手写探针或答案。无需 Intel PT、eBPF 或 root。**当前尚未连接 Java 来源还原器，不是 FlowDist 对比，也不是通用 Java 支持声明。**
+这是 TraceFusion 的**新增 JVM 采集前端试验**。使用标准 `-javaagent` 和固定 ASM 9.7.1，在类加载时自动插入记录逻辑；业务方法没有手写探针或答案。无需 Intel PT、eBPF 或 root。**现在已接入受限 Java 来源还原器，见 [PROVENANCE.md](PROVENANCE.md)。不是 FlowDist 对比，也不是通用 Java 支持声明。** 以下保留采集阶段的范围与历史验证记录。
 
 ## 运行
 
@@ -87,6 +87,6 @@ java -Xverify:all \
 
 `verify.py` 检查序号、类摘要、按原始计划执行的控制流、嵌套调用配对、字段版本和值的一致性、独立夹具的实际对象/访问/返回结果。它不执行通用 JVM 污点传播，不把正常用例的答案输入采集器。default 模式的短程序也不能证明热点方法已被 JIT 编译。
 
-下一步是为这一字节码子集实现操作数栈/局部变量及字段写版本的依赖传播，再提供用户指定源/目标的查询。通过之后才扩展真实 Java 程序或评估与 FlowDist 的共同任务。本轮没有性能测量、跨进程消息关联或外部工具胜负结论。
+后续已实现这一字节码子集的操作数栈/局部变量及字段写版本依赖传播，并提供用户指定源/目标查询，详见 [PROVENANCE.md](PROVENANCE.md)。可加 `--with-inference` 一次执行采集和还原。尚未扩展真实 Java 程序或运行与 FlowDist 的共同任务；没有性能测量、跨进程消息关联或外部工具胜负结论。
 
 实现依据：[Java Instrumentation](https://docs.oracle.com/en/java/javase/17/docs/api/java.instrument/java/lang/instrument/package-summary.html)、[ASM](https://asm.ow2.io/)。依赖不提交到仓库；ASM 使用其上游 BSD 许可证。
