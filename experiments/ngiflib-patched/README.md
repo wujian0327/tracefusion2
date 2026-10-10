@@ -2,6 +2,8 @@
 
 **真实主机对照已完成并核验，见 [HOST-RESULTS.md](HOST-RESULTS.md)：我们的 boundary_replay 格式来源集合 1,020/1,020 匹配，原版 libdft64 为 858/1,020，双方必要来源均无缺失。运行方式见 [HOST-COMPARISON.md](HOST-COMPARISON.md)。**
 
+性能入口现已实现并完成本地编译/协议检查，主机命令及计时范围见 [PERFORMANCE.md](PERFORMANCE.md)。尚无实测加速比；本轮测量包含启动和离线重放的完整命令成本。
+
 ## 范围和当前结果
 
 沿用 HardTaint 评估中出现的 ngiflib 项目，研究相关解码路径的输入来源；本轮使用包含公开修复的固定提交和正常图片。**没有运行 PoC、异常图片或旧漏洞版本，没有复现漏洞。随后完成了单独的本地模拟核验（`QUERY-RESULTS.md`）和真实主机来源对照（`HOST-RESULTS.md`），证据分别记录。** 本节正常转换结果不能记入 CVE 检出数或来源准确率；模拟结果也不能记作主机准确率。
