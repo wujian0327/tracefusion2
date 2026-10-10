@@ -112,7 +112,8 @@ def dependencies(args, out):
     return pin, lib
 
 
-def build_tools(pin, lib, out):
+def build_tools(pin, lib, out, adapter_source=None, tool_name='libdft_payment'):
+    check(re.fullmatch(r'[a-z][a-z0-9_]*', tool_name), 'Invalid tool name')
     work = out / 'libdft-build'
     shutil.copytree(lib, work, ignore=shutil.ignore_patterns('.git', 'obj-*', '*.log'))
     # Extract only the upstream dispatcher's explicit opcode cases. This is an
@@ -124,12 +125,12 @@ def build_tools(pin, lib, out):
     header += ''.join('case ' + op + ':\n' for op in opcodes)
     header += 'return true; default: return false; } }\n'
     (work / 'tools/libdft_known_opcodes.h').write_text(header)
-    shutil.copy2(HERE / 'libdft_payment.cpp', work / 'tools/libdft_payment.cpp')
+    shutil.copy2(adapter_source or HERE / 'libdft_payment.cpp', work / 'tools' / (tool_name + '.cpp'))
     make = ['make', '-j2', 'PIN_ROOT=' + str(pin)]
     command(make + ['-C', work / 'src'], out)
-    command(make + ['-C', work / 'tools', 'TOOL_ROOTS=nullpin libdft_payment',
-                    'obj-intel64/nullpin.so', 'obj-intel64/libdft_payment.so'], out)
-    result = {name: work / 'tools/obj-intel64' / (name + '.so') for name in ('nullpin', 'libdft_payment')}
+    command(make + ['-C', work / 'tools', 'TOOL_ROOTS=nullpin ' + tool_name,
+                    'obj-intel64/nullpin.so', 'obj-intel64/' + tool_name + '.so'], out)
+    result = {name: work / 'tools/obj-intel64' / (name + '.so') for name in ('nullpin', tool_name)}
     save(out / 'tool-build.json', dict(compiled=True, tools={k: dict(path=str(v), sha256=sha(v)) for k, v in result.items()},
          upstream_opcode_cases=opcodes, propagation_code_modified=False, adapter_changes='boundary API calls and diagnostic callbacks only'))
     return result
