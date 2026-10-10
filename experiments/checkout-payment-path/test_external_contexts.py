@@ -68,6 +68,15 @@ class ContextLogTests(unittest.TestCase):
     def test_old_archive_has_no_context_evidence(self):
         self.assertFalse(inspect_contexts([dict(kind='flow_finish')], labels)['enabled'])
 
+    def test_simd_tag_loss_without_recorded_values(self):
+        rows = fixture()
+        rows[0]['shadow_at_callback']['X0'] = [1, 2] * 8
+        rows[2]['shadow_at_callback']['X0'] = [0] * 16
+        report = inspect_contexts(rows, labels)
+        reg = next(r for r in report['signal_pairs'][0]['registers'] if r['register'] == 'X0')
+        self.assertEqual(reg['labels_lost'], [1, 2])
+        self.assertIsNone(reg['interrupted_value_restored'])
+
 
 if __name__ == '__main__':
     unittest.main()

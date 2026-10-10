@@ -51,11 +51,15 @@ def inspect_contexts(flow, labels):
                 entry = stack.pop()
                 require(entry['from'] is not None and r['to'] is not None, 'Missing signal context')
                 changes = []
-                for reg in ('R10', 'R11'):
+                for reg in entry['shadow_at_callback']:
                     old = labels(entry['shadow_at_callback'][reg])
                     now = labels(r['shadow_at_callback'][reg])
+                    if not old and not now and reg not in ('R10', 'R11'):
+                        continue
+                    values_recorded = reg in entry['from']['registers'] and reg in r['to']['registers']
                     changes.append(dict(register=reg, entry_labels=sorted(old), return_labels=sorted(now),
-                        interrupted_value_restored=(entry['from']['registers'][reg] == r['to']['registers'][reg]),
+                        interrupted_value_restored=(entry['from']['registers'][reg] == r['to']['registers'][reg])
+                            if values_recorded else None,
                         labels_lost=sorted(old - now)))
                 pairs.append(dict(signal_event=entry['id'], return_event=r['id'],
                                   signal_number=entry['info'], registers=changes))
@@ -77,7 +81,9 @@ def inspect_contexts(flow, labels):
             next_instruction_matches_to=(event['to'] == resumed['actual']),
             registers={reg: dict(callback_labels=sorted(labels(event['shadow_at_callback'][reg])),
                                 resumed_labels=sorted(labels(resumed['shadow_before_instruction'][reg])))
-                       for reg in ('R10', 'R11')}))
+                       for reg in event['shadow_at_callback']
+                       if reg in ('R10', 'R11') or labels(event['shadow_at_callback'][reg])
+                       or labels(resumed['shadow_before_instruction'][reg])}))
     return dict(enabled=True, event_count=len(events), events=report, signal_pairs=pairs,
                 unpaired_signal_entries=sum(len(v) for v in stacks.values()),
                 unpaired_signal_returns=unpaired_returns,
@@ -85,7 +91,7 @@ def inspect_contexts(flow, labels):
                        'it does not model modified ucontext, longjmp, or prove a unique cause.')
 
 
-def inspect(archive, case='one'):
+def inspect(archive, case='one', allow_failed_run=False):
     with ZipFile(archive) as z:
         summaries = [n for n in z.namelist() if n.count('/') == 1 and n.endswith('/summary.json')]
         require(len(summaries) == 1, 'Ambiguous archive root')
@@ -102,7 +108,9 @@ def inspect(archive, case='one'):
         flow = records(case + '/libdft_payment/flow.jsonl')
         origins = records(case + '/libdft_payment/origins.jsonl')
         require(flow and flow[-1]['kind'] == 'flow_finish' and flow[-1]['exit_code'] == 0, 'Incomplete flow log')
-        require(origins[-1]['kind'] == 'finish' and origins[-1]['exit_code'] == 0 and not origins[-1]['bad'], 'Invalid origin log completion')
+        require(origins[-1]['kind'] == 'finish' and origins[-1]['exit_code'] == 0, 'Invalid origin log completion')
+        failed = origins[-1]['bad']
+        require(allow_failed_run or not failed, 'Invalid origin log completion')
         dictionary = {}
         for r in flow:
             if r['kind'] != 'tag_dictionary':
@@ -146,11 +154,13 @@ def inspect(archive, case='one'):
                         lost_source_labels=sorted(old), value_unchanged=True,
                         interpretation='Unexplained by this recorded branch/return; unrecorded context activity remains possible'))
         sink = [r for r in origins if r['kind'] == 'sink']
-        require(len(sink) == 1, 'Expected a single diagnostic sink')
+        require(len(sink) == 1 or (allow_failed_run and failed and not sink), 'Expected a single diagnostic sink')
         return dict(source_readback_verified=True, source_fields=2*len(source_reads),
+                    adapter_rejected_run=failed, instruction_trace_may_be_partial=failed,
+                    adapter_errors=[r['reason'] for r in origins if r['kind'] == 'error'],
                     diagnostic_instruction_count=len(ins), executed_diagnostic_steps=len(steps),
                     register_tag_loss_gaps=gaps,
-                    raw_sink_labels={k:sink[0][k] for k in ('Units','Nanos')},
+                    raw_sink_labels={k:sink[0][k] for k in ('Units','Nanos')} if sink else None,
                     uncovered_opcode_kinds=origins[-1]['unhandled_opcode_kinds'],
                     wrapper_status=doc(case + '/libdft_payment/observation.json')['status'],
                     context_diagnostics=contexts,
@@ -163,5 +173,7 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('archive', type=Path)
     p.add_argument('--case', default='one')
+    p.add_argument('--allow-failed-run', action='store_true',
+                   help='Inspect completed but adapter-rejected runs as partial diagnostics only')
     args = p.parse_args()
-    print(json.dumps(inspect(args.archive, args.case), ensure_ascii=False, indent=2))
+    print(json.dumps(inspect(args.archive, args.case, args.allow_failed_run), ensure_ascii=False, indent=2))

@@ -121,7 +121,7 @@ python3 experiments/checkout-payment-path/inspect_external_flow.py /path/to/chec
 该脚本检查 ELF 指令字节、源标签逐字节回读、步骤连续性和完成标志，报告 R10/R11 在分支/返回附近的标签丢失。
 它不是完整传播验证器，不观测日志以外的上下文活动，也不会将外部基线标记为可做性能比较。
 
-## 新增信号上下文观测（主机执行待验证）
+## 信号上下文观测
 
 `--trace-flow` 现在还注册 Pin 的 `PIN_AddContextChangeFunction`，记录两类事件：
 
@@ -141,7 +141,7 @@ python3 experiments/checkout-payment-path/inspect_external_flow.py /path/to/chec
 也不能单独排除适配器顺序、其他指令语义或并发问题。旧包仍可读取，但明确显示未启用上下文观测。
 
 本次已用固定真实 Pin 3.20 SDK 编译通过；14 项合成日志检查通过，并重新读取已有主机流包，
-仍得到四个源字段打标成功及四处寄存器标签丢失记录。新增上下文回调尚未在真实主机执行。
+仍得到四个源字段打标成功及四处寄存器标签丢失记录。后续新增上下文回调的主机结果见下节。
 开发环境的 Pin 启动限制未变，编译及离线检查不能替代主机执行证据。
 
 相关依据：
@@ -149,6 +149,39 @@ python3 experiments/checkout-payment-path/inspect_external_flow.py /path/to/chec
 [Go 异步抢占说明](https://go.dev/doc/go1.14#runtime)、
 [固定 libdft64 初始化实现](https://github.com/AngoraFuzzer/libdft64/blob/20804d5bae5d8aed31a71761b1a1149e35a0da95/src/libdft_api.cpp)。
 公开上游记录未找到与当前 Go 标签丢失完全相同的已确认问题，不能将本诊断写成官方已知故障的复现。
+
+## 上下文主机诊断结果：未复现原来的 R10/R11 丢失
+
+后续上传结果的适配器源码与 `1e12688` 一致，两份工具二进制摘要与构建清单一致。
+离线检查了 ELF 摘要、990 个诊断位置的字节、源字段逐字节标签及日志完成标志。
+native、nullpin、libdft64 业务执行均完成，但本次来源观测被适配器拒绝，不能作为完整字段查询结果。
+
+- 四个来源字段均成功打标。保留 226 条连续的指令前记录、6 次上下文通知和对应的 6 次首指令观测。
+- 捕获三对信号进入/返回，信号号为 23；每次首指令前记录的 16 个 GPR 及 PC 均与对应 Pin to 上下文一致。
+- 这三对事件中，R10/R11 标签在信号进入前就为空。没有复现此前带标签寄存器变空的时刻，
+  因而既不能确认，也不能排除此前的信号上下文解释。
+- 第一次信号进入时 X0 带有运费 Units/Nanos 标签，处理器入口的首指令前仍保留；
+  到 sigreturn 通知时标签已为空，在恢复后首指令前仍为空。变化发生于信号处理区间，
+  不能表述成“sigreturn 本身清除了标签”。没有记录 X0 的真实数值，也未证明这个临时副本仍被后续计算使用，
+  因而不能据此认定它导致最终来源错误。
+- 随后适配器检测到业务 G 的 OS 线程迁移，报告 `goroutine_thread_migration_unqualified` 并停止活动跟踪；
+  支付边界又报告 `invalid_sink_sequence`。没有输出 sink 标签记录，不能将缺失记录当作空来源集合。
+  仍观察到未覆盖的 POPFQ。
+
+这次确认了上下文诊断能在主机执行，也暴露了当前适配器的线程迁移限制；尚未完成根因定位。
+不能称为“libdft 信号恢复缺陷已证实”，也不能把适配器主动拒绝计为 libdft 的字段来源错误。
+当前配置无需盲目重复运行。若继续定位，应先设计能区分信号恢复与线程迁移影响的有限诊断，
+包括必要的 SIMD 实值证据和迁移前后状态，而不是直接修复传播规则或放宽 unknown 门槛。
+
+复查这类正常结束但被适配器拒绝的包时，可显式选择：
+
+```bash
+python3 experiments/checkout-payment-path/inspect_external_flow.py /path/to/checkout-external.zip --allow-failed-run
+```
+
+该选项只显示部分诊断，明确保留拒绝原因、可能不完整的指令区间及缺失 sink 为 null；
+不改变实验执行器的判定或性能资格。默认检查仍拒绝失败运行。本次 15 项合成日志检查通过，
+其中新增检查确保未记录 SIMD 实值时，不会声称其数值已经恢复。
 
 ## 本地可复查的检查
 
