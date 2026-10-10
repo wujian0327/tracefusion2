@@ -17,7 +17,7 @@ def plan(binary, source, out):
     data = binary.read_bytes()
     elf = ELFFile(io.BytesIO(data))
     check(elf.elfclass == 64 and elf.little_endian and elf['e_machine'] == 'EM_X86_64', 'Unsupported ELF ABI')
-    names = ['GetGifWord','GetByte','GetByteStr','DecodeGifImg']
+    names = ['GetGifWord','GetByte','GetByteStr','DecodeGifImg','LoadGif']
     syms = {s.name: dict(address=s['st_value'], size=s['st_size'])
             for s in elf.get_section_by_name('.symtab').iter_symbols() if s.name in names}
     check(set(syms) == set(names) and all(s['size'] for s in syms.values()), 'Missing configured function')
@@ -81,9 +81,9 @@ def infer(plan, trace, file_bytes):
     check(trace['binary_sha256'] == plan['binary_sha256'], 'ELF identity mismatch')
     check(trace['complete'] and not trace.get('errors'), 'Incomplete/error capture')
     check(trace['input_sha256'] == hashlib.sha256(file_bytes).hexdigest(), 'Input identity mismatch')
-    # This implementation currently consumes only an explicitly synthetic,
-    # checked trace schema. A native collector must qualify its own transport.
-    check(trace['backend'] == 'unicorn-original-decoder-v1', 'Unqualified capture backend')
+    check(trace['backend'] in ('unicorn-original-decoder-v1', 'pin-ngif-boundaries-v1'), 'Unqualified capture backend')
+    if trace['backend'] == 'pin-ngif-boundaries-v1':
+        check(trace.get('transport_checked') is True, 'Native transport not validated')
     check(trace['decoder_return'] == 0 and trace['records'], 'Decoder did not complete')
     check(len(trace['records']) <= 131072, 'Query budget exceeded')
     rows = {r['address']:r for r in plan['instructions']}
@@ -203,5 +203,5 @@ def infer(plan, trace, file_bytes):
                             address_source_labels=sorted(m.address_origins),control_source_labels=sorted(m.control_origins)))
         prior = end
     return dict(status='inferred',strategy='boundary_replay',queries=results,source_writes=writes,
-                semantics=plan['semantics'],oracle_used_for_inference=False,native_capture=False,
+                semantics=plan['semantics'],oracle_used_for_inference=False,native_capture=trace['backend']=='pin-ngif-boundaries-v1',
                 libdft_compared=False,performance_eligible=False)
