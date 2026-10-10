@@ -20,6 +20,26 @@ PREP = BASE + '.(*checkoutService).prepareOrderItemsAndShippingQuoteFromCart'
 PAY = BASE + '.(*checkoutService).chargeCard'
 
 
+def diagnostic_instructions(binary, command, out):
+    """All instructions in named functions, independent of query/taint results."""
+    data = binary.read_bytes()
+    result = []
+    for name in (PLACE, BASE + '/money.MultiplySlow', BASE + '/money.Sum',
+                 BASE + '/money.IsValid', 'runtime.asyncPreempt.abi0'):
+        asm = command(['tool', 'objdump', '-s', '^' + re.escape(name) + '$', str(binary)])
+        rows = assembly_rows(asm)
+        check(rows, 'Missing diagnostic function: ' + name)
+        for row in rows:
+            offset = file_offset(data, row['address'])
+            code = bytes.fromhex(row['code'])
+            check(data[offset:offset + len(code)] == code, 'Diagnostic ELF bytes differ')
+            result.append(dict(function=name, **row))
+    (out / 'diagnostic-instructions.json').write_text(json.dumps(result, indent=2) + '\n')
+    config = out / 'diagnostic-pcs.txt'
+    config.write_text(''.join('%x\n' % row['address'] for row in result))
+    return config
+
+
 def check(condition, message):
     if not condition:
         raise ValueError(message)

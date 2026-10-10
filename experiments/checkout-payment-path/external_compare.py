@@ -19,7 +19,7 @@ import urllib.request
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 sys.path[:0] = [str(HERE), str(HERE.parent / 'checkout-item-identity')]
-from external_boundaries import plan_binary, check
+from external_boundaries import plan_binary, diagnostic_instructions, check
 
 LIBDFT_REV = '20804d5bae5d8aed31a71761b1a1149e35a0da95'
 PIN_NAME = 'pin-3.20-98437-gf02b61307-gcc-linux'
@@ -205,6 +205,11 @@ def execute(args, out, report):
     spec.loader.exec_module(builder)
     binary, plan, source_hash, _ = builder.build_target(args, out, HERE / 'payment_test.go', plan_binary)
     report.update(binary_sha256=sha(binary), main_go_sha256=source_hash)
+    trace_config = None
+    if args.trace_flow:
+        trace_config = diagnostic_instructions(binary,
+            lambda argv: command([args.go, *argv], out), out)
+    report['flow_diagnostics_enabled'] = args.trace_flow
     money = args.checkout / 'src/checkoutservice/money/money.go'
     check(sha(money) == 'c7e81c0e8e24cafce6ccf35b9846d76cea114969998355db34d01169687e67f3', 'Money source changed')
     config = out / 'boundary-pcs.txt'
@@ -229,6 +234,8 @@ def execute(args, out, report):
             argv = [binary] if stage == 'native' else [pin / 'pin', '-t', tools[stage]]
             if stage == 'libdft_payment':
                 argv += ['-boundary_config', config, '-origin_log', folder / 'origins.jsonl']
+                if trace_config:
+                    argv += ['-flow_config', trace_config, '-flow_log', folder / 'flow.jsonl']
             if stage != 'native':
                 argv += ['--', binary]
             command(argv, out, extra=env, input='x', timeout=args.timeout)
@@ -256,6 +263,7 @@ def main():
     p.add_argument('--go', default=os.environ.get('TRACEFUSION_GO') or shutil.which('go'))
     p.add_argument('--output', type=Path)
     p.add_argument('--timeout', type=int, default=180)
+    p.add_argument('--trace-flow', action='store_true', help='Read-only byte-tag tracing for diagnosing a failing case; not performance data')
     group = p.add_mutually_exclusive_group()
     group.add_argument('--case', default='one')
     group.add_argument('--all-cases', action='store_true')

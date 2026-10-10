@@ -4,6 +4,9 @@
 首次主机诊断确认工具构建和 Pin 空工具执行 `/bin/true` 通过；
 在 Go 目标构建前遇到旧 checkout 的 Git `dubious ownership` 检查，尚未执行 Go/Pin 来源查询。
 现已将默认业务 checkout 移到外部实验独立目录，由当前普通用户克隆，不调整 Git 信任设置。
+后续同一 `one` 用例已完成 native、nullpin 和 libdft64 三次业务执行；业务输出一致，但来源核验未通过。
+原始候选标签只包含运费字段，漏掉商品价格字段；金额区间另观察到 `runtime.asyncPreempt.abi0` 的 `POPFQ`
+未被上游指令分派器覆盖。包装器按约定返回 unknown。这两项事实尚不能证明同一个根因，不能通过忽略指令告警宣告成功。
 当前受限工作环境不能执行 Pin 的 32 位启动器（`Exec format error`），尚未产生真实 Pin/Go 来源结果。
 新边界配置已对实际 Go 1.25.4 支付 ELF 完成指令字节/DWARF 核验，单个 `one` 原生夹具运行通过。
 编译成功、模拟日志检查、已有 BPF 正确性结果均不等于外部工具复现成功。
@@ -61,6 +64,21 @@ Go 不在 PATH 时加 `--go /usr/local/go/bin/go`。默认业务 checkout 为 `a
 仅在首例接入问题解决后，用 `--all-cases` 验证外部工具对既有十用例的语义；不新增场景，不重跑旧 BPF 正确性实验。
 最终性能比较还需要解决上述限制、去除诊断回调，并分别核算 native、Pin 运行时、传播、来源/目标适配和报告成本。
 应同时保留我们的 selected 和 boundary_replay，不能只挑弱控制组。
+
+## 定位首例的来源标签丢失
+
+```bash
+GOPROXY=https://goproxy.cn,direct \
+  python3 experiments/checkout-payment-path/external_compare.py run --trace-flow
+```
+
+仍然只运行既有 `one`，不关闭异步抢占、不改变 libdft64 传播规则，也不放宽 unknown 检查。
+附加 `flow.jsonl` 记录源字段打标后的逐字节回读，以及指定原始函数执行前的寄存器/内存标签。
+函数范围为 PlaceOrder、MultiplySlow、Sum、IsValid、asyncPreempt；指令集合从 ELF 全量提取，不读取生产选择器。
+内存记录是当前指令执行前的状态，不能当作写后状态；每个内存操作数最多记录 32 字节，原始宽度同时保留。
+标签以库内部节点号逐字节保存，完成时输出对应来源区间字典；上限 12000 条指令，超限明确拒绝。
+这些额外记录只用于定位，不能生成性能结论。它们可能改变调度，因此下一次结果不保证复现同一次抢占位置。
+新增诊断代码已用真实 Pin SDK 编译通过，诊断 PC 已对原始 Go ELF 校验；新增跟踪尚待实际 Pin 运行验证。
 
 ## 本地可复查的检查
 
