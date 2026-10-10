@@ -1,6 +1,9 @@
 # 外部工具接入与兼容性诊断
 
 当前阶段：libdft64 最小接入已实现，原始传播库与适配器已用真实 Pin 3.20 SDK 编译通过。
+首次主机诊断确认工具构建和 Pin 空工具执行 `/bin/true` 通过；
+在 Go 目标构建前遇到旧 checkout 的 Git `dubious ownership` 检查，尚未执行 Go/Pin 来源查询。
+现已将默认业务 checkout 移到外部实验独立目录，由当前普通用户克隆，不调整 Git 信任设置。
 当前受限工作环境不能执行 Pin 的 32 位启动器（`Exec format error`），尚未产生真实 Pin/Go 来源结果。
 新边界配置已对实际 Go 1.25.4 支付 ELF 完成指令字节/DWARF 核验，单个 `one` 原生夹具运行通过。
 编译成功、模拟日志检查、已有 BPF 正确性结果均不等于外部工具复现成功。
@@ -47,7 +50,8 @@ GOPROXY=https://goproxy.cn,direct \
 
 无需 sudo/BPF。默认自动下载固定 Pin 和检出固定 libdft64 到 `artifacts/external-tools/`，不安装系统软件。
 若已有工具，可传 `--pin-root /absolute/pin-kit --libdft /absolute/libdft64`；版本/源码改动检查仍保留。
-Go 不在 PATH 时加 `--go /usr/local/go/bin/go`，可用 `--checkout` 指向干净的原有 checkout。
+Go 不在 PATH 时加 `--go /usr/local/go/bin/go`。默认业务 checkout 为 `artifacts/external-tools/online-boutique-v0.10.4`，
+与旧 sudo/BPF 实验的 checkout 分开；可用 `--checkout` 指向当前用户拥有的干净 checkout。
 需要 Intel 下载域和 GitHub 可访问；工具下载、编译、启动或执行失败都会保存阶段与日志并生成 zip。
 
 默认仅运行既有 `one` 用例，顺序是：工具构建 → Pin 空工具启动 `/bin/true` → 构建原始夹具 → native → nullpin → 来源适配器。

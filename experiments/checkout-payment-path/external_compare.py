@@ -194,12 +194,18 @@ def execute(args, out, report):
     command([pin / 'pin', '-t', tools['nullpin'], '--', '/bin/true'], out, timeout=30)
     report['pin_startup_passed'] = True
     report['stage'] = 'target_build'
+    # Earlier BPF runners may have created their checkout as root. This runner
+    # intentionally runs without sudo; keep its default checkout independent.
+    # Do not bypass Git's ownership checks or change global safe.directory.
+    if args.checkout is None:
+        args.checkout = ROOT / 'artifacts/external-tools/online-boutique-v0.10.4'
+    report['target_checkout'] = str(args.checkout)
     spec = importlib.util.spec_from_file_location('external_fixture_builder', HERE.parent / 'checkout-item-identity/run.py')
     builder = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(builder)
     binary, plan, source_hash, _ = builder.build_target(args, out, HERE / 'payment_test.go', plan_binary)
     report.update(binary_sha256=sha(binary), main_go_sha256=source_hash)
-    money = (args.checkout or ROOT / 'artifacts/online-boutique-v0.10.4') / 'src/checkoutservice/money/money.go'
+    money = args.checkout / 'src/checkoutservice/money/money.go'
     check(sha(money) == 'c7e81c0e8e24cafce6ccf35b9846d76cea114969998355db34d01169687e67f3', 'Money source changed')
     config = out / 'boundary-pcs.txt'
     roles = {'source': 1, 'sink': 2, 'end': 3}
