@@ -263,7 +263,7 @@ def main():
     p.add_argument('--go', default=os.environ.get('TRACEFUSION_GO') or shutil.which('go'))
     p.add_argument('--output', type=Path)
     p.add_argument('--timeout', type=int, default=180)
-    p.add_argument('--trace-flow', action='store_true', help='Read-only byte-tag tracing for diagnosing a failing case; not performance data')
+    p.add_argument('--trace-flow', action='store_true', help='Read-only byte-tag and signal-context tracing; not performance data')
     group = p.add_mutually_exclusive_group()
     group.add_argument('--case', default='one')
     group.add_argument('--all-cases', action='store_true')
@@ -278,7 +278,7 @@ def main():
     source_dir = out / 'adapter-sources'
     source_dir.mkdir()
     for name in ('external_compare.py', 'external_boundaries.py', 'libdft_payment.cpp', 'payment_test.go', 'cases.json',
-                 'test_external_compare.py', 'EXTERNAL-TOOLS.md'):
+                 'test_external_compare.py', 'inspect_external_flow.py', 'test_external_contexts.py', 'EXTERNAL-TOOLS.md'):
         shutil.copy2(HERE / name, source_dir / name)
     try:
         execute(args, out, report)

@@ -21,6 +21,12 @@ static std::ofstream flow_file;
 static std::set<ADDRINT> flow_pcs;
 static std::set<tag_t> seen_tags;
 static UINT64 flow_steps = 0;
+static UINT64 context_events = 0, context_resumes = 0;
+static std::map<THREADID, std::vector<UINT64> > pending_contexts;
+static const REG diagnostic_regs[] = {REG_RAX, REG_RBX, REG_RCX, REG_RDX, REG_RSI, REG_RDI, REG_RBP, REG_RSP,
+                                      REG_R8, REG_R9, REG_R10, REG_R11, REG_R12, REG_R13, REG_R14, REG_R15};
+static const char *diagnostic_names[] = {"AX", "BX", "CX", "DX", "SI", "DI", "BP", "SP",
+                                        "R8", "R9", "R10", "R11", "R12", "R13", "R14", "R15"};
 static PIN_LOCK lock;
 static ADDRINT owner_g = 0, source_sp = 0;
 static THREADID owner_tid;
@@ -53,6 +59,78 @@ static void source_tags(unsigned index, ADDRINT address) {
 static void fail(const char *reason) {
     bad = true;
     log_file << "{\"kind\":\"error\",\"reason\":\"" << reason << "\"}" << std::endl;
+}
+
+static void context_values(const CONTEXT *ctx) {
+    if (!ctx) { flow_file << "null"; return; }
+    flow_file << "{\"pc\":" << PIN_GetContextReg(ctx, REG_INST_PTR) << ",\"registers\":{";
+    for (unsigned i = 0; i < 16; ++i) {
+        if (i) flow_file << ",";
+        flow_file << "\"" << diagnostic_names[i] << "\":" << PIN_GetContextReg(ctx, diagnostic_regs[i]);
+    }
+    flow_file << "}}";
+}
+
+static void shadow_registers(THREADID tid) {
+    flow_file << "{";
+    for (unsigned i = 0; i < 16; ++i) {
+        if (i) flow_file << ",";
+        flow_file << "\"" << diagnostic_names[i] << "\":";
+        raw_tags(0, tid, REG_INDX(diagnostic_regs[i]), 8);
+    }
+    flow_file << ",\"X0\":"; raw_tags(0, tid, DFT_REG_XMM0, 16);
+    flow_file << ",\"X15\":"; raw_tags(0, tid, DFT_REG_XMM15, 16);
+    flow_file << "}";
+}
+
+static const char *context_reason(CONTEXT_CHANGE_REASON reason) {
+    switch (reason) {
+    case CONTEXT_CHANGE_REASON_SIGNAL: return "signal";
+    case CONTEXT_CHANGE_REASON_SIGRETURN: return "sigreturn";
+    case CONTEXT_CHANGE_REASON_FATALSIGNAL: return "fatal_signal";
+    default: return "other";
+    }
+}
+
+static VOID context_change(THREADID tid, CONTEXT_CHANGE_REASON reason,
+                           const CONTEXT *from, CONTEXT *to, INT32 info, VOID *) {
+    PIN_GetLock(&lock, tid + 1);
+    // Follow the owner OS thread even when R14 denotes gsignal or g0.
+    // These are observations only: never restore tags or modify either context.
+    if (active && tid == owner_tid) {
+        if (context_events >= 256) {
+            fail("context_diagnostic_budget_exceeded");
+            active = false;
+        } else {
+            ++context_events;
+            flow_file << "{\"kind\":\"context_change\",\"id\":" << context_events
+                      << ",\"step\":" << flow_steps << ",\"tid\":" << tid
+                      << ",\"reason\":\"" << context_reason(reason) << "\",\"reason_code\":" << reason
+                      << ",\"info\":" << info << ",\"from\":";
+            context_values(from);
+            flow_file << ",\"to\":"; context_values(to);
+            // One current shadow state, NOT separate before/after shadow contexts.
+            flow_file << ",\"shadow_at_callback\":"; shadow_registers(tid);
+            flow_file << "}" << std::endl;
+            pending_contexts[tid].push_back(context_events);
+        }
+    }
+    PIN_ReleaseLock(&lock);
+}
+
+// Called under the adapter lock before any boundary action or libdft propagation.
+static void context_resume(THREADID tid, const CONTEXT *ctx) {
+    std::map<THREADID, std::vector<UINT64> >::iterator it = pending_contexts.find(tid);
+    if (it == pending_contexts.end()) return;
+    for (size_t i = 0; i < it->second.size(); ++i) {
+        ++context_resumes;
+        flow_file << "{\"kind\":\"context_resume\",\"id\":" << it->second[i]
+                  << ",\"step\":" << flow_steps << ",\"tid\":" << tid << ",\"actual\":";
+        context_values(ctx);
+        flow_file << ",\"shadow_before_instruction\":"; shadow_registers(tid);
+        flow_file << "}" << std::endl;
+    }
+    pending_contexts.erase(it);
 }
 
 template<typename T> static T read_at(ADDRINT address) {
@@ -100,6 +178,7 @@ static void write_tags(ADDRINT address, unsigned width) {
 
 static VOID observe(THREADID tid, const CONTEXT *ctx, ADDRINT pc, UINT32 opcode, UINT32 role, BOOL covered) {
     PIN_GetLock(&lock, tid + 1);
+    context_resume(tid, ctx);
     ADDRINT g = PIN_GetContextReg(ctx, REG_R14);
     if (role == 1) {
         ++source_hits;
@@ -227,7 +306,9 @@ static VOID finish(INT32 code, VOID *) {
             }
             flow_file << "]}" << std::endl;
         }
-        flow_file << "{\"kind\":\"flow_finish\",\"steps\":" << flow_steps << ",\"exit_code\":" << code << "}" << std::endl;
+        flow_file << "{\"kind\":\"flow_finish\",\"steps\":" << flow_steps
+                  << ",\"context_events\":" << context_events << ",\"context_resumes\":" << context_resumes
+                  << ",\"context_diagnostics\":true,\"exit_code\":" << code << "}" << std::endl;
         flow_file.close();
     }
     log_file << "{\"kind\":\"finish\",\"exit_code\":" << code << ",\"source_hits\":" << source_hits
@@ -254,6 +335,7 @@ int main(int argc, char **argv) {
     }
     PIN_InitLock(&lock);
     if (libdft_init()) return 4;
+    if (flow_file.is_open()) PIN_AddContextChangeFunction(context_change, 0);
     // No hook_file_syscall(): only our declared price/shipping sources get tags.
     for (unsigned i = 0; i < XED_ICLASS_LAST; ++i) ins_set_pre(&ins_desc[i], instrument);
     PIN_AddFiniFunction(finish, 0);

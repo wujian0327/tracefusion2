@@ -43,7 +43,8 @@
 
 ## 先运行一个既有用例
 
-以下命令保留用于复现。当前首例兼容性调查已经得到明确阻塞证据，无需重复运行相同配置或扩展十用例。
+以下默认命令保留用于复现。首例已发现明确阻塞证据，无需重复运行相同配置或扩展十用例。
+新增的信号上下文诊断使用下方 `--trace-flow` 命令，只用于检验已提出的机制假设。
 
 在已有 Linux 主机、Go 1.25.4、git、make、g++ 和 Python 3.12 环境中：
 
@@ -108,7 +109,7 @@ GOPROXY=https://goproxy.cn,direct \
 仅把 POPFQ 加入允许列表无法修复已发生的标签丢失。
 
 当前结论限定为：**固定 libdft64 原始传播库加本边界适配器，尚不能在原始 Go 支付首例中提供可信来源结果。**
-停止扩大用例和性能比较，不把兼容性失败计为本方法的正确率或性能胜出。
+停止扩大用例和性能比较，不把兼容性失败计为本方法的正确率或性能胜出；下一步仅补充上下文观测以定位原因。
 继续接入需要单独开展信号上下文、Go 调度/栈行为及并发标签状态的适配与验证；届时应明确称为修改后的移植基线。
 
 可在不执行上传二进制的情况下复查已有流诊断包：
@@ -120,12 +121,41 @@ python3 experiments/checkout-payment-path/inspect_external_flow.py /path/to/chec
 该脚本检查 ELF 指令字节、源标签逐字节回读、步骤连续性和完成标志，报告 R10/R11 在分支/返回附近的标签丢失。
 它不是完整传播验证器，不观测日志以外的上下文活动，也不会将外部基线标记为可做性能比较。
 
+## 新增信号上下文观测（主机执行待验证）
+
+`--trace-flow` 现在还注册 Pin 的 `PIN_AddContextChangeFunction`，记录两类事件：
+
+- `context_change`：原因、信号信息、Pin 提供的 from/to 真实寄存器、回调当时唯一一份影子寄存器标签。
+  from/to 不是两份影子标签快照，不能据此声称已直接观测回调前后的标签变化。
+- `context_resume`：上下文通知后，该 OS 线程下一条被插桩指令执行前的真实寄存器和标签。
+  在现有最先执行的诊断回调中读取，早于本适配器的边界动作及该指令的 libdft 传播回调。
+
+观测限于来源到支付之间的 owner OS 线程，覆盖 R14 已切换为 gsignal/g0 的情况；
+每次上下文变化有独立 ID，并记录最近的业务流步骤号。寄存器真实值覆盖 16 个 GPR，
+标签覆盖这些 GPR 及 X0/X15；不声称覆盖完整 SIMD 状态。最多 256 次上下文通知，超限明确报错。
+回调只读取并写日志，不更改 Pin 上下文，不保存/恢复标签，不拦截或屏蔽信号，不改变 Go 抢占设置。
+
+离线脚本按同线程嵌套顺序关联 signal/sigreturn，报告中断值是否恢复、标签是否丢失，
+以及回调到第一条指令之间标签是否变化。未配对的信号明确列出；缺失恢复观测、计数不符均拒绝。
+若没有捕获上下文事件，不能排除这一机制。配对仅是时间关联，不模拟修改 ucontext、longjmp 等行为，
+也不能单独排除适配器顺序、其他指令语义或并发问题。旧包仍可读取，但明确显示未启用上下文观测。
+
+本次已用固定真实 Pin 3.20 SDK 编译通过；14 项合成日志检查通过，并重新读取已有主机流包，
+仍得到四个源字段打标成功及四处寄存器标签丢失记录。新增上下文回调尚未在真实主机执行。
+开发环境的 Pin 启动限制未变，编译及离线检查不能替代主机执行证据。
+
+相关依据：
+[Pin 上下文回调文档](https://software.intel.com/sites/landingpage/pintool/docs/98484/Pin/html/group__PIN__CONTROL.html)、
+[Go 异步抢占说明](https://go.dev/doc/go1.14#runtime)、
+[固定 libdft64 初始化实现](https://github.com/AngoraFuzzer/libdft64/blob/20804d5bae5d8aed31a71761b1a1149e35a0da95/src/libdft_api.cpp)。
+公开上游记录未找到与当前 Go 标签丢失完全相同的已确认问题，不能将本诊断写成官方已知故障的复现。
+
 ## 本地可复查的检查
 
 ```bash
 python3 experiments/checkout-payment-path/external_compare.py build-tools \
   --pin-root /absolute/pin-kit --libdft /absolute/libdft64
-python3 -m unittest discover -s experiments/checkout-payment-path -p test_external_compare.py
+python3 -m unittest discover -s experiments/checkout-payment-path -p 'test_external*.py'
 ```
 
 第二条只检查合成日志的完整性、来源身份和错误结果拒绝，明确不算 Pin、内核或来源传播正确性证据。

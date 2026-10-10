@@ -31,6 +31,60 @@ def elf_bytes(data, address, size):
     raise ValueError('Instruction outside ELF file-backed load segment')
 
 
+def inspect_contexts(flow, labels):
+    """Pair recorded signal callbacks; value equality is diagnostic, not provenance."""
+    finish = flow[-1]
+    if not finish.get('context_diagnostics'):
+        require(not any(r['kind'] in ('context_change', 'context_resume') for r in flow),
+                'Context records without enabled marker')
+        return dict(enabled=False, signal_pairs=[], events=[])
+    events, resumes, stacks, pairs = {}, {}, {}, []
+    unpaired_returns = 0
+    for r in flow:
+        if r['kind'] == 'context_change':
+            require(r['id'] == len(events) + 1, 'Invalid context event sequence')
+            events[r['id']] = r
+            stack = stacks.setdefault(r['tid'], [])
+            if r['reason'] == 'signal':
+                stack.append(r)
+            elif r['reason'] == 'sigreturn' and stack:
+                entry = stack.pop()
+                require(entry['from'] is not None and r['to'] is not None, 'Missing signal context')
+                changes = []
+                for reg in ('R10', 'R11'):
+                    old = labels(entry['shadow_at_callback'][reg])
+                    now = labels(r['shadow_at_callback'][reg])
+                    changes.append(dict(register=reg, entry_labels=sorted(old), return_labels=sorted(now),
+                        interrupted_value_restored=(entry['from']['registers'][reg] == r['to']['registers'][reg]),
+                        labels_lost=sorted(old - now)))
+                pairs.append(dict(signal_event=entry['id'], return_event=r['id'],
+                                  signal_number=entry['info'], registers=changes))
+            elif r['reason'] == 'sigreturn':
+                unpaired_returns += 1
+        elif r['kind'] == 'context_resume':
+            require(r['id'] in events and r['id'] not in resumes, 'Invalid context resume sequence')
+            require(r['tid'] == events[r['id']]['tid'], 'Context resume changed thread')
+            require(r['actual'] is not None, 'Missing resumed context')
+            resumes[r['id']] = r
+    require(finish['context_events'] == len(events) and finish['context_resumes'] == len(resumes),
+            'Context count mismatch')
+    require(set(events) == set(resumes), 'Context event lacks first-instruction observation')
+    report = []
+    for key, event in events.items():
+        resumed = resumes[key]
+        report.append(dict(id=key, reason=event['reason'], after_step=event['step'],
+            resume_after_step=resumed['step'],
+            next_instruction_matches_to=(event['to'] == resumed['actual']),
+            registers={reg: dict(callback_labels=sorted(labels(event['shadow_at_callback'][reg])),
+                                resumed_labels=sorted(labels(resumed['shadow_before_instruction'][reg])))
+                       for reg in ('R10', 'R11')}))
+    return dict(enabled=True, event_count=len(events), events=report, signal_pairs=pairs,
+                unpaired_signal_entries=sum(len(v) for v in stacks.values()),
+                unpaired_signal_returns=unpaired_returns,
+                caveat='Callback shadow state is sampled once. Signal pairing assumes normal nested returns; '
+                       'it does not model modified ucontext, longjmp, or prove a unique cause.')
+
+
 def inspect(archive, case='one'):
     with ZipFile(archive) as z:
         summaries = [n for n in z.namelist() if n.count('/') == 1 and n.endswith('/summary.json')]
@@ -72,6 +126,7 @@ def inspect(archive, case='one'):
         steps = [r for r in flow if r['kind'] == 'before_instruction']
         require([r['step'] for r in steps] == list(range(1, len(steps) + 1)), 'Noncontiguous step sequence')
         require(flow[-1]['steps'] == len(steps), 'Step count mismatch')
+        contexts = inspect_contexts(flow, labels)
         gaps = []
         for a, b in zip(steps, steps[1:]):
             previous = ins[a['pc']]
@@ -98,8 +153,10 @@ def inspect(archive, case='one'):
                     raw_sink_labels={k:sink[0][k] for k in ('Units','Nanos')},
                     uncovered_opcode_kinds=origins[-1]['unhandled_opcode_kinds'],
                     wrapper_status=doc(case + '/libdft_payment/observation.json')['status'],
+                    context_diagnostics=contexts,
                     performance_eligible=False,
-                    limitation='No signal entry/return callbacks were recorded. Context-loss mechanism is a hypothesis, not uniquely established by these gaps.')
+                    limitation='Recorded gaps alone do not establish the context-loss mechanism. '
+                               'Context callbacks, when enabled, add temporal evidence but do not validate propagation semantics.')
 
 
 if __name__ == '__main__':
