@@ -1,0 +1,225 @@
+{
+  "stage": "local-original-decoder-query",
+  "native_capture": false,
+  "bpf_executed": false,
+  "libdft_executed": false,
+  "performance_eligible": false,
+  "synthetic": true,
+  "unicorn_version": "2.1.4",
+  "binary_sha256": "f190058af40162fb88528f49fba53c916f309a201e1d0c2062c0ea1d43a0d08f",
+  "cases": [
+    {
+      "input": "single_pixel",
+      "indexed": false,
+      "queries": 3,
+      "value_matches": 3,
+      "exact_sources": 3,
+      "tp": 6,
+      "fp": 0,
+      "fn": 0,
+      "refills": 1,
+      "code_widths": [
+        9
+      ],
+      "instruction_steps": 164,
+      "pixels_match": true
+    },
+    {
+      "input": "single_pixel",
+      "indexed": true,
+      "queries": 3,
+      "value_matches": 3,
+      "exact_sources": 3,
+      "tp": 6,
+      "fp": 0,
+      "fn": 0,
+      "refills": 1,
+      "code_widths": [
+        9
+      ],
+      "instruction_steps": 164,
+      "pixels_match": true
+    },
+    {
+      "input": "stripes",
+      "indexed": false,
+      "queries": 16,
+      "value_matches": 16,
+      "exact_sources": 16,
+      "tp": 32,
+      "fp": 0,
+      "fn": 0,
+      "refills": 1,
+      "code_widths": [
+        9
+      ],
+      "instruction_steps": 771,
+      "pixels_match": true
+    },
+    {
+      "input": "stripes",
+      "indexed": true,
+      "queries": 16,
+      "value_matches": 16,
+      "exact_sources": 16,
+      "tp": 32,
+      "fp": 0,
+      "fn": 0,
+      "refills": 1,
+      "code_widths": [
+        9
+      ],
+      "instruction_steps": 771,
+      "pixels_match": true
+    },
+    {
+      "input": "checker",
+      "indexed": false,
+      "queries": 75,
+      "value_matches": 75,
+      "exact_sources": 75,
+      "tp": 150,
+      "fp": 0,
+      "fn": 0,
+      "refills": 1,
+      "code_widths": [
+        9
+      ],
+      "instruction_steps": 3557,
+      "pixels_match": true
+    },
+    {
+      "input": "checker",
+      "indexed": true,
+      "queries": 75,
+      "value_matches": 75,
+      "exact_sources": 75,
+      "tp": 150,
+      "fp": 0,
+      "fn": 0,
+      "refills": 1,
+      "code_widths": [
+        9
+      ],
+      "instruction_steps": 3557,
+      "pixels_match": true
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "queries": 416,
+      "value_matches": 416,
+      "exact_sources": 416,
+      "tp": 832,
+      "fp": 0,
+      "fn": 0,
+      "refills": 2,
+      "code_widths": [
+        9,
+        10
+      ],
+      "instruction_steps": 19811,
+      "pixels_match": true
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "queries": 416,
+      "value_matches": 416,
+      "exact_sources": 416,
+      "tp": 832,
+      "fp": 0,
+      "fn": 0,
+      "refills": 2,
+      "code_widths": [
+        9,
+        10
+      ],
+      "instruction_steps": 19811,
+      "pixels_match": true
+    }
+  ],
+  "rejection_checks": [
+    {
+      "name": "wrong_elf",
+      "rejected": true,
+      "reason": "ELF identity mismatch"
+    },
+    {
+      "name": "incomplete_capture",
+      "rejected": true,
+      "reason": "Incomplete/error capture"
+    },
+    {
+      "name": "wrong_input_identity",
+      "rejected": true,
+      "reason": "Input identity mismatch"
+    },
+    {
+      "name": "unqualified_native_backend",
+      "rejected": true,
+      "reason": "Unqualified capture backend"
+    },
+    {
+      "name": "missing_first_invocation",
+      "rejected": true,
+      "reason": "Missing/reordered invocation"
+    },
+    {
+      "name": "duplicate_sequence",
+      "rejected": true,
+      "reason": "Missing/reordered invocation"
+    },
+    {
+      "name": "missing_refill",
+      "rejected": true,
+      "reason": "Missing/wrong helper boundary"
+    },
+    {
+      "name": "wrong_read_offset",
+      "rejected": true,
+      "reason": "Read identity/content mismatch"
+    },
+    {
+      "name": "wrong_abi_parent",
+      "rejected": true,
+      "reason": "Pre-call register mismatch rdi"
+    },
+    {
+      "name": "wrong_return",
+      "rejected": true,
+      "reason": "Return register mismatch rax"
+    },
+    {
+      "name": "source_write_corruption",
+      "rejected": true,
+      "reason": "Invalid refill summary"
+    },
+    {
+      "name": "wrong_context_version",
+      "rejected": true,
+      "reason": "Cross-call state changed outside query"
+    }
+  ],
+  "all_passed": true,
+  "total_queries": 1020,
+  "distinct_input_code_positions": 510,
+  "source_sha256": {
+    "ngiflib.c": "de2df465173a8acf6f376d6b264c0e1d74903901d683368c8cd2a7f2bf499b33",
+    "ngiflib.h": "3f585dc029479541ff1ac1dde749c4f346170ea06b9d99731a81e7086e7f05cd",
+    "gif2tga.c": "4f2a8468ce708bc4436077b4d90af69c457835125b2f3f756f6c6d520530794a"
+  },
+  "revision": "cfbedecfeca66e22b62c37b85fcad5aa825625d7",
+  "semantics": "explicit bit routing, projected to input byte identity; metadata fixed; arithmetic conservative",
+  "strategy": "boundary_replay",
+  "layout_verified_against_elf_dwarf": true,
+  "scope": "one image per file; normal global-palette noninterlaced inputs; widths 9 and 10 observed; GetByteStr source boundary; code metadata fixed",
+  "unvalidated": [
+    "native collection",
+    "libdft comparison",
+    "BPF",
+    "performance",
+    "arbitrary C/C++",
+    "minimal bit dependence for general arithmetic"
+  ]
+}

@@ -1,2 +1,5 @@
 # Optional development ISA-emulation tests only; host BCC capture does not need it.
 unicorn==2.1.4
+
+# Bounded C ISA decoder used by test_c_bit_machine.py.
+capstone==5.0.6
