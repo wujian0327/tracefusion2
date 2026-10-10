@@ -14,12 +14,30 @@ public final class Agent implements Opcodes {
     private static final String R = "tracefusion/Recorder";
     private static Path output;
     private static Set<String> selected;
+    private static Set<String> methods;
+    private static Properties scope;
+    private static String mode;
 
     public static void premain(String args, Instrumentation inst) throws Exception {
         output = Paths.get(System.getProperty("tracefusion.output", "java-trace"));
         Files.createDirectories(output);
+        mode = System.getProperty("tracefusion.mode", "full");
+        if (!mode.equals("full") && !mode.equals("sparse")) throw new IllegalArgumentException("capture_mode");
+        String scopePath = System.getProperty("tracefusion.scope");
+        if (scopePath != null) {
+            byte[] scopeBytes = Files.readAllBytes(Paths.get(scopePath));
+            System.setProperty("tracefusion.scopeHash", sha(scopeBytes));
+            scope = new Properties();
+            scope.load(new java.io.ByteArrayInputStream(scopeBytes));
+            methods = new HashSet<>();
+            for (int i = 0; i < Integer.parseInt(scope.getProperty("method.count")); i++)
+                methods.add(scope.getProperty("method." + i));
+            if (!methods.contains(scope.getProperty("entry"))) throw new IllegalArgumentException("scope_entry");
+            Files.write(output.resolve("observation.properties"), scopeBytes, StandardOpenOption.CREATE_NEW);
+        }
+        if (mode.equals("sparse") && scope == null) throw new IllegalArgumentException("sparse_requires_scope");
         selected = new HashSet<>(Arrays.asList(System.getProperty("tracefusion.classes",
-            "demo.Subject").replace('.', '/').split(",")));
+            scope == null ? "demo.Subject" : scope.getProperty("classes")).replace('.', '/').split(",")));
         for (String c : selected) if (c.isEmpty() || c.startsWith("java/") || c.startsWith("tracefusion/"))
             throw new IllegalArgumentException("Explicit application classes required");
         Recorder.start(output.resolve("events.jsonl"), Integer.getInteger("tracefusion.maxEvents", 100000));
@@ -82,6 +100,8 @@ public final class Agent implements Opcodes {
     private static byte[] instrument(String name, byte[] bytes) throws Exception {
         ClassNode c = new ClassNode(ASM9);
         new ClassReader(bytes).accept(c, 0);
+        if (scope != null && !sha(bytes).equals(scope.getProperty("sha256." + name)))
+            throw new IllegalArgumentException("scope_class_hash:" + name);
         for (MethodNode m : c.methods) if (!m.name.equals("<init>")) audit(m);
         // A symbolic owner must actually DECLARE this nonvolatile int field. Otherwise
         // inherited-field spellings could create two version counters for one location.
@@ -110,6 +130,7 @@ public final class Agent implements Opcodes {
         for (MethodNode m : c.methods) {
             if (m.name.equals("<init>")) continue; // Constructors outside this experiment's boundary.
             String method = name + "." + m.name + m.desc;
+            if (methods != null && !methods.contains(method)) continue;
             AbstractInsnNode[] original = m.instructions.toArray();
             IdentityHashMap<AbstractInsnNode, Integer> pcs = new IdentityHashMap<>();
             int pc = 0;
@@ -141,7 +162,7 @@ public final class Agent implements Opcodes {
                 }
                 plans.add("{\"site\":" + Recorder.json(site) + ",\"method\":" + Recorder.json(method)
                     + ",\"pc\":" + index + ",\"opcode\":" + op + ",\"operands\":" + Recorder.json(operands) + "}");
-                m.instructions.insertBefore(n, event("step", site, null));
+                if (mode.equals("full")) m.instructions.insertBefore(n, event("step", site, null));
                 if (n instanceof FieldInsnNode) instrumentField(m, (FieldInsnNode)n, site);
                 if (n instanceof JumpInsnNode && op != GOTO) {
                     JumpInsnNode jump = (JumpInsnNode)n;

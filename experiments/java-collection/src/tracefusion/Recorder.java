@@ -22,7 +22,8 @@ public final class Recorder {
         limit = maxEvents;
         // Never silently replace a previous capture.
         out = Files.newBufferedWriter(file, StandardCharsets.UTF_8, StandardOpenOption.CREATE_NEW);
-        row("start", "", 0, new Object[]{"java-collection-v1", System.getProperty("java.runtime.version")});
+        row("start", "", 0, new Object[]{"java-collection-v1", System.getProperty("java.runtime.version"),
+            System.getProperty("tracefusion.mode", "full"), System.getProperty("tracefusion.scopeHash", "")});
         Runtime.getRuntime().addShutdownHook(new Thread(Recorder::finish, "tracefusion-finish"));
     }
     public static synchronized String ref(Object o) {

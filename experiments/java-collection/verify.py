@@ -17,6 +17,15 @@ def validate(directory):
     require([r["seq"] for r in rows] == list(range(1, len(rows) + 1)), "event gap/order")
     require(rows[-1]["values"][0] == "complete" and not rows[-1]["values"][1], "collector reports unknown")
     require(sum(r["kind"] == "start" for r in rows) == 1 and sum(r["kind"] == "finish" for r in rows) == 1, "duplicate boundaries")
+    mode = rows[0]["values"][2] if len(rows[0]["values"]) > 2 else "full"
+    require(mode in ("full", "sparse"), "unsupported observation mode")
+    scope_path = directory / "observation.properties"
+    scope_hash = rows[0]["values"][3] if len(rows[0]["values"]) > 3 else ""
+    require(scope_hash == (hashlib.sha256(scope_path.read_bytes()).hexdigest() if scope_path.exists() else ""),
+            "scope evidence hash mismatch")
+    if mode == "sparse":
+        from observation import expand
+        rows = expand(directory, rows)
     plans, methods = {}, {}
     for file in directory.glob("*.plan.jsonl"):
         for line in file.read_text().splitlines():

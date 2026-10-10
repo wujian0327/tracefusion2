@@ -9,6 +9,7 @@ from pathlib import Path
 
 from classfile import descriptor, read_class
 from verify import validate, require
+from observation import read_scope, decoded_scope, query_hash
 
 
 def i32(x): return ((x + 2**31) % 2**32) - 2**31
@@ -37,16 +38,23 @@ class Engine:
         self.directory, self.config = Path(directory), config
         self.rows = validate(self.directory)  # structural checks only; never check_fixture()
         require(self.rows[0]["values"][0] == "java-collection-v1", "unsupported capture schema")
+        scope = read_scope(self.directory)
+        selected_methods = decoded_scope(self.directory, scope) if scope else None
+        if scope:
+            require(scope["query.sha256"] == query_hash(config), "query differs from observation scope")
+            require(all(r["site"] == scope["entry"] for r in self.rows
+                        if r["kind"] == "enter" and r["values"][0] == 0), "root differs from query entry")
         self.methods, self.plans, self.fields = {}, {}, {}
         for r in self.rows:
             if r["kind"] != "class": continue
             stem = r["site"].replace("/", "_")
             c = read_class((self.directory / (stem + ".original.class")).read_bytes())
             require(c["name"] == r["site"], "class name mismatch")
-            decoded = [p for m in c["methods"].values() for p in m["plans"]]
+            selected = {k: m for k, m in c["methods"].items() if selected_methods is None or k in selected_methods}
+            decoded = [p for m in selected.values() for p in m["plans"]]
             saved = [json.loads(x) for x in (self.directory / (stem + ".plan.jsonl")).read_text().splitlines()]
             require(saved == decoded, "collector plan differs from independently decoded original class")
-            self.methods.update(c["methods"])
+            self.methods.update(selected)
             self.plans.update({p["site"]: p for p in decoded})
             self.fields.update(c["fields"])
         for f in self.directory.glob("field_*.class"):
@@ -307,8 +315,11 @@ class Engine:
         return dict(schema="java-provenance-v1", status="ok", semantics="operational-direct-data-dependency",
                     source_bindings=self.bindings, source_aliases=aliases, results=results,
                     branch_observations=self.branches, nodes=self.nodes,
+                    observation=dict(mode=self.rows[0]["values"][2] if len(self.rows[0]["values"]) > 2 else "full",
+                                     raw_events=sum(not r.get("derived", False) for r in self.rows),
+                                     derived_steps=sum(r.get("derived", False) for r in self.rows)),
                     evidence={f.name: hashlib.sha256(f.read_bytes()).hexdigest() for f in sorted(self.directory.iterdir())
-                              if f.suffix == ".class" or f.name == "events.jsonl" or f.name.endswith(".plan.jsonl")})
+                              if f.suffix == ".class" or f.name in ("events.jsonl", "observation.properties") or f.name.endswith(".plan.jsonl")})
 
 
 def infer(directory, config):

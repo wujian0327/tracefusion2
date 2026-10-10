@@ -1,0 +1,2293 @@
+{
+  "schema": "java-observation-comparison-v1",
+  "status": "pass",
+  "java": {
+    "command": [
+      "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+      "-version"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": "openjdk version \"17.0.20.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Corretto-17.0.20.12.1 (build 17.0.20.1+12-LTS)\nOpenJDK 64-Bit Server VM Corretto-17.0.20.12.1 (build 17.0.20.1+12-LTS, mixed mode, sharing)\n"
+  },
+  "platform": {
+    "system": "Linux",
+    "node": "92ff1116476a",
+    "release": "6.18.44",
+    "version": "#1 SMP Sat Sep 26 20:02:31 UTC 2026",
+    "machine": "x86_64",
+    "processor": "x86_64"
+  },
+  "qualification": {
+    "query_scope": "entry static-call closure, not field-level slicing",
+    "retained": "all field/branch/call/return observations",
+    "global_optimality": false,
+    "real_application": false,
+    "external_tool_comparison": false,
+    "steady_state": false,
+    "memory_measurement_qualified": false
+  },
+  "rounds": 200,
+  "repetitions": 6,
+  "warmup_blocks": 1,
+  "seed": 20261010,
+  "agent_sha256": "8eae701edc93db143c39a413d386037efdc12cc3d23e76dee93b45aa4a9f8015",
+  "source_sha256": {
+    "check_inference.py": "0d1c084550cf3fd7053a28d010c2bad5d756f39a5b2f87b7936b6d3c7428d059",
+    "check_integer_semantics.py": "7250be5d1917c3ad466f37ff7144eef40cae5fcc0aba14a8c2eecc9e5be00aae",
+    "classfile.py": "99fd4b96fff2a8457a2c9ffba99ca625eea8da960267363e4cd5c630e3183cba",
+    "compare_observations.py": "a5d61cd051f27df30d24392648101e70b5d26d64168e780be89e0dfeebe0d142",
+    "fixtures/demo/Bench.java": "ab98ff81704c21a11bd4b05b23b4f32df36add3dc4a11654970a6d03808de15d",
+    "fixtures/demo/Cell.java": "cbdb7d4ff05daeaecb0ecbbb6a0479ea32d4b66ec06502e20133cd2e1669f720",
+    "fixtures/demo/Driver.java": "2fd320be5815dd2db1190e4c55835dcd226e8e3e128bceb7b2775842d9a157a5",
+    "fixtures/demo/Subject.java": "fc91d359efa8f64ac8da594d0812c43395acea6844a286f40f281ad95dca1895",
+    "fixtures/demo/Unsupported.java": "5105e74646a50492bcdc64d91586fc14a139ad219c75b55622f960640ffddc02",
+    "infer.py": "799e8fc1aaf9687bbc0cd6dd638164915ba9369c4c860f110eb4b54685101ebf",
+    "measure_command.c": "560d33ee6975c939eb9087c9d855aa530144c5f620897437801a7d14504fe26f",
+    "observation.py": "35941df025f38183b77924d8eac7ad5d977cace5028ca167f761159732b8c92b",
+    "run.py": "2ebd7278dd5ad2efe2240a98b8175cec52985899da9fd75a8dbc2aed9cd1ddc3",
+    "semantics/calibration/IntOps.java": "a82517231cac2d49a671618afa464ff3588ea817d4961a841f2045bf843f10c8",
+    "src/tracefusion/Agent.java": "a0c53e4e710dab6951eae1a7cd7d061d2a49f83f950e4c21cd3f384faf60cfa7",
+    "src/tracefusion/Recorder.java": "06429644efefc99244566c27743138868c6040f355a7a9f30e4e0d8c08fcf90a",
+    "verify.py": "7a7b81c562d26eab364de4c5f52dec2689a2abb01e7d9f7dd24cec816b3c25b8"
+  },
+  "correctness_reused_from": "java-observation-20261010-092104-488238",
+  "correctness_manifest_sha256": "a012fb3c4f1aa9729d24fec78a10628d89c6ab74a1b1ac51af3f980ffc06ba6f",
+  "cases": [
+    {
+      "jvm": "default",
+      "case": "left",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "events": 12,
+      "derived_steps": 0,
+      "bytes": 1491,
+      "graph_nodes": 9
+    },
+    {
+      "jvm": "default",
+      "case": "left",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "events": 7,
+      "derived_steps": 5,
+      "bytes": 920,
+      "graph_nodes": 9
+    },
+    {
+      "jvm": "default",
+      "case": "right",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "events": 12,
+      "derived_steps": 0,
+      "bytes": 1491,
+      "graph_nodes": 9
+    },
+    {
+      "jvm": "default",
+      "case": "right",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "events": 7,
+      "derived_steps": 5,
+      "bytes": 920,
+      "graph_nodes": 9
+    },
+    {
+      "jvm": "default",
+      "case": "alias",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "events": 12,
+      "derived_steps": 0,
+      "bytes": 1491,
+      "graph_nodes": 9
+    },
+    {
+      "jvm": "default",
+      "case": "alias",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "events": 7,
+      "derived_steps": 5,
+      "bytes": 920,
+      "graph_nodes": 9
+    },
+    {
+      "jvm": "default",
+      "case": "overwrite",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        }
+      ],
+      "events": 15,
+      "derived_steps": 0,
+      "bytes": 1914,
+      "graph_nodes": 10
+    },
+    {
+      "jvm": "default",
+      "case": "overwrite",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        }
+      ],
+      "events": 8,
+      "derived_steps": 7,
+      "bytes": 1098,
+      "graph_nodes": 10
+    },
+    {
+      "jvm": "default",
+      "case": "nested",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 34,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 22
+        }
+      ],
+      "events": 30,
+      "derived_steps": 0,
+      "bytes": 3456,
+      "graph_nodes": 23
+    },
+    {
+      "jvm": "default",
+      "case": "nested",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 34,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 22
+        }
+      ],
+      "events": 15,
+      "derived_steps": 15,
+      "bytes": 1825,
+      "graph_nodes": 23
+    },
+    {
+      "jvm": "default",
+      "case": "loop",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 68,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            },
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 41
+        }
+      ],
+      "events": 53,
+      "derived_steps": 0,
+      "bytes": 6173,
+      "graph_nodes": 42
+    },
+    {
+      "jvm": "default",
+      "case": "loop",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 68,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            },
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 41
+        }
+      ],
+      "events": 13,
+      "derived_steps": 40,
+      "bytes": 1678,
+      "graph_nodes": 42
+    },
+    {
+      "jvm": "default",
+      "case": "gc",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        },
+        {
+          "id": "return2",
+          "root": 2,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 17
+        }
+      ],
+      "events": 21,
+      "derived_steps": 0,
+      "bytes": 2572,
+      "graph_nodes": 18
+    },
+    {
+      "jvm": "default",
+      "case": "gc",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        },
+        {
+          "id": "return2",
+          "root": 2,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 17
+        }
+      ],
+      "events": 11,
+      "derived_steps": 10,
+      "bytes": 1424,
+      "graph_nodes": 18
+    },
+    {
+      "jvm": "interpreter",
+      "case": "left",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "events": 12,
+      "derived_steps": 0,
+      "bytes": 1490,
+      "graph_nodes": 9
+    },
+    {
+      "jvm": "interpreter",
+      "case": "left",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "events": 7,
+      "derived_steps": 5,
+      "bytes": 919,
+      "graph_nodes": 9
+    },
+    {
+      "jvm": "interpreter",
+      "case": "right",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "events": 12,
+      "derived_steps": 0,
+      "bytes": 1490,
+      "graph_nodes": 9
+    },
+    {
+      "jvm": "interpreter",
+      "case": "right",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "events": 7,
+      "derived_steps": 5,
+      "bytes": 919,
+      "graph_nodes": 9
+    },
+    {
+      "jvm": "interpreter",
+      "case": "alias",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "events": 12,
+      "derived_steps": 0,
+      "bytes": 1490,
+      "graph_nodes": 9
+    },
+    {
+      "jvm": "interpreter",
+      "case": "alias",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "events": 7,
+      "derived_steps": 5,
+      "bytes": 919,
+      "graph_nodes": 9
+    },
+    {
+      "jvm": "interpreter",
+      "case": "overwrite",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        }
+      ],
+      "events": 15,
+      "derived_steps": 0,
+      "bytes": 1913,
+      "graph_nodes": 10
+    },
+    {
+      "jvm": "interpreter",
+      "case": "overwrite",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        }
+      ],
+      "events": 8,
+      "derived_steps": 7,
+      "bytes": 1097,
+      "graph_nodes": 10
+    },
+    {
+      "jvm": "interpreter",
+      "case": "nested",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 34,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 22
+        }
+      ],
+      "events": 30,
+      "derived_steps": 0,
+      "bytes": 3455,
+      "graph_nodes": 23
+    },
+    {
+      "jvm": "interpreter",
+      "case": "nested",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 34,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 22
+        }
+      ],
+      "events": 15,
+      "derived_steps": 15,
+      "bytes": 1824,
+      "graph_nodes": 23
+    },
+    {
+      "jvm": "interpreter",
+      "case": "loop",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 68,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            },
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 41
+        }
+      ],
+      "events": 53,
+      "derived_steps": 0,
+      "bytes": 6172,
+      "graph_nodes": 42
+    },
+    {
+      "jvm": "interpreter",
+      "case": "loop",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 68,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            },
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 41
+        }
+      ],
+      "events": 13,
+      "derived_steps": 40,
+      "bytes": 1677,
+      "graph_nodes": 42
+    },
+    {
+      "jvm": "interpreter",
+      "case": "gc",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        },
+        {
+          "id": "return2",
+          "root": 2,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 17
+        }
+      ],
+      "events": 21,
+      "derived_steps": 0,
+      "bytes": 2571,
+      "graph_nodes": 18
+    },
+    {
+      "jvm": "interpreter",
+      "case": "gc",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        },
+        {
+          "id": "return2",
+          "root": 2,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 17
+        }
+      ],
+      "events": 11,
+      "derived_steps": 10,
+      "bytes": 1423,
+      "graph_nodes": 18
+    }
+  ],
+  "faults": [
+    {
+      "fault": "missing_read",
+      "rejected": true,
+      "reason": "missing mandatory sparse observation"
+    },
+    {
+      "fault": "missing_branch",
+      "rejected": true,
+      "reason": "missing mandatory sparse observation"
+    },
+    {
+      "fault": "missing_exit",
+      "rejected": true,
+      "reason": "incomplete sparse frames"
+    },
+    {
+      "fault": "missing_footer",
+      "rejected": true,
+      "reason": "missing boundaries"
+    },
+    {
+      "fault": "same_value_receiver",
+      "rejected": true,
+      "reason": "field receiver/identity disagrees with operand stack"
+    },
+    {
+      "fault": "branch_direction",
+      "rejected": true,
+      "reason": "missing mandatory sparse observation"
+    },
+    {
+      "fault": "extra_step",
+      "rejected": true,
+      "reason": "unexpected raw step in sparse mode"
+    },
+    {
+      "fault": "scope_hash",
+      "rejected": true,
+      "reason": "scope evidence hash mismatch"
+    },
+    {
+      "fault": "original_class",
+      "rejected": true,
+      "reason": "scope class hash"
+    },
+    {
+      "fault": "query_binding",
+      "rejected": true,
+      "reason": "query differs from observation scope"
+    },
+    {
+      "fault": "null",
+      "rejected": true,
+      "reason": "collector reports unknown"
+    },
+    {
+      "fault": "threads",
+      "rejected": true,
+      "reason": "collector reports unknown"
+    }
+  ],
+  "measurements": [
+    {
+      "block": -1,
+      "warmup": true,
+      "order": [
+        "sparse",
+        "native",
+        "full"
+      ],
+      "position": 0,
+      "mode": "sparse",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost--1-0-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.24969396899541607,
+        "user_seconds": 0.360967,
+        "system_seconds": 0.027257,
+        "cpu_seconds": 0.38822399999999996,
+        "peak_rss_kib": 52984,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost--1-0-sparse/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost--1-0-sparse/inference.json"
+        ],
+        "wall_seconds": 0.17485482000483898,
+        "user_seconds": 0.156576,
+        "system_seconds": 0.016177,
+        "cpu_seconds": 0.172753,
+        "peak_rss_kib": 35380,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 2003,
+      "trace_bytes": 259442,
+      "end_to_end_wall_seconds": 0.42454878900025506,
+      "end_to_end_cpu_seconds": 0.560977
+    },
+    {
+      "block": -1,
+      "warmup": true,
+      "order": [
+        "sparse",
+        "native",
+        "full"
+      ],
+      "position": 1,
+      "mode": "native",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.06695262700668536,
+        "user_seconds": 0.054749,
+        "system_seconds": 0.019956,
+        "cpu_seconds": 0.074705,
+        "peak_rss_kib": 29968,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.06695262700668536,
+      "end_to_end_cpu_seconds": 0.074705
+    },
+    {
+      "block": -1,
+      "warmup": true,
+      "order": [
+        "sparse",
+        "native",
+        "full"
+      ],
+      "position": 2,
+      "mode": "full",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost--1-2-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.2801177959991037,
+        "user_seconds": 0.459492,
+        "system_seconds": 0.047369,
+        "cpu_seconds": 0.506861,
+        "peak_rss_kib": 64424,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost--1-2-full/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost--1-2-full/inference.json"
+        ],
+        "wall_seconds": 0.18330735999916214,
+        "user_seconds": 0.169214,
+        "system_seconds": 0.012006,
+        "cpu_seconds": 0.18122,
+        "peak_rss_kib": 36796,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 10003,
+      "trace_bytes": 1186524,
+      "end_to_end_wall_seconds": 0.46342515599826584,
+      "end_to_end_cpu_seconds": 0.6880809999999999
+    },
+    {
+      "block": 0,
+      "warmup": false,
+      "order": [
+        "full",
+        "native",
+        "sparse"
+      ],
+      "position": 0,
+      "mode": "full",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-0-0-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.2815484730017488,
+        "user_seconds": 0.476183,
+        "system_seconds": 0.063574,
+        "cpu_seconds": 0.539757,
+        "peak_rss_kib": 69684,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-0-0-full/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-0-0-full/inference.json"
+        ],
+        "wall_seconds": 0.1746797259984305,
+        "user_seconds": 0.148383,
+        "system_seconds": 0.024062,
+        "cpu_seconds": 0.172445,
+        "peak_rss_kib": 36800,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 10003,
+      "trace_bytes": 1186524,
+      "end_to_end_wall_seconds": 0.4562281990001793,
+      "end_to_end_cpu_seconds": 0.712202
+    },
+    {
+      "block": 0,
+      "warmup": false,
+      "order": [
+        "full",
+        "native",
+        "sparse"
+      ],
+      "position": 1,
+      "mode": "native",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.06353976100217551,
+        "user_seconds": 0.06642,
+        "system_seconds": 0.004194,
+        "cpu_seconds": 0.07061400000000001,
+        "peak_rss_kib": 30092,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.06353976100217551,
+      "end_to_end_cpu_seconds": 0.07061400000000001
+    },
+    {
+      "block": 0,
+      "warmup": false,
+      "order": [
+        "full",
+        "native",
+        "sparse"
+      ],
+      "position": 2,
+      "mode": "sparse",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-0-2-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.24299648700252874,
+        "user_seconds": 0.332489,
+        "system_seconds": 0.039918,
+        "cpu_seconds": 0.372407,
+        "peak_rss_kib": 53484,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-0-2-sparse/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-0-2-sparse/inference.json"
+        ],
+        "wall_seconds": 0.16903112499858253,
+        "user_seconds": 0.146449,
+        "system_seconds": 0.020313,
+        "cpu_seconds": 0.166762,
+        "peak_rss_kib": 35376,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 2003,
+      "trace_bytes": 259442,
+      "end_to_end_wall_seconds": 0.41202761200111127,
+      "end_to_end_cpu_seconds": 0.539169
+    },
+    {
+      "block": 1,
+      "warmup": false,
+      "order": [
+        "native",
+        "full",
+        "sparse"
+      ],
+      "position": 0,
+      "mode": "native",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.0657310390015482,
+        "user_seconds": 0.061474,
+        "system_seconds": 0.012405,
+        "cpu_seconds": 0.073879,
+        "peak_rss_kib": 29840,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.0657310390015482,
+      "end_to_end_cpu_seconds": 0.073879
+    },
+    {
+      "block": 1,
+      "warmup": false,
+      "order": [
+        "native",
+        "full",
+        "sparse"
+      ],
+      "position": 1,
+      "mode": "full",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-1-1-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.28968864399939775,
+        "user_seconds": 0.470024,
+        "system_seconds": 0.036138,
+        "cpu_seconds": 0.506162,
+        "peak_rss_kib": 62100,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-1-1-full/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-1-1-full/inference.json"
+        ],
+        "wall_seconds": 0.18629284799681045,
+        "user_seconds": 0.163161,
+        "system_seconds": 0.015644,
+        "cpu_seconds": 0.178805,
+        "peak_rss_kib": 36800,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 10003,
+      "trace_bytes": 1186524,
+      "end_to_end_wall_seconds": 0.4759814919962082,
+      "end_to_end_cpu_seconds": 0.684967
+    },
+    {
+      "block": 1,
+      "warmup": false,
+      "order": [
+        "native",
+        "full",
+        "sparse"
+      ],
+      "position": 2,
+      "mode": "sparse",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-1-2-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.23122959399916,
+        "user_seconds": 0.322878,
+        "system_seconds": 0.038683,
+        "cpu_seconds": 0.361561,
+        "peak_rss_kib": 53100,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-1-2-sparse/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-1-2-sparse/inference.json"
+        ],
+        "wall_seconds": 0.1639042349997908,
+        "user_seconds": 0.145369,
+        "system_seconds": 0.016236,
+        "cpu_seconds": 0.161605,
+        "peak_rss_kib": 35372,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 2003,
+      "trace_bytes": 259442,
+      "end_to_end_wall_seconds": 0.3951338289989508,
+      "end_to_end_cpu_seconds": 0.523166
+    },
+    {
+      "block": 2,
+      "warmup": false,
+      "order": [
+        "native",
+        "sparse",
+        "full"
+      ],
+      "position": 0,
+      "mode": "native",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.0638430819963105,
+        "user_seconds": 0.071787,
+        "system_seconds": 0.0,
+        "cpu_seconds": 0.071787,
+        "peak_rss_kib": 30096,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.0638430819963105,
+      "end_to_end_cpu_seconds": 0.071787
+    },
+    {
+      "block": 2,
+      "warmup": false,
+      "order": [
+        "native",
+        "sparse",
+        "full"
+      ],
+      "position": 1,
+      "mode": "sparse",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-2-1-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.22373566599708283,
+        "user_seconds": 0.316319,
+        "system_seconds": 0.033456,
+        "cpu_seconds": 0.349775,
+        "peak_rss_kib": 53104,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-2-1-sparse/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-2-1-sparse/inference.json"
+        ],
+        "wall_seconds": 0.16362556599779055,
+        "user_seconds": 0.145019,
+        "system_seconds": 0.01615,
+        "cpu_seconds": 0.161169,
+        "peak_rss_kib": 35372,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 2003,
+      "trace_bytes": 259442,
+      "end_to_end_wall_seconds": 0.3873612319948734,
+      "end_to_end_cpu_seconds": 0.5109440000000001
+    },
+    {
+      "block": 2,
+      "warmup": false,
+      "order": [
+        "native",
+        "sparse",
+        "full"
+      ],
+      "position": 2,
+      "mode": "full",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-2-2-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.25763885600463254,
+        "user_seconds": 0.408837,
+        "system_seconds": 0.044938,
+        "cpu_seconds": 0.453775,
+        "peak_rss_kib": 64380,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-2-2-full/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-2-2-full/inference.json"
+        ],
+        "wall_seconds": 0.18281610400299542,
+        "user_seconds": 0.172639,
+        "system_seconds": 0.007935,
+        "cpu_seconds": 0.18057399999999998,
+        "peak_rss_kib": 36804,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 10003,
+      "trace_bytes": 1186524,
+      "end_to_end_wall_seconds": 0.44045496000762796,
+      "end_to_end_cpu_seconds": 0.6343489999999999
+    },
+    {
+      "block": 3,
+      "warmup": false,
+      "order": [
+        "native",
+        "sparse",
+        "full"
+      ],
+      "position": 0,
+      "mode": "native",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.06833122600073693,
+        "user_seconds": 0.073429,
+        "system_seconds": 0.004162,
+        "cpu_seconds": 0.077591,
+        "peak_rss_kib": 29968,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.06833122600073693,
+      "end_to_end_cpu_seconds": 0.077591
+    },
+    {
+      "block": 3,
+      "warmup": false,
+      "order": [
+        "native",
+        "sparse",
+        "full"
+      ],
+      "position": 1,
+      "mode": "sparse",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-3-1-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.24915854400023818,
+        "user_seconds": 0.318273,
+        "system_seconds": 0.061833,
+        "cpu_seconds": 0.38010599999999994,
+        "peak_rss_kib": 53392,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-3-1-sparse/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-3-1-sparse/inference.json"
+        ],
+        "wall_seconds": 0.1745426430061343,
+        "user_seconds": 0.147485,
+        "system_seconds": 0.024377,
+        "cpu_seconds": 0.17186200000000001,
+        "peak_rss_kib": 35372,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 2003,
+      "trace_bytes": 259442,
+      "end_to_end_wall_seconds": 0.4237011870063725,
+      "end_to_end_cpu_seconds": 0.551968
+    },
+    {
+      "block": 3,
+      "warmup": false,
+      "order": [
+        "native",
+        "sparse",
+        "full"
+      ],
+      "position": 2,
+      "mode": "full",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-3-2-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.27449811800033785,
+        "user_seconds": 0.465804,
+        "system_seconds": 0.035873,
+        "cpu_seconds": 0.501677,
+        "peak_rss_kib": 66396,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-3-2-full/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-3-2-full/inference.json"
+        ],
+        "wall_seconds": 0.17771462300152052,
+        "user_seconds": 0.15161,
+        "system_seconds": 0.019248,
+        "cpu_seconds": 0.170858,
+        "peak_rss_kib": 36804,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 10003,
+      "trace_bytes": 1186524,
+      "end_to_end_wall_seconds": 0.4522127410018584,
+      "end_to_end_cpu_seconds": 0.6725350000000001
+    },
+    {
+      "block": 4,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "native",
+        "full"
+      ],
+      "position": 0,
+      "mode": "sparse",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-4-0-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.23574333199940156,
+        "user_seconds": 0.342485,
+        "system_seconds": 0.028073,
+        "cpu_seconds": 0.370558,
+        "peak_rss_kib": 53256,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-4-0-sparse/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-4-0-sparse/inference.json"
+        ],
+        "wall_seconds": 0.16263395099667832,
+        "user_seconds": 0.140341,
+        "system_seconds": 0.02004,
+        "cpu_seconds": 0.160381,
+        "peak_rss_kib": 35372,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 2003,
+      "trace_bytes": 259442,
+      "end_to_end_wall_seconds": 0.3983772829960799,
+      "end_to_end_cpu_seconds": 0.530939
+    },
+    {
+      "block": 4,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "native",
+        "full"
+      ],
+      "position": 1,
+      "mode": "native",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.0644185959972674,
+        "user_seconds": 0.058438,
+        "system_seconds": 0.015488,
+        "cpu_seconds": 0.07392599999999999,
+        "peak_rss_kib": 29988,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.0644185959972674,
+      "end_to_end_cpu_seconds": 0.07392599999999999
+    },
+    {
+      "block": 4,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "native",
+        "full"
+      ],
+      "position": 2,
+      "mode": "full",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-4-2-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.2472897080006078,
+        "user_seconds": 0.390084,
+        "system_seconds": 0.039895,
+        "cpu_seconds": 0.429979,
+        "peak_rss_kib": 63340,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-4-2-full/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-4-2-full/inference.json"
+        ],
+        "wall_seconds": 0.17628409200551687,
+        "user_seconds": 0.165371,
+        "system_seconds": 0.00829,
+        "cpu_seconds": 0.17366099999999998,
+        "peak_rss_kib": 36800,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 10003,
+      "trace_bytes": 1186524,
+      "end_to_end_wall_seconds": 0.42357380000612466,
+      "end_to_end_cpu_seconds": 0.60364
+    },
+    {
+      "block": 5,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "full",
+        "native"
+      ],
+      "position": 0,
+      "mode": "sparse",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-5-0-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.24543211799755227,
+        "user_seconds": 0.321876,
+        "system_seconds": 0.047666,
+        "cpu_seconds": 0.369542,
+        "peak_rss_kib": 53308,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-5-0-sparse/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-5-0-sparse/inference.json"
+        ],
+        "wall_seconds": 0.16575614099565428,
+        "user_seconds": 0.146853,
+        "system_seconds": 0.016477,
+        "cpu_seconds": 0.16333,
+        "peak_rss_kib": 35372,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 2003,
+      "trace_bytes": 259442,
+      "end_to_end_wall_seconds": 0.41118825899320655,
+      "end_to_end_cpu_seconds": 0.532872
+    },
+    {
+      "block": 5,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "full",
+        "native"
+      ],
+      "position": 1,
+      "mode": "full",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-5-1-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.2437052440000116,
+        "user_seconds": 0.36985,
+        "system_seconds": 0.053355,
+        "cpu_seconds": 0.423205,
+        "peak_rss_kib": 62684,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-5-1-full/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/cost-5-1-full/inference.json"
+        ],
+        "wall_seconds": 0.1788761119969422,
+        "user_seconds": 0.160616,
+        "system_seconds": 0.01597,
+        "cpu_seconds": 0.17658600000000002,
+        "peak_rss_kib": 36800,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 10003,
+      "trace_bytes": 1186524,
+      "end_to_end_wall_seconds": 0.4225813559969538,
+      "end_to_end_cpu_seconds": 0.599791
+    },
+    {
+      "block": 5,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "full",
+        "native"
+      ],
+      "position": 2,
+      "mode": "native",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-092411-937152/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.07419632600067416,
+        "user_seconds": 0.073119,
+        "system_seconds": 0.00728,
+        "cpu_seconds": 0.080399,
+        "peak_rss_kib": 30092,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.07419632600067416,
+      "end_to_end_cpu_seconds": 0.080399
+    }
+  ],
+  "summary": {
+    "correct_queries_per_mode": 16,
+    "raw_events": {
+      "full": 310,
+      "sparse": 136
+    },
+    "cost_medians": {
+      "native": {
+        "online_wall_seconds": 0.0650748174994078,
+        "online_cpu_seconds": 0.0739025,
+        "online_peak_rss_kib": 30040.0,
+        "offline_wall_seconds": 0.0,
+        "offline_cpu_seconds": 0.0,
+        "offline_peak_rss_kib": 0.0,
+        "end_to_end_wall_seconds": 0.0650748174994078,
+        "end_to_end_cpu_seconds": 0.0739025,
+        "events": 0.0,
+        "trace_bytes": 0.0
+      },
+      "full": {
+        "online_wall_seconds": 0.2660684870024852,
+        "online_cpu_seconds": 0.477726,
+        "online_peak_rss_kib": 63860.0,
+        "offline_wall_seconds": 0.17829536749923136,
+        "offline_cpu_seconds": 0.1751235,
+        "offline_peak_rss_kib": 36800.0,
+        "end_to_end_wall_seconds": 0.44633385050474317,
+        "end_to_end_cpu_seconds": 0.6534420000000001,
+        "events": 10003.0,
+        "trace_bytes": 1186524.0
+      },
+      "sparse": {
+        "online_wall_seconds": 0.23936990950096515,
+        "online_cpu_seconds": 0.37005,
+        "online_peak_rss_kib": 53282.0,
+        "offline_wall_seconds": 0.16483018799772253,
+        "offline_cpu_seconds": 0.1624675,
+        "offline_peak_rss_kib": 35372.0,
+        "end_to_end_wall_seconds": 0.4047827709946432,
+        "end_to_end_cpu_seconds": 0.5319055,
+        "events": 2003.0,
+        "trace_bytes": 259442.0
+      }
+    },
+    "paired_reduction": {
+      "online_wall_seconds": {
+        "median": 0.11195214560773958,
+        "minimum": -0.0070859123472148955,
+        "maximum": 0.2017995914274061,
+        "sparse_worse": 1
+      },
+      "online_cpu_seconds": {
+        "median": 0.23575885111713812,
+        "minimum": 0.12680143193015214,
+        "maximum": 0.31004692852524385,
+        "sparse_worse": 0
+      },
+      "online_peak_rss_kib": {
+        "qualified": false,
+        "reason": "supervisor RSS floor unverified"
+      },
+      "offline_wall_seconds": {
+        "median": 0.07538966113474305,
+        "minimum": 0.017848728156484195,
+        "maximum": 0.12017967000753016,
+        "sparse_worse": 0
+      },
+      "offline_cpu_seconds": {
+        "median": 0.07576953202442466,
+        "minimum": -0.00587622470121385,
+        "maximum": 0.10746286840851937,
+        "sparse_worse": 1
+      },
+      "offline_peak_rss_kib": {
+        "qualified": false,
+        "reason": "supervisor RSS floor unverified"
+      },
+      "end_to_end_wall_seconds": {
+        "median": 0.07996580625950123,
+        "minimum": 0.026960718550558482,
+        "maximum": 0.1698546358560964,
+        "sparse_worse": 0
+      },
+      "end_to_end_cpu_seconds": {
+        "median": 0.18690523833338557,
+        "minimum": 0.11157053040142306,
+        "maximum": 0.24295494817481555,
+        "sparse_worse": 0
+      },
+      "events": {
+        "median": 0.7997600719784065,
+        "minimum": 0.7997600719784065,
+        "maximum": 0.7997600719784065,
+        "sparse_worse": 0
+      },
+      "trace_bytes": {
+        "median": 0.781342813124724,
+        "minimum": 0.781342813124724,
+        "maximum": 0.781342813124724,
+        "sparse_worse": 0
+      }
+    }
+  },
+  "capture_directory": "java-observation-20261010-092411-937152",
+  "capture_manifest_sha256": "5a44ad08a2303cb18e81443873e64ea45f7b872e02facd984c4c85f0764f9647",
+  "verification": {
+    "status": "pass",
+    "new_JVM_execution": false,
+    "correct_queries": {
+      "full": 16,
+      "sparse": 16
+    },
+    "benchmark_queries_including_warmup": 28,
+    "raw_manifest_sha256": "5a44ad08a2303cb18e81443873e64ea45f7b872e02facd984c4c85f0764f9647",
+    "existing_rejections": 12,
+    "additional_rejections": [
+      {
+        "fault": "missing_write",
+        "reason": "missing mandatory sparse observation",
+        "rejected": true
+      },
+      {
+        "fault": "bad_write_version",
+        "reason": "field write version",
+        "rejected": true
+      },
+      {
+        "fault": "missing_call",
+        "reason": "unexpected callee entry",
+        "rejected": true
+      },
+      {
+        "fault": "missing_call_return",
+        "reason": "missing mandatory sparse observation",
+        "rejected": true
+      },
+      {
+        "fault": "missing_callee_entry",
+        "reason": "sparse frame mismatch",
+        "rejected": true
+      },
+      {
+        "fault": "bad_callee_argument",
+        "reason": "callee arguments disagree with caller operand stack",
+        "rejected": true
+      }
+    ],
+    "evidence_files_checked": 653,
+    "summary": {
+      "correct_queries_per_mode": 16,
+      "raw_events": {
+        "full": 310,
+        "sparse": 136
+      },
+      "cost_medians": {
+        "native": {
+          "online_wall_seconds": 0.0650748174994078,
+          "online_cpu_seconds": 0.0739025,
+          "online_peak_rss_kib": 30040.0,
+          "offline_wall_seconds": 0.0,
+          "offline_cpu_seconds": 0.0,
+          "offline_peak_rss_kib": 0.0,
+          "end_to_end_wall_seconds": 0.0650748174994078,
+          "end_to_end_cpu_seconds": 0.0739025,
+          "events": 0.0,
+          "trace_bytes": 0.0
+        },
+        "full": {
+          "online_wall_seconds": 0.2660684870024852,
+          "online_cpu_seconds": 0.477726,
+          "online_peak_rss_kib": 63860.0,
+          "offline_wall_seconds": 0.17829536749923136,
+          "offline_cpu_seconds": 0.1751235,
+          "offline_peak_rss_kib": 36800.0,
+          "end_to_end_wall_seconds": 0.44633385050474317,
+          "end_to_end_cpu_seconds": 0.6534420000000001,
+          "events": 10003.0,
+          "trace_bytes": 1186524.0
+        },
+        "sparse": {
+          "online_wall_seconds": 0.23936990950096515,
+          "online_cpu_seconds": 0.37005,
+          "online_peak_rss_kib": 53282.0,
+          "offline_wall_seconds": 0.16483018799772253,
+          "offline_cpu_seconds": 0.1624675,
+          "offline_peak_rss_kib": 35372.0,
+          "end_to_end_wall_seconds": 0.4047827709946432,
+          "end_to_end_cpu_seconds": 0.5319055,
+          "events": 2003.0,
+          "trace_bytes": 259442.0
+        }
+      },
+      "paired_reduction": {
+        "online_wall_seconds": {
+          "median": 0.11195214560773958,
+          "minimum": -0.0070859123472148955,
+          "maximum": 0.2017995914274061,
+          "sparse_worse": 1
+        },
+        "online_cpu_seconds": {
+          "median": 0.23575885111713812,
+          "minimum": 0.12680143193015214,
+          "maximum": 0.31004692852524385,
+          "sparse_worse": 0
+        },
+        "online_peak_rss_kib": {
+          "qualified": false,
+          "reason": "supervisor RSS floor unverified"
+        },
+        "offline_wall_seconds": {
+          "median": 0.07538966113474305,
+          "minimum": 0.017848728156484195,
+          "maximum": 0.12017967000753016,
+          "sparse_worse": 0
+        },
+        "offline_cpu_seconds": {
+          "median": 0.07576953202442466,
+          "minimum": -0.00587622470121385,
+          "maximum": 0.10746286840851937,
+          "sparse_worse": 1
+        },
+        "offline_peak_rss_kib": {
+          "qualified": false,
+          "reason": "supervisor RSS floor unverified"
+        },
+        "end_to_end_wall_seconds": {
+          "median": 0.07996580625950123,
+          "minimum": 0.026960718550558482,
+          "maximum": 0.1698546358560964,
+          "sparse_worse": 0
+        },
+        "end_to_end_cpu_seconds": {
+          "median": 0.18690523833338557,
+          "minimum": 0.11157053040142306,
+          "maximum": 0.24295494817481555,
+          "sparse_worse": 0
+        },
+        "events": {
+          "median": 0.7997600719784065,
+          "minimum": 0.7997600719784065,
+          "maximum": 0.7997600719784065,
+          "sparse_worse": 0
+        },
+        "trace_bytes": {
+          "median": 0.781342813124724,
+          "minimum": 0.781342813124724,
+          "maximum": 0.781342813124724,
+          "sparse_worse": 0
+        }
+      }
+    }
+  },
+  "verification_source_sha256": "f273d4e31b80459890694fbc749f14f421b867cb78d36189c0a25cf5c88d2632",
+  "note": "Capture source hashes describe exact measurement snapshot. Later runner change only validates reused input hashes; see git history. RSS unqualified. Costs include process startup."
+}

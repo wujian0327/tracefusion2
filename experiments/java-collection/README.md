@@ -4,6 +4,8 @@
 
 ## 运行
 
+最新的完整/稀疏观测对照与成本入口见 [OBSERVATION-COMPARISON.md](OBSERVATION-COMPARISON.md)：`python3 experiments/java-collection/compare_observations.py --jdk /path/to/jdk`。以下 `run.py` 保留原有全步骤采集实验。
+
 需要完整 JDK 17 或以上（`java`、`javac`、`javap`）和 Python 3.10+。首次构建会从 Maven Central 下载约 175 KiB 的固定 ASM 依赖并核对 SHA-256。
 
 ```bash
@@ -73,7 +75,7 @@ java -Xverify:all \
 
 ## 固定边界与拒绝策略
 
-默认仅变换 `demo.Subject`，可用 `-Dtracefusion.classes=包名.类名,另一个类名` 指定精确类白名单。只接受系统类加载器首次加载。方法必须是无同步的具体静态方法；支持经白名单审核的 int 运算、int/引用局部变量、条件分支、范围内静态调用、int 实例字段读写和返回。完整集合以 `Agent.audit` 为准。**没有查询驱动的最优选点：此原型记录范围内全部支持的字节码步骤。**
+默认仅变换 `demo.Subject`，可用 `-Dtracefusion.classes=包名.类名,另一个类名` 指定精确类白名单。只接受系统类加载器首次加载。方法必须是无同步的具体静态方法；支持经白名单审核的 int 运算、int/引用局部变量、条件分支、范围内静态调用、int 实例字段读写和返回。完整集合以 `Agent.audit` 为准。**默认 full 模式记录范围内全部支持的字节码步骤；后续 sparse 模式省略可重建的 step，仍没有字段级最优选点。**
 
 不支持数组、long/浮点运算、对象分配、实例/虚方法调用、外部调用、异常处理器、反射、JNI、监视器和并发业务访问等。类中非构造方法发现不支持内容时，整个类拒绝插桩，并将此次采集标为 unknown。Java transformer 抛异常可能被 JVM 忽略，所以拒绝被明确写入日志；业务可继续执行原始代码，不能把该次执行算成采集成功。
 
@@ -87,6 +89,6 @@ java -Xverify:all \
 
 `verify.py` 检查序号、类摘要、按原始计划执行的控制流、嵌套调用配对、字段版本和值的一致性、独立夹具的实际对象/访问/返回结果。它不执行通用 JVM 污点传播，不把正常用例的答案输入采集器。default 模式的短程序也不能证明热点方法已被 JIT 编译。
 
-后续已实现这一字节码子集的操作数栈/局部变量及字段写版本依赖传播，并提供用户指定源/目标查询，详见 [PROVENANCE.md](PROVENANCE.md)。可加 `--with-inference` 一次执行采集和还原。尚未扩展真实 Java 程序或运行与 FlowDist 的共同任务；没有性能测量、跨进程消息关联或外部工具胜负结论。
+后续已实现这一字节码子集的操作数栈/局部变量及字段写版本依赖传播，并提供用户指定源/目标查询，详见 [PROVENANCE.md](PROVENANCE.md)。可加 `--with-inference` 一次执行采集和还原。最新本地诊断成本与稀疏采集结果另见 [OBSERVATION-COMPARISON.md](OBSERVATION-COMPARISON.md)。尚未扩展真实 Java 程序或运行与 FlowDist 的共同任务；没有跨进程消息关联或外部工具胜负结论。
 
 实现依据：[Java Instrumentation](https://docs.oracle.com/en/java/javase/17/docs/api/java.instrument/java/lang/instrument/package-summary.html)、[ASM](https://asm.ow2.io/)。依赖不提交到仓库；ASM 使用其上游 BSD 许可证。
