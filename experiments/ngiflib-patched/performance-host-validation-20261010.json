@@ -1,0 +1,3884 @@
+{
+  "archive_sha256": "f964533f47f11f8011eeff0f4aecf72424defb7922a167aac994b41405c2bc08",
+  "experiment_commit": "d6d3d6608e6047d2826bdef6cb466b255d68c645",
+  "binary_sha256": "2b3bf0592e045cf0111e1e3115154b357163fdcde996d23d4caf7e644f49015b",
+  "source_revision": "cfbedecfeca66e22b62c37b85fcad5aa825625d7",
+  "libdft_revision": "20804d5bae5d8aed31a71761b1a1149e35a0da95",
+  "measured_online_processes": 320,
+  "warmup_online_processes": 64,
+  "offline_processes": 192,
+  "distinct_inputs": 4,
+  "output_modes": 2,
+  "distinct_input_code_positions": 510,
+  "blocks": 10,
+  "warmups": 2,
+  "source_and_tool_identity_verified": true,
+  "unchanged_upstream_source_files": 33,
+  "elf_plan_rebuilt": true,
+  "raw_inference_recomputed": true,
+  "pixels_and_source_results_verified": true,
+  "schedule_and_every_timing_row_checked": true,
+  "statistics_recomputed": true,
+  "record_counts": {
+    "boundary_replay": {
+      "raw_records": 178080,
+      "source_fills": 120,
+      "processes": 96
+    },
+    "libdft64": {
+      "raw_records": 178080,
+      "source_fills": 120,
+      "processes": 96
+    }
+  },
+  "query_totals": {
+    "measured": {
+      "boundary_replay": {
+        "queries": 10200,
+        "value_matches": 10200,
+        "exact_format_sources": 10200,
+        "covered_required_bytes": 20400,
+        "missing_required_bytes": 0,
+        "additional_source_bytes": 0
+      },
+      "libdft64": {
+        "queries": 10200,
+        "value_matches": 10200,
+        "exact_format_sources": 8580,
+        "covered_required_bytes": 20400,
+        "missing_required_bytes": 0,
+        "additional_source_bytes": 1620
+      }
+    },
+    "warmup": {
+      "boundary_replay": {
+        "queries": 2040,
+        "value_matches": 2040,
+        "exact_format_sources": 2040,
+        "covered_required_bytes": 4080,
+        "missing_required_bytes": 0,
+        "additional_source_bytes": 0
+      },
+      "libdft64": {
+        "queries": 2040,
+        "value_matches": 2040,
+        "exact_format_sources": 1716,
+        "covered_required_bytes": 4080,
+        "missing_required_bytes": 0,
+        "additional_source_bytes": 324
+      }
+    }
+  },
+  "memory_measurement_qualified": false,
+  "formal_nonzero_peak_rss_values_bytes": [
+    56856576
+  ],
+  "memory_issue": "wait4/RUSAGE_SELF high-water marks include pre-exec fork memory; identical recorded values do not establish equal target memory",
+  "results": [
+    {
+      "input": "single_pixel",
+      "indexed": false,
+      "groups": {
+        "native": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.0010390385000000001,
+            "minimum": 0.000934439,
+            "maximum": 0.001139963,
+            "p90": 0.001084277
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.0007205,
+            "minimum": 0.000637,
+            "maximum": 0.0007689999999999999,
+            "p90": 0.000763
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.0010390385000000001,
+            "minimum": 0.000934439,
+            "maximum": 0.001139963,
+            "p90": 0.001084277
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.0007205,
+            "minimum": 0.000637,
+            "maximum": 0.0007689999999999999,
+            "p90": 0.000763
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          }
+        },
+        "nullpin": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.210382016,
+            "minimum": 0.204330809,
+            "maximum": 0.246010282,
+            "p90": 0.220898559
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.20886849999999998,
+            "minimum": 0.20416099999999998,
+            "maximum": 0.245819,
+            "p90": 0.21737399999999998
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.210382016,
+            "minimum": 0.204330809,
+            "maximum": 0.246010282,
+            "p90": 0.220898559
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.20886849999999998,
+            "minimum": 0.20416099999999998,
+            "maximum": 0.245819,
+            "p90": 0.21737399999999998
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          }
+        },
+        "boundary_replay": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.21263696999999998,
+            "minimum": 0.209239342,
+            "maximum": 0.230214801,
+            "p90": 0.219872563
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.2121385,
+            "minimum": 0.208525,
+            "maximum": 0.228597,
+            "p90": 0.21842
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.102509639,
+            "minimum": 0.098804631,
+            "maximum": 0.122456181,
+            "p90": 0.107274887
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.10151199999999999,
+            "minimum": 0.098565,
+            "maximum": 0.12224099999999999,
+            "p90": 0.1069
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.3175059905,
+            "minimum": 0.309587294,
+            "maximum": 0.352670982,
+            "p90": 0.326561331
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.314697,
+            "minimum": 0.309238,
+            "maximum": 0.350838,
+            "p90": 0.32532
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 319688.0,
+            "minimum": 319688,
+            "maximum": 323710,
+            "p90": 323710
+          }
+        },
+        "libdft64": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.521218722,
+            "minimum": 0.496575186,
+            "maximum": 0.602117049,
+            "p90": 0.571625626
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.5209125,
+            "minimum": 0.494056,
+            "maximum": 0.602489,
+            "p90": 0.57058
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.10784398449999999,
+            "minimum": 0.097968614,
+            "maximum": 0.118944921,
+            "p90": 0.114225532
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.107075,
+            "minimum": 0.097518,
+            "maximum": 0.117197,
+            "p90": 0.112964
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.629249234,
+            "minimum": 0.598789485,
+            "maximum": 0.70063396,
+            "p90": 0.685851158
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.6284270000000001,
+            "minimum": 0.595827,
+            "maximum": 0.700791,
+            "p90": 0.6835439999999999
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 323789.0,
+            "minimum": 319767,
+            "maximum": 323789,
+            "p90": 323789
+          }
+        }
+      },
+      "paired_raw": [
+        {
+          "block": 0,
+          "online_wall_reduction_percent": 64.99307512549773,
+          "complete_wall_reduction_percent": 55.81326174940193,
+          "complete_cpu_reduction_percent": 55.865586173338414
+        },
+        {
+          "block": 1,
+          "online_wall_reduction_percent": 59.506119091489396,
+          "complete_wall_reduction_percent": 51.07042719777378,
+          "complete_cpu_reduction_percent": 51.05520003683072
+        },
+        {
+          "block": 2,
+          "online_wall_reduction_percent": 57.362292556556184,
+          "complete_wall_reduction_percent": 48.67476080823814,
+          "complete_cpu_reduction_percent": 48.65559716232407
+        },
+        {
+          "block": 3,
+          "online_wall_reduction_percent": 58.795872732528174,
+          "complete_wall_reduction_percent": 48.69639048245109,
+          "complete_cpu_reduction_percent": 49.21533729804642
+        },
+        {
+          "block": 4,
+          "online_wall_reduction_percent": 58.503324495878196,
+          "complete_wall_reduction_percent": 49.17943945218184,
+          "complete_cpu_reduction_percent": 49.050043239186124
+        },
+        {
+          "block": 5,
+          "online_wall_reduction_percent": 56.48560761858159,
+          "complete_wall_reduction_percent": 44.642626161696775,
+          "complete_cpu_reduction_percent": 44.73834677184355
+        },
+        {
+          "block": 6,
+          "online_wall_reduction_percent": 61.637884652847944,
+          "complete_wall_reduction_percent": 52.38597657948403,
+          "complete_cpu_reduction_percent": 52.40686773638566
+        },
+        {
+          "block": 7,
+          "online_wall_reduction_percent": 61.773066341016026,
+          "complete_wall_reduction_percent": 51.931516056020264,
+          "complete_cpu_reduction_percent": 52.01380452361239
+        },
+        {
+          "block": 8,
+          "online_wall_reduction_percent": 57.86351233426312,
+          "complete_wall_reduction_percent": 48.16174786369203,
+          "complete_cpu_reduction_percent": 48.09936441282453
+        },
+        {
+          "block": 9,
+          "online_wall_reduction_percent": 57.99757902475309,
+          "complete_wall_reduction_percent": 48.58596381872767,
+          "complete_cpu_reduction_percent": 48.67569532515886
+        }
+      ],
+      "paired_replay_vs_libdft": {
+        "online_wall_reduction_percent": {
+          "n": 10,
+          "median": 58.649598614203185,
+          "minimum": 56.48560761858159,
+          "maximum": 64.99307512549773,
+          "p90": 61.773066341016026
+        },
+        "complete_wall_reduction_percent": {
+          "n": 10,
+          "median": 48.937914967316466,
+          "minimum": 44.642626161696775,
+          "maximum": 55.81326174940193,
+          "p90": 52.38597657948403
+        },
+        "complete_cpu_reduction_percent": {
+          "n": 10,
+          "median": 49.13269026861627,
+          "minimum": 44.73834677184355,
+          "maximum": 55.865586173338414,
+          "p90": 52.40686773638566
+        }
+      },
+      "paired_online_wall_slowdown_vs_native": {
+        "nullpin": {
+          "n": 10,
+          "median": 209.6688996622563,
+          "minimum": 189.75552557141762,
+          "maximum": 236.39698150441066,
+          "p90": 227.2446463491348
+        },
+        "boundary_replay": {
+          "n": 10,
+          "median": 203.24351772104308,
+          "minimum": 192.36385917788562,
+          "maximum": 245.9709629753094,
+          "p90": 235.29900079084882
+        },
+        "libdft64": {
+          "n": 10,
+          "median": 510.8092112459839,
+          "minimum": 473.4796172933669,
+          "maximum": 581.0729806868078,
+          "p90": 565.2634668991595
+        }
+      }
+    },
+    {
+      "input": "single_pixel",
+      "indexed": true,
+      "groups": {
+        "native": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.0010271635,
+            "minimum": 0.000840566,
+            "maximum": 0.001106976,
+            "p90": 0.001081093
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.0007075,
+            "minimum": 0.000578,
+            "maximum": 0.000789,
+            "p90": 0.000741
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.0010271635,
+            "minimum": 0.000840566,
+            "maximum": 0.001106976,
+            "p90": 0.001081093
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.0007075,
+            "minimum": 0.000578,
+            "maximum": 0.000789,
+            "p90": 0.000741
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          }
+        },
+        "nullpin": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.211205951,
+            "minimum": 0.206463517,
+            "maximum": 0.272491709,
+            "p90": 0.250606233
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.2100485,
+            "minimum": 0.205621,
+            "maximum": 0.27220999999999995,
+            "p90": 0.249805
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.211205951,
+            "minimum": 0.206463517,
+            "maximum": 0.272491709,
+            "p90": 0.250606233
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.2100485,
+            "minimum": 0.205621,
+            "maximum": 0.27220999999999995,
+            "p90": 0.249805
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          }
+        },
+        "boundary_replay": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.2263859385,
+            "minimum": 0.212134751,
+            "maximum": 0.268298829,
+            "p90": 0.230384714
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.224698,
+            "minimum": 0.211111,
+            "maximum": 0.268277,
+            "p90": 0.229591
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.105947156,
+            "minimum": 0.099675969,
+            "maximum": 0.123666755,
+            "p90": 0.117052626
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.104978,
+            "minimum": 0.09942499999999999,
+            "maximum": 0.123321,
+            "p90": 0.11666299999999999
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.331363079,
+            "minimum": 0.31181072,
+            "maximum": 0.39196558400000003,
+            "p90": 0.344770637
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.32952,
+            "minimum": 0.310809,
+            "maximum": 0.391598,
+            "p90": 0.343878
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 323696.0,
+            "minimum": 319675,
+            "maximum": 323696,
+            "p90": 323696
+          }
+        },
+        "libdft64": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.530889216,
+            "minimum": 0.494262593,
+            "maximum": 0.643966372,
+            "p90": 0.603827606
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.5274355,
+            "minimum": 0.493471,
+            "maximum": 0.646827,
+            "p90": 0.603696
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.1016343555,
+            "minimum": 0.098660924,
+            "maximum": 0.150364145,
+            "p90": 0.124905267
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.10130199999999999,
+            "minimum": 0.09809799999999999,
+            "maximum": 0.14868699999999999,
+            "p90": 0.124944
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.6371685305,
+            "minimum": 0.592923517,
+            "maximum": 0.768871639,
+            "p90": 0.7191372469999999
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.6328239999999999,
+            "minimum": 0.591569,
+            "maximum": 0.771771,
+            "p90": 0.7186440000000001
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 321764.5,
+            "minimum": 319754,
+            "maximum": 323775,
+            "p90": 323775
+          }
+        }
+      },
+      "paired_raw": [
+        {
+          "block": 0,
+          "online_wall_reduction_percent": 64.6215981290402,
+          "complete_wall_reduction_percent": 56.201037479027114,
+          "complete_cpu_reduction_percent": 56.18506007611066
+        },
+        {
+          "block": 1,
+          "online_wall_reduction_percent": 58.10826550283619,
+          "complete_wall_reduction_percent": 48.90661991237935,
+          "complete_cpu_reduction_percent": 48.87590970920647
+        },
+        {
+          "block": 2,
+          "online_wall_reduction_percent": 53.92772703719457,
+          "complete_wall_reduction_percent": 41.85242664274354,
+          "complete_cpu_reduction_percent": 41.87017913379504
+        },
+        {
+          "block": 3,
+          "online_wall_reduction_percent": 59.55879821925284,
+          "complete_wall_reduction_percent": 50.283662215451926,
+          "complete_cpu_reduction_percent": 50.36651517372819
+        },
+        {
+          "block": 4,
+          "online_wall_reduction_percent": 61.93310148194847,
+          "complete_wall_reduction_percent": 53.256212023182826,
+          "complete_cpu_reduction_percent": 53.35214654265534
+        },
+        {
+          "block": 5,
+          "online_wall_reduction_percent": 50.61076989492055,
+          "complete_wall_reduction_percent": 43.488043361440845,
+          "complete_cpu_reduction_percent": 43.328142728135774
+        },
+        {
+          "block": 6,
+          "online_wall_reduction_percent": 60.73473438256016,
+          "complete_wall_reduction_percent": 51.690212842949215,
+          "complete_cpu_reduction_percent": 51.77254696068137
+        },
+        {
+          "block": 7,
+          "online_wall_reduction_percent": 57.23391409945597,
+          "complete_wall_reduction_percent": 47.50529826371858,
+          "complete_cpu_reduction_percent": 47.60689451725736
+        },
+        {
+          "block": 8,
+          "online_wall_reduction_percent": 57.95779845648159,
+          "complete_wall_reduction_percent": 47.730846449387066,
+          "complete_cpu_reduction_percent": 47.863281332856886
+        },
+        {
+          "block": 9,
+          "online_wall_reduction_percent": 56.08696526833001,
+          "complete_wall_reduction_percent": 45.617792360950695,
+          "complete_cpu_reduction_percent": 45.75351065587312
+        }
+      ],
+      "paired_replay_vs_libdft": {
+        "online_wall_reduction_percent": {
+          "n": 10,
+          "median": 58.03303197965889,
+          "minimum": 50.61076989492055,
+          "maximum": 64.6215981290402,
+          "p90": 61.93310148194847
+        },
+        "complete_wall_reduction_percent": {
+          "n": 10,
+          "median": 48.31873318088321,
+          "minimum": 41.85242664274354,
+          "maximum": 56.201037479027114,
+          "p90": 53.256212023182826
+        },
+        "complete_cpu_reduction_percent": {
+          "n": 10,
+          "median": 48.36959552103168,
+          "minimum": 41.87017913379504,
+          "maximum": 56.18506007611066,
+          "p90": 53.35214654265534
+        }
+      },
+      "paired_online_wall_slowdown_vs_native": {
+        "nullpin": {
+          "n": 10,
+          "median": 206.79834700772363,
+          "minimum": 187.3755736348394,
+          "maximum": 324.176458481547,
+          "p90": 255.23517819168438
+        },
+        "boundary_replay": {
+          "n": 10,
+          "median": 222.74242924024148,
+          "minimum": 191.63446271644554,
+          "maximum": 271.0376234584792,
+          "p90": 251.552713321476
+        },
+        "libdft64": {
+          "n": 10,
+          "median": 512.6544762061766,
+          "minimum": 459.0640610937264,
+          "maximum": 766.1104208354847,
+          "p90": 587.9957689582637
+        }
+      }
+    },
+    {
+      "input": "stripes",
+      "indexed": false,
+      "groups": {
+        "native": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.0009994795,
+            "minimum": 0.000859822,
+            "maximum": 0.001159009,
+            "p90": 0.00109552
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.000699,
+            "minimum": 0.000592,
+            "maximum": 0.00083,
+            "p90": 0.00079
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.0009994795,
+            "minimum": 0.000859822,
+            "maximum": 0.001159009,
+            "p90": 0.00109552
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.000699,
+            "minimum": 0.000592,
+            "maximum": 0.00083,
+            "p90": 0.00079
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          }
+        },
+        "nullpin": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.209404868,
+            "minimum": 0.201518329,
+            "maximum": 0.257659302,
+            "p90": 0.219312562
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.20861049999999998,
+            "minimum": 0.20079399999999997,
+            "maximum": 0.257025,
+            "p90": 0.216053
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.209404868,
+            "minimum": 0.201518329,
+            "maximum": 0.257659302,
+            "p90": 0.219312562
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.20861049999999998,
+            "minimum": 0.20079399999999997,
+            "maximum": 0.257025,
+            "p90": 0.216053
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          }
+        },
+        "boundary_replay": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.220560946,
+            "minimum": 0.214008098,
+            "maximum": 0.254245331,
+            "p90": 0.246620846
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.21855049999999998,
+            "minimum": 0.212712,
+            "maximum": 0.253152,
+            "p90": 0.24594999999999997
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.110596431,
+            "minimum": 0.105684742,
+            "maximum": 0.132887775,
+            "p90": 0.11710494
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.11017949999999999,
+            "minimum": 0.10523999999999999,
+            "maximum": 0.13192299999999998,
+            "p90": 0.11520999999999999
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.332540492,
+            "minimum": 0.321438059,
+            "maximum": 0.37950862100000005,
+            "p90": 0.36452114
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.3296935,
+            "minimum": 0.32019,
+            "maximum": 0.37787299999999996,
+            "p90": 0.36304099999999995
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 349675.0,
+            "minimum": 345509,
+            "maximum": 349675,
+            "p90": 349675
+          }
+        },
+        "libdft64": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.518120169,
+            "minimum": 0.493577965,
+            "maximum": 0.570330127,
+            "p90": 0.545466647
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.5159054999999999,
+            "minimum": 0.49287800000000004,
+            "maximum": 0.5695589999999999,
+            "p90": 0.543994
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.102594281,
+            "minimum": 0.096974923,
+            "maximum": 0.121695939,
+            "p90": 0.105998249
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.10164100000000001,
+            "minimum": 0.096561,
+            "maximum": 0.12120699999999998,
+            "p90": 0.10479799999999999
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.6193122405,
+            "minimum": 0.592815829,
+            "maximum": 0.6920260659999999,
+            "p90": 0.644873839
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.617884,
+            "minimum": 0.5917030000000001,
+            "maximum": 0.6907659999999999,
+            "p90": 0.640555
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 350093.0,
+            "minimum": 345927,
+            "maximum": 350093,
+            "p90": 350093
+          }
+        }
+      },
+      "paired_raw": [
+        {
+          "block": 0,
+          "online_wall_reduction_percent": 57.01696244368135,
+          "complete_wall_reduction_percent": 46.3855906243647,
+          "complete_cpu_reduction_percent": 46.48311177913551
+        },
+        {
+          "block": 1,
+          "online_wall_reduction_percent": 58.81782175362591,
+          "complete_wall_reduction_percent": 47.42760126139959,
+          "complete_cpu_reduction_percent": 47.4884896320144
+        },
+        {
+          "block": 2,
+          "online_wall_reduction_percent": 57.2705457744784,
+          "complete_wall_reduction_percent": 46.83858359132035,
+          "complete_cpu_reduction_percent": 46.8578900977295
+        },
+        {
+          "block": 3,
+          "online_wall_reduction_percent": 55.42137457522036,
+          "complete_wall_reduction_percent": 47.32551880495206,
+          "complete_cpu_reduction_percent": 47.44370742045787
+        },
+        {
+          "block": 4,
+          "online_wall_reduction_percent": 56.95047189545392,
+          "complete_wall_reduction_percent": 46.03576392988023,
+          "complete_cpu_reduction_percent": 46.19378021301728
+        },
+        {
+          "block": 5,
+          "online_wall_reduction_percent": 51.28177512198493,
+          "complete_wall_reduction_percent": 37.50270099121066,
+          "complete_cpu_reduction_percent": 37.645748419993076
+        },
+        {
+          "block": 6,
+          "online_wall_reduction_percent": 59.048857529512055,
+          "complete_wall_reduction_percent": 47.30510507463771,
+          "complete_cpu_reduction_percent": 47.48615250077849
+        },
+        {
+          "block": 7,
+          "online_wall_reduction_percent": 60.446102766023024,
+          "complete_wall_reduction_percent": 49.9661799593697,
+          "complete_cpu_reduction_percent": 50.01366002919343
+        },
+        {
+          "block": 8,
+          "online_wall_reduction_percent": 56.82494961224509,
+          "complete_wall_reduction_percent": 45.60343223504017,
+          "complete_cpu_reduction_percent": 45.65481727520816
+        },
+        {
+          "block": 9,
+          "online_wall_reduction_percent": 56.41512926939516,
+          "complete_wall_reduction_percent": 45.074494797270326,
+          "complete_cpu_reduction_percent": 45.17435267355414
+        }
+      ],
+      "paired_replay_vs_libdft": {
+        "online_wall_reduction_percent": {
+          "n": 10,
+          "median": 56.98371716956764,
+          "minimum": 51.28177512198493,
+          "maximum": 60.446102766023024,
+          "p90": 59.048857529512055
+        },
+        "complete_wall_reduction_percent": {
+          "n": 10,
+          "median": 46.61208710784253,
+          "minimum": 37.50270099121066,
+          "maximum": 49.9661799593697,
+          "p90": 47.42760126139959
+        },
+        "complete_cpu_reduction_percent": {
+          "n": 10,
+          "median": 46.67050093843251,
+          "minimum": 37.645748419993076,
+          "maximum": 50.01366002919343,
+          "p90": 47.4884896320144
+        }
+      },
+      "paired_online_wall_slowdown_vs_native": {
+        "nullpin": {
+          "n": 10,
+          "median": 208.42830337065175,
+          "minimum": 185.02746484280968,
+          "maximum": 293.05808061564426,
+          "p90": 236.18462309640833
+        },
+        "boundary_replay": {
+          "n": 10,
+          "median": 222.81288349605757,
+          "minimum": 184.6474859125339,
+          "maximum": 289.17507782563644,
+          "p90": 251.87022779133355
+        },
+        "libdft64": {
+          "n": 10,
+          "median": 509.87800064241645,
+          "minimum": 450.8970318608398,
+          "maximum": 648.6854968500094,
+          "p90": 585.0708216351757
+        }
+      }
+    },
+    {
+      "input": "stripes",
+      "indexed": true,
+      "groups": {
+        "native": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.001040744,
+            "minimum": 0.000959432,
+            "maximum": 0.0018216,
+            "p90": 0.001333259
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.0007344999999999999,
+            "minimum": 0.000674,
+            "maximum": 0.0011669999999999999,
+            "p90": 0.001032
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.001040744,
+            "minimum": 0.000959432,
+            "maximum": 0.0018216,
+            "p90": 0.001333259
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.0007344999999999999,
+            "minimum": 0.000674,
+            "maximum": 0.0011669999999999999,
+            "p90": 0.001032
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          }
+        },
+        "nullpin": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.21858750799999999,
+            "minimum": 0.206062383,
+            "maximum": 0.261026261,
+            "p90": 0.241269224
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.216798,
+            "minimum": 0.20549699999999999,
+            "maximum": 0.260529,
+            "p90": 0.24040899999999998
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.21858750799999999,
+            "minimum": 0.206062383,
+            "maximum": 0.261026261,
+            "p90": 0.241269224
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.216798,
+            "minimum": 0.20549699999999999,
+            "maximum": 0.260529,
+            "p90": 0.24040899999999998
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          }
+        },
+        "boundary_replay": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.2217940785,
+            "minimum": 0.209089014,
+            "maximum": 0.282695073,
+            "p90": 0.266191199
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.2210555,
+            "minimum": 0.208915,
+            "maximum": 0.281626,
+            "p90": 0.265293
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.115495482,
+            "minimum": 0.107487866,
+            "maximum": 0.142150857,
+            "p90": 0.134679343
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.114386,
+            "minimum": 0.10709099999999999,
+            "maximum": 0.14171399999999998,
+            "p90": 0.13397799999999999
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.33728956050000003,
+            "minimum": 0.317206691,
+            "maximum": 0.42484593000000004,
+            "p90": 0.400870542
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.3344195,
+            "minimum": 0.316845,
+            "maximum": 0.42333999999999994,
+            "p90": 0.399271
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 349531.0,
+            "minimum": 345388,
+            "maximum": 349531,
+            "p90": 349531
+          }
+        },
+        "libdft64": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.5239856789999999,
+            "minimum": 0.503575665,
+            "maximum": 0.591050395,
+            "p90": 0.57912053
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.5204139999999999,
+            "minimum": 0.503778,
+            "maximum": 0.590353,
+            "p90": 0.578157
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.1037284245,
+            "minimum": 0.098858374,
+            "maximum": 0.135856293,
+            "p90": 0.10766648
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.102658,
+            "minimum": 0.098661,
+            "maximum": 0.135311,
+            "p90": 0.10716999999999999
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.630583428,
+            "minimum": 0.60328505,
+            "maximum": 0.726906688,
+            "p90": 0.681208949
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.6258889999999999,
+            "minimum": 0.602439,
+            "maximum": 0.725664,
+            "p90": 0.679803
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 349949.0,
+            "minimum": 345806,
+            "maximum": 349949,
+            "p90": 349949
+          }
+        }
+      },
+      "paired_raw": [
+        {
+          "block": 0,
+          "online_wall_reduction_percent": 58.803268009190326,
+          "complete_wall_reduction_percent": 47.7723387185502,
+          "complete_cpu_reduction_percent": 47.90482166127708
+        },
+        {
+          "block": 1,
+          "online_wall_reduction_percent": 58.88606762636329,
+          "complete_wall_reduction_percent": 47.866240323579646,
+          "complete_cpu_reduction_percent": 47.93624866118398
+        },
+        {
+          "block": 2,
+          "online_wall_reduction_percent": 55.73612294907579,
+          "complete_wall_reduction_percent": 44.501075449825,
+          "complete_cpu_reduction_percent": 44.568777292576414
+        },
+        {
+          "block": 3,
+          "online_wall_reduction_percent": 56.322653716795465,
+          "complete_wall_reduction_percent": 45.652412735903205,
+          "complete_cpu_reduction_percent": 45.83200842640803
+        },
+        {
+          "block": 4,
+          "online_wall_reduction_percent": 58.89417710025505,
+          "complete_wall_reduction_percent": 47.7865143190497,
+          "complete_cpu_reduction_percent": 47.40629341725884
+        },
+        {
+          "block": 5,
+          "online_wall_reduction_percent": 49.96600592713419,
+          "complete_wall_reduction_percent": 37.32562579606527,
+          "complete_cpu_reduction_percent": 37.462937873460156
+        },
+        {
+          "block": 6,
+          "online_wall_reduction_percent": 57.82922659091152,
+          "complete_wall_reduction_percent": 47.475264799350704,
+          "complete_cpu_reduction_percent": 47.56576373909077
+        },
+        {
+          "block": 7,
+          "online_wall_reduction_percent": 61.53381663053803,
+          "complete_wall_reduction_percent": 50.04940429812233,
+          "complete_cpu_reduction_percent": 50.09377716779715
+        },
+        {
+          "block": 8,
+          "online_wall_reduction_percent": 52.17073275113875,
+          "complete_wall_reduction_percent": 41.554268654630945,
+          "complete_cpu_reduction_percent": 41.66170569299291
+        },
+        {
+          "block": 9,
+          "online_wall_reduction_percent": 48.573096139365624,
+          "complete_wall_reduction_percent": 37.07492386214815,
+          "complete_cpu_reduction_percent": 37.08712461816634
+        }
+      ],
+      "paired_replay_vs_libdft": {
+        "online_wall_reduction_percent": {
+          "n": 10,
+          "median": 57.075940153853495,
+          "minimum": 48.573096139365624,
+          "maximum": 61.53381663053803,
+          "p90": 58.89417710025505
+        },
+        "complete_wall_reduction_percent": {
+          "n": 10,
+          "median": 46.563838767626955,
+          "minimum": 37.07492386214815,
+          "maximum": 50.04940429812233,
+          "p90": 47.866240323579646
+        },
+        "complete_cpu_reduction_percent": {
+          "n": 10,
+          "median": 46.61915092183344,
+          "minimum": 37.08712461816634,
+          "maximum": 50.09377716779715,
+          "p90": 47.93624866118398
+        }
+      },
+      "paired_online_wall_slowdown_vs_native": {
+        "nullpin": {
+          "n": 10,
+          "median": 210.0070473304424,
+          "minimum": 127.4390854194115,
+          "maximum": 235.77887706858104,
+          "p90": 224.71501169089208
+        },
+        "boundary_replay": {
+          "n": 10,
+          "median": 210.09806331068825,
+          "minimum": 122.2911533816425,
+          "maximum": 275.1156371952703,
+          "p90": 228.9459317667204
+        },
+        "libdft64": {
+          "n": 10,
+          "median": 488.910209355761,
+          "minimum": 317.9186045234958,
+          "maximum": 575.2035375407523,
+          "p90": 530.1681922220647
+        }
+      }
+    },
+    {
+      "input": "checker",
+      "indexed": false,
+      "groups": {
+        "native": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.0010794939999999999,
+            "minimum": 0.000964871,
+            "maximum": 0.00114406,
+            "p90": 0.001118353
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.000724,
+            "minimum": 0.0006799999999999999,
+            "maximum": 0.000846,
+            "p90": 0.0008259999999999999
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.0010794939999999999,
+            "minimum": 0.000964871,
+            "maximum": 0.00114406,
+            "p90": 0.001118353
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.000724,
+            "minimum": 0.0006799999999999999,
+            "maximum": 0.000846,
+            "p90": 0.0008259999999999999
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          }
+        },
+        "nullpin": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.2150470215,
+            "minimum": 0.202984406,
+            "maximum": 0.268382327,
+            "p90": 0.261355703
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.21477000000000002,
+            "minimum": 0.202384,
+            "maximum": 0.267594,
+            "p90": 0.260505
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.2150470215,
+            "minimum": 0.202984406,
+            "maximum": 0.268382327,
+            "p90": 0.261355703
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.21477000000000002,
+            "minimum": 0.202384,
+            "maximum": 0.267594,
+            "p90": 0.260505
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          }
+        },
+        "boundary_replay": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.226014766,
+            "minimum": 0.205695294,
+            "maximum": 0.273251528,
+            "p90": 0.251962537
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.2249975,
+            "minimum": 0.20499499999999998,
+            "maximum": 0.26734899999999995,
+            "p90": 0.25156199999999995
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.1558721475,
+            "minimum": 0.140346487,
+            "maximum": 0.189468652,
+            "p90": 0.178070912
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.15544599999999997,
+            "minimum": 0.139869,
+            "maximum": 0.18885599999999997,
+            "p90": 0.177562
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.38603941249999996,
+            "minimum": 0.346041781,
+            "maximum": 0.45132244,
+            "p90": 0.42094803199999997
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.384934,
+            "minimum": 0.34486399999999995,
+            "maximum": 0.44491099999999995,
+            "p90": 0.4200749999999999
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 465420.5,
+            "minimum": 463013,
+            "maximum": 467828,
+            "p90": 467828
+          }
+        },
+        "libdft64": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.530726848,
+            "minimum": 0.495598778,
+            "maximum": 0.6153629,
+            "p90": 0.555044674
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.5274825000000001,
+            "minimum": 0.494926,
+            "maximum": 0.614339,
+            "p90": 0.553504
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.1064976145,
+            "minimum": 0.099053155,
+            "maximum": 0.11792037,
+            "p90": 0.112929302
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.1060125,
+            "minimum": 0.09861799999999998,
+            "maximum": 0.11741599999999999,
+            "p90": 0.11255799999999999
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.639723384,
+            "minimum": 0.594651933,
+            "maximum": 0.73328327,
+            "p90": 0.662104326
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.633495,
+            "minimum": 0.593544,
+            "maximum": 0.7317549999999999,
+            "p90": 0.660169
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 469833.0,
+            "minimum": 465018,
+            "maximum": 469833,
+            "p90": 469833
+          }
+        }
+      },
+      "paired_raw": [
+        {
+          "block": 0,
+          "online_wall_reduction_percent": 47.56585318787333,
+          "complete_wall_reduction_percent": 28.11332082717032,
+          "complete_cpu_reduction_percent": 29.006547065309498
+        },
+        {
+          "block": 1,
+          "online_wall_reduction_percent": 57.48871863095384,
+          "complete_wall_reduction_percent": 40.893148597712646,
+          "complete_cpu_reduction_percent": 40.909570103910276
+        },
+        {
+          "block": 2,
+          "online_wall_reduction_percent": 58.230789928753865,
+          "complete_wall_reduction_percent": 42.888370201563774,
+          "complete_cpu_reduction_percent": 43.05757791247616
+        },
+        {
+          "block": 3,
+          "online_wall_reduction_percent": 59.906312801286155,
+          "complete_wall_reduction_percent": 43.94996818487931,
+          "complete_cpu_reduction_percent": 44.12998180043783
+        },
+        {
+          "block": 4,
+          "online_wall_reduction_percent": 58.61891876683401,
+          "complete_wall_reduction_percent": 42.32356700889765,
+          "complete_cpu_reduction_percent": 42.36243523189942
+        },
+        {
+          "block": 5,
+          "online_wall_reduction_percent": 54.604998696014874,
+          "complete_wall_reduction_percent": 36.422703270481286,
+          "complete_cpu_reduction_percent": 36.368566230768195
+        },
+        {
+          "block": 6,
+          "online_wall_reduction_percent": 55.95663197695829,
+          "complete_wall_reduction_percent": 38.2903735830152,
+          "complete_cpu_reduction_percent": 38.34446710000113
+        },
+        {
+          "block": 7,
+          "online_wall_reduction_percent": 59.16329096212982,
+          "complete_wall_reduction_percent": 44.47764872639192,
+          "complete_cpu_reduction_percent": 44.536764354189586
+        },
+        {
+          "block": 8,
+          "online_wall_reduction_percent": 58.49560105251107,
+          "complete_wall_reduction_percent": 41.80767575172416,
+          "complete_cpu_reduction_percent": 41.89748359009611
+        },
+        {
+          "block": 9,
+          "online_wall_reduction_percent": 58.262945161477,
+          "complete_wall_reduction_percent": 35.6549442424274,
+          "complete_cpu_reduction_percent": 35.78042689564376
+        }
+      ],
+      "paired_replay_vs_libdft": {
+        "online_wall_reduction_percent": {
+          "n": 10,
+          "median": 58.246867545115435,
+          "minimum": 47.56585318787333,
+          "maximum": 59.906312801286155,
+          "p90": 59.16329096212982
+        },
+        "complete_wall_reduction_percent": {
+          "n": 10,
+          "median": 41.3504121747184,
+          "minimum": 28.11332082717032,
+          "maximum": 44.47764872639192,
+          "p90": 43.94996818487931
+        },
+        "complete_cpu_reduction_percent": {
+          "n": 10,
+          "median": 41.40352684700319,
+          "minimum": 29.006547065309498,
+          "maximum": 44.536764354189586,
+          "p90": 44.12998180043783
+        }
+      },
+      "paired_online_wall_slowdown_vs_native": {
+        "nullpin": {
+          "n": 10,
+          "median": 207.06275484338715,
+          "minimum": 194.12548118105695,
+          "maximum": 239.97997680517685,
+          "p90": 239.39087229437428
+        },
+        "boundary_replay": {
+          "n": 10,
+          "median": 219.02801436087412,
+          "minimum": 198.61199578241593,
+          "maximum": 250.23171189585292,
+          "p90": 232.86504203746543
+        },
+        "libdft64": {
+          "n": 10,
+          "median": 497.4904796293842,
+          "minimum": 474.55681782424006,
+          "maximum": 563.6466306939391,
+          "p90": 533.2936682727536
+        }
+      }
+    },
+    {
+      "input": "checker",
+      "indexed": true,
+      "groups": {
+        "native": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.0010238019999999999,
+            "minimum": 0.000962998,
+            "maximum": 0.001233939,
+            "p90": 0.001069209
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.000713,
+            "minimum": 0.0006749999999999999,
+            "maximum": 0.0008619999999999999,
+            "p90": 0.000732
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.0010238019999999999,
+            "minimum": 0.000962998,
+            "maximum": 0.001233939,
+            "p90": 0.001069209
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.000713,
+            "minimum": 0.0006749999999999999,
+            "maximum": 0.0008619999999999999,
+            "p90": 0.000732
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          }
+        },
+        "nullpin": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.21403958150000002,
+            "minimum": 0.204688022,
+            "maximum": 0.221523724,
+            "p90": 0.220103761
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.212364,
+            "minimum": 0.20397099999999999,
+            "maximum": 0.21917199999999998,
+            "p90": 0.218159
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.21403958150000002,
+            "minimum": 0.204688022,
+            "maximum": 0.221523724,
+            "p90": 0.220103761
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.212364,
+            "minimum": 0.20397099999999999,
+            "maximum": 0.21917199999999998,
+            "p90": 0.218159
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          }
+        },
+        "boundary_replay": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.2203401375,
+            "minimum": 0.216858427,
+            "maximum": 0.27214423,
+            "p90": 0.258178543
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.21949649999999998,
+            "minimum": 0.215018,
+            "maximum": 0.27159,
+            "p90": 0.257297
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.149782971,
+            "minimum": 0.142839812,
+            "maximum": 0.174712512,
+            "p90": 0.162178502
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.1489805,
+            "minimum": 0.142338,
+            "maximum": 0.17434899999999998,
+            "p90": 0.161797
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.369464955,
+            "minimum": 0.360565577,
+            "maximum": 0.434322732,
+            "p90": 0.43289105499999997
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.3679845,
+            "minimum": 0.35748399999999997,
+            "maximum": 0.43338699999999997,
+            "p90": 0.431646
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 466836.0,
+            "minimum": 462149,
+            "maximum": 466836,
+            "p90": 466836
+          }
+        },
+        "libdft64": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.521506128,
+            "minimum": 0.507783728,
+            "maximum": 0.570019438,
+            "p90": 0.550145517
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.520658,
+            "minimum": 0.507033,
+            "maximum": 0.5676669999999999,
+            "p90": 0.5427489999999999
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.1056127335,
+            "minimum": 0.099656886,
+            "maximum": 0.140063851,
+            "p90": 0.126863924
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.1045115,
+            "minimum": 0.099558,
+            "maximum": 0.139738,
+            "p90": 0.126394
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.6255717605,
+            "minimum": 0.610034013,
+            "maximum": 0.696883362,
+            "p90": 0.679379805
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.6241209999999999,
+            "minimum": 0.6088849999999999,
+            "maximum": 0.6940609999999999,
+            "p90": 0.678246
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 468841.0,
+            "minimum": 464154,
+            "maximum": 468841,
+            "p90": 468841
+          }
+        }
+      },
+      "paired_raw": [
+        {
+          "block": 0,
+          "online_wall_reduction_percent": 58.1422149966738,
+          "complete_wall_reduction_percent": 42.21322917063935,
+          "complete_cpu_reduction_percent": 42.648490905969794
+        },
+        {
+          "block": 1,
+          "online_wall_reduction_percent": 57.77247058799535,
+          "complete_wall_reduction_percent": 41.67001709706219,
+          "complete_cpu_reduction_percent": 41.622103249178856
+        },
+        {
+          "block": 2,
+          "online_wall_reduction_percent": 56.96134102981733,
+          "complete_wall_reduction_percent": 39.5599959768145,
+          "complete_cpu_reduction_percent": 39.74395821871124
+        },
+        {
+          "block": 3,
+          "online_wall_reduction_percent": 58.90712476470483,
+          "complete_wall_reduction_percent": 42.61467749969867,
+          "complete_cpu_reduction_percent": 42.78434005613294
+        },
+        {
+          "block": 4,
+          "online_wall_reduction_percent": 52.128517414487604,
+          "complete_wall_reduction_percent": 36.281436125408526,
+          "complete_cpu_reduction_percent": 36.358489397652185
+        },
+        {
+          "block": 5,
+          "online_wall_reduction_percent": 57.18097991524822,
+          "complete_wall_reduction_percent": 41.49001083765772,
+          "complete_cpu_reduction_percent": 41.51520056981902
+        },
+        {
+          "block": 6,
+          "online_wall_reduction_percent": 56.30969455153476,
+          "complete_wall_reduction_percent": 38.26614113813023,
+          "complete_cpu_reduction_percent": 38.41475834376
+        },
+        {
+          "block": 7,
+          "online_wall_reduction_percent": 52.2570263647746,
+          "complete_wall_reduction_percent": 37.6764096141529,
+          "complete_cpu_reduction_percent": 37.55779391148616
+        },
+        {
+          "block": 8,
+          "online_wall_reduction_percent": 58.42733274631392,
+          "complete_wall_reduction_percent": 41.94595653632736,
+          "complete_cpu_reduction_percent": 42.0123090819116
+        },
+        {
+          "block": 9,
+          "online_wall_reduction_percent": 57.560119100763465,
+          "complete_wall_reduction_percent": 40.77426227448229,
+          "complete_cpu_reduction_percent": 40.836131928024685
+        }
+      ],
+      "paired_replay_vs_libdft": {
+        "online_wall_reduction_percent": {
+          "n": 10,
+          "median": 57.370549508005844,
+          "minimum": 52.128517414487604,
+          "maximum": 58.90712476470483,
+          "p90": 58.42733274631392
+        },
+        "complete_wall_reduction_percent": {
+          "n": 10,
+          "median": 41.13213655607001,
+          "minimum": 36.281436125408526,
+          "maximum": 42.61467749969867,
+          "p90": 42.21322917063935
+        },
+        "complete_cpu_reduction_percent": {
+          "n": 10,
+          "median": 41.17566624892186,
+          "minimum": 36.358489397652185,
+          "maximum": 42.78434005613294,
+          "p90": 42.648490905969794
+        }
+      },
+      "paired_online_wall_slowdown_vs_native": {
+        "nullpin": {
+          "n": 10,
+          "median": 208.58355745670121,
+          "minimum": 175.74041018235098,
+          "maximum": 227.264756520782,
+          "p90": 211.44104422333888
+        },
+        "boundary_replay": {
+          "n": 10,
+          "median": 216.76404722946427,
+          "minimum": 203.23396828870688,
+          "maximum": 268.82876484318894,
+          "p90": 235.33856768134515
+        },
+        "libdft64": {
+          "n": 10,
+          "median": 509.00555739951113,
+          "minimum": 437.06856984016224,
+          "maximum": 563.0750336104819,
+          "p90": 538.6516877501303
+        }
+      }
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "groups": {
+        "native": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.0010994985000000001,
+            "minimum": 0.000866116,
+            "maximum": 0.00128746,
+            "p90": 0.001172834
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.0007825,
+            "minimum": 0.000619,
+            "maximum": 0.0009149999999999999,
+            "p90": 0.000864
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.0010994985000000001,
+            "minimum": 0.000866116,
+            "maximum": 0.00128746,
+            "p90": 0.001172834
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.0007825,
+            "minimum": 0.000619,
+            "maximum": 0.0009149999999999999,
+            "p90": 0.000864
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          }
+        },
+        "nullpin": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.2161826,
+            "minimum": 0.208673946,
+            "maximum": 0.249779236,
+            "p90": 0.227803061
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.2134095,
+            "minimum": 0.208476,
+            "maximum": 0.24917999999999998,
+            "p90": 0.220385
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.2161826,
+            "minimum": 0.208673946,
+            "maximum": 0.249779236,
+            "p90": 0.227803061
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.2134095,
+            "minimum": 0.208476,
+            "maximum": 0.24917999999999998,
+            "p90": 0.220385
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          }
+        },
+        "boundary_replay": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.2256628925,
+            "minimum": 0.214333106,
+            "maximum": 0.270873965,
+            "p90": 0.263106771
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.22279899999999997,
+            "minimum": 0.21362899999999999,
+            "maximum": 0.270319,
+            "p90": 0.262254
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.34489856649999995,
+            "minimum": 0.335437198,
+            "maximum": 0.404878068,
+            "p90": 0.388638425
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.3405705,
+            "minimum": 0.335966,
+            "maximum": 0.40505,
+            "p90": 0.388086
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.570561459,
+            "minimum": 0.552020744,
+            "maximum": 0.675752033,
+            "p90": 0.651745196
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.563017,
+            "minimum": 0.55026,
+            "maximum": 0.675369,
+            "p90": 0.6503399999999999
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 1154548.0,
+            "minimum": 1145950,
+            "maximum": 1154548,
+            "p90": 1154548
+          }
+        },
+        "libdft64": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.5289988130000001,
+            "minimum": 0.50945828,
+            "maximum": 0.663052147,
+            "p90": 0.559288069
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.5271035,
+            "minimum": 0.508625,
+            "maximum": 0.66246,
+            "p90": 0.54861
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.11685148100000001,
+            "minimum": 0.107146736,
+            "maximum": 0.139874539,
+            "p90": 0.125284753
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.11648899999999998,
+            "minimum": 0.10674999999999998,
+            "maximum": 0.13887,
+            "p90": 0.12171299999999999
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.644283849,
+            "minimum": 0.6166050160000001,
+            "maximum": 0.8029266860000001,
+            "p90": 0.684572822
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.6389119999999999,
+            "minimum": 0.615375,
+            "maximum": 0.8013300000000001,
+            "p90": 0.670323
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 1158657.0,
+            "minimum": 1158657,
+            "maximum": 1167255,
+            "p90": 1167255
+          }
+        }
+      },
+      "paired_raw": [
+        {
+          "block": 0,
+          "online_wall_reduction_percent": 57.667567946398975,
+          "complete_wall_reduction_percent": 11.940976632878575,
+          "complete_cpu_reduction_percent": 11.985000532785083
+        },
+        {
+          "block": 1,
+          "online_wall_reduction_percent": 57.96729217305352,
+          "complete_wall_reduction_percent": 11.738435508430845,
+          "complete_cpu_reduction_percent": 11.772825903437411
+        },
+        {
+          "block": 2,
+          "online_wall_reduction_percent": 59.12038863822071,
+          "complete_wall_reduction_percent": 15.761498781790683,
+          "complete_cpu_reduction_percent": 16.29572609025799
+        },
+        {
+          "block": 3,
+          "online_wall_reduction_percent": 57.61586968685541,
+          "complete_wall_reduction_percent": 13.014203386493628,
+          "complete_cpu_reduction_percent": 13.018076469471628
+        },
+        {
+          "block": 4,
+          "online_wall_reduction_percent": 56.04690846824369,
+          "complete_wall_reduction_percent": 9.838470784758202,
+          "complete_cpu_reduction_percent": 9.870472649521144
+        },
+        {
+          "block": 5,
+          "online_wall_reduction_percent": 59.14741152327496,
+          "complete_wall_reduction_percent": 15.838887312807548,
+          "complete_cpu_reduction_percent": 15.718992175508228
+        },
+        {
+          "block": 6,
+          "online_wall_reduction_percent": 56.79761321229015,
+          "complete_wall_reduction_percent": 8.632075003904005,
+          "complete_cpu_reduction_percent": 8.646405984086247
+        },
+        {
+          "block": 7,
+          "online_wall_reduction_percent": 58.29788159849607,
+          "complete_wall_reduction_percent": 11.77110239688497,
+          "complete_cpu_reduction_percent": 11.745034796123111
+        },
+        {
+          "block": 8,
+          "online_wall_reduction_percent": 56.93343525597425,
+          "complete_wall_reduction_percent": 9.45480177540431,
+          "complete_cpu_reduction_percent": 9.499410928295749
+        },
+        {
+          "block": 9,
+          "online_wall_reduction_percent": 49.135915387261484,
+          "complete_wall_reduction_percent": -2.4165224193761548,
+          "complete_cpu_reduction_percent": -2.4418828110478685
+        }
+      ],
+      "paired_replay_vs_libdft": {
+        "online_wall_reduction_percent": {
+          "n": 10,
+          "median": 57.64171881662719,
+          "minimum": 49.135915387261484,
+          "maximum": 59.14741152327496,
+          "p90": 59.12038863822071
+        },
+        "complete_wall_reduction_percent": {
+          "n": 10,
+          "median": 11.754768952657908,
+          "minimum": -2.4165224193761548,
+          "maximum": 15.838887312807548,
+          "p90": 15.761498781790683
+        },
+        "complete_cpu_reduction_percent": {
+          "n": 10,
+          "median": 11.758930349780261,
+          "minimum": -2.4418828110478685,
+          "maximum": 16.29572609025799,
+          "p90": 15.718992175508228
+        }
+      },
+      "paired_online_wall_slowdown_vs_native": {
+        "nullpin": {
+          "n": 10,
+          "median": 196.74889479690881,
+          "minimum": 168.21056032808787,
+          "maximum": 247.89243126786712,
+          "p90": 233.99860413569297
+        },
+        "boundary_replay": {
+          "n": 10,
+          "median": 209.42961726787058,
+          "minimum": 178.33178739533656,
+          "maximum": 253.32193378254183,
+          "p90": 246.48412789864338
+        },
+        "libdft64": {
+          "n": 10,
+          "median": 490.96546497635137,
+          "minimum": 412.7822573128485,
+          "maximum": 588.2102166453454,
+          "p90": 565.3418531522791
+        }
+      }
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "groups": {
+        "native": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.0010593775,
+            "minimum": 0.000897198,
+            "maximum": 0.001136827,
+            "p90": 0.001118125
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.0007325,
+            "minimum": 0.0006309999999999999,
+            "maximum": 0.00079,
+            "p90": 0.00077
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.0010593775,
+            "minimum": 0.000897198,
+            "maximum": 0.001136827,
+            "p90": 0.001118125
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.0007325,
+            "minimum": 0.0006309999999999999,
+            "maximum": 0.00079,
+            "p90": 0.00077
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          }
+        },
+        "nullpin": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.21471091949999999,
+            "minimum": 0.208751291,
+            "maximum": 0.241928207,
+            "p90": 0.227626724
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.21346749999999998,
+            "minimum": 0.20824399999999998,
+            "maximum": 0.241312,
+            "p90": 0.22760599999999998
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.21471091949999999,
+            "minimum": 0.208751291,
+            "maximum": 0.241928207,
+            "p90": 0.227626724
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.21346749999999998,
+            "minimum": 0.20824399999999998,
+            "maximum": 0.241312,
+            "p90": 0.22760599999999998
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "p90": 0
+          }
+        },
+        "boundary_replay": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.226878825,
+            "minimum": 0.217559845,
+            "maximum": 0.323146808,
+            "p90": 0.234676179
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.2253405,
+            "minimum": 0.21678899999999998,
+            "maximum": 0.31970999999999994,
+            "p90": 0.23183399999999998
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.35276620849999996,
+            "minimum": 0.337522579,
+            "maximum": 0.418437179,
+            "p90": 0.369133421
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.34761,
+            "minimum": 0.337016,
+            "maximum": 0.418284,
+            "p90": 0.36701599999999995
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.5800461255,
+            "minimum": 0.560308452,
+            "maximum": 0.7415839870000001,
+            "p90": 0.6038096000000001
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.5720035,
+            "minimum": 0.55895,
+            "maximum": 0.7379939999999999,
+            "p90": 0.597721
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 1147943.0,
+            "minimum": 1140137,
+            "maximum": 1147943,
+            "p90": 1147943
+          }
+        },
+        "libdft64": {
+          "online_wall_seconds": {
+            "n": 10,
+            "median": 0.5487904995,
+            "minimum": 0.518308574,
+            "maximum": 0.633333716,
+            "p90": 0.62134357
+          },
+          "online_cpu_seconds": {
+            "n": 10,
+            "median": 0.5433129999999999,
+            "minimum": 0.517661,
+            "maximum": 0.6286609999999999,
+            "p90": 0.620412
+          },
+          "online_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "offline_wall_seconds": {
+            "n": 10,
+            "median": 0.111865963,
+            "minimum": 0.106379106,
+            "maximum": 0.150466186,
+            "p90": 0.126391328
+          },
+          "offline_cpu_seconds": {
+            "n": 10,
+            "median": 0.1115265,
+            "minimum": 0.105973,
+            "maximum": 0.149891,
+            "p90": 0.125912
+          },
+          "offline_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "complete_wall_seconds": {
+            "n": 10,
+            "median": 0.662903947,
+            "minimum": 0.62468768,
+            "maximum": 0.7477348979999999,
+            "p90": 0.742112501
+          },
+          "complete_cpu_seconds": {
+            "n": 10,
+            "median": 0.656177,
+            "minimum": 0.623634,
+            "maximum": 0.746324,
+            "p90": 0.7368399999999999
+          },
+          "complete_peak_rss_bytes": {
+            "n": 10,
+            "median": 56856576.0,
+            "minimum": 56856576,
+            "maximum": 56856576,
+            "p90": 56856576
+          },
+          "raw_bytes": {
+            "n": 10,
+            "median": 1160650.0,
+            "minimum": 1152844,
+            "maximum": 1160650,
+            "p90": 1160650
+          }
+        }
+      },
+      "paired_raw": [
+        {
+          "block": 0,
+          "online_wall_reduction_percent": 56.21410485390697,
+          "complete_wall_reduction_percent": 6.787344268631612,
+          "complete_cpu_reduction_percent": 6.9665981820445815
+        },
+        {
+          "block": 1,
+          "online_wall_reduction_percent": 58.46532046014583,
+          "complete_wall_reduction_percent": 11.079373258331914,
+          "complete_cpu_reduction_percent": 10.92698029778736
+        },
+        {
+          "block": 2,
+          "online_wall_reduction_percent": 57.09448745261629,
+          "complete_wall_reduction_percent": 9.003145590709838,
+          "complete_cpu_reduction_percent": 9.36311757299373
+        },
+        {
+          "block": 3,
+          "online_wall_reduction_percent": 60.462406773291534,
+          "complete_wall_reduction_percent": 16.44865459886179,
+          "complete_cpu_reduction_percent": 16.494367258603692
+        },
+        {
+          "block": 4,
+          "online_wall_reduction_percent": 56.90818134726248,
+          "complete_wall_reduction_percent": 10.467170787413583,
+          "complete_cpu_reduction_percent": 10.37129709793324
+        },
+        {
+          "block": 5,
+          "online_wall_reduction_percent": 41.945304768691926,
+          "complete_wall_reduction_percent": -4.878161882163301,
+          "complete_cpu_reduction_percent": -4.480967461983765
+        },
+        {
+          "block": 6,
+          "online_wall_reduction_percent": 64.12460930786764,
+          "complete_wall_reduction_percent": 19.844168209207957,
+          "complete_cpu_reduction_percent": 19.444519841485263
+        },
+        {
+          "block": 7,
+          "online_wall_reduction_percent": 57.24094943143301,
+          "complete_wall_reduction_percent": 10.936653205061253,
+          "complete_cpu_reduction_percent": 10.918639583538214
+        },
+        {
+          "block": 8,
+          "online_wall_reduction_percent": 56.29115234354584,
+          "complete_wall_reduction_percent": 9.70379246153853,
+          "complete_cpu_reduction_percent": 9.88368177488721
+        },
+        {
+          "block": 9,
+          "online_wall_reduction_percent": 64.98558036095875,
+          "complete_wall_reduction_percent": 25.0658952125035,
+          "complete_cpu_reduction_percent": 25.10625412019445
+        }
+      ],
+      "paired_replay_vs_libdft": {
+        "online_wall_reduction_percent": {
+          "n": 10,
+          "median": 57.16771844202465,
+          "minimum": 41.945304768691926,
+          "maximum": 64.98558036095875,
+          "p90": 64.12460930786764
+        },
+        "complete_wall_reduction_percent": {
+          "n": 10,
+          "median": 10.701911996237417,
+          "minimum": -4.878161882163301,
+          "maximum": 25.0658952125035,
+          "p90": 19.844168209207957
+        },
+        "complete_cpu_reduction_percent": {
+          "n": 10,
+          "median": 10.644968340735726,
+          "minimum": -4.480967461983765,
+          "maximum": 25.10625412019445,
+          "p90": 19.444519841485263
+        }
+      },
+      "paired_online_wall_slowdown_vs_native": {
+        "nullpin": {
+          "n": 10,
+          "median": 208.8693653492927,
+          "minimum": 187.6500558132416,
+          "maximum": 253.70846123152305,
+          "p90": 227.7315739135327
+        },
+        "boundary_replay": {
+          "n": 10,
+          "median": 219.59115257661557,
+          "minimum": 194.57560201229737,
+          "maximum": 306.12126178339304,
+          "p90": 247.62006602778874
+        },
+        "libdft64": {
+          "n": 10,
+          "median": 534.4654808108631,
+          "minimum": 457.56315252892483,
+          "maximum": 626.290185666932,
+          "p90": 577.9618502549624
+        }
+      }
+    }
+  ],
+  "offline_phases": [
+    {
+      "input": "single_pixel",
+      "indexed": false,
+      "group": "boundary_replay",
+      "phases": {
+        "parse_validate_wall_seconds": {
+          "n": 10,
+          "median": 0.0054488714995386545,
+          "minimum": 0.005185117999644717,
+          "maximum": 0.008088856997346738,
+          "p90": 0.006999110999458935
+        },
+        "infer_wall_seconds": {
+          "n": 10,
+          "median": 0.001924966001752182,
+          "minimum": 0.0018417579995002598,
+          "maximum": 0.0025358509992656764,
+          "p90": 0.0019584910005505662
+        },
+        "output_wall_seconds": {
+          "n": 10,
+          "median": 0.0001750879982864717,
+          "minimum": 0.00016227900050580502,
+          "maximum": 0.00022010899920132942,
+          "p90": 0.00018145300055039115
+        },
+        "total_wall_seconds": {
+          "n": 10,
+          "median": 0.007513567001296906,
+          "minimum": 0.007265831998665817,
+          "maximum": 0.010189845997956581,
+          "p90": 0.009755070997925941
+        }
+      }
+    },
+    {
+      "input": "single_pixel",
+      "indexed": false,
+      "group": "libdft64",
+      "phases": {
+        "parse_validate_wall_seconds": {
+          "n": 10,
+          "median": 0.00586163450134336,
+          "minimum": 0.005320974996720906,
+          "maximum": 0.0070698620002076495,
+          "p90": 0.006827395998698194
+        },
+        "infer_wall_seconds": {
+          "n": 10,
+          "median": 5.154997779754922e-06,
+          "minimum": 4.626002919394523e-06,
+          "maximum": 1.0021001799032092e-05,
+          "p90": 6.823000148870051e-06
+        },
+        "output_wall_seconds": {
+          "n": 10,
+          "median": 0.00021231550090305973,
+          "minimum": 0.0001725570000417065,
+          "maximum": 0.00028062400087947026,
+          "p90": 0.00025122100123553537
+        },
+        "total_wall_seconds": {
+          "n": 10,
+          "median": 0.006086535000576987,
+          "minimum": 0.005498341997736134,
+          "maximum": 0.0073257460026070476,
+          "p90": 0.00702010199893266
+        }
+      }
+    },
+    {
+      "input": "single_pixel",
+      "indexed": true,
+      "group": "boundary_replay",
+      "phases": {
+        "parse_validate_wall_seconds": {
+          "n": 10,
+          "median": 0.005527899498702027,
+          "minimum": 0.005155271002877271,
+          "maximum": 0.008134577998134773,
+          "p90": 0.006964629999856697
+        },
+        "infer_wall_seconds": {
+          "n": 10,
+          "median": 0.001918728001328418,
+          "minimum": 0.0017885329980344977,
+          "maximum": 0.00225930400119978,
+          "p90": 0.001986570998269599
+        },
+        "output_wall_seconds": {
+          "n": 10,
+          "median": 0.00017643350111029577,
+          "minimum": 0.0001553980000608135,
+          "maximum": 0.00021449699852382764,
+          "p90": 0.00021050699797342531
+        },
+        "total_wall_seconds": {
+          "n": 10,
+          "median": 0.0076592184996115975,
+          "minimum": 0.007114828000339912,
+          "maximum": 0.010290728998370469,
+          "p90": 0.00927263099947595
+        }
+      }
+    },
+    {
+      "input": "single_pixel",
+      "indexed": true,
+      "group": "libdft64",
+      "phases": {
+        "parse_validate_wall_seconds": {
+          "n": 10,
+          "median": 0.005571326501012663,
+          "minimum": 0.005241245999059174,
+          "maximum": 0.007871969999541761,
+          "p90": 0.00660117799998261
+        },
+        "infer_wall_seconds": {
+          "n": 10,
+          "median": 4.73000000056345e-06,
+          "minimum": 3.908000508090481e-06,
+          "maximum": 6.261998350964859e-06,
+          "p90": 5.294998118188232e-06
+        },
+        "output_wall_seconds": {
+          "n": 10,
+          "median": 0.00019772350060520694,
+          "minimum": 0.00017001200103550218,
+          "maximum": 0.00038879700150573626,
+          "p90": 0.00032159799957298674
+        },
+        "total_wall_seconds": {
+          "n": 10,
+          "median": 0.00582544849930855,
+          "minimum": 0.005415646999608725,
+          "maximum": 0.008104199998342665,
+          "p90": 0.006994667000981281
+        }
+      }
+    },
+    {
+      "input": "stripes",
+      "indexed": false,
+      "group": "boundary_replay",
+      "phases": {
+        "parse_validate_wall_seconds": {
+          "n": 10,
+          "median": 0.005739059501138399,
+          "minimum": 0.005479866998939542,
+          "maximum": 0.006289532000664622,
+          "p90": 0.005935336997936247
+        },
+        "infer_wall_seconds": {
+          "n": 10,
+          "median": 0.00897936299952562,
+          "minimum": 0.008727454998734174,
+          "maximum": 0.010004889998526778,
+          "p90": 0.009750617999088718
+        },
+        "output_wall_seconds": {
+          "n": 10,
+          "median": 0.0002151435000996571,
+          "minimum": 0.00018255100076203234,
+          "maximum": 0.0003376669992576353,
+          "p90": 0.00032719000228098594
+        },
+        "total_wall_seconds": {
+          "n": 10,
+          "median": 0.01498212999831594,
+          "minimum": 0.014396740996744484,
+          "maximum": 0.016621612001472386,
+          "p90": 0.015696639002271695
+        }
+      }
+    },
+    {
+      "input": "stripes",
+      "indexed": false,
+      "group": "libdft64",
+      "phases": {
+        "parse_validate_wall_seconds": {
+          "n": 10,
+          "median": 0.005754171499575023,
+          "minimum": 0.005466919999889797,
+          "maximum": 0.007103878000634722,
+          "p90": 0.006125419997260906
+        },
+        "infer_wall_seconds": {
+          "n": 10,
+          "median": 4.8675010475562885e-06,
+          "minimum": 4.1669991333037615e-06,
+          "maximum": 6.832000508438796e-06,
+          "p90": 5.9970006986986846e-06
+        },
+        "output_wall_seconds": {
+          "n": 10,
+          "median": 0.00021614400066027883,
+          "minimum": 0.00018784699932439253,
+          "maximum": 0.0002651630020409357,
+          "p90": 0.00024877100076992065
+        },
+        "total_wall_seconds": {
+          "n": 10,
+          "median": 0.005981259499094449,
+          "minimum": 0.005673272000422003,
+          "maximum": 0.007338708001043415,
+          "p90": 0.006361941999784904
+        }
+      }
+    },
+    {
+      "input": "stripes",
+      "indexed": true,
+      "group": "boundary_replay",
+      "phases": {
+        "parse_validate_wall_seconds": {
+          "n": 10,
+          "median": 0.005815642498419038,
+          "minimum": 0.005490441002621083,
+          "maximum": 0.006986526001128368,
+          "p90": 0.006376094999723136
+        },
+        "infer_wall_seconds": {
+          "n": 10,
+          "median": 0.009133072500844719,
+          "minimum": 0.008603165999375051,
+          "maximum": 0.01044013799764798,
+          "p90": 0.009773020003194688
+        },
+        "output_wall_seconds": {
+          "n": 10,
+          "median": 0.0002125669998349622,
+          "minimum": 0.00018193100186181255,
+          "maximum": 0.00037946000156807713,
+          "p90": 0.000275147998763714
+        },
+        "total_wall_seconds": {
+          "n": 10,
+          "median": 0.015257212000506115,
+          "minimum": 0.014435298999160295,
+          "maximum": 0.017640288999245968,
+          "p90": 0.016167956000572303
+        }
+      }
+    },
+    {
+      "input": "stripes",
+      "indexed": true,
+      "group": "libdft64",
+      "phases": {
+        "parse_validate_wall_seconds": {
+          "n": 10,
+          "median": 0.005822334500408033,
+          "minimum": 0.005553123002755456,
+          "maximum": 0.006285358998866286,
+          "p90": 0.005921301999478601
+        },
+        "infer_wall_seconds": {
+          "n": 10,
+          "median": 4.894001904176548e-06,
+          "minimum": 4.4480002543423325e-06,
+          "maximum": 5.522997525986284e-06,
+          "p90": 5.3200019465293735e-06
+        },
+        "output_wall_seconds": {
+          "n": 10,
+          "median": 0.00019975649956904817,
+          "minimum": 0.0001833179994719103,
+          "maximum": 0.00027811999825644307,
+          "p90": 0.0002342530024179723
+        },
+        "total_wall_seconds": {
+          "n": 10,
+          "median": 0.006013938002070063,
+          "minimum": 0.005785579000075813,
+          "maximum": 0.006484697998530464,
+          "p90": 0.006124840001575649
+        }
+      }
+    },
+    {
+      "input": "checker",
+      "indexed": false,
+      "group": "boundary_replay",
+      "phases": {
+        "parse_validate_wall_seconds": {
+          "n": 10,
+          "median": 0.006841993501438992,
+          "minimum": 0.0062942250006017275,
+          "maximum": 0.008012681999389315,
+          "p90": 0.0073643459982122295
+        },
+        "infer_wall_seconds": {
+          "n": 10,
+          "median": 0.043140154499269556,
+          "minimum": 0.04065417500169133,
+          "maximum": 0.05643516300187912,
+          "p90": 0.04920238500199048
+        },
+        "output_wall_seconds": {
+          "n": 10,
+          "median": 0.00035372350066609215,
+          "minimum": 0.00029814600202371366,
+          "maximum": 0.0005129150013090111,
+          "p90": 0.00042708000182756223
+        },
+        "total_wall_seconds": {
+          "n": 10,
+          "median": 0.05032046550149971,
+          "minimum": 0.04738860500219744,
+          "maximum": 0.06484140199972899,
+          "p90": 0.05691318399840384
+        }
+      }
+    },
+    {
+      "input": "checker",
+      "indexed": false,
+      "group": "libdft64",
+      "phases": {
+        "parse_validate_wall_seconds": {
+          "n": 10,
+          "median": 0.00687303450104082,
+          "minimum": 0.006711993999488186,
+          "maximum": 0.007603489997563884,
+          "p90": 0.007239168000523932
+        },
+        "infer_wall_seconds": {
+          "n": 10,
+          "median": 5.129999408381991e-06,
+          "minimum": 4.608002200257033e-06,
+          "maximum": 7.945000106701627e-06,
+          "p90": 5.590001819655299e-06
+        },
+        "output_wall_seconds": {
+          "n": 10,
+          "median": 0.0002726144975895295,
+          "minimum": 0.00025947899848688394,
+          "maximum": 0.0003616860012698453,
+          "p90": 0.0003015269976458512
+        },
+        "total_wall_seconds": {
+          "n": 10,
+          "median": 0.007137791999412002,
+          "minimum": 0.0070111000022734515,
+          "maximum": 0.007880425997427665,
+          "p90": 0.007606394003232708
+        }
+      }
+    },
+    {
+      "input": "checker",
+      "indexed": true,
+      "group": "boundary_replay",
+      "phases": {
+        "parse_validate_wall_seconds": {
+          "n": 10,
+          "median": 0.006629935500313877,
+          "minimum": 0.0064630200031388085,
+          "maximum": 0.007386969002254773,
+          "p90": 0.006830919999629259
+        },
+        "infer_wall_seconds": {
+          "n": 10,
+          "median": 0.04243681150001066,
+          "minimum": 0.041043094999622554,
+          "maximum": 0.0464503280018107,
+          "p90": 0.04543465099777677
+        },
+        "output_wall_seconds": {
+          "n": 10,
+          "median": 0.00040737400013313163,
+          "minimum": 0.0003132329984509852,
+          "maximum": 0.0004788389996974729,
+          "p90": 0.0004737210001621861
+        },
+        "total_wall_seconds": {
+          "n": 10,
+          "median": 0.04947688950051088,
+          "minimum": 0.04785313400134328,
+          "maximum": 0.05375496900160215,
+          "p90": 0.05326727700230549
+        }
+      }
+    },
+    {
+      "input": "checker",
+      "indexed": true,
+      "group": "libdft64",
+      "phases": {
+        "parse_validate_wall_seconds": {
+          "n": 10,
+          "median": 0.006767825998394983,
+          "minimum": 0.00653429900194169,
+          "maximum": 0.008227334001276176,
+          "p90": 0.007795700999849942
+        },
+        "infer_wall_seconds": {
+          "n": 10,
+          "median": 5.309999323799275e-06,
+          "minimum": 4.618999810190871e-06,
+          "maximum": 7.243001164169982e-06,
+          "p90": 5.666999641107395e-06
+        },
+        "output_wall_seconds": {
+          "n": 10,
+          "median": 0.0002642645013111178,
+          "minimum": 0.00024827100060065277,
+          "maximum": 0.0006201280011737254,
+          "p90": 0.0004396309996081982
+        },
+        "total_wall_seconds": {
+          "n": 10,
+          "median": 0.007031495000774157,
+          "minimum": 0.006805695000366541,
+          "maximum": 0.008852982002281351,
+          "p90": 0.00824257500062231
+        }
+      }
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "group": "boundary_replay",
+      "phases": {
+        "parse_validate_wall_seconds": {
+          "n": 10,
+          "median": 0.012233628500325722,
+          "minimum": 0.011878828001499642,
+          "maximum": 0.013579499998741085,
+          "p90": 0.013513248999515781
+        },
+        "infer_wall_seconds": {
+          "n": 10,
+          "median": 0.23416322249977384,
+          "minimum": 0.22720820200265734,
+          "maximum": 0.27270871400105534,
+          "p90": 0.2598884489998454
+        },
+        "output_wall_seconds": {
+          "n": 10,
+          "median": 0.000975630498942337,
+          "minimum": 0.0008031590004975442,
+          "maximum": 0.0010280720016453415,
+          "p90": 0.0010265269993396942
+        },
+        "total_wall_seconds": {
+          "n": 10,
+          "median": 0.24727359600001364,
+          "minimum": 0.24009264099731809,
+          "maximum": 0.2872327389995917,
+          "p90": 0.27439421899907757
+        }
+      }
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "group": "libdft64",
+      "phases": {
+        "parse_validate_wall_seconds": {
+          "n": 10,
+          "median": 0.014265637999415048,
+          "minimum": 0.013105932001053588,
+          "maximum": 0.016124091001984198,
+          "p90": 0.015470102000108454
+        },
+        "infer_wall_seconds": {
+          "n": 10,
+          "median": 6.122500053606927e-06,
+          "minimum": 5.6919998314697295e-06,
+          "maximum": 6.731999746989459e-06,
+          "p90": 6.662001396762207e-06
+        },
+        "output_wall_seconds": {
+          "n": 10,
+          "median": 0.0007132995015126653,
+          "minimum": 0.0006458419993577991,
+          "maximum": 0.0010196609982813243,
+          "p90": 0.000934487998165423
+        },
+        "total_wall_seconds": {
+          "n": 10,
+          "median": 0.014922033000402735,
+          "minimum": 0.013788994001515675,
+          "maximum": 0.01715048400001251,
+          "p90": 0.016171510000276612
+        }
+      }
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "group": "boundary_replay",
+      "phases": {
+        "parse_validate_wall_seconds": {
+          "n": 10,
+          "median": 0.012539106499389163,
+          "minimum": 0.011857937002787367,
+          "maximum": 0.015527707000728697,
+          "p90": 0.013260903000627877
+        },
+        "infer_wall_seconds": {
+          "n": 10,
+          "median": 0.2390298169993912,
+          "minimum": 0.22835613999995985,
+          "maximum": 0.27234570300061023,
+          "p90": 0.255297570998664
+        },
+        "output_wall_seconds": {
+          "n": 10,
+          "median": 0.0009600960001989733,
+          "minimum": 0.0009050230000866577,
+          "maximum": 0.0013635909999720752,
+          "p90": 0.0012739710000460036
+        },
+        "total_wall_seconds": {
+          "n": 10,
+          "median": 0.2525393440009793,
+          "minimum": 0.24154394699871773,
+          "maximum": 0.289237001001311,
+          "p90": 0.2694053099985467
+        }
+      }
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "group": "libdft64",
+      "phases": {
+        "parse_validate_wall_seconds": {
+          "n": 10,
+          "median": 0.013569130500400206,
+          "minimum": 0.013261962001706706,
+          "maximum": 0.02045785500013153,
+          "p90": 0.015333991999796126
+        },
+        "infer_wall_seconds": {
+          "n": 10,
+          "median": 4.978499418939464e-06,
+          "minimum": 4.708999767899513e-06,
+          "maximum": 8.823000825941563e-06,
+          "p90": 6.878999556647614e-06
+        },
+        "output_wall_seconds": {
+          "n": 10,
+          "median": 0.0006083154985390138,
+          "minimum": 0.0005648830010613892,
+          "maximum": 0.0009826679997786414,
+          "p90": 0.0009463649985264055
+        },
+        "total_wall_seconds": {
+          "n": 10,
+          "median": 0.014360784998643794,
+          "minimum": 0.013831554002535995,
+          "maximum": 0.021413042999483878,
+          "p90": 0.015929694000078598
+        }
+      }
+    }
+  ],
+  "environment": {
+    "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "cpuinfo": "model name\t: AMD Ryzen 9 9955HX 16-Core Processor\nvendor_id\t: AuthenticAMD",
+    "selected_cpu": 0,
+    "governor": {
+      "unavailable": "FileNotFoundError"
+    }
+  },
+  "initialization_seconds": {
+    "fixture_prepare_seconds": 0.2154955539990624,
+    "static_plan_seconds": 0.07663008800227544,
+    "tool_build_seconds": 4.339710696000111
+  },
+  "startup_included": true,
+  "steady_state": false,
+  "bpf_executed": false,
+  "executed_uploaded_code": false,
+  "source_semantics_qualified": false,
+  "reported_adapter_errors": 0,
+  "reported_context_changes": 0,
+  "limitations": [
+    "Common full boundary snapshots, not minimal libdft overhead",
+    "Pin startup/JIT not isolated",
+    "Host-reported clock/wait4 observations, not remote attestation",
+    "Buffered writes without fsync",
+    "Fixed-metadata GIF source semantics differ from ordinary byte taint"
+  ]
+}

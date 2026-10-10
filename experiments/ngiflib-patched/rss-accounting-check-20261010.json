@@ -1,0 +1,11 @@
+{
+  "target": "/bin/true",
+  "small_parent_peak_bytes": 10092544,
+  "allocated_parent_peak_bytes": 136052736,
+  "allocation_bytes": 125829120,
+  "fresh_supervisor_child_peak_bytes": 10092544,
+  "parent_memory_affects_child_maxrss": true,
+  "fresh_supervisor_reduces_inherited_floor": true,
+  "host_performance_result": false,
+  "scope": "Local measurement mechanism only; a Python supervisor still has its own RSS floor"
+}

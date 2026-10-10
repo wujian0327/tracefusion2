@@ -1,6 +1,6 @@
 # ngiflib：真实主机来源对照核验
 
-2026-10-10，固定已修复 ngiflib 的正常图片实验已经完成 **boundary_replay 与原版 libdft64 的真实主机对照**。回传包通过逐记录复核；本文件不是此前 Unicorn 模拟结果，也不是 selected/eBPF 或性能评估。
+2026-10-10，固定已修复 ngiflib 的正常图片实验已经完成 **boundary_replay 与原版 libdft64 的真实主机对照**。回传包通过逐记录复核；本文件不是此前 Unicorn 模拟结果，也不是 selected/eBPF 或性能评估。后续单独的性能结果见 [PERFORMANCE-RESULTS.md](PERFORMANCE-RESULTS.md)。
 
 ## 结果与计数
 

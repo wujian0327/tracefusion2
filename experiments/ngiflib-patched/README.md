@@ -2,7 +2,7 @@
 
 **真实主机对照已完成并核验，见 [HOST-RESULTS.md](HOST-RESULTS.md)：我们的 boundary_replay 格式来源集合 1,020/1,020 匹配，原版 libdft64 为 858/1,020，双方必要来源均无缺失。运行方式见 [HOST-COMPARISON.md](HOST-COMPARISON.md)。**
 
-性能入口现已实现并完成本地编译/协议检查，主机命令及计时范围见 [PERFORMANCE.md](PERFORMANCE.md)。尚无实测加速比；本轮测量包含启动和离线重放的完整命令成本。
+性能主机回传已核验，见 [PERFORMANCE-RESULTS.md](PERFORMANCE-RESULTS.md)：包含启动及离线重放的完整墙钟配对中位降幅为 10.70%–48.94%，当前峰值 RSS 指标不能用于内存比较。方法与命令见 [PERFORMANCE.md](PERFORMANCE.md)，不将本轮结果表述为稳态或 selected/eBPF 性能。
 
 ## 范围和当前结果
 
