@@ -1,6 +1,6 @@
 # 原始支付金额路径的独立方法对照
 
-状态（2026-10-09）：实现及本地检查完成，**新四组主机 BPF 比较尚未运行**。不是正式性能结果，不是 HardTaint、libdft 或论文作者系统的复现。
+状态（2026-10-10）：**四组 40 次主机 BPF 正确性比较已完整核验通过**，全部原始事件重新推断。结果见 [METHOD-RESULTS.md](METHOD-RESULTS.md)。完整边界重放在同一来源边界下正确恢复 18/18 字段，事件数少于 selected；四组正式性能结果仍待评估。不是 HardTaint、libdft 或论文作者系统的复现。
 
 本轮只复用原始 `PlaceOrder → MultiplySlow/Sum → chargeCard`、既有十用例和独立真值，不追加业务函数、语言或应用。论文起草暂停。
 
@@ -69,4 +69,4 @@ python3 experiments/checkout-payment-path/compare_methods.py build --output /abs
 python3 experiments/checkout-payment-path/check_methods_local.py --results /absolute/new/results
 ```
 
-先核验新主机结果是否保留边界充分性，再把通过正确性的强基线接入同负载性能比较。若边界基线仍足够且采集更少，应收缩当前业务路径上的优势主张，并据此审阅贡献边界；不默认开启一轮新增小场景。
+新主机结果已确认边界充分性，无需重跑此正确性命令。下一项是通过正确性的四组同负载完整成本比较，包含业务、采集和离线推断成本；若仍无优势，应收缩当前业务路径上的优势主张，并据此审阅贡献边界，不默认开启一轮新增小场景。
