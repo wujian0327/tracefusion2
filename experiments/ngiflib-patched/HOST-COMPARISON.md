@@ -1,6 +1,6 @@
 # ngiflib 原生来源对照入口
 
-状态：**主机运行入口已实现，本地已编译；实际 Pin 执行仍需主机回传验证。当前没有新增真实主机对照结果。** 本地启动固定 Pin 仍报 `Exec format error`。既有 24 个受控 C 查询的 libdft64 主机结果不属于本实验。
+状态：**真实主机回传已核验，结果见 [HOST-RESULTS.md](HOST-RESULTS.md)。** 双方均完成 1,020 次查询；格式来源精确集合分别为 1,020/1,020 与 858/1,020。下面保留运行方式与语义限制。既有 24 个受控 C 查询的主机结果另列。
 
 ## 比较什么
 
@@ -58,6 +58,6 @@ artifacts/ngiflib-venv/bin/python experiments/ngiflib-patched/compare_host.py ru
 - 双模式适配器在固定 Pin/libdft64 上编译、链接通过，33 个上游传播源文件摘要与固定 checkout 一致。
 - 22 项记录协议检查：2 个正向合成协议样例和 20 个故障拒绝，包括偏移/内容、ELF 重定位、源标签、版本、线程、缺失事件、返回值等。合成外部标签只是测试替身，不是 libdft64 实测。
 - 接入沿用已通过的 C 位来源执行器；未新增应用、图片或 PoC。
-- 本地 Pin 启动失败，尚无这条路径的 native/BPF/libdft 运行准确率。机器记录见 `host-adapter-local-validation-20261010.json`。
+- 开发环境本地 Pin 启动失败的历史记录见 `host-adapter-local-validation-20261010.json`；后续用户主机执行成功，已单独核验。仍无 BPF 或性能结果。
 
-真实结果必须回传后从上传 ELF 重建计划、检查工具源码与原始记录、重新推断并评分；目前不预先写结论或胜出数字。
+已从上传 ELF 重建计划，检查工具源码与全部原始记录，重新推断并评分。复核脚本为 `verify_host.py`，结果和边界见 `HOST-RESULTS.md`。已有回传无需重复运行本页实验。
