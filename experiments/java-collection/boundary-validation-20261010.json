@@ -1,0 +1,3654 @@
+{
+  "schema": "java-observation-comparison-v1",
+  "status": "pass",
+  "modes": [
+    "full",
+    "sparse",
+    "boundary"
+  ],
+  "snapshot_protocol": "v2-complete-root-fields",
+  "java": {
+    "command": [
+      "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+      "-version"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": "openjdk version \"17.0.20.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Corretto-17.0.20.12.1 (build 17.0.20.1+12-LTS)\nOpenJDK 64-Bit Server VM Corretto-17.0.20.12.1 (build 17.0.20.1+12-LTS, mixed mode, sharing)\n"
+  },
+  "platform": {
+    "system": "Linux",
+    "node": "92ff1116476a",
+    "release": "6.18.44",
+    "version": "#1 SMP Sat Sep 26 20:02:31 UTC 2026",
+    "machine": "x86_64",
+    "processor": "x86_64"
+  },
+  "qualification": {
+    "query_scope": "entry static-call closure, not field-level slicing",
+    "retained": {
+      "full_sparse": "all field/branch/call/return observations plus root snapshots",
+      "boundary": "root entry, complete declared root field snapshots, value-only root return"
+    },
+    "global_optimality": false,
+    "real_application": false,
+    "external_tool_comparison": false,
+    "steady_state": false,
+    "memory_measurement_qualified": false,
+    "boundary_branches_are_replayed": true,
+    "shared_instruction_semantics_engine": true
+  },
+  "rounds": 200,
+  "repetitions": 6,
+  "warmup_blocks": 1,
+  "seed": 20261010,
+  "agent_sha256": "823be976e8029e952ff2d16a584f77b29bead8ae614db3607f2b900e60f8f18e",
+  "source_sha256": {
+    "boundary.py": "a3a75c599be0c7783f934a628eb0997b8cf62b49f28ac3ed8dbf042f221ea218",
+    "check_boundary.py": "3352b107cc923e74625f0daa69e0af4edab43f7288cc96f939b513814c2e20c6",
+    "check_inference.py": "0d1c084550cf3fd7053a28d010c2bad5d756f39a5b2f87b7936b6d3c7428d059",
+    "check_integer_semantics.py": "7250be5d1917c3ad466f37ff7144eef40cae5fcc0aba14a8c2eecc9e5be00aae",
+    "classfile.py": "99fd4b96fff2a8457a2c9ffba99ca625eea8da960267363e4cd5c630e3183cba",
+    "compare_observations.py": "a15729b35f61438e299f5e3e1000893bb516f6d1ae02a8872c7cc3ad5c2a4c58",
+    "fixtures/demo/Bench.java": "ab98ff81704c21a11bd4b05b23b4f32df36add3dc4a11654970a6d03808de15d",
+    "fixtures/demo/Cell.java": "cbdb7d4ff05daeaecb0ecbbb6a0479ea32d4b66ec06502e20133cd2e1669f720",
+    "fixtures/demo/Driver.java": "2fd320be5815dd2db1190e4c55835dcd226e8e3e128bceb7b2775842d9a157a5",
+    "fixtures/demo/Subject.java": "fc91d359efa8f64ac8da594d0812c43395acea6844a286f40f281ad95dca1895",
+    "fixtures/demo/Unsupported.java": "5105e74646a50492bcdc64d91586fc14a139ad219c75b55622f960640ffddc02",
+    "infer.py": "2bb4b252f4a11a0629b240ec52bce74762f9e008c23e4d6484bd2f46a33c0d03",
+    "measure_command.c": "560d33ee6975c939eb9087c9d855aa530144c5f620897437801a7d14504fe26f",
+    "observation.py": "29ccfede43d3301fafa1933ca73ae836031ba3f680c23eb82fcf20ce1515e560",
+    "run.py": "2ebd7278dd5ad2efe2240a98b8175cec52985899da9fd75a8dbc2aed9cd1ddc3",
+    "semantics/calibration/IntOps.java": "a82517231cac2d49a671618afa464ff3588ea817d4961a841f2045bf843f10c8",
+    "src/tracefusion/Agent.java": "b03706dee043a013ebfe9c7f254ddd8587dd23b4b60bd0f55c274e570c1d0d0e",
+    "src/tracefusion/Recorder.java": "7ed228ee06d5afeab798430c4a5ddb8142c01939114e2ef8c38d67179900cd5e",
+    "verify.py": "e01910af7b33aa78e3737cb89bdd0e6079c2028734393fcfe24e65f10d84287f",
+    "verify_observations.py": "f273d4e31b80459890694fbc749f14f421b867cb78d36189c0a25cf5c88d2632"
+  },
+  "cases": [
+    {
+      "jvm": "default",
+      "case": "left",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        }
+      ],
+      "events": 14,
+      "derived_steps": 0,
+      "bytes": 1783,
+      "graph_nodes": 10
+    },
+    {
+      "jvm": "default",
+      "case": "left",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        }
+      ],
+      "events": 9,
+      "derived_steps": 5,
+      "bytes": 1210,
+      "graph_nodes": 10
+    },
+    {
+      "jvm": "default",
+      "case": "left",
+      "mode": "boundary",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        }
+      ],
+      "events": 7,
+      "derived_steps": 5,
+      "bytes": 950,
+      "graph_nodes": 10
+    },
+    {
+      "jvm": "default",
+      "case": "right",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        }
+      ],
+      "events": 14,
+      "derived_steps": 0,
+      "bytes": 1783,
+      "graph_nodes": 10
+    },
+    {
+      "jvm": "default",
+      "case": "right",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        }
+      ],
+      "events": 9,
+      "derived_steps": 5,
+      "bytes": 1210,
+      "graph_nodes": 10
+    },
+    {
+      "jvm": "default",
+      "case": "right",
+      "mode": "boundary",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        }
+      ],
+      "events": 7,
+      "derived_steps": 5,
+      "bytes": 950,
+      "graph_nodes": 10
+    },
+    {
+      "jvm": "default",
+      "case": "alias",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "events": 14,
+      "derived_steps": 0,
+      "bytes": 1783,
+      "graph_nodes": 9
+    },
+    {
+      "jvm": "default",
+      "case": "alias",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "events": 9,
+      "derived_steps": 5,
+      "bytes": 1210,
+      "graph_nodes": 9
+    },
+    {
+      "jvm": "default",
+      "case": "alias",
+      "mode": "boundary",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "events": 7,
+      "derived_steps": 5,
+      "bytes": 950,
+      "graph_nodes": 9
+    },
+    {
+      "jvm": "default",
+      "case": "overwrite",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 10
+        }
+      ],
+      "events": 17,
+      "derived_steps": 0,
+      "bytes": 2210,
+      "graph_nodes": 11
+    },
+    {
+      "jvm": "default",
+      "case": "overwrite",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 10
+        }
+      ],
+      "events": 10,
+      "derived_steps": 7,
+      "bytes": 1393,
+      "graph_nodes": 11
+    },
+    {
+      "jvm": "default",
+      "case": "overwrite",
+      "mode": "boundary",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 10
+        }
+      ],
+      "events": 7,
+      "derived_steps": 7,
+      "bytes": 956,
+      "graph_nodes": 11
+    },
+    {
+      "jvm": "default",
+      "case": "nested",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 34,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 23
+        }
+      ],
+      "events": 32,
+      "derived_steps": 0,
+      "bytes": 3748,
+      "graph_nodes": 24
+    },
+    {
+      "jvm": "default",
+      "case": "nested",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 34,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 23
+        }
+      ],
+      "events": 17,
+      "derived_steps": 15,
+      "bytes": 2117,
+      "graph_nodes": 24
+    },
+    {
+      "jvm": "default",
+      "case": "nested",
+      "mode": "boundary",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 34,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 23
+        }
+      ],
+      "events": 7,
+      "derived_steps": 15,
+      "bytes": 950,
+      "graph_nodes": 24
+    },
+    {
+      "jvm": "default",
+      "case": "loop",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 68,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            },
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 41
+        }
+      ],
+      "events": 55,
+      "derived_steps": 0,
+      "bytes": 6459,
+      "graph_nodes": 42
+    },
+    {
+      "jvm": "default",
+      "case": "loop",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 68,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            },
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 41
+        }
+      ],
+      "events": 15,
+      "derived_steps": 40,
+      "bytes": 1964,
+      "graph_nodes": 42
+    },
+    {
+      "jvm": "default",
+      "case": "loop",
+      "mode": "boundary",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 68,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            },
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 41
+        }
+      ],
+      "events": 7,
+      "derived_steps": 40,
+      "bytes": 938,
+      "graph_nodes": 42
+    },
+    {
+      "jvm": "default",
+      "case": "gc",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        },
+        {
+          "id": "return2",
+          "root": 2,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 17
+        }
+      ],
+      "events": 25,
+      "derived_steps": 0,
+      "bytes": 3156,
+      "graph_nodes": 18
+    },
+    {
+      "jvm": "default",
+      "case": "gc",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        },
+        {
+          "id": "return2",
+          "root": 2,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 17
+        }
+      ],
+      "events": 15,
+      "derived_steps": 10,
+      "bytes": 2008,
+      "graph_nodes": 18
+    },
+    {
+      "jvm": "default",
+      "case": "gc",
+      "mode": "boundary",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        },
+        {
+          "id": "return2",
+          "root": 2,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 17
+        }
+      ],
+      "events": 11,
+      "derived_steps": 10,
+      "bytes": 1482,
+      "graph_nodes": 18
+    },
+    {
+      "jvm": "interpreter",
+      "case": "left",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        }
+      ],
+      "events": 14,
+      "derived_steps": 0,
+      "bytes": 1782,
+      "graph_nodes": 10
+    },
+    {
+      "jvm": "interpreter",
+      "case": "left",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        }
+      ],
+      "events": 9,
+      "derived_steps": 5,
+      "bytes": 1209,
+      "graph_nodes": 10
+    },
+    {
+      "jvm": "interpreter",
+      "case": "left",
+      "mode": "boundary",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        }
+      ],
+      "events": 7,
+      "derived_steps": 5,
+      "bytes": 949,
+      "graph_nodes": 10
+    },
+    {
+      "jvm": "interpreter",
+      "case": "right",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        }
+      ],
+      "events": 14,
+      "derived_steps": 0,
+      "bytes": 1782,
+      "graph_nodes": 10
+    },
+    {
+      "jvm": "interpreter",
+      "case": "right",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        }
+      ],
+      "events": 9,
+      "derived_steps": 5,
+      "bytes": 1209,
+      "graph_nodes": 10
+    },
+    {
+      "jvm": "interpreter",
+      "case": "right",
+      "mode": "boundary",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        }
+      ],
+      "events": 7,
+      "derived_steps": 5,
+      "bytes": 949,
+      "graph_nodes": 10
+    },
+    {
+      "jvm": "interpreter",
+      "case": "alias",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "events": 14,
+      "derived_steps": 0,
+      "bytes": 1782,
+      "graph_nodes": 9
+    },
+    {
+      "jvm": "interpreter",
+      "case": "alias",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "events": 9,
+      "derived_steps": 5,
+      "bytes": 1209,
+      "graph_nodes": 9
+    },
+    {
+      "jvm": "interpreter",
+      "case": "alias",
+      "mode": "boundary",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "events": 7,
+      "derived_steps": 5,
+      "bytes": 949,
+      "graph_nodes": 9
+    },
+    {
+      "jvm": "interpreter",
+      "case": "overwrite",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 10
+        }
+      ],
+      "events": 17,
+      "derived_steps": 0,
+      "bytes": 2209,
+      "graph_nodes": 11
+    },
+    {
+      "jvm": "interpreter",
+      "case": "overwrite",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 10
+        }
+      ],
+      "events": 10,
+      "derived_steps": 7,
+      "bytes": 1392,
+      "graph_nodes": 11
+    },
+    {
+      "jvm": "interpreter",
+      "case": "overwrite",
+      "mode": "boundary",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 10
+        }
+      ],
+      "events": 7,
+      "derived_steps": 7,
+      "bytes": 955,
+      "graph_nodes": 11
+    },
+    {
+      "jvm": "interpreter",
+      "case": "nested",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 34,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 23
+        }
+      ],
+      "events": 32,
+      "derived_steps": 0,
+      "bytes": 3747,
+      "graph_nodes": 24
+    },
+    {
+      "jvm": "interpreter",
+      "case": "nested",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 34,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 23
+        }
+      ],
+      "events": 17,
+      "derived_steps": 15,
+      "bytes": 2116,
+      "graph_nodes": 24
+    },
+    {
+      "jvm": "interpreter",
+      "case": "nested",
+      "mode": "boundary",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 34,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 23
+        }
+      ],
+      "events": 7,
+      "derived_steps": 15,
+      "bytes": 949,
+      "graph_nodes": 24
+    },
+    {
+      "jvm": "interpreter",
+      "case": "loop",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 68,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            },
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 41
+        }
+      ],
+      "events": 55,
+      "derived_steps": 0,
+      "bytes": 6458,
+      "graph_nodes": 42
+    },
+    {
+      "jvm": "interpreter",
+      "case": "loop",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 68,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            },
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 41
+        }
+      ],
+      "events": 15,
+      "derived_steps": 40,
+      "bytes": 1963,
+      "graph_nodes": 42
+    },
+    {
+      "jvm": "interpreter",
+      "case": "loop",
+      "mode": "boundary",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 68,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            },
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 41
+        }
+      ],
+      "events": 7,
+      "derived_steps": 40,
+      "bytes": 937,
+      "graph_nodes": 42
+    },
+    {
+      "jvm": "interpreter",
+      "case": "gc",
+      "mode": "full",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        },
+        {
+          "id": "return2",
+          "root": 2,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 17
+        }
+      ],
+      "events": 25,
+      "derived_steps": 0,
+      "bytes": 3155,
+      "graph_nodes": 18
+    },
+    {
+      "jvm": "interpreter",
+      "case": "gc",
+      "mode": "sparse",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        },
+        {
+          "id": "return2",
+          "root": 2,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 17
+        }
+      ],
+      "events": 15,
+      "derived_steps": 10,
+      "bytes": 2007,
+      "graph_nodes": 18
+    },
+    {
+      "jvm": "interpreter",
+      "case": "gc",
+      "mode": "boundary",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        },
+        {
+          "id": "return2",
+          "root": 2,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 17
+        }
+      ],
+      "events": 11,
+      "derived_steps": 10,
+      "bytes": 1481,
+      "graph_nodes": 18
+    }
+  ],
+  "faults": [
+    {
+      "fault": "missing_read",
+      "rejected": true,
+      "reason": "missing mandatory sparse observation"
+    },
+    {
+      "fault": "missing_branch",
+      "rejected": true,
+      "reason": "missing mandatory sparse observation"
+    },
+    {
+      "fault": "missing_exit",
+      "rejected": true,
+      "reason": "incomplete sparse frames"
+    },
+    {
+      "fault": "missing_footer",
+      "rejected": true,
+      "reason": "missing boundaries"
+    },
+    {
+      "fault": "same_value_receiver",
+      "rejected": true,
+      "reason": "field receiver/identity disagrees with operand stack"
+    },
+    {
+      "fault": "branch_direction",
+      "rejected": true,
+      "reason": "missing mandatory sparse observation"
+    },
+    {
+      "fault": "extra_step",
+      "rejected": true,
+      "reason": "unexpected raw step in sparse mode"
+    },
+    {
+      "fault": "scope_hash",
+      "rejected": true,
+      "reason": "scope evidence hash mismatch"
+    },
+    {
+      "fault": "original_class",
+      "rejected": true,
+      "reason": "scope class hash"
+    },
+    {
+      "fault": "query_binding",
+      "rejected": true,
+      "reason": "query differs from observation scope"
+    },
+    {
+      "fault": "null",
+      "rejected": true,
+      "reason": "collector reports unknown"
+    },
+    {
+      "fault": "threads",
+      "rejected": true,
+      "reason": "collector reports unknown"
+    }
+  ],
+  "boundary_faults": [
+    {
+      "case": "missing_snapshot",
+      "expected": "unknown",
+      "passed": true,
+      "reason": "snapshot argument identity"
+    },
+    {
+      "case": "missing_entry",
+      "expected": "unknown",
+      "passed": true,
+      "reason": "extra boundary snapshot"
+    },
+    {
+      "case": "missing_exit",
+      "expected": "unknown",
+      "passed": true,
+      "reason": "boundary completeness/thread scope"
+    },
+    {
+      "case": "missing_footer",
+      "expected": "unknown",
+      "passed": true,
+      "reason": "missing boundaries"
+    },
+    {
+      "case": "duplicate_snapshot",
+      "expected": "unknown",
+      "passed": true,
+      "reason": "snapshot argument identity"
+    },
+    {
+      "case": "snapshot_identity",
+      "expected": "unknown",
+      "passed": true,
+      "reason": "snapshot argument identity"
+    },
+    {
+      "case": "snapshot_value",
+      "expected": "unknown",
+      "passed": true,
+      "reason": "return value disagrees with bytecode replay"
+    },
+    {
+      "case": "return_value",
+      "expected": "unknown",
+      "passed": true,
+      "reason": "return value disagrees with bytecode replay"
+    },
+    {
+      "case": "extra_internal_event",
+      "expected": "unknown",
+      "passed": true,
+      "reason": "internal/unexpected boundary event"
+    },
+    {
+      "case": "alias_disagreement",
+      "expected": "unknown",
+      "passed": true,
+      "reason": "inconsistent aliased snapshots"
+    },
+    {
+      "case": "later_snapshot_mutation",
+      "expected": "unknown",
+      "passed": true,
+      "reason": "boundary snapshot differs from replayed state"
+    },
+    {
+      "case": "query_binding",
+      "expected": "unknown",
+      "passed": true,
+      "reason": "query differs from observation scope"
+    },
+    {
+      "case": "plan_tamper",
+      "expected": "unknown",
+      "passed": true,
+      "reason": "collector plan differs from independently decoded original class"
+    },
+    {
+      "case": "scope_hash",
+      "expected": "unknown",
+      "passed": true,
+      "reason": "scope evidence hash mismatch"
+    },
+    {
+      "case": "same_value_selector_change",
+      "expected": "ok_different_origin",
+      "passed": true
+    }
+  ],
+  "measurements": [
+    {
+      "block": -1,
+      "warmup": true,
+      "order": [
+        "full",
+        "boundary",
+        "native",
+        "sparse"
+      ],
+      "position": 0,
+      "mode": "full",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost--1-0-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.25920825200591935,
+        "user_seconds": 0.432906,
+        "system_seconds": 0.048587,
+        "cpu_seconds": 0.481493,
+        "peak_rss_kib": 64212,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost--1-0-full/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost--1-0-full/inference.json"
+        ],
+        "wall_seconds": 0.180929879003088,
+        "user_seconds": 0.162062,
+        "system_seconds": 0.016419,
+        "cpu_seconds": 0.178481,
+        "peak_rss_kib": 37048,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 10403,
+      "trace_bytes": 1245508,
+      "end_to_end_wall_seconds": 0.44013813100900734,
+      "end_to_end_cpu_seconds": 0.6599740000000001
+    },
+    {
+      "block": -1,
+      "warmup": true,
+      "order": [
+        "full",
+        "boundary",
+        "native",
+        "sparse"
+      ],
+      "position": 1,
+      "mode": "boundary",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost--1-1-boundary/capture",
+          "-Dtracefusion.mode=boundary",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.22811618299601832,
+        "user_seconds": 0.315564,
+        "system_seconds": 0.037533,
+        "cpu_seconds": 0.353097,
+        "peak_rss_kib": 49656,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost--1-1-boundary/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost--1-1-boundary/inference.json"
+        ],
+        "wall_seconds": 0.1541211630028556,
+        "user_seconds": 0.122947,
+        "system_seconds": 0.028641,
+        "cpu_seconds": 0.151588,
+        "peak_rss_kib": 35072,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 803,
+      "trace_bytes": 106688,
+      "end_to_end_wall_seconds": 0.38223734599887393,
+      "end_to_end_cpu_seconds": 0.504685
+    },
+    {
+      "block": -1,
+      "warmup": true,
+      "order": [
+        "full",
+        "boundary",
+        "native",
+        "sparse"
+      ],
+      "position": 2,
+      "mode": "native",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.06585008899855893,
+        "user_seconds": 0.057214,
+        "system_seconds": 0.015088,
+        "cpu_seconds": 0.072302,
+        "peak_rss_kib": 29844,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.06585008899855893,
+      "end_to_end_cpu_seconds": 0.072302
+    },
+    {
+      "block": -1,
+      "warmup": true,
+      "order": [
+        "full",
+        "boundary",
+        "native",
+        "sparse"
+      ],
+      "position": 3,
+      "mode": "sparse",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost--1-3-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.22938168900145683,
+        "user_seconds": 0.307257,
+        "system_seconds": 0.053112,
+        "cpu_seconds": 0.360369,
+        "peak_rss_kib": 54244,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost--1-3-sparse/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost--1-3-sparse/inference.json"
+        ],
+        "wall_seconds": 0.17107061699789483,
+        "user_seconds": 0.140852,
+        "system_seconds": 0.028068,
+        "cpu_seconds": 0.16892000000000001,
+        "peak_rss_kib": 35576,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 2403,
+      "trace_bytes": 318026,
+      "end_to_end_wall_seconds": 0.40045230599935167,
+      "end_to_end_cpu_seconds": 0.529289
+    },
+    {
+      "block": 0,
+      "warmup": false,
+      "order": [
+        "native",
+        "boundary",
+        "full",
+        "sparse"
+      ],
+      "position": 0,
+      "mode": "native",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.06428257000516169,
+        "user_seconds": 0.059351,
+        "system_seconds": 0.012775,
+        "cpu_seconds": 0.072126,
+        "peak_rss_kib": 30108,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.06428257000516169,
+      "end_to_end_cpu_seconds": 0.072126
+    },
+    {
+      "block": 0,
+      "warmup": false,
+      "order": [
+        "native",
+        "boundary",
+        "full",
+        "sparse"
+      ],
+      "position": 1,
+      "mode": "boundary",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-0-1-boundary/capture",
+          "-Dtracefusion.mode=boundary",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.22099866899952758,
+        "user_seconds": 0.30124,
+        "system_seconds": 0.028794,
+        "cpu_seconds": 0.330034,
+        "peak_rss_kib": 49252,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-0-1-boundary/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-0-1-boundary/inference.json"
+        ],
+        "wall_seconds": 0.15314655499969376,
+        "user_seconds": 0.122988,
+        "system_seconds": 0.027862,
+        "cpu_seconds": 0.15085,
+        "peak_rss_kib": 35072,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 803,
+      "trace_bytes": 106688,
+      "end_to_end_wall_seconds": 0.37414522399922134,
+      "end_to_end_cpu_seconds": 0.480884
+    },
+    {
+      "block": 0,
+      "warmup": false,
+      "order": [
+        "native",
+        "boundary",
+        "full",
+        "sparse"
+      ],
+      "position": 2,
+      "mode": "full",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-0-2-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.26267582799482625,
+        "user_seconds": 0.433041,
+        "system_seconds": 0.06122,
+        "cpu_seconds": 0.494261,
+        "peak_rss_kib": 66520,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-0-2-full/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-0-2-full/inference.json"
+        ],
+        "wall_seconds": 0.18293076199915959,
+        "user_seconds": 0.176658,
+        "system_seconds": 0.004065,
+        "cpu_seconds": 0.18072300000000002,
+        "peak_rss_kib": 37048,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 10403,
+      "trace_bytes": 1245508,
+      "end_to_end_wall_seconds": 0.44560658999398584,
+      "end_to_end_cpu_seconds": 0.674984
+    },
+    {
+      "block": 0,
+      "warmup": false,
+      "order": [
+        "native",
+        "boundary",
+        "full",
+        "sparse"
+      ],
+      "position": 3,
+      "mode": "sparse",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-0-3-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.24241211499611381,
+        "user_seconds": 0.331027,
+        "system_seconds": 0.04678,
+        "cpu_seconds": 0.377807,
+        "peak_rss_kib": 56444,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-0-3-sparse/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-0-3-sparse/inference.json"
+        ],
+        "wall_seconds": 0.17302805500366958,
+        "user_seconds": 0.150653,
+        "system_seconds": 0.0197,
+        "cpu_seconds": 0.170353,
+        "peak_rss_kib": 35592,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 2403,
+      "trace_bytes": 318026,
+      "end_to_end_wall_seconds": 0.4154401699997834,
+      "end_to_end_cpu_seconds": 0.54816
+    },
+    {
+      "block": 1,
+      "warmup": false,
+      "order": [
+        "native",
+        "boundary",
+        "full",
+        "sparse"
+      ],
+      "position": 0,
+      "mode": "native",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.06496233300276799,
+        "user_seconds": 0.055169,
+        "system_seconds": 0.018379,
+        "cpu_seconds": 0.073548,
+        "peak_rss_kib": 30108,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.06496233300276799,
+      "end_to_end_cpu_seconds": 0.073548
+    },
+    {
+      "block": 1,
+      "warmup": false,
+      "order": [
+        "native",
+        "boundary",
+        "full",
+        "sparse"
+      ],
+      "position": 1,
+      "mode": "boundary",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-1-1-boundary/capture",
+          "-Dtracefusion.mode=boundary",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.20610520799527876,
+        "user_seconds": 0.277865,
+        "system_seconds": 0.040298,
+        "cpu_seconds": 0.318163,
+        "peak_rss_kib": 48504,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-1-1-boundary/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-1-1-boundary/inference.json"
+        ],
+        "wall_seconds": 0.16046175700466847,
+        "user_seconds": 0.138237,
+        "system_seconds": 0.01979,
+        "cpu_seconds": 0.158027,
+        "peak_rss_kib": 35072,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 803,
+      "trace_bytes": 106688,
+      "end_to_end_wall_seconds": 0.36656696499994723,
+      "end_to_end_cpu_seconds": 0.47619
+    },
+    {
+      "block": 1,
+      "warmup": false,
+      "order": [
+        "native",
+        "boundary",
+        "full",
+        "sparse"
+      ],
+      "position": 2,
+      "mode": "full",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-1-2-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.27100287399662193,
+        "user_seconds": 0.447443,
+        "system_seconds": 0.068944,
+        "cpu_seconds": 0.5163869999999999,
+        "peak_rss_kib": 66860,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-1-2-full/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-1-2-full/inference.json"
+        ],
+        "wall_seconds": 0.1820704170022509,
+        "user_seconds": 0.151479,
+        "system_seconds": 0.028123,
+        "cpu_seconds": 0.179602,
+        "peak_rss_kib": 37052,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 10403,
+      "trace_bytes": 1245508,
+      "end_to_end_wall_seconds": 0.45307329099887284,
+      "end_to_end_cpu_seconds": 0.695989
+    },
+    {
+      "block": 1,
+      "warmup": false,
+      "order": [
+        "native",
+        "boundary",
+        "full",
+        "sparse"
+      ],
+      "position": 3,
+      "mode": "sparse",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-1-3-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.23883751399989706,
+        "user_seconds": 0.349605,
+        "system_seconds": 0.028135,
+        "cpu_seconds": 0.37774,
+        "peak_rss_kib": 54584,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-1-3-sparse/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-1-3-sparse/inference.json"
+        ],
+        "wall_seconds": 0.1699074069983908,
+        "user_seconds": 0.143331,
+        "system_seconds": 0.024067,
+        "cpu_seconds": 0.167398,
+        "peak_rss_kib": 35584,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 2403,
+      "trace_bytes": 318026,
+      "end_to_end_wall_seconds": 0.40874492099828785,
+      "end_to_end_cpu_seconds": 0.545138
+    },
+    {
+      "block": 2,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "boundary",
+        "native",
+        "full"
+      ],
+      "position": 0,
+      "mode": "sparse",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-2-0-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.2285878130060155,
+        "user_seconds": 0.322052,
+        "system_seconds": 0.046211,
+        "cpu_seconds": 0.368263,
+        "peak_rss_kib": 54348,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-2-0-sparse/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-2-0-sparse/inference.json"
+        ],
+        "wall_seconds": 0.17404102900036378,
+        "user_seconds": 0.159722,
+        "system_seconds": 0.012056,
+        "cpu_seconds": 0.17177800000000001,
+        "peak_rss_kib": 35584,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 2403,
+      "trace_bytes": 318026,
+      "end_to_end_wall_seconds": 0.4026288420063793,
+      "end_to_end_cpu_seconds": 0.540041
+    },
+    {
+      "block": 2,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "boundary",
+        "native",
+        "full"
+      ],
+      "position": 1,
+      "mode": "boundary",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-2-1-boundary/capture",
+          "-Dtracefusion.mode=boundary",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.22267561899934663,
+        "user_seconds": 0.325053,
+        "system_seconds": 0.02872,
+        "cpu_seconds": 0.353773,
+        "peak_rss_kib": 49512,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-2-1-boundary/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-2-1-boundary/inference.json"
+        ],
+        "wall_seconds": 0.15635501399810892,
+        "user_seconds": 0.11459,
+        "system_seconds": 0.039552,
+        "cpu_seconds": 0.154142,
+        "peak_rss_kib": 35072,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 803,
+      "trace_bytes": 106688,
+      "end_to_end_wall_seconds": 0.37903063299745554,
+      "end_to_end_cpu_seconds": 0.507915
+    },
+    {
+      "block": 2,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "boundary",
+        "native",
+        "full"
+      ],
+      "position": 2,
+      "mode": "native",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.08194479899975704,
+        "user_seconds": 0.059846,
+        "system_seconds": 0.020096,
+        "cpu_seconds": 0.079942,
+        "peak_rss_kib": 30104,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.08194479899975704,
+      "end_to_end_cpu_seconds": 0.079942
+    },
+    {
+      "block": 2,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "boundary",
+        "native",
+        "full"
+      ],
+      "position": 3,
+      "mode": "full",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-2-3-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.3966434819958522,
+        "user_seconds": 0.582261,
+        "system_seconds": 0.17813,
+        "cpu_seconds": 0.760391,
+        "peak_rss_kib": 79664,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-2-3-full/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-2-3-full/inference.json"
+        ],
+        "wall_seconds": 0.21144366000226,
+        "user_seconds": 0.180879,
+        "system_seconds": 0.028282,
+        "cpu_seconds": 0.209161,
+        "peak_rss_kib": 37044,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 10403,
+      "trace_bytes": 1245508,
+      "end_to_end_wall_seconds": 0.6080871419981122,
+      "end_to_end_cpu_seconds": 0.9695520000000001
+    },
+    {
+      "block": 3,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "full",
+        "native",
+        "boundary"
+      ],
+      "position": 0,
+      "mode": "sparse",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-3-0-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.23100338900258066,
+        "user_seconds": 0.332195,
+        "system_seconds": 0.042779,
+        "cpu_seconds": 0.37497400000000003,
+        "peak_rss_kib": 54128,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-3-0-sparse/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-3-0-sparse/inference.json"
+        ],
+        "wall_seconds": 0.16901450200384716,
+        "user_seconds": 0.147011,
+        "system_seconds": 0.019896,
+        "cpu_seconds": 0.166907,
+        "peak_rss_kib": 35588,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 2403,
+      "trace_bytes": 318026,
+      "end_to_end_wall_seconds": 0.4000178910064278,
+      "end_to_end_cpu_seconds": 0.5418810000000001
+    },
+    {
+      "block": 3,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "full",
+        "native",
+        "boundary"
+      ],
+      "position": 1,
+      "mode": "full",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-3-1-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.26388682700053323,
+        "user_seconds": 0.441524,
+        "system_seconds": 0.046728,
+        "cpu_seconds": 0.488252,
+        "peak_rss_kib": 67584,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-3-1-full/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-3-1-full/inference.json"
+        ],
+        "wall_seconds": 0.18843031099822838,
+        "user_seconds": 0.161574,
+        "system_seconds": 0.024439,
+        "cpu_seconds": 0.18601299999999998,
+        "peak_rss_kib": 37052,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 10403,
+      "trace_bytes": 1245508,
+      "end_to_end_wall_seconds": 0.4523171379987616,
+      "end_to_end_cpu_seconds": 0.674265
+    },
+    {
+      "block": 3,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "full",
+        "native",
+        "boundary"
+      ],
+      "position": 2,
+      "mode": "native",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.06524245499895187,
+        "user_seconds": 0.04631,
+        "system_seconds": 0.02708,
+        "cpu_seconds": 0.07339,
+        "peak_rss_kib": 30368,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.06524245499895187,
+      "end_to_end_cpu_seconds": 0.07339
+    },
+    {
+      "block": 3,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "full",
+        "native",
+        "boundary"
+      ],
+      "position": 3,
+      "mode": "boundary",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-3-3-boundary/capture",
+          "-Dtracefusion.mode=boundary",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.288866846000019,
+        "user_seconds": 0.320009,
+        "system_seconds": 0.101457,
+        "cpu_seconds": 0.421466,
+        "peak_rss_kib": 48636,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-3-3-boundary/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-3-3-boundary/inference.json"
+        ],
+        "wall_seconds": 0.16139065500465222,
+        "user_seconds": 0.131294,
+        "system_seconds": 0.027893,
+        "cpu_seconds": 0.159187,
+        "peak_rss_kib": 35072,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 803,
+      "trace_bytes": 106688,
+      "end_to_end_wall_seconds": 0.4502575010046712,
+      "end_to_end_cpu_seconds": 0.580653
+    },
+    {
+      "block": 4,
+      "warmup": false,
+      "order": [
+        "boundary",
+        "native",
+        "full",
+        "sparse"
+      ],
+      "position": 0,
+      "mode": "boundary",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-4-0-boundary/capture",
+          "-Dtracefusion.mode=boundary",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.20929575600166572,
+        "user_seconds": 0.290992,
+        "system_seconds": 0.042148,
+        "cpu_seconds": 0.33314,
+        "peak_rss_kib": 47600,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-4-0-boundary/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-4-0-boundary/inference.json"
+        ],
+        "wall_seconds": 0.15574504200048978,
+        "user_seconds": 0.141632,
+        "system_seconds": 0.011914,
+        "cpu_seconds": 0.15354600000000002,
+        "peak_rss_kib": 35072,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 803,
+      "trace_bytes": 106688,
+      "end_to_end_wall_seconds": 0.3650407980021555,
+      "end_to_end_cpu_seconds": 0.486686
+    },
+    {
+      "block": 4,
+      "warmup": false,
+      "order": [
+        "boundary",
+        "native",
+        "full",
+        "sparse"
+      ],
+      "position": 1,
+      "mode": "native",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.06669097499980126,
+        "user_seconds": 0.054497,
+        "system_seconds": 0.02115,
+        "cpu_seconds": 0.07564699999999999,
+        "peak_rss_kib": 30096,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.06669097499980126,
+      "end_to_end_cpu_seconds": 0.07564699999999999
+    },
+    {
+      "block": 4,
+      "warmup": false,
+      "order": [
+        "boundary",
+        "native",
+        "full",
+        "sparse"
+      ],
+      "position": 2,
+      "mode": "full",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-4-2-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.47527146699576406,
+        "user_seconds": 0.53505,
+        "system_seconds": 0.283322,
+        "cpu_seconds": 0.8183720000000001,
+        "peak_rss_kib": 67576,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-4-2-full/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-4-2-full/inference.json"
+        ],
+        "wall_seconds": 0.2073824550025165,
+        "user_seconds": 0.161981,
+        "system_seconds": 0.043262,
+        "cpu_seconds": 0.205243,
+        "peak_rss_kib": 37052,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 10403,
+      "trace_bytes": 1245508,
+      "end_to_end_wall_seconds": 0.6826539219982806,
+      "end_to_end_cpu_seconds": 1.0236150000000002
+    },
+    {
+      "block": 4,
+      "warmup": false,
+      "order": [
+        "boundary",
+        "native",
+        "full",
+        "sparse"
+      ],
+      "position": 3,
+      "mode": "sparse",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-4-3-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.26851766199979465,
+        "user_seconds": 0.359075,
+        "system_seconds": 0.065034,
+        "cpu_seconds": 0.42410899999999996,
+        "peak_rss_kib": 54204,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-4-3-sparse/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-4-3-sparse/inference.json"
+        ],
+        "wall_seconds": 0.16897864500060678,
+        "user_seconds": 0.146679,
+        "system_seconds": 0.019814,
+        "cpu_seconds": 0.166493,
+        "peak_rss_kib": 35568,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 2403,
+      "trace_bytes": 318026,
+      "end_to_end_wall_seconds": 0.43749630700040143,
+      "end_to_end_cpu_seconds": 0.590602
+    },
+    {
+      "block": 5,
+      "warmup": false,
+      "order": [
+        "native",
+        "sparse",
+        "boundary",
+        "full"
+      ],
+      "position": 0,
+      "mode": "native",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.06934490099956747,
+        "user_seconds": 0.050612,
+        "system_seconds": 0.025413,
+        "cpu_seconds": 0.076025,
+        "peak_rss_kib": 29980,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.06934490099956747,
+      "end_to_end_cpu_seconds": 0.076025
+    },
+    {
+      "block": 5,
+      "warmup": false,
+      "order": [
+        "native",
+        "sparse",
+        "boundary",
+        "full"
+      ],
+      "position": 1,
+      "mode": "sparse",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-5-1-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.26093080600549,
+        "user_seconds": 0.369035,
+        "system_seconds": 0.061088,
+        "cpu_seconds": 0.43012300000000003,
+        "peak_rss_kib": 52984,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-5-1-sparse/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-5-1-sparse/inference.json"
+        ],
+        "wall_seconds": 0.17324081100377953,
+        "user_seconds": 0.13925,
+        "system_seconds": 0.031814,
+        "cpu_seconds": 0.17106400000000002,
+        "peak_rss_kib": 35584,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 2403,
+      "trace_bytes": 318026,
+      "end_to_end_wall_seconds": 0.43417161700926954,
+      "end_to_end_cpu_seconds": 0.601187
+    },
+    {
+      "block": 5,
+      "warmup": false,
+      "order": [
+        "native",
+        "sparse",
+        "boundary",
+        "full"
+      ],
+      "position": 2,
+      "mode": "boundary",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-5-2-boundary/capture",
+          "-Dtracefusion.mode=boundary",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.30174268100381596,
+        "user_seconds": 0.333264,
+        "system_seconds": 0.084205,
+        "cpu_seconds": 0.417469,
+        "peak_rss_kib": 49768,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-5-2-boundary/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-5-2-boundary/inference.json"
+        ],
+        "wall_seconds": 0.1562553330004448,
+        "user_seconds": 0.137724,
+        "system_seconds": 0.016323,
+        "cpu_seconds": 0.15404700000000002,
+        "peak_rss_kib": 35072,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 803,
+      "trace_bytes": 106688,
+      "end_to_end_wall_seconds": 0.45799801400426077,
+      "end_to_end_cpu_seconds": 0.571516
+    },
+    {
+      "block": 5,
+      "warmup": false,
+      "order": [
+        "native",
+        "sparse",
+        "boundary",
+        "full"
+      ],
+      "position": 3,
+      "mode": "full",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-5-3-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/fixture-classes",
+          "demo.Bench",
+          "200"
+        ],
+        "wall_seconds": 0.27445096900191857,
+        "user_seconds": 0.45966,
+        "system_seconds": 0.047439,
+        "cpu_seconds": 0.507099,
+        "peak_rss_kib": 66576,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-5-3-full/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/benchmark-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-observation-20261010-093820-220882/cost-5-3-full/inference.json"
+        ],
+        "wall_seconds": 0.17834253500041086,
+        "user_seconds": 0.152092,
+        "system_seconds": 0.02393,
+        "cpu_seconds": 0.176022,
+        "peak_rss_kib": 37048,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 10403,
+      "trace_bytes": 1245508,
+      "end_to_end_wall_seconds": 0.4527935040023294,
+      "end_to_end_cpu_seconds": 0.683121
+    }
+  ],
+  "summary": {
+    "correct_queries_per_mode": 16,
+    "raw_events": {
+      "full": 342,
+      "sparse": 168,
+      "boundary": 106
+    },
+    "cost_medians": {
+      "native": {
+        "online_wall_seconds": 0.06596671499937656,
+        "online_cpu_seconds": 0.0745975,
+        "online_peak_rss_kib": 30106.0,
+        "offline_wall_seconds": 0.0,
+        "offline_cpu_seconds": 0.0,
+        "offline_peak_rss_kib": 0.0,
+        "end_to_end_wall_seconds": 0.06596671499937656,
+        "end_to_end_cpu_seconds": 0.0745975,
+        "events": 0.0,
+        "trace_bytes": 0.0
+      },
+      "full": {
+        "online_wall_seconds": 0.27272692149927025,
+        "online_cpu_seconds": 0.511743,
+        "online_peak_rss_kib": 67218.0,
+        "offline_wall_seconds": 0.18568053649869398,
+        "offline_cpu_seconds": 0.183368,
+        "offline_peak_rss_kib": 37050.0,
+        "end_to_end_wall_seconds": 0.45293339750060113,
+        "end_to_end_cpu_seconds": 0.6895549999999999,
+        "events": 10403.0,
+        "trace_bytes": 1245508.0
+      },
+      "sparse": {
+        "online_wall_seconds": 0.24062481449800543,
+        "online_cpu_seconds": 0.3777735,
+        "online_peak_rss_kib": 54276.0,
+        "offline_wall_seconds": 0.1714677310010302,
+        "offline_cpu_seconds": 0.1688755,
+        "offline_peak_rss_kib": 35584.0,
+        "end_to_end_wall_seconds": 0.4120925454990356,
+        "end_to_end_cpu_seconds": 0.5466489999999999,
+        "events": 2403.0,
+        "trace_bytes": 318026.0
+      },
+      "boundary": {
+        "online_wall_seconds": 0.2218371439994371,
+        "online_cpu_seconds": 0.3434565,
+        "online_peak_rss_kib": 48944.0,
+        "offline_wall_seconds": 0.15630517349927686,
+        "offline_cpu_seconds": 0.15409450000000002,
+        "offline_peak_rss_kib": 35072.0,
+        "end_to_end_wall_seconds": 0.37658792849833844,
+        "end_to_end_cpu_seconds": 0.49730050000000003,
+        "events": 803.0,
+        "trace_bytes": 106688.0
+      }
+    },
+    "paired_reduction": {
+      "online_wall_seconds": {
+        "median": 0.12165100158294556,
+        "minimum": 0.049262580655468735,
+        "maximum": 0.43502254890847913,
+        "sparse_worse": 0
+      },
+      "online_cpu_seconds": {
+        "median": 0.25205336215623914,
+        "minimum": 0.15179678918712114,
+        "maximum": 0.5156925844729883,
+        "sparse_worse": 0
+      },
+      "online_peak_rss_kib": {
+        "qualified": false,
+        "reason": "supervisor RSS floor unverified"
+      },
+      "offline_wall_seconds": {
+        "median": 0.08492180587629328,
+        "minimum": 0.028606322079135937,
+        "maximum": 0.18518350552578677,
+        "sparse_worse": 0
+      },
+      "offline_cpu_seconds": {
+        "median": 0.08533174838364976,
+        "minimum": 0.028166933678744677,
+        "maximum": 0.18880059246843983,
+        "sparse_worse": 0
+      },
+      "offline_peak_rss_kib": {
+        "qualified": false,
+        "reason": "supervisor RSS floor unverified"
+      },
+      "end_to_end_wall_seconds": {
+        "median": 0.10673223210816452,
+        "minimum": 0.041126665529556905,
+        "maximum": 0.35912430456745636,
+        "sparse_worse": 0
+      },
+      "end_to_end_cpu_seconds": {
+        "median": 0.20654080151871812,
+        "minimum": 0.11994068400766478,
+        "maximum": 0.4429994471673516,
+        "sparse_worse": 0
+      },
+      "events": {
+        "median": 0.7690089397289244,
+        "minimum": 0.7690089397289244,
+        "maximum": 0.7690089397289244,
+        "sparse_worse": 0
+      },
+      "trace_bytes": {
+        "median": 0.7446616159831972,
+        "minimum": 0.7446616159831972,
+        "maximum": 0.7446616159831972,
+        "sparse_worse": 0
+      }
+    },
+    "boundary_vs_full": {
+      "online_wall_seconds": {
+        "median": 0.19906804789433857,
+        "minimum": -0.0994411209446544,
+        "maximum": 0.5596290319622088,
+        "boundary_worse": 2
+      },
+      "online_cpu_seconds": {
+        "median": 0.3580674539318613,
+        "minimum": 0.13678592202387296,
+        "maximum": 0.5929235115570914,
+        "boundary_worse": 0
+      },
+      "online_peak_rss_kib": {
+        "qualified": false,
+        "reason": "memory mechanism requires separate validation"
+      },
+      "offline_wall_seconds": {
+        "median": 0.15315816714513386,
+        "minimum": 0.11868298185594472,
+        "maximum": 0.2605358136704703,
+        "boundary_worse": 0
+      },
+      "offline_cpu_seconds": {
+        "median": 0.15475644717308323,
+        "minimum": 0.12012672464671892,
+        "maximum": 0.2630461701751283,
+        "boundary_worse": 0
+      },
+      "offline_peak_rss_kib": {
+        "qualified": false,
+        "reason": "memory mechanism requires separate validation"
+      },
+      "end_to_end_wall_seconds": {
+        "median": 0.17565051898314382,
+        "minimum": -0.011494224090954575,
+        "maximum": 0.46526228556103577,
+        "boundary_worse": 1
+      },
+      "end_to_end_cpu_seconds": {
+        "median": 0.3016852619945749,
+        "minimum": 0.13883562100954372,
+        "maximum": 0.5245419420387549,
+        "boundary_worse": 0
+      },
+      "events": {
+        "median": 0.9228107276747092,
+        "minimum": 0.9228107276747092,
+        "maximum": 0.9228107276747092,
+        "boundary_worse": 0
+      },
+      "trace_bytes": {
+        "median": 0.9143417786156331,
+        "minimum": 0.9143417786156331,
+        "maximum": 0.9143417786156331,
+        "boundary_worse": 0
+      }
+    },
+    "boundary_vs_sparse": {
+      "online_wall_seconds": {
+        "median": 0.05709943927197819,
+        "minimum": -0.25048748092951967,
+        "maximum": 0.22055124998881537,
+        "boundary_worse": 2
+      },
+      "online_cpu_seconds": {
+        "median": 0.08289751992541217,
+        "minimum": -0.12398726311690944,
+        "maximum": 0.21449438705615764,
+        "boundary_worse": 1
+      },
+      "online_peak_rss_kib": {
+        "qualified": false,
+        "reason": "memory mechanism requires separate validation"
+      },
+      "offline_wall_seconds": {
+        "median": 0.08818035824354103,
+        "minimum": 0.045107649987463194,
+        "maximum": 0.1149033317374698,
+        "boundary_worse": 0
+      },
+      "offline_cpu_seconds": {
+        "median": 0.08862020882800514,
+        "minimum": 0.04625330273745265,
+        "maximum": 0.11448580300904587,
+        "boundary_worse": 0
+      },
+      "offline_peak_rss_kib": {
+        "qualified": false,
+        "reason": "memory mechanism requires separate validation"
+      },
+      "end_to_end_wall_seconds": {
+        "median": 0.07900539704883264,
+        "minimum": -0.12559340751445558,
+        "maximum": 0.16561398996718724,
+        "boundary_worse": 2
+      },
+      "end_to_end_cpu_seconds": {
+        "median": 0.09110933275711058,
+        "minimum": -0.07155076483582179,
+        "maximum": 0.17594928564413925,
+        "boundary_worse": 1
+      },
+      "events": {
+        "median": 0.6658343736995422,
+        "minimum": 0.6658343736995422,
+        "maximum": 0.6658343736995422,
+        "boundary_worse": 0
+      },
+      "trace_bytes": {
+        "median": 0.6645305729720212,
+        "minimum": 0.6645305729720212,
+        "maximum": 0.6645305729720212,
+        "boundary_worse": 0
+      }
+    }
+  },
+  "capture_directory": "java-observation-20261010-093820-220882",
+  "capture_manifest_sha256": "2a9eff39626a4ee8a9d124aa047426a6b336fd90a30c5276d3772fd26538e5d6",
+  "verification": {
+    "status": "pass",
+    "new_JVM_execution": false,
+    "correct_queries": {
+      "full": 16,
+      "sparse": 16,
+      "boundary": 16
+    },
+    "benchmark_queries_including_warmup": 42,
+    "raw_manifest_sha256": "2a9eff39626a4ee8a9d124aa047426a6b336fd90a30c5276d3772fd26538e5d6",
+    "existing_rejections": 12,
+    "additional_rejections": [
+      {
+        "fault": "missing_write",
+        "reason": "missing mandatory sparse observation",
+        "rejected": true
+      },
+      {
+        "fault": "bad_write_version",
+        "reason": "field write version",
+        "rejected": true
+      },
+      {
+        "fault": "missing_call",
+        "reason": "unexpected callee entry",
+        "rejected": true
+      },
+      {
+        "fault": "missing_call_return",
+        "reason": "missing mandatory sparse observation",
+        "rejected": true
+      },
+      {
+        "fault": "missing_callee_entry",
+        "reason": "sparse frame mismatch",
+        "rejected": true
+      },
+      {
+        "fault": "bad_callee_argument",
+        "reason": "callee arguments disagree with caller operand stack",
+        "rejected": true
+      }
+    ],
+    "boundary_checks": [
+      {
+        "case": "missing_snapshot",
+        "expected": "unknown",
+        "passed": true,
+        "reason": "snapshot argument identity"
+      },
+      {
+        "case": "missing_entry",
+        "expected": "unknown",
+        "passed": true,
+        "reason": "extra boundary snapshot"
+      },
+      {
+        "case": "missing_exit",
+        "expected": "unknown",
+        "passed": true,
+        "reason": "boundary completeness/thread scope"
+      },
+      {
+        "case": "missing_footer",
+        "expected": "unknown",
+        "passed": true,
+        "reason": "missing boundaries"
+      },
+      {
+        "case": "duplicate_snapshot",
+        "expected": "unknown",
+        "passed": true,
+        "reason": "snapshot argument identity"
+      },
+      {
+        "case": "snapshot_identity",
+        "expected": "unknown",
+        "passed": true,
+        "reason": "snapshot argument identity"
+      },
+      {
+        "case": "snapshot_value",
+        "expected": "unknown",
+        "passed": true,
+        "reason": "return value disagrees with bytecode replay"
+      },
+      {
+        "case": "return_value",
+        "expected": "unknown",
+        "passed": true,
+        "reason": "return value disagrees with bytecode replay"
+      },
+      {
+        "case": "extra_internal_event",
+        "expected": "unknown",
+        "passed": true,
+        "reason": "internal/unexpected boundary event"
+      },
+      {
+        "case": "alias_disagreement",
+        "expected": "unknown",
+        "passed": true,
+        "reason": "inconsistent aliased snapshots"
+      },
+      {
+        "case": "later_snapshot_mutation",
+        "expected": "unknown",
+        "passed": true,
+        "reason": "boundary snapshot differs from replayed state"
+      },
+      {
+        "case": "query_binding",
+        "expected": "unknown",
+        "passed": true,
+        "reason": "query differs from observation scope"
+      },
+      {
+        "case": "plan_tamper",
+        "expected": "unknown",
+        "passed": true,
+        "reason": "collector plan differs from independently decoded original class"
+      },
+      {
+        "case": "scope_hash",
+        "expected": "unknown",
+        "passed": true,
+        "reason": "scope evidence hash mismatch"
+      },
+      {
+        "case": "same_value_selector_change",
+        "expected": "ok_different_origin",
+        "passed": true
+      }
+    ],
+    "evidence_files_checked": 1010,
+    "summary": {
+      "correct_queries_per_mode": 16,
+      "raw_events": {
+        "full": 342,
+        "sparse": 168,
+        "boundary": 106
+      },
+      "cost_medians": {
+        "native": {
+          "online_wall_seconds": 0.06596671499937656,
+          "online_cpu_seconds": 0.0745975,
+          "online_peak_rss_kib": 30106.0,
+          "offline_wall_seconds": 0.0,
+          "offline_cpu_seconds": 0.0,
+          "offline_peak_rss_kib": 0.0,
+          "end_to_end_wall_seconds": 0.06596671499937656,
+          "end_to_end_cpu_seconds": 0.0745975,
+          "events": 0.0,
+          "trace_bytes": 0.0
+        },
+        "full": {
+          "online_wall_seconds": 0.27272692149927025,
+          "online_cpu_seconds": 0.511743,
+          "online_peak_rss_kib": 67218.0,
+          "offline_wall_seconds": 0.18568053649869398,
+          "offline_cpu_seconds": 0.183368,
+          "offline_peak_rss_kib": 37050.0,
+          "end_to_end_wall_seconds": 0.45293339750060113,
+          "end_to_end_cpu_seconds": 0.6895549999999999,
+          "events": 10403.0,
+          "trace_bytes": 1245508.0
+        },
+        "sparse": {
+          "online_wall_seconds": 0.24062481449800543,
+          "online_cpu_seconds": 0.3777735,
+          "online_peak_rss_kib": 54276.0,
+          "offline_wall_seconds": 0.1714677310010302,
+          "offline_cpu_seconds": 0.1688755,
+          "offline_peak_rss_kib": 35584.0,
+          "end_to_end_wall_seconds": 0.4120925454990356,
+          "end_to_end_cpu_seconds": 0.5466489999999999,
+          "events": 2403.0,
+          "trace_bytes": 318026.0
+        },
+        "boundary": {
+          "online_wall_seconds": 0.2218371439994371,
+          "online_cpu_seconds": 0.3434565,
+          "online_peak_rss_kib": 48944.0,
+          "offline_wall_seconds": 0.15630517349927686,
+          "offline_cpu_seconds": 0.15409450000000002,
+          "offline_peak_rss_kib": 35072.0,
+          "end_to_end_wall_seconds": 0.37658792849833844,
+          "end_to_end_cpu_seconds": 0.49730050000000003,
+          "events": 803.0,
+          "trace_bytes": 106688.0
+        }
+      },
+      "paired_reduction": {
+        "online_wall_seconds": {
+          "median": 0.12165100158294556,
+          "minimum": 0.049262580655468735,
+          "maximum": 0.43502254890847913,
+          "sparse_worse": 0
+        },
+        "online_cpu_seconds": {
+          "median": 0.25205336215623914,
+          "minimum": 0.15179678918712114,
+          "maximum": 0.5156925844729883,
+          "sparse_worse": 0
+        },
+        "online_peak_rss_kib": {
+          "qualified": false,
+          "reason": "supervisor RSS floor unverified"
+        },
+        "offline_wall_seconds": {
+          "median": 0.08492180587629328,
+          "minimum": 0.028606322079135937,
+          "maximum": 0.18518350552578677,
+          "sparse_worse": 0
+        },
+        "offline_cpu_seconds": {
+          "median": 0.08533174838364976,
+          "minimum": 0.028166933678744677,
+          "maximum": 0.18880059246843983,
+          "sparse_worse": 0
+        },
+        "offline_peak_rss_kib": {
+          "qualified": false,
+          "reason": "supervisor RSS floor unverified"
+        },
+        "end_to_end_wall_seconds": {
+          "median": 0.10673223210816452,
+          "minimum": 0.041126665529556905,
+          "maximum": 0.35912430456745636,
+          "sparse_worse": 0
+        },
+        "end_to_end_cpu_seconds": {
+          "median": 0.20654080151871812,
+          "minimum": 0.11994068400766478,
+          "maximum": 0.4429994471673516,
+          "sparse_worse": 0
+        },
+        "events": {
+          "median": 0.7690089397289244,
+          "minimum": 0.7690089397289244,
+          "maximum": 0.7690089397289244,
+          "sparse_worse": 0
+        },
+        "trace_bytes": {
+          "median": 0.7446616159831972,
+          "minimum": 0.7446616159831972,
+          "maximum": 0.7446616159831972,
+          "sparse_worse": 0
+        }
+      },
+      "boundary_vs_full": {
+        "online_wall_seconds": {
+          "median": 0.19906804789433857,
+          "minimum": -0.0994411209446544,
+          "maximum": 0.5596290319622088,
+          "boundary_worse": 2
+        },
+        "online_cpu_seconds": {
+          "median": 0.3580674539318613,
+          "minimum": 0.13678592202387296,
+          "maximum": 0.5929235115570914,
+          "boundary_worse": 0
+        },
+        "online_peak_rss_kib": {
+          "qualified": false,
+          "reason": "memory mechanism requires separate validation"
+        },
+        "offline_wall_seconds": {
+          "median": 0.15315816714513386,
+          "minimum": 0.11868298185594472,
+          "maximum": 0.2605358136704703,
+          "boundary_worse": 0
+        },
+        "offline_cpu_seconds": {
+          "median": 0.15475644717308323,
+          "minimum": 0.12012672464671892,
+          "maximum": 0.2630461701751283,
+          "boundary_worse": 0
+        },
+        "offline_peak_rss_kib": {
+          "qualified": false,
+          "reason": "memory mechanism requires separate validation"
+        },
+        "end_to_end_wall_seconds": {
+          "median": 0.17565051898314382,
+          "minimum": -0.011494224090954575,
+          "maximum": 0.46526228556103577,
+          "boundary_worse": 1
+        },
+        "end_to_end_cpu_seconds": {
+          "median": 0.3016852619945749,
+          "minimum": 0.13883562100954372,
+          "maximum": 0.5245419420387549,
+          "boundary_worse": 0
+        },
+        "events": {
+          "median": 0.9228107276747092,
+          "minimum": 0.9228107276747092,
+          "maximum": 0.9228107276747092,
+          "boundary_worse": 0
+        },
+        "trace_bytes": {
+          "median": 0.9143417786156331,
+          "minimum": 0.9143417786156331,
+          "maximum": 0.9143417786156331,
+          "boundary_worse": 0
+        }
+      },
+      "boundary_vs_sparse": {
+        "online_wall_seconds": {
+          "median": 0.05709943927197819,
+          "minimum": -0.25048748092951967,
+          "maximum": 0.22055124998881537,
+          "boundary_worse": 2
+        },
+        "online_cpu_seconds": {
+          "median": 0.08289751992541217,
+          "minimum": -0.12398726311690944,
+          "maximum": 0.21449438705615764,
+          "boundary_worse": 1
+        },
+        "online_peak_rss_kib": {
+          "qualified": false,
+          "reason": "memory mechanism requires separate validation"
+        },
+        "offline_wall_seconds": {
+          "median": 0.08818035824354103,
+          "minimum": 0.045107649987463194,
+          "maximum": 0.1149033317374698,
+          "boundary_worse": 0
+        },
+        "offline_cpu_seconds": {
+          "median": 0.08862020882800514,
+          "minimum": 0.04625330273745265,
+          "maximum": 0.11448580300904587,
+          "boundary_worse": 0
+        },
+        "offline_peak_rss_kib": {
+          "qualified": false,
+          "reason": "memory mechanism requires separate validation"
+        },
+        "end_to_end_wall_seconds": {
+          "median": 0.07900539704883264,
+          "minimum": -0.12559340751445558,
+          "maximum": 0.16561398996718724,
+          "boundary_worse": 2
+        },
+        "end_to_end_cpu_seconds": {
+          "median": 0.09110933275711058,
+          "minimum": -0.07155076483582179,
+          "maximum": 0.17594928564413925,
+          "boundary_worse": 1
+        },
+        "events": {
+          "median": 0.6658343736995422,
+          "minimum": 0.6658343736995422,
+          "maximum": 0.6658343736995422,
+          "boundary_worse": 0
+        },
+        "trace_bytes": {
+          "median": 0.6645305729720212,
+          "minimum": 0.6645305729720212,
+          "maximum": 0.6645305729720212,
+          "boundary_worse": 0
+        }
+      }
+    }
+  },
+  "additional_boundary_runtime_checks": [
+    {
+      "case": "runtime_null",
+      "expected": "unknown",
+      "passed": true,
+      "reason": "collector reports unknown"
+    },
+    {
+      "case": "runtime_threads",
+      "expected": "unknown",
+      "passed": true,
+      "reason": "collector reports unknown"
+    }
+  ],
+  "additional_boundary_runtime_evidence": {
+    "boundary-runtime/runtime_null/demo_Subject.instrumented.class": "0190a181646ce9963f4ca7551ee43e21295471d5ce2f20ff8189035d84fdadcb",
+    "boundary-runtime/runtime_null/demo_Subject.original.class": "4034dba95d26efc6f9937fdc5b8b16032e72dfa1f54813904122ba67736badd6",
+    "boundary-runtime/runtime_null/demo_Subject.plan.jsonl": "6e5de14f4947fca07d85d2857be84363f735dc51fab9aabbfcb1336064865a53",
+    "boundary-runtime/runtime_null/events.jsonl": "4683e285903ad31228115c95ae2d1243ebb02de24709639ff8af86b4b4d0c27e",
+    "boundary-runtime/runtime_null/field_demo_Cell.class": "c0e04ae7e4f5e680e17ac75bfc048df30d02d38afae3b30552c2b92d3841b185",
+    "boundary-runtime/runtime_null/inference.json": "91ce7e4ef8cae371c530cc899197a3e28856e94d73e8c769782ee8f6eae65b82",
+    "boundary-runtime/runtime_null/observation.properties": "92f23990650aacd16c9b74a46d69ac996f9a708f63b87ff3f3046c8cdcda7098",
+    "boundary-runtime/runtime_null/query.json": "b18b9e28f0787f0f7181ec3a9da0d6a31407674c8406947e854b88c6a8283e51",
+    "boundary-runtime/runtime_null/run.json": "70e74e5d124edf10a41827438ffa28e9dd3c284bfceffbe8a2120ed5a7d0fcba",
+    "boundary-runtime/runtime_threads/demo_Subject.instrumented.class": "0190a181646ce9963f4ca7551ee43e21295471d5ce2f20ff8189035d84fdadcb",
+    "boundary-runtime/runtime_threads/demo_Subject.original.class": "4034dba95d26efc6f9937fdc5b8b16032e72dfa1f54813904122ba67736badd6",
+    "boundary-runtime/runtime_threads/demo_Subject.plan.jsonl": "6e5de14f4947fca07d85d2857be84363f735dc51fab9aabbfcb1336064865a53",
+    "boundary-runtime/runtime_threads/events.jsonl": "3860853ab84b333a5b3de5e6b986f06cb5add267f979eb744e4ff13045504218",
+    "boundary-runtime/runtime_threads/field_demo_Cell.class": "c0e04ae7e4f5e680e17ac75bfc048df30d02d38afae3b30552c2b92d3841b185",
+    "boundary-runtime/runtime_threads/inference.json": "91ce7e4ef8cae371c530cc899197a3e28856e94d73e8c769782ee8f6eae65b82",
+    "boundary-runtime/runtime_threads/observation.properties": "92f23990650aacd16c9b74a46d69ac996f9a708f63b87ff3f3046c8cdcda7098",
+    "boundary-runtime/runtime_threads/query.json": "b18b9e28f0787f0f7181ec3a9da0d6a31407674c8406947e854b88c6a8283e51",
+    "boundary-runtime/runtime_threads/run.json": "ab29396f84d016b4be791f5164568ba1881d262a197d886410c3426a0285abf4"
+  },
+  "verification_sources": {
+    "verify_observations.py": "a96efc4e4b88bdb210adf0a76dafc45a1122de790d1fd184ccca486b998b9527",
+    "check_boundary.py": "0b5569324c10461205b90833104a20c91ce50061eafa44654e9439a7c14b4028"
+  },
+  "note": "Source hashes identify exact timing snapshot. Later runner edits clarify retained-evidence metadata and add two actual-JVM boundary rejection checks, archived separately. Raw capture and timing values unchanged; no new successful business cases."
+}

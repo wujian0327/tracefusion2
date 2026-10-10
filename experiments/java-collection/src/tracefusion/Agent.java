@@ -22,7 +22,7 @@ public final class Agent implements Opcodes {
         output = Paths.get(System.getProperty("tracefusion.output", "java-trace"));
         Files.createDirectories(output);
         mode = System.getProperty("tracefusion.mode", "full");
-        if (!mode.equals("full") && !mode.equals("sparse")) throw new IllegalArgumentException("capture_mode");
+        if (!mode.equals("full") && !mode.equals("sparse") && !mode.equals("boundary")) throw new IllegalArgumentException("capture_mode");
         String scopePath = System.getProperty("tracefusion.scope");
         if (scopePath != null) {
             byte[] scopeBytes = Files.readAllBytes(Paths.get(scopePath));
@@ -36,6 +36,8 @@ public final class Agent implements Opcodes {
             Files.write(output.resolve("observation.properties"), scopeBytes, StandardOpenOption.CREATE_NEW);
         }
         if (mode.equals("sparse") && scope == null) throw new IllegalArgumentException("sparse_requires_scope");
+        if (mode.equals("boundary") && (scope == null || !scope.getProperty("schema").equals("java-observation-scope-v2")))
+            throw new IllegalArgumentException("boundary_requires_snapshots");
         selected = new HashSet<>(Arrays.asList(System.getProperty("tracefusion.classes",
             scope == null ? "demo.Subject" : scope.getProperty("classes")).replace('.', '/').split(",")));
         for (String c : selected) if (c.isEmpty() || c.startsWith("java/") || c.startsWith("tracefusion/"))
@@ -127,10 +129,24 @@ public final class Agent implements Opcodes {
             }
         }
         List<String> plans = new ArrayList<>();
+        if (scope != null && scope.getProperty("schema").equals("java-observation-scope-v2")) {
+            for (String key : scope.stringPropertyNames()) if (key.startsWith("snapshot.sha256.")) {
+                String owner = key.substring("snapshot.sha256.".length());
+                byte[] data;
+                try (InputStream in = ClassLoader.getSystemResourceAsStream(owner + ".class")) {
+                    if (in == null) throw new IllegalArgumentException("missing_snapshot_owner");
+                    data = in.readAllBytes();
+                }
+                if (!sha(data).equals(scope.getProperty(key))) throw new IllegalArgumentException("snapshot_owner_hash");
+                fieldOwners.put(owner, data);
+            }
+        }
         for (MethodNode m : c.methods) {
             if (m.name.equals("<init>")) continue; // Constructors outside this experiment's boundary.
             String method = name + "." + m.name + m.desc;
             if (methods != null && !methods.contains(method)) continue;
+            boolean boundary = mode.equals("boundary");
+            boolean root = scope != null && method.equals(scope.getProperty("entry"));
             AbstractInsnNode[] original = m.instructions.toArray();
             IdentityHashMap<AbstractInsnNode, Integer> pcs = new IdentityHashMap<>();
             int pc = 0;
@@ -163,8 +179,8 @@ public final class Agent implements Opcodes {
                 plans.add("{\"site\":" + Recorder.json(site) + ",\"method\":" + Recorder.json(method)
                     + ",\"pc\":" + index + ",\"opcode\":" + op + ",\"operands\":" + Recorder.json(operands) + "}");
                 if (mode.equals("full")) m.instructions.insertBefore(n, event("step", site, null));
-                if (n instanceof FieldInsnNode) instrumentField(m, (FieldInsnNode)n, site);
-                if (n instanceof JumpInsnNode && op != GOTO) {
+                if (!boundary && n instanceof FieldInsnNode) instrumentField(m, (FieldInsnNode)n, site);
+                if (!boundary && n instanceof JumpInsnNode && op != GOTO) {
                     JumpInsnNode jump = (JumpInsnNode)n;
                     LabelNode taken = new LabelNode(), after = new LabelNode();
                     InsnList replacement = new InsnList();
@@ -178,30 +194,47 @@ public final class Agent implements Opcodes {
                     m.instructions.insertBefore(n, replacement);
                     m.instructions.remove(n);
                 }
-                if (n instanceof MethodInsnNode) {
+                if (!boundary && n instanceof MethodInsnNode) {
                     m.instructions.insertBefore(n, event("call", site, null));
                     m.instructions.insert(n, event("call_return", site, null));
                 }
-                if (op == IRETURN || op == ARETURN || op == RETURN) {
+                if ((!boundary || root) && (op == IRETURN || op == ARETURN || op == RETURN)) {
                     InsnList e = new InsnList();
                     int v = m.maxLocals++;
                     if (op != RETURN) {
                         e.add(new InsnNode(DUP));
                         e.add(new VarInsnNode(op == ARETURN ? ASTORE : ISTORE, v));
                     }
-                    e.add(new LdcInsnNode(site));
+                    e.add(new LdcInsnNode(boundary ? method : site));
                     arrayStart(e, op == RETURN ? 0 : 1);
                     if (op != RETURN) arrayValue(e, 0, op == ARETURN ? Type.getType(Object.class) : Type.INT_TYPE, v);
                     e.add(new MethodInsnNode(INVOKESTATIC, R, "exit", "(Ljava/lang/String;[Ljava/lang/Object;)V", false));
                     m.instructions.insertBefore(n, e);
                 }
             }
+            if (boundary && !root) continue;
             InsnList entry = new InsnList();
             entry.add(new LdcInsnNode(method));
             Type[] args = Type.getArgumentTypes(m.desc);
             arrayStart(entry, args.length);
             for (int i = 0; i < args.length; i++) arrayValue(entry, i, args[i], i);
             entry.add(new MethodInsnNode(INVOKESTATIC, R, "enter", "(Ljava/lang/String;[Ljava/lang/Object;)V", false));
+            if (root && scope.getProperty("schema").equals("java-observation-scope-v2")) {
+                for (int i = 0; i < Integer.parseInt(scope.getProperty("snapshot.count")); i++) {
+                    int slot = Integer.parseInt(scope.getProperty("snapshot." + i + ".arg"));
+                    String field = scope.getProperty("snapshot." + i + ".field");
+                    int split = field.lastIndexOf('.');
+                    entry.add(new LdcInsnNode(method)); entry.add(new LdcInsnNode(slot));
+                    entry.add(new VarInsnNode(ALOAD, slot)); entry.add(new LdcInsnNode(field));
+                    LabelNode nonnull = new LabelNode(), done = new LabelNode();
+                    entry.add(new VarInsnNode(ALOAD, slot)); entry.add(new JumpInsnNode(IFNONNULL, nonnull));
+                    entry.add(new InsnNode(ICONST_0)); entry.add(new JumpInsnNode(GOTO, done));
+                    entry.add(nonnull); entry.add(new VarInsnNode(ALOAD, slot));
+                    entry.add(new FieldInsnNode(GETFIELD, field.substring(0, split), field.substring(split + 1, field.length() - 2), "I"));
+                    entry.add(done);
+                    entry.add(new MethodInsnNode(INVOKESTATIC, R, "snapshot", "(Ljava/lang/String;ILjava/lang/Object;Ljava/lang/String;I)V", false));
+                }
+            }
             m.instructions.insert(entry);
         }
         ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);

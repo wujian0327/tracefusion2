@@ -68,6 +68,7 @@ class Engine:
         self.bind()
         self.nodes, self.frames, self.memory, self.answers, self.branches = [], [], {}, {}, []
         self.root_count = 0
+        self.replayed_steps = 0
 
     def check_field(self, name):
         require(name.endswith(":I") and name in self.fields and self.fields[name] & (0x8 | 0x40) == 0,
@@ -293,14 +294,32 @@ class Engine:
             else: self.answers[f.root] = v
         else: raise ValueError("unsupported observation")
 
+    def seed_snapshot(self, r):
+        _, obj, field, value = r["values"]
+        self.check_field(field)
+        key = (obj, field)
+        if key in self.memory:
+            require(self.memory[key][1].value == value, "boundary snapshot differs from replayed state")
+        else:
+            initial = self.node("initial_field", "int", value, labels=self.field_labels.get(key, ()),
+                                origin=dict(kind="initial_field", object=obj, field=field, version=0),
+                                site=r["site"], frame=r["frame"])
+            self.memory[key] = (0, initial)
+
     def run(self):
-        for r in self.rows:
-            if r["kind"] in ("start", "class", "finish"): continue
-            if r["kind"] == "enter": self.enter(r); continue
-            f = self.frames[-1]
-            require(f.id == r["frame"], "replay frame mismatch")
-            if r["kind"] == "step": self.step(r, f)
-            else: self.observe(r, f)
+        mode = self.rows[0]["values"][2] if len(self.rows[0]["values"]) > 2 else "full"
+        if mode == "boundary":
+            from boundary import replay
+            replay(self)
+        else:
+            for r in self.rows:
+                if r["kind"] in ("start", "class", "finish"): continue
+                if r["kind"] == "enter": self.enter(r); continue
+                if r["kind"] == "snapshot": self.seed_snapshot(r); continue
+                f = self.frames[-1]
+                require(f.id == r["frame"], "replay frame mismatch")
+                if r["kind"] == "step": self.step(r, f)
+                else: self.observe(r, f)
         require(not self.frames, "incomplete replay")
         results = []
         for t in self.config["targets"]:
@@ -315,9 +334,9 @@ class Engine:
         return dict(schema="java-provenance-v1", status="ok", semantics="operational-direct-data-dependency",
                     source_bindings=self.bindings, source_aliases=aliases, results=results,
                     branch_observations=self.branches, nodes=self.nodes,
-                    observation=dict(mode=self.rows[0]["values"][2] if len(self.rows[0]["values"]) > 2 else "full",
+                    observation=dict(mode=mode,
                                      raw_events=sum(not r.get("derived", False) for r in self.rows),
-                                     derived_steps=sum(r.get("derived", False) for r in self.rows)),
+                                     derived_steps=self.replayed_steps + sum(r.get("derived", False) for r in self.rows)),
                     evidence={f.name: hashlib.sha256(f.read_bytes()).hexdigest() for f in sorted(self.directory.iterdir())
                               if f.suffix == ".class" or f.name in ("events.jsonl", "observation.properties") or f.name.endswith(".plan.jsonl")})
 

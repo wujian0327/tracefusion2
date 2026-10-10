@@ -1,5 +1,7 @@
 # Java 查询入口绑定与稀疏观测对照
 
+本文保留 v1 两组实验。后续已完成统一 v2 快照的三组实验，见 [BOUNDARY-COMPARISON.md](BOUNDARY-COMPARISON.md)，不可将两轮不同快照协议的数字直接合表。
+
 此轮完成**同一原始字节码、同一来源语义下，full 与 sparse 两组真实 JVM 采集、独立还原及完整命令成本比较**。没有新增业务函数，只增加调用原有 `Subject.sum` 的负载驱动。Java Agent/ASM 采集，不使用 eBPF；不是 FlowDist/MirrorTaint 的复现或比较，不是实际 Java 应用适用性证明。
 
 ## 算法和边界

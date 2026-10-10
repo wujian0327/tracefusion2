@@ -96,12 +96,16 @@ def measured(cmd, dest, supervisor):
 
 
 def main(a):
+    modes = ["full", "sparse", "boundary"] if a.with_boundary else ["full", "sparse"]
     jdk = (a.jdk.resolve() / "bin") if a.jdk else Path(shutil.which("javac") or "missing").resolve().parent
     stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d-%H%M%S-%f")
     out = ROOT / "artifacts" / ("java-observation-" + stamp); out.mkdir(parents=True)
-    report = dict(schema="java-observation-comparison-v1", status="running", cases=[], measurements=[],
+    report = dict(schema="java-observation-comparison-v1", status="running", cases=[], measurements=[], modes=modes,
+                  snapshot_protocol="v2-complete-root-fields" if a.with_boundary else "v1-observed-reads",
                   qualification=dict(query_scope="entry static-call closure, not field-level slicing",
-                     retained="all field/branch/call/return observations", global_optimality=False,
+                     retained=({"full_sparse": "all field/branch/call/return observations plus root snapshots",
+                                "boundary": "root entry, complete declared root field snapshots, value-only root return"}
+                               if a.with_boundary else "all field/branch/call/return observations"), global_optimality=False,
                      real_application=False, external_tool_comparison=False, steady_state=False),
                   java=command([jdk / "java", "-version"]), platform=platform.uname()._asdict(),
                   rounds=a.rounds, repetitions=a.repeats, warmup_blocks=a.warmup, seed=a.seed)
@@ -109,11 +113,12 @@ def main(a):
         if a.reuse_correctness:
             prior = a.reuse_correctness.resolve()
             old = json.loads((prior / "validation.json").read_text())
-            if len(old["cases"]) != 28 or len(old["faults"]) != 12: raise ValueError("incomplete correctness evidence")
+            if len(old["cases"]) != 14 * len(modes) or len(old["faults"]) != 12: raise ValueError("incomplete correctness evidence")
+            if old.get("modes", ["full", "sparse"]) != modes: raise ValueError("comparison modes changed")
             for name, sha in old["evidence_files"].items():
                 path = (prior / name).resolve()
                 if not path.is_relative_to(prior) or digest(path) != sha: raise ValueError("changed prior evidence: " + name)
-            for name in ("observation.py", "infer.py", "verify.py", "src/tracefusion/Agent.java", "src/tracefusion/Recorder.java"):
+            for name in ("observation.py", "boundary.py", "infer.py", "verify.py", "src/tracefusion/Agent.java", "src/tracefusion/Recorder.java"):
                 if digest(HERE / name) != old["source_sha256"][name]: raise ValueError("correctness code changed: " + name)
             for name in ("fixture-classes", "agent-classes", "source", "faults"):
                 shutil.copytree(prior / name, out / ("correctness-source" if name == "source" else name))
@@ -125,6 +130,9 @@ def main(a):
             if digest(agent) != old["agent_sha256"]: raise ValueError("correctness agent changed")
             report.update(cases=old["cases"], faults=old["faults"], build=old["build"],
                           correctness_reused_from=prior.name, correctness_manifest_sha256=digest(prior / "validation.json"))
+            if a.with_boundary:
+                report["boundary_faults"] = old["boundary_faults"]
+                shutil.copytree(prior / "boundary-faults", out / "boundary-faults")
         else:
             agent, fixture, report["build"] = build(jdk, out)
         report["agent_sha256"] = digest(agent)
@@ -132,9 +140,9 @@ def main(a):
             flags = [] if jvm == "default" else ["-Xint"]
             for case, (values, labels) in EXPECTED.items():
                 q = query(case); scope = out / (case + ".properties")
-                plan(fixture, entry(case), q, scope)
+                plan(fixture, entry(case), q, scope, snapshots=a.with_boundary)
                 answers = {}
-                for mode in ("full", "sparse"):
+                for mode in modes:
                     capture = out / f"{jvm}-{case}-{mode}"
                     observed = command(collect_args(jdk, agent, fixture, capture, mode, scope,
                                                     "demo.Driver", [case], flags))
@@ -151,8 +159,9 @@ def main(a):
                          events=answer["observation"]["raw_events"], derived_steps=answer["observation"]["derived_steps"],
                          bytes=raw.stat().st_size, graph_nodes=len(answer["nodes"])))
                 # Complete graph and control predicates must remain identical, not only final values.
-                for key in ("results", "nodes", "branch_observations", "source_aliases"):
-                    if answers["full"][key] != answers["sparse"][key]: raise AssertionError("mode mismatch " + key)
+                for other in modes[1:]:
+                    for key in ("results", "nodes", "branch_observations", "source_aliases"):
+                        if answers["full"][key] != answers[other][key]: raise AssertionError("mode mismatch " + other + ":" + key)
         if not a.reuse_correctness:
             report["faults"] = faults(out / "default-right-sparse", query("right"), out / "faults")
         for case in (() if a.reuse_correctness else ("null", "threads")):
@@ -161,16 +170,20 @@ def main(a):
             answer = infer(capture, query("right")); save(capture / "inference.json", answer)
             if answer["status"] != "unknown": raise AssertionError("negative accepted " + case)
             report["faults"].append(dict(fault=case, rejected=True, reason=answer["reason"]))
+        if a.with_boundary and not a.reuse_correctness:
+            from check_boundary import fault_checks, runtime_checks
+            report["boundary_faults"] = fault_checks(out, out / "boundary-faults")
+            report["boundary_faults"].extend(runtime_checks(jdk, agent, fixture, out / "right.properties", out / "boundary-faults"))
         # Repeated original loop path, fixed load, independent root-return oracle.
         q = query("loop")
         if a.rounds > 1: q["targets"].append(dict(id="last", root=a.rounds, kind="return"))
-        scope = out / "benchmark.properties"; plan(fixture, entry("loop"), q, scope)
+        scope = out / "benchmark.properties"; plan(fixture, entry("loop"), q, scope, snapshots=a.with_boundary)
         qfile = out / "benchmark-query.json"; save(qfile, q)
         supervisor = out / "measure-command"
         report["measurement_build"] = command(["cc", "-O2", "-Wall", "-Wextra", "-Werror", HERE / "measure_command.c", "-o", supervisor])
         rng = random.Random(a.seed)
         for block in range(-a.warmup, a.repeats):
-            order = ["native", "full", "sparse"]; rng.shuffle(order)
+            order = ["native", *modes]; rng.shuffle(order)
             for index, mode in enumerate(order):
                 dest = out / f"cost-{block}-{index}-{mode}"
                 capture = dest / "capture"
@@ -210,8 +223,9 @@ def main(a):
 
 
 def summarize(report):
+    modes = report.get("modes", ["full", "sparse"])
     result = {"correct_queries_per_mode": sum(len(c["results"]) for c in report["cases"] if c["mode"] == "full"),
-              "raw_events": {m: sum(c["events"] for c in report["cases"] if c["mode"] == m) for m in ("full", "sparse")},
+              "raw_events": {m: sum(c["events"] for c in report["cases"] if c["mode"] == m) for m in modes},
               "cost_medians": {}, "paired_reduction": {}}
     rows = [r for r in report["measurements"] if not r["warmup"]]
     def value(r, key):
@@ -220,7 +234,7 @@ def summarize(report):
         return r[key]
     keys = ("online_wall_seconds", "online_cpu_seconds", "online_peak_rss_kib", "offline_wall_seconds",
             "offline_cpu_seconds", "offline_peak_rss_kib", "end_to_end_wall_seconds", "end_to_end_cpu_seconds", "events", "trace_bytes")
-    for mode in ("native", "full", "sparse"):
+    for mode in ("native", *modes):
         group = [r for r in rows if r["mode"] == mode]
         result["cost_medians"][mode] = {k: statistics.median(value(r, k) for r in group) for k in keys} if group else {}
     for key in keys:
@@ -235,6 +249,19 @@ def summarize(report):
             ratios.append(1 - value(pair["sparse"], key) / base if base else 0)
         result["paired_reduction"][key] = dict(median=statistics.median(ratios), minimum=min(ratios), maximum=max(ratios),
                                                sparse_worse=sum(x < 0 for x in ratios)) if ratios else {}
+    if "boundary" in modes:
+        for base_mode in ("full", "sparse"):
+            group = result["boundary_vs_" + base_mode] = {}
+            for key in keys:
+                if "rss" in key:
+                    group[key] = {"qualified": False, "reason": "memory mechanism requires separate validation"}; continue
+                ratios = []
+                for block in range(report["repetitions"]):
+                    pair = {r["mode"]: r for r in rows if r["block"] == block}
+                    base = value(pair[base_mode], key)
+                    ratios.append(1 - value(pair["boundary"], key) / base if base else 0)
+                group[key] = dict(median=statistics.median(ratios), minimum=min(ratios), maximum=max(ratios),
+                                  boundary_worse=sum(x < 0 for x in ratios)) if ratios else {}
     return result
 
 
@@ -245,6 +272,7 @@ if __name__ == "__main__":
     p.add_argument("--repeats", type=int, default=6)
     p.add_argument("--warmup", type=int, default=1)
     p.add_argument("--seed", type=int, default=20261010)
+    p.add_argument("--with-boundary", action="store_true", help="three methods with the same complete root field snapshots")
     p.add_argument("--reuse-correctness", type=Path, help="reuse completed comparison captures with unchanged collector/inference sources")
     a = p.parse_args()
     if not 1 <= a.rounds <= 2000 or not 0 <= a.repeats <= 100 or not 0 <= a.warmup <= 10: p.error("bounded experiment sizes required")

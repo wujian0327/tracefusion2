@@ -18,11 +18,14 @@ def validate(directory):
     require(rows[-1]["values"][0] == "complete" and not rows[-1]["values"][1], "collector reports unknown")
     require(sum(r["kind"] == "start" for r in rows) == 1 and sum(r["kind"] == "finish" for r in rows) == 1, "duplicate boundaries")
     mode = rows[0]["values"][2] if len(rows[0]["values"]) > 2 else "full"
-    require(mode in ("full", "sparse"), "unsupported observation mode")
+    require(mode in ("full", "sparse", "boundary"), "unsupported observation mode")
     scope_path = directory / "observation.properties"
     scope_hash = rows[0]["values"][3] if len(rows[0]["values"]) > 3 else ""
     require(scope_hash == (hashlib.sha256(scope_path.read_bytes()).hexdigest() if scope_path.exists() else ""),
             "scope evidence hash mismatch")
+    from boundary import validate_snapshots, validate_boundary
+    validate_snapshots(directory, rows)
+    if mode == "boundary": return validate_boundary(directory, rows)
     if mode == "sparse":
         from observation import expand
         rows = expand(directory, rows)
@@ -46,6 +49,7 @@ def validate(directory):
             require(hashlib.sha256(original.read_bytes()).hexdigest() == values[0], "class hash")
             continue
         require(kind not in ("reject", "start", "finish"), "unexpected lifecycle record")
+        if kind == "snapshot": continue  # Complete ordered root snapshots checked above.
         threads.add(r["thread"])
         if kind == "enter":
             require(fid not in seen and site in methods, "frame identity/method")

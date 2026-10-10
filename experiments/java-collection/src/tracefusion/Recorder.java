@@ -73,6 +73,10 @@ public final class Recorder {
         transformed++;
         row("class", name, 0, new Object[]{sha});
     }
+    public static synchronized void snapshot(String method, int arg, Object obj, String field, int value) {
+        if (obj == null) problem("null_snapshot_argument");
+        event("snapshot", method, new Object[]{arg, ref(obj), field, value});
+    }
     public static synchronized void problem(String why) { problems.add(why); }
     public static synchronized void rejected(String name, String why) {
         problem("rejected_class:" + name + ":" + why);

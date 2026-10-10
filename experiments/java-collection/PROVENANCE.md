@@ -79,6 +79,8 @@ python3 experiments/java-collection/check_integer_semantics.py \
 
 ## 当前限制与下一步
 
+后续三组统一 v2 快照实验已验证完整边界重放，见 [BOUNDARY-COMPARISON.md](BOUNDARY-COMPARISON.md)。当前受控查询不要求内部观测；尚无真实 Java 应用或自动成本选型结论。
+
 上述历史结果使用全步骤诊断采集。后续已增加查询入口可达方法绑定、稀疏观测还原和本地完整命令成本试验，见 [OBSERVATION-COMPARISON.md](OBSERVATION-COMPARISON.md)。不是字段级最小探针优化，也不是稳态性能结论。强引用对象表会延长对象生命周期。采集端仍不支持数组、虚调用、反射/JNI、异常处理、并发业务访问和跨进程通信；不在支持范围或证据不完整都报告 unknown。hash 和内部一致性复核不能证明远端主机或上传日志真实。
 
 接下来应选定双方真正共同支持的正常 Java 业务查询，再扩展必要的 JVM 语义与运行时契约。当前结果只能支持“受控 Java 子集已完成采集到来源查询的闭环”，不能写成已支持 ZooKeeper/任意 Java，或已经优于 FlowDist。

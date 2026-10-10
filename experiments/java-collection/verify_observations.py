@@ -44,13 +44,14 @@ def verify(directory, output):
     directory = directory.resolve()
     manifest = json.loads((directory / "validation.json").read_text())
     require(manifest["status"] == "pass", "incomplete comparison")
+    modes = manifest.get("modes", ["full", "sparse"])
     for name, sha in manifest["evidence_files"].items():
         path = (directory / name).resolve()
         require(path.is_relative_to(directory) and digest(path) == sha, "evidence hash: " + name)
     for name, sha in manifest["source_sha256"].items():
         require(digest(directory / "source" / name) == sha, "source snapshot: " + name)
     require(digest(directory / "tracefusion-java-agent.jar") == manifest["agent_sha256"], "agent hash")
-    seen, answers, counts = set(), {}, {"full": 0, "sparse": 0}
+    seen, answers, counts = set(), {}, {m: 0 for m in modes}
     for c in manifest["cases"]:
         key = (c["jvm"], c["case"], c["mode"])
         require(key not in seen, "duplicate case"); seen.add(key)
@@ -66,18 +67,23 @@ def verify(directory, output):
                 and c["graph_nodes"] == len(answer["nodes"])
                 and c["bytes"] == (capture / "events.jsonl").stat().st_size, "saved counts differ")
         answers[key] = answer; counts[c["mode"]] += len(answer["results"])
-    require(seen == {(j, c, m) for j in ("default", "interpreter") for c in EXPECTED for m in ("full", "sparse")}, "case coverage")
+        if c["mode"] == "boundary":
+            raw = [json.loads(s) for s in (capture / "events.jsonl").read_text().splitlines()]
+            require(all(r["kind"] in ("start", "class", "enter", "snapshot", "exit", "finish") for r in raw), "boundary internal event leak")
+            require(all("@" not in r["site"] for r in raw), "boundary instruction-position leak")
+    require(seen == {(j, c, m) for j in ("default", "interpreter") for c in EXPECTED for m in modes}, "case coverage")
     for j in ("default", "interpreter"):
         for c in EXPECTED:
-            for k in ("results", "nodes", "branch_observations", "source_aliases"):
-                require(answers[j, c, "full"][k] == answers[j, c, "sparse"][k], "full/sparse graph mismatch")
+            for mode in modes[1:]:
+                for k in ("results", "nodes", "branch_observations", "source_aliases"):
+                    require(answers[j, c, "full"][k] == answers[j, c, mode][k], "cross-mode graph mismatch")
     bench_query = json.loads((directory / "benchmark-query.json").read_text())
     measured_queries, order = 0, set()
     for r in manifest["measurements"]:
         key = (r["block"], r["mode"])
         require(key not in order, "duplicate measurement"); order.add(key)
         require(r["warmup"] == (r["block"] < 0) and r["order"][r["position"]] == r["mode"]
-                and set(r["order"]) == {"native", "full", "sparse"}, "measurement order")
+                and set(r["order"]) == {"native", *modes}, "measurement order")
         dest = directory / f'cost-{r["block"]}-{r["position"]}-{r["mode"]}'
         for stage in ("online", "offline"):
             if r[stage] is None: continue
@@ -86,6 +92,7 @@ def verify(directory, output):
             require((user, system, rss, floor) == (r[stage]["user_seconds"], r[stage]["system_seconds"],
                                                   r[stage]["peak_rss_kib"], r[stage]["supervisor_rss_kib"]), "resource metrics")
         require(r["end_to_end_wall_seconds"] == r["online"]["wall_seconds"] + (r["offline"]["wall_seconds"] if r["offline"] else 0), "end-to-end time")
+        require(r["end_to_end_cpu_seconds"] == r["online"]["cpu_seconds"] + (r["offline"]["cpu_seconds"] if r["offline"] else 0), "end-to-end CPU")
         require((dest / "online/stdout.txt").read_text() == str(68 * manifest["rounds"]) + "\n", "benchmark output")
         if r["mode"] != "native":
             answer = infer(dest / "capture", bench_query)
@@ -96,7 +103,7 @@ def verify(directory, output):
                     "benchmark event/byte count")
             measured_queries += len(answer["results"])
     require(order == {(b, m) for b in range(-manifest["warmup_blocks"], manifest["repetitions"])
-                      for m in ("native", "full", "sparse")}, "cost coverage")
+                      for m in ("native", *modes)}, "cost coverage")
     require(summarize(manifest) == manifest["summary"], "cost summary differs")
     for f in manifest["faults"]:
         q = query("right")
@@ -105,9 +112,18 @@ def verify(directory, output):
         answer = infer(dest, q)
         require(answer["status"] == "unknown" and not answer["results"], "old fault accepted")
     new_faults = additional_faults(directory, output / "additional-faults")
+    boundary_checks = []
+    for case in manifest.get("boundary_faults", []):
+        dest = directory / "boundary-faults" / case["case"]
+        answer = infer(dest, json.loads((dest / "query.json").read_text()))
+        require(answer == json.loads((dest / "inference.json").read_text()), "boundary saved fault result differs")
+        if case["expected"] == "unknown": require(answer["status"] == "unknown" and not answer["results"], "boundary fault accepted")
+        else: require(answer["status"] == "ok" and answer["results"][0]["direct_sources"] == ["left.value"], "equal-value selection not reconstructed")
+        boundary_checks.append(case)
     report = dict(status="pass", new_JVM_execution=False, correct_queries=counts,
                   benchmark_queries_including_warmup=measured_queries, raw_manifest_sha256=digest(directory / "validation.json"),
                   existing_rejections=len(manifest["faults"]), additional_rejections=new_faults,
+                  boundary_checks=boundary_checks,
                   evidence_files_checked=len(manifest["evidence_files"]), summary=manifest["summary"])
     save(output / "verification.json", report)
     return report

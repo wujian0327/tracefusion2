@@ -7,6 +7,7 @@ field access, branch outcome, call boundary and return remains observed.
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
 
 from classfile import read_class
@@ -31,7 +32,7 @@ def closure(methods, entry):
     return sorted(reached)
 
 
-def plan(classes, entry, query, output):
+def plan(classes, entry, query, output, snapshots=False):
     # Explicit entry binding is required: root invocation ordinals alone cannot
     # identify a class/method before the program runs.
     owner = entry.split(".", 1)[0]
@@ -44,6 +45,24 @@ def plan(classes, entry, query, output):
              "query.sha256": query_hash(query), "sha256." + owner: hashlib.sha256(data).hexdigest(),
              "method.count": str(len(methods))}
     props.update({"method." + str(i): m for i, m in enumerate(methods)})
+    if snapshots:
+        props["schema"] = "java-observation-scope-v2"
+        require(not any(p["opcode"] == 184 and p["operands"][0] == entry
+                        for m in methods for p in decoded["methods"][m]["plans"]), "recursive boundary entry")
+        fields = []
+        args = re.findall(r"L[^;]+;|[IZBCS]", entry.split("(", 1)[1].split(")", 1)[0])
+        for slot, arg in enumerate(args):
+            if not arg.startswith("L"): continue
+            owner = arg[1:-1]
+            data = (Path(classes) / (owner + ".class")).read_bytes()
+            props["snapshot.sha256." + owner] = hashlib.sha256(data).hexdigest()
+            for field, access in sorted(read_class(data, fields_only=True)["fields"].items()):
+                if not access & 8 and field.endswith(":I"):
+                    require(access & 1 and not access & 64, "snapshot requires public nonvolatile int fields")
+                    fields.append((slot, field))
+        props["snapshot.count"] = str(len(fields))
+        for i, (slot, field) in enumerate(fields):
+            props[f"snapshot.{i}.arg"], props[f"snapshot.{i}.field"] = str(slot), field
     Path(output).write_text("".join(k + "=" + v + "\n" for k, v in props.items()))
     return props
 
@@ -56,7 +75,7 @@ def read_scope(directory):
         key, sep, value = line.partition("=")
         require(sep and key not in props, "invalid/duplicate scope property")
         props[key] = value
-    require(props.get("schema") == "java-observation-scope-v1", "scope schema")
+    require(props.get("schema") in ("java-observation-scope-v1", "java-observation-scope-v2"), "scope schema")
     require(props.get("method.count", "").isdigit(), "scope method count")
     count = int(props["method.count"])
     require(0 < count <= 10000, "scope method count limit")
@@ -98,7 +117,7 @@ def expand(directory, raw, max_steps=1_000_000):
             if not stack: require(r["site"] == props["entry"], "root differs from query entry")
             else: require(stack[-1]["pending"] == "enter", "unexpected callee entry")
             stack.append(dict(method=r["site"], frame=r["frame"], pc=0, pending=None))
-        elif kind not in ("start", "class", "finish", "reject"):
+        elif kind not in ("start", "class", "finish", "reject", "snapshot"):
             require(stack and r["frame"] == stack[-1]["frame"], "sparse frame mismatch")
             f = stack[-1]
             if f["pending"] is None:
@@ -140,5 +159,6 @@ if __name__ == "__main__":
     p.add_argument("--entry", required=True)
     p.add_argument("--query", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
+    p.add_argument("--snapshots", action="store_true", help="uniform v2 root field snapshots")
     a = p.parse_args()
-    print(json.dumps(plan(a.classes, a.entry, json.loads(a.query.read_text()), a.output), indent=2))
+    print(json.dumps(plan(a.classes, a.entry, json.loads(a.query.read_text()), a.output, a.snapshots), indent=2))
