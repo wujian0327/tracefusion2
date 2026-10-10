@@ -1,0 +1,791 @@
+{
+  "schema": "java-inference-validation-v1",
+  "status": "pass",
+  "cases": [
+    {
+      "mode": "default",
+      "case": "left",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "source_aliases": [],
+      "branch_predicate_sources": [
+        "selector"
+      ],
+      "graph_nodes": 9
+    },
+    {
+      "mode": "default",
+      "case": "right",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "source_aliases": [],
+      "branch_predicate_sources": [
+        "selector"
+      ],
+      "graph_nodes": 9
+    },
+    {
+      "mode": "default",
+      "case": "alias",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "source_aliases": [
+        [
+          "left.value",
+          "right.value"
+        ]
+      ],
+      "branch_predicate_sources": [
+        "selector"
+      ],
+      "graph_nodes": 9
+    },
+    {
+      "mode": "default",
+      "case": "overwrite",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        }
+      ],
+      "source_aliases": [],
+      "branch_predicate_sources": [],
+      "graph_nodes": 10
+    },
+    {
+      "mode": "default",
+      "case": "nested",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 34,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 22
+        }
+      ],
+      "source_aliases": [],
+      "branch_predicate_sources": [
+        "selector"
+      ],
+      "graph_nodes": 23
+    },
+    {
+      "mode": "default",
+      "case": "loop",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 68,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            },
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 41
+        }
+      ],
+      "source_aliases": [],
+      "branch_predicate_sources": [
+        "count"
+      ],
+      "graph_nodes": 42
+    },
+    {
+      "mode": "default",
+      "case": "gc",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        },
+        {
+          "id": "return2",
+          "root": 2,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 17
+        }
+      ],
+      "source_aliases": [],
+      "branch_predicate_sources": [
+        "selector",
+        "selector.second"
+      ],
+      "graph_nodes": 18
+    },
+    {
+      "mode": "interpreter",
+      "case": "left",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "source_aliases": [],
+      "branch_predicate_sources": [
+        "selector"
+      ],
+      "graph_nodes": 9
+    },
+    {
+      "mode": "interpreter",
+      "case": "right",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "source_aliases": [],
+      "branch_predicate_sources": [
+        "selector"
+      ],
+      "graph_nodes": 9
+    },
+    {
+      "mode": "interpreter",
+      "case": "alias",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        }
+      ],
+      "source_aliases": [
+        [
+          "left.value",
+          "right.value"
+        ]
+      ],
+      "branch_predicate_sources": [
+        "selector"
+      ],
+      "graph_nodes": 9
+    },
+    {
+      "mode": "interpreter",
+      "case": "overwrite",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 9
+        }
+      ],
+      "source_aliases": [],
+      "branch_predicate_sources": [],
+      "graph_nodes": 10
+    },
+    {
+      "mode": "interpreter",
+      "case": "nested",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 34,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 22
+        }
+      ],
+      "source_aliases": [],
+      "branch_predicate_sources": [
+        "selector"
+      ],
+      "graph_nodes": 23
+    },
+    {
+      "mode": "interpreter",
+      "case": "loop",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 68,
+          "direct_sources": [
+            "left.value",
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            },
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 41
+        }
+      ],
+      "source_aliases": [],
+      "branch_predicate_sources": [
+        "count"
+      ],
+      "graph_nodes": 42
+    },
+    {
+      "mode": "interpreter",
+      "case": "gc",
+      "results": [
+        {
+          "id": "return1",
+          "root": 1,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "left.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o1",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 8
+        },
+        {
+          "id": "return2",
+          "root": 2,
+          "status": "ok",
+          "value": 17,
+          "direct_sources": [
+            "right.value"
+          ],
+          "direct_origins": [
+            {
+              "kind": "initial_field",
+              "object": "o2",
+              "field": "demo/Cell.value:I",
+              "version": 0
+            }
+          ],
+          "node": 17
+        }
+      ],
+      "source_aliases": [],
+      "branch_predicate_sources": [
+        "selector",
+        "selector.second"
+      ],
+      "graph_nodes": 18
+    }
+  ],
+  "collection_reverification": {
+    "status": "pass",
+    "positive_captures": 14,
+    "positive_events": 310,
+    "negative_captures": 7,
+    "fault_rejections": 8,
+    "scope": "collection integrity and fixture observations; not provenance inference"
+  },
+  "capture_manifest_sha256": "6587aaea6b5a10c0878457a463665b06eafbdd263f3337f4df5ce06f28a0549e",
+  "correct_queries": 16,
+  "total_queries": 16,
+  "TP": 20,
+  "FP": 0,
+  "FN": 0,
+  "physical_origin_relationships": 18,
+  "existing_bad_capture_rejections": [
+    {
+      "case": "negative-external",
+      "reason": "collector reports unknown"
+    },
+    {
+      "case": "negative-handler",
+      "reason": "collector reports unknown"
+    },
+    {
+      "case": "negative-limit",
+      "reason": "collector reports unknown"
+    },
+    {
+      "case": "negative-null",
+      "reason": "collector reports unknown"
+    },
+    {
+      "case": "negative-threads",
+      "reason": "collector reports unknown"
+    },
+    {
+      "case": "negative-unsupported",
+      "reason": "collector reports unknown"
+    },
+    {
+      "case": "negative-volatile",
+      "reason": "collector reports unknown"
+    },
+    {
+      "case": "missing_footer",
+      "reason": "missing boundaries"
+    },
+    {
+      "case": "missing_read_renumbered",
+      "reason": "instruction sequence"
+    },
+    {
+      "case": "missing_step",
+      "reason": "event gap/order"
+    },
+    {
+      "case": "missing_step_renumbered",
+      "reason": "instruction sequence"
+    },
+    {
+      "case": "object_identity",
+      "reason": "field object without observed argument"
+    },
+    {
+      "case": "reordered_events",
+      "reason": "event gap/order"
+    },
+    {
+      "case": "return_value",
+      "reason": "return value disagrees with bytecode replay"
+    },
+    {
+      "case": "write_version",
+      "reason": "field write version"
+    }
+  ],
+  "new_fault_checks": [
+    {
+      "fault": "same_value_receiver",
+      "rejected": true,
+      "reason": "field receiver/identity disagrees with operand stack"
+    },
+    {
+      "fault": "callee_argument",
+      "rejected": true,
+      "reason": "callee arguments disagree with caller operand stack"
+    },
+    {
+      "fault": "plan_local_swap",
+      "rejected": true,
+      "reason": "collector plan differs from independently decoded original class"
+    },
+    {
+      "fault": "same_value_branch",
+      "rejected": true,
+      "reason": "branch disagrees with computed operands"
+    },
+    {
+      "fault": "missing_source_field",
+      "rejected": true,
+      "reason": "field not declared nonvolatile instance int: demo/Cell.missing:I"
+    },
+    {
+      "fault": "unobserved_target",
+      "rejected": true,
+      "reason": "target root not observed"
+    }
+  ],
+  "source_sha256": {
+    "check_inference.py": "0d1c084550cf3fd7053a28d010c2bad5d756f39a5b2f87b7936b6d3c7428d059",
+    "check_integer_semantics.py": "7250be5d1917c3ad466f37ff7144eef40cae5fcc0aba14a8c2eecc9e5be00aae",
+    "classfile.py": "99fd4b96fff2a8457a2c9ffba99ca625eea8da960267363e4cd5c630e3183cba",
+    "fixtures/demo/Cell.java": "cbdb7d4ff05daeaecb0ecbbb6a0479ea32d4b66ec06502e20133cd2e1669f720",
+    "fixtures/demo/Driver.java": "2fd320be5815dd2db1190e4c55835dcd226e8e3e128bceb7b2775842d9a157a5",
+    "fixtures/demo/Subject.java": "fc91d359efa8f64ac8da594d0812c43395acea6844a286f40f281ad95dca1895",
+    "fixtures/demo/Unsupported.java": "5105e74646a50492bcdc64d91586fc14a139ad219c75b55622f960640ffddc02",
+    "infer.py": "81fc80f790d7197ed320b6a4dcfefc1f98090622e15eccc6aacb3d27e953da3b",
+    "run.py": "2ebd7278dd5ad2efe2240a98b8175cec52985899da9fd75a8dbc2aed9cd1ddc3",
+    "semantics/calibration/IntOps.java": "a82517231cac2d49a671618afa464ff3588ea817d4961a841f2045bf843f10c8",
+    "src/tracefusion/Agent.java": "d842db7b61003facbdacce2dac3ea363cf5eba09e5cdf493fec3dcd225332513",
+    "src/tracefusion/Recorder.java": "3147be2d2efeebf6b98416b37703d98235a56bc656c9ca84a8e7048b13daded9",
+    "verify.py": "0d04d12c5ea97f7683e868ff7a5514ecc8bd1bfb4ba717e27ba35666db4148c8"
+  },
+  "qualification": {
+    "real_JVM_capture": true,
+    "new_JVM_execution": false,
+    "independent_class_decoder": true,
+    "fixture_oracle_used_by_inference": false,
+    "selective_capture": false,
+    "external_tool_comparison": false,
+    "performance_eligible": false,
+    "minimal_semantic_dependency_claim": false
+  },
+  "integer_calibration": {
+    "status": "pass",
+    "scope": "JVM integer semantic calibration; not application or performance evidence",
+    "total_checks": 44,
+    "distinct_inputs": 22,
+    "agent_sha256": "b32a1711d83643fc54ca3208c1329ba7722acca2305b8c36c0b6026285cfda29",
+    "source_sha256": "a82517231cac2d49a671618afa464ff3588ea817d4961a841f2045bf843f10c8",
+    "cases": [
+      {
+        "method": "add",
+        "arguments": [
+          2147483647,
+          1
+        ],
+        "expected": -2147483648
+      },
+      {
+        "method": "sub",
+        "arguments": [
+          -2147483648,
+          1
+        ],
+        "expected": 2147483647
+      },
+      {
+        "method": "mul",
+        "arguments": [
+          65536,
+          65536
+        ],
+        "expected": 0
+      },
+      {
+        "method": "div",
+        "arguments": [
+          -7,
+          3
+        ],
+        "expected": -2
+      },
+      {
+        "method": "div",
+        "arguments": [
+          7,
+          -3
+        ],
+        "expected": -2
+      },
+      {
+        "method": "div",
+        "arguments": [
+          -2147483648,
+          -1
+        ],
+        "expected": -2147483648
+      },
+      {
+        "method": "rem",
+        "arguments": [
+          -7,
+          3
+        ],
+        "expected": -1
+      },
+      {
+        "method": "rem",
+        "arguments": [
+          7,
+          -3
+        ],
+        "expected": 1
+      },
+      {
+        "method": "neg",
+        "arguments": [
+          -2147483648
+        ],
+        "expected": -2147483648
+      },
+      {
+        "method": "shl",
+        "arguments": [
+          1,
+          -1
+        ],
+        "expected": -2147483648
+      },
+      {
+        "method": "shl",
+        "arguments": [
+          1,
+          32
+        ],
+        "expected": 1
+      },
+      {
+        "method": "shr",
+        "arguments": [
+          -8,
+          1
+        ],
+        "expected": -4
+      },
+      {
+        "method": "ushr",
+        "arguments": [
+          -1,
+          1
+        ],
+        "expected": 2147483647
+      },
+      {
+        "method": "ushr",
+        "arguments": [
+          -1,
+          32
+        ],
+        "expected": -1
+      },
+      {
+        "method": "and",
+        "arguments": [
+          17,
+          0
+        ],
+        "expected": 0
+      },
+      {
+        "method": "or",
+        "arguments": [
+          16,
+          3
+        ],
+        "expected": 19
+      },
+      {
+        "method": "xor",
+        "arguments": [
+          17,
+          17
+        ],
+        "expected": 0
+      },
+      {
+        "method": "asByte",
+        "arguments": [
+          255
+        ],
+        "expected": -1
+      },
+      {
+        "method": "asByte",
+        "arguments": [
+          128
+        ],
+        "expected": -128
+      },
+      {
+        "method": "asChar",
+        "arguments": [
+          -1
+        ],
+        "expected": 65535
+      },
+      {
+        "method": "asShort",
+        "arguments": [
+          65535
+        ],
+        "expected": -1
+      },
+      {
+        "method": "asShort",
+        "arguments": [
+          32768
+        ],
+        "expected": -32768
+      }
+    ],
+    "final_backend_offline_reverification": "exact_match",
+    "jvm": "Corretto 17.0.20.1+12-LTS; default and -Xint"
+  },
+  "date": "2026-10-10",
+  "capture_commit": "1f846eff29f60f31553efad6bd6610438ff820c2",
+  "capture_archive_sha256": "9ca58e46e7f18ff98f085b58e0d616994c3edf535c33fa531b55ca2e511b0bed"
+}

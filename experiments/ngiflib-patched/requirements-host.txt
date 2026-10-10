@@ -1,0 +1,4 @@
+# Native correctness comparison. Unicorn is not required.
+capstone==5.0.6
+pyelftools==0.32
+Pillow==12.3.0

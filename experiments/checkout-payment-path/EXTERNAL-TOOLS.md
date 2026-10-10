@@ -1,0 +1,264 @@
+# 外部工具接入与兼容性诊断
+
+当前阶段：libdft64 最小接入已实现，原始传播库与适配器已用真实 Pin 3.20 SDK 编译通过。
+首次主机诊断确认工具构建和 Pin 空工具执行 `/bin/true` 通过；
+在 Go 目标构建前遇到旧 checkout 的 Git `dubious ownership` 检查，尚未执行 Go/Pin 来源查询。
+现已将默认业务 checkout 移到外部实验独立目录，由当前普通用户克隆，不调整 Git 信任设置。
+后续同一 `one` 用例已完成 native、nullpin 和 libdft64 三次业务执行；业务输出一致，但来源核验未通过。
+原始候选标签只包含运费字段，漏掉商品价格字段；金额区间另观察到 `runtime.asyncPreempt.abi0` 的 `POPFQ`
+未被上游指令分派器覆盖。包装器按约定返回 unknown。这两项事实尚不能证明同一个根因，不能通过忽略指令告警宣告成功。
+新增逐字节标签跟踪已在主机执行，源字段打标正确，但运行时转换附近出现寄存器标签丢失，详见下方诊断。
+当前受限开发环境不能执行 Pin 的 32 位启动器（`Exec format error`）；上述执行证据来自上传的主机结果。
+新边界配置已对实际 Go 1.25.4 支付 ELF 完成指令字节/DWARF 核验，单个 `one` 原生夹具运行通过。
+编译成功、模拟日志检查、已有 BPF 正确性结果均不等于外部工具复现成功。
+
+## 固定版本与比较语义
+
+- 外部工具：[AngoraFuzzer/libdft64](https://github.com/AngoraFuzzer/libdft64)，提交 `20804d5bae5d8aed31a71761b1a1149e35a0da95`。
+- Pin：官方 `pin-3.20-98437-gf02b61307-gcc-linux`，下载包和两个可执行文件以 SHA256 固定。
+- 目标：既有原始 Online Boutique v0.10.4 支付夹具，Go 1.25.4/Linux amd64、GOAMD64=v1。
+- 来源：准备结果中 shipping、每个 item.Cost 的 Units/Nanos；目标：chargeCard 金额的 Units/Nanos。
+- 每个来源字段独立标签，分别覆盖 8/4 字节；在源返回后打标、支付调用前读标签集合，不用数值相等判断来源。
+- 沿用直接数据依赖语义；数量和分支的控制影响不混进数值来源。
+
+应称为“基于该 libdft64 移植版本的动态污点基线”，不能称为原始 libdft 论文工具的完整复现。
+`external_boundaries.py` 只提取调用位置、验证 ELF 字节和 DWARF 字段布局；不调用生产选择器或来源推断器。
+源边界、Go 寄存器 ABI、不可变且不同的源对象仍是显式配置与契约。初始版本只接受 ET_EXEC。
+
+`libdft_payment.cpp` 只设置来源、读取目标及记录诊断；链接固定提交的原始传播库，不修改传播规则。
+没有启用示例 `hook_file_syscall()`，因此不会额外把网络/文件输入当作本次来源。
+原始来源日志解析完成后，Python 才读取夹具真值比较。
+
+## 当前为什么不能做性能表
+
+1. 上游 `bdd_tag.h/.cpp` 明确标有多线程支持 TODO，使用全局可变 BDD；Go 运行时的线程安全尚未核验。
+2. 上游指令分派器默认跳过未覆盖 opcode。适配器记录目标 G 在金额区间执行的未列出 opcode，并拒绝把该次结果当作匹配。
+   列出了 opcode 也不代表所有操作数形式都正确；部分指令被明确忽略，EFLAGS 不追踪。仍需实际传播审计。
+3. 适配器拒绝观测到的目标 G 线程迁移、调用方栈地址变化；这不是通用协程/栈迁移支持。
+4. 默认给所有指令插入诊断回调，成本很高。该配置仅用于兼容性调查。
+
+适配器自身日志锁不保护上游所有传播操作，不能据此宣称解决了并发问题。
+即使来源集合恰好与真值一致，报告仍保持 `external_baseline_qualified=false`、`performance_eligible=false`。
+不关闭 Go 抢占、GC 或强制单线程来悄悄改变比较条件；原有相关环境变量记录在结果中。
+
+## 先运行一个既有用例
+
+以下默认命令保留用于复现。首例已发现明确阻塞证据，无需重复运行相同配置或扩展十用例。
+新增的信号上下文诊断使用下方 `--trace-flow` 命令，只用于检验已提出的机制假设。
+
+在已有 Linux 主机、Go 1.25.4、git、make、g++ 和 Python 3.12 环境中：
+
+```bash
+cd ~/tracefusion2
+git pull --ff-only origin perf/payment-steady-state
+GOPROXY=https://goproxy.cn,direct \
+  python3 experiments/checkout-payment-path/external_compare.py run
+```
+
+无需 sudo/BPF。默认自动下载固定 Pin 和检出固定 libdft64 到 `artifacts/external-tools/`，不安装系统软件。
+若已有工具，可传 `--pin-root /absolute/pin-kit --libdft /absolute/libdft64`；版本/源码改动检查仍保留。
+Go 不在 PATH 时加 `--go /usr/local/go/bin/go`。默认业务 checkout 为 `artifacts/external-tools/online-boutique-v0.10.4`，
+与旧 sudo/BPF 实验的 checkout 分开；可用 `--checkout` 指向当前用户拥有的干净 checkout。
+需要 Intel 下载域和 GitHub 可访问；工具下载、编译、启动或执行失败都会保存阶段与日志并生成 zip。
+
+默认仅运行既有 `one` 用例，顺序是：工具构建 → Pin 空工具启动 `/bin/true` → 构建原始夹具 → native → nullpin → 来源适配器。
+任一步失败立即停止，返回最后打印的 zip。这个顺序用于诊断，绝不是随机化稳态性能比较。
+每次日志包含源字段标签、目标集合、边界次数和结束记录；崩溃、缺日志、未知指令、来源不符不会被删去当成功。
+
+仅在首例接入问题解决后，用 `--all-cases` 验证外部工具对既有十用例的语义；不新增场景，不重跑旧 BPF 正确性实验。
+最终性能比较还需要解决上述限制、去除诊断回调，并分别核算 native、Pin 运行时、传播、来源/目标适配和报告成本。
+应同时保留我们的 selected 和 boundary_replay，不能只挑弱控制组。
+
+## 定位首例的来源标签丢失
+
+```bash
+GOPROXY=https://goproxy.cn,direct \
+  python3 experiments/checkout-payment-path/external_compare.py run --trace-flow
+```
+
+仍然只运行既有 `one`，不关闭异步抢占、不改变 libdft64 传播规则，也不放宽 unknown 检查。
+附加 `flow.jsonl` 记录源字段打标后的逐字节回读，以及指定原始函数执行前的寄存器/内存标签。
+函数范围为 PlaceOrder、MultiplySlow、Sum、IsValid、asyncPreempt；指令集合从 ELF 全量提取，不读取生产选择器。
+内存记录是当前指令执行前的状态，不能当作写后状态；每个内存操作数最多记录 32 字节，原始宽度同时保留。
+标签以库内部节点号逐字节保存，完成时输出对应来源区间字典；上限 12000 条指令，超限明确拒绝。
+这些额外记录只用于定位，不能生成性能结论。它们可能改变调度，因此下一次结果不保证复现同一次抢占位置。
+新增诊断代码已用真实 Pin SDK 编译通过，诊断 PC 已对原始 Go ELF 校验；跟踪现已完成实际 Pin 运行。
+
+## 标签跟踪结果与停止条件
+
+2026-10-10 的 `one` 诊断中，native、nullpin、libdft64 均正常结束，业务金额一致。
+上传包的五份适配器源码与提交 `96d27b7` 一致；离线核对 ELF 摘要、990 个诊断位置的指令字节，
+并检查 1014 条执行前指令记录的连续性与日志结束标志。以下是来源正确性诊断，不是性能结果。
+
+- 运费 Units/Nanos、商品 0 Units/Nanos 的每个字节均成功回读到各自独立标签。
+  商品标签随后确实进入 `MultiplySlow` 的 R10/R11 参数寄存器，排除了“源字段没有打标”这一解释。
+- 第 379→380 条记录从 `Sum` 的 RET 到 `runtime.asyncPreempt.abi0` 入口。
+  R10/R11 数值保持不变，运费标签却已为空；这个丢失发生在 `POPFQ` 执行之前。
+- 第 528→529 条记录位于 `MultiplySlow` 栈检查的 JBE 与其跳转目标之间。
+  R10/R11 数值保持不变，商品标签变为空。JBE 本身不写这两个寄存器，上游分派器也不为 JBE 插入标签更新。
+- 本次支付边界原始 Units/Nanos 标签集合均为空；包装器返回 unknown，仍记录一个未覆盖 opcode 种类。
+  上次无流诊断的候选结果仅保留运费，说明不能把某次丢失位置或候选集合当作稳定结果。
+
+这些记录证明当前接入存在标签状态连续性缺口，不能证明 JBE、RET 或 POPFQ 是丢失的唯一原因。
+跟踪只覆盖指定函数，没有信号进入/返回记录；两个相邻记录之间仍可能发生未记录的信号或运行时活动。
+数值不变仅用于描述丢失位置，绝不用于推断或恢复来源标签。
+
+固定上游实现把影子寄存器保存在按 OS 线程索引的 `threads_ctx[tid].vcpu.gpr` 中，
+初始化代码未注册 `PIN_AddContextChangeFunction`，也未实现信号上下文寄存器标签保存/恢复。
+因此，信号/上下文恢复造成真实寄存器与影子标签不同步是符合证据的解释，但尚未被当前日志唯一证实。
+仅把 POPFQ 加入允许列表无法修复已发生的标签丢失。
+
+当前结论限定为：**固定 libdft64 原始传播库加本边界适配器，尚不能在原始 Go 支付首例中提供可信来源结果。**
+停止扩大用例和性能比较，不把兼容性失败计为本方法的正确率或性能胜出；下一步仅补充上下文观测以定位原因。
+继续接入需要单独开展信号上下文、Go 调度/栈行为及并发标签状态的适配与验证；届时应明确称为修改后的移植基线。
+
+可在不执行上传二进制的情况下复查已有流诊断包：
+
+```bash
+python3 experiments/checkout-payment-path/inspect_external_flow.py /path/to/checkout-external.zip
+```
+
+该脚本检查 ELF 指令字节、源标签逐字节回读、步骤连续性和完成标志，报告 R10/R11 在分支/返回附近的标签丢失。
+它不是完整传播验证器，不观测日志以外的上下文活动，也不会将外部基线标记为可做性能比较。
+
+## 信号上下文观测
+
+`--trace-flow` 现在还注册 Pin 的 `PIN_AddContextChangeFunction`，记录两类事件：
+
+- `context_change`：原因、信号信息、Pin 提供的 from/to 真实寄存器、回调当时唯一一份影子寄存器标签。
+  from/to 不是两份影子标签快照，不能据此声称已直接观测回调前后的标签变化。
+- `context_resume`：上下文通知后，该 OS 线程下一条被插桩指令执行前的真实寄存器和标签。
+  在现有最先执行的诊断回调中读取，早于本适配器的边界动作及该指令的 libdft 传播回调。
+
+观测限于来源到支付之间的 owner OS 线程，覆盖 R14 已切换为 gsignal/g0 的情况；
+每次上下文变化有独立 ID，并记录最近的业务流步骤号。寄存器真实值覆盖 16 个 GPR，
+标签覆盖这些 GPR 及 X0/X15；不声称覆盖完整 SIMD 状态。最多 256 次上下文通知，超限明确报错。
+回调只读取并写日志，不更改 Pin 上下文，不保存/恢复标签，不拦截或屏蔽信号，不改变 Go 抢占设置。
+
+离线脚本按同线程嵌套顺序关联 signal/sigreturn，报告中断值是否恢复、标签是否丢失，
+以及回调到第一条指令之间标签是否变化。未配对的信号明确列出；缺失恢复观测、计数不符均拒绝。
+若没有捕获上下文事件，不能排除这一机制。配对仅是时间关联，不模拟修改 ucontext、longjmp 等行为，
+也不能单独排除适配器顺序、其他指令语义或并发问题。旧包仍可读取，但明确显示未启用上下文观测。
+
+本次已用固定真实 Pin 3.20 SDK 编译通过；14 项合成日志检查通过，并重新读取已有主机流包，
+仍得到四个源字段打标成功及四处寄存器标签丢失记录。后续新增上下文回调的主机结果见下节。
+开发环境的 Pin 启动限制未变，编译及离线检查不能替代主机执行证据。
+
+相关依据：
+[Pin 上下文回调文档](https://software.intel.com/sites/landingpage/pintool/docs/98484/Pin/html/group__PIN__CONTROL.html)、
+[Go 异步抢占说明](https://go.dev/doc/go1.14#runtime)、
+[固定 libdft64 初始化实现](https://github.com/AngoraFuzzer/libdft64/blob/20804d5bae5d8aed31a71761b1a1149e35a0da95/src/libdft_api.cpp)。
+公开上游记录未找到与当前 Go 标签丢失完全相同的已确认问题，不能将本诊断写成官方已知故障的复现。
+
+## 上下文主机诊断结果：未复现原来的 R10/R11 丢失
+
+后续上传结果的适配器源码与 `1e12688` 一致，两份工具二进制摘要与构建清单一致。
+离线检查了 ELF 摘要、990 个诊断位置的字节、源字段逐字节标签及日志完成标志。
+native、nullpin、libdft64 业务执行均完成，但本次来源观测被适配器拒绝，不能作为完整字段查询结果。
+
+- 四个来源字段均成功打标。保留 226 条连续的指令前记录、6 次上下文通知和对应的 6 次首指令观测。
+- 捕获三对信号进入/返回，信号号为 23；每次首指令前记录的 16 个 GPR 及 PC 均与对应 Pin to 上下文一致。
+- 这三对事件中，R10/R11 标签在信号进入前就为空。没有复现此前带标签寄存器变空的时刻，
+  因而既不能确认，也不能排除此前的信号上下文解释。
+- 第一次信号进入时 X0 带有运费 Units/Nanos 标签，处理器入口的首指令前仍保留；
+  到 sigreturn 通知时标签已为空，在恢复后首指令前仍为空。变化发生于信号处理区间，
+  不能表述成“sigreturn 本身清除了标签”。没有记录 X0 的真实数值，也未证明这个临时副本仍被后续计算使用，
+  因而不能据此认定它导致最终来源错误。
+- 随后适配器检测到业务 G 的 OS 线程迁移，报告 `goroutine_thread_migration_unqualified` 并停止活动跟踪；
+  支付边界又报告 `invalid_sink_sequence`。没有输出 sink 标签记录，不能将缺失记录当作空来源集合。
+  仍观察到未覆盖的 POPFQ。
+
+这次确认了上下文诊断能在主机执行，也暴露了当前适配器的线程迁移限制；尚未完成根因定位。
+不能称为“libdft 信号恢复缺陷已证实”，也不能把适配器主动拒绝计为 libdft 的字段来源错误。
+当前配置无需盲目重复运行。若继续定位，应先设计能区分信号恢复与线程迁移影响的有限诊断，
+包括必要的 SIMD 实值证据和迁移前后状态，而不是直接修复传播规则或放宽 unknown 门槛。
+
+复查这类正常结束但被适配器拒绝的包时，可显式选择：
+
+```bash
+python3 experiments/checkout-payment-path/inspect_external_flow.py /path/to/checkout-external.zip --allow-failed-run
+```
+
+该选项只显示部分诊断，明确保留拒绝原因、可能不完整的指令区间及缺失 sink 为 null；
+不改变实验执行器的判定或性能资格。默认检查仍拒绝失败运行。本次 15 项合成日志检查通过，
+其中新增检查确保未记录 SIMD 实值时，不会声称其数值已经恢复。
+
+## 单次不迁移诊断
+
+用户指定的受控 `one` 诊断使用：
+
+```bash
+GOPROXY=https://goproxy.cn,direct \
+  python3 experiments/checkout-payment-path/external_compare.py run --trace-flow --lock-os-thread
+```
+
+此选项只允许既有 `one` 用例。执行器从原始测试驱动生成 `effective-payment_test.go`，
+在调用 PlaceOrder 前执行 `runtime.LockOSThread()`，并延迟解锁；原始业务函数和独立来源真值规则不变。
+三组 native/nullpin/libdft_payment 使用同一锁线程二进制，各执行一次，保存调用前后 Linux TID 并检查一致。
+端点 TID 一致本身不证明全过程无迁移；不迁移约束来自 Go LockOSThread 契约，原有逐指令迁移拒绝检查仍保留。
+
+该模式仅固定调用 PlaceOrder 的协程，不是整个进程单线程；Go 其他线程仍运行。
+执行器不修改 GOMAXPROCS、GODEBUG 或 GC 设置，继承值仍记录；尤其不自动关闭异步抢占。
+LockOSThread 也阻止其他普通协程在该线程运行，可能改变调度，因此成功也不能单凭此断言唯一根因是迁移。
+
+`fixture-control.json` 保存原始/实际驱动摘要及约束，summary 标记 `controlled_diagnostic=true`；
+每份 truth 记录 `thread_control`。从新 ELF 重新绑定边界并验证字节/DWARF，不能套用旧二进制地址。
+libdft 传播、指令覆盖及 unknown 判定不变，不构成正式性能比较或原始无约束 Go 支持证明。
+
+本地已用 Go 1.25.4 构建锁线程目标，从 ELF 验证 7 个边界位置，并运行一次 native `one`：
+业务金额为 `[3, 0]`，调用前后 TID 一致。此项本地验证不包含真实 Pin 执行；后续主机结果如下。
+
+## 锁线程主机结果：无迁移仍丢失标签
+
+`cfc543e` 的受控 `one` 主机诊断已经完成。上传源码与该提交一致；实际驱动与本地验证的锁线程版本逐字节一致，
+驱动摘要和两份工具二进制摘要匹配清单，归档内 35 份上游 src 文件与固定原始库一致。
+ELF 摘要及 990 个诊断位置的指令字节通过核验。未设置 GODEBUG、GOMAXPROCS、GOAMD64、GOGC 覆盖变量。
+
+- native、nullpin、libdft_payment 均完成，业务金额均为 `[3, 0]`，各次调用前后 Linux TID 一致。
+- 四个来源字段逐字节打标成功。991 条连续的指令前记录仅涉及同一 Pin 线程，
+  没有迁移错误或其他适配器 error，source/sink/end 各一次，finish 的 bad=false。
+- 捕获 5 对信号进入/返回和 10 次恢复后首指令观测；每次恢复的 GPR/PC 与 Pin 提供的 to 上下文一致。
+- 支付边界确实输出了 `Units=[]`、`Nanos=[]`，不同于上一轮迁移后没有 sink 标签记录。
+  两项字段来源均不匹配独立真值；仍有未覆盖的 POPFQ，包装器保持 unknown、性能资格为 false。
+
+在四对信号事件中，R10/R11 在进入信号处理时带有来源标签，处理器第一条指令前仍保留；
+到 sigreturn 通知时已为空，恢复后第一条指令前仍为空，但 R10/R11 的真实数值恢复为中断前数值。
+以下列出三个对应业务流记录间隙的实例：
+
+| 信号事件对 | 最近业务步骤 | 恢复的 R10/R11 数值 | 进入时的 R10/R11 来源 | 恢复后标签 |
+| --- | --- | --- | --- | --- |
+| 3→4 | 251 | 1 / 0 | 运费 Units / Nanos | 均为空 |
+| 7→8 | 581 | 2 / 0 | 商品 0 Units / Nanos | 均为空 |
+| 9→10 | 864 | 3 / 0 | 运费 Units+Nanos / Nanos | 均为空 |
+
+最后一对返回后，步骤 943/944 将已空标签的 R10/R11 写入金额临时对象，后续复制到支付对象，
+支付边界读到空标签。标签在进入 asyncPreempt 前已为空，不能归因于稍后执行的 POPFQ。
+真实数值仅作为状态恢复诊断证据，未用于生成或补回标签。
+
+当前可支持的结论是：**在该锁线程运行中，信号处理/恢复区间确实出现了真实寄存器恢复而来源标签未恢复的现象；
+去除业务协程跨线程迁移不足以解决当前 libdft64 接入的来源错误。**
+这比此前只根据相邻业务指令推测上下文缺口更直接，但仍未记录处理器内清除标签的具体指令，
+也未验证任何修复，不能宣称所有 libdft 版本或全部 Go 程序都存在同一问题。
+本次为改变调度约束的单次诊断，不构成正式性能比较；无需重复同一配置以制造成功结果。
+
+## 本地可复查的检查
+
+```bash
+python3 experiments/checkout-payment-path/external_compare.py build-tools \
+  --pin-root /absolute/pin-kit --libdft /absolute/libdft64
+python3 -m unittest discover -s experiments/checkout-payment-path -p 'test_external*.py'
+```
+
+第二条只检查合成日志的完整性、来源身份和错误结果拒绝，明确不算 Pin、内核或来源传播正确性证据。
+构建输出保存原始工具源码、适配器源码、命令日志、依赖提交、二进制摘要以及主机只读信息。
+
+## HardTaint 与其他候选
+
+[HardTaint 最终发表版](https://seg.nju.edu.cn/uploadPublication/copyright/125-753442135.pdf) §4.2 使用 Intel PT/PTWRITE，
+§7.3 明确有单机双进程版本。因此不能把双机/RDMA一概写成不可避免的最低要求。
+[官方实验包](https://zenodo.org/records/13117983) 已定位，尚未下载解包、编译或运行；单机入口是否可用仍待确认。
+本脚本记录 CPU flags、intel_pt 设备、perf 权限的可读信息，但不执行 PT 测试，不把这些信息当作 HardTaint 兼容性结论。
+下一步需确认主机 PT/PTWRITE 暴露、作者单机入口、Go ELF 重写、同一字段多来源查询语义。
+
+[SelectiveTaint 的 64 位问题报告](https://github.com/OSUSecLab/SelectiveTaint/issues/2) 尚未解决，暂排后面；
+该报告不构成“所有 amd64 程序均不支持”的证据。

@@ -1,0 +1,3865 @@
+{
+  "archive_sha256": "b9cf92d89a04fad558293c6f8e40c2fd76ca031ae7cb566dbfb7f3e72fc38bfc",
+  "experiment_commit": "f23114e1f57285b5f9109bbf562bd4e9b5aa1aa9",
+  "elf_sha256": "8a69f8a21a279b55fc343feaae517e8759f594275ff7e8c607d9d6f28d4c398c",
+  "source_revision": "cfbedecfeca66e22b62c37b85fcad5aa825625d7",
+  "libdft_revision": "20804d5bae5d8aed31a71761b1a1149e35a0da95",
+  "distinct_inputs": 4,
+  "output_modes": 2,
+  "native_process_runs": 32,
+  "observed_method_runs": 16,
+  "distinct_input_code_positions": 510,
+  "methods": {
+    "boundary_replay": {
+      "queries": 1020,
+      "value_matches": 1020,
+      "exact_format_sources": 1020,
+      "covered_required_bytes": 2040,
+      "missing_required_bytes": 0,
+      "additional_source_bytes": 0
+    },
+    "libdft64": {
+      "queries": 1020,
+      "value_matches": 1020,
+      "exact_format_sources": 858,
+      "covered_required_bytes": 2040,
+      "missing_required_bytes": 0,
+      "additional_source_bytes": 162
+    }
+  },
+  "records": {
+    "boundary_replay": {
+      "raw_records": 63446,
+      "instruction_records": 48606,
+      "source_fills": 10,
+      "ignored_shift_executions": 2210
+    },
+    "libdft64": {
+      "raw_records": 63446,
+      "instruction_records": 48606,
+      "source_fills": 10,
+      "ignored_shift_executions": 2210
+    }
+  },
+  "cases": [
+    {
+      "input": "single_pixel",
+      "indexed": false,
+      "methods": {
+        "boundary_replay": {
+          "status": "observed",
+          "queries": 3,
+          "value_matches": 3,
+          "exact_format_sources": 3,
+          "covered_required_bytes": 6,
+          "missing_required_bytes": 0,
+          "additional_source_bytes": 0,
+          "ignored_shift_executions": 7,
+          "native_pixels_match": true
+        },
+        "libdft64": {
+          "status": "observed",
+          "queries": 3,
+          "value_matches": 3,
+          "exact_format_sources": 3,
+          "covered_required_bytes": 6,
+          "missing_required_bytes": 0,
+          "additional_source_bytes": 0,
+          "ignored_shift_executions": 7,
+          "native_pixels_match": true
+        }
+      }
+    },
+    {
+      "input": "single_pixel",
+      "indexed": true,
+      "methods": {
+        "boundary_replay": {
+          "status": "observed",
+          "queries": 3,
+          "value_matches": 3,
+          "exact_format_sources": 3,
+          "covered_required_bytes": 6,
+          "missing_required_bytes": 0,
+          "additional_source_bytes": 0,
+          "ignored_shift_executions": 7,
+          "native_pixels_match": true
+        },
+        "libdft64": {
+          "status": "observed",
+          "queries": 3,
+          "value_matches": 3,
+          "exact_format_sources": 3,
+          "covered_required_bytes": 6,
+          "missing_required_bytes": 0,
+          "additional_source_bytes": 0,
+          "ignored_shift_executions": 7,
+          "native_pixels_match": true
+        }
+      }
+    },
+    {
+      "input": "stripes",
+      "indexed": false,
+      "methods": {
+        "boundary_replay": {
+          "status": "observed",
+          "queries": 16,
+          "value_matches": 16,
+          "exact_format_sources": 16,
+          "covered_required_bytes": 32,
+          "missing_required_bytes": 0,
+          "additional_source_bytes": 0,
+          "ignored_shift_executions": 34,
+          "native_pixels_match": true
+        },
+        "libdft64": {
+          "status": "observed",
+          "queries": 16,
+          "value_matches": 16,
+          "exact_format_sources": 15,
+          "covered_required_bytes": 32,
+          "missing_required_bytes": 0,
+          "additional_source_bytes": 1,
+          "ignored_shift_executions": 34,
+          "native_pixels_match": true
+        }
+      }
+    },
+    {
+      "input": "stripes",
+      "indexed": true,
+      "methods": {
+        "boundary_replay": {
+          "status": "observed",
+          "queries": 16,
+          "value_matches": 16,
+          "exact_format_sources": 16,
+          "covered_required_bytes": 32,
+          "missing_required_bytes": 0,
+          "additional_source_bytes": 0,
+          "ignored_shift_executions": 34,
+          "native_pixels_match": true
+        },
+        "libdft64": {
+          "status": "observed",
+          "queries": 16,
+          "value_matches": 16,
+          "exact_format_sources": 15,
+          "covered_required_bytes": 32,
+          "missing_required_bytes": 0,
+          "additional_source_bytes": 1,
+          "ignored_shift_executions": 34,
+          "native_pixels_match": true
+        }
+      }
+    },
+    {
+      "input": "checker",
+      "indexed": false,
+      "methods": {
+        "boundary_replay": {
+          "status": "observed",
+          "queries": 75,
+          "value_matches": 75,
+          "exact_format_sources": 75,
+          "covered_required_bytes": 150,
+          "missing_required_bytes": 0,
+          "additional_source_bytes": 0,
+          "ignored_shift_executions": 160,
+          "native_pixels_match": true
+        },
+        "libdft64": {
+          "status": "observed",
+          "queries": 75,
+          "value_matches": 75,
+          "exact_format_sources": 66,
+          "covered_required_bytes": 150,
+          "missing_required_bytes": 0,
+          "additional_source_bytes": 9,
+          "ignored_shift_executions": 160,
+          "native_pixels_match": true
+        }
+      }
+    },
+    {
+      "input": "checker",
+      "indexed": true,
+      "methods": {
+        "boundary_replay": {
+          "status": "observed",
+          "queries": 75,
+          "value_matches": 75,
+          "exact_format_sources": 75,
+          "covered_required_bytes": 150,
+          "missing_required_bytes": 0,
+          "additional_source_bytes": 0,
+          "ignored_shift_executions": 160,
+          "native_pixels_match": true
+        },
+        "libdft64": {
+          "status": "observed",
+          "queries": 75,
+          "value_matches": 75,
+          "exact_format_sources": 66,
+          "covered_required_bytes": 150,
+          "missing_required_bytes": 0,
+          "additional_source_bytes": 9,
+          "ignored_shift_executions": 160,
+          "native_pixels_match": true
+        }
+      }
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "methods": {
+        "boundary_replay": {
+          "status": "observed",
+          "queries": 416,
+          "value_matches": 416,
+          "exact_format_sources": 416,
+          "covered_required_bytes": 832,
+          "missing_required_bytes": 0,
+          "additional_source_bytes": 0,
+          "ignored_shift_executions": 904,
+          "native_pixels_match": true
+        },
+        "libdft64": {
+          "status": "observed",
+          "queries": 416,
+          "value_matches": 416,
+          "exact_format_sources": 345,
+          "covered_required_bytes": 832,
+          "missing_required_bytes": 0,
+          "additional_source_bytes": 71,
+          "ignored_shift_executions": 904,
+          "native_pixels_match": true
+        }
+      }
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "methods": {
+        "boundary_replay": {
+          "status": "observed",
+          "queries": 416,
+          "value_matches": 416,
+          "exact_format_sources": 416,
+          "covered_required_bytes": 832,
+          "missing_required_bytes": 0,
+          "additional_source_bytes": 0,
+          "ignored_shift_executions": 904,
+          "native_pixels_match": true
+        },
+        "libdft64": {
+          "status": "observed",
+          "queries": 416,
+          "value_matches": 416,
+          "exact_format_sources": 345,
+          "covered_required_bytes": 832,
+          "missing_required_bytes": 0,
+          "additional_source_bytes": 71,
+          "ignored_shift_executions": 904,
+          "native_pixels_match": true
+        }
+      }
+    }
+  ],
+  "libdft_format_differences": [
+    {
+      "input": "stripes",
+      "indexed": false,
+      "sequence": 9,
+      "value": 261,
+      "observed": [
+        801,
+        802,
+        803
+      ],
+      "required": [
+        802,
+        803
+      ],
+      "extra": [
+        801
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "stripes",
+      "indexed": true,
+      "sequence": 9,
+      "value": 261,
+      "observed": [
+        801,
+        802,
+        803
+      ],
+      "required": [
+        802,
+        803
+      ],
+      "extra": [
+        801
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "checker",
+      "indexed": false,
+      "sequence": 9,
+      "value": 261,
+      "observed": [
+        801,
+        802,
+        803
+      ],
+      "required": [
+        802,
+        803
+      ],
+      "extra": [
+        801
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "checker",
+      "indexed": false,
+      "sequence": 17,
+      "value": 272,
+      "observed": [
+        810,
+        811,
+        812
+      ],
+      "required": [
+        811,
+        812
+      ],
+      "extra": [
+        810
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "checker",
+      "indexed": false,
+      "sequence": 25,
+      "value": 273,
+      "observed": [
+        819,
+        820,
+        821
+      ],
+      "required": [
+        820,
+        821
+      ],
+      "extra": [
+        819
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "checker",
+      "indexed": false,
+      "sequence": 33,
+      "value": 280,
+      "observed": [
+        828,
+        829,
+        830
+      ],
+      "required": [
+        829,
+        830
+      ],
+      "extra": [
+        828
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "checker",
+      "indexed": false,
+      "sequence": 41,
+      "value": 294,
+      "observed": [
+        837,
+        838,
+        839
+      ],
+      "required": [
+        838,
+        839
+      ],
+      "extra": [
+        837
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "checker",
+      "indexed": false,
+      "sequence": 49,
+      "value": 303,
+      "observed": [
+        846,
+        847,
+        848
+      ],
+      "required": [
+        847,
+        848
+      ],
+      "extra": [
+        846
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "checker",
+      "indexed": false,
+      "sequence": 57,
+      "value": 283,
+      "observed": [
+        855,
+        856,
+        857
+      ],
+      "required": [
+        856,
+        857
+      ],
+      "extra": [
+        855
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "checker",
+      "indexed": false,
+      "sequence": 65,
+      "value": 320,
+      "observed": [
+        864,
+        865,
+        866
+      ],
+      "required": [
+        865,
+        866
+      ],
+      "extra": [
+        864
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "checker",
+      "indexed": false,
+      "sequence": 73,
+      "value": 314,
+      "observed": [
+        873,
+        874,
+        875
+      ],
+      "required": [
+        874,
+        875
+      ],
+      "extra": [
+        873
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "checker",
+      "indexed": true,
+      "sequence": 9,
+      "value": 261,
+      "observed": [
+        801,
+        802,
+        803
+      ],
+      "required": [
+        802,
+        803
+      ],
+      "extra": [
+        801
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "checker",
+      "indexed": true,
+      "sequence": 17,
+      "value": 272,
+      "observed": [
+        810,
+        811,
+        812
+      ],
+      "required": [
+        811,
+        812
+      ],
+      "extra": [
+        810
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "checker",
+      "indexed": true,
+      "sequence": 25,
+      "value": 273,
+      "observed": [
+        819,
+        820,
+        821
+      ],
+      "required": [
+        820,
+        821
+      ],
+      "extra": [
+        819
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "checker",
+      "indexed": true,
+      "sequence": 33,
+      "value": 280,
+      "observed": [
+        828,
+        829,
+        830
+      ],
+      "required": [
+        829,
+        830
+      ],
+      "extra": [
+        828
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "checker",
+      "indexed": true,
+      "sequence": 41,
+      "value": 294,
+      "observed": [
+        837,
+        838,
+        839
+      ],
+      "required": [
+        838,
+        839
+      ],
+      "extra": [
+        837
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "checker",
+      "indexed": true,
+      "sequence": 49,
+      "value": 303,
+      "observed": [
+        846,
+        847,
+        848
+      ],
+      "required": [
+        847,
+        848
+      ],
+      "extra": [
+        846
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "checker",
+      "indexed": true,
+      "sequence": 57,
+      "value": 283,
+      "observed": [
+        855,
+        856,
+        857
+      ],
+      "required": [
+        856,
+        857
+      ],
+      "extra": [
+        855
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "checker",
+      "indexed": true,
+      "sequence": 65,
+      "value": 320,
+      "observed": [
+        864,
+        865,
+        866
+      ],
+      "required": [
+        865,
+        866
+      ],
+      "extra": [
+        864
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "checker",
+      "indexed": true,
+      "sequence": 73,
+      "value": 314,
+      "observed": [
+        873,
+        874,
+        875
+      ],
+      "required": [
+        874,
+        875
+      ],
+      "extra": [
+        873
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 9,
+      "value": 262,
+      "observed": [
+        801,
+        802,
+        803
+      ],
+      "required": [
+        802,
+        803
+      ],
+      "extra": [
+        801
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 17,
+      "value": 270,
+      "observed": [
+        810,
+        811,
+        812
+      ],
+      "required": [
+        811,
+        812
+      ],
+      "extra": [
+        810
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 25,
+      "value": 272,
+      "observed": [
+        819,
+        820,
+        821
+      ],
+      "required": [
+        820,
+        821
+      ],
+      "extra": [
+        819
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 33,
+      "value": 271,
+      "observed": [
+        828,
+        829,
+        830
+      ],
+      "required": [
+        829,
+        830
+      ],
+      "extra": [
+        828
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 41,
+      "value": 3,
+      "observed": [
+        837,
+        838,
+        839
+      ],
+      "required": [
+        838,
+        839
+      ],
+      "extra": [
+        837
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 49,
+      "value": 290,
+      "observed": [
+        846,
+        847,
+        848
+      ],
+      "required": [
+        847,
+        848
+      ],
+      "extra": [
+        846
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 57,
+      "value": 296,
+      "observed": [
+        855,
+        856,
+        857
+      ],
+      "required": [
+        856,
+        857
+      ],
+      "extra": [
+        855
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 65,
+      "value": 288,
+      "observed": [
+        864,
+        865,
+        866
+      ],
+      "required": [
+        865,
+        866
+      ],
+      "extra": [
+        864
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 73,
+      "value": 280,
+      "observed": [
+        873,
+        874,
+        875
+      ],
+      "required": [
+        874,
+        875
+      ],
+      "extra": [
+        873
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 81,
+      "value": 281,
+      "observed": [
+        882,
+        883,
+        884
+      ],
+      "required": [
+        883,
+        884
+      ],
+      "extra": [
+        882
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 89,
+      "value": 273,
+      "observed": [
+        891,
+        892,
+        893
+      ],
+      "required": [
+        892,
+        893
+      ],
+      "extra": [
+        891
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 97,
+      "value": 282,
+      "observed": [
+        900,
+        901,
+        902
+      ],
+      "required": [
+        901,
+        902
+      ],
+      "extra": [
+        900
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 105,
+      "value": 353,
+      "observed": [
+        909,
+        910,
+        911
+      ],
+      "required": [
+        910,
+        911
+      ],
+      "extra": [
+        909
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 113,
+      "value": 275,
+      "observed": [
+        918,
+        919,
+        920
+      ],
+      "required": [
+        919,
+        920
+      ],
+      "extra": [
+        918
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 121,
+      "value": 365,
+      "observed": [
+        927,
+        928,
+        929
+      ],
+      "required": [
+        928,
+        929
+      ],
+      "extra": [
+        927
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 129,
+      "value": 346,
+      "observed": [
+        936,
+        937,
+        938
+      ],
+      "required": [
+        937,
+        938
+      ],
+      "extra": [
+        936
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 137,
+      "value": 389,
+      "observed": [
+        945,
+        946,
+        947
+      ],
+      "required": [
+        946,
+        947
+      ],
+      "extra": [
+        945
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 145,
+      "value": 397,
+      "observed": [
+        954,
+        955,
+        956
+      ],
+      "required": [
+        955,
+        956
+      ],
+      "extra": [
+        954
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 153,
+      "value": 377,
+      "observed": [
+        963,
+        964,
+        965
+      ],
+      "required": [
+        964,
+        965
+      ],
+      "extra": [
+        963
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 161,
+      "value": 410,
+      "observed": [
+        972,
+        973,
+        974
+      ],
+      "required": [
+        973,
+        974
+      ],
+      "extra": [
+        972
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 169,
+      "value": 421,
+      "observed": [
+        981,
+        982,
+        983
+      ],
+      "required": [
+        982,
+        983
+      ],
+      "extra": [
+        981
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 177,
+      "value": 429,
+      "observed": [
+        990,
+        991,
+        992
+      ],
+      "required": [
+        991,
+        992
+      ],
+      "extra": [
+        990
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 185,
+      "value": 437,
+      "observed": [
+        999,
+        1000,
+        1001
+      ],
+      "required": [
+        1000,
+        1001
+      ],
+      "extra": [
+        999
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 193,
+      "value": 287,
+      "observed": [
+        1008,
+        1009,
+        1010
+      ],
+      "required": [
+        1009,
+        1010
+      ],
+      "extra": [
+        1008
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 201,
+      "value": 453,
+      "observed": [
+        1017,
+        1018,
+        1019
+      ],
+      "required": [
+        1018,
+        1019
+      ],
+      "extra": [
+        1017
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 209,
+      "value": 295,
+      "observed": [
+        1026,
+        1027,
+        1028
+      ],
+      "required": [
+        1027,
+        1028
+      ],
+      "extra": [
+        1026
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 217,
+      "value": 469,
+      "observed": [
+        1035,
+        1036,
+        1037
+      ],
+      "required": [
+        1036,
+        1037
+      ],
+      "extra": [
+        1035
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 225,
+      "value": 299,
+      "observed": [
+        1044,
+        1045,
+        1046
+      ],
+      "required": [
+        1045,
+        1046
+      ],
+      "extra": [
+        1044
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 233,
+      "value": 475,
+      "observed": [
+        1054,
+        1055,
+        1056
+      ],
+      "required": [
+        1055,
+        1056
+      ],
+      "extra": [
+        1054
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 241,
+      "value": 489,
+      "observed": [
+        1063,
+        1064,
+        1065
+      ],
+      "required": [
+        1064,
+        1065
+      ],
+      "extra": [
+        1063
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 249,
+      "value": 497,
+      "observed": [
+        1072,
+        1073,
+        1074
+      ],
+      "required": [
+        1073,
+        1074
+      ],
+      "extra": [
+        1072
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 257,
+      "value": 479,
+      "observed": [
+        1081,
+        1082,
+        1083
+      ],
+      "required": [
+        1082,
+        1083
+      ],
+      "extra": [
+        1081
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 261,
+      "value": 510,
+      "observed": [
+        1086,
+        1087,
+        1088
+      ],
+      "required": [
+        1087,
+        1088
+      ],
+      "extra": [
+        1086
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 265,
+      "value": 517,
+      "observed": [
+        1091,
+        1092,
+        1093
+      ],
+      "required": [
+        1092,
+        1093
+      ],
+      "extra": [
+        1091
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 269,
+      "value": 521,
+      "observed": [
+        1096,
+        1097,
+        1098
+      ],
+      "required": [
+        1097,
+        1098
+      ],
+      "extra": [
+        1096
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 273,
+      "value": 508,
+      "observed": [
+        1101,
+        1102,
+        1103
+      ],
+      "required": [
+        1102,
+        1103
+      ],
+      "extra": [
+        1101
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 277,
+      "value": 527,
+      "observed": [
+        1106,
+        1107,
+        1108
+      ],
+      "required": [
+        1107,
+        1108
+      ],
+      "extra": [
+        1106
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 281,
+      "value": 531,
+      "observed": [
+        1111,
+        1112,
+        1113
+      ],
+      "required": [
+        1112,
+        1113
+      ],
+      "extra": [
+        1111
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 285,
+      "value": 477,
+      "observed": [
+        1116,
+        1117,
+        1118
+      ],
+      "required": [
+        1117,
+        1118
+      ],
+      "extra": [
+        1116
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 289,
+      "value": 533,
+      "observed": [
+        1121,
+        1122,
+        1123
+      ],
+      "required": [
+        1122,
+        1123
+      ],
+      "extra": [
+        1121
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 293,
+      "value": 530,
+      "observed": [
+        1126,
+        1127,
+        1128
+      ],
+      "required": [
+        1127,
+        1128
+      ],
+      "extra": [
+        1126
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 297,
+      "value": 535,
+      "observed": [
+        1131,
+        1132,
+        1133
+      ],
+      "required": [
+        1132,
+        1133
+      ],
+      "extra": [
+        1131
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 301,
+      "value": 550,
+      "observed": [
+        1136,
+        1137,
+        1138
+      ],
+      "required": [
+        1137,
+        1138
+      ],
+      "extra": [
+        1136
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 305,
+      "value": 556,
+      "observed": [
+        1141,
+        1142,
+        1143
+      ],
+      "required": [
+        1142,
+        1143
+      ],
+      "extra": [
+        1141
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 309,
+      "value": 553,
+      "observed": [
+        1146,
+        1147,
+        1148
+      ],
+      "required": [
+        1147,
+        1148
+      ],
+      "extra": [
+        1146
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 313,
+      "value": 567,
+      "observed": [
+        1151,
+        1152,
+        1153
+      ],
+      "required": [
+        1152,
+        1153
+      ],
+      "extra": [
+        1151
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 317,
+      "value": 571,
+      "observed": [
+        1156,
+        1157,
+        1158
+      ],
+      "required": [
+        1157,
+        1158
+      ],
+      "extra": [
+        1156
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 321,
+      "value": 575,
+      "observed": [
+        1161,
+        1162,
+        1163
+      ],
+      "required": [
+        1162,
+        1163
+      ],
+      "extra": [
+        1161
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 325,
+      "value": 482,
+      "observed": [
+        1166,
+        1167,
+        1168
+      ],
+      "required": [
+        1167,
+        1168
+      ],
+      "extra": [
+        1166
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 329,
+      "value": 583,
+      "observed": [
+        1171,
+        1172,
+        1173
+      ],
+      "required": [
+        1172,
+        1173
+      ],
+      "extra": [
+        1171
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 333,
+      "value": 569,
+      "observed": [
+        1176,
+        1177,
+        1178
+      ],
+      "required": [
+        1177,
+        1178
+      ],
+      "extra": [
+        1176
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 337,
+      "value": 591,
+      "observed": [
+        1181,
+        1182,
+        1183
+      ],
+      "required": [
+        1182,
+        1183
+      ],
+      "extra": [
+        1181
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 341,
+      "value": 595,
+      "observed": [
+        1186,
+        1187,
+        1188
+      ],
+      "required": [
+        1187,
+        1188
+      ],
+      "extra": [
+        1186
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 345,
+      "value": 440,
+      "observed": [
+        1191,
+        1192,
+        1193
+      ],
+      "required": [
+        1192,
+        1193
+      ],
+      "extra": [
+        1191
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 349,
+      "value": 532,
+      "observed": [
+        1196,
+        1197,
+        1198
+      ],
+      "required": [
+        1197,
+        1198
+      ],
+      "extra": [
+        1196
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 353,
+      "value": 601,
+      "observed": [
+        1201,
+        1202,
+        1203
+      ],
+      "required": [
+        1202,
+        1203
+      ],
+      "extra": [
+        1201
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 357,
+      "value": 609,
+      "observed": [
+        1206,
+        1207,
+        1208
+      ],
+      "required": [
+        1207,
+        1208
+      ],
+      "extra": [
+        1206
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 361,
+      "value": 613,
+      "observed": [
+        1211,
+        1212,
+        1213
+      ],
+      "required": [
+        1212,
+        1213
+      ],
+      "extra": [
+        1211
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 365,
+      "value": 617,
+      "observed": [
+        1216,
+        1217,
+        1218
+      ],
+      "required": [
+        1217,
+        1218
+      ],
+      "extra": [
+        1216
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 369,
+      "value": 623,
+      "observed": [
+        1221,
+        1222,
+        1223
+      ],
+      "required": [
+        1222,
+        1223
+      ],
+      "extra": [
+        1221
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 373,
+      "value": 599,
+      "observed": [
+        1226,
+        1227,
+        1228
+      ],
+      "required": [
+        1227,
+        1228
+      ],
+      "extra": [
+        1226
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 377,
+      "value": 542,
+      "observed": [
+        1231,
+        1232,
+        1233
+      ],
+      "required": [
+        1232,
+        1233
+      ],
+      "extra": [
+        1231
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 381,
+      "value": 635,
+      "observed": [
+        1236,
+        1237,
+        1238
+      ],
+      "required": [
+        1237,
+        1238
+      ],
+      "extra": [
+        1236
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 385,
+      "value": 606,
+      "observed": [
+        1241,
+        1242,
+        1243
+      ],
+      "required": [
+        1242,
+        1243
+      ],
+      "extra": [
+        1241
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 389,
+      "value": 643,
+      "observed": [
+        1246,
+        1247,
+        1248
+      ],
+      "required": [
+        1247,
+        1248
+      ],
+      "extra": [
+        1246
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 393,
+      "value": 516,
+      "observed": [
+        1251,
+        1252,
+        1253
+      ],
+      "required": [
+        1252,
+        1253
+      ],
+      "extra": [
+        1251
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 397,
+      "value": 651,
+      "observed": [
+        1256,
+        1257,
+        1258
+      ],
+      "required": [
+        1257,
+        1258
+      ],
+      "extra": [
+        1256
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 401,
+      "value": 655,
+      "observed": [
+        1261,
+        1262,
+        1263
+      ],
+      "required": [
+        1262,
+        1263
+      ],
+      "extra": [
+        1261
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 405,
+      "value": 659,
+      "observed": [
+        1266,
+        1267,
+        1268
+      ],
+      "required": [
+        1267,
+        1268
+      ],
+      "extra": [
+        1266
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 409,
+      "value": 663,
+      "observed": [
+        1271,
+        1272,
+        1273
+      ],
+      "required": [
+        1272,
+        1273
+      ],
+      "extra": [
+        1271
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": false,
+      "sequence": 413,
+      "value": 524,
+      "observed": [
+        1276,
+        1277,
+        1278
+      ],
+      "required": [
+        1277,
+        1278
+      ],
+      "extra": [
+        1276
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 9,
+      "value": 262,
+      "observed": [
+        801,
+        802,
+        803
+      ],
+      "required": [
+        802,
+        803
+      ],
+      "extra": [
+        801
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 17,
+      "value": 270,
+      "observed": [
+        810,
+        811,
+        812
+      ],
+      "required": [
+        811,
+        812
+      ],
+      "extra": [
+        810
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 25,
+      "value": 272,
+      "observed": [
+        819,
+        820,
+        821
+      ],
+      "required": [
+        820,
+        821
+      ],
+      "extra": [
+        819
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 33,
+      "value": 271,
+      "observed": [
+        828,
+        829,
+        830
+      ],
+      "required": [
+        829,
+        830
+      ],
+      "extra": [
+        828
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 41,
+      "value": 3,
+      "observed": [
+        837,
+        838,
+        839
+      ],
+      "required": [
+        838,
+        839
+      ],
+      "extra": [
+        837
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 49,
+      "value": 290,
+      "observed": [
+        846,
+        847,
+        848
+      ],
+      "required": [
+        847,
+        848
+      ],
+      "extra": [
+        846
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 57,
+      "value": 296,
+      "observed": [
+        855,
+        856,
+        857
+      ],
+      "required": [
+        856,
+        857
+      ],
+      "extra": [
+        855
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 65,
+      "value": 288,
+      "observed": [
+        864,
+        865,
+        866
+      ],
+      "required": [
+        865,
+        866
+      ],
+      "extra": [
+        864
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 73,
+      "value": 280,
+      "observed": [
+        873,
+        874,
+        875
+      ],
+      "required": [
+        874,
+        875
+      ],
+      "extra": [
+        873
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 81,
+      "value": 281,
+      "observed": [
+        882,
+        883,
+        884
+      ],
+      "required": [
+        883,
+        884
+      ],
+      "extra": [
+        882
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 89,
+      "value": 273,
+      "observed": [
+        891,
+        892,
+        893
+      ],
+      "required": [
+        892,
+        893
+      ],
+      "extra": [
+        891
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 97,
+      "value": 282,
+      "observed": [
+        900,
+        901,
+        902
+      ],
+      "required": [
+        901,
+        902
+      ],
+      "extra": [
+        900
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 105,
+      "value": 353,
+      "observed": [
+        909,
+        910,
+        911
+      ],
+      "required": [
+        910,
+        911
+      ],
+      "extra": [
+        909
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 113,
+      "value": 275,
+      "observed": [
+        918,
+        919,
+        920
+      ],
+      "required": [
+        919,
+        920
+      ],
+      "extra": [
+        918
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 121,
+      "value": 365,
+      "observed": [
+        927,
+        928,
+        929
+      ],
+      "required": [
+        928,
+        929
+      ],
+      "extra": [
+        927
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 129,
+      "value": 346,
+      "observed": [
+        936,
+        937,
+        938
+      ],
+      "required": [
+        937,
+        938
+      ],
+      "extra": [
+        936
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 137,
+      "value": 389,
+      "observed": [
+        945,
+        946,
+        947
+      ],
+      "required": [
+        946,
+        947
+      ],
+      "extra": [
+        945
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 145,
+      "value": 397,
+      "observed": [
+        954,
+        955,
+        956
+      ],
+      "required": [
+        955,
+        956
+      ],
+      "extra": [
+        954
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 153,
+      "value": 377,
+      "observed": [
+        963,
+        964,
+        965
+      ],
+      "required": [
+        964,
+        965
+      ],
+      "extra": [
+        963
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 161,
+      "value": 410,
+      "observed": [
+        972,
+        973,
+        974
+      ],
+      "required": [
+        973,
+        974
+      ],
+      "extra": [
+        972
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 169,
+      "value": 421,
+      "observed": [
+        981,
+        982,
+        983
+      ],
+      "required": [
+        982,
+        983
+      ],
+      "extra": [
+        981
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 177,
+      "value": 429,
+      "observed": [
+        990,
+        991,
+        992
+      ],
+      "required": [
+        991,
+        992
+      ],
+      "extra": [
+        990
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 185,
+      "value": 437,
+      "observed": [
+        999,
+        1000,
+        1001
+      ],
+      "required": [
+        1000,
+        1001
+      ],
+      "extra": [
+        999
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 193,
+      "value": 287,
+      "observed": [
+        1008,
+        1009,
+        1010
+      ],
+      "required": [
+        1009,
+        1010
+      ],
+      "extra": [
+        1008
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 201,
+      "value": 453,
+      "observed": [
+        1017,
+        1018,
+        1019
+      ],
+      "required": [
+        1018,
+        1019
+      ],
+      "extra": [
+        1017
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 209,
+      "value": 295,
+      "observed": [
+        1026,
+        1027,
+        1028
+      ],
+      "required": [
+        1027,
+        1028
+      ],
+      "extra": [
+        1026
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 217,
+      "value": 469,
+      "observed": [
+        1035,
+        1036,
+        1037
+      ],
+      "required": [
+        1036,
+        1037
+      ],
+      "extra": [
+        1035
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 225,
+      "value": 299,
+      "observed": [
+        1044,
+        1045,
+        1046
+      ],
+      "required": [
+        1045,
+        1046
+      ],
+      "extra": [
+        1044
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 233,
+      "value": 475,
+      "observed": [
+        1054,
+        1055,
+        1056
+      ],
+      "required": [
+        1055,
+        1056
+      ],
+      "extra": [
+        1054
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 241,
+      "value": 489,
+      "observed": [
+        1063,
+        1064,
+        1065
+      ],
+      "required": [
+        1064,
+        1065
+      ],
+      "extra": [
+        1063
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 249,
+      "value": 497,
+      "observed": [
+        1072,
+        1073,
+        1074
+      ],
+      "required": [
+        1073,
+        1074
+      ],
+      "extra": [
+        1072
+      ],
+      "missing": [],
+      "entry_nbbit": 9,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 257,
+      "value": 479,
+      "observed": [
+        1081,
+        1082,
+        1083
+      ],
+      "required": [
+        1082,
+        1083
+      ],
+      "extra": [
+        1081
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 261,
+      "value": 510,
+      "observed": [
+        1086,
+        1087,
+        1088
+      ],
+      "required": [
+        1087,
+        1088
+      ],
+      "extra": [
+        1086
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 265,
+      "value": 517,
+      "observed": [
+        1091,
+        1092,
+        1093
+      ],
+      "required": [
+        1092,
+        1093
+      ],
+      "extra": [
+        1091
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 269,
+      "value": 521,
+      "observed": [
+        1096,
+        1097,
+        1098
+      ],
+      "required": [
+        1097,
+        1098
+      ],
+      "extra": [
+        1096
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 273,
+      "value": 508,
+      "observed": [
+        1101,
+        1102,
+        1103
+      ],
+      "required": [
+        1102,
+        1103
+      ],
+      "extra": [
+        1101
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 277,
+      "value": 527,
+      "observed": [
+        1106,
+        1107,
+        1108
+      ],
+      "required": [
+        1107,
+        1108
+      ],
+      "extra": [
+        1106
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 281,
+      "value": 531,
+      "observed": [
+        1111,
+        1112,
+        1113
+      ],
+      "required": [
+        1112,
+        1113
+      ],
+      "extra": [
+        1111
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 285,
+      "value": 477,
+      "observed": [
+        1116,
+        1117,
+        1118
+      ],
+      "required": [
+        1117,
+        1118
+      ],
+      "extra": [
+        1116
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 289,
+      "value": 533,
+      "observed": [
+        1121,
+        1122,
+        1123
+      ],
+      "required": [
+        1122,
+        1123
+      ],
+      "extra": [
+        1121
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 293,
+      "value": 530,
+      "observed": [
+        1126,
+        1127,
+        1128
+      ],
+      "required": [
+        1127,
+        1128
+      ],
+      "extra": [
+        1126
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 297,
+      "value": 535,
+      "observed": [
+        1131,
+        1132,
+        1133
+      ],
+      "required": [
+        1132,
+        1133
+      ],
+      "extra": [
+        1131
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 301,
+      "value": 550,
+      "observed": [
+        1136,
+        1137,
+        1138
+      ],
+      "required": [
+        1137,
+        1138
+      ],
+      "extra": [
+        1136
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 305,
+      "value": 556,
+      "observed": [
+        1141,
+        1142,
+        1143
+      ],
+      "required": [
+        1142,
+        1143
+      ],
+      "extra": [
+        1141
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 309,
+      "value": 553,
+      "observed": [
+        1146,
+        1147,
+        1148
+      ],
+      "required": [
+        1147,
+        1148
+      ],
+      "extra": [
+        1146
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 313,
+      "value": 567,
+      "observed": [
+        1151,
+        1152,
+        1153
+      ],
+      "required": [
+        1152,
+        1153
+      ],
+      "extra": [
+        1151
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 317,
+      "value": 571,
+      "observed": [
+        1156,
+        1157,
+        1158
+      ],
+      "required": [
+        1157,
+        1158
+      ],
+      "extra": [
+        1156
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 321,
+      "value": 575,
+      "observed": [
+        1161,
+        1162,
+        1163
+      ],
+      "required": [
+        1162,
+        1163
+      ],
+      "extra": [
+        1161
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 325,
+      "value": 482,
+      "observed": [
+        1166,
+        1167,
+        1168
+      ],
+      "required": [
+        1167,
+        1168
+      ],
+      "extra": [
+        1166
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 329,
+      "value": 583,
+      "observed": [
+        1171,
+        1172,
+        1173
+      ],
+      "required": [
+        1172,
+        1173
+      ],
+      "extra": [
+        1171
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 333,
+      "value": 569,
+      "observed": [
+        1176,
+        1177,
+        1178
+      ],
+      "required": [
+        1177,
+        1178
+      ],
+      "extra": [
+        1176
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 337,
+      "value": 591,
+      "observed": [
+        1181,
+        1182,
+        1183
+      ],
+      "required": [
+        1182,
+        1183
+      ],
+      "extra": [
+        1181
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 341,
+      "value": 595,
+      "observed": [
+        1186,
+        1187,
+        1188
+      ],
+      "required": [
+        1187,
+        1188
+      ],
+      "extra": [
+        1186
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 345,
+      "value": 440,
+      "observed": [
+        1191,
+        1192,
+        1193
+      ],
+      "required": [
+        1192,
+        1193
+      ],
+      "extra": [
+        1191
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 349,
+      "value": 532,
+      "observed": [
+        1196,
+        1197,
+        1198
+      ],
+      "required": [
+        1197,
+        1198
+      ],
+      "extra": [
+        1196
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 353,
+      "value": 601,
+      "observed": [
+        1201,
+        1202,
+        1203
+      ],
+      "required": [
+        1202,
+        1203
+      ],
+      "extra": [
+        1201
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 357,
+      "value": 609,
+      "observed": [
+        1206,
+        1207,
+        1208
+      ],
+      "required": [
+        1207,
+        1208
+      ],
+      "extra": [
+        1206
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 361,
+      "value": 613,
+      "observed": [
+        1211,
+        1212,
+        1213
+      ],
+      "required": [
+        1212,
+        1213
+      ],
+      "extra": [
+        1211
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 365,
+      "value": 617,
+      "observed": [
+        1216,
+        1217,
+        1218
+      ],
+      "required": [
+        1217,
+        1218
+      ],
+      "extra": [
+        1216
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 369,
+      "value": 623,
+      "observed": [
+        1221,
+        1222,
+        1223
+      ],
+      "required": [
+        1222,
+        1223
+      ],
+      "extra": [
+        1221
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 373,
+      "value": 599,
+      "observed": [
+        1226,
+        1227,
+        1228
+      ],
+      "required": [
+        1227,
+        1228
+      ],
+      "extra": [
+        1226
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 377,
+      "value": 542,
+      "observed": [
+        1231,
+        1232,
+        1233
+      ],
+      "required": [
+        1232,
+        1233
+      ],
+      "extra": [
+        1231
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 381,
+      "value": 635,
+      "observed": [
+        1236,
+        1237,
+        1238
+      ],
+      "required": [
+        1237,
+        1238
+      ],
+      "extra": [
+        1236
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 385,
+      "value": 606,
+      "observed": [
+        1241,
+        1242,
+        1243
+      ],
+      "required": [
+        1242,
+        1243
+      ],
+      "extra": [
+        1241
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 389,
+      "value": 643,
+      "observed": [
+        1246,
+        1247,
+        1248
+      ],
+      "required": [
+        1247,
+        1248
+      ],
+      "extra": [
+        1246
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 393,
+      "value": 516,
+      "observed": [
+        1251,
+        1252,
+        1253
+      ],
+      "required": [
+        1252,
+        1253
+      ],
+      "extra": [
+        1251
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 397,
+      "value": 651,
+      "observed": [
+        1256,
+        1257,
+        1258
+      ],
+      "required": [
+        1257,
+        1258
+      ],
+      "extra": [
+        1256
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 401,
+      "value": 655,
+      "observed": [
+        1261,
+        1262,
+        1263
+      ],
+      "required": [
+        1262,
+        1263
+      ],
+      "extra": [
+        1261
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 405,
+      "value": 659,
+      "observed": [
+        1266,
+        1267,
+        1268
+      ],
+      "required": [
+        1267,
+        1268
+      ],
+      "extra": [
+        1266
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 409,
+      "value": 663,
+      "observed": [
+        1271,
+        1272,
+        1273
+      ],
+      "required": [
+        1272,
+        1273
+      ],
+      "extra": [
+        1271
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    },
+    {
+      "input": "blocks",
+      "indexed": true,
+      "sequence": 413,
+      "value": 524,
+      "observed": [
+        1276,
+        1277,
+        1278
+      ],
+      "required": [
+        1277,
+        1278
+      ],
+      "extra": [
+        1276
+      ],
+      "missing": [],
+      "entry_nbbit": 10,
+      "entry_restbits": 0,
+      "entry_lbyte": 0
+    }
+  ],
+  "unchanged_upstream_source_files": 33,
+  "source_snapshots_match_committed_files": true,
+  "plan_rebuilt_from_uploaded_elf": true,
+  "saved_inference_and_evaluation_match_recomputation": true,
+  "replay_paths_match_native_diagnostics": true,
+  "native_nullpin_and_instrumented_outputs_match": true,
+  "independent_reference_and_pixels_match": true,
+  "reported_context_changes": 0,
+  "reported_adapter_errors": 0,
+  "unknown_method_runs": 0,
+  "source_identity": "Sequential file offsets and successful buffer-fill versions, not equal-value matching",
+  "reference_semantics": "Fixed-metadata GIF bitstream byte windows; not a common instruction-taint oracle",
+  "upstream_semantics": {
+    "revision": "20804d5bae5d8aed31a71761b1a1149e35a0da95",
+    "core_sha256": "08035d9f23f64575cb551fb81680fd2e4d68d510758cc2585fe55c6318d72a6d",
+    "ignored_scalar_shift_opcodes": [
+      "SHL",
+      "SHR",
+      "SAR"
+    ],
+    "propagation_modified": false,
+    "qualification": "Raw upstream behavior; dispatcher case membership is not semantic coverage",
+    "scoring": "GIF format source coverage/extras, not a common instruction-taint oracle"
+  },
+  "executed_uploaded_code": false,
+  "bpf_executed": false,
+  "performance_eligible": false,
+  "external_baseline_qualified": false,
+  "conclusion": "Native boundary replay and original libdft64 compared on patched ngiflib normal inputs; format-source precision only, not selected/eBPF cost or general taint superiority"
+}

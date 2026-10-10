@@ -1,0 +1,269 @@
+{
+  "schema": "java-collection-local-validation-v1",
+  "date": "2026-10-10",
+  "status": "pass",
+  "evidence": "real local JVM executions; controlled fixtures; not emulation",
+  "java_version": "openjdk version \"17.0.20.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Corretto-17.0.20.12.1 (build 17.0.20.1+12-LTS)\nOpenJDK 64-Bit Server VM Corretto-17.0.20.12.1 (build 17.0.20.1+12-LTS, mixed mode, sharing)",
+  "jdk_archive_sha256": "b852a8bc8890149c71141e784cde160d7ecb09bfa82b71209179b25902a0ebe3",
+  "local_environment_note": "LD_LIBRARY_PATH explicitly included the downloaded JDK lib directory because this sandbox did not resolve libjli via launcher origin",
+  "archive_name": "java-collection-20261010-084036-762537.zip",
+  "archive_sha256": "9ca58e46e7f18ff98f085b58e0d616994c3edf535c33fa531b55ca2e511b0bed",
+  "agent_sha256": "b32a1711d83643fc54ca3208c1329ba7722acca2305b8c36c0b6026285cfda29",
+  "dependencies": {
+    "asm": "8cadd43ac5eb6d09de05faecca38b917a040bb9139c7edeb4cc81c740b713281",
+    "asm-tree": "9929881f59eb6b840e86d54570c77b59ce721d104e6dfd7a40978991c2d3b41f"
+  },
+  "source_sha256": {
+    "fixtures/demo/Cell.java": "cbdb7d4ff05daeaecb0ecbbb6a0479ea32d4b66ec06502e20133cd2e1669f720",
+    "fixtures/demo/Driver.java": "2fd320be5815dd2db1190e4c55835dcd226e8e3e128bceb7b2775842d9a157a5",
+    "fixtures/demo/Subject.java": "fc91d359efa8f64ac8da594d0812c43395acea6844a286f40f281ad95dca1895",
+    "fixtures/demo/Unsupported.java": "5105e74646a50492bcdc64d91586fc14a139ad219c75b55622f960640ffddc02",
+    "run.py": "31a7217db1a59ec9a12abba37d6b5aee2c6a2d022d29d129dcd989fc3e689ea5",
+    "src/tracefusion/Agent.java": "d842db7b61003facbdacce2dac3ea363cf5eba09e5cdf493fec3dcd225332513",
+    "src/tracefusion/Recorder.java": "3147be2d2efeebf6b98416b37703d98235a56bc656c9ca84a8e7048b13daded9",
+    "verify.py": "0d04d12c5ea97f7683e868ff7a5514ecc8bd1bfb4ba717e27ba35666db4148c8"
+  },
+  "positive_captures": 14,
+  "distinct_fixture_cases": 7,
+  "cases": [
+    {
+      "case": "left",
+      "mode": "default",
+      "events": 12,
+      "instructions": 5,
+      "frames": 1,
+      "reads": 1,
+      "writes": 0,
+      "branches": 1
+    },
+    {
+      "case": "right",
+      "mode": "default",
+      "events": 12,
+      "instructions": 5,
+      "frames": 1,
+      "reads": 1,
+      "writes": 0,
+      "branches": 1
+    },
+    {
+      "case": "alias",
+      "mode": "default",
+      "events": 12,
+      "instructions": 5,
+      "frames": 1,
+      "reads": 1,
+      "writes": 0,
+      "branches": 1
+    },
+    {
+      "case": "overwrite",
+      "mode": "default",
+      "events": 15,
+      "instructions": 7,
+      "frames": 1,
+      "reads": 2,
+      "writes": 1,
+      "branches": 0
+    },
+    {
+      "case": "nested",
+      "mode": "default",
+      "events": 30,
+      "instructions": 15,
+      "frames": 3,
+      "reads": 1,
+      "writes": 0,
+      "branches": 1
+    },
+    {
+      "case": "loop",
+      "mode": "default",
+      "events": 53,
+      "instructions": 40,
+      "frames": 1,
+      "reads": 4,
+      "writes": 0,
+      "branches": 4
+    },
+    {
+      "case": "gc",
+      "mode": "default",
+      "events": 21,
+      "instructions": 10,
+      "frames": 2,
+      "reads": 2,
+      "writes": 0,
+      "branches": 2
+    },
+    {
+      "case": "left",
+      "mode": "interpreter",
+      "events": 12,
+      "instructions": 5,
+      "frames": 1,
+      "reads": 1,
+      "writes": 0,
+      "branches": 1
+    },
+    {
+      "case": "right",
+      "mode": "interpreter",
+      "events": 12,
+      "instructions": 5,
+      "frames": 1,
+      "reads": 1,
+      "writes": 0,
+      "branches": 1
+    },
+    {
+      "case": "alias",
+      "mode": "interpreter",
+      "events": 12,
+      "instructions": 5,
+      "frames": 1,
+      "reads": 1,
+      "writes": 0,
+      "branches": 1
+    },
+    {
+      "case": "overwrite",
+      "mode": "interpreter",
+      "events": 15,
+      "instructions": 7,
+      "frames": 1,
+      "reads": 2,
+      "writes": 1,
+      "branches": 0
+    },
+    {
+      "case": "nested",
+      "mode": "interpreter",
+      "events": 30,
+      "instructions": 15,
+      "frames": 3,
+      "reads": 1,
+      "writes": 0,
+      "branches": 1
+    },
+    {
+      "case": "loop",
+      "mode": "interpreter",
+      "events": 53,
+      "instructions": 40,
+      "frames": 1,
+      "reads": 4,
+      "writes": 0,
+      "branches": 4
+    },
+    {
+      "case": "gc",
+      "mode": "interpreter",
+      "events": 21,
+      "instructions": 10,
+      "frames": 2,
+      "reads": 2,
+      "writes": 0,
+      "branches": 2
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "null",
+      "reasons": [
+        "incomplete_frames"
+      ]
+    },
+    {
+      "case": "threads",
+      "reasons": [
+        "multiple_application_threads"
+      ]
+    },
+    {
+      "case": "unsupported",
+      "reasons": [
+        "rejected_class:demo/Unsupported:java.lang.IllegalArgumentException: argument_type",
+        "empty_capture"
+      ]
+    },
+    {
+      "case": "limit",
+      "reasons": [
+        "event_limit"
+      ]
+    },
+    {
+      "case": "external",
+      "reasons": [
+        "rejected_class:demo/Unsupported$External:java.lang.IllegalArgumentException: unsupported_opcode:184:abs",
+        "empty_capture"
+      ]
+    },
+    {
+      "case": "handler",
+      "reasons": [
+        "rejected_class:demo/Unsupported$Handler:java.lang.IllegalArgumentException: exception_handlers:divide",
+        "empty_capture"
+      ]
+    },
+    {
+      "case": "volatile",
+      "reasons": [
+        "rejected_class:demo/Unsupported$VolatileRead:java.lang.IllegalArgumentException: inherited_or_volatile_field:demo/Unsupported$VolatileCell.value",
+        "empty_capture"
+      ]
+    }
+  ],
+  "fault_checks": [
+    {
+      "fault": "missing_footer",
+      "rejected": true,
+      "reason": "missing boundaries"
+    },
+    {
+      "fault": "missing_step",
+      "rejected": true,
+      "reason": "event gap/order"
+    },
+    {
+      "fault": "missing_step_renumbered",
+      "rejected": true,
+      "reason": "instruction sequence"
+    },
+    {
+      "fault": "missing_read_renumbered",
+      "rejected": true,
+      "reason": "instruction sequence"
+    },
+    {
+      "fault": "reordered_events",
+      "rejected": true,
+      "reason": "event gap/order"
+    },
+    {
+      "fault": "write_version",
+      "rejected": true,
+      "reason": "field write version"
+    },
+    {
+      "fault": "object_identity",
+      "rejected": true,
+      "reason": "field object without observed argument"
+    },
+    {
+      "fault": "return_value",
+      "rejected": true,
+      "reason": "fixture returned value"
+    }
+  ],
+  "qualification": {
+    "collection_frontend_validated": true,
+    "java_provenance_inference_implemented": false,
+    "external_tool_comparison": false,
+    "performance_eligible": false,
+    "actual_gc_relocation_verified": false,
+    "jit_compilation_verified": false,
+    "arbitrary_java_support": false
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "compiled": true,
+  "upstream_source_files": 33,
+  "propagation_modified": false,
+  "adapter_source_sha256": "597e88a8c5c5ebb8f7a45cb4916654c2e5d8dc0f13d65a782e040c3260cd4b29",
+  "expanded_adapter_sha256": "58f95cd9245b24aada3d0d84cc3f1ce27c8f4a6e0cfbc3a2bfc39f491a5b9014",
+  "built_tool_sha256": "3c0ff4316e789f9a545217b8a81a9f293edb08b6550ac1485958622d1f473d7d",
+  "checks": {
+    "checks": [
+      "boundary_replay_compacted_transport_matches_416_existing_queries",
+      "libdft64_compacted_transport_matches_416_existing_queries",
+      "missing_finish",
+      "missing_boundary_record",
+      "context_change",
+      "wrong_profile",
+      "diagnostics_enabled",
+      "nonzero_instruction_counter",
+      "unknown_call_pc",
+      "bad_source_seed",
+      "unknown_sink_label",
+      "incomplete_scope",
+      "fresh_worker_replay_and_resource_accounting",
+      "reject_measured_exit_failure",
+      "reject_measured_timeout",
+      "reproducible_balanced_schedule",
+      "warmups_excluded_and_offline_reversal_visible"
+    ],
+    "total": 17,
+    "converted_prior_host_records": true,
+    "new_pin_execution": false,
+    "new_libdft_execution": false,
+    "performance_result": false
+  },
+  "pin_startup_returncode": 126,
+  "pin_startup_error": "Exec format error",
+  "new_pin_execution": false,
+  "host_performance_result": false,
+  "scope": "Compile and converted-record/measurement tests only; host benchmark pending"
+}

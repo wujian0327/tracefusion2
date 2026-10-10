@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-10",
+  "native": {
+    "queries": 24,
+    "all_outputs_match_independent_truth": true,
+    "expected_source_relations": 22,
+    "binary_sha256": "7c87dca3d3c707de6c2e7cd58977b5f16832d67056928709dd5d9d78d4600f7b"
+  },
+  "build": {
+    "real_pinned_pin_sdk": true,
+    "tools": [
+      "nullpin",
+      "libdft_c"
+    ],
+    "unchanged_upstream_source_files": 33,
+    "adapter_sha256": "dd31599e74b34524100c7b4cacafdef50ded719a0a57dc59e582dd61b4e7beff"
+  },
+  "synthetic_tests": {
+    "new_test_methods_passed": 6,
+    "rejected_fault_variants": 17,
+    "existing_external_test_methods_passed": 15,
+    "pin_execution_evidence": false
+  },
+  "pin_execution": {
+    "passed": false,
+    "reason": "Official pinned launcher fails in local environment with Exec format error; no libdft source-set result obtained"
+  },
+  "bpf_rerun": false,
+  "performance_eligible": false,
+  "host_validation_pending": true
+}

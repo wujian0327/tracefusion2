@@ -1,0 +1,302 @@
+{
+  "upstream_candidate_commit": "9530a14420fc1a267e90d45e8a0d710c3668382d",
+  "native_distribution_binaries": {
+    "cut": {
+      "version": "cut (GNU coreutils) 9.4",
+      "binary_sha256": "e48d15703786f49ae0e01003d72d335b6307769735bd36d93df2983d6b340122"
+    },
+    "join": {
+      "version": "join (GNU coreutils) 9.4",
+      "binary_sha256": "e052a4755c25e45879b131c88f802d9a8db50b1fdd5f7a68879171fa0f44e4cc"
+    }
+  },
+  "exact_upstream_build_verified": false,
+  "locale": "C",
+  "cases": [
+    {
+      "id": "cut_left_equal",
+      "program": "cut",
+      "options": [
+        "-d",
+        "\t",
+        "-f",
+        "1"
+      ],
+      "returncode": 0,
+      "output_matched": true,
+      "output_bytes": 5,
+      "data_field_queries": 1,
+      "generated_byte_queries": 1,
+      "no_output_expected": false,
+      "provenance_checked": false
+    },
+    {
+      "id": "cut_right_equal",
+      "program": "cut",
+      "options": [
+        "-d",
+        "\t",
+        "-f",
+        "2"
+      ],
+      "returncode": 0,
+      "output_matched": true,
+      "output_bytes": 5,
+      "data_field_queries": 1,
+      "generated_byte_queries": 1,
+      "no_output_expected": false,
+      "provenance_checked": false
+    },
+    {
+      "id": "cut_disjoint_fields",
+      "program": "cut",
+      "options": [
+        "-d",
+        "\t",
+        "-f",
+        "1,3"
+      ],
+      "returncode": 0,
+      "output_matched": true,
+      "output_bytes": 11,
+      "data_field_queries": 2,
+      "generated_byte_queries": 2,
+      "no_output_expected": false,
+      "provenance_checked": false
+    },
+    {
+      "id": "cut_complement",
+      "program": "cut",
+      "options": [
+        "-d",
+        "\t",
+        "--complement",
+        "-f",
+        "2"
+      ],
+      "returncode": 0,
+      "output_matched": true,
+      "output_bytes": 11,
+      "data_field_queries": 2,
+      "generated_byte_queries": 2,
+      "no_output_expected": false,
+      "provenance_checked": false
+    },
+    {
+      "id": "cut_repeated_rows",
+      "program": "cut",
+      "options": [
+        "-d",
+        "\t",
+        "-f",
+        "2"
+      ],
+      "returncode": 0,
+      "output_matched": true,
+      "output_bytes": 10,
+      "data_field_queries": 2,
+      "generated_byte_queries": 2,
+      "no_output_expected": false,
+      "provenance_checked": false
+    },
+    {
+      "id": "cut_equal_files",
+      "program": "cut",
+      "options": [
+        "-d",
+        "\t",
+        "-f",
+        "2"
+      ],
+      "returncode": 0,
+      "output_matched": true,
+      "output_bytes": 10,
+      "data_field_queries": 2,
+      "generated_byte_queries": 2,
+      "no_output_expected": false,
+      "provenance_checked": false
+    },
+    {
+      "id": "cut_custom_delimiter",
+      "program": "cut",
+      "options": [
+        "-d",
+        "\t",
+        "-f",
+        "1,2",
+        "--output-delimiter",
+        "|"
+      ],
+      "returncode": 0,
+      "output_matched": true,
+      "output_bytes": 10,
+      "data_field_queries": 2,
+      "generated_byte_queries": 2,
+      "no_output_expected": false,
+      "provenance_checked": false
+    },
+    {
+      "id": "cut_nondelimited_passthrough",
+      "program": "cut",
+      "options": [
+        "-d",
+        "\t",
+        "-f",
+        "2"
+      ],
+      "returncode": 0,
+      "output_matched": true,
+      "output_bytes": 5,
+      "data_field_queries": 1,
+      "generated_byte_queries": 1,
+      "no_output_expected": false,
+      "provenance_checked": false
+    },
+    {
+      "id": "cut_nondelimited_suppressed",
+      "program": "cut",
+      "options": [
+        "-d",
+        "\t",
+        "-s",
+        "-f",
+        "2"
+      ],
+      "returncode": 0,
+      "output_matched": true,
+      "output_bytes": 0,
+      "data_field_queries": 0,
+      "generated_byte_queries": 0,
+      "no_output_expected": true,
+      "provenance_checked": false
+    },
+    {
+      "id": "cut_long_first_field",
+      "program": "cut",
+      "options": [
+        "-d",
+        "\t",
+        "-f",
+        "1,3"
+      ],
+      "returncode": 0,
+      "output_matched": true,
+      "output_bytes": 20006,
+      "data_field_queries": 2,
+      "generated_byte_queries": 2,
+      "no_output_expected": false,
+      "provenance_checked": false
+    },
+    {
+      "id": "join_two_files_equal_payload",
+      "program": "join",
+      "options": [
+        "-t",
+        "\t",
+        "-o",
+        "1.2,2.2"
+      ],
+      "returncode": 0,
+      "output_matched": true,
+      "output_bytes": 20,
+      "data_field_queries": 4,
+      "generated_byte_queries": 4,
+      "no_output_expected": false,
+      "provenance_checked": false
+    },
+    {
+      "id": "join_reverse_projection",
+      "program": "join",
+      "options": [
+        "-t",
+        "\t",
+        "-o",
+        "2.2,1.2"
+      ],
+      "returncode": 0,
+      "output_matched": true,
+      "output_bytes": 20,
+      "data_field_queries": 4,
+      "generated_byte_queries": 4,
+      "no_output_expected": false,
+      "provenance_checked": false
+    },
+    {
+      "id": "join_duplicate_keys",
+      "program": "join",
+      "options": [
+        "-t",
+        "\t",
+        "-o",
+        "1.2,2.2"
+      ],
+      "returncode": 0,
+      "output_matched": true,
+      "output_bytes": 40,
+      "data_field_queries": 8,
+      "generated_byte_queries": 8,
+      "no_output_expected": false,
+      "provenance_checked": false
+    },
+    {
+      "id": "join_unmatched_left",
+      "program": "join",
+      "options": [
+        "-t",
+        "\t",
+        "-a",
+        "1",
+        "-e",
+        "?",
+        "-o",
+        "1.2,2.2"
+      ],
+      "returncode": 0,
+      "output_matched": true,
+      "output_bytes": 17,
+      "data_field_queries": 3,
+      "generated_byte_queries": 5,
+      "no_output_expected": false,
+      "provenance_checked": false
+    },
+    {
+      "id": "join_select_nonkey_field",
+      "program": "join",
+      "options": [
+        "-t",
+        "\t",
+        "-o",
+        "2.2"
+      ],
+      "returncode": 0,
+      "output_matched": true,
+      "output_bytes": 5,
+      "data_field_queries": 1,
+      "generated_byte_queries": 1,
+      "no_output_expected": false,
+      "provenance_checked": false
+    },
+    {
+      "id": "join_no_matching_keys",
+      "program": "join",
+      "options": [
+        "-t",
+        "\t",
+        "-o",
+        "1.2,2.2"
+      ],
+      "returncode": 0,
+      "output_matched": true,
+      "output_bytes": 0,
+      "data_field_queries": 0,
+      "generated_byte_queries": 0,
+      "no_output_expected": true,
+      "provenance_checked": false
+    }
+  ],
+  "all_native_outputs_matched": true,
+  "provenance_checked": false,
+  "bpf_executed": false,
+  "libdft_executed": false,
+  "performance_eligible": false
+}

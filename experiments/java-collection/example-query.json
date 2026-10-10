@@ -1,0 +1,11 @@
+{
+  "schema": "java-source-query-v1",
+  "sources": [
+    {"id": "left.value", "kind": "initial_field", "root": 1, "arg": 0, "field": "demo/Cell.value:I"},
+    {"id": "right.value", "kind": "initial_field", "root": 1, "arg": 1, "field": "demo/Cell.value:I"},
+    {"id": "selector", "kind": "argument", "root": 1, "arg": 2}
+  ],
+  "targets": [
+    {"id": "returned_value", "kind": "return", "root": 1}
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "revision": "cfbedecfeca66e22b62c37b85fcad5aa825625d7",
+  "fix_commit": "be4c7dffdcf7543fe24acc7448d6014a939fd26b",
+  "inputs": "ordinary Pillow-generated palette GIFs",
+  "pillow_version": "12.3.0",
+  "source_modified": false,
+  "poc_executed": false,
+  "vulnerable_revision_executed": false,
+  "provenance_checked": false,
+  "vulnerability_reproduced": false,
+  "performance_eligible": false,
+  "sanitizer_validation_complete": false,
+  "cases": [
+    {
+      "input": "single_pixel",
+      "width": 1,
+      "height": 1,
+      "input_sha256": "c57064d499c56ffce47e02486824e696f842d6c1ae31871d63227a7aaf69fe51",
+      "build": "native",
+      "indexed": false,
+      "pixels_match": true,
+      "output_sha256": "463d2b08ca166ec4b025d8f9a91df39d514ff1c131040faf977fe308d2b90547"
+    },
+    {
+      "input": "single_pixel",
+      "width": 1,
+      "height": 1,
+      "input_sha256": "c57064d499c56ffce47e02486824e696f842d6c1ae31871d63227a7aaf69fe51",
+      "build": "native",
+      "indexed": true,
+      "pixels_match": true,
+      "output_sha256": "c56f55e87428a41bd2d6662445cda3bab1dc7c49b95a663a9bc6b7129826f192"
+    },
+    {
+      "input": "stripes",
+      "width": 8,
+      "height": 4,
+      "input_sha256": "6f852572c10270ef465ce7e8509b4041335c8bc568b9380c2346e3581e01f16e",
+      "build": "native",
+      "indexed": false,
+      "pixels_match": true,
+      "output_sha256": "f8a78adb9d33988f6c3568b289a2c0eec4e5a85bcf8647413a50a04a2b8f567e"
+    },
+    {
+      "input": "stripes",
+      "width": 8,
+      "height": 4,
+      "input_sha256": "6f852572c10270ef465ce7e8509b4041335c8bc568b9380c2346e3581e01f16e",
+      "build": "native",
+      "indexed": true,
+      "pixels_match": true,
+      "output_sha256": "01f282bff51c0a5e5e804c4440f6171b8b662871f6db314dfd0db2eefbcdd4a4"
+    },
+    {
+      "input": "checker",
+      "width": 31,
+      "height": 17,
+      "input_sha256": "5664a6446689dc9fbb87489e07ccc43043c28da1a660e03e0c41b054eaf7b979",
+      "build": "native",
+      "indexed": false,
+      "pixels_match": true,
+      "output_sha256": "bce2449b0cf60c9c096f5d4f047ccddcc4af9444376735e81033a9cd172c392e"
+    },
+    {
+      "input": "checker",
+      "width": 31,
+      "height": 17,
+      "input_sha256": "5664a6446689dc9fbb87489e07ccc43043c28da1a660e03e0c41b054eaf7b979",
+      "build": "native",
+      "indexed": true,
+      "pixels_match": true,
+      "output_sha256": "f31d9532eedc526889798780237f16af4b14219b59fa9ab21f3eab00abc9e627"
+    },
+    {
+      "input": "blocks",
+      "width": 64,
+      "height": 64,
+      "input_sha256": "3b25564231852543879ef8ec12e2d965f3247a4f0a3473d4ce624a37bb14c40d",
+      "build": "native",
+      "indexed": false,
+      "pixels_match": true,
+      "output_sha256": "b5da68ebcdc2bcbd924645257185d8b66b6574c644da7eb0d9c7d681ba484dca"
+    },
+    {
+      "input": "blocks",
+      "width": 64,
+      "height": 64,
+      "input_sha256": "3b25564231852543879ef8ec12e2d965f3247a4f0a3473d4ce624a37bb14c40d",
+      "build": "native",
+      "indexed": true,
+      "pixels_match": true,
+      "output_sha256": "eceb54b4eb46e3057fc13dbc63460ae4a07e5e0381cd64e5337130926caf37a3"
+    }
+  ],
+  "source_sha256": {
+    "ngiflib.c": "de2df465173a8acf6f376d6b264c0e1d74903901d683368c8cd2a7f2bf499b33",
+    "ngiflib.h": "3f585dc029479541ff1ac1dde749c4f346170ea06b9d99731a81e7086e7f05cd",
+    "gif2tga.c": "4f2a8468ce708bc4436077b4d90af69c457835125b2f3f756f6c6d520530794a"
+  },
+  "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0",
+  "binary_sha256": {
+    "native": "f190058af40162fb88528f49fba53c916f309a201e1d0c2062c0ea1d43a0d08f",
+    "sanitized": "7ee8b3e00cc48a00b329c82dbc82faf6322e8de1f324581f6767fe98a822c971"
+  },
+  "sanitizer_environment_failure": "LeakSanitizer could not access /proc task metadata; execution validation incomplete, despite requested detect_leaks=0.",
+  "all_pixels_match": true,
+  "native_runs_passed": 8,
+  "sanitized_runs_passed": 0,
+  "normal_path_coverage": {
+    "input": "stripes",
+    "guard_line": 592,
+    "guard_evaluations": 13,
+    "rejection_line": 596,
+    "rejection_executions": 0,
+    "pixels_match": true,
+    "provenance_checked": false,
+    "performance_eligible": false
+  }
+}

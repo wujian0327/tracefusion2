@@ -1,0 +1,2183 @@
+{
+  "schema": "java-upstream-comparison-v1",
+  "status": "pass",
+  "modes": [
+    "full",
+    "sparse",
+    "boundary"
+  ],
+  "rounds": 10,
+  "repetitions": 6,
+  "warmup_blocks": 1,
+  "seed": 20261010,
+  "qualification": {
+    "scope": "two unchanged library methods, primitive argument to return",
+    "whole_application": false,
+    "field_provenance": false,
+    "external_tool_comparison": false,
+    "steady_state": false,
+    "global_optimality": false,
+    "boundary": "complete integer arguments; no heap inputs or field snapshots in these methods",
+    "unobserved": "driver, class initialization and unrelated library methods",
+    "costs": "fresh JVM incl. ASM/startup/output plus fresh Python inference; build/plan excluded",
+    "memory_measurement_qualified": false
+  },
+  "dependencies": [
+    {
+      "name": "commons-lang3-3.17.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.17.0/commons-lang3-3.17.0.jar",
+      "sha256": "6ee731df5c8e5a2976a1ca023b6bb320ea8d3539fbe64c8a1d5cb765127c33b4"
+    },
+    {
+      "name": "commons-lang3-3.17.0-sources.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.17.0/commons-lang3-3.17.0-sources.jar",
+      "sha256": "5fdcac21ad329766054a95367d7583dfcdca737d221d5e01a5f2a198c04c6b18"
+    }
+  ],
+  "java": {
+    "command": [
+      "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+      "-version"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": "openjdk version \"17.0.20.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Corretto-17.0.20.12.1 (build 17.0.20.1+12-LTS)\nOpenJDK 64-Bit Server VM Corretto-17.0.20.12.1 (build 17.0.20.1+12-LTS, mixed mode, sharing)\n"
+  },
+  "agent_sha256": "4219b2a8534006009fde24d6475512cfe51cc89b8ae7dcc136a1b005b65d4aa3",
+  "class_sha256": "a507d3c7395eea9618ac4c804da27094b38099d5db95783541e6bc1f51de0ae9",
+  "inputs": [
+    [
+      -1,
+      -1,
+      -1
+    ],
+    [
+      -1,
+      -1,
+      0
+    ],
+    [
+      -1,
+      -1,
+      1
+    ],
+    [
+      -1,
+      0,
+      -1
+    ],
+    [
+      -1,
+      0,
+      0
+    ],
+    [
+      -1,
+      0,
+      1
+    ],
+    [
+      -1,
+      1,
+      -1
+    ],
+    [
+      -1,
+      1,
+      0
+    ],
+    [
+      -1,
+      1,
+      1
+    ],
+    [
+      0,
+      -1,
+      -1
+    ],
+    [
+      0,
+      -1,
+      0
+    ],
+    [
+      0,
+      -1,
+      1
+    ],
+    [
+      0,
+      0,
+      -1
+    ],
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      1,
+      -1
+    ],
+    [
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      1,
+      1
+    ],
+    [
+      1,
+      -1,
+      -1
+    ],
+    [
+      1,
+      -1,
+      0
+    ],
+    [
+      1,
+      -1,
+      1
+    ],
+    [
+      1,
+      0,
+      -1
+    ],
+    [
+      1,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      1
+    ],
+    [
+      1,
+      1,
+      -1
+    ],
+    [
+      1,
+      1,
+      0
+    ],
+    [
+      1,
+      1,
+      1
+    ],
+    [
+      -2147483648,
+      0,
+      2147483647
+    ],
+    [
+      -2147483648,
+      2147483647,
+      0
+    ],
+    [
+      0,
+      -2147483648,
+      2147483647
+    ],
+    [
+      0,
+      2147483647,
+      -2147483648
+    ],
+    [
+      2147483647,
+      -2147483648,
+      0
+    ],
+    [
+      2147483647,
+      0,
+      -2147483648
+    ],
+    [
+      -2147483648,
+      -2147483648,
+      -2147483648
+    ],
+    [
+      2147483647,
+      2147483647,
+      2147483647
+    ]
+  ],
+  "compatibility_rejections": [
+    {
+      "entry": "max([I)I",
+      "status": "unknown",
+      "reason": "unsupported descriptor ([I)I"
+    },
+    {
+      "entry": "max(JJJ)J",
+      "status": "unknown",
+      "reason": "unsupported descriptor (JJJ)J"
+    },
+    {
+      "entry": "createNumber(Ljava/lang/String;)Ljava/lang/Number;",
+      "status": "unknown",
+      "reason": "exception table outside contract"
+    },
+    {
+      "entry": "unscoped whole class",
+      "status": "unknown",
+      "reason": "unsupported descriptor (JJ)I"
+    }
+  ],
+  "faults": [
+    {
+      "fault": "missing_exit",
+      "status": "unknown",
+      "reason": "boundary root order"
+    },
+    {
+      "fault": "wrong_return",
+      "status": "unknown",
+      "reason": "return value disagrees with bytecode replay"
+    },
+    {
+      "fault": "scope_extra_method",
+      "status": "unknown",
+      "reason": "scope is not entry call closure"
+    },
+    {
+      "fault": "original_class",
+      "status": "unknown",
+      "reason": "scope class hash"
+    }
+  ],
+  "runtime_rejection": {
+    "schema": "java-provenance-v1",
+    "status": "unknown",
+    "reason": "collector reports unknown",
+    "results": []
+  },
+  "summary": {
+    "correct_queries_per_mode": 140,
+    "raw_events": {
+      "full": 1844,
+      "sparse": 572,
+      "boundary": 292
+    },
+    "cost_medians": {
+      "native": {
+        "online_wall_seconds": 0.09116950649695355,
+        "online_cpu_seconds": 0.103735,
+        "online_peak_rss_kib": 32896.0,
+        "offline_wall_seconds": 0.0,
+        "offline_cpu_seconds": 0.0,
+        "offline_peak_rss_kib": 0.0,
+        "end_to_end_wall_seconds": 0.09116950649695355,
+        "end_to_end_cpu_seconds": 0.103735,
+        "events": 0.0,
+        "trace_bytes": 0.0
+      },
+      "full": {
+        "online_wall_seconds": 0.25053049249981996,
+        "online_cpu_seconds": 0.42570399999999997,
+        "online_peak_rss_kib": 56988.0,
+        "offline_wall_seconds": 0.1562525569970603,
+        "offline_cpu_seconds": 0.15402300000000002,
+        "offline_peak_rss_kib": 30900.0,
+        "end_to_end_wall_seconds": 0.408383607500582,
+        "end_to_end_cpu_seconds": 0.5799305,
+        "events": 4583.0,
+        "trace_bytes": 578745.0
+      },
+      "sparse": {
+        "online_wall_seconds": 0.2532225574977929,
+        "online_cpu_seconds": 0.399911,
+        "online_peak_rss_kib": 51856.0,
+        "offline_wall_seconds": 0.15587101400160464,
+        "offline_cpu_seconds": 0.153702,
+        "offline_peak_rss_kib": 30032.0,
+        "end_to_end_wall_seconds": 0.41364310500284773,
+        "end_to_end_cpu_seconds": 0.549089,
+        "events": 1403.0,
+        "trace_bytes": 181539.0
+      },
+      "boundary": {
+        "online_wall_seconds": 0.2336480810008652,
+        "online_cpu_seconds": 0.3624895,
+        "online_peak_rss_kib": 49278.0,
+        "offline_wall_seconds": 0.14629596750091878,
+        "offline_cpu_seconds": 0.142736,
+        "offline_peak_rss_kib": 29696.0,
+        "end_to_end_wall_seconds": 0.3786771175036847,
+        "end_to_end_cpu_seconds": 0.5043500000000001,
+        "events": 703.0,
+        "trace_bytes": 91403.0
+      }
+    },
+    "paired_reduction": {
+      "online_wall_seconds": {
+        "median": 0.04609738779361505,
+        "minimum": -0.10771775354476953,
+        "maximum": 0.24924682135816156,
+        "sparse_worse": 2
+      },
+      "online_cpu_seconds": {
+        "median": 0.09689184754855806,
+        "minimum": -0.036255636468412344,
+        "maximum": 0.24886993111426958,
+        "sparse_worse": 1
+      },
+      "online_peak_rss_kib": {
+        "qualified": false,
+        "reason": "supervisor RSS floor unverified"
+      },
+      "offline_wall_seconds": {
+        "median": -0.0009462052545508026,
+        "minimum": -0.11676878654304268,
+        "maximum": 0.07569921580449956,
+        "sparse_worse": 3
+      },
+      "offline_cpu_seconds": {
+        "median": -0.0035692431243117273,
+        "minimum": -0.11328317752587225,
+        "maximum": 0.06379940002608586,
+        "sparse_worse": 3
+      },
+      "offline_peak_rss_kib": {
+        "qualified": false,
+        "reason": "supervisor RSS floor unverified"
+      },
+      "end_to_end_wall_seconds": {
+        "median": 0.012519005500574554,
+        "minimum": -0.056318593425704666,
+        "maximum": 0.16311514473281907,
+        "sparse_worse": 3
+      },
+      "end_to_end_cpu_seconds": {
+        "median": 0.08754257258316223,
+        "minimum": -0.043160528347780724,
+        "maximum": 0.1918524074180913,
+        "sparse_worse": 1
+      },
+      "events": {
+        "median": 0.693868644992363,
+        "minimum": 0.693868644992363,
+        "maximum": 0.693868644992363,
+        "sparse_worse": 0
+      },
+      "trace_bytes": {
+        "median": 0.6863229919912914,
+        "minimum": 0.6863229919912914,
+        "maximum": 0.6863229919912914,
+        "sparse_worse": 0
+      }
+    },
+    "boundary_vs_full": {
+      "online_wall_seconds": {
+        "median": 0.08567468534428002,
+        "minimum": 0.03813287922424258,
+        "maximum": 0.23864736060690217,
+        "boundary_worse": 0
+      },
+      "online_cpu_seconds": {
+        "median": 0.15101275945455883,
+        "minimum": 0.12693911792905077,
+        "maximum": 0.34971806363637814,
+        "boundary_worse": 0
+      },
+      "online_peak_rss_kib": {
+        "qualified": false,
+        "reason": "memory mechanism requires separate validation"
+      },
+      "offline_wall_seconds": {
+        "median": 0.06351418391713953,
+        "minimum": 0.004760653960355077,
+        "maximum": 0.10610142365488029,
+        "boundary_worse": 0
+      },
+      "offline_cpu_seconds": {
+        "median": 0.07453340799549962,
+        "minimum": 0.006349292304359877,
+        "maximum": 0.10908438763532036,
+        "boundary_worse": 0
+      },
+      "offline_peak_rss_kib": {
+        "qualified": false,
+        "reason": "memory mechanism requires separate validation"
+      },
+      "end_to_end_wall_seconds": {
+        "median": 0.08738066893920693,
+        "minimum": 0.03366584794120164,
+        "maximum": 0.18384209316305078,
+        "boundary_worse": 0
+      },
+      "end_to_end_cpu_seconds": {
+        "median": 0.1259041614616183,
+        "minimum": 0.1049331743517643,
+        "maximum": 0.29208382212478445,
+        "boundary_worse": 0
+      },
+      "events": {
+        "median": 0.8466070259655247,
+        "minimum": 0.8466070259655247,
+        "maximum": 0.8466070259655247,
+        "boundary_worse": 0
+      },
+      "trace_bytes": {
+        "median": 0.8420668861070074,
+        "minimum": 0.8420668861070074,
+        "maximum": 0.8420668861070074,
+        "boundary_worse": 0
+      }
+    },
+    "boundary_vs_sparse": {
+      "online_wall_seconds": {
+        "median": 0.01636353579660388,
+        "minimum": -0.014118436062348083,
+        "maximum": 0.17478649758693376,
+        "boundary_worse": 1
+      },
+      "online_cpu_seconds": {
+        "median": 0.07395411152901615,
+        "minimum": 0.02982900063924998,
+        "maximum": 0.16212632164322216,
+        "boundary_worse": 0
+      },
+      "online_peak_rss_kib": {
+        "qualified": false,
+        "reason": "memory mechanism requires separate validation"
+      },
+      "offline_wall_seconds": {
+        "median": 0.06751513445427615,
+        "minimum": -0.026332992605188732,
+        "maximum": 0.12822068086574323,
+        "boundary_worse": 1
+      },
+      "offline_cpu_seconds": {
+        "median": 0.07135100593978694,
+        "minimum": -0.023582241498329992,
+        "maximum": 0.14157028266549732,
+        "boundary_worse": 1
+      },
+      "offline_peak_rss_kib": {
+        "qualified": false,
+        "reason": "memory mechanism requires separate validation"
+      },
+      "end_to_end_wall_seconds": {
+        "median": 0.04457126122668814,
+        "minimum": -0.0013808122922989163,
+        "maximum": 0.1362150939157838,
+        "boundary_worse": 1
+      },
+      "end_to_end_cpu_seconds": {
+        "median": 0.07849124735480101,
+        "minimum": 0.029756514932932188,
+        "maximum": 0.15635673624288426,
+        "boundary_worse": 0
+      },
+      "events": {
+        "median": 0.4989308624376336,
+        "minimum": 0.4989308624376336,
+        "maximum": 0.4989308624376336,
+        "boundary_worse": 0
+      },
+      "trace_bytes": {
+        "median": 0.49651039170646527,
+        "minimum": 0.49651039170646527,
+        "maximum": 0.49651039170646527,
+        "boundary_worse": 0
+      }
+    }
+  },
+  "source_sha256": {
+    "boundary.py": "a3a75c599be0c7783f934a628eb0997b8cf62b49f28ac3ed8dbf042f221ea218",
+    "check_boundary.py": "0b5569324c10461205b90833104a20c91ce50061eafa44654e9439a7c14b4028",
+    "check_inference.py": "0d1c084550cf3fd7053a28d010c2bad5d756f39a5b2f87b7936b6d3c7428d059",
+    "check_integer_semantics.py": "7250be5d1917c3ad466f37ff7144eef40cae5fcc0aba14a8c2eecc9e5be00aae",
+    "classfile.py": "50cb472cd6a5ec0775d360d21b35f68482b535a5e26672668a45d9657e8d6a5a",
+    "compare_observations.py": "687bb5af309e98c3c5073800d848ad5f833d07edd723e909a1564606da89fbe5",
+    "compare_upstream.py": "6fb778a0542525c3a4f702bba06d895ceba95a3e5ceb69a90af8a0fa93b2540c",
+    "fixtures/demo/Bench.java": "ab98ff81704c21a11bd4b05b23b4f32df36add3dc4a11654970a6d03808de15d",
+    "fixtures/demo/Cell.java": "cbdb7d4ff05daeaecb0ecbbb6a0479ea32d4b66ec06502e20133cd2e1669f720",
+    "fixtures/demo/Driver.java": "2fd320be5815dd2db1190e4c55835dcd226e8e3e128bceb7b2775842d9a157a5",
+    "fixtures/demo/Subject.java": "fc91d359efa8f64ac8da594d0812c43395acea6844a286f40f281ad95dca1895",
+    "fixtures/demo/Unsupported.java": "5105e74646a50492bcdc64d91586fc14a139ad219c75b55622f960640ffddc02",
+    "infer.py": "6cf5ed5377b2bd063c4b879df0f81d0fca3cc5f476840ed06fabd28d543addb3",
+    "measure_command.c": "560d33ee6975c939eb9087c9d855aa530144c5f620897437801a7d14504fe26f",
+    "observation.py": "7994a47de867d42245dc8f22d04ab3b791556cc8bc9dacc0c09028af395b469f",
+    "run.py": "2ebd7278dd5ad2efe2240a98b8175cec52985899da9fd75a8dbc2aed9cd1ddc3",
+    "semantics/calibration/IntOps.java": "a82517231cac2d49a671618afa464ff3588ea817d4961a841f2045bf843f10c8",
+    "src/tracefusion/Agent.java": "904eab679485277e5eda2c9a28ac11d2f59fb7dc8121beb0dc305da1e04fac16",
+    "src/tracefusion/Recorder.java": "7ed228ee06d5afeab798430c4a5ddb8142c01939114e2ef8c38d67179900cd5e",
+    "upstream/CommonsDriver.java": "e1ed7a681ecb6a050b307366db31c04c60c0c2a575f02df090fbcf8cc4a93b8a",
+    "verify.py": "e01910af7b33aa78e3737cb89bdd0e6079c2028734393fcfe24e65f10d84287f",
+    "verify_observations.py": "a96efc4e4b88bdb210adf0a76dafc45a1122de790d1fd184ccca486b998b9527"
+  },
+  "measurements": [
+    {
+      "block": -1,
+      "warmup": true,
+      "order": [
+        "full",
+        "boundary",
+        "native",
+        "sparse"
+      ],
+      "position": 0,
+      "mode": "full",
+      "directory": "cost--1-0-full",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost--1-0-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.2659307460053242,
+        "user_seconds": 0.404568,
+        "system_seconds": 0.040102,
+        "cpu_seconds": 0.44467,
+        "peak_rss_kib": 57680,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost--1-0-full/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost--1-0-full/inference.json"
+        ],
+        "wall_seconds": 0.14042214000073727,
+        "user_seconds": 0.117608,
+        "system_seconds": 0.020312,
+        "cpu_seconds": 0.13792000000000001,
+        "peak_rss_kib": 30772,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 4583,
+      "trace_bytes": 578745,
+      "end_to_end_wall_seconds": 0.40635288600606145,
+      "end_to_end_cpu_seconds": 0.58259
+    },
+    {
+      "block": -1,
+      "warmup": true,
+      "order": [
+        "full",
+        "boundary",
+        "native",
+        "sparse"
+      ],
+      "position": 1,
+      "mode": "boundary",
+      "directory": "cost--1-1-boundary",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost--1-1-boundary/capture",
+          "-Dtracefusion.mode=boundary",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.21676482600014424,
+        "user_seconds": 0.321911,
+        "system_seconds": 0.032704,
+        "cpu_seconds": 0.354615,
+        "peak_rss_kib": 49400,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost--1-1-boundary/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost--1-1-boundary/inference.json"
+        ],
+        "wall_seconds": 0.13899709600082133,
+        "user_seconds": 0.108721,
+        "system_seconds": 0.027988,
+        "cpu_seconds": 0.136709,
+        "peak_rss_kib": 29696,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 703,
+      "trace_bytes": 91403,
+      "end_to_end_wall_seconds": 0.35576192200096557,
+      "end_to_end_cpu_seconds": 0.491324
+    },
+    {
+      "block": -1,
+      "warmup": true,
+      "order": [
+        "full",
+        "boundary",
+        "native",
+        "sparse"
+      ],
+      "position": 2,
+      "mode": "native",
+      "directory": "cost--1-2-native",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.08732705000147689,
+        "user_seconds": 0.0845,
+        "system_seconds": 0.015381,
+        "cpu_seconds": 0.09988100000000001,
+        "peak_rss_kib": 32852,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.08732705000147689,
+      "end_to_end_cpu_seconds": 0.09988100000000001
+    },
+    {
+      "block": -1,
+      "warmup": true,
+      "order": [
+        "full",
+        "boundary",
+        "native",
+        "sparse"
+      ],
+      "position": 3,
+      "mode": "sparse",
+      "directory": "cost--1-3-sparse",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost--1-3-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.2335896069998853,
+        "user_seconds": 0.340797,
+        "system_seconds": 0.027844,
+        "cpu_seconds": 0.368641,
+        "peak_rss_kib": 50288,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost--1-3-sparse/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost--1-3-sparse/inference.json"
+        ],
+        "wall_seconds": 0.15148283100279514,
+        "user_seconds": 0.120669,
+        "system_seconds": 0.028498,
+        "cpu_seconds": 0.149167,
+        "peak_rss_kib": 30032,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 1403,
+      "trace_bytes": 181539,
+      "end_to_end_wall_seconds": 0.38507243800268043,
+      "end_to_end_cpu_seconds": 0.517808
+    },
+    {
+      "block": 0,
+      "warmup": false,
+      "order": [
+        "native",
+        "boundary",
+        "full",
+        "sparse"
+      ],
+      "position": 0,
+      "mode": "native",
+      "directory": "cost-0-0-native",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.09260401999927126,
+        "user_seconds": 0.081913,
+        "system_seconds": 0.023989,
+        "cpu_seconds": 0.105902,
+        "peak_rss_kib": 33240,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.09260401999927126,
+      "end_to_end_cpu_seconds": 0.105902
+    },
+    {
+      "block": 0,
+      "warmup": false,
+      "order": [
+        "native",
+        "boundary",
+        "full",
+        "sparse"
+      ],
+      "position": 1,
+      "mode": "boundary",
+      "directory": "cost-0-1-boundary",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-0-1-boundary/capture",
+          "-Dtracefusion.mode=boundary",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.23417012100253487,
+        "user_seconds": 0.326304,
+        "system_seconds": 0.032683,
+        "cpu_seconds": 0.358987,
+        "peak_rss_kib": 49360,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-0-1-boundary/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-0-1-boundary/inference.json"
+        ],
+        "wall_seconds": 0.14620421000290662,
+        "user_seconds": 0.115586,
+        "system_seconds": 0.028374,
+        "cpu_seconds": 0.14396,
+        "peak_rss_kib": 29696,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 703,
+      "trace_bytes": 91403,
+      "end_to_end_wall_seconds": 0.3803743310054415,
+      "end_to_end_cpu_seconds": 0.502947
+    },
+    {
+      "block": 0,
+      "warmup": false,
+      "order": [
+        "native",
+        "boundary",
+        "full",
+        "sparse"
+      ],
+      "position": 2,
+      "mode": "full",
+      "directory": "cost-0-2-full",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-0-2-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.24345371199888177,
+        "user_seconds": 0.385538,
+        "system_seconds": 0.028433,
+        "cpu_seconds": 0.413971,
+        "peak_rss_kib": 55496,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-0-2-full/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-0-2-full/inference.json"
+        ],
+        "wall_seconds": 0.15017237499705516,
+        "user_seconds": 0.107964,
+        "system_seconds": 0.039975,
+        "cpu_seconds": 0.147939,
+        "peak_rss_kib": 30900,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 4583,
+      "trace_bytes": 578745,
+      "end_to_end_wall_seconds": 0.39362608699593693,
+      "end_to_end_cpu_seconds": 0.5619099999999999
+    },
+    {
+      "block": 0,
+      "warmup": false,
+      "order": [
+        "native",
+        "boundary",
+        "full",
+        "sparse"
+      ],
+      "position": 3,
+      "mode": "sparse",
+      "directory": "cost-0-3-sparse",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-0-3-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.2388382100034505,
+        "user_seconds": 0.34176,
+        "system_seconds": 0.042013,
+        "cpu_seconds": 0.38377300000000003,
+        "peak_rss_kib": 52328,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-0-3-sparse/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-0-3-sparse/inference.json"
+        ],
+        "wall_seconds": 0.16770782099774806,
+        "user_seconds": 0.124345,
+        "system_seconds": 0.040353,
+        "cpu_seconds": 0.164698,
+        "peak_rss_kib": 30032,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 1403,
+      "trace_bytes": 181539,
+      "end_to_end_wall_seconds": 0.40654603100119857,
+      "end_to_end_cpu_seconds": 0.548471
+    },
+    {
+      "block": 1,
+      "warmup": false,
+      "order": [
+        "native",
+        "boundary",
+        "full",
+        "sparse"
+      ],
+      "position": 0,
+      "mode": "native",
+      "directory": "cost-1-0-native",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.09360442400065949,
+        "user_seconds": 0.093266,
+        "system_seconds": 0.012102,
+        "cpu_seconds": 0.105368,
+        "peak_rss_kib": 32856,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.09360442400065949,
+      "end_to_end_cpu_seconds": 0.105368
+    },
+    {
+      "block": 1,
+      "warmup": false,
+      "order": [
+        "native",
+        "boundary",
+        "full",
+        "sparse"
+      ],
+      "position": 1,
+      "mode": "boundary",
+      "directory": "cost-1-1-boundary",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-1-1-boundary/capture",
+          "-Dtracefusion.mode=boundary",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.24612469100247836,
+        "user_seconds": 0.364503,
+        "system_seconds": 0.019629,
+        "cpu_seconds": 0.38413200000000003,
+        "peak_rss_kib": 50380,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-1-1-boundary/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-1-1-boundary/inference.json"
+        ],
+        "wall_seconds": 0.14939835399854928,
+        "user_seconds": 0.115348,
+        "system_seconds": 0.031447,
+        "cpu_seconds": 0.146795,
+        "peak_rss_kib": 29696,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 703,
+      "trace_bytes": 91403,
+      "end_to_end_wall_seconds": 0.39552304500102764,
+      "end_to_end_cpu_seconds": 0.530927
+    },
+    {
+      "block": 1,
+      "warmup": false,
+      "order": [
+        "native",
+        "boundary",
+        "full",
+        "sparse"
+      ],
+      "position": 2,
+      "mode": "full",
+      "directory": "cost-1-2-full",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-1-2-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.26912197600177024,
+        "user_seconds": 0.409762,
+        "system_seconds": 0.054076,
+        "cpu_seconds": 0.46383800000000003,
+        "peak_rss_kib": 57044,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-1-2-full/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-1-2-full/inference.json"
+        ],
+        "wall_seconds": 0.15011298999888822,
+        "user_seconds": 0.120015,
+        "system_seconds": 0.027718,
+        "cpu_seconds": 0.147733,
+        "peak_rss_kib": 30904,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 4583,
+      "trace_bytes": 578745,
+      "end_to_end_wall_seconds": 0.41923496600065846,
+      "end_to_end_cpu_seconds": 0.6115710000000001
+    },
+    {
+      "block": 1,
+      "warmup": false,
+      "order": [
+        "native",
+        "boundary",
+        "full",
+        "sparse"
+      ],
+      "position": 3,
+      "mode": "sparse",
+      "directory": "cost-1-3-sparse",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-1-3-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.24941246799426153,
+        "user_seconds": 0.349428,
+        "system_seconds": 0.056866,
+        "cpu_seconds": 0.40629400000000004,
+        "peak_rss_kib": 51076,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-1-3-sparse/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-1-3-sparse/inference.json"
+        ],
+        "wall_seconds": 0.14556518700555898,
+        "user_seconds": 0.115632,
+        "system_seconds": 0.027781,
+        "cpu_seconds": 0.143413,
+        "peak_rss_kib": 30032,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 1403,
+      "trace_bytes": 181539,
+      "end_to_end_wall_seconds": 0.3949776549998205,
+      "end_to_end_cpu_seconds": 0.5497070000000001
+    },
+    {
+      "block": 2,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "boundary",
+        "native",
+        "full"
+      ],
+      "position": 0,
+      "mode": "sparse",
+      "directory": "cost-2-0-sparse",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-2-0-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.23355445500055794,
+        "user_seconds": 0.342382,
+        "system_seconds": 0.033058,
+        "cpu_seconds": 0.37544,
+        "peak_rss_kib": 51728,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-2-0-sparse/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-2-0-sparse/inference.json"
+        ],
+        "wall_seconds": 0.14805270000215387,
+        "user_seconds": 0.117446,
+        "system_seconds": 0.028378,
+        "cpu_seconds": 0.145824,
+        "peak_rss_kib": 30032,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 1403,
+      "trace_bytes": 181539,
+      "end_to_end_wall_seconds": 0.3816071550027118,
+      "end_to_end_cpu_seconds": 0.521264
+    },
+    {
+      "block": 2,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "boundary",
+        "native",
+        "full"
+      ],
+      "position": 1,
+      "mode": "boundary",
+      "directory": "cost-2-1-boundary",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-2-1-boundary/capture",
+          "-Dtracefusion.mode=boundary",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.23312604099919554,
+        "user_seconds": 0.325988,
+        "system_seconds": 0.038253,
+        "cpu_seconds": 0.364241,
+        "peak_rss_kib": 49196,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-2-1-boundary/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-2-1-boundary/inference.json"
+        ],
+        "wall_seconds": 0.1438538630027324,
+        "user_seconds": 0.113046,
+        "system_seconds": 0.028466,
+        "cpu_seconds": 0.141512,
+        "peak_rss_kib": 29696,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 703,
+      "trace_bytes": 91403,
+      "end_to_end_wall_seconds": 0.37697990400192793,
+      "end_to_end_cpu_seconds": 0.505753
+    },
+    {
+      "block": 2,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "boundary",
+        "native",
+        "full"
+      ],
+      "position": 2,
+      "mode": "native",
+      "directory": "cost-2-2-native",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.08806015300069703,
+        "user_seconds": 0.079454,
+        "system_seconds": 0.022075,
+        "cpu_seconds": 0.101529,
+        "peak_rss_kib": 32936,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.08806015300069703,
+      "end_to_end_cpu_seconds": 0.101529
+    },
+    {
+      "block": 2,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "boundary",
+        "native",
+        "full"
+      ],
+      "position": 3,
+      "mode": "full",
+      "directory": "cost-2-3-full",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-2-3-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.2528118420013925,
+        "user_seconds": 0.383003,
+        "system_seconds": 0.034197,
+        "cpu_seconds": 0.41719999999999996,
+        "peak_rss_kib": 56856,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-2-3-full/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-2-3-full/inference.json"
+        ],
+        "wall_seconds": 0.16017805300361942,
+        "user_seconds": 0.127505,
+        "system_seconds": 0.027608,
+        "cpu_seconds": 0.155113,
+        "peak_rss_kib": 30900,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 4583,
+      "trace_bytes": 578745,
+      "end_to_end_wall_seconds": 0.41298989500501193,
+      "end_to_end_cpu_seconds": 0.572313
+    },
+    {
+      "block": 3,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "full",
+        "native",
+        "boundary"
+      ],
+      "position": 0,
+      "mode": "sparse",
+      "directory": "cost-3-0-sparse",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-3-0-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.2570326470013242,
+        "user_seconds": 0.377646,
+        "system_seconds": 0.043137,
+        "cpu_seconds": 0.42078299999999996,
+        "peak_rss_kib": 51984,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-3-0-sparse/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-3-0-sparse/inference.json"
+        ],
+        "wall_seconds": 0.16650864600524073,
+        "user_seconds": 0.128699,
+        "system_seconds": 0.035488,
+        "cpu_seconds": 0.164187,
+        "peak_rss_kib": 30032,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 1403,
+      "trace_bytes": 181539,
+      "end_to_end_wall_seconds": 0.42354129300656496,
+      "end_to_end_cpu_seconds": 0.58497
+    },
+    {
+      "block": 3,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "full",
+        "native",
+        "boundary"
+      ],
+      "position": 1,
+      "mode": "full",
+      "directory": "cost-3-1-full",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-3-1-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.24398286399809876,
+        "user_seconds": 0.38183,
+        "system_seconds": 0.024231,
+        "cpu_seconds": 0.406061,
+        "peak_rss_kib": 56932,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-3-1-full/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-3-1-full/inference.json"
+        ],
+        "wall_seconds": 0.15697693699621595,
+        "user_seconds": 0.121883,
+        "system_seconds": 0.032823,
+        "cpu_seconds": 0.154706,
+        "peak_rss_kib": 30904,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 4583,
+      "trace_bytes": 578745,
+      "end_to_end_wall_seconds": 0.4009598009943147,
+      "end_to_end_cpu_seconds": 0.560767
+    },
+    {
+      "block": 3,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "full",
+        "native",
+        "boundary"
+      ],
+      "position": 2,
+      "mode": "native",
+      "directory": "cost-3-2-native",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.08810007399733877,
+        "user_seconds": 0.072559,
+        "system_seconds": 0.026935,
+        "cpu_seconds": 0.099494,
+        "peak_rss_kib": 32852,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.08810007399733877,
+      "end_to_end_cpu_seconds": 0.099494
+    },
+    {
+      "block": 3,
+      "warmup": false,
+      "order": [
+        "sparse",
+        "full",
+        "native",
+        "boundary"
+      ],
+      "position": 3,
+      "mode": "boundary",
+      "directory": "cost-3-3-boundary",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-3-3-boundary/capture",
+          "-Dtracefusion.mode=boundary",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.2194608510035323,
+        "user_seconds": 0.332667,
+        "system_seconds": 0.019896,
+        "cpu_seconds": 0.352563,
+        "peak_rss_kib": 49128,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-3-3-boundary/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-3-3-boundary/inference.json"
+        ],
+        "wall_seconds": 0.14638772499893093,
+        "user_seconds": 0.109608,
+        "system_seconds": 0.031335,
+        "cpu_seconds": 0.14094299999999998,
+        "peak_rss_kib": 29696,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 703,
+      "trace_bytes": 91403,
+      "end_to_end_wall_seconds": 0.36584857600246323,
+      "end_to_end_cpu_seconds": 0.493506
+    },
+    {
+      "block": 4,
+      "warmup": false,
+      "order": [
+        "boundary",
+        "native",
+        "full",
+        "sparse"
+      ],
+      "position": 0,
+      "mode": "boundary",
+      "directory": "cost-4-0-boundary",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-4-0-boundary/capture",
+          "-Dtracefusion.mode=boundary",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.22692544700112194,
+        "user_seconds": 0.348124,
+        "system_seconds": 0.012614,
+        "cpu_seconds": 0.360738,
+        "peak_rss_kib": 49148,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-4-0-boundary/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-4-0-boundary/inference.json"
+        ],
+        "wall_seconds": 0.13902641599997878,
+        "user_seconds": 0.108472,
+        "system_seconds": 0.028141,
+        "cpu_seconds": 0.13661299999999998,
+        "peak_rss_kib": 29696,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 703,
+      "trace_bytes": 91403,
+      "end_to_end_wall_seconds": 0.3659518630011007,
+      "end_to_end_cpu_seconds": 0.497351
+    },
+    {
+      "block": 4,
+      "warmup": false,
+      "order": [
+        "boundary",
+        "native",
+        "full",
+        "sparse"
+      ],
+      "position": 1,
+      "mode": "native",
+      "directory": "cost-4-1-native",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.08973499299463583,
+        "user_seconds": 0.094468,
+        "system_seconds": 0.007634,
+        "cpu_seconds": 0.102102,
+        "peak_rss_kib": 33112,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.08973499299463583,
+      "end_to_end_cpu_seconds": 0.102102
+    },
+    {
+      "block": 4,
+      "warmup": false,
+      "order": [
+        "boundary",
+        "native",
+        "full",
+        "sparse"
+      ],
+      "position": 2,
+      "mode": "full",
+      "directory": "cost-4-2-full",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-4-2-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.2482491429982474,
+        "user_seconds": 0.39438,
+        "system_seconds": 0.039828,
+        "cpu_seconds": 0.43420800000000004,
+        "peak_rss_kib": 57924,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-4-2-full/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-4-2-full/inference.json"
+        ],
+        "wall_seconds": 0.15552817699790467,
+        "user_seconds": 0.11803,
+        "system_seconds": 0.03531,
+        "cpu_seconds": 0.15334,
+        "peak_rss_kib": 30808,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 4583,
+      "trace_bytes": 578745,
+      "end_to_end_wall_seconds": 0.4037773199961521,
+      "end_to_end_cpu_seconds": 0.5875480000000001
+    },
+    {
+      "block": 4,
+      "warmup": false,
+      "order": [
+        "boundary",
+        "native",
+        "full",
+        "sparse"
+      ],
+      "position": 3,
+      "mode": "sparse",
+      "directory": "cost-4-3-sparse",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-4-3-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.27498998300143285,
+        "user_seconds": 0.37713,
+        "system_seconds": 0.016398,
+        "cpu_seconds": 0.39352800000000004,
+        "peak_rss_kib": 52772,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-4-3-sparse/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-4-3-sparse/inference.json"
+        ],
+        "wall_seconds": 0.14575019600306405,
+        "user_seconds": 0.106628,
+        "system_seconds": 0.036929,
+        "cpu_seconds": 0.143557,
+        "peak_rss_kib": 30032,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 1403,
+      "trace_bytes": 181539,
+      "end_to_end_wall_seconds": 0.4207401790044969,
+      "end_to_end_cpu_seconds": 0.537085
+    },
+    {
+      "block": 5,
+      "warmup": false,
+      "order": [
+        "native",
+        "sparse",
+        "boundary",
+        "full"
+      ],
+      "position": 0,
+      "mode": "native",
+      "directory": "cost-5-0-native",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.10710372399626067,
+        "user_seconds": 0.09169,
+        "system_seconds": 0.024933,
+        "cpu_seconds": 0.11662299999999999,
+        "peak_rss_kib": 32852,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.10710372399626067,
+      "end_to_end_cpu_seconds": 0.11662299999999999
+    },
+    {
+      "block": 5,
+      "warmup": false,
+      "order": [
+        "native",
+        "sparse",
+        "boundary",
+        "full"
+      ],
+      "position": 1,
+      "mode": "sparse",
+      "directory": "cost-5-1-sparse",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-5-1-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.26996382499783067,
+        "user_seconds": 0.417305,
+        "system_seconds": 0.051458,
+        "cpu_seconds": 0.468763,
+        "peak_rss_kib": 51208,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-5-1-sparse/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-5-1-sparse/inference.json"
+        ],
+        "wall_seconds": 0.1636893280010554,
+        "user_seconds": 0.127451,
+        "system_seconds": 0.034129,
+        "cpu_seconds": 0.16158,
+        "peak_rss_kib": 30032,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 1403,
+      "trace_bytes": 181539,
+      "end_to_end_wall_seconds": 0.43365315299888607,
+      "end_to_end_cpu_seconds": 0.630343
+    },
+    {
+      "block": 5,
+      "warmup": false,
+      "order": [
+        "native",
+        "sparse",
+        "boundary",
+        "full"
+      ],
+      "position": 2,
+      "mode": "boundary",
+      "directory": "cost-5-2-boundary",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-5-2-boundary/capture",
+          "-Dtracefusion.mode=boundary",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.27377529200020945,
+        "user_seconds": 0.360152,
+        "system_seconds": 0.045674,
+        "cpu_seconds": 0.405826,
+        "peak_rss_kib": 49896,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-5-2-boundary/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-5-2-boundary/inference.json"
+        ],
+        "wall_seconds": 0.1491376659978414,
+        "user_seconds": 0.122435,
+        "system_seconds": 0.023903,
+        "cpu_seconds": 0.146338,
+        "peak_rss_kib": 29696,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 703,
+      "trace_bytes": 91403,
+      "end_to_end_wall_seconds": 0.42291295799805084,
+      "end_to_end_cpu_seconds": 0.552164
+    },
+    {
+      "block": 5,
+      "warmup": false,
+      "order": [
+        "native",
+        "sparse",
+        "boundary",
+        "full"
+      ],
+      "position": 3,
+      "mode": "full",
+      "directory": "cost-5-3-full",
+      "online": {
+        "command": [
+          "/workspace/scratch/d1fad2474461/work/java-collector-deps/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-5-3-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/harness-classes:/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/commons-lang3-3.17.0.jar",
+          "upstream.CommonsDriver",
+          "max",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/inputs.csv",
+          "10"
+        ],
+        "wall_seconds": 0.3595906519985874,
+        "user_seconds": 0.487637,
+        "system_seconds": 0.13644,
+        "cpu_seconds": 0.624077,
+        "peak_rss_kib": 60376,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "offline": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "/workspace/scratch/d1fad2474461/tracefusion2/experiments/java-collection/infer.py",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-5-3-full/capture",
+          "--query",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-query.json",
+          "--output",
+          "/workspace/scratch/d1fad2474461/tracefusion2/artifacts/java-upstream-20261010-100020-322190/cost-5-3-full/inference.json"
+        ],
+        "wall_seconds": 0.15858475799905136,
+        "user_seconds": 0.128076,
+        "system_seconds": 0.027832,
+        "cpu_seconds": 0.155908,
+        "peak_rss_kib": 30900,
+        "supervisor_rss_kib": -1,
+        "rss_above_supervisor_floor": false
+      },
+      "events": 4583,
+      "trace_bytes": 578745,
+      "end_to_end_wall_seconds": 0.5181754099976388,
+      "end_to_end_cpu_seconds": 0.7799849999999999
+    }
+  ],
+  "artifact_directory": "java-upstream-20261010-100020-322190",
+  "cases": [
+    {
+      "method": "max",
+      "jvm": "default",
+      "mode": "full",
+      "capture": "max-default-full",
+      "events": 461,
+      "bytes": 57384,
+      "queries": 35,
+      "correct": 35
+    },
+    {
+      "method": "max",
+      "jvm": "default",
+      "mode": "sparse",
+      "capture": "max-default-sparse",
+      "events": 143,
+      "bytes": 18292,
+      "queries": 35,
+      "correct": 35
+    },
+    {
+      "method": "max",
+      "jvm": "default",
+      "mode": "boundary",
+      "capture": "max-default-boundary",
+      "events": 73,
+      "bytes": 9413,
+      "queries": 35,
+      "correct": 35
+    },
+    {
+      "method": "max",
+      "jvm": "interpreter",
+      "mode": "full",
+      "capture": "max-interpreter-full",
+      "events": 461,
+      "bytes": 57383,
+      "queries": 35,
+      "correct": 35
+    },
+    {
+      "method": "max",
+      "jvm": "interpreter",
+      "mode": "sparse",
+      "capture": "max-interpreter-sparse",
+      "events": 143,
+      "bytes": 18291,
+      "queries": 35,
+      "correct": 35
+    },
+    {
+      "method": "max",
+      "jvm": "interpreter",
+      "mode": "boundary",
+      "capture": "max-interpreter-boundary",
+      "events": 73,
+      "bytes": 9412,
+      "queries": 35,
+      "correct": 35
+    },
+    {
+      "method": "min",
+      "jvm": "default",
+      "mode": "full",
+      "capture": "min-default-full",
+      "events": 461,
+      "bytes": 57426,
+      "queries": 35,
+      "correct": 35
+    },
+    {
+      "method": "min",
+      "jvm": "default",
+      "mode": "sparse",
+      "capture": "min-default-sparse",
+      "events": 143,
+      "bytes": 18316,
+      "queries": 35,
+      "correct": 35
+    },
+    {
+      "method": "min",
+      "jvm": "default",
+      "mode": "boundary",
+      "capture": "min-default-boundary",
+      "events": 73,
+      "bytes": 9437,
+      "queries": 35,
+      "correct": 35
+    },
+    {
+      "method": "min",
+      "jvm": "interpreter",
+      "mode": "full",
+      "capture": "min-interpreter-full",
+      "events": 461,
+      "bytes": 57425,
+      "queries": 35,
+      "correct": 35
+    },
+    {
+      "method": "min",
+      "jvm": "interpreter",
+      "mode": "sparse",
+      "capture": "min-interpreter-sparse",
+      "events": 143,
+      "bytes": 18315,
+      "queries": 35,
+      "correct": 35
+    },
+    {
+      "method": "min",
+      "jvm": "interpreter",
+      "mode": "boundary",
+      "capture": "min-interpreter-boundary",
+      "events": 73,
+      "bytes": 9436,
+      "queries": 35,
+      "correct": 35
+    }
+  ],
+  "verification": {
+    "status": "pass",
+    "manifest_sha256": "9852ffac054238de94a783f55d1ca2895dccd8a27ccbc1789592c1e00c07f4fa",
+    "evidence_files": 515,
+    "positive_jvm_captures": 12,
+    "distinct_input_method_queries": 70,
+    "queries_with_two_jvm_modes_and_three_methods": 420,
+    "cost_commands": 28,
+    "raw_events_reinferred": 49531,
+    "offline_faults": 4,
+    "actual_jvm_rejections": 1
+  },
+  "scope_regression": {
+    "status": "pass",
+    "agent_sha256": "4219b2a8534006009fde24d6475512cfe51cc89b8ae7dcc136a1b005b65d4aa3",
+    "positive_captures": 3,
+    "offline_missing_callee": "unavailable scope method: demo/Subject.twice(I)I",
+    "actual_jvm_missing_callee": {
+      "schema": "java-provenance-v1",
+      "status": "unknown",
+      "reason": "collector reports unknown",
+      "results": []
+    },
+    "manifest_sha256": "d3c91255003af114fcfc899af0e621930d2a8c8978bc6acd5c087686855a6680"
+  },
+  "verification_sources_sha256": {
+    "verify_upstream.py": "5e527686264670b0fd729cee3cbf3615698a3a93043af4611bbacb23d5d3fa8e",
+    "check_scope.py": "665a191ebd9d0b01412eb957e2e984953b90484c466df5abd34a0e445f556e4e"
+  }
+}

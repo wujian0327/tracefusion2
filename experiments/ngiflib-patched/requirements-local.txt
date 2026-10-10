@@ -1,0 +1,5 @@
+# Development emulation only; not a native host/BPF evidence backend.
+unicorn==2.1.4
+capstone==5.0.6
+pyelftools==0.32
+Pillow==12.3.0

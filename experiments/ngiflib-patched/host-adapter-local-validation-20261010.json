@@ -1,0 +1,81 @@
+{
+  "stage": "host_adapter_compiled_not_executed",
+  "compiled": true,
+  "original_libdft_revision": "20804d5bae5d8aed31a71761b1a1149e35a0da95",
+  "pin_kit": "pin-3.20-98437-gf02b61307-gcc-linux",
+  "propagation_modified": false,
+  "upstream_source_files_verified": 33,
+  "adapter_sha256": {
+    "compare_host.py": "987b6b2d4d1d34d6ed02759f23f39572b9dc0b884639b510c22c994f120ad625",
+    "host_records.py": "ead0ab2571588ec1f810eddae12865f0d00c2069ebfe421e1e63d8a260cf8204",
+    "libdft_ngif.cpp": "95c61e24392bff523c4354dd7ad445d4747d38a3ea1cb12b94c063b9110e9e99",
+    "query.py": "945ec7356053c9369529a41c132fc7d1a0c921aeea9c5fd1d24911843b924c5d",
+    "test_host_records.py": "732aad8e465c8d5312fedfcedf590a74c91a5c7966188078ddb6ba5a6aeba09a"
+  },
+  "built_tools": {
+    "nullpin": "164e17cb6c6d057433b9c2c954ea3f78e79780e89cf62a7a8af8bdb644db3d06",
+    "libdft_ngif": "f8b1f606336135f8e3ebfb5f09c9aa6b640ad3c55656c985c19338a697489671"
+  },
+  "source_semantics_audit": {
+    "revision": "20804d5bae5d8aed31a71761b1a1149e35a0da95",
+    "core_sha256": "08035d9f23f64575cb551fb81680fd2e4d68d510758cc2585fe55c6318d72a6d",
+    "ignored_scalar_shift_opcodes": [
+      "SHL",
+      "SHR",
+      "SAR"
+    ],
+    "propagation_modified": false,
+    "qualification": "Raw upstream behavior; dispatcher case membership is not semantic coverage",
+    "scoring": "GIF format source coverage/extras, not a common instruction-taint oracle"
+  },
+  "synthetic_transport_checks": {
+    "synthetic_transport": true,
+    "native_executed": false,
+    "libdft_executed": false,
+    "checks": [
+      "positive_observer_transport",
+      "positive_taint_test_double",
+      "missing_finish",
+      "missing_record",
+      "error_flag",
+      "lost_thread_identity",
+      "context_change",
+      "symbol_size_mismatch",
+      "wrong_relocation",
+      "unknown_dispatcher",
+      "shift_coverage_mislabel",
+      "wrong_call_target",
+      "wrong_source_identity",
+      "input_contents_changed",
+      "failed_reader",
+      "missing_source_tags",
+      "unseeded_sink_tag",
+      "wrong_source_version",
+      "dirty_metadata",
+      "unterminated_process",
+      "truncated_file",
+      "return_value_corruption"
+    ],
+    "total": 22
+  },
+  "isa_tests": {
+    "groups_passed": 4,
+    "unicorn_instruction_value_differentials": 176
+  },
+  "default_fixture_check": {
+    "built_from_fixed_git_objects": true,
+    "source_sha256_verified": true,
+    "same_four_gif_hashes": true,
+    "elf_dwarf_layout_verified": true
+  },
+  "native_pin_startup": {
+    "passed": false,
+    "returncode": 126,
+    "reason": "Pin launcher cannot execute binary file: Exec format error"
+  },
+  "ngiflib_native_collection_executed": false,
+  "ngiflib_libdft_executed": false,
+  "bpf_executed": false,
+  "performance_eligible": false,
+  "host_results_pending": true
+}

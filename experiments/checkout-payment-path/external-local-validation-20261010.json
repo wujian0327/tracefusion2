@@ -1,0 +1,41 @@
+{
+  "status": "build_verified_runtime_blocked",
+  "date": "2026-10-10",
+  "libdft_commit": "20804d5bae5d8aed31a71761b1a1149e35a0da95",
+  "pin_kit": "pin-3.20-98437-gf02b61307-gcc-linux",
+  "pin_archive_sha256": "ca2f542eee2013471961bb683d06ccb20ef5dd8ed0d02537cf4d47f09bd616bf",
+  "checks": {
+    "original_libdft_compiled": true,
+    "nullpin_compiled": true,
+    "boundary_adapter_compiled": true,
+    "propagation_code_modified": false,
+    "actual_go_elf_built": true,
+    "elf_bytes_and_dwarf_boundary_checks": true,
+    "boundary_sites": 7,
+    "native_fixture_case": "one",
+    "native_fixture_passed": true,
+    "synthetic_log_integrity_tests": 8
+  },
+  "execution": {
+    "pin_started": false,
+    "pin_go_runs": 0,
+    "origin_queries_verified": 0,
+    "bpf_runs": 0,
+    "failure_stage": "pin_startup",
+    "error": "OSError [Errno 8] Exec format error on official ELF32 Pin launcher; this environment does not provide a usable launcher execution path. No conclusion about Go compatibility."
+  },
+  "target_binary_sha256": "043e77b69eb130683664217fe17a4389b097e6981ea018e9054a51d9d30c9899",
+  "tool_sha256": {
+    "nullpin": "164e17cb6c6d057433b9c2c954ea3f78e79780e89cf62a7a8af8bdb644db3d06",
+    "libdft_payment": "79b4ceb9945fa20094052bfdae68f85b4154d8af75518f7a336afc0bd9b2b4ff"
+  },
+  "sources_sha256": {
+    "external_compare.py": "f9efbfac05d38a90c0f09a435ba756a8709bd4c3d1643f08998e2d3d44715a53",
+    "external_boundaries.py": "5ab77783859cefcbbf5a0157db716464819ac754d1fbd8698e6e1d8e75be2f1a",
+    "libdft_payment.cpp": "828508363fc564069932b3ef1f2f62786e468b9880c518ac68517bf123331763",
+    "test_external_compare.py": "ab9e27877b4dd9a61cb78db8856163c5eeac623bde71cb98fcceb0146d203d5d"
+  },
+  "external_baseline_qualified": false,
+  "performance_eligible": false,
+  "note": "Real SDK compilation plus native fixture/ELF validation and synthetic log tests only. No real Pin propagation result. HardTaint not built or executed."
+}
