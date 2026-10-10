@@ -1,0 +1,32 @@
+{
+  "archive_sha256": "890a4657d2e871ac9ebce3c2f65caea2ed705c5a75dabebbe8952e8e7ab5bf13",
+  "experiment_commit": "c3561ad38b2215152bab22f0fb1fc53411a532d1",
+  "elf_sha256": "dde4744713519b060aa881d8af30a8593b224fe6b6ceef432fe30c56a557cf6f",
+  "adapter_sha256": "dd31599e74b34524100c7b4cacafdef50ded719a0a57dc59e582dd61b4e7beff",
+  "verified_queries": 24,
+  "matched_queries": 24,
+  "empty_source_queries": 6,
+  "unknown_queries": 0,
+  "mismatched_queries": 0,
+  "relation_totals": {
+    "tp": 22,
+    "fp": 0,
+    "fn": 0
+  },
+  "raw_instruction_records": 940,
+  "raw_jsonl_records": 1132,
+  "unchanged_upstream_source_files": 33,
+  "native_nullpin_and_all_instrumented_outputs_match": true,
+  "recomputed_oracle_matches": true,
+  "source_snapshots_match_committed_files": true,
+  "saved_inference_matches_recomputation": true,
+  "source_byte_labels_validated": true,
+  "instruction_pcs_checked_against_uploaded_elf": true,
+  "reported_context_changes": 0,
+  "reported_uncovered_opcodes": 0,
+  "reported_adapter_errors": 0,
+  "executed_uploaded_code": false,
+  "bpf_rerun": false,
+  "performance_eligible": false,
+  "conclusion": "Original libdft64 matches all input-field source queries in this bounded C fixture; no general C/C++ or performance claim"
+}

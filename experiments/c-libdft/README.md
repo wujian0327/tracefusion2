@@ -31,7 +31,33 @@ python3 experiments/c-libdft/compare.py run
 
 ## 结果解释与后续
 
-2026-10-10 本地已完成：原生 24 次调用全部符合原驱动真值；真实固定 Pin SDK 的 `nullpin`/`libdft_c` 编译通过；6 项新增日志/评分测试（含 17 种故障变体）和原有 15 项外部工具测试通过。原始 C 业务文件没有修改。当前环境执行官方 Pin 启动器报 `Exec format error`，**尚无这轮 libdft 的实际传播结果**，等待主机包。机器可读记录见 `local-validation-20261010.json`。
+2026-10-10 本地验证：原生 24 次调用全部符合原驱动真值；真实固定 Pin SDK 的 `nullpin`/`libdft_c` 编译通过；6 项新增日志/评分测试（含 17 种故障变体）和原有 15 项外部工具测试通过。原始 C 业务文件没有修改。本地执行官方 Pin 启动器报 `Exec format error`，因此本地编译不作为传播证据。历史记录见 `local-validation-20261010.json`；随后取得的真实主机结果如下。
+
+## 2026-10-10 主机结果
+
+主机包 `c-libdft-20261010-032159-226808.zip` 对应实验提交 `c3561ad38b2215152bab22f0fb1fc53411a532d1`，已完整复核：
+
+| 指标 | libdft64 实测并离线复核 |
+| --- | --- |
+| 正确输出字段查询 | 24/24，包含 6 个空来源查询 |
+| 来源关系 | TP=22、FP=0、FN=0 |
+| unknown / mismatch | 0 / 0 |
+| 选中调用区间内的指令记录 | 940 |
+| 原始 JSONL 记录 | 1132，含符号、边界及完成记录 |
+| 报告的上下文变化、未覆盖 opcode、适配器错误 | 均为 0 |
+
+逐个核验原始源标签和目标字节标签，从上传 ELF 重新反汇编校验所有指令 PC，重新推断并评分 24 个查询，与保存结果一致。native、nullpin 及 24 次 libdft 进程的全部业务输出相同；独立重新计算驱动真值一致。适配器和业务源码与提交内容相同，构建副本内 33 个上游 C/C++ 源码及头文件与固定 libdft64 提交一致，dispatcher 检查表和工具哈希也一致。复核未执行上传代码或二进制，未重跑旧 BPF 实验。
+
+**结论：libdft64 已通过这组受控 C 场景的来源正确性验证。** 与已有本方法在相同字段查询口径下均为 TP=22/FP=0/FN=0，正确性打平。这不能从 Go 路径失败外推为 libdft64 普遍不可用，也不能推出任一方具有性能优势。两套方法都记录了 940 个范围内指令事件，是本组逐指令诊断配置的结果，不是选择性采集优势证据。
+
+机器可读复核记录：`host-validation-20261010.json`。可用原包离线复核：
+
+```bash
+python3 experiments/c-libdft/verify_host.py /path/to/c-libdft-20261010-032159-226808.zip \
+  --libdft artifacts/external-tools/libdft64
+```
+
+## 比较资格与后续
 
 `full_fixture_agreement` 只在 24/24 查询均通过时成立。即使通过，`external_baseline_qualified` 和 `performance_eligible` 仍为 false：全指令诊断、逐查询新进程与原微型负载不适合性能排名。工具也没有证明任意 C/C++、异常、线程并发、标准库或 SIMD 的完整支持。
 
