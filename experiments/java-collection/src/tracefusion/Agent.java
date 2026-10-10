@@ -89,6 +89,7 @@ public final class Agent implements Opcodes {
             if (n instanceof MethodInsnNode) {
                 MethodInsnNode c = (MethodInsnNode)n;
                 ok = op == INVOKESTATIC && selected.contains(c.owner) && !c.name.startsWith("<");
+                ok &= methods == null || methods.contains(c.owner + "." + c.name + c.desc);
                 for (Type t : Type.getArgumentTypes(c.desc)) ok &= type(t);
                 Type r = Type.getReturnType(c.desc);
                 ok &= r.getSort() == Type.VOID || type(r);
@@ -104,11 +105,13 @@ public final class Agent implements Opcodes {
         new ClassReader(bytes).accept(c, 0);
         if (scope != null && !sha(bytes).equals(scope.getProperty("sha256." + name)))
             throw new IllegalArgumentException("scope_class_hash:" + name);
-        for (MethodNode m : c.methods) if (!m.name.equals("<init>")) audit(m);
+        for (MethodNode m : c.methods) if (!m.name.equals("<init>")
+                && (methods == null || methods.contains(name + "." + m.name + m.desc))) audit(m);
         // A symbolic owner must actually DECLARE this nonvolatile int field. Otherwise
         // inherited-field spellings could create two version counters for one location.
         Map<String, byte[]> fieldOwners = new TreeMap<>();
-        for (MethodNode m : c.methods) if (!m.name.equals("<init>")) {
+        for (MethodNode m : c.methods) if (!m.name.equals("<init>")
+                && (methods == null || methods.contains(name + "." + m.name + m.desc))) {
             for (AbstractInsnNode n : m.instructions) if (n instanceof FieldInsnNode) {
                 FieldInsnNode f = (FieldInsnNode)n;
                 byte[] ownerBytes = fieldOwners.get(f.owner);

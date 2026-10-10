@@ -37,8 +37,19 @@ def plan(classes, entry, query, output, snapshots=False):
     # identify a class/method before the program runs.
     owner = entry.split(".", 1)[0]
     data = (Path(classes) / (owner + ".class")).read_bytes()
-    decoded = read_class(data)
+    # Lazily decode each reachable method. Unsupported unrelated overloads and
+    # class initialization are outside the declared invocation boundary.
+    decoded = read_class(data, method_names=set())
     require(decoded["name"] == owner, "entry class mismatch")
+    todo = [entry]
+    while todo:
+        method = todo.pop()
+        if method in decoded["methods"]: continue
+        require(method.split(".", 1)[0] == owner, "external scope callee: " + method)
+        one = read_class(data, method_names={method})["methods"]
+        require(method in one, "unavailable scope method: " + method)
+        decoded["methods"].update(one)
+        todo.extend(p["operands"][0] for p in one[method]["plans"] if p["opcode"] == 184)
     methods = closure(decoded["methods"], entry)
     # First experiment deliberately limits call closure to one application class.
     props = {"schema": "java-observation-scope-v1", "entry": entry, "classes": owner,
@@ -89,7 +100,8 @@ def decoded_scope(directory, props):
     for owner in props["classes"].split(","):
         data = (Path(directory) / (owner.replace("/", "_") + ".original.class")).read_bytes()
         require(hashlib.sha256(data).hexdigest() == props["sha256." + owner], "scope class hash")
-        c = read_class(data)
+        selected = {props["method." + str(i)] for i in range(int(props["method.count"]))}
+        c = read_class(data, method_names=selected)
         require(c["name"] == owner, "scope class name")
         methods.update(c["methods"])
     expected = closure(methods, props["entry"])

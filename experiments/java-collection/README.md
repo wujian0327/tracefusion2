@@ -4,6 +4,11 @@
 
 ## 运行
 
+原版开源库接入与三组成本见 [UPSTREAM-COMPARISON.md](UPSTREAM-COMPARISON.md)：
+`python3 experiments/java-collection/compare_upstream.py --jdk /path/to/jdk17`。
+已验证 Commons Lang 3.17.0 JAR 的两个整数方法；支持按查询入口审查方法闭包，
+不表示支持完整库或复杂 Java 应用。
+
 最新三组统一入口快照比较见 [BOUNDARY-COMPARISON.md](BOUNDARY-COMPARISON.md)：`python3 experiments/java-collection/compare_observations.py --with-boundary`。boundary 仅采根边界，从原始字节码重放内部行为。
 
 最新的完整/稀疏观测对照与成本入口见 [OBSERVATION-COMPARISON.md](OBSERVATION-COMPARISON.md)：`python3 experiments/java-collection/compare_observations.py --jdk /path/to/jdk`。以下 `run.py` 保留原有全步骤采集实验。

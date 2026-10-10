@@ -48,7 +48,8 @@ class Engine:
         for r in self.rows:
             if r["kind"] != "class": continue
             stem = r["site"].replace("/", "_")
-            c = read_class((self.directory / (stem + ".original.class")).read_bytes())
+            c = read_class((self.directory / (stem + ".original.class")).read_bytes(),
+                           method_names=selected_methods)
             require(c["name"] == r["site"], "class name mismatch")
             selected = {k: m for k, m in c["methods"].items() if selected_methods is None or k in selected_methods}
             decoded = [p for m in selected.values() for p in m["plans"]]

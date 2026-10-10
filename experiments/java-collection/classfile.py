@@ -36,7 +36,13 @@ def descriptor(desc):
     return args, ret
 
 
-def read_class(data, fields_only=False):
+def read_class(data, fields_only=False, method_names=None):
+    """Decode only explicitly requested methods when a query scope is supplied.
+
+    Other method attributes are structurally consumed, not semantically audited.
+    The caller must independently check the entire reachable call closure.
+    Unscoped callers retain the original whole-class audit.
+    """
     r = Reader(data)
     if r.u4() != 0xcafebabe: raise ValueError("class magic")
     minor, major = r.u2(), r.u2()
@@ -86,6 +92,7 @@ def read_class(data, fields_only=False):
         flags, method, desc = r.u2(), utf(r.u2()), utf(r.u2())
         attrs = attributes(r)
         if fields_only or method == "<init>": continue
+        if method_names is not None and name + "." + method + desc not in method_names: continue
         if flags & (0x8 | 0x100 | 0x400 | 0x20) != 0x8: raise ValueError("method access contract")
         descriptor(desc)
         if "Code" not in attrs: raise ValueError("method has no code")
