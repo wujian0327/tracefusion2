@@ -156,6 +156,8 @@ def inspect(archive, case='one', allow_failed_run=False):
         sink = [r for r in origins if r['kind'] == 'sink']
         require(len(sink) == 1 or (allow_failed_run and failed and not sink), 'Expected a single diagnostic sink')
         return dict(source_readback_verified=True, source_fields=2*len(source_reads),
+                    controlled_diagnostic=summary.get('controlled_diagnostic', False),
+                    thread_control=summary.get('thread_control', 'default'),
                     adapter_rejected_run=failed, instruction_trace_may_be_partial=failed,
                     adapter_errors=[r['reason'] for r in origins if r['kind'] == 'error'],
                     diagnostic_instruction_count=len(ins), executed_diagnostic_steps=len(steps),

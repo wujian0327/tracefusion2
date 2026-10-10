@@ -183,6 +183,31 @@ python3 experiments/checkout-payment-path/inspect_external_flow.py /path/to/chec
 不改变实验执行器的判定或性能资格。默认检查仍拒绝失败运行。本次 15 项合成日志检查通过，
 其中新增检查确保未记录 SIMD 实值时，不会声称其数值已经恢复。
 
+## 单次不迁移诊断
+
+用户指定的受控 `one` 诊断使用：
+
+```bash
+GOPROXY=https://goproxy.cn,direct \
+  python3 experiments/checkout-payment-path/external_compare.py run --trace-flow --lock-os-thread
+```
+
+此选项只允许既有 `one` 用例。执行器从原始测试驱动生成 `effective-payment_test.go`，
+在调用 PlaceOrder 前执行 `runtime.LockOSThread()`，并延迟解锁；原始业务函数和独立来源真值规则不变。
+三组 native/nullpin/libdft_payment 使用同一锁线程二进制，各执行一次，保存调用前后 Linux TID 并检查一致。
+端点 TID 一致本身不证明全过程无迁移；不迁移约束来自 Go LockOSThread 契约，原有逐指令迁移拒绝检查仍保留。
+
+该模式仅固定调用 PlaceOrder 的协程，不是整个进程单线程；Go 其他线程仍运行。
+执行器不修改 GOMAXPROCS、GODEBUG 或 GC 设置，继承值仍记录；尤其不自动关闭异步抢占。
+LockOSThread 也阻止其他普通协程在该线程运行，可能改变调度，因此成功也不能单凭此断言唯一根因是迁移。
+
+`fixture-control.json` 保存原始/实际驱动摘要及约束，summary 标记 `controlled_diagnostic=true`；
+每份 truth 记录 `thread_control`。从新 ELF 重新绑定边界并验证字节/DWARF，不能套用旧二进制地址。
+libdft 传播、指令覆盖及 unknown 判定不变，不构成正式性能比较或原始无约束 Go 支持证明。
+
+本地已用 Go 1.25.4 构建锁线程目标，从 ELF 验证 7 个边界位置，并运行一次 native `one`：
+业务金额为 `[3, 0]`，调用前后 TID 一致。此验证不包含真实 Pin 执行，锁线程 libdft 结果仍待主机采集。
+
 ## 本地可复查的检查
 
 ```bash

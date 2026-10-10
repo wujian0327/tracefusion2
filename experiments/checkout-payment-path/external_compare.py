@@ -179,6 +179,37 @@ def compare_truth(observation, truth):
                 note='Diagnostic agreement only; concurrency and instruction semantics remain unqualified')
 
 
+def prepare_fixture(out, lock_thread=False):
+    original = HERE / 'payment_test.go'
+    source = original.read_text()
+    if lock_thread:
+        # Change only the test driver. Keep the business functions and oracle intact.
+        changes = [
+            ('import (\n', 'import (\n\t"runtime"\n\t"syscall"\n'),
+            ('\tstart := time.Now()\n',
+             '\truntime.LockOSThread()\n\tdefer runtime.UnlockOSThread()\n'
+             '\tlockedTID := syscall.Gettid()\n\tstart := time.Now()\n'),
+            ('\telapsed := time.Since(start).Nanoseconds()\n',
+             '\telapsed := time.Since(start).Nanoseconds()\n\treturnedTID := syscall.Gettid()\n'
+             '\tif returnedTID != lockedTID { t.Fatal("locked test goroutine changed OS thread") }\n'),
+            ('\tdata, e := json.MarshalIndent(doc, "", "  ")\n',
+             '\tdoc["thread_control"] = map[string]interface{}{"mode": "runtime.LockOSThread", '
+             '"scope": "PlaceOrder caller goroutine", "before_tid": lockedTID, "after_tid": returnedTID}\n'
+             '\tdata, e := json.MarshalIndent(doc, "", "  ")\n'),
+        ]
+        for old, new in changes:
+            check(source.count(old) == 1, 'Fixture changed; review thread-lock insertion')
+            source = source.replace(old, new)
+    effective = out / 'effective-payment_test.go'
+    effective.write_text(source)
+    save(out / 'fixture-control.json', dict(controlled_diagnostic=lock_thread,
+         thread_control='runtime.LockOSThread' if lock_thread else 'default',
+         scope='PlaceOrder caller goroutine only', original_fixture_sha256=sha(original),
+         effective_fixture_sha256=sha(effective), runtime_environment_modified=False,
+         propagation_modified=False, performance_eligible=False))
+    return effective
+
+
 def execute(args, out, report):
     report['stage'] = 'dependencies'
     pin, lib = dependencies(args, out)
@@ -203,7 +234,8 @@ def execute(args, out, report):
     spec = importlib.util.spec_from_file_location('external_fixture_builder', HERE.parent / 'checkout-item-identity/run.py')
     builder = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(builder)
-    binary, plan, source_hash, _ = builder.build_target(args, out, HERE / 'payment_test.go', plan_binary)
+    fixture = prepare_fixture(out, args.lock_os_thread)
+    binary, plan, source_hash, _ = builder.build_target(args, out, fixture, plan_binary)
     report.update(binary_sha256=sha(binary), main_go_sha256=source_hash)
     trace_config = None
     if args.trace_flow:
@@ -240,13 +272,18 @@ def execute(args, out, report):
                 argv += ['--', binary]
             command(argv, out, extra=env, input='x', timeout=args.timeout)
             check(truth_path.is_file(), 'Fixture did not complete')
+            truth = json.loads(truth_path.read_text())
+            if args.lock_os_thread:
+                control = truth.get('thread_control', {})
+                check(control.get('mode') == 'runtime.LockOSThread' and control.get('before_tid', 0) > 0
+                      and control['before_tid'] == control.get('after_tid'), 'Missing or invalid thread-lock evidence')
             if stage == 'libdft_payment':
                 try:
                     observation = parse_observation(folder / 'origins.jsonl')
                 except (ValueError, KeyError, OSError, json.JSONDecodeError) as exc:
                     observation = dict(status='unknown', reason=str(exc), origins={}, output=[])
                 save(folder / 'observation.json', observation)
-                row['comparison'] = compare_truth(observation, json.loads(truth_path.read_text()))
+                row['comparison'] = compare_truth(observation, truth)
             row[stage] = 'completed'
         save(out / 'summary.json', report)
         check(row['comparison']['matched'], 'External origin mismatch/unknown; stopping at first failing case')
@@ -264,10 +301,14 @@ def main():
     p.add_argument('--output', type=Path)
     p.add_argument('--timeout', type=int, default=180)
     p.add_argument('--trace-flow', action='store_true', help='Read-only byte-tag and signal-context tracing; not performance data')
+    p.add_argument('--lock-os-thread', action='store_true',
+                   help='Controlled diagnostic: lock the PlaceOrder test goroutine to its OS thread')
     group = p.add_mutually_exclusive_group()
     group.add_argument('--case', default='one')
     group.add_argument('--all-cases', action='store_true')
     args = p.parse_args()
+    if args.lock_os_thread and (args.all_cases or args.case != 'one'):
+        p.error('--lock-os-thread is limited to the single one diagnostic case')
     if args.checkout:
         args.checkout = args.checkout.resolve()
     out = (args.output or ROOT / 'artifacts' / ('checkout-external-' + datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S-%f'))).resolve()
@@ -275,6 +316,8 @@ def main():
     report = dict(mode=args.mode, stage='initialization', cases=[], compiled=False, pin_startup_passed=False,
                   diagnostic_all_matched=False, performance_eligible=False, external_baseline_qualified=False,
                   unresolved=RISKS, bpf_executed=False, hardware=hardware())
+    report.update(controlled_diagnostic=args.lock_os_thread,
+                  thread_control='runtime.LockOSThread' if args.lock_os_thread else 'default')
     source_dir = out / 'adapter-sources'
     source_dir.mkdir()
     for name in ('external_compare.py', 'external_boundaries.py', 'libdft_payment.cpp', 'payment_test.go', 'cases.json',
