@@ -69,4 +69,4 @@ python3 experiments/checkout-payment-path/compare_methods.py build --output /abs
 python3 experiments/checkout-payment-path/check_methods_local.py --results /absolute/new/results
 ```
 
-新主机结果已确认边界充分性，无需重跑此正确性命令。下一项是通过正确性的四组同负载完整成本比较，包含业务、采集和离线推断成本；若仍无优势，应收缩当前业务路径上的优势主张，并据此审阅贡献边界，不默认开启一轮新增小场景。
+新主机结果已确认边界充分性，无需重跑此正确性命令。用户当前优先推进 [外部工具兼容性检查](EXTERNAL-TOOLS.md)。四组同负载完整成本比较仍待进行，须包含业务、采集和离线推断成本；若仍无优势，应收缩当前业务路径上的优势主张，并据此审阅贡献边界，不默认开启一轮新增小场景。

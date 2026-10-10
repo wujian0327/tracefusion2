@@ -1,5 +1,9 @@
 # 原始订单金额到支付参数：一次集成回归
 
+最新进展（2026-10-10）：四组 snapshot-v2 正确性结果见 [METHOD-RESULTS.md](METHOD-RESULTS.md)，边界重放已正确恢复全部字段。
+当前优先推进 [外部 libdft64 兼容性诊断](EXTERNAL-TOOLS.md)：真实 SDK 编译与原生边界核验通过，Pin 运行仍待主机验证。
+下文为较早 snapshot-v1 集成记录，不能将其中旧 boundaries 的 unknown 当作内部观测必要性的证据。
+
 状态（2026-10-09）：**原始金额区间的主机 eBPF 集成回归已核验通过。**本轮 10 个 native 用例、30 次采集，共 9,384 个事件；全部原始事件重新推断、真值评估、采集器源码及上传 ELF 的观测计划重建一致。记录见 [host-validation-20261009.json](host-validation-20261009.json)。不把这条局部完整金额路径扩大为整个商店的跨服务溯源。
 
 这就是论文收尾协议中固定的那一条集成路径，不再单独发布 MultiplySlow 小实验。

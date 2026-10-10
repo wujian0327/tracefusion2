@@ -1,0 +1,81 @@
+# 外部工具接入与兼容性诊断
+
+当前阶段：libdft64 最小接入已实现，原始传播库与适配器已用真实 Pin 3.20 SDK 编译通过。
+当前受限工作环境不能执行 Pin 的 32 位启动器（`Exec format error`），尚未产生真实 Pin/Go 来源结果。
+新边界配置已对实际 Go 1.25.4 支付 ELF 完成指令字节/DWARF 核验，单个 `one` 原生夹具运行通过。
+编译成功、模拟日志检查、已有 BPF 正确性结果均不等于外部工具复现成功。
+
+## 固定版本与比较语义
+
+- 外部工具：[AngoraFuzzer/libdft64](https://github.com/AngoraFuzzer/libdft64)，提交 `20804d5bae5d8aed31a71761b1a1149e35a0da95`。
+- Pin：官方 `pin-3.20-98437-gf02b61307-gcc-linux`，下载包和两个可执行文件以 SHA256 固定。
+- 目标：既有原始 Online Boutique v0.10.4 支付夹具，Go 1.25.4/Linux amd64、GOAMD64=v1。
+- 来源：准备结果中 shipping、每个 item.Cost 的 Units/Nanos；目标：chargeCard 金额的 Units/Nanos。
+- 每个来源字段独立标签，分别覆盖 8/4 字节；在源返回后打标、支付调用前读标签集合，不用数值相等判断来源。
+- 沿用直接数据依赖语义；数量和分支的控制影响不混进数值来源。
+
+应称为“基于该 libdft64 移植版本的动态污点基线”，不能称为原始 libdft 论文工具的完整复现。
+`external_boundaries.py` 只提取调用位置、验证 ELF 字节和 DWARF 字段布局；不调用生产选择器或来源推断器。
+源边界、Go 寄存器 ABI、不可变且不同的源对象仍是显式配置与契约。初始版本只接受 ET_EXEC。
+
+`libdft_payment.cpp` 只设置来源、读取目标及记录诊断；链接固定提交的原始传播库，不修改传播规则。
+没有启用示例 `hook_file_syscall()`，因此不会额外把网络/文件输入当作本次来源。
+原始来源日志解析完成后，Python 才读取夹具真值比较。
+
+## 当前为什么不能做性能表
+
+1. 上游 `bdd_tag.h/.cpp` 明确标有多线程支持 TODO，使用全局可变 BDD；Go 运行时的线程安全尚未核验。
+2. 上游指令分派器默认跳过未覆盖 opcode。适配器记录目标 G 在金额区间执行的未列出 opcode，并拒绝把该次结果当作匹配。
+   列出了 opcode 也不代表所有操作数形式都正确；部分指令被明确忽略，EFLAGS 不追踪。仍需实际传播审计。
+3. 适配器拒绝观测到的目标 G 线程迁移、调用方栈地址变化；这不是通用协程/栈迁移支持。
+4. 默认给所有指令插入诊断回调，成本很高。该配置仅用于兼容性调查。
+
+适配器自身日志锁不保护上游所有传播操作，不能据此宣称解决了并发问题。
+即使来源集合恰好与真值一致，报告仍保持 `external_baseline_qualified=false`、`performance_eligible=false`。
+不关闭 Go 抢占、GC 或强制单线程来悄悄改变比较条件；原有相关环境变量记录在结果中。
+
+## 先运行一个既有用例
+
+在已有 Linux 主机、Go 1.25.4、git、make、g++ 和 Python 3.12 环境中：
+
+```bash
+cd ~/tracefusion2
+git pull --ff-only origin perf/payment-steady-state
+GOPROXY=https://goproxy.cn,direct \
+  python3 experiments/checkout-payment-path/external_compare.py run
+```
+
+无需 sudo/BPF。默认自动下载固定 Pin 和检出固定 libdft64 到 `artifacts/external-tools/`，不安装系统软件。
+若已有工具，可传 `--pin-root /absolute/pin-kit --libdft /absolute/libdft64`；版本/源码改动检查仍保留。
+Go 不在 PATH 时加 `--go /usr/local/go/bin/go`，可用 `--checkout` 指向干净的原有 checkout。
+需要 Intel 下载域和 GitHub 可访问；工具下载、编译、启动或执行失败都会保存阶段与日志并生成 zip。
+
+默认仅运行既有 `one` 用例，顺序是：工具构建 → Pin 空工具启动 `/bin/true` → 构建原始夹具 → native → nullpin → 来源适配器。
+任一步失败立即停止，返回最后打印的 zip。这个顺序用于诊断，绝不是随机化稳态性能比较。
+每次日志包含源字段标签、目标集合、边界次数和结束记录；崩溃、缺日志、未知指令、来源不符不会被删去当成功。
+
+仅在首例接入问题解决后，用 `--all-cases` 验证外部工具对既有十用例的语义；不新增场景，不重跑旧 BPF 正确性实验。
+最终性能比较还需要解决上述限制、去除诊断回调，并分别核算 native、Pin 运行时、传播、来源/目标适配和报告成本。
+应同时保留我们的 selected 和 boundary_replay，不能只挑弱控制组。
+
+## 本地可复查的检查
+
+```bash
+python3 experiments/checkout-payment-path/external_compare.py build-tools \
+  --pin-root /absolute/pin-kit --libdft /absolute/libdft64
+python3 -m unittest discover -s experiments/checkout-payment-path -p test_external_compare.py
+```
+
+第二条只检查合成日志的完整性、来源身份和错误结果拒绝，明确不算 Pin、内核或来源传播正确性证据。
+构建输出保存原始工具源码、适配器源码、命令日志、依赖提交、二进制摘要以及主机只读信息。
+
+## HardTaint 与其他候选
+
+[HardTaint 最终发表版](https://seg.nju.edu.cn/uploadPublication/copyright/125-753442135.pdf) §4.2 使用 Intel PT/PTWRITE，
+§7.3 明确有单机双进程版本。因此不能把双机/RDMA一概写成不可避免的最低要求。
+[官方实验包](https://zenodo.org/records/13117983) 已定位，尚未下载解包、编译或运行；单机入口是否可用仍待确认。
+本脚本记录 CPU flags、intel_pt 设备、perf 权限的可读信息，但不执行 PT 测试，不把这些信息当作 HardTaint 兼容性结论。
+下一步需确认主机 PT/PTWRITE 暴露、作者单机入口、Go ELF 重写、同一字段多来源查询语义。
+
+[SelectiveTaint 的 64 位问题报告](https://github.com/OSUSecLab/SelectiveTaint/issues/2) 尚未解决，暂排后面；
+该报告不构成“所有 amd64 程序均不支持”的证据。
