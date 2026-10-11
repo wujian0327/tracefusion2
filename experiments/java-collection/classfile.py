@@ -19,6 +19,7 @@ def descriptor(desc):
     def one(i):
         if i >= len(desc): raise ValueError("truncated descriptor")
         if desc[i] in "IZBCS": return "int", i + 1
+        if desc[i:i+2] == "[B": return "ref", i + 2
         if desc[i] == "L":
             end = desc.find(";", i)
             if end <= i + 1: raise ValueError("invalid reference descriptor")
@@ -116,13 +117,26 @@ def read_class(data, fields_only=False, method_names=None):
             elif op == 132: operands = [b.u1(), b.signed(1)]
             elif 153 <= op <= 167 or op in (198, 199): operands = [offset + b.signed(2)]
             elif op == 200: operands, op = [offset + b.signed(4)], 167
+            elif op in (170, 171):
+                if any(b.take((-b.pos) % 4)): raise ValueError("nonzero switch padding")
+                default = offset + b.signed(4)
+                if op == 170:
+                    low, high = b.signed(4), b.signed(4)
+                    if not 0 <= high - low < 65536: raise ValueError("switch size")
+                    pairs = [(key, offset + b.signed(4)) for key in range(low, high + 1)]
+                else:
+                    count = b.signed(4)
+                    if not 0 <= count <= 65536: raise ValueError("switch size")
+                    pairs = [(b.signed(4), offset + b.signed(4)) for _ in range(count)]
+                    if [k for k, _ in pairs] != sorted(set(k for k, _ in pairs)): raise ValueError("switch keys")
+                operands = [default] + [v for pair in pairs for v in pair]
             elif op in (180, 181, 184): operands = [member(b.u2(), op != 184)]
             elif op == 196:
                 op = b.u1()
                 if op not in (21, 25, 54, 58, 132): raise ValueError("unsupported wide opcode")
                 operands = [b.u2()]
                 if op == 132: operands.append(b.signed(2))
-            elif op not in {0, 1, 2, 3, 4, 5, 6, 7, 8, 87, 89, 95, 96, 100, 104, 108,
+            elif op not in {0, 1, 2, 3, 4, 5, 6, 7, 8, 51, 87, 89, 95, 96, 100, 104, 108,
                             112, 116, 120, 122, 124, 126, 128, 130, 145, 146, 147, 172, 176, 177}:
                 raise ValueError("unsupported raw opcode " + str(op))
             instructions.append(dict(offset=offset, opcode=op, operands=operands))
@@ -134,8 +148,18 @@ def read_class(data, fields_only=False, method_names=None):
             if 153 <= op <= 167 or op in (198, 199):
                 if operands[0] not in offsets: raise ValueError("branch into non-instruction")
                 operands = [offsets[operands[0]]]
+            if op in (170, 171):
+                if any(operands[i] not in offsets for i in range(0, len(operands), 2)):
+                    raise ValueError("switch into non-instruction")
+                operands = [offsets[v] if i % 2 == 0 else v for i, v in enumerate(operands)]
             plans.append(dict(site=full + "@" + str(index), method=full, pc=index, opcode=op, operands=operands))
         methods[full] = dict(plans=plans, max_stack=max_stack, max_locals=max_locals, descriptor=desc)
     attributes(r)
     if r.pos != len(data): raise ValueError("trailing class data")
     return dict(name=name, fields=fields, methods=methods)
+
+
+def switch_target(plan, key):
+    if type(key) is not int or not -2**31 <= key < 2**31: raise ValueError("switch key type")
+    args = plan["operands"]
+    return dict(zip(args[1::2], args[2::2])).get(key, args[0])

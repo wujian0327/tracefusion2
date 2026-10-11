@@ -66,6 +66,7 @@ class Engine:
                 require(p["operands"][0] in self.methods, "unavailable callee")
         self.roots = [r for r in self.rows if r["kind"] == "enter" and r["values"][0] == 0]
         self.field_labels, self.arg_labels, self.bindings = {}, {}, []
+        self.array_labels, self.arrays = {}, {}
         self.bind()
         self.nodes, self.frames, self.memory, self.answers, self.branches = [], [], {}, {}, []
         self.root_count = 0
@@ -93,7 +94,7 @@ class Engine:
                 require(s["root"] == 1 and args[slot] == "ref", "initial field binds a first-root reference")
                 self.check_field(s["field"])
                 raw_args = self.methods[r["site"]]["descriptor"].split(")", 1)[0][1:]
-                declared_args = re.findall(r"L[^;]+;|[IZBCS]", raw_args)
+                declared_args = re.findall(r"\[B|L[^;]+;|[IZBCS]", raw_args)
                 owner = s["field"].rsplit(".", 1)[0]
                 require(declared_args[slot] == "L" + owner + ";", "source owner must match declared argument class")
                 obj = r["values"][slot + 1]
@@ -101,6 +102,16 @@ class Engine:
                 location = (obj, s["field"])
                 self.field_labels.setdefault(location, []).append(s["id"])
                 self.bindings.append(dict(id=s["id"], kind="initial_field", object=obj, field=s["field"], version=0))
+            elif s.get("kind") == "initial_array_element":
+                require(set(s) == {"id", "kind", "root", "arg", "index"}, "array source keys")
+                declared = re.findall(r"\[B|L[^;]+;|[IZBCS]", self.methods[r["site"]]["descriptor"].split(")", 1)[0][1:])
+                require(declared[slot] == "[B" and type(s["index"]) is int, "array source type")
+                obj = r["values"][slot + 1]
+                snapshot = next((x for x in self.rows if x["kind"] == "snapshot" and x["frame"] == r["frame"]
+                                 and x["values"][:3] == [slot, obj, "[B"]), None)
+                require(snapshot is not None and 0 <= s["index"] < len(snapshot["values"][4]), "array source outside snapshot")
+                self.array_labels.setdefault((obj, s["index"]), []).append(s["id"])
+                self.bindings.append(dict(id=s["id"], kind="initial_array_element", object=obj, index=s["index"], version=0))
             elif s.get("kind") == "argument":
                 require(set(s) == {"id", "kind", "root", "arg"}, "argument source keys")
                 require(args[slot] == "int", "only integer arguments are data sources")
@@ -233,6 +244,12 @@ class Engine:
             obj = self.pop(f, "ref")
             require(obj.value != "o0", "null field access")
             f.pending = ("write" if op == 181 else "read", obj, args[0], val)
+        elif op == 51:
+            index, obj = self.pop(f, "int"), self.pop(f, "ref")
+            self.array_value(obj.value, index.value)
+            f.pending = ("array_read", obj, index)
+        elif op in (170, 171):
+            f.pending = ("switch", self.pop(f, "int"))
         elif op == 184:
             types, _ = descriptor(self.methods[args[0]]["descriptor"])
             vals = [self.pop(f, t) for t in reversed(types)][::-1]
@@ -256,6 +273,19 @@ class Engine:
             labels, origins = self.origins(condition.node)
             self.branches.append(dict(root=f.root, site=r["site"], frame=f.id, taken=bool(condition.value),
                                       node=condition.node, predicate_sources=labels, predicate_origins=origins))
+            f.pending = None
+        elif kind == "switch":
+            selector = f.pending[1]
+            require(len(values) == 1 and type(values[0]) is int and values == [selector.value], "switch disagrees with computed selector")
+            labels, origins = self.origins(selector.node)
+            self.branches.append(dict(root=f.root, site=r["site"], frame=f.id, kind="switch", selector=selector.value,
+                                      node=selector.node, predicate_sources=labels, predicate_origins=origins))
+            f.pending = None
+        elif kind == "array_read":
+            _, obj, index = f.pending
+            val = self.array_value(obj.value, index.value)
+            require(values == [obj.value, index.value, val.value], "array read identity/index/value disagrees with snapshot")
+            f.stack.append(self.derived("array_read", val.value, [val], r, address=[obj, index]))
             f.pending = None
         elif kind in ("read", "write"):
             _, obj, name, val = f.pending
@@ -296,7 +326,16 @@ class Engine:
         else: raise ValueError("unsupported observation")
 
     def seed_snapshot(self, r):
-        _, obj, field, value = r["values"]
+        _, obj, field = r["values"][:3]
+        value = r["values"][-1]
+        if field == "[B":
+            if obj in self.arrays:
+                require([v.value for v in self.arrays[obj]] == value, "immutable array snapshot changed")
+            else:
+                self.arrays[obj] = [self.node("initial_array_element", "int", v, labels=self.array_labels.get((obj, i), ()),
+                    origin=dict(kind="initial_array_element", object=obj, index=i, version=0), site=r["site"], frame=r["frame"])
+                    for i, v in enumerate(value)]
+            return
         self.check_field(field)
         key = (obj, field)
         if key in self.memory:
@@ -306,6 +345,10 @@ class Engine:
                                 origin=dict(kind="initial_field", object=obj, field=field, version=0),
                                 site=r["site"], frame=r["frame"])
             self.memory[key] = (0, initial)
+
+    def array_value(self, obj, index):
+        require(obj in self.arrays and type(index) is int and 0 <= index < len(self.arrays[obj]), "array access outside complete snapshot")
+        return self.arrays[obj][index]
 
     def run(self):
         mode = self.rows[0]["values"][2] if len(self.rows[0]["values"]) > 2 else "full"
@@ -331,7 +374,7 @@ class Engine:
             labels, origins = self.origins(v.node)
             results.append(dict(id=t["id"], root=t["root"], status="ok", value=v.value,
                                 direct_sources=labels, direct_origins=origins, node=v.node))
-        aliases = [sorted(labels) for labels in self.field_labels.values() if len(labels) > 1]
+        aliases = [sorted(labels) for labels in list(self.field_labels.values()) + list(self.array_labels.values()) if len(labels) > 1]
         return dict(schema="java-provenance-v1", status="ok", semantics="operational-direct-data-dependency",
                     source_bindings=self.bindings, source_aliases=aliases, results=results,
                     branch_observations=self.branches, nodes=self.nodes,

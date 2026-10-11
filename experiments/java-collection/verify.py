@@ -3,6 +3,7 @@
 import hashlib
 import json
 from pathlib import Path
+from classfile import switch_target
 
 
 def require(condition, message):
@@ -80,6 +81,8 @@ def validate(directory):
                 f["next"] = p["operands"][0]
             elif 153 <= op <= 166 or op in (198, 199):
                 f["pending"] = "branch"
+            elif op in (170, 171): f["pending"] = "switch"
+            elif op == 51: f["pending"] = "array_read"
             elif op in (180, 181):
                 f["pending"] = "read" if op == 180 else "write"
             elif op == 184:
@@ -93,6 +96,13 @@ def validate(directory):
                 require(values in ([0], [1]), "branch value")
                 if values[0]:
                     f["next"] = p["operands"][0]
+            elif kind == "switch":
+                require(len(values) == 1, "switch shape")
+                f["next"] = switch_target(p, values[0])
+            elif kind == "array_read":
+                require(len(values) == 3 and values[0] in objects and type(values[1]) is int
+                        and 0 <= values[1] < 4096 and type(values[2]) is int
+                        and -128 <= values[2] <= 127, "byte array read shape")
             elif kind in ("read", "write"):
                 require(len(values) == 4, "field shape")
                 obj, field, value, version = values

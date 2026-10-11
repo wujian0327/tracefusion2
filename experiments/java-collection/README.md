@@ -4,6 +4,10 @@
 
 ## 运行
 
+字节数组、循环与 switch 的原版开源路径见 [ARRAY-COMPARISON.md](ARRAY-COMPARISON.md)：
+`python3 experiments/java-collection/compare_arrays.py --jdk /实际/JDK/目录`。
+已核验 Commons Codec 的哈希来源；本地成本归档不完整，尚无本轮有效性能结论。
+
 原版开源库接入与三组成本见 [UPSTREAM-COMPARISON.md](UPSTREAM-COMPARISON.md)：
 `python3 experiments/java-collection/compare_upstream.py --jdk /path/to/jdk17`。
 已验证 Commons Lang 3.17.0 JAR 的两个整数方法；支持按查询入口审查方法闭包，

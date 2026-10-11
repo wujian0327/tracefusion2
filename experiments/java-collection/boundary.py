@@ -6,7 +6,7 @@ internal instructions, field accesses, calls and branch outcomes are computed.
 import hashlib
 import re
 from pathlib import Path
-from classfile import read_class
+from classfile import read_class, switch_target
 from observation import read_scope, decoded_scope, require
 
 
@@ -15,9 +15,12 @@ def snapshot_layout(directory, props):
     entry = props["entry"]
     require(not any(p["opcode"] == 184 and p["operands"][0] == entry for m in methods.values() for p in m["plans"]),
             "recursive boundary entry")
-    args = re.findall(r"L[^;]+;|[IZBCS]", methods[entry]["descriptor"].split(")", 1)[0][1:])
+    args = re.findall(r"\[B|L[^;]+;|[IZBCS]", methods[entry]["descriptor"].split(")", 1)[0][1:])
     expected = []
     for slot, arg in enumerate(args):
+        if arg == "[B":
+            require(props["schema"] == "java-observation-scope-v3", "byte arrays require v3 snapshots")
+            expected.append((slot, "[B")); continue
         if not arg.startswith("L"): continue
         owner = arg[1:-1]
         data = (Path(directory) / ("field_" + owner.replace("/", "_") + ".class")).read_bytes()
@@ -36,7 +39,7 @@ def snapshot_layout(directory, props):
 
 def validate_snapshots(directory, rows):
     props = read_scope(directory)
-    v2 = props is not None and props["schema"] == "java-observation-scope-v2"
+    v2 = props is not None and props["schema"] in ("java-observation-scope-v2", "java-observation-scope-v3")
     if not v2:
         require(not any(r["kind"] == "snapshot" for r in rows), "snapshot without v2 scope")
         return
@@ -52,11 +55,16 @@ def validate_snapshots(directory, rows):
             r = rows[j]
             require(r["kind"] == "snapshot" and r["site"] == root["site"] and r["frame"] == root["frame"]
                     and r["thread"] == root["thread"], "missing/misplaced boundary snapshot")
-            require(len(r["values"]) == 4, "snapshot shape")
-            arg, obj, name, value = r["values"]
+            require(len(r["values"]) == (5 if field == "[B" else 4), "snapshot shape")
+            arg, obj, name = r["values"][:3]
+            value = r["values"][-1]
             require(type(arg) is int and (arg, name) == (slot, field) and obj == root["values"][slot + 1]
                     and isinstance(obj, str) and obj.startswith("o") and obj[1:].isdigit() and obj != "o0", "snapshot argument identity")
-            require(type(value) is int and -2**31 <= value < 2**31, "snapshot integer")
+            if field == "[B":
+                require(isinstance(value, list) and len(value) <= 4096
+                        and all(type(v) is int and -128 <= v <= 127 for v in value), "byte array snapshot contract")
+                require(type(r["values"][3]) is int and r["values"][3] == len(value), "incomplete byte array snapshot")
+            else: require(type(value) is int and -2**31 <= value < 2**31, "snapshot integer")
             key = (obj, name)
             require(key not in values or values[key] == value, "inconsistent aliased snapshots")
             values[key] = value; consumed.add(j)
@@ -65,7 +73,7 @@ def validate_snapshots(directory, rows):
 
 def validate_boundary(directory, rows):
     props = read_scope(directory)
-    require(props and props["schema"] == "java-observation-scope-v2", "boundary requires v2 scope")
+    require(props and props["schema"] in ("java-observation-scope-v2", "java-observation-scope-v3"), "boundary requires snapshots")
     current, roots, classes, threads, objects = None, 0, set(), set(), set()
     for r in rows[1:-1]:
         kind, site, values = r["kind"], r["site"], r["values"]
@@ -123,6 +131,14 @@ def replay(engine):
                 value = frame.pending[1].value
                 engine.observe(dict(r, kind=kind, values=[value]), frame)
                 if value: pcs[frame.id] = p["operands"][0]
+            elif kind == "switch":
+                value = frame.pending[1].value
+                engine.observe(dict(r, kind=kind, values=[value]), frame)
+                pcs[frame.id] = switch_target(p, value)
+            elif kind == "array_read":
+                _, obj, idx = frame.pending
+                value = engine.array_value(obj.value, idx.value)
+                engine.observe(dict(r, kind=kind, values=[obj.value, idx.value, value.value]), frame)
             elif kind in ("read", "write"):
                 _, obj, field, val = frame.pending
                 key = (obj.value, field)

@@ -77,6 +77,20 @@ public final class Recorder {
         if (obj == null) problem("null_snapshot_argument");
         event("snapshot", method, new Object[]{arg, ref(obj), field, value});
     }
+    public static synchronized void byteSnapshot(String method, int arg, byte[] bytes) {
+        if (bytes == null || bytes.length > 4096) {
+            problem(bytes == null ? "null_array_snapshot" : "array_snapshot_limit");
+            return;
+        }
+        Object[] values = new Object[bytes.length];
+        for (int i = 0; i < bytes.length; i++) values[i] = (int)bytes[i];
+        event("snapshot", method, new Object[]{arg, ref(bytes), "[B", bytes.length, values});
+    }
+    public static synchronized int byteRead(byte[] bytes, int index, String site) {
+        int value = bytes[index]; // Preserve the original load and its exception behavior.
+        event("array_read", site, new Object[]{ref(bytes), index, value});
+        return value;
+    }
     public static synchronized void problem(String why) { problems.add(why); }
     public static synchronized void rejected(String name, String why) {
         problem("rejected_class:" + name + ":" + why);

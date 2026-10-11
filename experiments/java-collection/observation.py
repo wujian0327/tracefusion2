@@ -10,7 +10,7 @@ import json
 import re
 from pathlib import Path
 
-from classfile import read_class
+from classfile import read_class, switch_target
 
 
 def require(ok, message):
@@ -61,8 +61,11 @@ def plan(classes, entry, query, output, snapshots=False):
         require(not any(p["opcode"] == 184 and p["operands"][0] == entry
                         for m in methods for p in decoded["methods"][m]["plans"]), "recursive boundary entry")
         fields = []
-        args = re.findall(r"L[^;]+;|[IZBCS]", entry.split("(", 1)[1].split(")", 1)[0])
+        args = re.findall(r"\[B|L[^;]+;|[IZBCS]", entry.split("(", 1)[1].split(")", 1)[0])
         for slot, arg in enumerate(args):
+            if arg == "[B":
+                props["schema"] = "java-observation-scope-v3"
+                fields.append((slot, "[B")); continue
             if not arg.startswith("L"): continue
             owner = arg[1:-1]
             data = (Path(classes) / (owner + ".class")).read_bytes()
@@ -86,7 +89,7 @@ def read_scope(directory):
         key, sep, value = line.partition("=")
         require(sep and key not in props, "invalid/duplicate scope property")
         props[key] = value
-    require(props.get("schema") in ("java-observation-scope-v1", "java-observation-scope-v2"), "scope schema")
+    require(props.get("schema") in ("java-observation-scope-v1", "java-observation-scope-v2", "java-observation-scope-v3"), "scope schema")
     require(props.get("method.count", "").isdigit(), "scope method count")
     count = int(props["method.count"])
     require(0 < count <= 10000, "scope method count limit")
@@ -145,6 +148,8 @@ def expand(directory, raw, max_steps=1_000_000):
                     f["pc"] += 1
                     if op == 167: f["pc"] = p["operands"][0]
                     elif 153 <= op <= 166 or op in (198, 199): f["pending"] = "branch"
+                    elif op in (170, 171): f["pending"] = "switch"
+                    elif op == 51: f["pending"] = "array_read"
                     elif op in (180, 181): f["pending"] = "read" if op == 180 else "write"
                     elif op == 184: f["pending"] = "call"
                     elif op in (172, 176, 177): f["pending"] = "exit"
@@ -157,6 +162,10 @@ def expand(directory, raw, max_steps=1_000_000):
                     pc = int(f["last"].rsplit("@", 1)[1])
                     f["pc"] = methods[f["method"]]["plans"][pc]["operands"][0]
             elif kind == "call": f["pending"] = "enter"
+            elif kind == "switch":
+                require(len(r["values"]) == 1, "switch shape")
+                pc = int(f["last"].rsplit("@", 1)[1])
+                f["pc"] = switch_target(methods[f["method"]]["plans"][pc], r["values"][0])
             elif kind == "exit":
                 stack.pop()
                 if stack: stack[-1]["pending"] = "call_return"

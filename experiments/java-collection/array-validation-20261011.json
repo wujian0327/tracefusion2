@@ -1,0 +1,919 @@
+{
+  "schema": "java-array-comparison-v1",
+  "modes": [
+    "full",
+    "sparse",
+    "boundary"
+  ],
+  "qualification": {
+    "scope": "unchanged hash32 byte-array call closure; one library path",
+    "snapshot": "v3 complete immutable byte arrays <=4096 bytes",
+    "semantics": "operational operand data dependence; array index/address separate",
+    "array_writes": false,
+    "whole_application": false,
+    "external_tool_comparison": false,
+    "steady_state": false,
+    "memory_measurement_qualified": false,
+    "costs_qualified": false
+  },
+  "dependencies": [
+    {
+      "name": "commons-codec-1.17.1.jar",
+      "url": "https://repo.maven.apache.org/maven2/commons-codec/commons-codec/1.17.1/commons-codec-1.17.1.jar",
+      "sha256": "f9f6cb103f2ddc3c99a9d80ada2ae7bf0685111fd6bffccb72033d1da4e6ff23"
+    },
+    {
+      "name": "commons-codec-1.17.1-sources.jar",
+      "url": "https://repo.maven.apache.org/maven2/commons-codec/commons-codec/1.17.1/commons-codec-1.17.1-sources.jar",
+      "sha256": "2283aff7f425dff23ebdb7a8fc0f03ae21b4ced7a43aacba47cedae126dc5d4a"
+    }
+  ],
+  "agent_sha256": "8c3d6a9b718f16f0686e2baad3cee366dfe6f75e05520ee18874ddd75e45a96c",
+  "class_sha256": "2c4a93e6f84117372dd203c9c2a59d7db40d4e436e8ea6bbed0e25a735cad182",
+  "java": {
+    "command": [
+      "/workspace/scratch/d1fad2474461/work/amazon-corretto-17.0.20.12.1-linux-x64/bin/java",
+      "-version"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": "openjdk version \"17.0.20.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Corretto-17.0.20.12.1 (build 17.0.20.1+12-LTS)\nOpenJDK 64-Bit Server VM Corretto-17.0.20.12.1 (build 17.0.20.1+12-LTS, mixed mode, sharing)\n"
+  },
+  "inputs": [
+    {
+      "name": "prefix-0",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 0,
+      "seed": 17
+    },
+    {
+      "name": "prefix-1",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 1,
+      "seed": 17
+    },
+    {
+      "name": "prefix-2",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 2,
+      "seed": 17
+    },
+    {
+      "name": "prefix-3",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 3,
+      "seed": 17
+    },
+    {
+      "name": "prefix-4",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 4,
+      "seed": 17
+    },
+    {
+      "name": "prefix-5",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 5,
+      "seed": 17
+    },
+    {
+      "name": "prefix-6",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 6,
+      "seed": 17
+    },
+    {
+      "name": "prefix-7",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 7,
+      "seed": 17
+    },
+    {
+      "name": "prefix-8",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 8,
+      "seed": 17
+    },
+    {
+      "name": "prefix-9",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 9,
+      "seed": 17
+    },
+    {
+      "name": "prefix-10",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 10,
+      "seed": 17
+    },
+    {
+      "name": "prefix-11",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 11,
+      "seed": 17
+    },
+    {
+      "name": "prefix-12",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 12,
+      "seed": 17
+    },
+    {
+      "name": "empty",
+      "data": [],
+      "length": 0,
+      "seed": 0
+    },
+    {
+      "name": "equal-bytes",
+      "data": [
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17
+      ],
+      "length": 7,
+      "seed": -1
+    },
+    {
+      "name": "zero-bytes",
+      "data": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "length": 17,
+      "seed": 0
+    },
+    {
+      "name": "suffix-a",
+      "data": [
+        128,
+        255,
+        0,
+        127,
+        1,
+        2,
+        3,
+        4
+      ],
+      "length": 4,
+      "seed": -2147483648
+    },
+    {
+      "name": "suffix-b",
+      "data": [
+        128,
+        255,
+        0,
+        127,
+        255,
+        254,
+        253,
+        252
+      ],
+      "length": 4,
+      "seed": -2147483648
+    },
+    {
+      "name": "multi-block",
+      "data": [
+        0,
+        11,
+        22,
+        33,
+        44,
+        55,
+        66,
+        77,
+        88,
+        99,
+        110,
+        121,
+        132,
+        143,
+        154,
+        165,
+        176,
+        187,
+        198,
+        209,
+        220,
+        231,
+        242,
+        253,
+        8,
+        19,
+        30,
+        41,
+        52,
+        63,
+        74,
+        85,
+        96,
+        107,
+        118,
+        129,
+        140,
+        151,
+        162,
+        173,
+        184,
+        195,
+        206,
+        217,
+        228,
+        239,
+        250,
+        5,
+        16,
+        27,
+        38,
+        49,
+        60,
+        71,
+        82,
+        93,
+        104,
+        115,
+        126,
+        137,
+        148,
+        159,
+        170,
+        181
+      ],
+      "length": 63,
+      "seed": 2147483647
+    },
+    {
+      "name": "full-array",
+      "data": [
+        0,
+        255,
+        128,
+        127,
+        0,
+        255,
+        128,
+        127
+      ],
+      "length": 8,
+      "seed": 17
+    }
+  ],
+  "scope": {
+    "schema": "java-observation-scope-v3",
+    "entry": "org/apache/commons/codec/digest/MurmurHash2.hash32([BII)I",
+    "classes": "org/apache/commons/codec/digest/MurmurHash2",
+    "query.sha256": "cf9a29df414518dcbb555dfd5cb615c145bbec1b4603c12cd17f043969917cd2",
+    "sha256.org/apache/commons/codec/digest/MurmurHash2": "2c4a93e6f84117372dd203c9c2a59d7db40d4e436e8ea6bbed0e25a735cad182",
+    "method.count": "2",
+    "method.0": "org/apache/commons/codec/digest/MurmurHash2.getLittleEndianInt([BI)I",
+    "method.1": "org/apache/commons/codec/digest/MurmurHash2.hash32([BII)I",
+    "snapshot.count": "1",
+    "snapshot.0.arg": "0",
+    "snapshot.0.field": "[B"
+  },
+  "faults": [
+    {
+      "fault": "missing_snapshot",
+      "status": "unknown",
+      "reason": "missing/misplaced boundary snapshot"
+    },
+    {
+      "fault": "snapshot_truncated",
+      "status": "unknown",
+      "reason": "incomplete byte array snapshot"
+    },
+    {
+      "fault": "wrong_byte",
+      "status": "unknown",
+      "reason": "array read identity/index/value disagrees with snapshot"
+    },
+    {
+      "fault": "same_value_index",
+      "status": "unknown",
+      "reason": "array read identity/index/value disagrees with snapshot"
+    },
+    {
+      "fault": "missing_read",
+      "status": "unknown",
+      "reason": "missing mandatory sparse observation"
+    },
+    {
+      "fault": "switch_selector",
+      "status": "unknown",
+      "reason": "missing mandatory sparse observation"
+    },
+    {
+      "fault": "missing_exit",
+      "status": "unknown",
+      "reason": "unexpected callee entry"
+    },
+    {
+      "fault": "wrong_source_index",
+      "status": "unknown",
+      "reason": "query differs from observation scope"
+    }
+  ],
+  "runtime_rejections": [
+    {
+      "case": "null",
+      "answer": {
+        "schema": "java-provenance-v1",
+        "status": "unknown",
+        "reason": "collector reports unknown",
+        "results": []
+      }
+    },
+    {
+      "case": "oversize",
+      "answer": {
+        "schema": "java-provenance-v1",
+        "status": "unknown",
+        "reason": "collector reports unknown",
+        "results": []
+      }
+    },
+    {
+      "case": "bounds",
+      "answer": {
+        "schema": "java-provenance-v1",
+        "status": "unknown",
+        "reason": "collector reports unknown",
+        "results": []
+      }
+    }
+  ],
+  "source_sha256": {
+    "boundary.py": "7944b7fd533619a5fe285fe922dfae6012394a7458e6ee9b80d3bb08b7d777b6",
+    "check_arrays.py": "b0cca6205ed994e0e92fee79504d073eff4616a99c9e83130bf7c745b4d4d67c",
+    "check_boundary.py": "0b5569324c10461205b90833104a20c91ce50061eafa44654e9439a7c14b4028",
+    "check_inference.py": "0d1c084550cf3fd7053a28d010c2bad5d756f39a5b2f87b7936b6d3c7428d059",
+    "check_integer_semantics.py": "7250be5d1917c3ad466f37ff7144eef40cae5fcc0aba14a8c2eecc9e5be00aae",
+    "check_scope.py": "665a191ebd9d0b01412eb957e2e984953b90484c466df5abd34a0e445f556e4e",
+    "classfile.py": "50f5fb9b008daa96a2bf2c19fdf2bc988339dca93fb75733f3249288a1e6d51a",
+    "compare_arrays.py": "391f244ae1c1e86d1dc6a2fd36a57a32c08c4b2cb5ed18d59b64055bd5e24ec9",
+    "compare_observations.py": "bba857b0125487cce5989cbacfa591a9d235a6b07dbc9b35be96d488bc3a31b7",
+    "compare_upstream.py": "6fb778a0542525c3a4f702bba06d895ceba95a3e5ceb69a90af8a0fa93b2540c",
+    "fixtures/demo/Bench.java": "ab98ff81704c21a11bd4b05b23b4f32df36add3dc4a11654970a6d03808de15d",
+    "fixtures/demo/Cell.java": "cbdb7d4ff05daeaecb0ecbbb6a0479ea32d4b66ec06502e20133cd2e1669f720",
+    "fixtures/demo/Driver.java": "2fd320be5815dd2db1190e4c55835dcd226e8e3e128bceb7b2775842d9a157a5",
+    "fixtures/demo/Subject.java": "fc91d359efa8f64ac8da594d0812c43395acea6844a286f40f281ad95dca1895",
+    "fixtures/demo/Unsupported.java": "5105e74646a50492bcdc64d91586fc14a139ad219c75b55622f960640ffddc02",
+    "infer.py": "1e9d7f9cd07dbf8d36d1ea3f8f7427be4a519a72c7d02abb20abe9e5eeb5a546",
+    "measure_command.c": "560d33ee6975c939eb9087c9d855aa530144c5f620897437801a7d14504fe26f",
+    "observation.py": "57023585ddd823e89b3b34a0aca8c8090cf874cf227dfef7f09ed32bc98bed13",
+    "run.py": "2ebd7278dd5ad2efe2240a98b8175cec52985899da9fd75a8dbc2aed9cd1ddc3",
+    "semantics/calibration/ByteDriver.java": "06c9f18141c4b5dd7e271327b405aa317db08ec24338952a53120d0176114f73",
+    "semantics/calibration/ByteOps.java": "37f2411eced7e2c1b23ef5d0c0d252ec8f62e7d49d00164733aa39077eed4693",
+    "semantics/calibration/IntOps.java": "a82517231cac2d49a671618afa464ff3588ea817d4961a841f2045bf843f10c8",
+    "src/tracefusion/Agent.java": "c5f97ebbf1db38f6cf61cc11000a6efd279164fae12b7e48cf63ba2910d65e8c",
+    "src/tracefusion/Recorder.java": "1a5ed44585ce77574b3d6bcb1db3eebd8ffb6266a98af876cd371f2fac9e1083",
+    "upstream/CommonsDriver.java": "e1ed7a681ecb6a050b307366db31c04c60c0c2a575f02df090fbcf8cc4a93b8a",
+    "upstream/HashDriver.java": "9e088e14e49110f0176bd71eb61f5e959dddc6eb2219038b05f3f24c05ce6fe1",
+    "verify.py": "0eef2bbb41d5e531b6691070aaf300837c9f6d5f8ea56d76c4dfd2bcdc65ff94",
+    "verify_arrays.py": "873b693ede48a061b1380f8fadbc8c5f1ca89a7ccf3b0910282f82661e7922d2",
+    "verify_observations.py": "a96efc4e4b88bdb210adf0a76dafc45a1122de790d1fd184ccca486b998b9527",
+    "verify_upstream.py": "5e527686264670b0fd729cee3cbf3615698a3a93043af4611bbacb23d5d3fa8e"
+  },
+  "correctness_reused_from": "java-arrays-20261011-140944-275218",
+  "prior_manifest_sha256": "a2c8ab55cb61bd242f73ad5116095b5cf935380269231b1f0d2d87ae4dc75b9f",
+  "status": "correctness_pass_costs_unqualified",
+  "summary": {
+    "correct_queries_per_mode": 40,
+    "raw_events": {
+      "full": 8656,
+      "sparse": 958,
+      "boundary": 126
+    }
+  },
+  "verification": {
+    "status": "pass",
+    "coverage": "correctness_only",
+    "costs_qualified": false,
+    "cost_evidence_issues": [
+      {
+        "file": "cost-5-3-full/offline/stdout.txt",
+        "issue": "manifest hash mismatch"
+      },
+      {
+        "file": "cost--1-1-sparse/online/stdout.txt",
+        "issue": "business checksum missing or incorrect"
+      },
+      {
+        "file": "cost--1-1-sparse/capture/events.jsonl",
+        "issue": "raw capture count differs from recorded measurement"
+      },
+      {
+        "file": "cost-3-0-full/online/stdout.txt",
+        "issue": "business checksum missing or incorrect"
+      }
+    ],
+    "verifier_sha256": "424ad992bb32b8756c227402a1d0ec295c4d0b80611db95489f41f0c22de6a0e",
+    "manifest_sha256": "061f9fd164c92093f01e83d3260b58e0bae4039324693faefff96ac5fee923d2",
+    "evidence_files": 523,
+    "original_jvm_captures": 6,
+    "distinct_queries": 20,
+    "queries_including_two_jvm_modes_and_three_capture_methods": 120,
+    "cost_commands": 0,
+    "raw_events_reinferred": 9740,
+    "offline_faults": 8,
+    "actual_jvm_rejections": 3
+  },
+  "cases": [
+    {
+      "jvm": "default",
+      "mode": "full",
+      "capture": "default-full",
+      "events": 4328,
+      "bytes": 588957,
+      "queries": 20,
+      "correct": 20
+    },
+    {
+      "jvm": "default",
+      "mode": "sparse",
+      "capture": "default-sparse",
+      "events": 479,
+      "bytes": 70824,
+      "queries": 20,
+      "correct": 20
+    },
+    {
+      "jvm": "default",
+      "mode": "boundary",
+      "capture": "default-boundary",
+      "events": 63,
+      "bytes": 10048,
+      "queries": 20,
+      "correct": 20
+    },
+    {
+      "jvm": "interpreter",
+      "mode": "full",
+      "capture": "interpreter-full",
+      "events": 4328,
+      "bytes": 588956,
+      "queries": 20,
+      "correct": 20
+    },
+    {
+      "jvm": "interpreter",
+      "mode": "sparse",
+      "capture": "interpreter-sparse",
+      "events": 479,
+      "bytes": 70823,
+      "queries": 20,
+      "correct": 20
+    },
+    {
+      "jvm": "interpreter",
+      "mode": "boundary",
+      "capture": "interpreter-boundary",
+      "events": 63,
+      "bytes": 10047,
+      "queries": 20,
+      "correct": 20
+    }
+  ],
+  "array_semantics_checks": {
+    "status": "pass",
+    "cases": [
+      {
+        "case": "distinct",
+        "mode": "full",
+        "status": "pass",
+        "sources": [
+          "right"
+        ]
+      },
+      {
+        "case": "distinct",
+        "mode": "sparse",
+        "status": "pass",
+        "sources": [
+          "right"
+        ]
+      },
+      {
+        "case": "distinct",
+        "mode": "boundary",
+        "status": "pass",
+        "sources": [
+          "right"
+        ]
+      },
+      {
+        "case": "alias",
+        "mode": "full",
+        "status": "pass",
+        "sources": [
+          "left",
+          "right"
+        ]
+      },
+      {
+        "case": "alias",
+        "mode": "sparse",
+        "status": "pass",
+        "sources": [
+          "left",
+          "right"
+        ]
+      },
+      {
+        "case": "alias",
+        "mode": "boundary",
+        "status": "pass",
+        "sources": [
+          "left",
+          "right"
+        ]
+      },
+      {
+        "case": "-3",
+        "mode": "full",
+        "status": "pass",
+        "sources": [
+          "byte0"
+        ]
+      },
+      {
+        "case": "-3",
+        "mode": "sparse",
+        "status": "pass",
+        "sources": [
+          "byte0"
+        ]
+      },
+      {
+        "case": "-3",
+        "mode": "boundary",
+        "status": "pass",
+        "sources": [
+          "byte0"
+        ]
+      },
+      {
+        "case": "7",
+        "mode": "full",
+        "status": "pass",
+        "sources": [
+          "byte1"
+        ]
+      },
+      {
+        "case": "7",
+        "mode": "sparse",
+        "status": "pass",
+        "sources": [
+          "byte1"
+        ]
+      },
+      {
+        "case": "7",
+        "mode": "boundary",
+        "status": "pass",
+        "sources": [
+          "byte1"
+        ]
+      },
+      {
+        "case": "1000",
+        "mode": "full",
+        "status": "pass",
+        "sources": [
+          "byte2"
+        ]
+      },
+      {
+        "case": "1000",
+        "mode": "sparse",
+        "status": "pass",
+        "sources": [
+          "byte2"
+        ]
+      },
+      {
+        "case": "1000",
+        "mode": "boundary",
+        "status": "pass",
+        "sources": [
+          "byte2"
+        ]
+      },
+      {
+        "case": "2",
+        "mode": "full",
+        "status": "pass",
+        "sources": [
+          "byte3"
+        ]
+      },
+      {
+        "case": "2",
+        "mode": "sparse",
+        "status": "pass",
+        "sources": [
+          "byte3"
+        ]
+      },
+      {
+        "case": "2",
+        "mode": "boundary",
+        "status": "pass",
+        "sources": [
+          "byte3"
+        ]
+      }
+    ],
+    "static_store_rejection": "unsupported raw opcode 84",
+    "actual_jvm_store_rejection": {
+      "schema": "java-provenance-v1",
+      "status": "unknown",
+      "reason": "collector reports unknown",
+      "results": []
+    },
+    "source_sha256": {
+      "check_arrays.py": "b0cca6205ed994e0e92fee79504d073eff4616a99c9e83130bf7c745b4d4d67c",
+      "semantics/calibration/ByteOps.java": "37f2411eced7e2c1b23ef5d0c0d252ec8f62e7d49d00164733aa39077eed4693",
+      "semantics/calibration/ByteDriver.java": "06c9f18141c4b5dd7e271327b405aa317db08ec24338952a53120d0176114f73"
+    },
+    "manifest_sha256": "3a35f935475daf40701345d2c7ae78d425c2c206524928a86060a13bb279cdfe"
+  },
+  "v2_regression": {
+    "status": "pass",
+    "agent_sha256": "8c3d6a9b718f16f0686e2baad3cee366dfe6f75e05520ee18874ddd75e45a96c",
+    "positive_captures": 3,
+    "offline_missing_callee": "unavailable scope method: demo/Subject.twice(I)I",
+    "actual_jvm_missing_callee": {
+      "schema": "java-provenance-v1",
+      "status": "unknown",
+      "reason": "collector reports unknown",
+      "results": []
+    },
+    "manifest_sha256": "a24febeff7d457a0fa0d762563a72a69775f8ce06c037487880442c9590b6083"
+  },
+  "costs": {
+    "status": "unqualified",
+    "batches_rejected": [
+      "java-arrays-20261011-140944-275218",
+      "java-arrays-20261011-141331-587654"
+    ],
+    "reason": "saved stdout and one raw cost trace missing/inconsistent; preliminary timings withdrawn",
+    "steady_state": false,
+    "memory_qualified": false
+  },
+  "current_runner_sha256": {
+    "compare_arrays.py": "64f1b15582ad8cf1c50bfa29a4a9c83c1ccf02324ef3a58916be4993903edf69",
+    "verify_arrays.py": "424ad992bb32b8756c227402a1d0ec295c4d0b80611db95489f41f0c22de6a0e"
+  }
+}

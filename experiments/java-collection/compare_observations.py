@@ -85,6 +85,9 @@ def measured(cmd, dest, supervisor):
         try: result.wait()  # Blocking wait, not Popen.wait(timeout)'s coarse polling.
         finally: timer.cancel()
         if expired.is_set(): raise subprocess.TimeoutExpired(argv, 180)
+        # Persist inherited child descriptors before hashing archived evidence.
+        out.flush(); os.fsync(out.fileno())
+        err.flush(); os.fsync(err.fileno())
     wall = time.perf_counter() - begin
     if result.returncode: raise RuntimeError(f"command failed: {argv}; see {dest}")
     user, system, rss, floor = metric.read_text().split()

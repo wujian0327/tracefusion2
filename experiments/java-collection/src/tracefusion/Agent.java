@@ -36,7 +36,7 @@ public final class Agent implements Opcodes {
             Files.write(output.resolve("observation.properties"), scopeBytes, StandardOpenOption.CREATE_NEW);
         }
         if (mode.equals("sparse") && scope == null) throw new IllegalArgumentException("sparse_requires_scope");
-        if (mode.equals("boundary") && (scope == null || !scope.getProperty("schema").equals("java-observation-scope-v2")))
+        if (mode.equals("boundary") && !hasSnapshots())
             throw new IllegalArgumentException("boundary_requires_snapshots");
         selected = new HashSet<>(Arrays.asList(System.getProperty("tracefusion.classes",
             scope == null ? "demo.Subject" : scope.getProperty("classes")).replace('.', '/').split(",")));
@@ -62,7 +62,14 @@ public final class Agent implements Opcodes {
     private static boolean type(Type t) {
         return t.getSort() == Type.INT || t.getSort() == Type.BOOLEAN
             || t.getSort() == Type.BYTE || t.getSort() == Type.SHORT
-            || t.getSort() == Type.CHAR || t.getSort() == Type.OBJECT;
+            || t.getSort() == Type.CHAR || t.getSort() == Type.OBJECT
+            || (hasByteArrays() && t.getDescriptor().equals("[B"));
+    }
+    private static boolean hasSnapshots() {
+        return scope != null && (scope.getProperty("schema").equals("java-observation-scope-v2") || hasByteArrays());
+    }
+    private static boolean hasByteArrays() {
+        return scope != null && scope.getProperty("schema").equals("java-observation-scope-v3");
     }
     private static void audit(MethodNode m) {
         if ((m.access & (ACC_STATIC | ACC_NATIVE | ACC_ABSTRACT | ACC_SYNCHRONIZED)) != ACC_STATIC)
@@ -81,6 +88,7 @@ public final class Agent implements Opcodes {
                 || op == IUSHR || op == IAND || op == IOR || op == IXOR || op == IINC
                 || op == I2B || op == I2C || op == I2S || (op >= IFEQ && op <= GOTO)
                 || op == IFNULL || op == IFNONNULL || op == IRETURN || op == ARETURN || op == RETURN;
+            ok |= op == TABLESWITCH || op == LOOKUPSWITCH || (hasByteArrays() && op == BALOAD);
             if (n instanceof LdcInsnNode) ok = ((LdcInsnNode)n).cst instanceof Integer;
             if (n instanceof FieldInsnNode) {
                 FieldInsnNode f = (FieldInsnNode)n;
@@ -132,7 +140,7 @@ public final class Agent implements Opcodes {
             }
         }
         List<String> plans = new ArrayList<>();
-        if (scope != null && scope.getProperty("schema").equals("java-observation-scope-v2")) {
+        if (hasSnapshots()) {
             for (String key : scope.stringPropertyNames()) if (key.startsWith("snapshot.sha256.")) {
                 String owner = key.substring("snapshot.sha256.".length());
                 byte[] data;
@@ -171,6 +179,18 @@ public final class Agent implements Opcodes {
                 if (n instanceof LdcInsnNode) operands = new Object[]{((LdcInsnNode)n).cst};
                 if (n instanceof IincInsnNode) operands = new Object[]{((IincInsnNode)n).var, ((IincInsnNode)n).incr};
                 if (n instanceof JumpInsnNode) operands = new Object[]{targets.get(((JumpInsnNode)n).label)};
+                if (n instanceof TableSwitchInsnNode) {
+                    TableSwitchInsnNode x = (TableSwitchInsnNode)n;
+                    List<Object> a = new ArrayList<>(); a.add(targets.get(x.dflt));
+                    for (int i = 0; i < x.labels.size(); i++) { a.add(x.min + i); a.add(targets.get(x.labels.get(i))); }
+                    operands = a.toArray();
+                }
+                if (n instanceof LookupSwitchInsnNode) {
+                    LookupSwitchInsnNode x = (LookupSwitchInsnNode)n;
+                    List<Object> a = new ArrayList<>(); a.add(targets.get(x.dflt));
+                    for (int i = 0; i < x.labels.size(); i++) { a.add(x.keys.get(i)); a.add(targets.get(x.labels.get(i))); }
+                    operands = a.toArray();
+                }
                 if (n instanceof MethodInsnNode) {
                     MethodInsnNode x = (MethodInsnNode)n;
                     operands = new Object[]{x.owner + "." + x.name + x.desc};
@@ -182,6 +202,20 @@ public final class Agent implements Opcodes {
                 plans.add("{\"site\":" + Recorder.json(site) + ",\"method\":" + Recorder.json(method)
                     + ",\"pc\":" + index + ",\"opcode\":" + op + ",\"operands\":" + Recorder.json(operands) + "}");
                 if (mode.equals("full")) m.instructions.insertBefore(n, event("step", site, null));
+                if (!boundary && (op == TABLESWITCH || op == LOOKUPSWITCH)) {
+                    int local = m.maxLocals++;
+                    InsnList a = new InsnList();
+                    a.add(new InsnNode(DUP)); a.add(new VarInsnNode(ISTORE, local));
+                    a.add(new LdcInsnNode("switch")); a.add(new LdcInsnNode(site));
+                    arrayStart(a, 1); arrayValue(a, 0, Type.INT_TYPE, local);
+                    a.add(new MethodInsnNode(INVOKESTATIC, R, "event", "(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V", false));
+                    m.instructions.insertBefore(n, a);
+                }
+                if (!boundary && op == BALOAD) {
+                    InsnList a = new InsnList(); a.add(new LdcInsnNode(site));
+                    a.add(new MethodInsnNode(INVOKESTATIC, R, "byteRead", "([BILjava/lang/String;)I", false));
+                    m.instructions.insertBefore(n, a); m.instructions.remove(n);
+                }
                 if (!boundary && n instanceof FieldInsnNode) instrumentField(m, (FieldInsnNode)n, site);
                 if (!boundary && n instanceof JumpInsnNode && op != GOTO) {
                     JumpInsnNode jump = (JumpInsnNode)n;
@@ -222,10 +256,17 @@ public final class Agent implements Opcodes {
             arrayStart(entry, args.length);
             for (int i = 0; i < args.length; i++) arrayValue(entry, i, args[i], i);
             entry.add(new MethodInsnNode(INVOKESTATIC, R, "enter", "(Ljava/lang/String;[Ljava/lang/Object;)V", false));
-            if (root && scope.getProperty("schema").equals("java-observation-scope-v2")) {
+            if (root && hasSnapshots()) {
                 for (int i = 0; i < Integer.parseInt(scope.getProperty("snapshot.count")); i++) {
                     int slot = Integer.parseInt(scope.getProperty("snapshot." + i + ".arg"));
                     String field = scope.getProperty("snapshot." + i + ".field");
+                    if (field.equals("[B")) {
+                        if (!hasByteArrays()) throw new IllegalArgumentException("array_snapshot_schema");
+                        entry.add(new LdcInsnNode(method)); entry.add(new LdcInsnNode(slot));
+                        entry.add(new VarInsnNode(ALOAD, slot));
+                        entry.add(new MethodInsnNode(INVOKESTATIC, R, "byteSnapshot", "(Ljava/lang/String;I[B)V", false));
+                        continue;
+                    }
                     int split = field.lastIndexOf('.');
                     entry.add(new LdcInsnNode(method)); entry.add(new LdcInsnNode(slot));
                     entry.add(new VarInsnNode(ALOAD, slot)); entry.add(new LdcInsnNode(field));
@@ -262,7 +303,7 @@ public final class Agent implements Opcodes {
     }
     private static void arrayValue(InsnList a, int index, Type type, int local) {
         a.add(new InsnNode(DUP)); a.add(new LdcInsnNode(index));
-        if (type.getSort() == Type.OBJECT) {
+        if (type.getSort() == Type.OBJECT || type.getSort() == Type.ARRAY) {
             a.add(new VarInsnNode(ALOAD, local));
             a.add(new MethodInsnNode(INVOKESTATIC, R, "ref", "(Ljava/lang/Object;)Ljava/lang/String;", false));
         } else {
