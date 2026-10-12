@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "selected_at": "2026-10-12",
+  "mirrortaint": {
+    "repository": "https://github.com/MirrorTaint/MirrorTaint",
+    "commit": "54fcbfc5bb3a0d7cd30309098355d999553a861b",
+    "agent_path": "mirrorTaint.jar",
+    "agent_sha256": "e4c679206993b45c6727a4ace1d4dcff6df0ded2b80b56b27b8c86741be63fe7",
+    "author_deployment": "Benchmarks/microservices-demo-mt.yml",
+    "core_source_available": false
+  },
+  "applications": {
+    "orders": {"repository": "https://github.com/microservices-demo/orders", "tag": "0.4.7", "commit": "e97ec6530811c92babbcb4227cf2d77896b5c26d"},
+    "carts": {"repository": "https://github.com/microservices-demo/carts", "tag": "0.4.8", "commit": "d0a55c9f483269034ab9f2473c1a738b2d7d422b"},
+    "shipping": {"repository": "https://github.com/microservices-demo/shipping", "tag": "0.4.8", "commit": "c3bc9015fdbfce1265370502c4fd19b45120550e"},
+    "user": {"repository": "https://github.com/microservices-demo/user", "tag": "0.4.4", "commit": "1714eca3ba643b9e2b9cd6c7e5a384bf89a20d8b"},
+    "payment": {"repository": "https://github.com/microservices-demo/payment", "tag": "0.4.3", "commit": "923c8b030364fd4e217c54cd1e30150b7cad4266"}
+  },
+  "deployment": {
+    "spec": "scenarios/sockshop/compose.json",
+    "scope": "11 existing original components; synchronous Orders HTTP response only",
+    "image_source_mapping": "Matching source/image tag names are insufficient proof. Host run records registry digests and available labels; source-to-image correspondence remains unverified unless independently established.",
+    "excluded": ["catalogue", "edge-router", "queue-master Docker-worker completion", "frontend response propagation", "database write-history provenance"]
+  },
+  "second_candidate": {
+    "name": "PiggyMetrics",
+    "repository": "https://github.com/sqshq/piggymetrics",
+    "commit": "6bb2cf9ddbca980b664d3edbb6ff775d75369278",
+    "status": "source reviewed only; no experiment run",
+    "target": "StatisticsService.save DataPoint metrics write; PUT returns void, so this is not a response-field query"
+  }
+}

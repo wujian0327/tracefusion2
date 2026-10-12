@@ -1,0 +1,313 @@
+{
+  "date": "2026-10-12",
+  "jdk": {
+    "vendor": "Amazon Corretto",
+    "version": "1.8.0_504-b04",
+    "distribution_sha256": "4ce436ddc3258e43b35d0c1f5041913ae5fc14b4f9c5892de5684abc51c858ae"
+  },
+  "maven": {
+    "version": "3.9.9",
+    "distribution_sha512": "a555254d6b53d267965a3404ecb14e53c3827c09c3b94b5678835887ab404556bfaf78dcfe03ba76fa2508649dca8531c74bca4d5846513522404d48e8c4ac8b"
+  },
+  "builds": {
+    "orders": {
+      "command": [
+        "/workspace/scratch/db208a1fdc8f/toolchains/apache-maven-3.9.9/bin/mvn",
+        "-B",
+        "-U",
+        "-s",
+        "/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/sockshop-mirrortaint-preflight-20261012/maven-local-settings.xml",
+        "-Dmaven.repo.local=/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/sockshop-mirrortaint-preflight-20261012/maven-cache",
+        "-Dmaven.test.skip=true",
+        "package"
+      ],
+      "returncode": 0,
+      "jdk": "/workspace/scratch/db208a1fdc8f/toolchains/amazon-corretto-8.504.04.1-linux-x64",
+      "mirror_upstream": "https://repo.maven.apache.org/maven2",
+      "source_changed": false,
+      "tests_run": false,
+      "jar_sha256": "e4a5ad51a861fdb81e341d73fd3857b87d9908c18a6756f590e7df5a5f9e7641",
+      "log_sha256": "53fcace0b5aa161233f12dd67472cf260eb36d1630c5f63d05b40ab695976a04"
+    },
+    "carts": {
+      "command": [
+        "/workspace/scratch/db208a1fdc8f/toolchains/apache-maven-3.9.9/bin/mvn",
+        "-B",
+        "-U",
+        "-s",
+        "/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/sockshop-mirrortaint-preflight-20261012/maven-local-settings.xml",
+        "-Dmaven.repo.local=/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/sockshop-mirrortaint-preflight-20261012/maven-cache",
+        "-Dmaven.test.skip=true",
+        "package"
+      ],
+      "returncode": 0,
+      "jdk": "/workspace/scratch/db208a1fdc8f/toolchains/amazon-corretto-8.504.04.1-linux-x64",
+      "mirror_upstream": "https://repo.maven.apache.org/maven2",
+      "source_changed": false,
+      "tests_run": false,
+      "jar_sha256": "5b2584ca2d9df2fbc102c8f670fcf0e8582ed1d00984f55981768672ec165d67",
+      "log_sha256": "eafb26a7e312a6e243e121a34e703f64bed9fb0f7d2f50084463cda6ca1afbb6"
+    },
+    "shipping": {
+      "command": [
+        "/workspace/scratch/db208a1fdc8f/toolchains/apache-maven-3.9.9/bin/mvn",
+        "-B",
+        "-U",
+        "-s",
+        "/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/sockshop-mirrortaint-preflight-20261012/maven-local-settings.xml",
+        "-Dmaven.repo.local=/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/sockshop-mirrortaint-preflight-20261012/maven-cache",
+        "-Dmaven.test.skip=true",
+        "package"
+      ],
+      "returncode": 0,
+      "jdk": "/workspace/scratch/db208a1fdc8f/toolchains/amazon-corretto-8.504.04.1-linux-x64",
+      "mirror_upstream": "https://repo.maven.apache.org/maven2",
+      "source_changed": false,
+      "tests_run": false,
+      "jar_sha256": "25fea9031e8cbd9c175b886ce497870e1fc99f8a69531cf8ad9ccb7f952bcf53",
+      "log_sha256": "3e2af0847162938ce79082e971583b4ec1bc8662b3606e4ec95809b24d1cfbc9"
+    }
+  },
+  "native_agent": {
+    "agent_sha256": "e4c679206993b45c6727a4ace1d4dcff6df0ded2b80b56b27b8c86741be63fe7",
+    "command": [
+      "/workspace/scratch/db208a1fdc8f/toolchains/amazon-corretto-8.504.04.1-linux-x64/bin/java",
+      "-Xmx256m",
+      "-Djava.io.tmpdir=/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/sockshop-agent-audit-20261012/tmp",
+      "-Duser.home=/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/sockshop-agent-audit-20261012/agent-home",
+      "-Dtaint.env=remote",
+      "-Dtaint.app=works.weave.socks",
+      "-Dtaint.version=tf2-preflight",
+      "-javaagent:/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/external-tools/mirrortaint/mirrorTaint.jar",
+      "-version"
+    ],
+    "returncode": 0,
+    "premain_invoked": true,
+    "files_created": [
+      "AgentLogs/ShadowTaint/tf2-preflight/agent-error.log",
+      "AgentLogs/ShadowTaint/tf2-preflight/agent-info.log",
+      "AgentLogs/ShadowTaint/tf2-preflight/depth.log",
+      "AgentLogs/ShadowTaint/tf2-preflight/runtime-error.log",
+      "AgentLogs/ShadowTaint/tf2-preflight/runtime-info.log",
+      "AgentLogs/ShadowTaint/tf2-preflight/sink.log"
+    ],
+    "javap": {
+      "config": {
+        "returncode": 0,
+        "sha256": "6b207f19a2d56abb554caf8834974e7e8a221a6d2ecf872ae9b4965c0279ad1a"
+      },
+      "collector": {
+        "returncode": 0,
+        "sha256": "e418a1b134f55c104a0e262565739da645ca8251e5052ca1702de298ddaef805"
+      }
+    },
+    "application_executed": false,
+    "field_propagation_tested": false,
+    "cross_service_join_tested": false,
+    "accuracy_eligible": false,
+    "performance_eligible": false
+  },
+  "native_startup": {
+    "plain": {
+      "command": [
+        "/workspace/scratch/db208a1fdc8f/toolchains/amazon-corretto-8.504.04.1-linux-x64/bin/java",
+        "-Xmx512m",
+        "-Djava.io.tmpdir=/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/sockshop-native-orders-plain-20261012/tmp",
+        "-Duser.home=/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/sockshop-native-orders-plain-20261012/agent-home",
+        "-Djava.security.egd=file:/dev/urandom",
+        "-jar",
+        "/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/external-tools/sockshop-orders/target/orders.jar",
+        "--server.address=127.0.0.1",
+        "--server.port=41773",
+        "--spring.zipkin.enabled=false",
+        "--http.timeout=1",
+        "--spring.data.mongodb.uri=mongodb://127.0.0.1:27017/data?connectTimeoutMS=500&serverSelectionTimeoutMS=500"
+      ],
+      "orders_jar_sha256": "e4a5ad51a861fdb81e341d73fd3857b87d9908c18a6756f590e7df5a5f9e7641",
+      "mode": "plain",
+      "status": "failed",
+      "dependencies_available": false,
+      "positive_order_tested": false,
+      "field_propagation_tested": false,
+      "cross_service_join_tested": false,
+      "accuracy_eligible": false,
+      "performance_eligible": false,
+      "error": "Original service exited during startup: 1",
+      "process_returncode": 1,
+      "agent_files": [],
+      "agent_error_logs_nonempty": [],
+      "cause": "Original Prometheus DefaultExports cannot open /proc/self/fd"
+    },
+    "mt": {
+      "command": [
+        "/workspace/scratch/db208a1fdc8f/toolchains/amazon-corretto-8.504.04.1-linux-x64/bin/java",
+        "-Xmx512m",
+        "-Djava.io.tmpdir=/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/sockshop-native-orders-mt-20261012/tmp",
+        "-Duser.home=/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/sockshop-native-orders-mt-20261012/agent-home",
+        "-Djava.security.egd=file:/dev/urandom",
+        "-Dtaint.env=remote",
+        "-Dtaint.app=works.weave.socks",
+        "-Dtaint.version=tf2-native-orders",
+        "-javaagent:/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/external-tools/mirrortaint/mirrorTaint.jar",
+        "-jar",
+        "/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/external-tools/sockshop-orders/target/orders.jar",
+        "--server.address=127.0.0.1",
+        "--server.port=44557",
+        "--spring.zipkin.enabled=false",
+        "--http.timeout=1",
+        "--spring.data.mongodb.uri=mongodb://127.0.0.1:27017/data?connectTimeoutMS=500&serverSelectionTimeoutMS=500"
+      ],
+      "orders_jar_sha256": "e4a5ad51a861fdb81e341d73fd3857b87d9908c18a6756f590e7df5a5f9e7641",
+      "mode": "mirrortaint",
+      "status": "failed",
+      "dependencies_available": false,
+      "positive_order_tested": false,
+      "field_propagation_tested": false,
+      "cross_service_join_tested": false,
+      "accuracy_eligible": false,
+      "performance_eligible": false,
+      "error": "Original service exited during startup: 1",
+      "process_returncode": 1,
+      "agent_files": [
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/FacadeRequestSourceTransformer/works/weave/socks/orders/controllers/OrdersController.class",
+          "bytes": 10617
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/FacadeResponseSinkTransformer/works/weave/socks/orders/controllers/OrdersController.class",
+          "bytes": 10908
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/RestSourceSinkTransformer/org/springframework/web/client/RestTemplate.class",
+          "bytes": 31676
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/TaintStackFrameTransformer/works.weave.socks.orders.OrderApplication$$EnhancerBySpringCGLIB$$d1fcfdf4.class",
+          "bytes": 7577
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/TaintStackFrameTransformer/works.weave.socks.orders.OrderApplication.class",
+          "bytes": 1608
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/TaintStackFrameTransformer/works.weave.socks.orders.config.MongoConfiguration$$EnhancerBySpringCGLIB$$ddc39c7c.class",
+          "bytes": 9413
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/TaintStackFrameTransformer/works.weave.socks.orders.config.MongoConfiguration.class",
+          "bytes": 2350
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/TaintStackFrameTransformer/works.weave.socks.orders.config.OrdersConfiguration$$EnhancerBySpringCGLIB$$ebf4b4d7.class",
+          "bytes": 9586
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/TaintStackFrameTransformer/works.weave.socks.orders.config.OrdersConfiguration.class",
+          "bytes": 1762
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/TaintStackFrameTransformer/works.weave.socks.orders.config.OrdersConfigurationProperties.class",
+          "bytes": 3947
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/TaintStackFrameTransformer/works.weave.socks.orders.config.PrometheusAutoConfiguration$$EnhancerBySpringCGLIB$$a28a4e03$$FastClassBySpringCGLIB$$baa87c64.class",
+          "bytes": 16496
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/TaintStackFrameTransformer/works.weave.socks.orders.config.PrometheusAutoConfiguration$$EnhancerBySpringCGLIB$$a28a4e03.class",
+          "bytes": 11747
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/TaintStackFrameTransformer/works.weave.socks.orders.config.PrometheusAutoConfiguration$$FastClassBySpringCGLIB$$aa86b283.class",
+          "bytes": 8583
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/TaintStackFrameTransformer/works.weave.socks.orders.config.PrometheusAutoConfiguration.class",
+          "bytes": 3636
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/TaintStackFrameTransformer/works.weave.socks.orders.config.RestProxyTemplate.class",
+          "bytes": 5196
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/TaintStackFrameTransformer/works.weave.socks.orders.config.WebMvcConfig$$EnhancerBySpringCGLIB$$17d9d22.class",
+          "bytes": 11433
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/TaintStackFrameTransformer/works.weave.socks.orders.config.WebMvcConfig.class",
+          "bytes": 2435
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/TaintStackFrameTransformer/works.weave.socks.orders.controllers.HealthCheckController.class",
+          "bytes": 4812
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/TaintStackFrameTransformer/works.weave.socks.orders.controllers.OrdersController.class",
+          "bytes": 23858
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/TaintStackFrameTransformer/works.weave.socks.orders.middleware.HTTPMonitoringInterceptor.class",
+          "bytes": 14674
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/TaintStackFrameTransformer/works.weave.socks.orders.repositories.CustomerOrderRepository.class",
+          "bytes": 949
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/TaintStackFrameTransformer/works.weave.socks.orders.services.AsyncGetService.class",
+          "bytes": 18140
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/agent-error.log",
+          "bytes": 0
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/agent-info.log",
+          "bytes": 2310656
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/depth.log",
+          "bytes": 0
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/runtime-error.log",
+          "bytes": 0
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/runtime-info.log",
+          "bytes": 0
+        },
+        {
+          "path": "AgentLogs/ShadowTaint/tf2-native-orders/sink.log",
+          "bytes": 0
+        }
+      ],
+      "agent_error_logs_nonempty": [],
+      "cause": "Original Prometheus DefaultExports cannot open /proc/self/fd"
+    }
+  },
+  "docker_host_preflight": {
+    "status": "blocked",
+    "project": "tf2-mt-f858275833",
+    "mode": "mirrortaint",
+    "business_workload_run": false,
+    "provenance_engine_run": false,
+    "cross_service_join_validated": false,
+    "execution_oracle_available": false,
+    "accuracy_eligible": false,
+    "performance_eligible": false,
+    "otel_or_our_collector_installed": false,
+    "error": "Docker Engine/Compose unavailable; no services or field engine executed"
+  },
+  "planned": {
+    "workloads": 15,
+    "target_orders": 14,
+    "no_target_orders": 1,
+    "target_queries": 98,
+    "java_boundary_queries": 42,
+    "external_boundary_queries": 56,
+    "no_target_queries": 7
+  },
+  "accuracy_eligible": false,
+  "performance_eligible": false
+}

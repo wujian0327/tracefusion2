@@ -1,0 +1,53 @@
+{
+  "applications": {
+    "orders": {
+      "commit": "e97ec6530811c92babbcb4227cf2d77896b5c26d",
+      "tracked_source_unmodified": true,
+      "sha256": {
+        "pom.xml": "09c1e8fa4000c328a8b6ab38837d49d861f2ac784e8980ce0ce1cfb7596e8b89",
+        "src/main/java/works/weave/socks/orders/controllers/OrdersController.java": "db4b57da43fa971922162c2e80b30d6b2d1f59834178f3ac98d9c5d2f00f7a28",
+        "src/main/java/works/weave/socks/orders/entities/CustomerOrder.java": "a49a95f6031e74a1b43173add9fe831348c77088e8fbc07729978088b6fbb9e4",
+        "src/main/java/works/weave/socks/orders/entities/Shipment.java": "c8cc2e54112ca064fc104ec054e285955392896e74a96ee2bca74c1868b0ec32",
+        "src/main/java/works/weave/socks/orders/services/AsyncGetService.java": "88d24ae639a1883e9ce82867afe9916c6ad8c1ff04dfa15fac8619cc14f5d2d9"
+      }
+    },
+    "carts": {
+      "commit": "d0a55c9f483269034ab9f2473c1a738b2d7d422b",
+      "tracked_source_unmodified": true,
+      "sha256": {
+        "pom.xml": "10769d2b98355b0e368d17ff4b8fde7fbd06764e5d4f87aa61313b9fdc9ee21e",
+        "src/main/java/works/weave/socks/cart/controllers/ItemsController.java": "5655d2a9b1b7d1fbbd7381badfe28f1c18d3dd37b79c5d0f2319ce85976b1918",
+        "src/main/java/works/weave/socks/cart/item/ItemResource.java": "a8dbfe264f711d13561f02add6d37c61c9a354f66b94ff76699b6b30ba1f4c05",
+        "src/main/java/works/weave/socks/cart/entities/Item.java": "623ca40646bd22cceeaf7cb1e2d67cb801e86378e0303db7ae5febf70c17987e"
+      }
+    },
+    "shipping": {
+      "commit": "c3bc9015fdbfce1265370502c4fd19b45120550e",
+      "tracked_source_unmodified": true,
+      "sha256": {
+        "pom.xml": "c6a7a07164a00a80a582cce3d8faeaf921acaa34db9ea13ff4150d38c8e6dbef",
+        "src/main/java/works/weave/socks/shipping/controllers/ShippingController.java": "cae3f116fb2748b699cda0117382a1425b29d0ee64617872919bea5b65df1f3f"
+      }
+    },
+    "user": {
+      "commit": "1714eca3ba643b9e2b9cd6c7e5a384bf89a20d8b",
+      "tracked_source_unmodified": true,
+      "sha256": {
+        "api/service.go": "575cdb2c5084db6fd4815cdb98d93c07dfa419f0501fa69baa914cf89be26b5c",
+        "api/transport.go": "70b8f3b86f56bab51b2020ace534bfe0425b5887358c179c00fe6aa066a39c18"
+      }
+    },
+    "payment": {
+      "commit": "923c8b030364fd4e217c54cd1e30150b7cad4266",
+      "tracked_source_unmodified": true,
+      "sha256": {
+        "service.go": "9e3633f2b2b7937d48688d2ce8bb23a61f12fbfd2416a1fdb2c39ec727cbbc88",
+        "endpoints.go": "2216649001bf4c2c4d53c90b230bbddb14ed2c3e1495a48db9e4f720d7caac8a"
+      }
+    }
+  },
+  "engine_output_read": false,
+  "source_image_correspondence_verified": false,
+  "execution_oracle_available": false,
+  "second_human_reviewed": false
+}

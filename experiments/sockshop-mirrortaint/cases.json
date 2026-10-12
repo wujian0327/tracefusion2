@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "frozen_at": "2026-10-12",
+  "cases": [
+    {"id": "single", "items": [{"key": "a", "quantity": 2, "unitPrice": 5.0}], "expected_target": true},
+    {"id": "multi_same_price", "items": [{"key": "a", "quantity": 2, "unitPrice": 5.0}, {"key": "b", "quantity": 3, "unitPrice": 5.0}], "expected_target": true},
+    {"id": "same_value_fields", "items": [{"key": "a", "quantity": 1, "unitPrice": 5.0}], "equal_name_street": true, "expected_target": true},
+    {"id": "patch_quantity", "items": [{"key": "a", "quantity": 1, "unitPrice": 5.0}], "patch": {"key": "a", "quantity": 3, "unitPrice": 999.0}, "expected_target": true},
+    {"id": "repost_existing", "items": [{"key": "a", "quantity": 2, "unitPrice": 5.0}], "repost": {"key": "a", "quantity": 17, "unitPrice": 999.0}, "expected_target": true},
+    {"id": "empty_cart", "items": [], "expected_target": true},
+    {"id": "payment_declined", "items": [{"key": "a", "quantity": 3, "unitPrice": 40.0}], "expected_target": false}
+  ],
+  "concurrent": {"count": 8, "case": "single", "shared_content_values": true, "distinct_customer_records": true},
+  "semantic_basis": {
+    "total": "OrdersController.calculateTotal: sum(quantity * unitPrice), float conversions, plus literal 4.99F",
+    "patch": "ItemResource.merge: new Item(oldItem, toMerge.quantity()); old unitPrice preserved",
+    "repost": "ItemsController.addToCart existing item: old quantity + literal 1; incoming quantity and unitPrice ignored",
+    "declined": "Original payment service default decline threshold 100; Orders throws before saving/returning CustomerOrder"
+  }
+}
