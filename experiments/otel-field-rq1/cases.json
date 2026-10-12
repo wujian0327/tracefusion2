@@ -1,0 +1,17 @@
+[
+ {"name":"single","ids":["OLJCESPC7Z"],"concurrent":false},
+ {"name":"equal-distinct","ids":["66VCHSJNUP","0PUK6V6EV0"],"concurrent":false},
+ {"name":"repeated-record","ids":["66VCHSJNUP","66VCHSJNUP"],"concurrent":false},
+ {"name":"mixed-three","ids":["OLJCESPC7Z","66VCHSJNUP","LS4PSXUNUM"],"concurrent":false},
+ {"name":"empty","ids":[],"concurrent":false},
+ {"name":"missing-first","ids":["RQ1-ABSENT"],"concurrent":false},
+ {"name":"missing-second","ids":["0PUK6V6EV0","RQ1-ABSENT"],"concurrent":false},
+ {"name":"parallel-0","ids":["66VCHSJNUP","0PUK6V6EV0"],"concurrent":true},
+ {"name":"parallel-1","ids":["0PUK6V6EV0","66VCHSJNUP"],"concurrent":true},
+ {"name":"parallel-2","ids":["66VCHSJNUP","0PUK6V6EV0"],"concurrent":true},
+ {"name":"parallel-3","ids":["0PUK6V6EV0","66VCHSJNUP"],"concurrent":true},
+ {"name":"parallel-4","ids":["66VCHSJNUP","0PUK6V6EV0"],"concurrent":true},
+ {"name":"parallel-5","ids":["0PUK6V6EV0","66VCHSJNUP"],"concurrent":true},
+ {"name":"parallel-6","ids":["66VCHSJNUP","0PUK6V6EV0"],"concurrent":true},
+ {"name":"parallel-7","ids":["0PUK6V6EV0","66VCHSJNUP"],"concurrent":true}
+]

@@ -1,0 +1,321 @@
+{
+  "status": "verified_native_boundary_preflight",
+  "native_processes": 2,
+  "workload_instances": 15,
+  "distinct_input_payloads": 8,
+  "concurrent_workload_instances": 8,
+  "observed_peak_overlapping_workloads": 8,
+  "product_rpc_attempts": 27,
+  "successful_product_rpcs": 25,
+  "failed_product_rpcs": 2,
+  "registered_queries": 56,
+  "confirmed_target_fields": 50,
+  "no_target_checks": 6,
+  "native_rpcs": [
+    {
+      "case": "single",
+      "ordinal": 0,
+      "trace_id": "9d3c4e5925970e4d053f8612a723fee5",
+      "client_span": "ecc32fd909d8e096",
+      "server_span": "b798459cb91603b2",
+      "target_fields": 2
+    },
+    {
+      "case": "equal-distinct",
+      "ordinal": 0,
+      "trace_id": "6c81a29c5b72dbb99905fa598ff6ac2a",
+      "client_span": "df3559c0b6fd8b29",
+      "server_span": "2e8b332840a934fd",
+      "target_fields": 2
+    },
+    {
+      "case": "equal-distinct",
+      "ordinal": 1,
+      "trace_id": "6c81a29c5b72dbb99905fa598ff6ac2a",
+      "client_span": "49b75425776f36a1",
+      "server_span": "ae51163ea007b255",
+      "target_fields": 2
+    },
+    {
+      "case": "repeated-record",
+      "ordinal": 0,
+      "trace_id": "d5af957d751bec2f455f935ea85d74dc",
+      "client_span": "5056d327a0c5335c",
+      "server_span": "b7fa81bc29db636f",
+      "target_fields": 2
+    },
+    {
+      "case": "repeated-record",
+      "ordinal": 1,
+      "trace_id": "d5af957d751bec2f455f935ea85d74dc",
+      "client_span": "000f9dbd8143efcb",
+      "server_span": "5aa0c9060f39d902",
+      "target_fields": 2
+    },
+    {
+      "case": "mixed-three",
+      "ordinal": 0,
+      "trace_id": "ede249c143cbb2340eca8ffd4f13a8c1",
+      "client_span": "40884f639f1ce09c",
+      "server_span": "0f2a2cd9b16a44bc",
+      "target_fields": 2
+    },
+    {
+      "case": "mixed-three",
+      "ordinal": 1,
+      "trace_id": "ede249c143cbb2340eca8ffd4f13a8c1",
+      "client_span": "761783a49eec8152",
+      "server_span": "437ff723f4bad2c8",
+      "target_fields": 2
+    },
+    {
+      "case": "mixed-three",
+      "ordinal": 2,
+      "trace_id": "ede249c143cbb2340eca8ffd4f13a8c1",
+      "client_span": "be3807ed6e4003de",
+      "server_span": "f938c4d01b1543c6",
+      "target_fields": 2
+    },
+    {
+      "case": "missing-second",
+      "ordinal": 0,
+      "trace_id": "e048e7456ff59f5f901cc2743770f5ce",
+      "client_span": "be7dbd7d2ab5a82a",
+      "server_span": "4459a82a5c41274c",
+      "target_fields": 2
+    },
+    {
+      "case": "parallel-0",
+      "ordinal": 0,
+      "trace_id": "95faa864520c00fd9f4b35c5ad00012f",
+      "client_span": "2fd655041699fae2",
+      "server_span": "e41559c4cffafffa",
+      "target_fields": 2
+    },
+    {
+      "case": "parallel-0",
+      "ordinal": 1,
+      "trace_id": "95faa864520c00fd9f4b35c5ad00012f",
+      "client_span": "6ade47cec3eee90f",
+      "server_span": "2fc2d47940e1e6a3",
+      "target_fields": 2
+    },
+    {
+      "case": "parallel-1",
+      "ordinal": 0,
+      "trace_id": "77d9a20f20debe701b395f96f6cba95e",
+      "client_span": "4d27a8fb091db82f",
+      "server_span": "fcb877acfdfd339a",
+      "target_fields": 2
+    },
+    {
+      "case": "parallel-1",
+      "ordinal": 1,
+      "trace_id": "77d9a20f20debe701b395f96f6cba95e",
+      "client_span": "a9248c9bef2d9361",
+      "server_span": "9523c3b900a4d841",
+      "target_fields": 2
+    },
+    {
+      "case": "parallel-2",
+      "ordinal": 0,
+      "trace_id": "f615fa4e4e50a1d4e4069f4636e96c83",
+      "client_span": "a10597b994444632",
+      "server_span": "5162ffc1d6af6164",
+      "target_fields": 2
+    },
+    {
+      "case": "parallel-2",
+      "ordinal": 1,
+      "trace_id": "f615fa4e4e50a1d4e4069f4636e96c83",
+      "client_span": "d5e37006ba1cb79d",
+      "server_span": "93610de3d8d34b26",
+      "target_fields": 2
+    },
+    {
+      "case": "parallel-3",
+      "ordinal": 0,
+      "trace_id": "d377943899ffd857e22eb11342cc494f",
+      "client_span": "caa7409dfc109628",
+      "server_span": "1524a7825a77800c",
+      "target_fields": 2
+    },
+    {
+      "case": "parallel-3",
+      "ordinal": 1,
+      "trace_id": "d377943899ffd857e22eb11342cc494f",
+      "client_span": "b6fc5f2f635f5fd3",
+      "server_span": "9f7f599a682c475e",
+      "target_fields": 2
+    },
+    {
+      "case": "parallel-4",
+      "ordinal": 0,
+      "trace_id": "8ea20a1ac46ad07645a87ffc7f65b78d",
+      "client_span": "bc3aabbc56f8bf60",
+      "server_span": "031694c7ef9b6a9d",
+      "target_fields": 2
+    },
+    {
+      "case": "parallel-4",
+      "ordinal": 1,
+      "trace_id": "8ea20a1ac46ad07645a87ffc7f65b78d",
+      "client_span": "ee402b80925e8cea",
+      "server_span": "1e107fc56c63de97",
+      "target_fields": 2
+    },
+    {
+      "case": "parallel-5",
+      "ordinal": 0,
+      "trace_id": "a0fb8cb18b9030d5374445ceafde94f0",
+      "client_span": "6e31932a0298daeb",
+      "server_span": "6f8a60fd07565176",
+      "target_fields": 2
+    },
+    {
+      "case": "parallel-5",
+      "ordinal": 1,
+      "trace_id": "a0fb8cb18b9030d5374445ceafde94f0",
+      "client_span": "ee3ae5bf375be345",
+      "server_span": "dfeadf3a82ce8be5",
+      "target_fields": 2
+    },
+    {
+      "case": "parallel-6",
+      "ordinal": 0,
+      "trace_id": "3a99caacf03ce67fd87d10d6a27d8e46",
+      "client_span": "e335fb26b713545a",
+      "server_span": "a26c5a31512eb5d8",
+      "target_fields": 2
+    },
+    {
+      "case": "parallel-6",
+      "ordinal": 1,
+      "trace_id": "3a99caacf03ce67fd87d10d6a27d8e46",
+      "client_span": "e59fba4519192773",
+      "server_span": "c88b94285f00abaf",
+      "target_fields": 2
+    },
+    {
+      "case": "parallel-7",
+      "ordinal": 0,
+      "trace_id": "fe8c01ec923374bfad494350cd20fe99",
+      "client_span": "ef0e5aa09191e440",
+      "server_span": "dac1eb207b73d29c",
+      "target_fields": 2
+    },
+    {
+      "case": "parallel-7",
+      "ordinal": 1,
+      "trace_id": "fe8c01ec923374bfad494350cd20fe99",
+      "client_span": "047b11ad707ea3c0",
+      "server_span": "28435ee6a8fb4b1f",
+      "target_fields": 2
+    }
+  ],
+  "original_convert_context_absent_at_target": 25,
+  "native_currency_detached_traces": 25,
+  "tracefusion_provenance_executed": false,
+  "external_tool_executed": false,
+  "accuracy_eligible": false,
+  "performance_eligible": false,
+  "selective_collection": false,
+  "scope": "Two-process original product handler / original checkout method workload, not full deployment",
+  "limitations": [
+    "Currency implementation is a test-only passthrough mock outside queried scope",
+    "No serialization byte taint inference, selective collection or external comparison yet",
+    "Typed payload snapshots do not constitute raw wire-byte recording",
+    "Native observer object/trace checks are admission evidence, not algorithmic provenance answers"
+  ],
+  "rejection_checks": [
+    {
+      "case": "missing_server_span",
+      "rejected": true,
+      "reason": "server RPC parentage"
+    },
+    {
+      "case": "duplicate_payload",
+      "rejected": true,
+      "reason": "client request payload"
+    },
+    {
+      "case": "wrong_remote_parent",
+      "rejected": true,
+      "reason": "server RPC parentage"
+    },
+    {
+      "case": "same_value_wrong_object",
+      "rejected": true,
+      "reason": "original checkout field object binding"
+    },
+    {
+      "case": "same_value_wrong_catalog_record",
+      "rejected": true,
+      "reason": "handler catalogue field instance binding"
+    },
+    {
+      "case": "missing_target",
+      "rejected": true,
+      "reason": "target coverage"
+    }
+  ],
+  "evidence_sha256": {
+    "catalog.jsonl": "7d109c777a4625ef06ac523e5982d7f7bd8051def1685141bb7f4f0ee04d5b4c",
+    "checkout.jsonl": "de32828ee227ada7b04849b1d1d273d99cf272ed42dc236ac5ecefea49ac21a9",
+    "contract.json": "03044e447826e2ff16d6faa9cfc6ad4b5e673503747b9428a94e0fe14edab975",
+    "source-manifest.json": "e08eeeb0f9e334dc3146c08075ecd6c82e3f2881d5497d7644edf97f8eb7cac7"
+  },
+  "verifier_sha256": "bb0298023d85dc1ed2a538cfa24e9265fca03e9c30671d7b9d079c3af73ed5bb",
+  "upstream_commit": "474d0f2eb73d97525234995a40d7781b7923a07d",
+  "go": "go1.25.4",
+  "source_sha256": {
+    "src/productcatalogservice/README.md": "40c67975726aedce74e39bd07743377c3fddc41db4c15e91c13a08c8a1f2351c",
+    "src/productcatalogservice/go.sum": "5d8e8eb46330535abf6aa3ff304c2552d2b04dcd2baeba93972d903311f648dd",
+    "src/productcatalogservice/product_catalog.go": "c91fa7b4620356534a06aae1534ce631aa7dd1813187778e7c44141fffa52510",
+    "src/productcatalogservice/products.json": "766cd816fb1721ec0ce8d9261214fb5e10f6b89ce70600e2d20f149c7b5afffa",
+    "src/productcatalogservice/product_catalog_test.go": "8e0cce569f67874eea9e739b9c12e36d0295208a4e32aa22b4a6644beb82ed37",
+    "src/productcatalogservice/genproto.sh": "1552c2f80e11339e78b0b63bb9fafc8d7c0c05d810b85df3b57fce2a007b5e1c",
+    "src/productcatalogservice/server.go": "ece522d9ca42ecbaa9ff58d08bf0e2ac026dc0133a9c4750d593af6e0a8ee53c",
+    "src/productcatalogservice/Dockerfile": "d0b8e17d300220d942c38caa7aa8082fd9b8d4527e969dca891394ff8665a9fb",
+    "src/productcatalogservice/catalog_loader.go": "c37a169b74faf6be29f1ae9999ea2a22daf8f2d7dd676b4706459b36cf95a4a4",
+    "src/productcatalogservice/.dockerignore": "e15b1b0e0f10012abb6f06891455da689a7a4ff323b70ce46144d8611b7d4d8a",
+    "src/productcatalogservice/go.mod": "cd7c7ef3193f91a9eb45dfe2bb91c2853ff5c486c0b739fd31b39c4d755f551a",
+    "src/productcatalogservice/genproto/demo.pb.go": "799971d468d1e66e0d7fce8930ce74f8f1c894bf8425c50cad44c2a9b40cd9af",
+    "src/productcatalogservice/genproto/demo_grpc.pb.go": "70bb93b42e93399bf30d9971b6568244d0fa2eb1cb4757f967354810601dc916",
+    "src/checkoutservice/main.go": "862b2c7bba24205db7ed81ec8af7fd9abb960245e3df1c56a1b497d34d4b39c0",
+    "src/checkoutservice/README.md": "6c5e1bebc29e5aba859054e8d698f766a33d6a76aa507989be49682233044a51",
+    "src/checkoutservice/go.sum": "eda89c7b2f57e54824b4b2be9f170e5e5ccf21ab997aed10919e4eb9a1e34dee",
+    "src/checkoutservice/genproto.sh": "167aeb0ea7f5abffeeed2f202d6065c8689e20a3454285e18ddfc19b6c88c5c7",
+    "src/checkoutservice/Dockerfile": "f55906dd6b3d43e92f9f21309380fea3f7e980fc54b8d098cce22f1fb4f98d7b",
+    "src/checkoutservice/.dockerignore": "e15b1b0e0f10012abb6f06891455da689a7a4ff323b70ce46144d8611b7d4d8a",
+    "src/checkoutservice/go.mod": "8492d358cdae520016fc850def2d20ab6878101c077d3dfd7335f99411d2ae0c",
+    "src/checkoutservice/money/money.go": "c7e81c0e8e24cafce6ccf35b9846d76cea114969998355db34d01169687e67f3",
+    "src/checkoutservice/money/money_test.go": "a975381b0fec7a2a83f8ec83730157f91958de7577f03a1675300d015f027055",
+    "src/checkoutservice/genproto/demo.pb.go": "799971d468d1e66e0d7fce8930ce74f8f1c894bf8425c50cad44c2a9b40cd9af",
+    "src/checkoutservice/genproto/demo_grpc.pb.go": "70bb93b42e93399bf30d9971b6568244d0fa2eb1cb4757f967354810601dc916",
+    "protos/demo.proto": "b1f2fa42c0a9305211bf51fba7d8b5832cd3defd7b8855c327ebd5b1f0f86884"
+  },
+  "binary_sha256": {
+    "catalog": "0992f79529b682021d57cfd8cd2125accba0005121bf5b57048db6cd1a9fb68a",
+    "checkout": "e2ae52cc218e23008608a335c1b0b55a361c18209d35a95617710de097ee50e8"
+  },
+  "observer_source_sha256": {
+    "run.py": "bdc4d821e6ee138799e4a634024a36ca0328f054ce0207468dd4eae788bc9441",
+    "observer_test.go": "900397398d5ffde54fe88efac92d87eaa1504aabc7b20b2975f53d734cc089ec",
+    "catalog_test.go": "fda1838ec7463f0ad2b6045f99c0d247f8fc32432fe36bdc8732b7f4dacd09f2",
+    "cases.json": "b87cdfd91d76bcbb86de905b6afe2b76aca3efd4bc5edb8abdd6544b7dd551e9",
+    "verify.py": "bb0298023d85dc1ed2a538cfa24e9265fca03e9c30671d7b9d079c3af73ed5bb",
+    "checkout_test.go": "b8c7c4fe9b9d89f982f722e4c5317161c078b1af43f2ee7d35070014c6043dd4",
+    "contract.py": "c9630dc971cde0f51356acb1519f267ecd8114322ae8b46cda663c7c9a8f98e7"
+  },
+  "business_source_modified": false,
+  "instrumentation": "Test-only SDK exporter, gRPC stats observer and interceptors; no production startup",
+  "wire_capture": false,
+  "second_human_truth_review": false,
+  "archive": {
+    "path": "native-evidence-20261012.zip",
+    "sha256": "26d554811addc149d8bde8c1e8cdf63a61abdb5b84f14abacba53f9c0415cc27",
+    "size_bytes": 112030,
+    "contains_binaries": false
+  }
+}
