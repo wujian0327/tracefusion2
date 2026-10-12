@@ -1,0 +1,569 @@
+{
+  "status": "verified_bounded_native_parser_calibration",
+  "query_requests": 22,
+  "calibrated_queries": 18,
+  "no_sink_queries": 2,
+  "out_of_scope_queries": 2,
+  "instruction_records": 1545,
+  "raw_jsonl_records": 3215,
+  "intermediate_byte_checks": 209609,
+  "final_allocation_byte_checks": 108,
+  "field_presence_diagnostics_passed": {
+    "ours": 18,
+    "libdft": 18
+  },
+  "output_content_bytes": 62,
+  "cross_engine_different_byte_sets": 0,
+  "cross_engine_queries_with_different_byte_sets": 0,
+  "aggregate_source_sets_equal": 18,
+  "extracted_callbacks": 46,
+  "exercised_callbacks": {
+    "r2r_xfer_opq": 118,
+    "r2m_xfer_opq": 119,
+    "r_clrq": 20,
+    "_movsx_m2r_oplb": 78,
+    "m2r_xfer_opq": 214,
+    "r2m_xfer_opb_l": 60,
+    "clear": 38,
+    "m2r_binary_opq": 36,
+    "r_clrl": 39,
+    "r2r_binary_opq": 21,
+    "r2r_xfer_opl": 40,
+    "_movsx_r2r_oplb_l": 26,
+    "_movsx_m2r_opql": 4,
+    "_lea_opl": 12,
+    "r2m_binary_opq": 2,
+    "r2r_binary_opl": 2
+  },
+  "mnemonic_counts": {
+    "mov": 396,
+    "test": 30,
+    "je": 89,
+    "cmp": 193,
+    "jae": 80,
+    "lea": 137,
+    "jmp": 109,
+    "movzx": 104,
+    "add": 93,
+    "sub": 53,
+    "jne": 25,
+    "pop": 116,
+    "ret": 23,
+    "jle": 10,
+    "jbe": 13,
+    "movabs": 3,
+    "bt": 3,
+    "ja": 27,
+    "movsxd": 4,
+    "call": 5,
+    "push": 8,
+    "shl": 10,
+    "and": 6,
+    "or": 5,
+    "shr": 3
+  },
+  "queries": [
+    {
+      "case": "equal_fields",
+      "path": "/payer",
+      "status": "native_calibrated",
+      "root": 2,
+      "steps": 83,
+      "intermediate_byte_checks": 11205,
+      "ours_source_offsets": [
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "libdft_source_offsets": [
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "field_presence_diagnostics": {
+        "ours": true,
+        "libdft": true
+      }
+    },
+    {
+      "case": "equal_fields",
+      "path": "/recipient",
+      "status": "native_calibrated",
+      "root": 4,
+      "steps": 83,
+      "intermediate_byte_checks": 11205,
+      "ours_source_offsets": [
+        30,
+        31,
+        32,
+        33,
+        34
+      ],
+      "libdft_source_offsets": [
+        30,
+        31,
+        32,
+        33,
+        34
+      ],
+      "field_presence_diagnostics": {
+        "ours": true,
+        "libdft": true
+      }
+    },
+    {
+      "case": "nested_equal",
+      "path": "/buyer/name",
+      "status": "native_calibrated",
+      "root": 7,
+      "steps": 72,
+      "intermediate_byte_checks": 9648,
+      "ours_source_offsets": [
+        18,
+        19,
+        20,
+        21
+      ],
+      "libdft_source_offsets": [
+        18,
+        19,
+        20,
+        21
+      ],
+      "field_presence_diagnostics": {
+        "ours": true,
+        "libdft": true
+      }
+    },
+    {
+      "case": "nested_equal",
+      "path": "/seller/name",
+      "status": "native_calibrated",
+      "root": 10,
+      "steps": 72,
+      "intermediate_byte_checks": 9648,
+      "ours_source_offsets": [
+        43,
+        44,
+        45,
+        46
+      ],
+      "libdft_source_offsets": [
+        43,
+        44,
+        45,
+        46
+      ],
+      "field_presence_diagnostics": {
+        "ours": true,
+        "libdft": true
+      }
+    },
+    {
+      "case": "nested_equal",
+      "path": "/note",
+      "status": "native_calibrated",
+      "root": 12,
+      "steps": 83,
+      "intermediate_byte_checks": 11205,
+      "ours_source_offsets": [
+        58,
+        59,
+        60,
+        61,
+        62
+      ],
+      "libdft_source_offsets": [
+        58,
+        59,
+        60,
+        61,
+        62
+      ],
+      "field_presence_diagnostics": {
+        "ours": true,
+        "libdft": true
+      }
+    },
+    {
+      "case": "array_equal",
+      "path": "/items/0/sku",
+      "status": "native_calibrated",
+      "root": 15,
+      "steps": 39,
+      "intermediate_byte_checks": 5109,
+      "ours_source_offsets": [
+        18
+      ],
+      "libdft_source_offsets": [
+        18
+      ],
+      "field_presence_diagnostics": {
+        "ours": true,
+        "libdft": true
+      }
+    },
+    {
+      "case": "array_equal",
+      "path": "/items/1/sku",
+      "status": "native_calibrated",
+      "root": 17,
+      "steps": 39,
+      "intermediate_byte_checks": 5109,
+      "ours_source_offsets": [
+        30
+      ],
+      "libdft_source_offsets": [
+        30
+      ],
+      "field_presence_diagnostics": {
+        "ours": true,
+        "libdft": true
+      }
+    },
+    {
+      "case": "array_equal",
+      "path": "/items/2/sku",
+      "status": "native_calibrated",
+      "root": 19,
+      "steps": 39,
+      "intermediate_byte_checks": 5109,
+      "ours_source_offsets": [
+        42
+      ],
+      "libdft_source_offsets": [
+        42
+      ],
+      "field_presence_diagnostics": {
+        "ours": true,
+        "libdft": true
+      }
+    },
+    {
+      "case": "different_lengths",
+      "path": "/short",
+      "status": "native_calibrated",
+      "root": 21,
+      "steps": 39,
+      "intermediate_byte_checks": 5109,
+      "ours_source_offsets": [
+        10
+      ],
+      "libdft_source_offsets": [
+        10
+      ],
+      "field_presence_diagnostics": {
+        "ours": true,
+        "libdft": true
+      }
+    },
+    {
+      "case": "different_lengths",
+      "path": "/long",
+      "status": "native_calibrated",
+      "root": 23,
+      "steps": 149,
+      "intermediate_byte_checks": 21009,
+      "ours_source_offsets": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "libdft_source_offsets": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "field_presence_diagnostics": {
+        "ours": true,
+        "libdft": true
+      }
+    },
+    {
+      "case": "overwrite_equal",
+      "path": "/payer",
+      "status": "not_in_parser_scope",
+      "reason": "post-parse replacement"
+    },
+    {
+      "case": "overwrite_equal",
+      "path": "/recipient",
+      "status": "native_calibrated",
+      "root": 27,
+      "steps": 83,
+      "intermediate_byte_checks": 11205,
+      "ours_source_offsets": [
+        30,
+        31,
+        32,
+        33,
+        34
+      ],
+      "libdft_source_offsets": [
+        30,
+        31,
+        32,
+        33,
+        34
+      ],
+      "field_presence_diagnostics": {
+        "ours": true,
+        "libdft": true
+      }
+    },
+    {
+      "case": "overwrite_different",
+      "path": "/payer",
+      "status": "not_in_parser_scope",
+      "reason": "post-parse replacement"
+    },
+    {
+      "case": "overwrite_different",
+      "path": "/recipient",
+      "status": "native_calibrated",
+      "root": 31,
+      "steps": 72,
+      "intermediate_byte_checks": 9648,
+      "ours_source_offsets": [
+        28,
+        29,
+        30,
+        31
+      ],
+      "libdft_source_offsets": [
+        28,
+        29,
+        30,
+        31
+      ],
+      "field_presence_diagnostics": {
+        "ours": true,
+        "libdft": true
+      }
+    },
+    {
+      "case": "empty_fields",
+      "path": "/empty",
+      "status": "native_calibrated",
+      "root": 33,
+      "steps": 26,
+      "intermediate_byte_checks": 3380,
+      "ours_source_offsets": [],
+      "libdft_source_offsets": [],
+      "field_presence_diagnostics": {
+        "ours": true,
+        "libdft": true
+      }
+    },
+    {
+      "case": "empty_fields",
+      "path": "/nonempty",
+      "status": "native_calibrated",
+      "root": 35,
+      "steps": 39,
+      "intermediate_byte_checks": 5109,
+      "ours_source_offsets": [
+        24
+      ],
+      "libdft_source_offsets": [
+        24
+      ],
+      "field_presence_diagnostics": {
+        "ours": true,
+        "libdft": true
+      }
+    },
+    {
+      "case": "quoted_and_slash",
+      "path": "/s",
+      "status": "native_calibrated",
+      "root": 37,
+      "steps": 150,
+      "intermediate_byte_checks": 20550,
+      "ours_source_offsets": [
+        6,
+        8,
+        9,
+        11,
+        12,
+        14,
+        15
+      ],
+      "libdft_source_offsets": [
+        6,
+        8,
+        9,
+        11,
+        12,
+        14,
+        15
+      ],
+      "field_presence_diagnostics": {
+        "ours": true,
+        "libdft": true
+      }
+    },
+    {
+      "case": "constant_escape",
+      "path": "/s",
+      "status": "native_calibrated",
+      "root": 39,
+      "steps": 88,
+      "intermediate_byte_checks": 11616,
+      "ours_source_offsets": [],
+      "libdft_source_offsets": [],
+      "field_presence_diagnostics": {
+        "ours": true,
+        "libdft": true
+      }
+    },
+    {
+      "case": "unicode",
+      "path": "/latin",
+      "status": "native_calibrated",
+      "root": 41,
+      "steps": 143,
+      "intermediate_byte_checks": 19305,
+      "ours_source_offsets": [
+        12,
+        13,
+        14,
+        15
+      ],
+      "libdft_source_offsets": [
+        12,
+        13,
+        14,
+        15
+      ],
+      "field_presence_diagnostics": {
+        "ours": true,
+        "libdft": true
+      }
+    },
+    {
+      "case": "unicode",
+      "path": "/face",
+      "status": "native_calibrated",
+      "root": 43,
+      "steps": 246,
+      "intermediate_byte_checks": 34440,
+      "ours_source_offsets": [
+        28,
+        29,
+        30,
+        31,
+        34,
+        35,
+        36,
+        37
+      ],
+      "libdft_source_offsets": [
+        28,
+        29,
+        30,
+        31,
+        34,
+        35,
+        36,
+        37
+      ],
+      "field_presence_diagnostics": {
+        "ours": true,
+        "libdft": true
+      }
+    },
+    {
+      "case": "missing_field",
+      "path": "/absent",
+      "status": "native_no_sink"
+    },
+    {
+      "case": "incomplete_json",
+      "path": "/s",
+      "status": "native_no_sink"
+    }
+  ],
+  "binary_sha256": "e1339520b26cf7a71414e74f282ef1de0673ff318ac549cec0662f881103f48c",
+  "cjson_source_sha256": {
+    "cJSON.c": "298581a04a36c0165da4b0aade235c23088cb2faa58651d720ea2f3706ed0b0d",
+    "cJSON.h": "25b0145150d500498e4d209cec69c18c42cf818bffcc54690be3b895a2a16dee",
+    "LICENSE": "a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c"
+  },
+  "libdft_revision": "20804d5bae5d8aed31a71761b1a1149e35a0da95",
+  "libdft_source_files_verified": 34,
+  "implementation_sha256": {
+    "cases.py": "a1fc237286ca7c898ecc1829bde811d8194ff282b2cfa727675cb1c7c703818e",
+    "driver.c": "97c2cac841bce70853cac12b2355da58d069193728dd572c2ede41787b34633e",
+    "preflight.py": "bffe8ad99641401c3c32db79e35c00cd52da78c7d0325f1084b8746ddd4bc48b",
+    "parser_core.py": "e8697b9e257d050ebf9c6471937d263e5cd849172a19f3e86d7dc566a04df0fc",
+    "parser_local.py": "a8a53fe167d43fd5863767f2ca601e706f61a20c2032482d760d0845519bb964",
+    "parser_ours.py": "6c707f6c345c71d536f39e96b5955617db12cca870f6dc75c239c39f5bdc1812",
+    "parser_capture.cpp": "04fabcfa441480a3a4eece1249be25b525a5da9de5cf06b8da83ff9f48e5b434",
+    "parser_host.py": "ba7dd9a15bbf61c0878a48833d5b21cc44cda20236c7be28279f830d3b6f0ef2",
+    "requirements.txt": "471cc590d447641a19eed933e06c4491cf46ddea12f41665382cce7cff639e63"
+  },
+  "support_source_sha256": {
+    "c_bit_machine.py": "89fa598822594facb0fff5bf0e721603ba012f62d24a6b562c752d068b82855f",
+    "interproc_model.py": "ad4122e5ddb801d66082b3f525b2624ec094f8df5dfec22869aa09a1f9207937",
+    "hybrid_model.py": "d94e0beecc0d464dc557c93b42e01804c99ca0ef68be5cd1200cd1bec9e9aaf2",
+    "language_adapters.py": "68c55a3399be7d76b3a13258eeafbdaf56bfbcea5e579ee1a1d906cb4e006f5d",
+    "build_core.py": "bd91b71d91e3cc21c344f8036a58d7558d04b639619ef699d7a14ef0d67f4449",
+    "core.cpp": "3b527836097c24ef13dbe030d862eca2ff08478c0d7c2827ef03292c44982308",
+    "pin.H": "bf6de9f41c1336501ba229e9d33dfa301484c3ad9c21aff8623287b5769533c7",
+    "replay.py": "4a4a6e8af7ee8557f96c48f34ec42bb1d8b1924f4340f695a40f9c9f7d7dff09",
+    "external_compare.py": "066e8e3cbbfc1195940d8cd781ced3b6cb4a0dfae414c76bdb38d2738b8bdd9b"
+  },
+  "verifier_sha256": "62c28ff7abe905672ffd414ae0f6f1bf89c646dfc2cddbc04e2f0efa949fc8ec",
+  "generated_core_sha256": "143532c19d67c7a1d3526bb35b486102d0e4eabb4b7443b3955b4bda0b5226ab",
+  "host_reported_environment": {
+    "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "python": "3.13.9 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 19:16:10) [GCC 11.2.0]",
+    "cpuinfo": "vendor_id\t: AuthenticAMD\nmodel name\t: AMD Ryzen 9 9955HX 16-Core Processor\nflags\t\t: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext perfctr_core ssbd ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves avx_vnni avx512_bf16 clzero xsaveerptr arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid fsrm avx512_vp2intersect",
+    "perf_event_paranoid": "2",
+    "intel_pt_type": {
+      "unavailable": "[Errno 2] No such file or directory: '/sys/bus/event_source/devices/intel_pt/type'"
+    },
+    "runtime_overrides": {
+      "GODEBUG": null,
+      "GOMAXPROCS": null,
+      "GOAMD64": null,
+      "GOGC": null
+    },
+    "hardtaint_status": "inventory_only; PTWRITE capability and usable PT capture not tested"
+  },
+  "performance_eligible": false,
+  "independent_per_byte_accuracy": null,
+  "limitations": [
+    "Post-allocation string decoding only; replacement and serialization excluded",
+    "Field presence is not an independent per-byte dependency oracle",
+    "Observed native states calibrate exercised forms, not all 46 callbacks",
+    "Diagnostic full traces do not establish sparse collection or performance gains"
+  ],
+  "archive": {
+    "name": "cjson-parser-host-20261012-041303-736089.zip",
+    "size_bytes": 2963370,
+    "sha256": "11743491e30466eadf54b979212d9c091f5d2c75422e510384c8435b509d62b3"
+  }
+}
