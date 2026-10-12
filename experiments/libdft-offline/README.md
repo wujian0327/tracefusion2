@@ -1,6 +1,6 @@
 # libdft64 离线传播核心：RQ1 接入与校准
 
-2026-10-12。**原版传播回调已成功离线编译并运行；同轨迹原版 Pin 校准仍待主机执行。**
+2026-10-12。**原版传播回调已成功离线编译并运行；受控 C 的同轨迹原版 Pin 主机校准已通过并独立复核。**
 本实验落实“我们提供运行证据、适配已有传播核心”的 RQ1 路线，不更改 RQ2 的外部系统成本口径。
 当前名称为 **libdft64 callback-core offline adapter**，不是完整 libdft64、HardTaint 或新的通用污点算法。
 
@@ -22,7 +22,18 @@
 未知指令/操作数、越界寄存器/地址、缺少完成记录等拒绝；当前不支持一般 SIMD、
 系统调用、任意异常、线程迁移和跨线程共享内存。已有 Java/Go 前端缺口没有因此自动解决。
 
-## 已执行的本地验证
+## 已完成的主机校准
+
+上传 `libdft-offline-host-20261012-032317-563858.zip` 已由本地可信源码重新编译核心、
+从上传 ELF 重建指令证据，并重放全部原始记录。详见 [HOST-RESULTS.md](HOST-RESULTS.md)
+及 [host-validation-20261012.json](host-validation-20261012.json)。
+
+- 24/24 查询最终逐字节标签、来源集合与独立真值一致；6 项正确为空来源。
+- 916 条主机指令记录，逐步比较 16 个 GPR 与目标四字节，共 120,912 次字节标签比较全部一致。
+- 来源关系 TP=22、FP=0、FN=0；27 个提取回调中，本工作负载实际触发 8 种。
+- 校准采集仍使用 Pin；未验证 Go/Java/Rust/C++，未进行性能测量，不涵盖所有内存标签。
+
+## 此前的本地验证（保留原始证据口径）
 
 见 [local-validation-20261012.json](local-validation-20261012.json)。
 
@@ -35,7 +46,7 @@
 | 离线来源结果 | 24/24 查询匹配独立真值，22 条来源关系，无额外或遗漏 |
 | 原生业务输出 | 单独执行同一本地 ELF，24 个值符合独立驱动真值 |
 | 原版 Pin 诊断工具 | 固定 SDK 编译成功；本环境启动器 `Exec format error` |
-| 原版 Pin 与离线核心同轨迹校准 | **未完成** |
+| 原版 Pin 与离线核心同轨迹校准 | 当时未完成；现由上述独立主机记录补齐 |
 
 916 条是模拟器执行记录，不是 BPF/Pin/内核采集。原生驱动只验证业务值和真值，
 没有提供本轮原生动态轨迹。它与历史 940 条主机指令属于不同构建，不能互相替代。
@@ -48,7 +59,7 @@
 host 校准另外通过原版中间标签和目标标签检查这一有限适配器。
 没有性能测量，不使用模拟器/诊断日志耗时比较效率。
 
-## 主机下一步：同一次执行校准
+## 主机校准复现入口（本轮已通过，无需重复运行）
 
 使用此前可以运行 libdft64 的 Linux x86-64 主机，普通用户，无需 sudo/BCC。
 需要 GCC/G++、make、git、binutils 和 Python 3.12+。已有 Pin/libdft 缓存会复用；
@@ -98,9 +109,21 @@ python3 experiments/libdft-offline/build_core.py --libdft artifacts/external-too
 
 输出目录必须不存在，不覆盖旧证据。成功后报告仍保持 `native_pin_equivalence=false`。
 
+## 独立复核上传结果
+
+`verify_host.py` 读取解压目录，使用可信上游检出与本地适配器重新编译、重放；
+不会执行上传包中的程序、动态库或 Python 脚本。输出目录必须是新目录。
+
+```bash
+.venv-libdft-offline/bin/python experiments/libdft-offline/verify_host.py \
+  artifacts/libdft-offline-host-20261012-032317-563858 \
+  --libdft artifacts/external-tools/libdft64 \
+  --output artifacts/libdft-offline-reverified-new
+```
+
 ## 后续资格
 
-先完成同轨迹校准，再适配一个已有 Go 路径并检查所需指令与上下文，不预设成功。
+同轨迹校准已完成；下一步适配一个已有 Go 路径并检查所需指令与上下文，不预设成功。
 C++/Rust 使用相同 amd64 核心的可能性需要真实执行证据；Java 需要不同的操作语义适配。
 不能把当前单线程受控 C 的 24 个查询填入四种语言的准确率表，也不把此核心的成本当成
 原版 libdft64 系统成本。Galette/HardTaint 接入仍为未开始状态。
