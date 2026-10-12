@@ -1,0 +1,726 @@
+{
+  "status": "local_parser_replay_pass_native_calibration_pending",
+  "native_capture": false,
+  "native_core_calibration": false,
+  "our_provenance_run": true,
+  "performance_eligible": false,
+  "queries": [
+    {
+      "case": "equal_fields",
+      "path": "/payer",
+      "status": "emulated_replay_completed",
+      "steps": 83,
+      "byte_labels": [
+        [
+          11
+        ],
+        [
+          12
+        ],
+        [
+          13
+        ],
+        [
+          14
+        ],
+        [
+          15
+        ]
+      ],
+      "source_offsets": [
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "ours_source_offsets": [
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "field_presence_diagnostic_matched": true
+    },
+    {
+      "case": "equal_fields",
+      "path": "/recipient",
+      "status": "emulated_replay_completed",
+      "steps": 83,
+      "byte_labels": [
+        [
+          31
+        ],
+        [
+          32
+        ],
+        [
+          33
+        ],
+        [
+          34
+        ],
+        [
+          35
+        ]
+      ],
+      "source_offsets": [
+        30,
+        31,
+        32,
+        33,
+        34
+      ],
+      "ours_source_offsets": [
+        30,
+        31,
+        32,
+        33,
+        34
+      ],
+      "field_presence_diagnostic_matched": true
+    },
+    {
+      "case": "nested_equal",
+      "path": "/buyer/name",
+      "status": "emulated_replay_completed",
+      "steps": 72,
+      "byte_labels": [
+        [
+          19
+        ],
+        [
+          20
+        ],
+        [
+          21
+        ],
+        [
+          22
+        ]
+      ],
+      "source_offsets": [
+        18,
+        19,
+        20,
+        21
+      ],
+      "ours_source_offsets": [
+        18,
+        19,
+        20,
+        21
+      ],
+      "field_presence_diagnostic_matched": true
+    },
+    {
+      "case": "nested_equal",
+      "path": "/seller/name",
+      "status": "emulated_replay_completed",
+      "steps": 72,
+      "byte_labels": [
+        [
+          44
+        ],
+        [
+          45
+        ],
+        [
+          46
+        ],
+        [
+          47
+        ]
+      ],
+      "source_offsets": [
+        43,
+        44,
+        45,
+        46
+      ],
+      "ours_source_offsets": [
+        43,
+        44,
+        45,
+        46
+      ],
+      "field_presence_diagnostic_matched": true
+    },
+    {
+      "case": "nested_equal",
+      "path": "/note",
+      "status": "emulated_replay_completed",
+      "steps": 83,
+      "byte_labels": [
+        [
+          59
+        ],
+        [
+          60
+        ],
+        [
+          61
+        ],
+        [
+          62
+        ],
+        [
+          63
+        ]
+      ],
+      "source_offsets": [
+        58,
+        59,
+        60,
+        61,
+        62
+      ],
+      "ours_source_offsets": [
+        58,
+        59,
+        60,
+        61,
+        62
+      ],
+      "field_presence_diagnostic_matched": true
+    },
+    {
+      "case": "array_equal",
+      "path": "/items/0/sku",
+      "status": "emulated_replay_completed",
+      "steps": 39,
+      "byte_labels": [
+        [
+          19
+        ]
+      ],
+      "source_offsets": [
+        18
+      ],
+      "ours_source_offsets": [
+        18
+      ],
+      "field_presence_diagnostic_matched": true
+    },
+    {
+      "case": "array_equal",
+      "path": "/items/1/sku",
+      "status": "emulated_replay_completed",
+      "steps": 39,
+      "byte_labels": [
+        [
+          31
+        ]
+      ],
+      "source_offsets": [
+        30
+      ],
+      "ours_source_offsets": [
+        30
+      ],
+      "field_presence_diagnostic_matched": true
+    },
+    {
+      "case": "array_equal",
+      "path": "/items/2/sku",
+      "status": "emulated_replay_completed",
+      "steps": 39,
+      "byte_labels": [
+        [
+          43
+        ]
+      ],
+      "source_offsets": [
+        42
+      ],
+      "ours_source_offsets": [
+        42
+      ],
+      "field_presence_diagnostic_matched": true
+    },
+    {
+      "case": "different_lengths",
+      "path": "/short",
+      "status": "emulated_replay_completed",
+      "steps": 39,
+      "byte_labels": [
+        [
+          11
+        ]
+      ],
+      "source_offsets": [
+        10
+      ],
+      "ours_source_offsets": [
+        10
+      ],
+      "field_presence_diagnostic_matched": true
+    },
+    {
+      "case": "different_lengths",
+      "path": "/long",
+      "status": "emulated_replay_completed",
+      "steps": 149,
+      "byte_labels": [
+        [
+          22
+        ],
+        [
+          23
+        ],
+        [
+          24
+        ],
+        [
+          25
+        ],
+        [
+          26
+        ],
+        [
+          27
+        ],
+        [
+          28
+        ],
+        [
+          29
+        ],
+        [
+          30
+        ],
+        [
+          31
+        ],
+        [
+          32
+        ]
+      ],
+      "source_offsets": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "ours_source_offsets": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "field_presence_diagnostic_matched": true
+    },
+    {
+      "case": "overwrite_equal",
+      "path": "/payer",
+      "status": "not_in_parser_scope",
+      "reason": "replacement occurs after parsing"
+    },
+    {
+      "case": "overwrite_equal",
+      "path": "/recipient",
+      "status": "emulated_replay_completed",
+      "steps": 83,
+      "byte_labels": [
+        [
+          31
+        ],
+        [
+          32
+        ],
+        [
+          33
+        ],
+        [
+          34
+        ],
+        [
+          35
+        ]
+      ],
+      "source_offsets": [
+        30,
+        31,
+        32,
+        33,
+        34
+      ],
+      "ours_source_offsets": [
+        30,
+        31,
+        32,
+        33,
+        34
+      ],
+      "field_presence_diagnostic_matched": true
+    },
+    {
+      "case": "overwrite_different",
+      "path": "/payer",
+      "status": "not_in_parser_scope",
+      "reason": "replacement occurs after parsing"
+    },
+    {
+      "case": "overwrite_different",
+      "path": "/recipient",
+      "status": "emulated_replay_completed",
+      "steps": 72,
+      "byte_labels": [
+        [
+          29
+        ],
+        [
+          30
+        ],
+        [
+          31
+        ],
+        [
+          32
+        ]
+      ],
+      "source_offsets": [
+        28,
+        29,
+        30,
+        31
+      ],
+      "ours_source_offsets": [
+        28,
+        29,
+        30,
+        31
+      ],
+      "field_presence_diagnostic_matched": true
+    },
+    {
+      "case": "empty_fields",
+      "path": "/empty",
+      "status": "emulated_replay_completed",
+      "steps": 26,
+      "byte_labels": [],
+      "source_offsets": [],
+      "ours_source_offsets": [],
+      "field_presence_diagnostic_matched": true
+    },
+    {
+      "case": "empty_fields",
+      "path": "/nonempty",
+      "status": "emulated_replay_completed",
+      "steps": 39,
+      "byte_labels": [
+        [
+          25
+        ]
+      ],
+      "source_offsets": [
+        24
+      ],
+      "ours_source_offsets": [
+        24
+      ],
+      "field_presence_diagnostic_matched": true
+    },
+    {
+      "case": "quoted_and_slash",
+      "path": "/s",
+      "status": "emulated_replay_completed",
+      "steps": 150,
+      "byte_labels": [
+        [
+          7
+        ],
+        [
+          9
+        ],
+        [
+          10
+        ],
+        [
+          12
+        ],
+        [
+          13
+        ],
+        [
+          15
+        ],
+        [
+          16
+        ]
+      ],
+      "source_offsets": [
+        6,
+        8,
+        9,
+        11,
+        12,
+        14,
+        15
+      ],
+      "ours_source_offsets": [
+        6,
+        8,
+        9,
+        11,
+        12,
+        14,
+        15
+      ],
+      "field_presence_diagnostic_matched": true
+    },
+    {
+      "case": "constant_escape",
+      "path": "/s",
+      "status": "emulated_replay_completed",
+      "steps": 88,
+      "byte_labels": [
+        [],
+        []
+      ],
+      "source_offsets": [],
+      "ours_source_offsets": [],
+      "field_presence_diagnostic_matched": true
+    },
+    {
+      "case": "unicode",
+      "path": "/latin",
+      "status": "emulated_replay_completed",
+      "steps": 143,
+      "byte_labels": [
+        [
+          13,
+          14,
+          15,
+          16
+        ]
+      ],
+      "source_offsets": [
+        12,
+        13,
+        14,
+        15
+      ],
+      "ours_source_offsets": [
+        12,
+        13,
+        14,
+        15
+      ],
+      "field_presence_diagnostic_matched": true
+    },
+    {
+      "case": "unicode",
+      "path": "/face",
+      "status": "emulated_replay_completed",
+      "steps": 246,
+      "byte_labels": [
+        [
+          29,
+          30,
+          31,
+          32,
+          35,
+          36,
+          37,
+          38
+        ],
+        [
+          29,
+          30,
+          31,
+          32,
+          35,
+          36,
+          37,
+          38
+        ],
+        [
+          29,
+          30,
+          31,
+          32,
+          35,
+          36,
+          37,
+          38
+        ],
+        [
+          29,
+          30,
+          31,
+          32,
+          35,
+          36,
+          37,
+          38
+        ]
+      ],
+      "source_offsets": [
+        28,
+        29,
+        30,
+        31,
+        34,
+        35,
+        36,
+        37
+      ],
+      "ours_source_offsets": [
+        28,
+        29,
+        30,
+        31,
+        34,
+        35,
+        36,
+        37
+      ],
+      "field_presence_diagnostic_matched": true
+    },
+    {
+      "case": "missing_field",
+      "path": "/absent",
+      "status": "native_no_sink"
+    },
+    {
+      "case": "incomplete_json",
+      "path": "/s",
+      "status": "native_no_sink"
+    }
+  ],
+  "query_requests": 22,
+  "extracted_callbacks": 46,
+  "emulated_queries": 18,
+  "emulated_instructions": 1545,
+  "mnemonic_counts": {
+    "mov": 396,
+    "test": 30,
+    "je": 89,
+    "cmp": 193,
+    "jae": 80,
+    "lea": 137,
+    "jmp": 109,
+    "movzx": 104,
+    "add": 93,
+    "sub": 53,
+    "jne": 25,
+    "pop": 116,
+    "ret": 23,
+    "jle": 10,
+    "jbe": 13,
+    "movabs": 3,
+    "bt": 3,
+    "ja": 27,
+    "movsxd": 4,
+    "call": 5,
+    "push": 8,
+    "shl": 10,
+    "and": 6,
+    "or": 5,
+    "shr": 3
+  },
+  "binary_sha256": "7b2c3ef19e89a6511edb6147007c900eec78616d577150127cc3f827ca5ce3e2",
+  "upstream_sha256": {
+    "cJSON.c": "298581a04a36c0165da4b0aade235c23088cb2faa58651d720ea2f3706ed0b0d",
+    "cJSON.h": "25b0145150d500498e4d209cec69c18c42cf818bffcc54690be3b895a2a16dee",
+    "LICENSE": "a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c"
+  },
+  "rejection_checks": [
+    {
+      "name": "missing_completion",
+      "engine": "libdft_offline",
+      "rejected": true
+    },
+    {
+      "name": "missing_completion",
+      "engine": "ours",
+      "rejected": true
+    },
+    {
+      "name": "sequence_gap",
+      "engine": "libdft_offline",
+      "rejected": true
+    },
+    {
+      "name": "sequence_gap",
+      "engine": "ours",
+      "rejected": true
+    },
+    {
+      "name": "outside_decoder",
+      "engine": "libdft_offline",
+      "rejected": true
+    },
+    {
+      "name": "outside_decoder",
+      "engine": "ours",
+      "rejected": true
+    },
+    {
+      "name": "missing_root_return",
+      "engine": "libdft_offline",
+      "rejected": true
+    },
+    {
+      "name": "missing_root_return",
+      "engine": "ours",
+      "rejected": true
+    },
+    {
+      "name": "wrong_concrete_register",
+      "engine": "ours",
+      "rejected": true
+    },
+    {
+      "name": "missing_stack_snapshot",
+      "engine": "ours",
+      "rejected": true
+    }
+  ],
+  "implementation_sha256": {
+    "parser_ours.py": "6c707f6c345c71d536f39e96b5955617db12cca870f6dc75c239c39f5bdc1812",
+    "driver.c": "97c2cac841bce70853cac12b2355da58d069193728dd572c2ede41787b34633e",
+    "parser_core.py": "e8697b9e257d050ebf9c6471937d263e5cd849172a19f3e86d7dc566a04df0fc",
+    "cases.py": "a1fc237286ca7c898ecc1829bde811d8194ff282b2cfa727675cb1c7c703818e",
+    "parser_capture.cpp": "04fabcfa441480a3a4eece1249be25b525a5da9de5cf06b8da83ff9f48e5b434",
+    "parser_host.py": "ba7dd9a15bbf61c0878a48833d5b21cc44cda20236c7be28279f830d3b6f0ef2",
+    "preflight.py": "bffe8ad99641401c3c32db79e35c00cd52da78c7d0325f1084b8746ddd4bc48b",
+    "parser_local.py": "a8a53fe167d43fd5863767f2ca601e706f61a20c2032482d760d0845519bb964"
+  },
+  "scope": "Post-allocation parse_string decoding; replacement/serialization not analyzed",
+  "limitations": [
+    "Unicorn allocation return is a concrete runtime stub, not native execution",
+    "Local byte labels are not proof of equivalence to original Pin dispatcher",
+    "Field-presence diagnostics are not independent per-byte dependency truth"
+  ],
+  "pin_tool_build": {
+    "status": "compiled_not_run",
+    "capture_sha256": "04fabcfa441480a3a4eece1249be25b525a5da9de5cf06b8da83ff9f48e5b434",
+    "tool_build": {
+      "nullpin": {
+        "path": "<REPO>/artifacts/cjson-parser-host-build-20261012/libdft-build/tools/obj-intel64/nullpin.so",
+        "sha256": "164e17cb6c6d057433b9c2c954ea3f78e79780e89cf62a7a8af8bdb644db3d06"
+      },
+      "cjson_parser_capture": {
+        "path": "<REPO>/artifacts/cjson-parser-host-build-20261012/libdft-build/tools/obj-intel64/cjson_parser_capture.so",
+        "sha256": "6743dca6f88315fe533131c378bd05517a6824eb01b4308b93b1b76276ed04d9"
+      }
+    }
+  }
+}

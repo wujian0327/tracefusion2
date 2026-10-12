@@ -124,7 +124,8 @@ python3 experiments/libdft-offline/build_core.py --libdft artifacts/external-too
 ## 后续资格
 
 同轨迹校准已完成。用户随后确认先增加真实开源对象，当前先接入
-[cJSON](../cjson-provenance/README.md)，已完成原生功能检查、尚待扩展指令和采集契约；
+[cJSON](../cjson-provenance/PARSER-CALIBRATION.md)，已完成原生功能检查；独立扩展的 46 回调版本
+已对字符串解码区间做本地模拟并编译主机工具，真实校准待运行；
 已有 Go 路径接入保留为后续项，不预设成功。
 C++/Rust 使用相同 amd64 核心的可能性需要真实执行证据；Java 需要不同的操作语义适配。
 不能把当前单线程受控 C 的 24 个查询填入四种语言的准确率表，也不把此核心的成本当成
