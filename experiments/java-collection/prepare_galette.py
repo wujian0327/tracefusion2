@@ -22,20 +22,31 @@ def logged(cmd, out, name, env=None, cwd=None):
             f.write(data);f.flush();os.fsync(f.fileno())
     record = dict(command=list(map(str, cmd)), returncode=p.returncode, wall_seconds=time.perf_counter()-begin)
     (out / (name + ".json")).write_text(json.dumps(record, indent=2)+"\n")
-    if p.returncode: raise RuntimeError(f"{name} failed; inspect {out}/{name}.stderr.txt")
+    if p.returncode: raise RuntimeError(f"{name} failed; inspect {out}/{name}.stdout.txt and {out}/{name}.stderr.txt")
     return record
 
 
 def main(a):
-    out = a.output.resolve(); out.mkdir(parents=True, exist_ok=False)
+    out = a.output.resolve()
+    if out.exists():
+        raise SystemExit(f"输出目录已存在：{out}\n请为本次准备指定新的 --output 目录，保留原目录供检查。"
+                         "\n只有 preparation.json 中 status 为 prepared 的目录才能用于 compare_galette.py。")
     jdk = a.jdk.resolve()
-    if not (jdk / "bin/javac").is_file(): raise ValueError("--jdk must name a complete JDK 17")
+    for name in ("java", "javac", "jlink"):
+        if not (jdk / "bin" / name).is_file():
+            raise SystemExit(f"未找到 {jdk / 'bin' / name}；--jdk 必须是实际安装的完整 JDK 17 根目录。")
+    env = dict(os.environ, JAVA_HOME=str(jdk), PATH=str(jdk / "bin")+os.pathsep+os.environ["PATH"])
+    version = subprocess.check_output([str(jdk / "bin/java"), "-version"], env=env, stderr=subprocess.STDOUT, text=True)
+    if 'version "17.' not in version:
+        raise SystemExit("本轮要求 JDK 17；当前 --jdk 对应版本：\n"+version)
+    for name in (["git"] if a.skip_build else ["git", a.maven]):
+        if not shutil.which(name, path=env["PATH"]): raise SystemExit(f"未找到所需命令：{name}；安装后重试。")
+    # Validate arguments and tools before creating a directory that could be mistaken
+    # for a prepared runtime. Build failures below still retain their logs and status.
+    out.mkdir(parents=True, exist_ok=False)
     source = a.source.resolve() if a.source else out / "upstream"
     report = dict(schema="galette-build-v1", status="running", revision=REVISION, repository=URL, jdk=str(jdk), steps=[])
     try:
-        env = dict(os.environ, JAVA_HOME=str(jdk), PATH=str(jdk / "bin")+os.pathsep+os.environ["PATH"])
-        version = subprocess.check_output([str(jdk / "bin/java"), "-version"], env=env, stderr=subprocess.STDOUT, text=True)
-        if 'version "17.' not in version: raise ValueError("this comparison pins the build and runtime to JDK 17")
         report["java"] = version
         report["base_jdk_sha256"] = {p:digest(jdk/p) for p in ("release", "bin/java", "lib/modules")}
         if not a.source:

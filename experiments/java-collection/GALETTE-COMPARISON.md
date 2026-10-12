@@ -55,10 +55,11 @@ version instead of silently accepting the default JDK 21.
 git switch perf/payment-steady-state
 git pull --ff-only
 "$JDK17/bin/java" -version
+GALETTE_DIR="artifacts/galette-jdk17-$(date +%Y%m%d-%H%M%S-%N)"
 python experiments/java-collection/prepare_galette.py \
-  --jdk "$JDK17" --output artifacts/galette-jdk17
+  --jdk "$JDK17" --output "$GALETTE_DIR" &&
 python experiments/java-collection/compare_galette.py \
-  --jdk "$JDK17" --galette artifacts/galette-jdk17 \
+  --jdk "$JDK17" --galette "$GALETTE_DIR" \
   --rounds 2 --jvm-warmup 0 --repeats 6 --warmup 1
 ```
 
@@ -68,6 +69,12 @@ It never changes the original JDK. Build and JDK instrumentation costs are recor
 separately. An existing clean checkout can be supplied using `--source`; reuse of
 its built JARs using `--skip-build` is explicitly recorded and requires retaining
 the original build logs separately.
+
+Each preparation uses a new directory. An existing directory without
+`preparation.json` (or with status other than `prepared`) is incomplete and must
+not be passed to the comparison runner. Keep it for diagnosis and retry into a
+new directory. The `&&` above prevents comparison when preparation fails.
+JDK and required-tool validation happens before the output directory is created.
 
 The runner prints an `artifacts/java-galette-...` directory. Re-read that archive:
 
