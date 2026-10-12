@@ -4,9 +4,13 @@
 
 ## 运行
 
+最新用户主机结果见 [ARRAY-HOST-RESULTS.md](ARRAY-HOST-RESULTS.md)：完整原始证据复核
+通过，三组均 40/40 正确；sparse 相对 full 的总耗时配对中位降幅为 7.23%，boundary
+相对 full 为 24.36%。这是含启动成本的固定负载结果，不是稳态服务性能。
+
 字节数组、循环与 switch 的原版开源路径见 [ARRAY-COMPARISON.md](ARRAY-COMPARISON.md)：
 `python3 experiments/java-collection/compare_arrays.py --jdk /实际/JDK/目录`。
-已核验 Commons Codec 的哈希来源；本地成本归档不完整，尚无本轮有效性能结论。
+已核验 Commons Codec 的哈希来源；此前本地成本归档不完整的历史记录仍保留。
 
 原版开源库接入与三组成本见 [UPSTREAM-COMPARISON.md](UPSTREAM-COMPARISON.md)：
 `python3 experiments/java-collection/compare_upstream.py --jdk /path/to/jdk17`。

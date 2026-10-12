@@ -1,0 +1,2588 @@
+{
+  "modes": [
+    "full",
+    "sparse",
+    "boundary"
+  ],
+  "rounds": 2,
+  "repetitions": 6,
+  "warmup_blocks": 1,
+  "seed": 20261011,
+  "qualification": {
+    "scope": "unchanged hash32 byte-array call closure; one library path",
+    "snapshot": "v3 complete immutable byte arrays <=4096 bytes",
+    "semantics": "operational operand data dependence; array index/address separate",
+    "array_writes": false,
+    "whole_application": false,
+    "external_tool_comparison": false,
+    "steady_state": false,
+    "memory_measurement_qualified": true
+  },
+  "dependencies": [
+    {
+      "name": "commons-codec-1.17.1.jar",
+      "url": "https://repo.maven.apache.org/maven2/commons-codec/commons-codec/1.17.1/commons-codec-1.17.1.jar",
+      "sha256": "f9f6cb103f2ddc3c99a9d80ada2ae7bf0685111fd6bffccb72033d1da4e6ff23"
+    },
+    {
+      "name": "commons-codec-1.17.1-sources.jar",
+      "url": "https://repo.maven.apache.org/maven2/commons-codec/commons-codec/1.17.1/commons-codec-1.17.1-sources.jar",
+      "sha256": "2283aff7f425dff23ebdb7a8fc0f03ae21b4ced7a43aacba47cedae126dc5d4a"
+    }
+  ],
+  "agent_sha256": "6eb218cb6ea97c0d61e9a2ab57e08c6a84227ed8b0f9152b854a09b408b39e2d",
+  "class_sha256": "2c4a93e6f84117372dd203c9c2a59d7db40d4e436e8ea6bbed0e25a735cad182",
+  "java": {
+    "command": [
+      "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+      "-version"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": "openjdk version \"21.0.12.1\" 2026-08-18\nOpenJDK Runtime Environment (build 21.0.12.1+1-1-24.04.4-Ubuntu)\nOpenJDK 64-Bit Server VM (build 21.0.12.1+1-1-24.04.4-Ubuntu, mixed mode, sharing)\n"
+  },
+  "inputs": [
+    {
+      "name": "prefix-0",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 0,
+      "seed": 17
+    },
+    {
+      "name": "prefix-1",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 1,
+      "seed": 17
+    },
+    {
+      "name": "prefix-2",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 2,
+      "seed": 17
+    },
+    {
+      "name": "prefix-3",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 3,
+      "seed": 17
+    },
+    {
+      "name": "prefix-4",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 4,
+      "seed": 17
+    },
+    {
+      "name": "prefix-5",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 5,
+      "seed": 17
+    },
+    {
+      "name": "prefix-6",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 6,
+      "seed": 17
+    },
+    {
+      "name": "prefix-7",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 7,
+      "seed": 17
+    },
+    {
+      "name": "prefix-8",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 8,
+      "seed": 17
+    },
+    {
+      "name": "prefix-9",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 9,
+      "seed": 17
+    },
+    {
+      "name": "prefix-10",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 10,
+      "seed": 17
+    },
+    {
+      "name": "prefix-11",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 11,
+      "seed": 17
+    },
+    {
+      "name": "prefix-12",
+      "data": [
+        128,
+        181,
+        234,
+        31,
+        84,
+        137,
+        190,
+        243,
+        40,
+        93,
+        146,
+        199,
+        252,
+        49,
+        102,
+        155
+      ],
+      "length": 12,
+      "seed": 17
+    },
+    {
+      "name": "empty",
+      "data": [],
+      "length": 0,
+      "seed": 0
+    },
+    {
+      "name": "equal-bytes",
+      "data": [
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17
+      ],
+      "length": 7,
+      "seed": -1
+    },
+    {
+      "name": "zero-bytes",
+      "data": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "length": 17,
+      "seed": 0
+    },
+    {
+      "name": "suffix-a",
+      "data": [
+        128,
+        255,
+        0,
+        127,
+        1,
+        2,
+        3,
+        4
+      ],
+      "length": 4,
+      "seed": -2147483648
+    },
+    {
+      "name": "suffix-b",
+      "data": [
+        128,
+        255,
+        0,
+        127,
+        255,
+        254,
+        253,
+        252
+      ],
+      "length": 4,
+      "seed": -2147483648
+    },
+    {
+      "name": "multi-block",
+      "data": [
+        0,
+        11,
+        22,
+        33,
+        44,
+        55,
+        66,
+        77,
+        88,
+        99,
+        110,
+        121,
+        132,
+        143,
+        154,
+        165,
+        176,
+        187,
+        198,
+        209,
+        220,
+        231,
+        242,
+        253,
+        8,
+        19,
+        30,
+        41,
+        52,
+        63,
+        74,
+        85,
+        96,
+        107,
+        118,
+        129,
+        140,
+        151,
+        162,
+        173,
+        184,
+        195,
+        206,
+        217,
+        228,
+        239,
+        250,
+        5,
+        16,
+        27,
+        38,
+        49,
+        60,
+        71,
+        82,
+        93,
+        104,
+        115,
+        126,
+        137,
+        148,
+        159,
+        170,
+        181
+      ],
+      "length": 63,
+      "seed": 2147483647
+    },
+    {
+      "name": "full-array",
+      "data": [
+        0,
+        255,
+        128,
+        127,
+        0,
+        255,
+        128,
+        127
+      ],
+      "length": 8,
+      "seed": 17
+    }
+  ],
+  "scope": {
+    "schema": "java-observation-scope-v3",
+    "entry": "org/apache/commons/codec/digest/MurmurHash2.hash32([BII)I",
+    "classes": "org/apache/commons/codec/digest/MurmurHash2",
+    "query.sha256": "cf9a29df414518dcbb555dfd5cb615c145bbec1b4603c12cd17f043969917cd2",
+    "sha256.org/apache/commons/codec/digest/MurmurHash2": "2c4a93e6f84117372dd203c9c2a59d7db40d4e436e8ea6bbed0e25a735cad182",
+    "method.count": "2",
+    "method.0": "org/apache/commons/codec/digest/MurmurHash2.getLittleEndianInt([BI)I",
+    "method.1": "org/apache/commons/codec/digest/MurmurHash2.hash32([BII)I",
+    "snapshot.count": "1",
+    "snapshot.0.arg": "0",
+    "snapshot.0.field": "[B"
+  },
+  "faults": [
+    {
+      "fault": "missing_snapshot",
+      "status": "unknown",
+      "reason": "missing/misplaced boundary snapshot"
+    },
+    {
+      "fault": "snapshot_truncated",
+      "status": "unknown",
+      "reason": "incomplete byte array snapshot"
+    },
+    {
+      "fault": "wrong_byte",
+      "status": "unknown",
+      "reason": "array read identity/index/value disagrees with snapshot"
+    },
+    {
+      "fault": "same_value_index",
+      "status": "unknown",
+      "reason": "array read identity/index/value disagrees with snapshot"
+    },
+    {
+      "fault": "missing_read",
+      "status": "unknown",
+      "reason": "missing mandatory sparse observation"
+    },
+    {
+      "fault": "switch_selector",
+      "status": "unknown",
+      "reason": "missing mandatory sparse observation"
+    },
+    {
+      "fault": "missing_exit",
+      "status": "unknown",
+      "reason": "unexpected callee entry"
+    },
+    {
+      "fault": "wrong_source_index",
+      "status": "unknown",
+      "reason": "query differs from observation scope"
+    }
+  ],
+  "runtime_rejections": [
+    {
+      "case": "null",
+      "answer": {
+        "schema": "java-provenance-v1",
+        "status": "unknown",
+        "reason": "collector reports unknown",
+        "results": []
+      }
+    },
+    {
+      "case": "oversize",
+      "answer": {
+        "schema": "java-provenance-v1",
+        "status": "unknown",
+        "reason": "collector reports unknown",
+        "results": []
+      }
+    },
+    {
+      "case": "bounds",
+      "answer": {
+        "schema": "java-provenance-v1",
+        "status": "unknown",
+        "reason": "collector reports unknown",
+        "results": []
+      }
+    }
+  ],
+  "source_sha256": {
+    "boundary.py": "7944b7fd533619a5fe285fe922dfae6012394a7458e6ee9b80d3bb08b7d777b6",
+    "check_arrays.py": "b0cca6205ed994e0e92fee79504d073eff4616a99c9e83130bf7c745b4d4d67c",
+    "check_boundary.py": "0b5569324c10461205b90833104a20c91ce50061eafa44654e9439a7c14b4028",
+    "check_inference.py": "0d1c084550cf3fd7053a28d010c2bad5d756f39a5b2f87b7936b6d3c7428d059",
+    "check_integer_semantics.py": "7250be5d1917c3ad466f37ff7144eef40cae5fcc0aba14a8c2eecc9e5be00aae",
+    "check_scope.py": "665a191ebd9d0b01412eb957e2e984953b90484c466df5abd34a0e445f556e4e",
+    "classfile.py": "50f5fb9b008daa96a2bf2c19fdf2bc988339dca93fb75733f3249288a1e6d51a",
+    "compare_arrays.py": "64f1b15582ad8cf1c50bfa29a4a9c83c1ccf02324ef3a58916be4993903edf69",
+    "compare_observations.py": "bba857b0125487cce5989cbacfa591a9d235a6b07dbc9b35be96d488bc3a31b7",
+    "compare_upstream.py": "6fb778a0542525c3a4f702bba06d895ceba95a3e5ceb69a90af8a0fa93b2540c",
+    "fixtures/demo/Bench.java": "ab98ff81704c21a11bd4b05b23b4f32df36add3dc4a11654970a6d03808de15d",
+    "fixtures/demo/Cell.java": "cbdb7d4ff05daeaecb0ecbbb6a0479ea32d4b66ec06502e20133cd2e1669f720",
+    "fixtures/demo/Driver.java": "2fd320be5815dd2db1190e4c55835dcd226e8e3e128bceb7b2775842d9a157a5",
+    "fixtures/demo/Subject.java": "fc91d359efa8f64ac8da594d0812c43395acea6844a286f40f281ad95dca1895",
+    "fixtures/demo/Unsupported.java": "5105e74646a50492bcdc64d91586fc14a139ad219c75b55622f960640ffddc02",
+    "infer.py": "1e9d7f9cd07dbf8d36d1ea3f8f7427be4a519a72c7d02abb20abe9e5eeb5a546",
+    "measure_command.c": "560d33ee6975c939eb9087c9d855aa530144c5f620897437801a7d14504fe26f",
+    "observation.py": "57023585ddd823e89b3b34a0aca8c8090cf874cf227dfef7f09ed32bc98bed13",
+    "run.py": "2ebd7278dd5ad2efe2240a98b8175cec52985899da9fd75a8dbc2aed9cd1ddc3",
+    "semantics/calibration/ByteDriver.java": "06c9f18141c4b5dd7e271327b405aa317db08ec24338952a53120d0176114f73",
+    "semantics/calibration/ByteOps.java": "37f2411eced7e2c1b23ef5d0c0d252ec8f62e7d49d00164733aa39077eed4693",
+    "semantics/calibration/IntOps.java": "a82517231cac2d49a671618afa464ff3588ea817d4961a841f2045bf843f10c8",
+    "src/tracefusion/Agent.java": "c5f97ebbf1db38f6cf61cc11000a6efd279164fae12b7e48cf63ba2910d65e8c",
+    "src/tracefusion/Recorder.java": "1a5ed44585ce77574b3d6bcb1db3eebd8ffb6266a98af876cd371f2fac9e1083",
+    "upstream/CommonsDriver.java": "e1ed7a681ecb6a050b307366db31c04c60c0c2a575f02df090fbcf8cc4a93b8a",
+    "upstream/HashDriver.java": "9e088e14e49110f0176bd71eb61f5e959dddc6eb2219038b05f3f24c05ce6fe1",
+    "verify.py": "0eef2bbb41d5e531b6691070aaf300837c9f6d5f8ea56d76c4dfd2bcdc65ff94",
+    "verify_arrays.py": "424ad992bb32b8756c227402a1d0ec295c4d0b80611db95489f41f0c22de6a0e",
+    "verify_observations.py": "a96efc4e4b88bdb210adf0a76dafc45a1122de790d1fd184ccca486b998b9527",
+    "verify_upstream.py": "5e527686264670b0fd729cee3cbf3615698a3a93043af4611bbacb23d5d3fa8e"
+  },
+  "summary": {
+    "correct_queries_per_mode": 40,
+    "raw_events": {
+      "full": 8656,
+      "sparse": 958,
+      "boundary": 126
+    },
+    "cost_medians": {
+      "native": {
+        "online_wall_seconds": 0.08808244999999815,
+        "online_cpu_seconds": 0.09696850000000001,
+        "online_peak_rss_kib": 38784.0,
+        "offline_wall_seconds": 0.0,
+        "offline_cpu_seconds": 0.0,
+        "offline_peak_rss_kib": 0.0,
+        "end_to_end_wall_seconds": 0.08808244999999815,
+        "end_to_end_cpu_seconds": 0.09696850000000001,
+        "events": 0.0,
+        "trace_bytes": 0.0
+      },
+      "full": {
+        "online_wall_seconds": 0.2633881630000019,
+        "online_cpu_seconds": 0.475197,
+        "online_peak_rss_kib": 69410.0,
+        "offline_wall_seconds": 0.15581466600000127,
+        "offline_cpu_seconds": 0.1368765,
+        "offline_peak_rss_kib": 39206.0,
+        "end_to_end_wall_seconds": 0.4197278235000006,
+        "end_to_end_cpu_seconds": 0.6115475,
+        "events": 8653.0,
+        "trace_bytes": 1180766.0
+      },
+      "sparse": {
+        "online_wall_seconds": 0.24695639599999808,
+        "online_cpu_seconds": 0.380847,
+        "online_peak_rss_kib": 57254.0,
+        "offline_wall_seconds": 0.14635113650000164,
+        "offline_cpu_seconds": 0.127556,
+        "offline_peak_rss_kib": 33484.0,
+        "end_to_end_wall_seconds": 0.3927248154999958,
+        "end_to_end_cpu_seconds": 0.5066315,
+        "events": 955.0,
+        "trace_bytes": 141623.0
+      },
+      "boundary": {
+        "online_wall_seconds": 0.2167849445000023,
+        "online_cpu_seconds": 0.334174,
+        "online_peak_rss_kib": 53286.0,
+        "offline_wall_seconds": 0.10370947500000227,
+        "offline_cpu_seconds": 0.08890400000000001,
+        "offline_peak_rss_kib": 31096.0,
+        "end_to_end_wall_seconds": 0.32094409400000146,
+        "end_to_end_cpu_seconds": 0.42156550000000004,
+        "events": 123.0,
+        "trace_bytes": 19730.0
+      }
+    },
+    "paired_reduction": {
+      "online_wall_seconds": {
+        "median": 0.08062039801195647,
+        "minimum": 0.0011464540481767038,
+        "maximum": 0.10537269378314007,
+        "sparse_worse": 0
+      },
+      "online_cpu_seconds": {
+        "median": 0.20913965025567616,
+        "minimum": 0.10865779023789868,
+        "maximum": 0.2420742387849929,
+        "sparse_worse": 0
+      },
+      "online_peak_rss_kib": {
+        "median": 0.180128693326001,
+        "minimum": 0.13956647569546987,
+        "maximum": 0.20493882843772904,
+        "sparse_worse": 0
+      },
+      "offline_wall_seconds": {
+        "median": 0.06125215214135904,
+        "minimum": -0.01135741040541749,
+        "maximum": 0.09893741928607092,
+        "sparse_worse": 1
+      },
+      "offline_cpu_seconds": {
+        "median": 0.05782844480466909,
+        "minimum": -0.018007679745773775,
+        "maximum": 0.1087068521380733,
+        "sparse_worse": 1
+      },
+      "offline_peak_rss_kib": {
+        "median": 0.145728618156322,
+        "minimum": 0.14401145545668403,
+        "maximum": 0.15080735249314514,
+        "sparse_worse": 0
+      },
+      "end_to_end_wall_seconds": {
+        "median": 0.0723359157884878,
+        "minimum": 0.011485912121323993,
+        "maximum": 0.10296557487090308,
+        "sparse_worse": 0
+      },
+      "end_to_end_cpu_seconds": {
+        "median": 0.17005784459691398,
+        "minimum": 0.08901391602404951,
+        "maximum": 0.2121653463864246,
+        "sparse_worse": 0
+      },
+      "events": {
+        "median": 0.8896336530683,
+        "minimum": 0.8896336530683,
+        "maximum": 0.8896336530683,
+        "sparse_worse": 0
+      },
+      "trace_bytes": {
+        "median": 0.8800583688893481,
+        "minimum": 0.8800583688893481,
+        "maximum": 0.8800583688893481,
+        "sparse_worse": 0
+      }
+    },
+    "boundary_vs_full": {
+      "online_wall_seconds": {
+        "median": 0.1787310358248621,
+        "minimum": 0.13415237974693917,
+        "maximum": 0.2497730228603161,
+        "boundary_worse": 0
+      },
+      "online_cpu_seconds": {
+        "median": 0.2976167522027041,
+        "minimum": 0.21861738391667807,
+        "maximum": 0.33133496754634695,
+        "boundary_worse": 0
+      },
+      "online_peak_rss_kib": {
+        "qualified": false,
+        "reason": "memory mechanism requires separate validation"
+      },
+      "offline_wall_seconds": {
+        "median": 0.33377572311392706,
+        "minimum": 0.32732181425060003,
+        "maximum": 0.43510257245871364,
+        "boundary_worse": 0
+      },
+      "offline_cpu_seconds": {
+        "median": 0.35066093355891736,
+        "minimum": 0.3259346767536785,
+        "maximum": 0.4134483823983758,
+        "boundary_worse": 0
+      },
+      "offline_peak_rss_kib": {
+        "qualified": false,
+        "reason": "memory mechanism requires separate validation"
+      },
+      "end_to_end_wall_seconds": {
+        "median": 0.2435782569652588,
+        "minimum": 0.2077910485637583,
+        "maximum": 0.3196017056233065,
+        "boundary_worse": 0
+      },
+      "end_to_end_cpu_seconds": {
+        "median": 0.3146015105560555,
+        "minimum": 0.24935070852508323,
+        "maximum": 0.33017784124099436,
+        "boundary_worse": 0
+      },
+      "events": {
+        "median": 0.9857852767826187,
+        "minimum": 0.9857852767826187,
+        "maximum": 0.9857852767826187,
+        "boundary_worse": 0
+      },
+      "trace_bytes": {
+        "median": 0.9832905080261457,
+        "minimum": 0.9832905080261457,
+        "maximum": 0.9832905080261457,
+        "boundary_worse": 0
+      }
+    },
+    "boundary_vs_sparse": {
+      "online_wall_seconds": {
+        "median": 0.1292383961607096,
+        "minimum": 0.0321694696370276,
+        "maximum": 0.1792602804482608,
+        "boundary_worse": 0
+      },
+      "online_cpu_seconds": {
+        "median": 0.13039026016367267,
+        "minimum": -0.0309487499550245,
+        "maximum": 0.2187750906520075,
+        "boundary_worse": 1
+      },
+      "online_peak_rss_kib": {
+        "qualified": false,
+        "reason": "memory mechanism requires separate validation"
+      },
+      "offline_wall_seconds": {
+        "median": 0.28472065663586277,
+        "minimum": 0.2575660287919054,
+        "maximum": 0.44144629610728914,
+        "boundary_worse": 0
+      },
+      "offline_cpu_seconds": {
+        "median": 0.2950689738135802,
+        "minimum": 0.2719813541988727,
+        "maximum": 0.423823975720789,
+        "boundary_worse": 0
+      },
+      "offline_peak_rss_kib": {
+        "qualified": false,
+        "reason": "memory mechanism requires separate validation"
+      },
+      "end_to_end_wall_seconds": {
+        "median": 0.1827844843845447,
+        "minimum": 0.11685780473560892,
+        "maximum": 0.27925191010755435,
+        "boundary_worse": 0
+      },
+      "end_to_end_cpu_seconds": {
+        "median": 0.17347058300560525,
+        "minimum": 0.04719944974253143,
+        "maximum": 0.257581524042806,
+        "boundary_worse": 0
+      },
+      "events": {
+        "median": 0.8712041884816754,
+        "minimum": 0.8712041884816754,
+        "maximum": 0.8712041884816754,
+        "boundary_worse": 0
+      },
+      "trace_bytes": {
+        "median": 0.8606864704179406,
+        "minimum": 0.8606864704179406,
+        "maximum": 0.8606864704179406,
+        "boundary_worse": 0
+      }
+    }
+  },
+  "measurements": [
+    {
+      "block": -1,
+      "warmup": true,
+      "order": [
+        "native",
+        "sparse",
+        "full",
+        "boundary"
+      ],
+      "position": 0,
+      "mode": "native",
+      "directory": "cost--1-0-native",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.08537958599999484,
+        "user_seconds": 0.074428,
+        "system_seconds": 0.024809,
+        "cpu_seconds": 0.09923699999999999,
+        "peak_rss_kib": 38516,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.08537958599999484,
+      "end_to_end_cpu_seconds": 0.09923699999999999
+    },
+    {
+      "block": -1,
+      "warmup": true,
+      "order": [
+        "native",
+        "sparse",
+        "full",
+        "boundary"
+      ],
+      "position": 1,
+      "mode": "sparse",
+      "directory": "cost--1-1-sparse",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost--1-1-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.2305006010000028,
+        "user_seconds": 0.259469,
+        "system_seconds": 0.113289,
+        "cpu_seconds": 0.37275800000000003,
+        "peak_rss_kib": 57036,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": {
+        "command": [
+          "/home/wujian/miniconda3/bin/python3",
+          "/home/wujian/tracefusion2/experiments/java-collection/infer.py",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost--1-1-sparse/capture",
+          "--query",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-query.json",
+          "--output",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost--1-1-sparse/inference.json"
+        ],
+        "wall_seconds": 0.13914089799999374,
+        "user_seconds": 0.106632,
+        "system_seconds": 0.023696,
+        "cpu_seconds": 0.130328,
+        "peak_rss_kib": 33484,
+        "supervisor_rss_kib": 1544,
+        "rss_above_supervisor_floor": true
+      },
+      "events": 955,
+      "trace_bytes": 141623,
+      "end_to_end_wall_seconds": 0.36964149899999654,
+      "end_to_end_cpu_seconds": 0.503086
+    },
+    {
+      "block": -1,
+      "warmup": true,
+      "order": [
+        "native",
+        "sparse",
+        "full",
+        "boundary"
+      ],
+      "position": 2,
+      "mode": "full",
+      "directory": "cost--1-2-full",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost--1-2-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.24658018600000275,
+        "user_seconds": 0.383592,
+        "system_seconds": 0.09051,
+        "cpu_seconds": 0.47410199999999997,
+        "peak_rss_kib": 67060,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": {
+        "command": [
+          "/home/wujian/miniconda3/bin/python3",
+          "/home/wujian/tracefusion2/experiments/java-collection/infer.py",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost--1-2-full/capture",
+          "--query",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-query.json",
+          "--output",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost--1-2-full/inference.json"
+        ],
+        "wall_seconds": 0.13787654699999763,
+        "user_seconds": 0.11063,
+        "system_seconds": 0.019755,
+        "cpu_seconds": 0.130385,
+        "peak_rss_kib": 39228,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "events": 8653,
+      "trace_bytes": 1180766,
+      "end_to_end_wall_seconds": 0.3844567330000004,
+      "end_to_end_cpu_seconds": 0.604487
+    },
+    {
+      "block": -1,
+      "warmup": true,
+      "order": [
+        "native",
+        "sparse",
+        "full",
+        "boundary"
+      ],
+      "position": 3,
+      "mode": "boundary",
+      "directory": "cost--1-3-boundary",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost--1-3-boundary/capture",
+          "-Dtracefusion.mode=boundary",
+          "-Dtracefusion.scope=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.20124119700000165,
+        "user_seconds": 0.231999,
+        "system_seconds": 0.095285,
+        "cpu_seconds": 0.327284,
+        "peak_rss_kib": 53308,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": {
+        "command": [
+          "/home/wujian/miniconda3/bin/python3",
+          "/home/wujian/tracefusion2/experiments/java-collection/infer.py",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost--1-3-boundary/capture",
+          "--query",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-query.json",
+          "--output",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost--1-3-boundary/inference.json"
+        ],
+        "wall_seconds": 0.08805141999999933,
+        "user_seconds": 0.05809,
+        "system_seconds": 0.023236,
+        "cpu_seconds": 0.08132600000000001,
+        "peak_rss_kib": 31036,
+        "supervisor_rss_kib": 1544,
+        "rss_above_supervisor_floor": true
+      },
+      "events": 123,
+      "trace_bytes": 19730,
+      "end_to_end_wall_seconds": 0.289292617000001,
+      "end_to_end_cpu_seconds": 0.40861000000000003
+    },
+    {
+      "block": 0,
+      "warmup": false,
+      "order": [
+        "boundary",
+        "native",
+        "full",
+        "sparse"
+      ],
+      "position": 0,
+      "mode": "boundary",
+      "directory": "cost-0-0-boundary",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-0-0-boundary/capture",
+          "-Dtracefusion.mode=boundary",
+          "-Dtracefusion.scope=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.192804615,
+        "user_seconds": 0.264967,
+        "system_seconds": 0.056205,
+        "cpu_seconds": 0.321172,
+        "peak_rss_kib": 53292,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": {
+        "command": [
+          "/home/wujian/miniconda3/bin/python3",
+          "/home/wujian/tracefusion2/experiments/java-collection/infer.py",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-0-0-boundary/capture",
+          "--query",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-query.json",
+          "--output",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-0-0-boundary/inference.json"
+        ],
+        "wall_seconds": 0.08776936399999613,
+        "user_seconds": 0.059803,
+        "system_seconds": 0.019934,
+        "cpu_seconds": 0.079737,
+        "peak_rss_kib": 31088,
+        "supervisor_rss_kib": 1544,
+        "rss_above_supervisor_floor": true
+      },
+      "events": 123,
+      "trace_bytes": 19730,
+      "end_to_end_wall_seconds": 0.28057397899999614,
+      "end_to_end_cpu_seconds": 0.400909
+    },
+    {
+      "block": 0,
+      "warmup": false,
+      "order": [
+        "boundary",
+        "native",
+        "full",
+        "sparse"
+      ],
+      "position": 1,
+      "mode": "native",
+      "directory": "cost-0-1-native",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.08609250300000326,
+        "user_seconds": 0.071334,
+        "system_seconds": 0.022292,
+        "cpu_seconds": 0.09362599999999999,
+        "peak_rss_kib": 38552,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.08609250300000326,
+      "end_to_end_cpu_seconds": 0.09362599999999999
+    },
+    {
+      "block": 0,
+      "warmup": false,
+      "order": [
+        "boundary",
+        "native",
+        "full",
+        "sparse"
+      ],
+      "position": 2,
+      "mode": "full",
+      "directory": "cost-0-2-full",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-0-2-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.25699504399999995,
+        "user_seconds": 0.378064,
+        "system_seconds": 0.080439,
+        "cpu_seconds": 0.458503,
+        "peak_rss_kib": 70948,
+        "supervisor_rss_kib": 1552,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": {
+        "command": [
+          "/home/wujian/miniconda3/bin/python3",
+          "/home/wujian/tracefusion2/experiments/java-collection/infer.py",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-0-2-full/capture",
+          "--query",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-query.json",
+          "--output",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-0-2-full/inference.json"
+        ],
+        "wall_seconds": 0.15537221400000334,
+        "user_seconds": 0.121246,
+        "system_seconds": 0.014696,
+        "cpu_seconds": 0.135942,
+        "peak_rss_kib": 39116,
+        "supervisor_rss_kib": 1552,
+        "rss_above_supervisor_floor": true
+      },
+      "events": 8653,
+      "trace_bytes": 1180766,
+      "end_to_end_wall_seconds": 0.4123672580000033,
+      "end_to_end_cpu_seconds": 0.594445
+    },
+    {
+      "block": 0,
+      "warmup": false,
+      "order": [
+        "boundary",
+        "native",
+        "full",
+        "sparse"
+      ],
+      "position": 3,
+      "mode": "sparse",
+      "directory": "cost-0-3-sparse",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-0-3-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.2321447729999946,
+        "user_seconds": 0.297027,
+        "system_seconds": 0.055005,
+        "cpu_seconds": 0.352032,
+        "peak_rss_kib": 56408,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": {
+        "command": [
+          "/home/wujian/miniconda3/bin/python3",
+          "/home/wujian/tracefusion2/experiments/java-collection/infer.py",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-0-3-sparse/capture",
+          "--query",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-query.json",
+          "--output",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-0-3-sparse/inference.json"
+        ],
+        "wall_seconds": 0.15713683999999972,
+        "user_seconds": 0.112897,
+        "system_seconds": 0.025493,
+        "cpu_seconds": 0.13838999999999999,
+        "peak_rss_kib": 33452,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "events": 955,
+      "trace_bytes": 141623,
+      "end_to_end_wall_seconds": 0.3892816129999943,
+      "end_to_end_cpu_seconds": 0.490422
+    },
+    {
+      "block": 1,
+      "warmup": false,
+      "order": [
+        "boundary",
+        "sparse",
+        "full",
+        "native"
+      ],
+      "position": 0,
+      "mode": "boundary",
+      "directory": "cost-1-0-boundary",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-1-0-boundary/capture",
+          "-Dtracefusion.mode=boundary",
+          "-Dtracefusion.scope=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.21239282399999837,
+        "user_seconds": 0.244815,
+        "system_seconds": 0.078972,
+        "cpu_seconds": 0.323787,
+        "peak_rss_kib": 52644,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": {
+        "command": [
+          "/home/wujian/miniconda3/bin/python3",
+          "/home/wujian/tracefusion2/experiments/java-collection/infer.py",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-1-0-boundary/capture",
+          "--query",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-query.json",
+          "--output",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-1-0-boundary/inference.json"
+        ],
+        "wall_seconds": 0.10288614600000301,
+        "user_seconds": 0.074176,
+        "system_seconds": 0.014835,
+        "cpu_seconds": 0.089011,
+        "peak_rss_kib": 31092,
+        "supervisor_rss_kib": 1544,
+        "rss_above_supervisor_floor": true
+      },
+      "events": 123,
+      "trace_bytes": 19730,
+      "end_to_end_wall_seconds": 0.3152789700000014,
+      "end_to_end_cpu_seconds": 0.412798
+    },
+    {
+      "block": 1,
+      "warmup": false,
+      "order": [
+        "boundary",
+        "sparse",
+        "full",
+        "native"
+      ],
+      "position": 1,
+      "mode": "sparse",
+      "directory": "cost-1-1-sparse",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-1-1-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.249717025999999,
+        "user_seconds": 0.293308,
+        "system_seconds": 0.077186,
+        "cpu_seconds": 0.370494,
+        "peak_rss_kib": 56076,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": {
+        "command": [
+          "/home/wujian/miniconda3/bin/python3",
+          "/home/wujian/tracefusion2/experiments/java-collection/infer.py",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-1-1-sparse/capture",
+          "--query",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-query.json",
+          "--output",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-1-1-sparse/inference.json"
+        ],
+        "wall_seconds": 0.1427723129999947,
+        "user_seconds": 0.099605,
+        "system_seconds": 0.025823,
+        "cpu_seconds": 0.12542799999999998,
+        "peak_rss_kib": 33476,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "events": 955,
+      "trace_bytes": 141623,
+      "end_to_end_wall_seconds": 0.3924893389999937,
+      "end_to_end_cpu_seconds": 0.495922
+    },
+    {
+      "block": 1,
+      "warmup": false,
+      "order": [
+        "boundary",
+        "sparse",
+        "full",
+        "native"
+      ],
+      "position": 2,
+      "mode": "full",
+      "directory": "cost-1-2-full",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-1-2-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.27280759399999965,
+        "user_seconds": 0.365944,
+        "system_seconds": 0.118285,
+        "cpu_seconds": 0.484229,
+        "peak_rss_kib": 69440,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": {
+        "command": [
+          "/home/wujian/miniconda3/bin/python3",
+          "/home/wujian/tracefusion2/experiments/java-collection/infer.py",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-1-2-full/capture",
+          "--query",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-query.json",
+          "--output",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-1-2-full/inference.json"
+        ],
+        "wall_seconds": 0.15295002599999918,
+        "user_seconds": 0.106375,
+        "system_seconds": 0.025676,
+        "cpu_seconds": 0.132051,
+        "peak_rss_kib": 39108,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "events": 8653,
+      "trace_bytes": 1180766,
+      "end_to_end_wall_seconds": 0.42575761999999884,
+      "end_to_end_cpu_seconds": 0.61628
+    },
+    {
+      "block": 1,
+      "warmup": false,
+      "order": [
+        "boundary",
+        "sparse",
+        "full",
+        "native"
+      ],
+      "position": 3,
+      "mode": "native",
+      "directory": "cost-1-3-native",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.09469294499999847,
+        "user_seconds": 0.079684,
+        "system_seconds": 0.021732,
+        "cpu_seconds": 0.101416,
+        "peak_rss_kib": 38804,
+        "supervisor_rss_kib": 1552,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.09469294499999847,
+      "end_to_end_cpu_seconds": 0.101416
+    },
+    {
+      "block": 2,
+      "warmup": false,
+      "order": [
+        "full",
+        "boundary",
+        "sparse",
+        "native"
+      ],
+      "position": 0,
+      "mode": "full",
+      "directory": "cost-2-0-full",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-2-0-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.26148603600000087,
+        "user_seconds": 0.398496,
+        "system_seconds": 0.078209,
+        "cpu_seconds": 0.47670500000000005,
+        "peak_rss_kib": 67444,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": {
+        "command": [
+          "/home/wujian/miniconda3/bin/python3",
+          "/home/wujian/tracefusion2/experiments/java-collection/infer.py",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-2-0-full/capture",
+          "--query",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-query.json",
+          "--output",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-2-0-full/inference.json"
+        ],
+        "wall_seconds": 0.1562571179999992,
+        "user_seconds": 0.116052,
+        "system_seconds": 0.021759,
+        "cpu_seconds": 0.13781100000000002,
+        "peak_rss_kib": 39384,
+        "supervisor_rss_kib": 1552,
+        "rss_above_supervisor_floor": true
+      },
+      "events": 8653,
+      "trace_bytes": 1180766,
+      "end_to_end_wall_seconds": 0.41774315400000006,
+      "end_to_end_cpu_seconds": 0.6145160000000001
+    },
+    {
+      "block": 2,
+      "warmup": false,
+      "order": [
+        "full",
+        "boundary",
+        "sparse",
+        "native"
+      ],
+      "position": 1,
+      "mode": "boundary",
+      "directory": "cost-2-1-boundary",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-2-1-boundary/capture",
+          "-Dtracefusion.mode=boundary",
+          "-Dtracefusion.scope=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.22640706200000693,
+        "user_seconds": 0.305441,
+        "system_seconds": 0.067048,
+        "cpu_seconds": 0.372489,
+        "peak_rss_kib": 53280,
+        "supervisor_rss_kib": 1552,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": {
+        "command": [
+          "/home/wujian/miniconda3/bin/python3",
+          "/home/wujian/tracefusion2/experiments/java-collection/infer.py",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-2-1-boundary/capture",
+          "--query",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-query.json",
+          "--output",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-2-1-boundary/inference.json"
+        ],
+        "wall_seconds": 0.10453280400000153,
+        "user_seconds": 0.077698,
+        "system_seconds": 0.011099,
+        "cpu_seconds": 0.088797,
+        "peak_rss_kib": 31100,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "events": 123,
+      "trace_bytes": 19730,
+      "end_to_end_wall_seconds": 0.33093986600000846,
+      "end_to_end_cpu_seconds": 0.46128600000000003
+    },
+    {
+      "block": 2,
+      "warmup": false,
+      "order": [
+        "full",
+        "boundary",
+        "sparse",
+        "native"
+      ],
+      "position": 2,
+      "mode": "sparse",
+      "directory": "cost-2-2-sparse",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-2-2-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.23393254800000562,
+        "user_seconds": 0.324059,
+        "system_seconds": 0.037248,
+        "cpu_seconds": 0.361307,
+        "peak_rss_kib": 57612,
+        "supervisor_rss_kib": 1552,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": {
+        "command": [
+          "/home/wujian/miniconda3/bin/python3",
+          "/home/wujian/tracefusion2/experiments/java-collection/infer.py",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-2-2-sparse/capture",
+          "--query",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-query.json",
+          "--output",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-2-2-sparse/inference.json"
+        ],
+        "wall_seconds": 0.14079744200000022,
+        "user_seconds": 0.104767,
+        "system_seconds": 0.018063,
+        "cpu_seconds": 0.12283,
+        "peak_rss_kib": 33492,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "events": 955,
+      "trace_bytes": 141623,
+      "end_to_end_wall_seconds": 0.37472999000000584,
+      "end_to_end_cpu_seconds": 0.484137
+    },
+    {
+      "block": 2,
+      "warmup": false,
+      "order": [
+        "full",
+        "boundary",
+        "sparse",
+        "native"
+      ],
+      "position": 3,
+      "mode": "native",
+      "directory": "cost-2-3-native",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.08663432200000187,
+        "user_seconds": 0.070886,
+        "system_seconds": 0.023628,
+        "cpu_seconds": 0.094514,
+        "peak_rss_kib": 39288,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.08663432200000187,
+      "end_to_end_cpu_seconds": 0.094514
+    },
+    {
+      "block": 3,
+      "warmup": false,
+      "order": [
+        "full",
+        "boundary",
+        "native",
+        "sparse"
+      ],
+      "position": 0,
+      "mode": "full",
+      "directory": "cost-3-0-full",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-3-0-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.2652902900000029,
+        "user_seconds": 0.390787,
+        "system_seconds": 0.07742,
+        "cpu_seconds": 0.468207,
+        "peak_rss_kib": 70292,
+        "supervisor_rss_kib": 1540,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": {
+        "command": [
+          "/home/wujian/miniconda3/bin/python3",
+          "/home/wujian/tracefusion2/experiments/java-collection/infer.py",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-3-0-full/capture",
+          "--query",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-query.json",
+          "--output",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-3-0-full/inference.json"
+        ],
+        "wall_seconds": 0.1564222029999982,
+        "user_seconds": 0.111901,
+        "system_seconds": 0.02611,
+        "cpu_seconds": 0.138011,
+        "peak_rss_kib": 39164,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "events": 8653,
+      "trace_bytes": 1180766,
+      "end_to_end_wall_seconds": 0.42171249300000113,
+      "end_to_end_cpu_seconds": 0.6062179999999999
+    },
+    {
+      "block": 3,
+      "warmup": false,
+      "order": [
+        "full",
+        "boundary",
+        "native",
+        "sparse"
+      ],
+      "position": 1,
+      "mode": "boundary",
+      "directory": "cost-3-1-boundary",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-3-1-boundary/capture",
+          "-Dtracefusion.mode=boundary",
+          "-Dtracefusion.scope=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.2271212720000051,
+        "user_seconds": 0.242191,
+        "system_seconds": 0.104949,
+        "cpu_seconds": 0.34714,
+        "peak_rss_kib": 54464,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": {
+        "command": [
+          "/home/wujian/miniconda3/bin/python3",
+          "/home/wujian/tracefusion2/experiments/java-collection/infer.py",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-3-1-boundary/capture",
+          "--query",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-query.json",
+          "--output",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-3-1-boundary/inference.json"
+        ],
+        "wall_seconds": 0.10483401599999809,
+        "user_seconds": 0.075255,
+        "system_seconds": 0.015051,
+        "cpu_seconds": 0.090306,
+        "peak_rss_kib": 31264,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "events": 123,
+      "trace_bytes": 19730,
+      "end_to_end_wall_seconds": 0.3319552880000032,
+      "end_to_end_cpu_seconds": 0.437446
+    },
+    {
+      "block": 3,
+      "warmup": false,
+      "order": [
+        "full",
+        "boundary",
+        "native",
+        "sparse"
+      ],
+      "position": 2,
+      "mode": "native",
+      "directory": "cost-3-2-native",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.08953057799999442,
+        "user_seconds": 0.068458,
+        "system_seconds": 0.02995,
+        "cpu_seconds": 0.09840800000000001,
+        "peak_rss_kib": 38764,
+        "supervisor_rss_kib": 1544,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.08953057799999442,
+      "end_to_end_cpu_seconds": 0.09840800000000001
+    },
+    {
+      "block": 3,
+      "warmup": false,
+      "order": [
+        "full",
+        "boundary",
+        "native",
+        "sparse"
+      ],
+      "position": 3,
+      "mode": "sparse",
+      "directory": "cost-3-3-sparse",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-3-3-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.24598620199999743,
+        "user_seconds": 0.306508,
+        "system_seconds": 0.097185,
+        "cpu_seconds": 0.40369299999999997,
+        "peak_rss_kib": 57240,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": {
+        "command": [
+          "/home/wujian/miniconda3/bin/python3",
+          "/home/wujian/tracefusion2/experiments/java-collection/infer.py",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-3-3-sparse/capture",
+          "--query",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-query.json",
+          "--output",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-3-3-sparse/inference.json"
+        ],
+        "wall_seconds": 0.14766857100000408,
+        "user_seconds": 0.103177,
+        "system_seconds": 0.025794,
+        "cpu_seconds": 0.128971,
+        "peak_rss_kib": 33520,
+        "supervisor_rss_kib": 1552,
+        "rss_above_supervisor_floor": true
+      },
+      "events": 955,
+      "trace_bytes": 141623,
+      "end_to_end_wall_seconds": 0.3936547730000015,
+      "end_to_end_cpu_seconds": 0.532664
+    },
+    {
+      "block": 4,
+      "warmup": false,
+      "order": [
+        "full",
+        "sparse",
+        "native",
+        "boundary"
+      ],
+      "position": 0,
+      "mode": "full",
+      "directory": "cost-4-0-full",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-4-0-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.2684932560000064,
+        "user_seconds": 0.399291,
+        "system_seconds": 0.081337,
+        "cpu_seconds": 0.480628,
+        "peak_rss_kib": 67724,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": {
+        "command": [
+          "/home/wujian/miniconda3/bin/python3",
+          "/home/wujian/tracefusion2/experiments/java-collection/infer.py",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-4-0-full/capture",
+          "--query",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-query.json",
+          "--output",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-4-0-full/inference.json"
+        ],
+        "wall_seconds": 0.1593281550000043,
+        "user_seconds": 0.124399,
+        "system_seconds": 0.014635,
+        "cpu_seconds": 0.139034,
+        "peak_rss_kib": 39248,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "events": 8653,
+      "trace_bytes": 1180766,
+      "end_to_end_wall_seconds": 0.4278214110000107,
+      "end_to_end_cpu_seconds": 0.6196619999999999
+    },
+    {
+      "block": 4,
+      "warmup": false,
+      "order": [
+        "full",
+        "sparse",
+        "native",
+        "boundary"
+      ],
+      "position": 1,
+      "mode": "sparse",
+      "directory": "cost-4-1-sparse",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-4-1-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.24792658999999873,
+        "user_seconds": 0.327331,
+        "system_seconds": 0.063869,
+        "cpu_seconds": 0.3912,
+        "peak_rss_kib": 58272,
+        "supervisor_rss_kib": 1552,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": {
+        "command": [
+          "/home/wujian/miniconda3/bin/python3",
+          "/home/wujian/tracefusion2/experiments/java-collection/infer.py",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-4-1-sparse/capture",
+          "--query",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-query.json",
+          "--output",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-4-1-sparse/inference.json"
+        ],
+        "wall_seconds": 0.1450337019999992,
+        "user_seconds": 0.108121,
+        "system_seconds": 0.01802,
+        "cpu_seconds": 0.126141,
+        "peak_rss_kib": 33492,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "events": 955,
+      "trace_bytes": 141623,
+      "end_to_end_wall_seconds": 0.39296029199999793,
+      "end_to_end_cpu_seconds": 0.517341
+    },
+    {
+      "block": 4,
+      "warmup": false,
+      "order": [
+        "full",
+        "sparse",
+        "native",
+        "boundary"
+      ],
+      "position": 2,
+      "mode": "native",
+      "directory": "cost-4-2-native",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.09183145299999751,
+        "user_seconds": 0.08717,
+        "system_seconds": 0.014528,
+        "cpu_seconds": 0.101698,
+        "peak_rss_kib": 38908,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.09183145299999751,
+      "end_to_end_cpu_seconds": 0.101698
+    },
+    {
+      "block": 4,
+      "warmup": false,
+      "order": [
+        "full",
+        "sparse",
+        "native",
+        "boundary"
+      ],
+      "position": 3,
+      "mode": "boundary",
+      "directory": "cost-4-3-boundary",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-4-3-boundary/capture",
+          "-Dtracefusion.mode=boundary",
+          "-Dtracefusion.scope=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.22089991300000378,
+        "user_seconds": 0.27004,
+        "system_seconds": 0.06846,
+        "cpu_seconds": 0.3385,
+        "peak_rss_kib": 53520,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": {
+        "command": [
+          "/home/wujian/miniconda3/bin/python3",
+          "/home/wujian/tracefusion2/experiments/java-collection/infer.py",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-4-3-boundary/capture",
+          "--query",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-query.json",
+          "--output",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-4-3-boundary/inference.json"
+        ],
+        "wall_seconds": 0.10570930499999776,
+        "user_seconds": 0.07714,
+        "system_seconds": 0.014693,
+        "cpu_seconds": 0.091833,
+        "peak_rss_kib": 31080,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "events": 123,
+      "trace_bytes": 19730,
+      "end_to_end_wall_seconds": 0.32660921800000153,
+      "end_to_end_cpu_seconds": 0.430333
+    },
+    {
+      "block": 5,
+      "warmup": false,
+      "order": [
+        "boundary",
+        "sparse",
+        "native",
+        "full"
+      ],
+      "position": 0,
+      "mode": "boundary",
+      "directory": "cost-5-0-boundary",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-5-0-boundary/capture",
+          "-Dtracefusion.mode=boundary",
+          "-Dtracefusion.scope=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.21266997600000082,
+        "user_seconds": 0.282204,
+        "system_seconds": 0.047644,
+        "cpu_seconds": 0.32984800000000003,
+        "peak_rss_kib": 53200,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": {
+        "command": [
+          "/home/wujian/miniconda3/bin/python3",
+          "/home/wujian/tracefusion2/experiments/java-collection/infer.py",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-5-0-boundary/capture",
+          "--query",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-query.json",
+          "--output",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-5-0-boundary/inference.json"
+        ],
+        "wall_seconds": 0.0969222239999965,
+        "user_seconds": 0.071091,
+        "system_seconds": 0.010663,
+        "cpu_seconds": 0.08175400000000001,
+        "peak_rss_kib": 31340,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "events": 123,
+      "trace_bytes": 19730,
+      "end_to_end_wall_seconds": 0.3095921999999973,
+      "end_to_end_cpu_seconds": 0.411602
+    },
+    {
+      "block": 5,
+      "warmup": false,
+      "order": [
+        "boundary",
+        "sparse",
+        "native",
+        "full"
+      ],
+      "position": 1,
+      "mode": "sparse",
+      "directory": "cost-5-1-sparse",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-5-1-sparse/capture",
+          "-Dtracefusion.mode=sparse",
+          "-Dtracefusion.scope=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.2591198779999999,
+        "user_seconds": 0.319418,
+        "system_seconds": 0.102801,
+        "cpu_seconds": 0.422219,
+        "peak_rss_kib": 57268,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": {
+        "command": [
+          "/home/wujian/miniconda3/bin/python3",
+          "/home/wujian/tracefusion2/experiments/java-collection/infer.py",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-5-1-sparse/capture",
+          "--query",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-query.json",
+          "--output",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-5-1-sparse/inference.json"
+        ],
+        "wall_seconds": 0.14924464700000328,
+        "user_seconds": 0.113304,
+        "system_seconds": 0.018884,
+        "cpu_seconds": 0.132188,
+        "peak_rss_kib": 33448,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "events": 955,
+      "trace_bytes": 141623,
+      "end_to_end_wall_seconds": 0.4083645250000032,
+      "end_to_end_cpu_seconds": 0.554407
+    },
+    {
+      "block": 5,
+      "warmup": false,
+      "order": [
+        "boundary",
+        "sparse",
+        "native",
+        "full"
+      ],
+      "position": 2,
+      "mode": "native",
+      "directory": "cost-5-2-native",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.08496218399999833,
+        "user_seconds": 0.062461,
+        "system_seconds": 0.033068,
+        "cpu_seconds": 0.095529,
+        "peak_rss_kib": 38596,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": null,
+      "events": 0,
+      "trace_bytes": 0,
+      "end_to_end_wall_seconds": 0.08496218399999833,
+      "end_to_end_cpu_seconds": 0.095529
+    },
+    {
+      "block": 5,
+      "warmup": false,
+      "order": [
+        "boundary",
+        "sparse",
+        "native",
+        "full"
+      ],
+      "position": 3,
+      "mode": "full",
+      "directory": "cost-5-3-full",
+      "online": {
+        "command": [
+          "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+          "-Xverify:all",
+          "-javaagent:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/tracefusion-java-agent.jar",
+          "-Dtracefusion.output=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-5-3-full/capture",
+          "-Dtracefusion.mode=full",
+          "-Dtracefusion.scope=/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost.properties",
+          "-Dtracefusion.maxEvents=2000000",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/harness-classes:/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/commons-codec-1.17.1.jar",
+          "upstream.HashDriver",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/inputs.csv",
+          "2"
+        ],
+        "wall_seconds": 0.25941728799999453,
+        "user_seconds": 0.381088,
+        "system_seconds": 0.092601,
+        "cpu_seconds": 0.47368899999999997,
+        "peak_rss_kib": 69380,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "offline": {
+        "command": [
+          "/home/wujian/miniconda3/bin/python3",
+          "/home/wujian/tracefusion2/experiments/java-collection/infer.py",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-5-3-full/capture",
+          "--query",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-query.json",
+          "--output",
+          "/home/wujian/tracefusion2/artifacts/java-arrays-20261012-005426-246979/cost-5-3-full/inference.json"
+        ],
+        "wall_seconds": 0.15369217599999985,
+        "user_seconds": 0.113016,
+        "system_seconds": 0.021874,
+        "cpu_seconds": 0.13489,
+        "peak_rss_kib": 39388,
+        "supervisor_rss_kib": 1548,
+        "rss_above_supervisor_floor": true
+      },
+      "events": 8653,
+      "trace_bytes": 1180766,
+      "end_to_end_wall_seconds": 0.4131094639999944,
+      "end_to_end_cpu_seconds": 0.608579
+    }
+  ],
+  "schema": "java-array-host-validation-v1",
+  "status": "pass",
+  "verified_scope": "correctness and whole-command wall/CPU costs; no steady-state or memory-advantage claim",
+  "repository_commit": "006e915ff392310337a1b0a658d3a7d4520a8c0f",
+  "archive_name": "java-array-host-20261012.tar.gz",
+  "archive_sha256": "c6f61902a5bca6bdb11b0725458d4185b9038ab69b6efd1c20fb11dbf29c7a47",
+  "archive_bytes": 5633780,
+  "artifact_directory": "java-arrays-20261012-005426-246979",
+  "verification": {
+    "status": "pass",
+    "coverage": "correctness_and_costs",
+    "costs_qualified": true,
+    "cost_evidence_issues": [],
+    "verifier_sha256": "424ad992bb32b8756c227402a1d0ec295c4d0b80611db95489f41f0c22de6a0e",
+    "manifest_sha256": "31a0d7e16e95b3ed30ad665ddc8ad438381f0b23145d1fd45c704b9dd40bbd3e",
+    "evidence_files": 525,
+    "original_jvm_captures": 6,
+    "distinct_queries": 20,
+    "queries_including_two_jvm_modes_and_three_capture_methods": 120,
+    "cost_commands": 28,
+    "raw_events_reinferred": 77857,
+    "offline_faults": 8,
+    "actual_jvm_rejections": 3
+  },
+  "additional_audit": {
+    "status": "pass",
+    "root_inputs_checked": 960,
+    "captures_checked": 27,
+    "input_csv_sha256": "c4c4d8befdd2ad94281492a8add834ce2e8d4eb86da0c330ab0d49d6916c8f71",
+    "independent_paired_calculation": {
+      "paired_reduction": {
+        "end_to_end_wall_seconds": {
+          "paired_values": [
+            0.05598321533085637,
+            0.07813901486955233,
+            0.10296557487090308,
+            0.06653281670742328,
+            0.08148521346448434,
+            0.011485912121323993
+          ],
+          "median": 0.0723359157884878,
+          "minimum": 0.011485912121323993,
+          "maximum": 0.10296557487090308
+        },
+        "end_to_end_cpu_seconds": {
+          "paired_values": [
+            0.17499179907308493,
+            0.19529759200363483,
+            0.2121653463864246,
+            0.12133258992639595,
+            0.16512389012074302,
+            0.08901391602404951
+          ],
+          "median": 0.17005784459691398,
+          "minimum": 0.08901391602404951,
+          "maximum": 0.2121653463864246
+        },
+        "events": {
+          "paired_values": [
+            0.8896336530683,
+            0.8896336530683,
+            0.8896336530683,
+            0.8896336530683,
+            0.8896336530683,
+            0.8896336530683
+          ],
+          "median": 0.8896336530683,
+          "minimum": 0.8896336530683,
+          "maximum": 0.8896336530683
+        },
+        "trace_bytes": {
+          "paired_values": [
+            0.8800583688893481,
+            0.8800583688893481,
+            0.8800583688893481,
+            0.8800583688893481,
+            0.8800583688893481,
+            0.8800583688893481
+          ],
+          "median": 0.8800583688893481,
+          "minimum": 0.8800583688893481,
+          "maximum": 0.8800583688893481
+        }
+      },
+      "boundary_vs_full": {
+        "end_to_end_wall_seconds": {
+          "paired_values": [
+            0.3196017056233065,
+            0.25948719367605855,
+            0.2077910485637583,
+            0.21283980553072612,
+            0.23657580101807163,
+            0.250580712912446
+          ],
+          "median": 0.2435782569652588,
+          "minimum": 0.2077910485637583,
+          "maximum": 0.3196017056233065
+        },
+        "end_to_end_cpu_seconds": {
+          "paired_values": [
+            0.32557427516422877,
+            0.33017784124099436,
+            0.24935070852508323,
+            0.2784014991306757,
+            0.30553592119574857,
+            0.32366709991636244
+          ],
+          "median": 0.3146015105560555,
+          "minimum": 0.24935070852508323,
+          "maximum": 0.33017784124099436
+        },
+        "events": {
+          "paired_values": [
+            0.9857852767826187,
+            0.9857852767826187,
+            0.9857852767826187,
+            0.9857852767826187,
+            0.9857852767826187,
+            0.9857852767826187
+          ],
+          "median": 0.9857852767826187,
+          "minimum": 0.9857852767826187,
+          "maximum": 0.9857852767826187
+        },
+        "trace_bytes": {
+          "paired_values": [
+            0.9832905080261457,
+            0.9832905080261457,
+            0.9832905080261457,
+            0.9832905080261457,
+            0.9832905080261457,
+            0.9832905080261457
+          ],
+          "median": 0.9832905080261457,
+          "minimum": 0.9832905080261457,
+          "maximum": 0.9832905080261457
+        }
+      },
+      "boundary_vs_sparse": {
+        "end_to_end_wall_seconds": {
+          "paired_values": [
+            0.27925191010755435,
+            0.1967196591803314,
+            0.11685780473560892,
+            0.1567350105519948,
+            0.168849309588758,
+            0.24187293203297988
+          ],
+          "median": 0.1827844843845447,
+          "minimum": 0.11685780473560892,
+          "maximum": 0.27925191010755435
+        },
+        "end_to_end_cpu_seconds": {
+          "paired_values": [
+            0.18252239907671353,
+            0.16761506849867513,
+            0.04719944974253143,
+            0.178758091404713,
+            0.1681830746064975,
+            0.257581524042806
+          ],
+          "median": 0.17347058300560525,
+          "minimum": 0.04719944974253143,
+          "maximum": 0.257581524042806
+        },
+        "events": {
+          "paired_values": [
+            0.8712041884816754,
+            0.8712041884816754,
+            0.8712041884816754,
+            0.8712041884816754,
+            0.8712041884816754,
+            0.8712041884816754
+          ],
+          "median": 0.8712041884816754,
+          "minimum": 0.8712041884816754,
+          "maximum": 0.8712041884816754
+        },
+        "trace_bytes": {
+          "paired_values": [
+            0.8606864704179406,
+            0.8606864704179406,
+            0.8606864704179406,
+            0.8606864704179406,
+            0.8606864704179406,
+            0.8606864704179406
+          ],
+          "median": 0.8606864704179406,
+          "minimum": 0.8606864704179406,
+          "maximum": 0.8606864704179406
+        }
+      }
+    },
+    "host_and_local_verification_identical": true
+  },
+  "cases": [
+    {
+      "jvm": "default",
+      "mode": "full",
+      "capture": "default-full",
+      "events": 4328,
+      "bytes": 588969,
+      "queries": 20,
+      "correct": 20
+    },
+    {
+      "jvm": "default",
+      "mode": "sparse",
+      "capture": "default-sparse",
+      "events": 479,
+      "bytes": 70836,
+      "queries": 20,
+      "correct": 20
+    },
+    {
+      "jvm": "default",
+      "mode": "boundary",
+      "capture": "default-boundary",
+      "events": 63,
+      "bytes": 10060,
+      "queries": 20,
+      "correct": 20
+    },
+    {
+      "jvm": "interpreter",
+      "mode": "full",
+      "capture": "interpreter-full",
+      "events": 4328,
+      "bytes": 588969,
+      "queries": 20,
+      "correct": 20
+    },
+    {
+      "jvm": "interpreter",
+      "mode": "sparse",
+      "capture": "interpreter-sparse",
+      "events": 479,
+      "bytes": 70836,
+      "queries": 20,
+      "correct": 20
+    },
+    {
+      "jvm": "interpreter",
+      "mode": "boundary",
+      "capture": "interpreter-boundary",
+      "events": 63,
+      "bytes": 10060,
+      "queries": 20,
+      "correct": 20
+    }
+  ]
+}
