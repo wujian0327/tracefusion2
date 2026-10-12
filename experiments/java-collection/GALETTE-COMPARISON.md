@@ -6,6 +6,10 @@ Pinned repository: <https://github.com/neu-se/galette>, commit
 Paper: Katherine Hough and Jonathan Bell, *Dynamic Taint Tracking for Modern Java
 Virtual Machines*, FSE 2025, <https://doi.org/10.1145/3729349>.
 
+Verified user Ubuntu/WSL2 host results: [GALETTE-HOST-RESULTS.md](GALETTE-HOST-RESULTS.md).
+The host archive was re-read independently; this is short-command deployment cost
+evidence, not steady-state or equal-instrumentation-scope algorithm performance.
+
 ## Scope and interpretation
 
 The application is the unchanged Commons Codec 1.17.1 release JAR and the original

@@ -8,9 +8,10 @@
 固定上游版本、原版 Commons Codec 字节数组哈希路径、逐字节来源标签，
 统一比较 native / full / sparse / boundary / Galette。
 该入口要求 JDK 17，并使用标准 JVM 默认校验；严格校验的兼容性限制单独归档。
-本地接入与六轮成本结果见 [GALETTE-LOCAL-RESULTS.md](GALETTE-LOCAL-RESULTS.md)：
-Galette 40/40 正确，sparse 相对 Galette 的总耗时配对中位降幅为 58.06%。
-这是短任务部署成本，尚未在用户主机复核，不代表稳态或通用算法优势。
+最新用户 WSL2 主机外部对比见 [GALETTE-HOST-RESULTS.md](GALETTE-HOST-RESULTS.md)：
+完整证据复核通过，Galette 40/40 正确，sparse 相对 Galette 的总耗时配对
+中位降幅为 60.71%，boundary 为 67.45%。这是短任务部署成本，不代表稳态
+或通用算法优势。[此前本地结果](GALETTE-LOCAL-RESULTS.md) 单独保留。
 
 最新用户主机结果见 [ARRAY-HOST-RESULTS.md](ARRAY-HOST-RESULTS.md)：完整原始证据复核
 通过，三组均 40/40 正确；sparse 相对 full 的总耗时配对中位降幅为 7.23%，boundary

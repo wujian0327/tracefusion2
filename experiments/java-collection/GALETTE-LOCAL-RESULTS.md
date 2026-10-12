@@ -1,5 +1,8 @@
 # Galette 外部对比：本地接入与完整成本核验（2026-10-12）
 
+后续用户 WSL2 主机上传包已核验，见 [GALETTE-HOST-RESULTS.md](GALETTE-HOST-RESULTS.md)。
+本文保留最初本地接入时的独立结果与当时状态。
+
 **已跑通未修改的上游 Galette；这是真实外部工具对比。** 当前结果来自本地
 执行环境，不是用户服务器结果，也不是整个 Java 应用或稳态服务评测。
 复现方法和语义范围见 [GALETTE-COMPARISON.md](GALETTE-COMPARISON.md)。
