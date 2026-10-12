@@ -1,0 +1,39 @@
+{
+  "kind": "controlled-runtime-scope-diagnostic",
+  "agent_sha256": "e4c679206993b45c6727a4ace1d4dcff6df0ded2b80b56b27b8c86741be63fe7",
+  "probe_source_sha256": "e4f9b45204a9e33c96c9fd3d35c21347e5c4759526714467e22d7a85e5bdda2c",
+  "compile_command": [
+    "/workspace/scratch/db208a1fdc8f/toolchains/amazon-corretto-8.504.04.1-linux-x64/bin/javac",
+    "-J-Xmx128m",
+    "-J-Djava.io.tmpdir=/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/sockshop-runtime-scope-20261012/tmp",
+    "-classpath",
+    "/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/external-tools/mirrortaint/mirrorTaint.jar",
+    "-d",
+    "/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/sockshop-runtime-scope-20261012",
+    "/workspace/scratch/db208a1fdc8f/tracefusion2/experiments/sockshop-mirrortaint/RuntimeScopeProbe.java"
+  ],
+  "run_command": [
+    "/workspace/scratch/db208a1fdc8f/toolchains/amazon-corretto-8.504.04.1-linux-x64/bin/java",
+    "-Xmx128m",
+    "-Djava.io.tmpdir=/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/sockshop-runtime-scope-20261012/tmp",
+    "-classpath",
+    "/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/external-tools/mirrortaint/mirrorTaint.jar:/workspace/scratch/db208a1fdc8f/tracefusion2/artifacts/sockshop-runtime-scope-20261012",
+    "RuntimeScopeProbe"
+  ],
+  "returncode": 0,
+  "business_workload_run": false,
+  "adapter_installed": false,
+  "cross_service_join_tested": false,
+  "accuracy_eligible": false,
+  "performance_eligible": false,
+  "observed": {
+    "parent_available": true,
+    "worker_initially_available": false,
+    "initialized_worker_available": true,
+    "parent_sees_worker_slot": false,
+    "worker_after_cleanup_available": false,
+    "parent_still_available": true,
+    "taint_labels_created": false,
+    "field_propagation_tested": false
+  }
+}

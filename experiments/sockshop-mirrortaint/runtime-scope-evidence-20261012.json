@@ -1,0 +1,14 @@
+{
+  "kind": "controlled-runtime-scope-diagnostic",
+  "logs": {
+    "compile.log": {
+      "text": "OpenJDK 64-Bit Server VM warning: Can't detect primordial thread stack location - find_vma failed\n",
+      "sha256": "2edc0ba36ae8c5184abdbc26ac514b96f3b1c683162f23dd8517d9c0a837333d"
+    },
+    "runtime.log": {
+      "text": "{\"parent_available\":true,\"worker_initially_available\":false,\"initialized_worker_available\":true,\"parent_sees_worker_slot\":false,\"worker_after_cleanup_available\":false,\"parent_still_available\":true,\"taint_labels_created\":false,\"field_propagation_tested\":false}\nOpenJDK 64-Bit Server VM warning: Can't detect primordial thread stack location - find_vma failed\n",
+      "sha256": "68883051c784f044ecc7b3cf3912bcfe1af63e99bed923669e03551e3d0a8f99"
+    }
+  },
+  "scope": "No taint labels, original business, or adapter executed"
+}

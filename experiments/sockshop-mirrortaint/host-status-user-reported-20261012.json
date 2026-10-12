@@ -1,0 +1,23 @@
+{
+  "reported_at": "2026-10-12T15:36:14+08:00",
+  "evidence_source": "user status update in this conversation",
+  "host_run_time": null,
+  "host_environment": null,
+  "raw_bundle_available_for_this_update": false,
+  "independently_verified_here": false,
+  "business": {
+    "plain": {"passed": 15, "total": 15},
+    "mirrortaint_original": {"passed": 15, "total": 15}
+  },
+  "reported_failures": {
+    "async_worker_taint_state_uninitialized": true,
+    "runtime_source_tagging_skipped": true,
+    "concurrent_log_filename_collision": true,
+    "partial_text_logs_overwritten": true
+  },
+  "empty_source_output_interpretation": "collection_failed_or_unknown; not established semantic empty source set",
+  "adaptations_implemented": false,
+  "paper_method_evaluated": false,
+  "accuracy_eligible": false,
+  "performance_eligible": false
+}

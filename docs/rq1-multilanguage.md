@@ -4,8 +4,9 @@
 当前主计划以 [RQ1 OTel 字段计划](rq1-otel-field-plan.md) 为准。
 **后续对象选择：**用户确认优先 Sock Shop / MirrorTaint，再做 PiggyMetrics。
 [原版服务与真实 API 预检包](../experiments/sockshop-mirrortaint/README.md)已冻结，
-三个 Java 服务原生构建通过；当前环境无 Docker，原版 Orders 又被 `/proc/self/fd` 缺失阻塞，
-因此仍无新增跨服务字段准确率。
+三个 Java 服务原生构建通过。后续用户报告主机 plain/MirrorTaint 业务均 15/15 通过，
+但异步线程打标跳过与日志覆盖使来源追踪尚未通过；原始主机记录待独立复核，
+仍无新增跨服务字段准确率，详见[接续状态](../experiments/sockshop-mirrortaint/HOST-STATUS-20261012.md)。
 第一条商品服务→checkout 出站换汇请求路径已完成双进程原生边界预检，见
 [新实验目录](../experiments/otel-field-rq1/README.md)；尚无这条路径的来源还原准确率、外部比较或选择性观测结果。
 下文既有 C/Go/Java 数值保留为组件与受限路径证据，不自动变成端到端跨服务结果。
