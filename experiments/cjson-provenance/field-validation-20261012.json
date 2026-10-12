@@ -1,0 +1,942 @@
+{
+  "status": "scored_verified_native_field_relations",
+  "semantics": "Explicit input-field content dependence after parse_string allocation; exclude control/address/identity.",
+  "annotation_review": "Source-derived, non-blinded annotations; second human review pending",
+  "total_requests": 22,
+  "existing_string_targets": 20,
+  "scored_targets": 18,
+  "out_of_scope_targets": 2,
+  "native_no_sink_checks": 2,
+  "scored_target_coverage": 0.9,
+  "expected_relations": 16,
+  "empty_source_queries": 2,
+  "methods": {
+    "ours": {
+      "scored_queries": 18,
+      "answered": 18,
+      "unknown": 0,
+      "exact_queries": 18,
+      "exact_query_rate": 1.0,
+      "tp": 16,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "libdft64_original": {
+      "scored_queries": 18,
+      "answered": 18,
+      "unknown": 0,
+      "exact_queries": 18,
+      "exact_query_rate": 1.0,
+      "tp": 16,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "libdft64_extracted": {
+      "scored_queries": 18,
+      "answered": 18,
+      "unknown": 0,
+      "exact_queries": 18,
+      "exact_query_rate": 1.0,
+      "tp": 16,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  },
+  "queries": [
+    {
+      "case": "equal_fields",
+      "path": "/payer",
+      "status": "scored",
+      "expected_sources": [
+        "equal_fields#input:v0:/payer"
+      ],
+      "rule": "copy",
+      "target_identity": {
+        "case": "equal_fields",
+        "requested_path": "/payer",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "methods": {
+        "ours": {
+          "predicted_sources": [
+            "equal_fields#input:v0:/payer"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_original": {
+          "predicted_sources": [
+            "equal_fields#input:v0:/payer"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_extracted": {
+          "predicted_sources": [
+            "equal_fields#input:v0:/payer"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        }
+      }
+    },
+    {
+      "case": "equal_fields",
+      "path": "/recipient",
+      "status": "scored",
+      "expected_sources": [
+        "equal_fields#input:v0:/recipient"
+      ],
+      "rule": "copy",
+      "target_identity": {
+        "case": "equal_fields",
+        "requested_path": "/recipient",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "methods": {
+        "ours": {
+          "predicted_sources": [
+            "equal_fields#input:v0:/recipient"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_original": {
+          "predicted_sources": [
+            "equal_fields#input:v0:/recipient"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_extracted": {
+          "predicted_sources": [
+            "equal_fields#input:v0:/recipient"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        }
+      }
+    },
+    {
+      "case": "nested_equal",
+      "path": "/buyer/name",
+      "status": "scored",
+      "expected_sources": [
+        "nested_equal#input:v0:/buyer/name"
+      ],
+      "rule": "copy",
+      "target_identity": {
+        "case": "nested_equal",
+        "requested_path": "/buyer/name",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "methods": {
+        "ours": {
+          "predicted_sources": [
+            "nested_equal#input:v0:/buyer/name"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_original": {
+          "predicted_sources": [
+            "nested_equal#input:v0:/buyer/name"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_extracted": {
+          "predicted_sources": [
+            "nested_equal#input:v0:/buyer/name"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        }
+      }
+    },
+    {
+      "case": "nested_equal",
+      "path": "/seller/name",
+      "status": "scored",
+      "expected_sources": [
+        "nested_equal#input:v0:/seller/name"
+      ],
+      "rule": "copy",
+      "target_identity": {
+        "case": "nested_equal",
+        "requested_path": "/seller/name",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "methods": {
+        "ours": {
+          "predicted_sources": [
+            "nested_equal#input:v0:/seller/name"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_original": {
+          "predicted_sources": [
+            "nested_equal#input:v0:/seller/name"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_extracted": {
+          "predicted_sources": [
+            "nested_equal#input:v0:/seller/name"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        }
+      }
+    },
+    {
+      "case": "nested_equal",
+      "path": "/note",
+      "status": "scored",
+      "expected_sources": [
+        "nested_equal#input:v0:/note"
+      ],
+      "rule": "copy",
+      "target_identity": {
+        "case": "nested_equal",
+        "requested_path": "/note",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "methods": {
+        "ours": {
+          "predicted_sources": [
+            "nested_equal#input:v0:/note"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_original": {
+          "predicted_sources": [
+            "nested_equal#input:v0:/note"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_extracted": {
+          "predicted_sources": [
+            "nested_equal#input:v0:/note"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        }
+      }
+    },
+    {
+      "case": "array_equal",
+      "path": "/items/0/sku",
+      "status": "scored",
+      "expected_sources": [
+        "array_equal#input:v0:/items/0/sku"
+      ],
+      "rule": "copy",
+      "target_identity": {
+        "case": "array_equal",
+        "requested_path": "/items/0/sku",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "methods": {
+        "ours": {
+          "predicted_sources": [
+            "array_equal#input:v0:/items/0/sku"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_original": {
+          "predicted_sources": [
+            "array_equal#input:v0:/items/0/sku"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_extracted": {
+          "predicted_sources": [
+            "array_equal#input:v0:/items/0/sku"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        }
+      }
+    },
+    {
+      "case": "array_equal",
+      "path": "/items/1/sku",
+      "status": "scored",
+      "expected_sources": [
+        "array_equal#input:v0:/items/1/sku"
+      ],
+      "rule": "copy",
+      "target_identity": {
+        "case": "array_equal",
+        "requested_path": "/items/1/sku",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "methods": {
+        "ours": {
+          "predicted_sources": [
+            "array_equal#input:v0:/items/1/sku"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_original": {
+          "predicted_sources": [
+            "array_equal#input:v0:/items/1/sku"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_extracted": {
+          "predicted_sources": [
+            "array_equal#input:v0:/items/1/sku"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        }
+      }
+    },
+    {
+      "case": "array_equal",
+      "path": "/items/2/sku",
+      "status": "scored",
+      "expected_sources": [
+        "array_equal#input:v0:/items/2/sku"
+      ],
+      "rule": "copy",
+      "target_identity": {
+        "case": "array_equal",
+        "requested_path": "/items/2/sku",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "methods": {
+        "ours": {
+          "predicted_sources": [
+            "array_equal#input:v0:/items/2/sku"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_original": {
+          "predicted_sources": [
+            "array_equal#input:v0:/items/2/sku"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_extracted": {
+          "predicted_sources": [
+            "array_equal#input:v0:/items/2/sku"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        }
+      }
+    },
+    {
+      "case": "different_lengths",
+      "path": "/short",
+      "status": "scored",
+      "expected_sources": [
+        "different_lengths#input:v0:/short"
+      ],
+      "rule": "copy",
+      "target_identity": {
+        "case": "different_lengths",
+        "requested_path": "/short",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "methods": {
+        "ours": {
+          "predicted_sources": [
+            "different_lengths#input:v0:/short"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_original": {
+          "predicted_sources": [
+            "different_lengths#input:v0:/short"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_extracted": {
+          "predicted_sources": [
+            "different_lengths#input:v0:/short"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        }
+      }
+    },
+    {
+      "case": "different_lengths",
+      "path": "/long",
+      "status": "scored",
+      "expected_sources": [
+        "different_lengths#input:v0:/long"
+      ],
+      "rule": "copy",
+      "target_identity": {
+        "case": "different_lengths",
+        "requested_path": "/long",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "methods": {
+        "ours": {
+          "predicted_sources": [
+            "different_lengths#input:v0:/long"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_original": {
+          "predicted_sources": [
+            "different_lengths#input:v0:/long"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_extracted": {
+          "predicted_sources": [
+            "different_lengths#input:v0:/long"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        }
+      }
+    },
+    {
+      "case": "overwrite_equal",
+      "path": "/payer",
+      "status": "out_of_scope",
+      "expected_sources": [
+        "overwrite_equal#replacement:v1:/payer"
+      ],
+      "rule": "replacement",
+      "target_identity": {
+        "case": "overwrite_equal",
+        "requested_path": "/payer",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "scoring_note": "Expected replacement source retained, not scored as a successful decoder answer"
+    },
+    {
+      "case": "overwrite_equal",
+      "path": "/recipient",
+      "status": "scored",
+      "expected_sources": [
+        "overwrite_equal#input:v0:/recipient"
+      ],
+      "rule": "copy",
+      "target_identity": {
+        "case": "overwrite_equal",
+        "requested_path": "/recipient",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "methods": {
+        "ours": {
+          "predicted_sources": [
+            "overwrite_equal#input:v0:/recipient"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_original": {
+          "predicted_sources": [
+            "overwrite_equal#input:v0:/recipient"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_extracted": {
+          "predicted_sources": [
+            "overwrite_equal#input:v0:/recipient"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        }
+      }
+    },
+    {
+      "case": "overwrite_different",
+      "path": "/payer",
+      "status": "out_of_scope",
+      "expected_sources": [
+        "overwrite_different#replacement:v1:/payer"
+      ],
+      "rule": "replacement",
+      "target_identity": {
+        "case": "overwrite_different",
+        "requested_path": "/payer",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "scoring_note": "Expected replacement source retained, not scored as a successful decoder answer"
+    },
+    {
+      "case": "overwrite_different",
+      "path": "/recipient",
+      "status": "scored",
+      "expected_sources": [
+        "overwrite_different#input:v0:/recipient"
+      ],
+      "rule": "copy",
+      "target_identity": {
+        "case": "overwrite_different",
+        "requested_path": "/recipient",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "methods": {
+        "ours": {
+          "predicted_sources": [
+            "overwrite_different#input:v0:/recipient"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_original": {
+          "predicted_sources": [
+            "overwrite_different#input:v0:/recipient"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_extracted": {
+          "predicted_sources": [
+            "overwrite_different#input:v0:/recipient"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        }
+      }
+    },
+    {
+      "case": "empty_fields",
+      "path": "/empty",
+      "status": "scored",
+      "expected_sources": [],
+      "rule": "empty",
+      "target_identity": {
+        "case": "empty_fields",
+        "requested_path": "/empty",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "methods": {
+        "ours": {
+          "predicted_sources": [],
+          "status": "answered",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_original": {
+          "predicted_sources": [],
+          "status": "answered",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_extracted": {
+          "predicted_sources": [],
+          "status": "answered",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        }
+      }
+    },
+    {
+      "case": "empty_fields",
+      "path": "/nonempty",
+      "status": "scored",
+      "expected_sources": [
+        "empty_fields#input:v0:/nonempty"
+      ],
+      "rule": "copy",
+      "target_identity": {
+        "case": "empty_fields",
+        "requested_path": "/nonempty",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "methods": {
+        "ours": {
+          "predicted_sources": [
+            "empty_fields#input:v0:/nonempty"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_original": {
+          "predicted_sources": [
+            "empty_fields#input:v0:/nonempty"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_extracted": {
+          "predicted_sources": [
+            "empty_fields#input:v0:/nonempty"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        }
+      }
+    },
+    {
+      "case": "quoted_and_slash",
+      "path": "/s",
+      "status": "scored",
+      "expected_sources": [
+        "quoted_and_slash#input:v0:/s"
+      ],
+      "rule": "escaped_copy",
+      "target_identity": {
+        "case": "quoted_and_slash",
+        "requested_path": "/s",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "methods": {
+        "ours": {
+          "predicted_sources": [
+            "quoted_and_slash#input:v0:/s"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_original": {
+          "predicted_sources": [
+            "quoted_and_slash#input:v0:/s"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_extracted": {
+          "predicted_sources": [
+            "quoted_and_slash#input:v0:/s"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        }
+      }
+    },
+    {
+      "case": "constant_escape",
+      "path": "/s",
+      "status": "scored",
+      "expected_sources": [],
+      "rule": "constant",
+      "target_identity": {
+        "case": "constant_escape",
+        "requested_path": "/s",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "methods": {
+        "ours": {
+          "predicted_sources": [],
+          "status": "answered",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_original": {
+          "predicted_sources": [],
+          "status": "answered",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_extracted": {
+          "predicted_sources": [],
+          "status": "answered",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        }
+      }
+    },
+    {
+      "case": "unicode",
+      "path": "/latin",
+      "status": "scored",
+      "expected_sources": [
+        "unicode#input:v0:/latin"
+      ],
+      "rule": "unicode",
+      "target_identity": {
+        "case": "unicode",
+        "requested_path": "/latin",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "methods": {
+        "ours": {
+          "predicted_sources": [
+            "unicode#input:v0:/latin"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_original": {
+          "predicted_sources": [
+            "unicode#input:v0:/latin"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_extracted": {
+          "predicted_sources": [
+            "unicode#input:v0:/latin"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        }
+      }
+    },
+    {
+      "case": "unicode",
+      "path": "/face",
+      "status": "scored",
+      "expected_sources": [
+        "unicode#input:v0:/face"
+      ],
+      "rule": "unicode",
+      "target_identity": {
+        "case": "unicode",
+        "requested_path": "/face",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "methods": {
+        "ours": {
+          "predicted_sources": [
+            "unicode#input:v0:/face"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_original": {
+          "predicted_sources": [
+            "unicode#input:v0:/face"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "libdft64_extracted": {
+          "predicted_sources": [
+            "unicode#input:v0:/face"
+          ],
+          "status": "answered",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        }
+      }
+    },
+    {
+      "case": "missing_field",
+      "path": "/absent",
+      "status": "no_sink",
+      "expected_sources": null,
+      "rule": "absent",
+      "target_identity": {
+        "case": "missing_field",
+        "requested_path": "/absent",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "scoring_note": "Shared native binding check; no per-engine decoder query exists"
+    },
+    {
+      "case": "incomplete_json",
+      "path": "/s",
+      "status": "no_sink",
+      "expected_sources": null,
+      "rule": "parse_failure",
+      "target_identity": {
+        "case": "incomplete_json",
+        "requested_path": "/s",
+        "binding": "native node + output allocation; see calibrated evidence"
+      },
+      "scoring_note": "Shared native binding check; no per-engine decoder query exists"
+    }
+  ],
+  "scoring_checks": "passed: wrong field, empty, unknown, same-value identity, unexpected syntax and aggregate denominators",
+  "archive": {
+    "name": "cjson-parser-host-20261012-041303-736089.zip",
+    "size_bytes": 2963370,
+    "sha256": "11743491e30466eadf54b979212d9c091f5d2c75422e510384c8435b509d62b3"
+  },
+  "verification_sha256": "eaf89d346403323c521c3f962c262afdb912f58f6ea696ce7c2966544de1e971",
+  "scorer_sha256": "c3aaf5bc9a73cd7ea105b06dc6bdf355845f0ec569b75aab8aa2b83fb4d3bfcf",
+  "truth_source_sha256": "004f6bcea573c0efb8a4acd8c6b5d70c35016a529a000f329a3d35d1fdc24569",
+  "performance_eligible": false,
+  "independent_per_byte_accuracy": null,
+  "limitations": [
+    "All metrics conditional on 18 predeclared decoder targets; 2 replacement targets remain excluded",
+    "No independent human second review or blinded annotation",
+    "Field projection cannot expose missing/extra bytes within the same source field",
+    "Positive targets each depend on one source field; no multi-source aggregation evidence",
+    "Original and extracted libdft are one algorithm, not two independent baselines"
+  ]
+}
