@@ -1,0 +1,1089 @@
+{
+  "schema": "libdft-offline-local-v1",
+  "status": "local_pass_native_pin_calibration_pending",
+  "pin_executed": false,
+  "bpf_executed": false,
+  "native_trace_collected": false,
+  "native_pin_equivalence": false,
+  "performance_eligible": false,
+  "cases": [
+    {
+      "sequence": 1,
+      "function": "loop_call_overwrite",
+      "count": 0,
+      "steps": 15,
+      "value": 42,
+      "labels": [],
+      "expected": [],
+      "matched": true,
+      "trace_sha256": "6434d752000ceabe2db7250f959e4f5eeee4040d621151fddaa93ee24d87bd0e",
+      "replay_sha256": "c547e53abc814c7305c094bf06e75c4f586352db31eec052fc4218820363c03c"
+    },
+    {
+      "sequence": 2,
+      "function": "loop_call_overwrite",
+      "count": 1,
+      "steps": 26,
+      "value": 424242,
+      "labels": [
+        1
+      ],
+      "expected": [
+        1
+      ],
+      "matched": true,
+      "trace_sha256": "ca7313ebd5618d8f5c66bb87e36def035eeca83ddd2e1f56b37bce851359eb57",
+      "replay_sha256": "7f550a4ded5296abb32aa93fa39f0988eb992b13ec0f39fc8971d74cea2cf802"
+    },
+    {
+      "sequence": 3,
+      "function": "loop_call_overwrite",
+      "count": 2,
+      "steps": 36,
+      "value": 424242,
+      "labels": [
+        1
+      ],
+      "expected": [
+        1
+      ],
+      "matched": true,
+      "trace_sha256": "d05d67b2dd9d38f1d45f1f472d079a02aef9721a9d57bc1918ae084363126a79",
+      "replay_sha256": "8a0c73fc940b066b56913daffc34d51142dfbfd4b79d327d505e9b41ca5aa896"
+    },
+    {
+      "sequence": 4,
+      "function": "loop_call_overwrite",
+      "count": 4,
+      "steps": 56,
+      "value": 424242,
+      "labels": [
+        2
+      ],
+      "expected": [
+        2
+      ],
+      "matched": true,
+      "trace_sha256": "3cf34efd4fbe7f54871d86636b062189ef0384fd5b53244f8fc649462058b95d",
+      "replay_sha256": "46b02fb3f85fbc79585490989678e76afff0fdb406462d96c5da7030065e1026"
+    },
+    {
+      "sequence": 5,
+      "function": "loop_call_accumulate",
+      "count": 0,
+      "steps": 18,
+      "value": 0,
+      "labels": [],
+      "expected": [],
+      "matched": true,
+      "trace_sha256": "ef06aa0616c7d7be5fe006782aa37db80cf77c97381ea796d9d557e0b669c799",
+      "replay_sha256": "9289add7fdfa4e841894a7f2b3e5e092bf3bfdcf236723fc8c0fc420d1a75507"
+    },
+    {
+      "sequence": 6,
+      "function": "loop_call_accumulate",
+      "count": 1,
+      "steps": 30,
+      "value": 424242,
+      "labels": [
+        1
+      ],
+      "expected": [
+        1
+      ],
+      "matched": true,
+      "trace_sha256": "20e62ccbcedc1885ae9095c3ce19684e33ff684e850e6a4e41a270ac1ccef272",
+      "replay_sha256": "0bc92b27644af084e71a33840afb666d970334147fb77d8ae838268a2c8e210a"
+    },
+    {
+      "sequence": 7,
+      "function": "loop_call_accumulate",
+      "count": 2,
+      "steps": 41,
+      "value": 848484,
+      "labels": [
+        1
+      ],
+      "expected": [
+        1
+      ],
+      "matched": true,
+      "trace_sha256": "117a6bbd4f8fb9ffbccdf59e19d31481ec83fe7697b42db73b12f0bfe3f0f7ee",
+      "replay_sha256": "43d29509b62f65f376dd130fd0c058165d04fda4674772eb28132d090bf4f1d9"
+    },
+    {
+      "sequence": 8,
+      "function": "loop_call_accumulate",
+      "count": 4,
+      "steps": 63,
+      "value": 1696968,
+      "labels": [
+        1,
+        2
+      ],
+      "expected": [
+        1,
+        2
+      ],
+      "matched": true,
+      "trace_sha256": "3c1c5f84f7de7b163766f77e74902541b8c0fee69f6ba9e03e496e442b6740bf",
+      "replay_sha256": "2cb8b905d0df4ffa0885b86bc0c97c4014ddd27f715128ad14a9e4815a7634ba"
+    },
+    {
+      "sequence": 9,
+      "function": "loop_call_transform",
+      "count": 0,
+      "steps": 18,
+      "value": 0,
+      "labels": [],
+      "expected": [],
+      "matched": true,
+      "trace_sha256": "c39907b0bfac8510ab977de55aa5f675a2b3ff24e5af069d08b2e12f236d2da2",
+      "replay_sha256": "6f11bc86674c7493fe1d6058490d89b8f392cba7f628a372d3fc031cf2f9e103"
+    },
+    {
+      "sequence": 10,
+      "function": "loop_call_transform",
+      "count": 1,
+      "steps": 33,
+      "value": 424295,
+      "labels": [
+        1
+      ],
+      "expected": [
+        1
+      ],
+      "matched": true,
+      "trace_sha256": "8497378031d3c3140c1ea8528f4dc039211931a13b4b8724b8c832636657db85",
+      "replay_sha256": "fcce063a3bf9c82f0383c7275281f9ecb6be76ccc63fd6d21eb96367c5cef52a"
+    },
+    {
+      "sequence": 11,
+      "function": "loop_call_transform",
+      "count": 2,
+      "steps": 47,
+      "value": 848590,
+      "labels": [
+        1
+      ],
+      "expected": [
+        1
+      ],
+      "matched": true,
+      "trace_sha256": "f03c35b14688ad0de393443861d3b88140def4968f6d059425c044585e416a00",
+      "replay_sha256": "4a632a324f31e6e79ce4bf799c5abaa8f17d5b5f425a6a61088ad881b02edf69"
+    },
+    {
+      "sequence": 12,
+      "function": "loop_call_transform",
+      "count": 4,
+      "steps": 75,
+      "value": 1697180,
+      "labels": [
+        1,
+        2
+      ],
+      "expected": [
+        1,
+        2
+      ],
+      "matched": true,
+      "trace_sha256": "9058906b6def1c2d6f98942b943f5623a96be416c19102259535cd3cab01061e",
+      "replay_sha256": "8d80d062d6699ef8b058b10db26bf6ffc3f4a003b71768f1574a9c19a78877f0"
+    },
+    {
+      "sequence": 13,
+      "function": "loop_call_overwrite",
+      "count": 0,
+      "steps": 15,
+      "value": 42,
+      "labels": [],
+      "expected": [],
+      "matched": true,
+      "trace_sha256": "48d8f8e9143a672609360b81aeff3d87d23a7227a42e6d2e13cebd541155c967",
+      "replay_sha256": "c547e53abc814c7305c094bf06e75c4f586352db31eec052fc4218820363c03c"
+    },
+    {
+      "sequence": 14,
+      "function": "loop_call_overwrite",
+      "count": 1,
+      "steps": 26,
+      "value": 424243,
+      "labels": [
+        1
+      ],
+      "expected": [
+        1
+      ],
+      "matched": true,
+      "trace_sha256": "e3fe704d961423aa447d18faaeff198d3f6469d46e3bfea227467c4563eafe0f",
+      "replay_sha256": "7f550a4ded5296abb32aa93fa39f0988eb992b13ec0f39fc8971d74cea2cf802"
+    },
+    {
+      "sequence": 15,
+      "function": "loop_call_overwrite",
+      "count": 2,
+      "steps": 36,
+      "value": 424243,
+      "labels": [
+        1
+      ],
+      "expected": [
+        1
+      ],
+      "matched": true,
+      "trace_sha256": "b5822ad74f356f97f4b46dc87d2c642b6517ae960ece8d880b922c1c82d80095",
+      "replay_sha256": "8a0c73fc940b066b56913daffc34d51142dfbfd4b79d327d505e9b41ca5aa896"
+    },
+    {
+      "sequence": 16,
+      "function": "loop_call_overwrite",
+      "count": 4,
+      "steps": 56,
+      "value": 424243,
+      "labels": [
+        2
+      ],
+      "expected": [
+        2
+      ],
+      "matched": true,
+      "trace_sha256": "f226b5639a60933303af90285eded7e2962912b0c13cfcff13862996df09cfcf",
+      "replay_sha256": "46b02fb3f85fbc79585490989678e76afff0fdb406462d96c5da7030065e1026"
+    },
+    {
+      "sequence": 17,
+      "function": "loop_call_accumulate",
+      "count": 0,
+      "steps": 18,
+      "value": 0,
+      "labels": [],
+      "expected": [],
+      "matched": true,
+      "trace_sha256": "e10408fdcaeddc8bd14d62a8884a2cb87df9955b74a8d0749c17e272b0af3f72",
+      "replay_sha256": "9289add7fdfa4e841894a7f2b3e5e092bf3bfdcf236723fc8c0fc420d1a75507"
+    },
+    {
+      "sequence": 18,
+      "function": "loop_call_accumulate",
+      "count": 1,
+      "steps": 30,
+      "value": 424243,
+      "labels": [
+        1
+      ],
+      "expected": [
+        1
+      ],
+      "matched": true,
+      "trace_sha256": "3d78a0fa9c80d63efa7746340401628fece38e25a9ae8fe5c1155237b585934e",
+      "replay_sha256": "0bc92b27644af084e71a33840afb666d970334147fb77d8ae838268a2c8e210a"
+    },
+    {
+      "sequence": 19,
+      "function": "loop_call_accumulate",
+      "count": 2,
+      "steps": 41,
+      "value": 848486,
+      "labels": [
+        1
+      ],
+      "expected": [
+        1
+      ],
+      "matched": true,
+      "trace_sha256": "7c1df5c1b8781c0ae2f17ab02ccd7640dc63e76bf33a4acf97a159a138a2ed74",
+      "replay_sha256": "43d29509b62f65f376dd130fd0c058165d04fda4674772eb28132d090bf4f1d9"
+    },
+    {
+      "sequence": 20,
+      "function": "loop_call_accumulate",
+      "count": 4,
+      "steps": 63,
+      "value": 1696972,
+      "labels": [
+        1,
+        2
+      ],
+      "expected": [
+        1,
+        2
+      ],
+      "matched": true,
+      "trace_sha256": "019b491e55963c7d43c679e7475c7a11cad772d1794abf015bf06eb9c2064998",
+      "replay_sha256": "2cb8b905d0df4ffa0885b86bc0c97c4014ddd27f715128ad14a9e4815a7634ba"
+    },
+    {
+      "sequence": 21,
+      "function": "loop_call_transform",
+      "count": 0,
+      "steps": 18,
+      "value": 0,
+      "labels": [],
+      "expected": [],
+      "matched": true,
+      "trace_sha256": "f6240e77d2dbd76f9968678005529dc3925054fbdb963a1121766edb53d3729c",
+      "replay_sha256": "6f11bc86674c7493fe1d6058490d89b8f392cba7f628a372d3fc031cf2f9e103"
+    },
+    {
+      "sequence": 22,
+      "function": "loop_call_transform",
+      "count": 1,
+      "steps": 33,
+      "value": 424294,
+      "labels": [
+        1
+      ],
+      "expected": [
+        1
+      ],
+      "matched": true,
+      "trace_sha256": "7bf3a6365ba63e9f7b44d3990655255d23c446c816a6b5792ab21de331018aac",
+      "replay_sha256": "fcce063a3bf9c82f0383c7275281f9ecb6be76ccc63fd6d21eb96367c5cef52a"
+    },
+    {
+      "sequence": 23,
+      "function": "loop_call_transform",
+      "count": 2,
+      "steps": 47,
+      "value": 848588,
+      "labels": [
+        1
+      ],
+      "expected": [
+        1
+      ],
+      "matched": true,
+      "trace_sha256": "71904ce47cffddac7228be7a9dd1c57bc51a032421352b88809dce2154149d5d",
+      "replay_sha256": "4a632a324f31e6e79ce4bf799c5abaa8f17d5b5f425a6a61088ad881b02edf69"
+    },
+    {
+      "sequence": 24,
+      "function": "loop_call_transform",
+      "count": 4,
+      "steps": 75,
+      "value": 1697176,
+      "labels": [
+        1,
+        2
+      ],
+      "expected": [
+        1,
+        2
+      ],
+      "matched": true,
+      "trace_sha256": "840fedbd87b279acdf6c195b5305c4336c04b135786e39c9cbefea9443f5f9a6",
+      "replay_sha256": "8d80d062d6699ef8b058b10db26bf6ffc3f4a003b71768f1574a9c19a78877f0"
+    }
+  ],
+  "extraction": {
+    "revision": "20804d5bae5d8aed31a71761b1a1149e35a0da95",
+    "upstream_sha256": {
+      "src/bdd_tag.cpp": "0cd065e341e02fd60b0764a9e942215819d0c9461db0e28b99a539eaf501229b",
+      "src/bdd_tag.h": "603ec6d0a8620c697eefd9095700189ff76a89ecc05d049928aabe7636f6d80e",
+      "src/branch_pred.h": "466c5b9b0678bac23b5ab2a529b6994261126dcaa727743701c9db33978203b6",
+      "src/debug.h": "c7440e436880a2fe3d5eeaad8d83b6ca12949fc0d7033d406072c26756ee8224",
+      "src/def.h": "1362315e06bb87981afb9f235e64809e6af0ae6d12fd9736442be3575d91cc76",
+      "src/ins_binary_op.cpp": "a1576162c6f71e9589ecafd125494f8d866c912c0c20f32aa338246d62f9ae49",
+      "src/ins_binary_op.h": "51f508d022eb19b61d94e23818251994eecbe8cb76f02e9622e55143caff3b83",
+      "src/ins_clear_op.cpp": "cb39a1d2bdbfdb6638e61abd57235a163efe5d38b49993805680955cd8afc69c",
+      "src/ins_clear_op.h": "4ab9312c40732e2af458f1375a49b139600223a78e7da329c6729c11db073893",
+      "src/ins_helper.h": "8d17b774ef45a26e8e1e0ff51df94548ac07118af3f210939d31a2cd4ef2efee",
+      "src/ins_movsx_op.cpp": "efd6e9d7683ab7bddbb748e2c9aee6fde3e606f285ac9378c7bae715f86e62e1",
+      "src/ins_movsx_op.h": "dfbc4d3991320922e6c5f8296131b77ada920f1d149258ed45dd83d80a4bf00c",
+      "src/ins_ternary_op.cpp": "c7b7afdee9a95aedfc8095c00ef54ff7c952cb48c610bdb2c036f8658adf70dd",
+      "src/ins_ternary_op.h": "6586f2764a62427b8eaae8d4b953366c6a14819bb5f4a103ba38825d27d99f70",
+      "src/ins_unitary_op.cpp": "4fa2fa2823b632d759c3433d7c8f4f396082aa81182520cba50eeb8700e5f872",
+      "src/ins_unitary_op.h": "b7bb5ccde051c5aeefa0e77a5a02d1fcf6b762a800de61c71b5908e63dd76076",
+      "src/ins_xchg_op.cpp": "3892dd4b2836847d45fe1da38dd4372d8e639f3ddf1cdb270fb6d83ec07e57b4",
+      "src/ins_xchg_op.h": "9636ed609f5e8b85223cbcd67ed432dc74b27bdca4fe76bbbc48bc669e3f073e",
+      "src/ins_xfer_op.cpp": "6e1e4760bfded865d126518cdd403dc84dfedbae42635675338246e9c85b087c",
+      "src/ins_xfer_op.h": "103768a4ca42524dfb1a1ad81405ab4b9d61ee261158b9bfd896793979e8bb23",
+      "src/libdft_api.cpp": "590d053c29940ed2c54f66d28fe6b369c4cf3a42034db8430cdeea03bc773dc3",
+      "src/libdft_api.h": "fe50c9f77cf73c000d876953aa0f9fecc603891af71d10f533c9c192992e66e8",
+      "src/libdft_core.cpp": "08035d9f23f64575cb551fb81680fd2e4d68d510758cc2585fe55c6318d72a6d",
+      "src/libdft_core.h": "24f3dc0af364756c22b4b182ed6dfc51b353c075aec5d9d0183ee3d8150dd759",
+      "src/syscall_desc.cpp": "ddb617659789fb76dac1a2cb09bf719f9704e3d86915b3cbaaf703423836e4ee",
+      "src/syscall_desc.h": "3b86edee42f39418d7a8ca5aa2cbdef695ce49a8be1fbc0de6fd5c8c4ecf2baa",
+      "src/syscall_hook.cpp": "76270039b1edc43c2904ab5f93752c4d4a7d1cecb2a76521bc769dbc22f106d0",
+      "src/syscall_hook.h": "78e68ff842598c237debc50ce03939e5e42e71df0a137d06153415c1c8af4411",
+      "src/syscall_struct.h": "eb3abd8a3ef22501e7653d493284d66c373da3e14fa811320361ec535f822cbe",
+      "src/tag_trait.cpp": "4b3a9529c78d7d3a859a2d0a129ea13159a78c6658d9537f16a10aa81a3e15dd",
+      "src/tag_traits.h": "28934a35e53551e9bdc98fecacc3e3da289a071b3c88758ec0133cc4f7449d0b",
+      "src/tagmap.cpp": "ec738c727c5a45b6b900945c66e906f6d6c3764f519d62623c9da2aec601c8e4",
+      "src/tagmap.h": "633d8824fffbd6a6339e5f37658d622246854bcb4f36902cd0f789be336a98ee",
+      "LICENSE": "e631dd665053b02a55e198edbcffb8ff7b2d336c421e061048e6973f21687544"
+    },
+    "callbacks": [
+      {
+        "name": "r2r_xfer_opw",
+        "source": "src/ins_xfer_op.cpp",
+        "line": 36,
+        "sha256": "f8cba75332f41068006850aadaf49bb74c830aa8fd54f41fa3ff2c45679cf351",
+        "body_unchanged": true
+      },
+      {
+        "name": "m2r_xfer_opw",
+        "source": "src/ins_xfer_op.cpp",
+        "line": 88,
+        "sha256": "e8157d8889885c3d0d1416773cc70ada5a494adb76cf2b74418641129d0e473e",
+        "body_unchanged": true
+      },
+      {
+        "name": "r2m_xfer_opw",
+        "source": "src/ins_xfer_op.cpp",
+        "line": 132,
+        "sha256": "675984c8bf10420dda15b93dc5987021c3b84430112af81e141000beac96fe96",
+        "body_unchanged": true
+      },
+      {
+        "name": "m2m_xfer_opw",
+        "source": "src/ins_xfer_op.cpp",
+        "line": 178,
+        "sha256": "89b43f41623b80ff531d829bc32edaac320c1f236c5ceaa0279037c11e6ba697",
+        "body_unchanged": true
+      },
+      {
+        "name": "r2r_binary_opw",
+        "source": "src/ins_binary_op.cpp",
+        "line": 39,
+        "sha256": "fe447974b15e477febf1e7a92e691930da0778b189eaccf3447383bb0ffd0870",
+        "body_unchanged": true
+      },
+      {
+        "name": "m2r_binary_opw",
+        "source": "src/ins_binary_op.cpp",
+        "line": 96,
+        "sha256": "d23887a5f3fa8997b8fccd99b34edfb8bb8410de55b42e89b6a38b767916cdf5",
+        "body_unchanged": true
+      },
+      {
+        "name": "r2m_binary_opw",
+        "source": "src/ins_binary_op.cpp",
+        "line": 149,
+        "sha256": "279139e6b53b3c8af32ed9936ca055b2d2096d278ec4f908dc6c67b5396b46c6",
+        "body_unchanged": true
+      },
+      {
+        "name": "r_clrw",
+        "source": "src/ins_clear_op.cpp",
+        "line": 31,
+        "sha256": "c71a0d841f1d8e7224c58c43ec20a72511104aac9d020cc2b64e0a273107fb03",
+        "body_unchanged": true
+      },
+      {
+        "name": "_lea_opw",
+        "source": "src/ins_xfer_op.cpp",
+        "line": 284,
+        "sha256": "0257d24f8017039bc68208a9e9fc151f2b2b8039db65efe7e9bf035ba9e9312a",
+        "body_unchanged": true
+      },
+      {
+        "name": "r2r_xfer_opl",
+        "source": "src/ins_xfer_op.cpp",
+        "line": 48,
+        "sha256": "4af9797a0042d2980b5083a0e12755891d027ae30c7dd59c0eaaf0cb463541b7",
+        "body_unchanged": true
+      },
+      {
+        "name": "m2r_xfer_opl",
+        "source": "src/ins_xfer_op.cpp",
+        "line": 94,
+        "sha256": "d4e88a0c68bbc1284a0bf047ce99ffab2b6bac3909a3677c51901b869a356775",
+        "body_unchanged": true
+      },
+      {
+        "name": "r2m_xfer_opl",
+        "source": "src/ins_xfer_op.cpp",
+        "line": 140,
+        "sha256": "63cf00e087b677ea33311649bbf9da2ada35469096ace384a219bcee997fd049",
+        "body_unchanged": true
+      },
+      {
+        "name": "m2m_xfer_opl",
+        "source": "src/ins_xfer_op.cpp",
+        "line": 183,
+        "sha256": "ca3da11ca0488db484cd553cd5af0c5f7a2167a895802275988e1183000f90e2",
+        "body_unchanged": true
+      },
+      {
+        "name": "r2r_binary_opl",
+        "source": "src/ins_binary_op.cpp",
+        "line": 47,
+        "sha256": "a3e27d8ae5c0eca1ab1eb8b0176fb3d78c138838095d7ac851fa4c68da1e16cd",
+        "body_unchanged": true
+      },
+      {
+        "name": "m2r_binary_opl",
+        "source": "src/ins_binary_op.cpp",
+        "line": 103,
+        "sha256": "013a600c6c4fd3f51a03169723aa41ea30750324e19572d511f9d9f516cc0c89",
+        "body_unchanged": true
+      },
+      {
+        "name": "r2m_binary_opl",
+        "source": "src/ins_binary_op.cpp",
+        "line": 156,
+        "sha256": "6f3b44d3d5bfbd00f9df0c6ca1b4010903da0ebd004accfc83cf3a762c7f62c7",
+        "body_unchanged": true
+      },
+      {
+        "name": "r_clrl",
+        "source": "src/ins_clear_op.cpp",
+        "line": 37,
+        "sha256": "4d7a8153ab730e26fda732c19f05ed2b090c4cb3a92aaf54a6ebb955de2b6cbf",
+        "body_unchanged": true
+      },
+      {
+        "name": "_lea_opl",
+        "source": "src/ins_xfer_op.cpp",
+        "line": 290,
+        "sha256": "59d41217b10ebff59d06b162a6315c264050dcd54e8dca9816dd65a49e86c457",
+        "body_unchanged": true
+      },
+      {
+        "name": "r2r_xfer_opq",
+        "source": "src/ins_xfer_op.cpp",
+        "line": 55,
+        "sha256": "1980f11b66262a39a3e5993c5282ab9b06e5c441c103e31f005b077979d1a7e7",
+        "body_unchanged": true
+      },
+      {
+        "name": "m2r_xfer_opq",
+        "source": "src/ins_xfer_op.cpp",
+        "line": 100,
+        "sha256": "fe7d0818ccfdbfe7bd42ace83ca90e0b45029a9329e58b2b86e142e5eb3ce649",
+        "body_unchanged": true
+      },
+      {
+        "name": "r2m_xfer_opq",
+        "source": "src/ins_xfer_op.cpp",
+        "line": 148,
+        "sha256": "24791db67414e47437f2c340191ef33b32f0a1db5bb6a06864542e4caa57011d",
+        "body_unchanged": true
+      },
+      {
+        "name": "m2m_xfer_opq",
+        "source": "src/ins_xfer_op.cpp",
+        "line": 188,
+        "sha256": "039d0b7e6378767c99a81a060285301220a451659189e8b7f01f8cf549f85a03",
+        "body_unchanged": true
+      },
+      {
+        "name": "r2r_binary_opq",
+        "source": "src/ins_binary_op.cpp",
+        "line": 55,
+        "sha256": "28307f97559dfd970268edfda7f5cc5a2c240e52db9e98f4c6d00e16bc7b4a25",
+        "body_unchanged": true
+      },
+      {
+        "name": "m2r_binary_opq",
+        "source": "src/ins_binary_op.cpp",
+        "line": 110,
+        "sha256": "652886f663923154acd690242d6608dc6bcba9421d025d6689115047afbb1104",
+        "body_unchanged": true
+      },
+      {
+        "name": "r2m_binary_opq",
+        "source": "src/ins_binary_op.cpp",
+        "line": 163,
+        "sha256": "13417ced7fb1e82c6025b691120e4169094e16f6df92d16b73cb2a444b5de511",
+        "body_unchanged": true
+      },
+      {
+        "name": "r_clrq",
+        "source": "src/ins_clear_op.cpp",
+        "line": 43,
+        "sha256": "900780fcbf4fd247b57f233f119c796ef2d0c7b84a6e19fc831907103632ba1a",
+        "body_unchanged": true
+      },
+      {
+        "name": "_lea_opq",
+        "source": "src/ins_xfer_op.cpp",
+        "line": 296,
+        "sha256": "07157e614d59ad3426c074249c3ee6b38b8db4970197f1d8562e119d899f952b",
+        "body_unchanged": true
+      }
+    ],
+    "upstream_dispatcher_reused": false,
+    "callback_dispatch": "explicit bounded offline adapter",
+    "bdd_and_tagmap_unchanged": true,
+    "command": [
+      "g++",
+      "-std=c++17",
+      "-O2",
+      "-I<REPO>/artifacts/libdft-offline-local-20261012-final/core/shim",
+      "-I<REPO>/artifacts/libdft-offline-local-20261012-final/core/upstream",
+      "<REPO>/artifacts/libdft-offline-local-20261012-final/core/core.cpp",
+      "<REPO>/artifacts/libdft-offline-local-20261012-final/core/upstream/bdd_tag.cpp",
+      "<REPO>/artifacts/libdft-offline-local-20261012-final/core/upstream/tag_trait.cpp",
+      "<REPO>/artifacts/libdft-offline-local-20261012-final/core/upstream/tagmap.cpp",
+      "-o",
+      "<REPO>/artifacts/libdft-offline-local-20261012-final/core/libdft-replay-core"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": "",
+    "adapter_sha256": {
+      "build_core.py": "bd91b71d91e3cc21c344f8036a58d7558d04b639619ef699d7a14ef0d67f4449",
+      "pin.H": "bf6de9f41c1336501ba229e9d33dfa301484c3ad9c21aff8623287b5769533c7",
+      "core.cpp": "3b527836097c24ef13dbe030d862eca2ff08478c0d7c2827ef03292c44982308"
+    },
+    "generated_sha256": "04977685f45ba25e11011eb1eb89971bfbeb5e3e6152ac0e288b84561e2e4a32",
+    "executable_sha256": "e1baa1775d38a481f2c5df470ec99dfbef2ac34bcf51bc630fe0ae4d1a7ea5dd"
+  },
+  "transport_checks": [
+    {
+      "name": "copy",
+      "passed": true,
+      "byte_labels": [
+        [
+          1
+        ],
+        [
+          1
+        ],
+        [
+          1
+        ],
+        [
+          1
+        ]
+      ]
+    },
+    {
+      "name": "union",
+      "passed": true,
+      "byte_labels": [
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          2
+        ]
+      ]
+    },
+    {
+      "name": "overwrite",
+      "passed": true,
+      "byte_labels": [
+        [
+          2
+        ],
+        [
+          2
+        ],
+        [
+          2
+        ],
+        [
+          2
+        ]
+      ]
+    },
+    {
+      "name": "clear",
+      "passed": true,
+      "byte_labels": [
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    {
+      "name": "upstream_32bit_upper_retention",
+      "passed": true,
+      "byte_labels": [
+        [],
+        [],
+        [],
+        [],
+        [
+          1
+        ],
+        [
+          1
+        ],
+        [
+          1
+        ],
+        [
+          1
+        ]
+      ]
+    },
+    {
+      "name": "memory_alias",
+      "passed": true,
+      "byte_labels": [
+        [
+          2
+        ],
+        [
+          2
+        ],
+        [
+          2
+        ],
+        [
+          2
+        ]
+      ]
+    },
+    {
+      "name": "call absent 1",
+      "rejected": true
+    },
+    {
+      "name": "call r2r_xfer_opq 999 10",
+      "rejected": true
+    },
+    {
+      "name": "seed 18446744073709551615 4 1",
+      "rejected": true
+    },
+    {
+      "name": "syscall",
+      "rejected": true
+    }
+  ],
+  "fixture": {
+    "source_sha256": {
+      "main.c": "488271251461984c46fa701e4ccb1cad77cc2eae4a52cda5b91fd274a327a550",
+      "operations.c": "614bffc522d8854c68e14bc61c4813c4e487d5135ebaadc965090c332f8ce472",
+      "model.h": "4ddf5633bbd33ab4730bb764f92afb15b8b37f95e118159fb310de5116342fbc"
+    },
+    "command": [
+      "gcc",
+      "-O1",
+      "-g",
+      "-fPIE",
+      "-pie",
+      "-fno-if-conversion",
+      "-fno-if-conversion2",
+      "-fno-inline",
+      "-fno-lto",
+      "-fno-ipa-icf",
+      "-fno-stack-protector",
+      "-fcf-protection=none",
+      "-o",
+      "<REPO>/artifacts/libdft-offline-local-20261012-final/fixture/program",
+      "<REPO>/artifacts/libdft-offline-local-20261012-final/fixture/main.c",
+      "<REPO>/artifacts/libdft-offline-local-20261012-final/fixture/operations.c"
+    ],
+    "elf_sha256": "883f842325901c51494ad43085fc3d2fd382e095330ce9f921fdc8610dcdbb34",
+    "gcc": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0"
+  },
+  "dependencies": {
+    "capstone": "5.0.6",
+    "unicorn": "2.1.4",
+    "pyelftools": "0.32"
+  },
+  "correct_queries": 24,
+  "raw_instruction_records": 916,
+  "callback_counts": {
+    "r2m_xfer_opq": 112,
+    "r2r_xfer_opq": 84,
+    "r_clrl": 32,
+    "r2m_xfer_opl": 24,
+    "m2r_xfer_opq": 112,
+    "r2r_xfer_opl": 68,
+    "m2r_xfer_opl": 42,
+    "r2r_binary_opl": 28
+  },
+  "source_relations": 22,
+  "missing_host_archive": "c-libdft-20261010-032159-226808.zip",
+  "limitations": [
+    "Emulated collection, not a native Pin replacement validation",
+    "Handwritten bounded instruction dispatcher; callback bodies and BDD/tagmap unchanged",
+    "Single thread, five existing C functions; no Go/Rust/C++/Java support claim",
+    "New local ELF; old host summary agreement is not same-trace calibration"
+  ],
+  "adapter_sha256": {
+    "core.cpp": "3b527836097c24ef13dbe030d862eca2ff08478c0d7c2827ef03292c44982308",
+    "build_core.py": "bd91b71d91e3cc21c344f8036a58d7558d04b639619ef699d7a14ef0d67f4449",
+    "calibrate_host.py": "0b05c786cf7f555eec78617c7ae939620f0542322b51e41c78b78f173b624060",
+    "pin.H": "bf6de9f41c1336501ba229e9d33dfa301484c3ad9c21aff8623287b5769533c7",
+    "replay.py": "4a4a6e8af7ee8557f96c48f34ec42bb1d8b1924f4340f695a40f9c9f7d7dff09",
+    "check_local.py": "a951f5afa773b7f722ba90ff85c466e94142473bcfbc7c3a233488e0cc6b7b15"
+  },
+  "host_adapter_build": {
+    "status": "built_native_pin_calibration_not_run",
+    "tool_build": {
+      "compiled": true,
+      "tools": {
+        "nullpin": {
+          "path": "<REPO>/artifacts/libdft-offline-host-build-20261012/libdft-build/tools/obj-intel64/nullpin.so",
+          "sha256": "164e17cb6c6d057433b9c2c954ea3f78e79780e89cf62a7a8af8bdb644db3d06"
+        },
+        "libdft_offline_capture": {
+          "path": "<REPO>/artifacts/libdft-offline-host-build-20261012/libdft-build/tools/obj-intel64/libdft_offline_capture.so",
+          "sha256": "75ca9676cfefe45efae87178ef229662fd3d26e24ca10f1713cd118a1c3a9a73"
+        }
+      },
+      "upstream_opcode_cases": [
+        "XED_ICLASS_ADC",
+        "XED_ICLASS_ADD",
+        "XED_ICLASS_ADDPD",
+        "XED_ICLASS_ADDSD",
+        "XED_ICLASS_ADDSS",
+        "XED_ICLASS_ADD_LOCK",
+        "XED_ICLASS_AND",
+        "XED_ICLASS_AND_LOCK",
+        "XED_ICLASS_BSF",
+        "XED_ICLASS_BSR",
+        "XED_ICLASS_BSWAP",
+        "XED_ICLASS_BT",
+        "XED_ICLASS_BTC",
+        "XED_ICLASS_BTR",
+        "XED_ICLASS_BTR_LOCK",
+        "XED_ICLASS_BTS",
+        "XED_ICLASS_BTS_LOCK",
+        "XED_ICLASS_CALL_FAR",
+        "XED_ICLASS_CALL_NEAR",
+        "XED_ICLASS_CBW",
+        "XED_ICLASS_CDQ",
+        "XED_ICLASS_CDQE",
+        "XED_ICLASS_CMOVB",
+        "XED_ICLASS_CMOVBE",
+        "XED_ICLASS_CMOVL",
+        "XED_ICLASS_CMOVLE",
+        "XED_ICLASS_CMOVNB",
+        "XED_ICLASS_CMOVNBE",
+        "XED_ICLASS_CMOVNL",
+        "XED_ICLASS_CMOVNLE",
+        "XED_ICLASS_CMOVNO",
+        "XED_ICLASS_CMOVNP",
+        "XED_ICLASS_CMOVNS",
+        "XED_ICLASS_CMOVNZ",
+        "XED_ICLASS_CMOVO",
+        "XED_ICLASS_CMOVP",
+        "XED_ICLASS_CMOVS",
+        "XED_ICLASS_CMOVZ",
+        "XED_ICLASS_CMP",
+        "XED_ICLASS_CMPSB",
+        "XED_ICLASS_CMPSD",
+        "XED_ICLASS_CMPSQ",
+        "XED_ICLASS_CMPSS",
+        "XED_ICLASS_CMPSW",
+        "XED_ICLASS_CMPXCHG",
+        "XED_ICLASS_CMPXCHG_LOCK",
+        "XED_ICLASS_CPUID",
+        "XED_ICLASS_CQO",
+        "XED_ICLASS_CVTSD2SI",
+        "XED_ICLASS_CVTSI2SD",
+        "XED_ICLASS_CWD",
+        "XED_ICLASS_CWDE",
+        "XED_ICLASS_DEC",
+        "XED_ICLASS_DEC_LOCK",
+        "XED_ICLASS_DIV",
+        "XED_ICLASS_DIVSD",
+        "XED_ICLASS_FNSTCW",
+        "XED_ICLASS_IDIV",
+        "XED_ICLASS_IMUL",
+        "XED_ICLASS_INC",
+        "XED_ICLASS_INC_LOCK",
+        "XED_ICLASS_JB",
+        "XED_ICLASS_JBE",
+        "XED_ICLASS_JL",
+        "XED_ICLASS_JLE",
+        "XED_ICLASS_JMP",
+        "XED_ICLASS_JNB",
+        "XED_ICLASS_JNBE",
+        "XED_ICLASS_JNL",
+        "XED_ICLASS_JNLE",
+        "XED_ICLASS_JNO",
+        "XED_ICLASS_JNP",
+        "XED_ICLASS_JNS",
+        "XED_ICLASS_JNZ",
+        "XED_ICLASS_JO",
+        "XED_ICLASS_JP",
+        "XED_ICLASS_JS",
+        "XED_ICLASS_JZ",
+        "XED_ICLASS_LAHF",
+        "XED_ICLASS_LAR",
+        "XED_ICLASS_LEA",
+        "XED_ICLASS_LEAVE",
+        "XED_ICLASS_LFENCE",
+        "XED_ICLASS_LODSB",
+        "XED_ICLASS_LODSD",
+        "XED_ICLASS_LODSQ",
+        "XED_ICLASS_LODSW",
+        "XED_ICLASS_MOV",
+        "XED_ICLASS_MOVAPD",
+        "XED_ICLASS_MOVAPS",
+        "XED_ICLASS_MOVBE",
+        "XED_ICLASS_MOVD",
+        "XED_ICLASS_MOVDQA",
+        "XED_ICLASS_MOVDQU",
+        "XED_ICLASS_MOVHLPS",
+        "XED_ICLASS_MOVHPD",
+        "XED_ICLASS_MOVHPS",
+        "XED_ICLASS_MOVLPD",
+        "XED_ICLASS_MOVLPS",
+        "XED_ICLASS_MOVQ",
+        "XED_ICLASS_MOVSB",
+        "XED_ICLASS_MOVSD",
+        "XED_ICLASS_MOVSD_XMM",
+        "XED_ICLASS_MOVSQ",
+        "XED_ICLASS_MOVSS",
+        "XED_ICLASS_MOVSW",
+        "XED_ICLASS_MOVSX",
+        "XED_ICLASS_MOVSXD",
+        "XED_ICLASS_MOVUPD",
+        "XED_ICLASS_MOVUPS",
+        "XED_ICLASS_MOVZX",
+        "XED_ICLASS_MUL",
+        "XED_ICLASS_MULPD",
+        "XED_ICLASS_MULSD",
+        "XED_ICLASS_NEG",
+        "XED_ICLASS_NOP",
+        "XED_ICLASS_NOT",
+        "XED_ICLASS_OR",
+        "XED_ICLASS_OR_LOCK",
+        "XED_ICLASS_PAUSE",
+        "XED_ICLASS_PCMPEQB",
+        "XED_ICLASS_PCMPISTRI",
+        "XED_ICLASS_PMINUB",
+        "XED_ICLASS_PMOVMSKB",
+        "XED_ICLASS_POP",
+        "XED_ICLASS_POPA",
+        "XED_ICLASS_POPAD",
+        "XED_ICLASS_POR",
+        "XED_ICLASS_PREFETCHW",
+        "XED_ICLASS_PSHUFB",
+        "XED_ICLASS_PSHUFD",
+        "XED_ICLASS_PSLLDQ",
+        "XED_ICLASS_PSRLDQ",
+        "XED_ICLASS_PSUBB",
+        "XED_ICLASS_PSUBD",
+        "XED_ICLASS_PSUBW",
+        "XED_ICLASS_PUNPCKLBW",
+        "XED_ICLASS_PUNPCKLWD",
+        "XED_ICLASS_PUSH",
+        "XED_ICLASS_PUSHA",
+        "XED_ICLASS_PUSHAD",
+        "XED_ICLASS_PUSHF",
+        "XED_ICLASS_PUSHFD",
+        "XED_ICLASS_PUSHFQ",
+        "XED_ICLASS_PXOR",
+        "XED_ICLASS_RCL",
+        "XED_ICLASS_RCR",
+        "XED_ICLASS_RDPID",
+        "XED_ICLASS_RDPMC",
+        "XED_ICLASS_RDRAND",
+        "XED_ICLASS_RDTSC",
+        "XED_ICLASS_RET_FAR",
+        "XED_ICLASS_RET_NEAR",
+        "XED_ICLASS_ROL",
+        "XED_ICLASS_ROR",
+        "XED_ICLASS_SALC",
+        "XED_ICLASS_SAR",
+        "XED_ICLASS_SBB",
+        "XED_ICLASS_SETB",
+        "XED_ICLASS_SETBE",
+        "XED_ICLASS_SETL",
+        "XED_ICLASS_SETLE",
+        "XED_ICLASS_SETNB",
+        "XED_ICLASS_SETNBE",
+        "XED_ICLASS_SETNL",
+        "XED_ICLASS_SETNLE",
+        "XED_ICLASS_SETNO",
+        "XED_ICLASS_SETNP",
+        "XED_ICLASS_SETNS",
+        "XED_ICLASS_SETNZ",
+        "XED_ICLASS_SETO",
+        "XED_ICLASS_SETP",
+        "XED_ICLASS_SETS",
+        "XED_ICLASS_SETZ",
+        "XED_ICLASS_SHL",
+        "XED_ICLASS_SHLD",
+        "XED_ICLASS_SHR",
+        "XED_ICLASS_SHRD",
+        "XED_ICLASS_SMSW",
+        "XED_ICLASS_STMXCSR",
+        "XED_ICLASS_STOSB",
+        "XED_ICLASS_STOSD",
+        "XED_ICLASS_STOSQ",
+        "XED_ICLASS_STOSW",
+        "XED_ICLASS_STR",
+        "XED_ICLASS_SUB",
+        "XED_ICLASS_SUBSD",
+        "XED_ICLASS_SYSCALL",
+        "XED_ICLASS_TEST",
+        "XED_ICLASS_TZCNT",
+        "XED_ICLASS_UCOMISD",
+        "XED_ICLASS_UCOMISS",
+        "XED_ICLASS_UNPCKLPD",
+        "XED_ICLASS_VDIVSD",
+        "XED_ICLASS_VMOVAPD",
+        "XED_ICLASS_VMOVAPS",
+        "XED_ICLASS_VMOVD",
+        "XED_ICLASS_VMOVDQA",
+        "XED_ICLASS_VMOVDQU",
+        "XED_ICLASS_VMOVHLPS",
+        "XED_ICLASS_VMOVHPD",
+        "XED_ICLASS_VMOVHPS",
+        "XED_ICLASS_VMOVLPD",
+        "XED_ICLASS_VMOVLPS",
+        "XED_ICLASS_VMOVQ",
+        "XED_ICLASS_VMOVSS",
+        "XED_ICLASS_VMOVUPD",
+        "XED_ICLASS_VMOVUPS",
+        "XED_ICLASS_VMULSD",
+        "XED_ICLASS_VPALIGNR",
+        "XED_ICLASS_VPAND",
+        "XED_ICLASS_VPANDN",
+        "XED_ICLASS_VPBROADCASTB",
+        "XED_ICLASS_VPCMPEQB",
+        "XED_ICLASS_VPCMPGTB",
+        "XED_ICLASS_VPCMPISTRI",
+        "XED_ICLASS_VPMINUB",
+        "XED_ICLASS_VPMOVMSKB",
+        "XED_ICLASS_VPOR",
+        "XED_ICLASS_VPSLLDQ",
+        "XED_ICLASS_VPSUBB",
+        "XED_ICLASS_VPSUBD",
+        "XED_ICLASS_VPSUBW",
+        "XED_ICLASS_VPTEST",
+        "XED_ICLASS_VPXOR",
+        "XED_ICLASS_VPXORD",
+        "XED_ICLASS_VPXORQ",
+        "XED_ICLASS_VZEROUPPER",
+        "XED_ICLASS_XADD",
+        "XED_ICLASS_XADD_LOCK",
+        "XED_ICLASS_XCHG",
+        "XED_ICLASS_XGETBV",
+        "XED_ICLASS_XLAT",
+        "XED_ICLASS_XOR",
+        "XED_ICLASS_XORPD",
+        "XED_ICLASS_XORPS",
+        "XED_ICLASS_XRSTOR",
+        "XED_ICLASS_XSAVEC"
+      ],
+      "propagation_code_modified": false,
+      "adapter_changes": "boundary API calls and diagnostic callbacks only"
+    },
+    "pin_startup": {
+      "command": [
+        "<REPO>/artifacts/external-tools/pin-3.20-98437-gf02b61307-gcc-linux/pin",
+        "-t",
+        "<REPO>/artifacts/libdft-offline-host-build-20261012/libdft-build/tools/obj-intel64/nullpin.so",
+        "--",
+        "<REPO>/artifacts/libdft-offline-host-build-20261012/fixture/program"
+      ],
+      "error": "[Errno 8] Exec format error: '<REPO>/artifacts/external-tools/pin-3.20-98437-gf02b61307-gcc-linux/pin'"
+    }
+  }
+}
