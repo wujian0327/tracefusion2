@@ -1,0 +1,459 @@
+{
+  "schema": "adservice-source-preflight-v1",
+  "status": "blocked_by_current_tracefusion_contract",
+  "evidence_level": "pinned_source_inspection_and_optional_compiler_version_only",
+  "upstream": {
+    "repository": "GoogleCloudPlatform/microservices-demo",
+    "tag": "v0.10.4",
+    "revision": "474d0f2eb73d97525234995a40d7781b7923a07d",
+    "tracked_clean": true
+  },
+  "upstream_evidence": [
+    {
+      "path": "src/adservice/src/main/java/hipstershop/AdService.java",
+      "sha256": "1123688864c953494dd2625abcd8123c0ce7c7c5a233a1676e2d901f80b6be50",
+      "evidence": [
+        {
+          "needle": "public void getAds(",
+          "matches": [
+            {
+              "line": 94,
+              "text": "public void getAds(AdRequest req, StreamObserver<AdResponse> responseObserver) {"
+            }
+          ]
+        },
+        {
+          "needle": "catch (StatusRuntimeException",
+          "matches": [
+            {
+              "line": 114,
+              "text": "} catch (StatusRuntimeException e) {"
+            }
+          ]
+        },
+        {
+          "needle": "private Collection<Ad> getAdsByCategory(",
+          "matches": [
+            {
+              "line": 123,
+              "text": "private Collection<Ad> getAdsByCategory(String category) {"
+            }
+          ]
+        },
+        {
+          "needle": "return adsMap.get(category)",
+          "matches": [
+            {
+              "line": 124,
+              "text": "return adsMap.get(category);"
+            }
+          ]
+        },
+        {
+          "needle": "new ArrayList<>()",
+          "matches": [
+            {
+              "line": 97,
+              "text": "List<Ad> allAds = new ArrayList<>();"
+            }
+          ]
+        },
+        {
+          "needle": "AdResponse.newBuilder().addAllAds(allAds).build()",
+          "matches": [
+            {
+              "line": 111,
+              "text": "AdResponse reply = AdResponse.newBuilder().addAllAds(allAds).build();"
+            }
+          ]
+        },
+        {
+          "needle": "responseObserver.onNext(reply)",
+          "matches": [
+            {
+              "line": 112,
+              "text": "responseObserver.onNext(reply);"
+            }
+          ]
+        },
+        {
+          "needle": "random.nextInt",
+          "matches": [
+            {
+              "line": 133,
+              "text": "ads.add(Iterables.get(allAds, random.nextInt(allAds.size())));"
+            }
+          ]
+        },
+        {
+          "needle": ".setText(",
+          "matches": [
+            {
+              "line": 153,
+              "text": ".setText(\"Hairdryer for sale. 50% off.\")"
+            },
+            {
+              "line": 158,
+              "text": ".setText(\"Tank top for sale. 20% off.\")"
+            },
+            {
+              "line": 163,
+              "text": ".setText(\"Candle holder for sale. 30% off.\")"
+            },
+            {
+              "line": 168,
+              "text": ".setText(\"Bamboo glass jar for sale. 10% off.\")"
+            },
+            {
+              "line": 173,
+              "text": ".setText(\"Watch for sale. Buy one, get second kit for free\")"
+            },
+            {
+              "line": 178,
+              "text": ".setText(\"Mug for sale. Buy two, get third one for free\")"
+            },
+            {
+              "line": 183,
+              "text": ".setText(\"Loafers for sale. Buy one, get second one for free\")"
+            }
+          ]
+        },
+        {
+          "needle": ".setRedirectUrl(",
+          "matches": [
+            {
+              "line": 152,
+              "text": ".setRedirectUrl(\"/product/2ZYFJ3GM2N\")"
+            },
+            {
+              "line": 157,
+              "text": ".setRedirectUrl(\"/product/66VCHSJNUP\")"
+            },
+            {
+              "line": 162,
+              "text": ".setRedirectUrl(\"/product/0PUK6V6EV0\")"
+            },
+            {
+              "line": 167,
+              "text": ".setRedirectUrl(\"/product/9SIQT8TOJO\")"
+            },
+            {
+              "line": 172,
+              "text": ".setRedirectUrl(\"/product/1YMWWN1N4O\")"
+            },
+            {
+              "line": 177,
+              "text": ".setRedirectUrl(\"/product/6E92ZMYYFZ\")"
+            },
+            {
+              "line": 182,
+              "text": ".setRedirectUrl(\"/product/L9ECAV7KIM\")"
+            }
+          ]
+        },
+        {
+          "needle": ".putAll(\"kitchen\", bambooGlassJar, mug)",
+          "matches": [
+            {
+              "line": 191,
+              "text": ".putAll(\"kitchen\", bambooGlassJar, mug)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "src/adservice/build.gradle",
+      "sha256": "9f40569085ab66cda3d7d9286f9adfe0200053f9e45f137d92e0f81aaabfdc23",
+      "evidence": [
+        {
+          "needle": "sourceCompatibility = JavaVersion.VERSION_19",
+          "matches": [
+            {
+              "line": 23,
+              "text": "sourceCompatibility = JavaVersion.VERSION_19"
+            }
+          ]
+        },
+        {
+          "needle": "targetCompatibility = JavaVersion.VERSION_19",
+          "matches": [
+            {
+              "line": 24,
+              "text": "targetCompatibility = JavaVersion.VERSION_19"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "src/adservice/Dockerfile",
+      "sha256": "2425786f60412acdc9f893b81cf5f2957775773599205ab9361d20d8f2bbbe5e",
+      "evidence": [
+        {
+          "needle": "FROM eclipse-temurin:21",
+          "matches": [
+            {
+              "line": 15,
+              "text": "FROM eclipse-temurin:21@sha256:b5fc642f67dbbd1c4ce811388801cb8480aaca8aa9e56fd6dcda362cfea113f1 AS builder"
+            }
+          ]
+        },
+        {
+          "needle": "FROM eclipse-temurin:25",
+          "matches": [
+            {
+              "line": 28,
+              "text": "FROM eclipse-temurin:25-jre-alpine@sha256:bf9c91071c4f90afebb31d735f111735975d6fe2b668a82339f8204202203621"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "src/adservice/src/main/proto/demo.proto",
+      "sha256": "850feb8b21f5e40adc72d86f85f0c978f460e7d6e0735994ea3dff08228ea57a",
+      "evidence": [
+        {
+          "needle": "repeated string context_keys",
+          "matches": [
+            {
+              "line": 247,
+              "text": "repeated string context_keys = 1;"
+            }
+          ]
+        },
+        {
+          "needle": "repeated Ad ads",
+          "matches": [
+            {
+              "line": 251,
+              "text": "repeated Ad ads = 1;"
+            }
+          ]
+        },
+        {
+          "needle": "string redirect_url",
+          "matches": [
+            {
+              "line": 256,
+              "text": "string redirect_url = 1;"
+            }
+          ]
+        },
+        {
+          "needle": "string text",
+          "matches": [
+            {
+              "line": 259,
+              "text": "string text = 2;"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "engine_revision": "66e9adf4363e2157c8057968386f0924577f1e94",
+  "engine_evidence": [
+    {
+      "path": "experiments/java-collection/classfile.py",
+      "sha256": "50f5fb9b008daa96a2bf2c19fdf2bc988339dca93fb75733f3249288a1e6d51a",
+      "evidence": [
+        {
+          "needle": "45 <= major <= 61",
+          "matches": [
+            {
+              "line": 50,
+              "text": "if not 45 <= major <= 61 or minor == 65535: raise ValueError(\"class version outside Java 17 contract\")"
+            }
+          ]
+        },
+        {
+          "needle": "method access contract",
+          "matches": [
+            {
+              "line": 97,
+              "text": "if flags & (0x8 | 0x100 | 0x400 | 0x20) != 0x8: raise ValueError(\"method access contract\")"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "experiments/java-collection/src/tracefusion/Agent.java",
+      "sha256": "c5f97ebbf1db38f6cf61cc11000a6efd279164fae12b7e48cf63ba2910d65e8c",
+      "evidence": [
+        {
+          "needle": "static_concrete_unsynchronized_methods_only",
+          "matches": [
+            {
+              "line": 76,
+              "text": "throw new IllegalArgumentException(\"static_concrete_unsynchronized_methods_only:\" + m.name);"
+            }
+          ]
+        },
+        {
+          "needle": "exception_handlers:",
+          "matches": [
+            {
+              "line": 77,
+              "text": "if (!m.tryCatchBlocks.isEmpty()) throw new IllegalArgumentException(\"exception_handlers:\" + m.name);"
+            }
+          ]
+        },
+        {
+          "needle": "f.desc.equals(\"I\")",
+          "matches": [
+            {
+              "line": 95,
+              "text": "ok = (op == GETFIELD || op == PUTFIELD) && f.desc.equals(\"I\");"
+            }
+          ]
+        },
+        {
+          "needle": "op == INVOKESTATIC",
+          "matches": [
+            {
+              "line": 99,
+              "text": "ok = op == INVOKESTATIC && selected.contains(c.owner) && !c.name.startsWith(\"<\");"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "experiments/java-collection/observation.py",
+      "sha256": "57023585ddd823e89b3b34a0aca8c8090cf874cf227dfef7f09ed32bc98bed13",
+      "evidence": [
+        {
+          "needle": "external scope callee:",
+          "matches": [
+            {
+              "line": 48,
+              "text": "require(method.split(\".\", 1)[0] == owner, \"external scope callee: \" + method)"
+            }
+          ]
+        },
+        {
+          "needle": "== owner, \"external scope callee:",
+          "matches": [
+            {
+              "line": 48,
+              "text": "require(method.split(\".\", 1)[0] == owner, \"external scope callee: \" + method)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "experiments/java-collection/src/tracefusion/Recorder.java",
+      "sha256": "1a5ed44585ce77574b3d6bcb1db3eebd8ffb6266a98af876cd371f2fac9e1083",
+      "evidence": [
+        {
+          "needle": "multiple_application_threads",
+          "matches": [
+            {
+              "line": 42,
+              "text": "if (t != firstThread) problem(\"multiple_application_threads\");"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "jdk": {
+    "status": "compiler_version_only",
+    "javac": "javac 17.0.20.1",
+    "service_build": "not_attempted"
+  },
+  "galette": {
+    "service_runtime": "not_run",
+    "source": {
+      "path": "README.md",
+      "sha256": "2b4857b62f31a112bc21613add08f47a7a6d015e27b4abe3cee1fd160e630991",
+      "evidence": [
+        {
+          "needle": "requires Java 17 to build",
+          "matches": [
+            {
+              "line": 7,
+              "text": "Galette requires Java 17 to build, but it can also be used on Java 8 through 21."
+            },
+            {
+              "line": 34,
+              "text": "Although Galette currently requires Java 17 to build, it can also be used on Java 8."
+            }
+          ]
+        },
+        {
+          "needle": "Java 8 through 21",
+          "matches": [
+            {
+              "line": 7,
+              "text": "Galette requires Java 17 to build, but it can also be used on Java 8 through 21."
+            }
+          ]
+        }
+      ]
+    },
+    "revision": "bc6002cc5ee4d6eaa30518b2d176a9831d77cb1a",
+    "interpretation": "JDK21 candidate; README is not service compatibility evidence"
+  },
+  "blockers": [
+    {
+      "id": "class_version",
+      "finding": "upstream target Java19; decoder accepts at most Java17",
+      "kind": "static_configuration_mismatch"
+    },
+    {
+      "id": "instance_calls",
+      "finding": "RPC and category lookup are instance methods; agent requires static methods",
+      "kind": "static_contract_mismatch"
+    },
+    {
+      "id": "reference_fields_and_libraries",
+      "finding": "String/collections/protobuf and cross-class calls exceed field/call contracts",
+      "kind": "static_contract_mismatch"
+    },
+    {
+      "id": "exception_handlers",
+      "finding": "getAds has catch; agent rejects exception handlers",
+      "kind": "static_contract_mismatch"
+    },
+    {
+      "id": "threading",
+      "finding": "current recorder rejects multiple observed application threads; RPC threading requires measurement",
+      "kind": "unvalidated_runtime_requirement"
+    },
+    {
+      "id": "random_fallback",
+      "finding": "empty/unmatched contexts use Random; replay needs observed/declared random state",
+      "kind": "additional_contract_requirement"
+    }
+  ],
+  "proposed_queries": [
+    {
+      "id": "ad_text",
+      "source": "initialized catalog Ad object text field",
+      "sink": "AdResponse.ads[i].text"
+    },
+    {
+      "id": "ad_url",
+      "source": "initialized catalog Ad object redirect_url field",
+      "sink": "AdResponse.ads[i].redirect_url"
+    }
+  ],
+  "query_semantics": {
+    "boundary": "catalog objects after initialization, not remote/database provenance",
+    "source_identity": "catalog object identity plus field; never string value equality",
+    "context_keys": "selection/address influence, not declared direct text-content source",
+    "not_implemented": "source tagging, independent runtime oracle, collector, RPC comparison"
+  },
+  "runtime_results": {
+    "native_service": "not_run",
+    "tracefusion": "not_run",
+    "galette": "not_run",
+    "correct_queries": null,
+    "performance": null
+  }
+}

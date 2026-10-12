@@ -5,6 +5,9 @@
 本文件更新实验方向；旧 [paper-plan.md](paper-plan.md) 中暂停扩展语言、优先撰写初稿等安排作为历史记录。
 本轮只推进实验准备与验证，暂不恢复论文初稿撰写。工作分支为 `perf/payment-steady-state`，不默认合入 main。
 
+RQ1 按用户后续确认采用多语言、多开源对象的外部准确性矩阵，具体进展见
+[RQ1 对象与接入记录](rq1-multilanguage.md)。单个 Commons Codec 实验不构成完整 RQ1。
+
 ## 1. 核心主张与范围
 
 拟检验的论文主张：
