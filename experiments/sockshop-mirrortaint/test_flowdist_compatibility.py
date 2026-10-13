@@ -45,6 +45,18 @@ class CompatibilityChecks(unittest.TestCase):
             with self.assertRaises(ValueError):
                 coverage(report, [{1, 2}, {3}], 4)
 
+    def test_appended_shutdown_snapshot_includes_business_statements(self):
+        with tempfile.TemporaryDirectory() as directory:
+            report=Path(directory)/'coverage.out'
+            startup='Statements covered (based on branch coverage): 1 2\nTotal statements covered: 2/4Branches covered: 0\nTotal branches covered: 1/2\n'
+            shutdown='Statements covered (based on branch coverage): 1 2 3\nTotal statements covered: 3/4Branches covered: 0 1\nTotal branches covered: 2/2\n'
+            report.write_text(startup+shutdown)
+            self.assertEqual(coverage(report,[{1,2},{3}],4),({0,1},{1,2,3}))
+            # Author cache bug: branch hits increase but statements stay stale.
+            report.write_text(startup+shutdown.replace('coverage): 1 2 3','coverage): 1 2').replace('3/4','2/4'))
+            with self.assertRaisesRegex(ValueError,'differs from measured'):
+                coverage(report,[{1,2},{3}],4)
+
 
 if __name__ == '__main__':
     unittest.main()

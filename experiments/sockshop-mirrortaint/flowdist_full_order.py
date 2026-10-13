@@ -18,6 +18,7 @@ from pathlib import Path
 from host import ROOT, HERE, prepare, submit
 from sockshop import Deployment, HEALTH_JS, save, check_spec
 import flowdist_preflight as tool
+from audit_flowdist_coverage import coverage
 
 
 class CachedDeployment(Deployment):
@@ -48,6 +49,9 @@ class CachedDeployment(Deployment):
                 entries = parsed if isinstance(parsed, list) else [parsed]
                 if any(e.get('State') in ('exited', 'dead') for e in entries):
                     raise RuntimeError('Original service exited during startup; inspect compose.log')
+            startup=self.compose('logs','--no-color','--tail','250','orders','shipping').stdout
+            if 'java.lang.VerifyError' in startup or 'APPLICATION FAILED TO START' in startup:
+                raise RuntimeError('Java service failed during startup; inspect compose.log')
             status = self.compose('exec', '-T', 'front-end', 'node', '-e', HEALTH_JS, check=False, timeout=15)
             if status.returncode == 0:
                 queues = self.queue_status()
@@ -93,6 +97,13 @@ def run(args):
         (capture / 'test1').mkdir(parents=True)
         capture.chmod(0o777)
         (capture / 'test1').chmod(0o777)
+        if manifest.get('branch_models'):
+            model=manifest['branch_models'][role]
+            for key,filename in (('mapping','entitystmt.out.branch'),('statements','stmtids.out')):
+                source=Path(model[key])
+                if hashlib.sha256(source.read_bytes()).hexdigest()!=model[key+'_sha256']:
+                    raise ValueError('Branch mapping/statement digest mismatch')
+                shutil.copyfile(source,capture/filename)
         cfg = spec['services'][role]
         cfg.setdefault('volumes', []).extend([str(out / jar.name) + ':/tf2/app.jar:ro', str(capture) + ':/tf2/output:rw'])
         cfg['entrypoint'] = ['sh', '-c', 'cd /tf2/output && exec java $$JAVA_OPTS -jar /tf2/app.jar --port=80']
@@ -145,6 +156,18 @@ def run(args):
         # reject collisions so two simultaneous flushes cannot overwrite a PID.
         for role in ('orders', 'shipping'):
             deployment.compose('stop', '-t', '30', role, timeout=45)
+        branch_reports={}
+        if manifest.get('branch_models'):
+            for role in ('orders','shipping'):
+                home=out/'runtime'/role
+                mapping=[set(map(int,row.split())) for row in (home/'entitystmt.out.branch').read_text().splitlines()]
+                statements=(home/'stmtids.out').read_text().splitlines()
+                branches,covered=coverage(home/'stmtCoverage1.out',mapping,len(statements))
+                controller=' newOrder(' if role=='orders' else ' postShipping('
+                if not any(controller in statements[i] for i in covered):
+                    raise ValueError('Controller absent from actual branch coverage')
+                branch_reports[role]={'branches_hit':len(branches),'branch_count':len(mapping),
+                    'statements_hit':len(covered),'mapped_statements':len(statements)}
         events = {}
         for role in ('orders', 'shipping'):
             path = out / 'runtime' / role / 'spring-events.jsonl'
@@ -176,6 +199,7 @@ def run(args):
         status.update(status='order-async-mq-delivery-and-peer-compatibility-passed', business=business,
             original_async_thread_verified=True, events=events, candidate_method_count=int(length[1]), query=query,
             queue_consumer_delivery_verified=True, shipment_worker_processing_verified=False)
+        if branch_reports:status.update(actual_branch_coverage=branch_reports,statement_graph_verified=False)
     finally:
         deployment.diagnostics()
         log = (out / 'compose.log').read_text()

@@ -1,0 +1,269 @@
+{
+  "kind": "flowdist-real-service-statement-coverage-checkpoint",
+  "date": "2026-10-13",
+  "upstream_commit": "9a683606aa42289e045cdbfa9391b55e79a3ac05",
+  "source_sha256": {
+    "FlowDistFrames.java": "3704c921909fede031f5a25c17f7552f6111738b0603e407c64ab1a9863f0c40",
+    "FlowDistLambdaUtilPatch.java": "14e22175d098ff12b457addc6858fac577c63e1f8049413b4830688b74aada24",
+    "audit_flowdist_services.py": "a6bdb10499c835b0f17723cc86a1da17ebf2eb1f5955e438d764cf2e340536f7",
+    "audit_flowdist_coverage.py": "0b58ab9a46b623b18145c6b042117e3a926b37246a45af1038da56e79e789964",
+    "build_flowdist_lambda_adapter.py": "3b1850a5fbaddc5b0d65937d36e1ac2cc58c659859685610a5a0e1cfd5c46ce5",
+    "build_flowdist_reporter_adapter.py": "80bc2ad69b7c66a8e75f1d3df3def1b4176f6906dba5af225b1e95d58b9cc868",
+    "flowdist_full_order.py": "7e86954257bd1898c1cb3f87dc02d7231f9e9f45b8f43fce469aee15703dacb9",
+    "flowdist_preflight.py": "6cea49f76f3e168602f33ed9384e7a0cb71e37c265c3f6e9705b210ff72277e3",
+    "flowdist_service_static.py": "6c7f051242f06b5118cc5c197736b4b29bf229d1a55750495ee6a5fa1dac88f8",
+    "overlay_flowdist_branches.py": "be1bb430cd98fbcc01db6e19100a1870a8ff9f0275eb85c6ba64eb3e8fd3df81",
+    "reframe_flowdist_branches.py": "b091d86955eb334377dab5f9ff66c300f053d021eac3365bb66c40b306dab008",
+    "test_flowdist_compatibility.py": "017d03b146aa0e5692efaabd1d6301ed6b2d06712e243c10fd46add7aedc4058",
+    "test_flowdist_full_order.py": "31efa99c8b66f5c7034eb428426874377f295f1fb0cbc0eb93cbc41559a2368e",
+    "test_flowdist_service_static.py": "c2cf66dde7fae8d02cb4aa3f30e58cc7ec93ae1a254b22970ffe67ac8b657ec1",
+    "flowdist/FlowDistDynamicTargets.java": "bbc3a42825c91a716bd8c6e17c7c7a18286819195060a9bac3701ad4757d0d39",
+    "flowdist/FlowDistLambdaModelTest.java": "eb4552695f51937ebf5ccb9d930799578b860ee5e6155a3d871edd5ea1601245",
+    "flowdist/FlowDistReporterTest.java": "8223b453b270a61857b3e363ffa7013a997d2141b86f4791590bcb84157a5d3a"
+  },
+  "evidence_sha256": {
+    "artifacts/flowdist-full-branches-final-20261013/queue-master-delivery.log": "7120b654d82a667449d8a019e3a08f614935a5ae6edffcbf5000cb079b3550cf",
+    "artifacts/flowdist-full-branches-final-20261013/compose.preflight.json": "0f72500c830dacd0808436dc048cf89d6f8a7e91acf32bb699042b9830a52f24",
+    "artifacts/flowdist-full-branches-final-20261013/compose-ps.json": "0054e42fa4fa2099af16121069d348fafa3a47870b3b0f82c271fd0e1169701b",
+    "artifacts/flowdist-full-branches-final-20261013/queue-proof.json": "43e0d8b54dc70861acacd829a57f720703edeca2d0e10bd0d1aa0b7fa7e9a3fa",
+    "artifacts/flowdist-full-branches-final-20261013/trace-inspection-stage.json": "9d1ee13bf17591f42065abee6d115f30f6cba9a54c42ba49af8269615032cacf",
+    "artifacts/flowdist-full-branches-final-20261013/statement-alignment-audit.json": "6332b4bb41436400b94f2a1d7db89d1badde5e8f222fcdb9f8aa9e8249ec7520",
+    "artifacts/flowdist-full-branches-final-20261013/compose.lock.json": "b5c47a59214e64ab478f1fb8dc38cc838e48eca2e6acab298669de52e6feb426",
+    "artifacts/flowdist-full-branches-final-20261013/result.json": "58bbd2b0dd79372006699a33510abdeb5051d66ea3fda73055ca72aa5c1c288c",
+    "artifacts/flowdist-full-branches-final-20261013/python-tests.log": "65673d6e58ce5b5f052a8a1449abc42184c5a8e5072edb74b5e044b6040f34bd",
+    "artifacts/flowdist-full-branches-final-20261013/method-query.log": "8096cdb5e481fe1084e2e2673e26b2efa7f80cb4b608c7846d67a179f3c667f4",
+    "artifacts/flowdist-full-branches-final-20261013/compose.log": "d3b527467c65828ddf82eac99239301d8cebddec8c91b8836b1266e3cbf0017c",
+    "artifacts/flowdist-full-branches-final-20261013/method-query-stage.json": "93f9a58fefa0304f9a08703404f8165f7219230a8da1eedbf5f4772d8b243b03",
+    "artifacts/flowdist-full-branches-final-20261013/trace-inspection.log": "2d65028443c302afbe0551f0f99fbacfee1cd8b67d6967a00e086377eb483c65",
+    "artifacts/flowdist-full-branches-final-20261013/adapter-equivalence-audit.json": "64606dbbb57aae356f4eb8bf0ab5a1d4c7499328f9e636e647f664fd9f793f4c",
+    "artifacts/flowdist-full-branches-final-20261013/images.json": "926e17cd6aaa6779f53bb37e9df131a6f8101249b3c5dbcd1faed4e3450fbcc8",
+    "artifacts/flowdist-full-branches-final-20261013/readiness.json": "5507209c627bf28884324af64d96be9ee7cda8535f1134c8be6e884ec46fab8d",
+    "artifacts/flowdist-full-branches-final-20261013/commands.log": "e38f4bad0c8dd0582ad03277ab942c7f67e048d7ee5097ef5fedb326842dbac3",
+    "artifacts/flowdist-orders-static-lambda-v3-20261013/method-inventory.log": "0f33b44c494acb59fd374413511e87e6d13331e8695fdd025e7ac8830e98bea1",
+    "artifacts/flowdist-orders-static-lambda-v3-20261013/service-refinement.log": "1f2714bc4a1bea77a6ab0a772b9189080396bcb67814df09af98a924089bba5c",
+    "artifacts/flowdist-orders-static-lambda-v3-20261013/launcher-manifest.json": "907a38bfd74bcf0d52023ca24df0c440d30f534f0137abdca1b52fe0746ba3ce",
+    "artifacts/flowdist-orders-static-lambda-v3-20261013/launcher-compile.log": "312e9bd919c699a2f8409f70240177012720c94095f0f4374d44152defc50f7e",
+    "artifacts/flowdist-orders-static-lambda-v3-20261013/service-branches-stage.json": "5f2c9803dfcd1de730a1585dc6a0b38f8cb0f4045773d1770a7c103835e05a41",
+    "artifacts/flowdist-orders-static-lambda-v3-20261013/manifest.json": "5b5367a6a94c04cba670e8397eeff4f0ced928c4dde619e8e24b7e303b35cc67",
+    "artifacts/flowdist-orders-static-lambda-v3-20261013/result.json": "d3328357266b262b8bd9c53f4598e366b65b3bbce453abf7c906a6125b60f17a",
+    "artifacts/flowdist-orders-static-lambda-v3-20261013/service-refinement-stage.json": "4474be9750274a488d36a115b8d80e62707228773518572f0525a92525f2b59d",
+    "artifacts/flowdist-orders-static-lambda-v3-20261013/service-branches.log": "9fc56cc17c7ed2006911f667efe63dd65386cfee99880d352cd75630916d4df8",
+    "artifacts/flowdist-orders-static-lambda-v3-20261013/work/ServiceGraph/staticVtg.dat": "ed12f22da8f403136beddb382eeaab26c6524623f6078ef23f60ddd45fe20b52",
+    "artifacts/flowdist-shipping-static-lambda-v3-20261013/method-inventory.log": "4ea1c6337387c1467dcb75e97b569ed8c38ea09944c15db1242ad9e7436e8fbf",
+    "artifacts/flowdist-shipping-static-lambda-v3-20261013/service-refinement.log": "7a99896e211f06f76c6ba116b4f68604b33677335ca0aa3157a41c5f52096461",
+    "artifacts/flowdist-shipping-static-lambda-v3-20261013/launcher-manifest.json": "78021409abc0325f37a2f153a34473b57c12fa198c2badecb4d51c5a8d4ecd94",
+    "artifacts/flowdist-shipping-static-lambda-v3-20261013/launcher-compile.log": "312e9bd919c699a2f8409f70240177012720c94095f0f4374d44152defc50f7e",
+    "artifacts/flowdist-shipping-static-lambda-v3-20261013/service-branches-stage.json": "77929dfbc94be7b8a5bb29da7857c4365f668dd88e872405f9e6ffc4de046f49",
+    "artifacts/flowdist-shipping-static-lambda-v3-20261013/manifest.json": "35c12c6f09cd8efd4089d2aa8f32ae21b06dd6e087a11c51288422e49a52a910",
+    "artifacts/flowdist-shipping-static-lambda-v3-20261013/result.json": "4976cb7b52a85180fdc39379f75c66c05c7ca87b6bf840faae6d557cf0e33cdb",
+    "artifacts/flowdist-shipping-static-lambda-v3-20261013/service-refinement-stage.json": "f289b6c8e36aa8048888ed61ad77499584d95cbf7599eddf7f7faa568cd4d2ee",
+    "artifacts/flowdist-shipping-static-lambda-v3-20261013/service-branches.log": "a62cf5395d3daee795c75c45dd0d87134244ed2b4ff7a5b63f7b560e1d0255d9",
+    "artifacts/flowdist-shipping-static-lambda-v3-20261013/work/ServiceGraph/staticVtg.dat": "ca40ef98cc4e50c3e342aed19929c4bb6e760bc873d1a910b3aba1d7cc1442d2",
+    "artifacts/flowdist-orders-frames-verified-20261013/verifier-frames-stage.json": "ed3082c595abd56fdbdb9f2c5a6998d106691070ce0cc087ef5ff443856fbfab",
+    "artifacts/flowdist-orders-frames-verified-20261013/verifier-frames.log": "e5702f5a00f52afa9214c00fb76c08df03cbc944b161a78b22ef9ced9d4a6602",
+    "artifacts/flowdist-orders-frames-verified-20261013/service-branches-stage.json": "5f2c9803dfcd1de730a1585dc6a0b38f8cb0f4045773d1770a7c103835e05a41",
+    "artifacts/flowdist-orders-frames-verified-20261013/manifest.json": "dc54619be9059ab49df35218d5c908ee5e0c7e2e19a3af57e28983ae55f650a7",
+    "artifacts/flowdist-shipping-frames-verified-20261013/verifier-frames-stage.json": "977626ec8cb5d6aee144659e59d383ab81c6d16d62d1a73c5727a151d10941ff",
+    "artifacts/flowdist-shipping-frames-verified-20261013/verifier-frames.log": "437a0734d5772ddd695793d4246211c46def65261b32bbd9fa4bad0d8c585908",
+    "artifacts/flowdist-shipping-frames-verified-20261013/service-branches-stage.json": "77929dfbc94be7b8a5bb29da7857c4365f668dd88e872405f9e6ffc4de046f49",
+    "artifacts/flowdist-shipping-frames-verified-20261013/manifest.json": "3bcc8692ab3cde03ce8d14a1a8754ba8aec87e41dc1dea14c410ac10f8475b5c",
+    "artifacts/flowdist-lambda-adapter-tested-20261013/lambda-model-test.log": "c23a758111df8ef8318c1ad38068b0385e065a1fb0db15e4d356d6d768f11f75",
+    "artifacts/flowdist-lambda-adapter-tested-20261013/lambda-model-test-stage.json": "6e7cd25cb82af4da72125a479f791f5f56ba6dca58c105432bb4aaa19452dc99",
+    "artifacts/flowdist-lambda-adapter-tested-20261013/manifest.json": "755eca8a8d23848282373bdc49d86d5d781b974b8fc99c1162221fa57a8bf7fe",
+    "artifacts/flowdist-reporter-adapter-tested-20261013/compile.log": "02f03a09c8bf8e26bca57e66cf653f1075beeb8004c1dceaf709839929c57a97",
+    "artifacts/flowdist-reporter-adapter-tested-20261013/manifest.json": "44891e1b9a54140a76ae18c902a6050e07a4ad283ee2657ec09167fa286e0e6e",
+    "artifacts/flowdist-reporter-adapter-tested-20261013/BranchReporter.patch": "5107275b9fe5144efc9bcc09e72620a9285de0c58bff0a9fef79467c258afefe",
+    "artifacts/flowdist-reporter-adapter-tested-20261013/test.log": "dcb52b8365ee7a39054620f82473add823564006f5964c2a500b368efb526e01",
+    "artifacts/flowdist-spring-branches-final-20261013/manifest.json": "802644cc1fff1195aac2ea49fce8dfbb8ef1052ea2b98bbe7d0486b298aa501a",
+    "artifacts/flowdist-full-branches-final-20261013/runtime/orders/stmtCoverage1.out": "c69baaa7619d20219f0c25f693a28d8ac231e0a316ee524bd7295981b2fc7d67",
+    "artifacts/flowdist-full-branches-final-20261013/runtime/orders/stmtids.out": "9d5135b3ae7edc324a57a64206b3ed12ced893cba3c572405a0a420a0f4c11bb",
+    "artifacts/flowdist-full-branches-final-20261013/runtime/orders/entitystmt.out.branch": "df1671aec37d0bcd0f45fda186d27fc93e9fc45103c8fd71173ccdee60d3882e",
+    "artifacts/flowdist-full-branches-final-20261013/runtime/orders/Local1791883752180.em": "c6896b6f2bb31aff57660ec70aa206d50bf9b95abbad16a0b43b6e8b02fda199",
+    "artifacts/flowdist-full-branches-final-20261013/runtime/orders/spring-events.jsonl": "b4433e5a5c7ff8884ec9820c42ce0a8e5a63a44bae30ec5a93b6e932b4047988",
+    "artifacts/flowdist-full-branches-final-20261013/runtime/shipping/stmtCoverage1.out": "22eda04448fb8010cf93f735b3912971dbb974bc7b5014572d22debe45f54521",
+    "artifacts/flowdist-full-branches-final-20261013/runtime/shipping/stmtids.out": "f04caa3d134b4f96acf7bebf1d03ce7aa1d34f5bd1057ee570dfb86c70333698",
+    "artifacts/flowdist-full-branches-final-20261013/runtime/shipping/Local1791883752869.em": "4509d2dd5e4e8a448894fdaf34ad43a8583d392151fc1b2aa8054181b9b5f108",
+    "artifacts/flowdist-full-branches-final-20261013/runtime/shipping/entitystmt.out.branch": "8d31e89a0521e413d51f13605e67ad954f7940b1a17f0f64a88f75535392e099",
+    "artifacts/flowdist-full-branches-final-20261013/runtime/shipping/spring-events.jsonl": "2ee6b6744e9a2561cb0608ad6d7862c8a7304acec225694ea7ebb6b913bf8613",
+    "artifacts/flowdist-full-branches-final-20261013/runtime/shipping/test1/Remote1791883752875.em": "07bcacf20fc19b3120da8d9f5e95050454613953f5940c39c8ef1dad12c2026a",
+    "artifacts/flowdist-full-branches-final-20261013/runtime/orders/test1/Remote1791883752197.em": "f057227cff7b61aa208a12819d6a1d43bddab80300985703e4fdba602898529a"
+  },
+  "runtime_result": {
+    "kind": "sockshop-flowdist-full-order-compatibility",
+    "project": "tf2-flowdist-full-f17419b52f",
+    "status": "order-async-mq-delivery-and-peer-compatibility-passed",
+    "boundary_method_hooks_only": true,
+    "accuracy_eligible": false,
+    "performance_eligible": false,
+    "business": {
+      "case": "single",
+      "business_passed": true,
+      "expected_target": true,
+      "start_monotonic_ns": 7170894372760,
+      "target_exists": true,
+      "order_id": "6acdf9e1441be50001613e6f",
+      "http_status": 201,
+      "end_monotonic_ns": 7171114551485
+    },
+    "original_async_thread_verified": true,
+    "events": {
+      "orders": [
+        {
+          "phase": "enter",
+          "method": "<works.weave.socks.orders.controllers.OrdersController: works.weave.socks.orders.entities.CustomerOrder newOrder(works.weave.socks.orders.resources.NewOrderResource)>",
+          "thread": "http-nio-80-exec-2",
+          "thread_id": 43,
+          "clock": 2
+        },
+        {
+          "phase": "enter",
+          "method": "<works.weave.socks.orders.services.AsyncGetService: java.util.concurrent.Future postResource(java.net.URI,java.lang.Object,org.springframework.core.ParameterizedTypeReference)>",
+          "thread": "SimpleAsyncTaskExecutor-6",
+          "thread_id": 50,
+          "clock": 3
+        },
+        {
+          "phase": "return",
+          "method": "<works.weave.socks.orders.services.AsyncGetService: java.util.concurrent.Future postResource(java.net.URI,java.lang.Object,org.springframework.core.ParameterizedTypeReference)>",
+          "thread": "SimpleAsyncTaskExecutor-6",
+          "thread_id": 50,
+          "clock": 6
+        },
+        {
+          "phase": "return",
+          "method": "<works.weave.socks.orders.controllers.OrdersController: works.weave.socks.orders.entities.CustomerOrder newOrder(works.weave.socks.orders.resources.NewOrderResource)>",
+          "thread": "http-nio-80-exec-2",
+          "thread_id": 43,
+          "clock": 6
+        }
+      ],
+      "shipping": [
+        {
+          "phase": "enter",
+          "method": "<works.weave.socks.shipping.controllers.ShippingController: works.weave.socks.shipping.entities.Shipment postShipping(works.weave.socks.shipping.entities.Shipment)>",
+          "thread": "http-nio-80-exec-2",
+          "thread_id": 43,
+          "clock": 5
+        },
+        {
+          "phase": "return",
+          "method": "<works.weave.socks.shipping.controllers.ShippingController: works.weave.socks.shipping.entities.Shipment postShipping(works.weave.socks.shipping.entities.Shipment)>",
+          "thread": "http-nio-80-exec-2",
+          "thread_id": 43,
+          "clock": 5
+        }
+      ]
+    },
+    "candidate_method_count": 3,
+    "query": "<works.weave.socks.orders.controllers.OrdersController: works.weave.socks.orders.entities.CustomerOrder newOrder(works.weave.socks.orders.resources.NewOrderResource)>; <works.weave.socks.shipping.controllers.ShippingController: works.weave.socks.shipping.entities.Shipment postShipping(works.weave.socks.shipping.entities.Shipment)>",
+    "queue_consumer_delivery_verified": true,
+    "shipment_worker_processing_verified": false,
+    "actual_branch_coverage": {
+      "orders": {
+        "branches_hit": 256,
+        "branch_count": 407,
+        "statements_hit": 1142,
+        "mapped_statements": 1782
+      },
+      "shipping": {
+        "branches_hit": 54,
+        "branch_count": 79,
+        "statements_hit": 310,
+        "mapped_statements": 406
+      }
+    },
+    "statement_graph_verified": false,
+    "queue_master_docker_worker_error_observed": true
+  },
+  "service_graphs": {
+    "orders": {
+      "static_artifact": "/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013",
+      "graph_nodes": 2131,
+      "graph_edges": 5364,
+      "branches_hit": 256,
+      "branches_mapped": 407,
+      "statements_hit": 1142,
+      "statements_mapped": 1782,
+      "controller_statements_hit": 152,
+      "per_index_alignment": "local-renaming-only",
+      "coverage_scope": "cumulative process startup, health checks and one target order",
+      "statement_coverage_method": "author branch-to-statement inference"
+    },
+    "shipping": {
+      "static_artifact": "/home/wujian/tracefusion2/artifacts/flowdist-shipping-static-lambda-v3-20261013",
+      "graph_nodes": 447,
+      "graph_edges": 1066,
+      "branches_hit": 54,
+      "branches_mapped": 79,
+      "statements_hit": 310,
+      "statements_mapped": 406,
+      "controller_statements_hit": 8,
+      "per_index_alignment": "local-renaming-only",
+      "coverage_scope": "cumulative process startup, health checks and one target order",
+      "statement_coverage_method": "author branch-to-statement inference"
+    }
+  },
+  "independent_java8_lambda_checks": 16,
+  "python_tests_passed": 11,
+  "repeated_report_regression_passed": true,
+  "frame_repair_instructions_and_class_data_preserved": true,
+  "tested_adapter_payload_equivalence": {
+    "lambda": {
+      "used": "artifacts/flowdist-lambda-adapter-v3-20261013/flowdist-lambda-adapter.jar",
+      "tested": "artifacts/flowdist-lambda-adapter-tested-20261013/flowdist-lambda-adapter.jar",
+      "all_class_payloads_identical": true,
+      "class_sha256": {
+        "dua/util/Util.class": "32296ca4c7813c9f98b699a24f6f7a880ac67996383cb7bb990319df692d53e3",
+        "dua/util/FlowDistDynamicTargets.class": "6296a932196f2d452e70789abf7fa1af02b8f3d6dc9e14011757b6e52e3aace8",
+        "dua/method/CFGDefUses$ObjVariable.class": "2201614a3ec9ee05ecd1af37f9e5c9710f0fe24be7f91520eac7dbf7fc0f405c"
+      }
+    },
+    "reporter": {
+      "used": "artifacts/flowdist-reporter-adapter-20261013/flowdist-reporter-adapter.jar",
+      "tested": "artifacts/flowdist-reporter-adapter-tested-20261013/flowdist-reporter-adapter.jar",
+      "all_class_payloads_identical": true,
+      "class_sha256": {
+        "profile/BranchReporter.class": "daa356afb71de735b566495d71f4420fb8efc9cb28b7854dd2224818e39f1ce5"
+      }
+    },
+    "orders-frames": {
+      "runtime_directory": "artifacts/flowdist-orders-frames-20261013/work/ReframedBranches",
+      "instruction_preservation_checked_directory": "artifacts/flowdist-orders-frames-verified-20261013/work/ReframedBranches",
+      "all_class_payloads_identical": true,
+      "class_count": 40
+    },
+    "shipping-frames": {
+      "runtime_directory": "artifacts/flowdist-shipping-frames-20261013/work/ReframedBranches",
+      "instruction_preservation_checked_directory": "artifacts/flowdist-shipping-frames-verified-20261013/work/ReframedBranches",
+      "all_class_payloads_identical": true,
+      "class_count": 12
+    }
+  },
+  "failed_artifacts_preserved": [
+    "artifacts/flowdist-orders-static-20261013",
+    "artifacts/flowdist-shipping-static-20261013",
+    "artifacts/flowdist-orders-static-asm-20261013",
+    "artifacts/flowdist-shipping-static-asm-20261013",
+    "artifacts/flowdist-orders-static-lambda-20261013",
+    "artifacts/flowdist-shipping-static-lambda-20261013",
+    "artifacts/flowdist-orders-static-nowrap-20261013",
+    "artifacts/flowdist-shipping-static-nowrap-20261013",
+    "artifacts/flowdist-full-branches-20261013",
+    "artifacts/flowdist-full-branches-nowrap-20261013",
+    "artifacts/flowdist-full-branches-frames-20261013"
+  ],
+  "limitations": [
+    "adapted FlowDist reference/alias and runtime compatibility model",
+    "cumulative startup/health-check/one-order inferred statement coverage, not request-isolated coverage",
+    "application bodies only; framework and JDK bodies excluded",
+    "lambda captured values, callbacks and hidden generated class dependencies not fully modeled",
+    "Spring reflection and HTTP DTO serialization not modeled",
+    "per-service graph indices aligned; cross-process statement paths unverified",
+    "method event traces contain selected entry hooks, not full instrumented method sequence",
+    "RabbitMQ consumer delivery verified; MQ clocks and statement model not present",
+    "queue-master Docker worker processing fails without socket and is not verified"
+  ],
+  "next_step": "Model HTTP DTO field transfer and asynchronous statement dependencies, then freeze independent positive/negative process-path queries",
+  "accuracy_eligible": false,
+  "performance_eligible": false
+}

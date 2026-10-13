@@ -11,6 +11,21 @@ import flowdist_full_order as full
 
 
 class DeploymentChecks(unittest.TestCase):
+    def test_jvm_verification_failure_fails_even_if_container_keeps_running(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);file=root/'compose.json'
+            file.write_text(json.dumps({'services':{'orders':{'image':'fixture:1'}}}))
+            deployment=full.CachedDeployment(SimpleNamespace(project='fixture',ready_timeout=180),root,file)
+            image=json.dumps([{'Id':'fixture-id','RepoDigests':['fixture@sha256:123']}])
+            with patch.object(deployment,'command',return_value=SimpleNamespace(stdout=image)), \
+                 patch.object(deployment,'compose') as compose:
+                def reply(*args,**kwargs):
+                    return SimpleNamespace(stdout='java.lang.VerifyError: Bad type' if args[0]=='logs' else '')
+                compose.side_effect=reply
+                with self.assertRaisesRegex(RuntimeError,'Java service failed'):
+                    deployment.start()
+                self.assertFalse(any(call.args[0]=='exec' for call in compose.call_args_list))
+
     def _existing_resource_is_never_cleaned_up(self, replies):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

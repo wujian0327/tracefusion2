@@ -132,7 +132,7 @@ def execute(repo,out,name,arguments,entry='java',timeout=240):
             subprocess.run(['docker','rm','-f',container_name],stdout=f,stderr=subprocess.STDOUT,timeout=30)
     elapsed=(time.perf_counter_ns()-start)/1e6
     text=log.read_text(errors='replace')
-    errors=[line for line in text.splitlines() if re.match(r'^(Exception in thread|Caused by:|java\.[\w.$]+(?:Exception|Error)(?::|$)|Error:|ERROR\b|Couldn.t)',line)]
+    errors=[line for line in text.splitlines() if re.match(r'^(Exception in thread|Caused by:|java\.[\w.$]+(?:Exception|Error)(?::|$)|Error:|ERROR\b|Couldn.t|Jasmin: Found [1-9]\d* errors)',line)]
     result={'command':command,'exit_code':exit_code,'elapsed_ms':elapsed,'errors':errors,
             'timeout_seconds':timeout,'timed_out':timed_out,
             'status':'timeout' if timed_out else ('failed' if exit_code or errors else 'process-completed-output-requires-validation'),

@@ -30,21 +30,29 @@ def canonical_rows(rows):
 
 def coverage(path, mapping, size):
     raw = path.read_text()
-    statements = set(map(int, re.search(r'Statements covered \(based on branch coverage\):([^\n]*)', raw)[1].split()))
-    branches = set(map(int, re.search(r'Branches covered:([^\n]*)', raw)[1].split()))
+    # Spring main returns after startup and the shutdown hook reports again.
+    # The author appends both snapshots, sometimes without a separating newline.
+    snapshots = re.findall(r'Statements covered \(based on branch coverage\):([\d ]*)\s*'
+        r'Total statements covered: (\d+)/(\d+)\s*Branches covered:([\d ]*)\s*'
+        r'Total branches covered: (\d+)/(\d+)', raw)
+    if not snapshots or len(snapshots)!=raw.count('Statements covered (based on branch coverage):'):
+        raise ValueError('Missing complete coverage snapshot: ' + str(path))
+    mapped_size = max(set().union(*mapping)) + 1
+    previous = set()
+    for stmt_ids, stmt_hits, stmt_size, branch_ids, branch_hits, branch_size in snapshots:
+        statements = set(map(int, stmt_ids.split()))
+        branches = set(map(int, branch_ids.split()))
+        if not all(0 <= b < len(mapping) for b in branches):raise ValueError('Invalid branch index')
+        expected = set().union(*(mapping[b] for b in branches)) if branches else set()
+        if expected != statements or not all(0 <= s < size for s in statements):
+            raise ValueError('Statement coverage differs from measured branch mapping')
+        if (int(branch_hits),int(branch_size))!=(len(branches),len(mapping)) or \
+           (int(stmt_hits),int(stmt_size))!=(len(statements),mapped_size):
+            raise ValueError('Incorrect coverage totals')
+        if not previous.issubset(branches):raise ValueError('Cumulative branch coverage decreased')
+        previous=branches
     if not branches or not statements:
         raise ValueError('No measured coverage: ' + str(path))
-    if not all(0 <= b < len(mapping) for b in branches):
-        raise ValueError('Invalid branch index')
-    expected = set().union(*(mapping[b] for b in branches))
-    if expected != statements or not all(0 <= s < size for s in statements):
-        raise ValueError('Statement coverage differs from measured branch mapping')
-    branch_total = tuple(map(int, re.search(r'Total branches covered: (\d+)/(\d+)', raw).groups()))
-    stmt_total = tuple(map(int, re.search(r'Total statements covered: (\d+)/(\d+)', raw).groups()))
-    # The author reporter uses maximum mapped statement ID + 1 as denominator.
-    mapped_size = max(set().union(*mapping)) + 1
-    if branch_total != (len(branches), len(mapping)) or stmt_total != (len(statements), mapped_size):
-        raise ValueError('Incorrect coverage totals')
     return branches, statements
 
 

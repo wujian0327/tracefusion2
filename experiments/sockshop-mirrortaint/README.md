@@ -699,3 +699,76 @@ python3 -m unittest discover -s experiments/sockshop-mirrortaint -p 'test_flowdi
 这一轮没有正式准确率或成本结果，资格继续为 false。下一步将实际执行的
 Spring 入口、异步调用和 HTTP DTO 转换纳入静态语句／分支模型，再冻结跨进程
 字段查询与多请求反例；MQ 工作容器处理另按所需实验范围处理。
+
+### FlowDist：真实服务的分支覆盖与语句图（2026-10-13）
+
+已对原始 Orders 的 37 个业务类、Shipping 的 9 个业务类生成作者分支探针，
+重新部署完成一次真实 newOrder，返回 201，预置业务字段、异步线程、
+Orders／Shipping 双向 HTTP 时钟、RabbitMQ 入队和消费端收到 Shipment 均通过。
+证据目录为 `artifacts/flowdist-full-branches-final-20261013`。
+queue-master 仍因缺少 Docker socket 无法启动任务容器，未证明 Shipment 工作任务完成。
+
+| 服务 | 累计分支命中 | 分支推导语句覆盖 | 静态语句图节点／边 |
+| --- | --- | --- | --- |
+| Orders | 256 / 407 | 1142 / 1782 | 2131 / 5364 |
+| Shipping | 54 / 79 | 310 / 406 | 447 / 1066 |
+
+这些数字包含进程启动、健康检查及一次目标下单，不是单请求隔离覆盖或准确率。
+语句覆盖使用作者的分支映射推导，不是每条语句的直接执行探针。
+`statement-alignment-audit.json` 验证每个服务的实际覆盖索引与静态图逐项对齐，
+只允许局部变量重命名；没有证明跨进程语句路径或图完整性。
+方法轨迹仍为三个边界方法的 entry hook，不是完整作者方法事件序列。
+
+本轮明确记录以下适配，作者仓库和原始工具 JAR 保持固定摘要：
+
+- 用原 Soot 内置 ASM 后端输出 Java 8 lambda 字节码；旧 Jasmin 输出会出错并留下无效 class。
+- 关闭 `wrapTryCatch`；作者包装涵盖构造函数的 super 初始化之前，导致 JVM VerifyError。
+- 独立重算校验帧，修复旧后端把异常类型合并成 Object 的 VerifyError。
+  将修复前后类文件去除 frames 并规范化后逐字节比较，确认指令、异常表和类数据不变。
+- 独立扩展旧 DUA 不支持的 invokedynamic 引用模型：声明返回类型及已知子类型；
+  在已知类型模型内做 may-alias，must-equal 仅接受同一表达式身份。
+  原断言继续启用，16 项 Java 8 引用／别名检查通过。
+  **没有建立 lambda 捕获变量、回调体依赖或运行时生成的隐藏类型的完整模型**。
+- 修复作者 BranchReporter 重复报告的缓存：原版退出时分支已增加，
+  语句列表却沿用启动时的值。独立覆盖类每次执行原映射算法重新计算；
+  重复报告回归检查通过，审计对每段报告逐项检查分支／语句一致性。
+
+静态图仅分析应用方法体，保留库签名但排除框架和 JDK 方法体。
+Spring 反射、JSON／HTTP DTO 转换和 MQ 消费端信息流仍未建模；
+该版本应称为 **FlowDist 适配版本**，不能声称完成原版复现或正式对比。
+正式准确率、Runtime Cost、Memory Cost 资格仍为 false。
+失败的 Jasmin 输出、lambda 断言、两轮 VerifyError、缓存不一致报告全部保留。
+
+下面命令使用新目录重建；Orders 和 Shipping 分别执行静态分析和帧修复：
+
+```bash
+python3 experiments/sockshop-mirrortaint/build_flowdist_lambda_adapter.py \
+  --repo artifacts/external-tools/flowdist --out artifacts/flowdist-lambda-new
+python3 experiments/sockshop-mirrortaint/build_flowdist_reporter_adapter.py \
+  --repo artifacts/external-tools/flowdist --out artifacts/flowdist-reporter-new
+python3 experiments/sockshop-mirrortaint/flowdist_service_static.py \
+  --repo artifacts/external-tools/flowdist --role orders \
+  --jar artifacts/sockshop-orders-original-20261012/app.jar \
+  --branch-adapter artifacts/flowdist-branch-adapter-v2-20261013/flowdist-branch-adapter.jar \
+  --lambda-adapter artifacts/flowdist-lambda-new/flowdist-lambda-adapter.jar \
+  --out artifacts/flowdist-orders-static-new
+python3 experiments/sockshop-mirrortaint/reframe_flowdist_branches.py \
+  --repo artifacts/external-tools/flowdist --static artifacts/flowdist-orders-static-new \
+  --out artifacts/flowdist-orders-frames-new
+# 同样处理 shipping，使用其原始 shipping.jar。
+python3 experiments/sockshop-mirrortaint/overlay_flowdist_branches.py \
+  --repo artifacts/external-tools/flowdist --apps artifacts/flowdist-spring-apps-v4-20261013 \
+  --orders artifacts/flowdist-orders-frames-new --shipping artifacts/flowdist-shipping-frames-new \
+  --reporter-adapter artifacts/flowdist-reporter-new/flowdist-reporter-adapter.jar \
+  --out artifacts/flowdist-spring-branches-new
+python3 experiments/sockshop-mirrortaint/flowdist_full_order.py \
+  --repo artifacts/external-tools/flowdist --apps artifacts/flowdist-spring-branches-new \
+  --out artifacts/flowdist-full-branches-new
+python3 experiments/sockshop-mirrortaint/audit_flowdist_services.py \
+  --runtime artifacts/flowdist-full-branches-new --orders artifacts/flowdist-orders-static-new \
+  --shipping artifacts/flowdist-shipping-static-new \
+  --out artifacts/flowdist-full-branches-new/statement-alignment-audit.json
+```
+
+摘要、源文件及证据摘要保存为 `flowdist-service-statements-20261013.json`。
+下一步是建立跨 HTTP 字段转换与异步调用的语句级模型，再用独立正负例评估跨进程路径。
