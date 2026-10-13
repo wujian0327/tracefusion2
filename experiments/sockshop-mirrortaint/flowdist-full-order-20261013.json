@@ -1,0 +1,316 @@
+{
+  "kind": "flowdist-real-full-order-async-and-mq-delivery-checkpoint",
+  "date": "2026-10-13",
+  "upstream_commit": "9a683606aa42289e045cdbfa9391b55e79a3ac05",
+  "source_sha256": {
+    "build_flowdist_spring_apps.py": "5f0d425f7bd3ce315b78f0f9a85d83311d67b5ae858be6bdb8aca7c39934fe39",
+    "flowdist_full_order.py": "b851a8a0555b687f6f167759a7786c386f9a3e20f636cca18869d92409f3722b",
+    "test_flowdist_full_order.py": "e125d7ea8660691ebcace0c7075f2d41a205991414496b762b9a21204a1d0a41",
+    "flowdist/FlowDistSpringHooks.java": "3cb2bbcb1caea11c3263dde2cd3013061ebc070082286a2629f05fdd643249b2",
+    "flowdist/FlowDistHttpClock.java": "47d5412ba4eff341c4b90d502ced92f3a111dadc6f7b3c7095e8633297b60bcf",
+    "FlowDistHttpConfiguration.java": "cca969e5641e97f09da64502dd086a0db0ec4ce91de8e721c9d87e44e65e705a",
+    "FlowDistTraceProbe.java": "430a3e3f46357d1214cd1003973020e4e165ac9a8364fabd0c324b7ae0950d2f",
+    "flowdist_preflight.py": "836372b8d717a8fd6758c9d0936d39bb8a395462a1f186a1be0b110df233f930"
+  },
+  "evidence_sha256": {
+    "artifacts/flowdist-full-order-final-v2-20261013/commands.log": "1889492e32411c054339348922ac5dcd9dc2dfa79d9a12cacb01b1765537d4c7",
+    "artifacts/flowdist-full-order-final-v2-20261013/compose-ps.json": "0553a46d40533e2aa0db7d1a4dbf94e55bf3e13fba45bece080443fab3b485ed",
+    "artifacts/flowdist-full-order-final-v2-20261013/compose.lock.json": "eee3fa5dc2a91cfc8817199b90bc1a341a0c8df76c2ec9644366551eb8c6bc39",
+    "artifacts/flowdist-full-order-final-v2-20261013/compose.log": "bc174a6ab922442c104316ddfd52010ca3bc72a6809544a00ef5b16a6b4d9bcb",
+    "artifacts/flowdist-full-order-final-v2-20261013/compose.preflight.json": "e97a7289b4722e28c9edca09b4a78695cf265f4f6277415da09d7047055add6a",
+    "artifacts/flowdist-full-order-final-v2-20261013/images.json": "926e17cd6aaa6779f53bb37e9df131a6f8101249b3c5dbcd1faed4e3450fbcc8",
+    "artifacts/flowdist-full-order-final-v2-20261013/method-query-stage.json": "399cc9500d1e160e70aabb7ac4db516cac3dc5d5a3a965fa327567d1fb80ee62",
+    "artifacts/flowdist-full-order-final-v2-20261013/method-query.log": "9a4a7109b6912aba2530f2f2cac21da01032e41b119b5820ae3a7ebff459b8c0",
+    "artifacts/flowdist-full-order-final-v2-20261013/queue-master-delivery.log": "85e2a77c6a5130d8a413c5f1952bed8e38b10197d5a929256b57013bf50924cc",
+    "artifacts/flowdist-full-order-final-v2-20261013/queue-proof.json": "ffee921b38c71d14f1a88709df8e460b7256425861d0ba77f1d067bfd7ddf956",
+    "artifacts/flowdist-full-order-final-v2-20261013/readiness.json": "5507209c627bf28884324af64d96be9ee7cda8535f1134c8be6e884ec46fab8d",
+    "artifacts/flowdist-full-order-final-v2-20261013/result.json": "cb1104ab37209804e3404e52ae2f744023fa8ca64c6e5b0359c5851d2a21135c",
+    "artifacts/flowdist-full-order-final-v2-20261013/runtime/orders/Local1791880866944.em": "85de74bc1dfc7e024d7873ae07e78b9ea21fe62cf28a9617291f97f60bafaf7b",
+    "artifacts/flowdist-full-order-final-v2-20261013/runtime/orders/test1/Remote1791880866950.em": "14707d8e59eb240189c2d41f331528879be454045ef2c31d6869358eebe37bc9",
+    "artifacts/flowdist-full-order-final-v2-20261013/runtime/shipping/Local1791880867603.em": "786b65caec61ac017c65c8d3fafd7a8a8787d51b7013e7790ea4c06a82539712",
+    "artifacts/flowdist-full-order-final-v2-20261013/runtime/shipping/test1/Remote1791880867608.em": "2c404bdae89cd4ffee31640b9ccb302b9b58b31de141904d9bd10ce89c3ef417",
+    "artifacts/flowdist-full-order-final-v2-20261013/single/business-result.json": "52dc25a89f67fa7b00540355366ff0fe50480a71a7b4a18f380eec3def16ca87",
+    "artifacts/flowdist-full-order-final-v2-20261013/single/fixture.json": "f0f143861611eed7d3138a890671ed3ca4882015d291b4df6b556f1db275c951",
+    "artifacts/flowdist-full-order-final-v2-20261013/single/http-client-observations.json": "8c3f9d1d818b621ba8da84fa6c480b1deedf88a94f8419b2ef4f83d13361f5e8",
+    "artifacts/flowdist-full-order-final-v2-20261013/single/order-response.json": "0d51022baf2269818614cd3f929f65e87c95ff3a1cc8ebab04053810c8cea5f2",
+    "artifacts/flowdist-full-order-final-v2-20261013/single/query-contract.json": "0ff3abea3a92fb89798f07c6956e22f1db62e13ecd19ff3e500732a88946489b",
+    "artifacts/flowdist-full-order-final-v2-20261013/trace-inspection-stage.json": "e1e29460c88be99b4fa41277093724b1f10a5c5568b682fa33fc4358fdc9ba81",
+    "artifacts/flowdist-full-order-final-v2-20261013/trace-inspection.log": "109c8ed8035153d75ee77d3795eaaa721447e60343caa1fddf8336854c62cc68",
+    "artifacts/flowdist-full-order-final-v2-20261013/work/traces/test1/Remote1791880866950.em": "14707d8e59eb240189c2d41f331528879be454045ef2c31d6869358eebe37bc9",
+    "artifacts/flowdist-full-order-final-v2-20261013/work/traces/test1/Remote1791880867608.em": "2c404bdae89cd4ffee31640b9ccb302b9b58b31de141904d9bd10ce89c3ef417",
+    "artifacts/flowdist-spring-apps-v4-20261013/manifest.json": "9af6486c2087eb248357b03c3014d28a4be0f96024c9d1c8757d997aba64c50e",
+    "artifacts/flowdist-spring-apps-v4-20261013/orders/compile.log": "312e9bd919c699a2f8409f70240177012720c94095f0f4374d44152defc50f7e",
+    "artifacts/flowdist-spring-apps-v4-20261013/shipping/compile.log": "312e9bd919c699a2f8409f70240177012720c94095f0f4374d44152defc50f7e",
+    "artifacts/flowdist-spring-apps-repro-20261013/manifest.json": "c2f56ae8431a22807529560ffa965bdbcbdaffb4079e5157d9a0912b55c02b8c",
+    "artifacts/flowdist-spring-apps-repro-20261013/orders/compile.log": "312e9bd919c699a2f8409f70240177012720c94095f0f4374d44152defc50f7e",
+    "artifacts/flowdist-spring-apps-repro-20261013/shipping/compile.log": "312e9bd919c699a2f8409f70240177012720c94095f0f4374d44152defc50f7e"
+  },
+  "runtime_result": {
+    "kind": "sockshop-flowdist-full-order-compatibility",
+    "project": "tf2-flowdist-full-6d53267582",
+    "status": "order-async-mq-delivery-and-peer-compatibility-passed",
+    "boundary_method_hooks_only": true,
+    "accuracy_eligible": false,
+    "performance_eligible": false,
+    "business": {
+      "case": "single",
+      "business_passed": true,
+      "expected_target": true,
+      "start_monotonic_ns": 4263150513914,
+      "target_exists": true,
+      "order_id": "6acdee9cea7bbf000135a777",
+      "http_status": 201,
+      "end_monotonic_ns": 4263382568653
+    },
+    "original_async_thread_verified": true,
+    "events": {
+      "orders": [
+        {
+          "phase": "enter",
+          "method": "<works.weave.socks.orders.controllers.OrdersController: works.weave.socks.orders.entities.CustomerOrder newOrder(works.weave.socks.orders.resources.NewOrderResource)>",
+          "thread": "http-nio-80-exec-2",
+          "thread_id": 42,
+          "clock": 2
+        },
+        {
+          "phase": "enter",
+          "method": "<works.weave.socks.orders.services.AsyncGetService: java.util.concurrent.Future postResource(java.net.URI,java.lang.Object,org.springframework.core.ParameterizedTypeReference)>",
+          "thread": "SimpleAsyncTaskExecutor-6",
+          "thread_id": 49,
+          "clock": 3
+        },
+        {
+          "phase": "return",
+          "method": "<works.weave.socks.orders.services.AsyncGetService: java.util.concurrent.Future postResource(java.net.URI,java.lang.Object,org.springframework.core.ParameterizedTypeReference)>",
+          "thread": "SimpleAsyncTaskExecutor-6",
+          "thread_id": 49,
+          "clock": 6
+        },
+        {
+          "phase": "return",
+          "method": "<works.weave.socks.orders.controllers.OrdersController: works.weave.socks.orders.entities.CustomerOrder newOrder(works.weave.socks.orders.resources.NewOrderResource)>",
+          "thread": "http-nio-80-exec-2",
+          "thread_id": 42,
+          "clock": 6
+        }
+      ],
+      "shipping": [
+        {
+          "phase": "enter",
+          "method": "<works.weave.socks.shipping.controllers.ShippingController: works.weave.socks.shipping.entities.Shipment postShipping(works.weave.socks.shipping.entities.Shipment)>",
+          "thread": "http-nio-80-exec-2",
+          "thread_id": 42,
+          "clock": 5
+        },
+        {
+          "phase": "return",
+          "method": "<works.weave.socks.shipping.controllers.ShippingController: works.weave.socks.shipping.entities.Shipment postShipping(works.weave.socks.shipping.entities.Shipment)>",
+          "thread": "http-nio-80-exec-2",
+          "thread_id": 42,
+          "clock": 5
+        }
+      ]
+    },
+    "candidate_method_count": 3,
+    "query": "<works.weave.socks.orders.controllers.OrdersController: works.weave.socks.orders.entities.CustomerOrder newOrder(works.weave.socks.orders.resources.NewOrderResource)>; <works.weave.socks.shipping.controllers.ShippingController: works.weave.socks.shipping.entities.Shipment postShipping(works.weave.socks.shipping.entities.Shipment)>",
+    "queue_consumer_delivery_verified": true,
+    "shipment_worker_processing_verified": false,
+    "queue_master_docker_worker_error_observed": true
+  },
+  "queue_delivery_proof": {
+    "baseline": {
+      "shipping-task": {
+        "ready": 0,
+        "unacknowledged": 0,
+        "consumers": 0
+      }
+    },
+    "after_order": {
+      "shipping-task": {
+        "ready": 1,
+        "unacknowledged": 0,
+        "consumers": 0
+      }
+    },
+    "after_consumer_restart": {
+      "shipping-task": {
+        "ready": 0,
+        "unacknowledged": 0,
+        "consumers": 1
+      }
+    },
+    "isolated_fresh_project": true,
+    "single_target_order": true,
+    "broker_payload_read": false,
+    "consumer_logged_shipment_name": "6acdee8b9dfd71000166689c",
+    "shipment_worker_processing_verified": false
+  },
+  "process_trace_audit": {
+    "command": [
+      "docker",
+      "run",
+      "--name",
+      "flowdist-preflight-9689c802b729",
+      "--hostname",
+      "flowdist-preflight-9689c802b729",
+      "--add-host",
+      "flowdist-preflight-9689c802b729:127.0.0.1",
+      "--rm",
+      "--network",
+      "none",
+      "--memory",
+      "4g",
+      "--user",
+      "1000:1000",
+      "--entrypoint",
+      "java",
+      "-v",
+      "/home/wujian/tracefusion2/artifacts/external-tools/flowdist:/flowdist:ro",
+      "-v",
+      "/home/wujian/tracefusion2/artifacts/flowdist-full-order-final-v2-20261013/work:/work:rw",
+      "-w",
+      "/work",
+      "weaveworksdemos/orders@sha256:b622e40e83433baf6374f15e076b53893f79958640fc6667dff597622eff03b9",
+      "-cp",
+      "/work/probe",
+      "FlowDistTraceProbe",
+      "/work/traces/test1",
+      "<works.weave.socks.orders.services.AsyncGetService: java.util.concurrent.Future postResource(java.net.URI,java.lang.Object,org.springframework.core.ParameterizedTypeReference)>",
+      "<works.weave.socks.shipping.controllers.ShippingController: works.weave.socks.shipping.entities.Shipment postShipping(works.weave.socks.shipping.entities.Shipment)>"
+    ],
+    "exit_code": 0,
+    "elapsed_ms": 466.842998,
+    "errors": [],
+    "timeout_seconds": 240,
+    "timed_out": false,
+    "status": "peer-correlation-validated",
+    "accuracy_eligible": false,
+    "performance_eligible": false,
+    "traces": [
+      {
+        "trace": "Remote1791880866950.em",
+        "process": "1@82356f89cc27",
+        "peers": {
+          "1@01bb2ba7189f": 6
+        },
+        "server_add_first": null,
+        "client_main_last": null,
+        "source_first": 2,
+        "sink_last": null
+      },
+      {
+        "trace": "Remote1791880867608.em",
+        "process": "1@01bb2ba7189f",
+        "peers": {
+          "1@82356f89cc27": 4
+        },
+        "server_add_first": null,
+        "client_main_last": null,
+        "source_first": null,
+        "sink_last": 4
+      }
+    ],
+    "reciprocal_peer_correlation": true,
+    "distinct_server_client_roles": true,
+    "compile_command": [
+      "javac",
+      "--release",
+      "8",
+      "-d",
+      "/home/wujian/tracefusion2/artifacts/flowdist-full-order-final-v2-20261013/work/probe",
+      "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/FlowDistTraceProbe.java"
+    ],
+    "probe_sha256": "430a3e3f46357d1214cd1003973020e4e165ac9a8364fabd0c324b7ae0950d2f",
+    "source_method": "<works.weave.socks.orders.services.AsyncGetService: java.util.concurrent.Future postResource(java.net.URI,java.lang.Object,org.springframework.core.ParameterizedTypeReference)>",
+    "sink_method": "<works.weave.socks.shipping.controllers.ShippingController: works.weave.socks.shipping.entities.Shipment postShipping(works.weave.socks.shipping.entities.Shipment)>"
+  },
+  "build_manifest": {
+    "kind": "sockshop-spring-flowdist-boundary-runtime",
+    "upstream_commit": "9a683606aa42289e045cdbfa9391b55e79a3ac05",
+    "apps": {
+      "orders": {
+        "original_sha256": "8a2cb87b9bedf79c7ad407fcd72bc74c6c1241ef67ae967de59f1ec5f5873a2b",
+        "adapted_sha256": "c85b4492d95309f11fbc563a0e4b7138d4a386b7275bf7507fe7e81924e24b76",
+        "added_entries": {
+          "BOOT-INF/classes/disttaint/FlowDistHttpClock.class": "5036fc959b27f1f70ae8190031b0581d2f1d8ec36aff4106a8a502067ce0d89d",
+          "BOOT-INF/classes/disttaint/http/FlowDistHttpConfiguration$1.class": "7badb9cd02512e96fbc10fb9154530b1792703bc22d10b4a7045b12a91d0756d",
+          "BOOT-INF/classes/disttaint/http/FlowDistHttpConfiguration$2.class": "49b1010fd52b56eb14dca5c887964c203e91cd0381c3ce6d6bf8100856a29849",
+          "BOOT-INF/classes/disttaint/http/FlowDistHttpConfiguration$ShippingReplyClock.class": "1af9a7d2b0dd70709412cd01d6cee9976a6f263a98bddd5e5f0ebeb422a83fc5",
+          "BOOT-INF/classes/disttaint/http/FlowDistHttpConfiguration.class": "eab2d2dcf714146ca4721ffafcf4eb4efb3f2afce232079806ca56b4012517f5",
+          "BOOT-INF/classes/disttaint/http/FlowDistSpringHooks$1.class": "904b5b813d008fbe9795769821245312b604325e79d1d97b01123ff0e607f303",
+          "BOOT-INF/classes/disttaint/http/FlowDistSpringHooks.class": "aa8a7737f63dbe9fbb5ee9e3c7bb49d6fb37278948623697d77c9ef466143cca",
+          "BOOT-INF/classes/works/weave/socks/orders/config/FlowDistServiceConfiguration.class": "05c3f46aad4370d79c91adb7643c59e32a2376442b2551d2370fa53196b2a235",
+          "BOOT-INF/lib/flowdist-original-FLOWDIST.jar": "809cadf28550959291c3c21c1ce3130a6ca84af3bb649a545def0d61905c82d5",
+          "BOOT-INF/lib/flowdist-original-DUA1.jar": "10d37877ccfb56379cecfc3462b6a6805888d77cb7b1664159175eeab9cc042f"
+        },
+        "original_entries_preserved": true,
+        "compile_command": [
+          "javac",
+          "--release",
+          "8",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/external-tools/flowdist/tool/FLOWDIST.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/aspectjrt-1.8.9.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/aspectjweaver-1.8.9.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/bcpkix-jdk15on-1.55.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/bcprov-jdk15on-1.55.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/bson-3.2.2.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/classmate-1.3.3.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/evo-inflector-1.2.1.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/hibernate-validator-5.2.4.Final.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/jackson-annotations-2.8.6.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/jackson-core-2.8.6.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/jackson-databind-2.8.6.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/jboss-logging-3.3.0.Final.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/jcl-over-slf4j-1.7.22.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/jul-to-slf4j-1.7.22.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/log4j-over-slf4j-1.7.22.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/logback-classic-1.1.9.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/logback-core-1.1.9.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/mongodb-driver-3.2.2.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/mongodb-driver-core-3.2.2.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/simpleclient-0.0.21.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/simpleclient_common-0.0.21.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/simpleclient_hotspot-0.0.21.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/simpleclient_servlet-0.0.21.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/simpleclient_spring_boot-0.0.21.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/slf4j-api-1.7.22.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/snakeyaml-1.17.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-aop-4.3.6.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-beans-4.3.6.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-boot-1.4.4.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-boot-actuator-1.4.4.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-boot-autoconfigure-1.4.4.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-boot-starter-1.4.4.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-boot-starter-actuator-1.4.4.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-boot-starter-aop-1.4.4.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-boot-starter-data-mongodb-1.4.4.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-boot-starter-data-rest-1.4.4.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-boot-starter-logging-1.4.4.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-boot-starter-tomcat-1.4.4.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-boot-starter-web-1.4.4.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-cloud-commons-1.1.6.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-cloud-context-1.1.6.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-cloud-sleuth-core-1.1.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-cloud-sleuth-zipkin-1.1.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-cloud-starter-1.1.6.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-cloud-starter-sleuth-1.1.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-cloud-starter-zipkin-1.1.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-context-4.3.6.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-core-4.3.6.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-data-commons-1.12.7.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-data-mongodb-1.9.7.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-data-rest-core-2.5.7.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-data-rest-hal-browser-2.5.7.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-data-rest-webmvc-2.5.7.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-expression-4.3.6.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-hateoas-0.20.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-plugin-core-1.2.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-security-crypto-4.1.4.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-security-rsa-1.0.3.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-tx-4.3.6.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-web-4.3.6.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/spring-webmvc-4.3.6.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/tomcat-embed-core-8.5.11.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/tomcat-embed-el-8.5.11.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/tomcat-embed-websocket-8.5.11.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/validation-api-1.1.0.Final.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/zipkin-1.16.2-tests.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/zipkin-1.16.2.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/zipkin-reporter-0.6.9.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/lib/zipkin-sender-urlconnection-0.6.9.jar",
+          "-d",
+          "/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/classes",
+          "/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/sources/FlowDistHttpConfiguration.java",
+          "/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/orders/sources/FlowDistServiceConfiguration.java",
+          "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/flowdist/FlowDistHttpClock.java",
+          "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/flowdist/FlowDistSpringHooks.java"
+        ]
+      },
+      "shipping": {
+        "original_sha256": "5704afeeca3c34e10873b15b5aeaf25cbe8326772382631ff4e579d5fa358890",
+        "adapted_sha256": "a69c93c75856f17d34e261be3f3231c33f0e3fefe5a099808e9403b4d62f378d",
+        "added_entries": {
+          "BOOT-INF/classes/disttaint/FlowDistHttpClock.class": "5036fc959b27f1f70ae8190031b0581d2f1d8ec36aff4106a8a502067ce0d89d",
+          "BOOT-INF/classes/disttaint/http/FlowDistHttpConfiguration$1.class": "7badb9cd02512e96fbc10fb9154530b1792703bc22d10b4a7045b12a91d0756d",
+          "BOOT-INF/classes/disttaint/http/FlowDistHttpConfiguration$2.class": "49b1010fd52b56eb14dca5c887964c203e91cd0381c3ce6d6bf8100856a29849",
+          "BOOT-INF/classes/disttaint/http/FlowDistHttpConfiguration$ShippingReplyClock.class": "1af9a7d2b0dd70709412cd01d6cee9976a6f263a98bddd5e5f0ebeb422a83fc5",
+          "BOOT-INF/classes/disttaint/http/FlowDistHttpConfiguration.class": "eab2d2dcf714146ca4721ffafcf4eb4efb3f2afce232079806ca56b4012517f5",
+          "BOOT-INF/classes/disttaint/http/FlowDistSpringHooks$1.class": "904b5b813d008fbe9795769821245312b604325e79d1d97b01123ff0e607f303",
+          "BOOT-INF/classes/disttaint/http/FlowDistSpringHooks.class": "aa8a7737f63dbe9fbb5ee9e3c7bb49d6fb37278948623697d77c9ef466143cca",
+          "BOOT-INF/classes/works/weave/socks/shipping/config/FlowDistServiceConfiguration.class": "6b736480a5a1f1433240e89e9f5ced756fbb27c010def557bd49fd2eb4651c7b",
+          "BOOT-INF/lib/flowdist-original-FLOWDIST.jar": "809cadf28550959291c3c21c1ce3130a6ca84af3bb649a545def0d61905c82d5",
+          "BOOT-INF/lib/flowdist-original-DUA1.jar": "10d37877ccfb56379cecfc3462b6a6805888d77cb7b1664159175eeab9cc042f"
+        },
+        "original_entries_preserved": true,
+        "compile_command": [
+          "javac",
+          "--release",
+          "8",
+          "-cp",
+          "/home/wujian/tracefusion2/artifacts/external-tools/flowdist/tool/FLOWDIST.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/amqp-client-3.6.3.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/aspectjrt-1.8.9.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/aspectjweaver-1.8.9.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/bcpkix-jdk15on-1.55.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/bcprov-jdk15on-1.55.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/classmate-1.3.1.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/commons-codec-1.10.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/evo-inflector-1.2.1.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/hibernate-validator-5.2.4.Final.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/http-client-1.0.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/httpclient-4.5.2.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/httpcore-4.4.5.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/jackson-annotations-2.8.1.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/jackson-core-2.8.1.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/jackson-databind-2.8.1.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/jboss-logging-3.3.0.Final.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/jcl-over-slf4j-1.7.21.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/jul-to-slf4j-1.7.21.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/log4j-over-slf4j-1.7.21.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/logback-classic-1.1.7.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/logback-core-1.1.7.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/simpleclient-0.0.21.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/simpleclient_common-0.0.21.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/simpleclient_hotspot-0.0.21.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/simpleclient_servlet-0.0.21.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/simpleclient_spring_boot-0.0.21.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/slf4j-api-1.7.21.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/snakeyaml-1.17.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-amqp-1.6.1.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-aop-4.3.2.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-beans-4.3.2.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-boot-1.4.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-boot-actuator-1.4.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-boot-autoconfigure-1.4.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-boot-starter-1.4.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-boot-starter-actuator-1.4.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-boot-starter-amqp-1.4.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-boot-starter-aop-1.4.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-boot-starter-data-rest-1.4.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-boot-starter-logging-1.4.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-boot-starter-tomcat-1.4.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-boot-starter-web-1.4.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-cloud-commons-1.1.6.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-cloud-context-1.1.6.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-cloud-sleuth-core-1.1.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-cloud-sleuth-zipkin-1.1.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-cloud-starter-1.1.6.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-cloud-starter-sleuth-1.1.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-cloud-starter-zipkin-1.1.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-context-4.3.2.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-core-4.3.2.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-data-commons-1.12.2.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-data-rest-core-2.5.2.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-data-rest-hal-browser-2.5.2.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-data-rest-webmvc-2.5.2.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-expression-4.3.2.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-hateoas-0.20.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-messaging-4.3.2.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-plugin-core-1.2.0.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-rabbit-1.6.1.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-retry-1.1.3.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-security-crypto-4.1.1.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-security-rsa-1.0.3.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-tx-4.3.2.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-web-4.3.2.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/spring-webmvc-4.3.2.RELEASE.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/tomcat-embed-core-8.5.4.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/tomcat-embed-el-8.5.4.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/tomcat-embed-websocket-8.5.4.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/validation-api-1.1.0.Final.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/zipkin-1.16.2-tests.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/zipkin-1.16.2.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/zipkin-reporter-0.6.9.jar:/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/lib/zipkin-sender-urlconnection-0.6.9.jar",
+          "-d",
+          "/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/classes",
+          "/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/sources/FlowDistHttpConfiguration.java",
+          "/home/wujian/tracefusion2/artifacts/flowdist-spring-apps-v4-20261013/shipping/sources/FlowDistServiceConfiguration.java",
+          "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/flowdist/FlowDistHttpClock.java",
+          "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/flowdist/FlowDistSpringHooks.java"
+        ]
+      }
+    },
+    "method_instrumentation": "Spring advice for newOrder/postResource/postShipping; entry only",
+    "static_statement_instrumentation": false,
+    "original_business_classes_modified": false,
+    "accuracy_eligible": false,
+    "performance_eligible": false
+  },
+  "rebuild_entry_payloads_identical": true,
+  "validation_tests_passed": 7,
+  "known_limitations": [
+    "Only selected method entry events write original OTMonitor; return logs are independent audit data.",
+    "No static statement or branch instrumentation of Sock Shop yet.",
+    "No field-level oracle or runtime/memory comparison.",
+    "RabbitMQ enqueue and consumer delivery confirmed; consumer Docker worker processing failed due to absent Docker socket.",
+    "MQ peer clocks and consumer statement paths are not instrumented."
+  ],
+  "failed_runs": {
+    "artifacts/flowdist-full-order-20261013": "Compose JAVA_OPTS warning was interpreted as existing project; corrected interpolation and direct resource checks.",
+    "artifacts/flowdist-full-order-v2-20261013": "Docker default subnet pools exhausted; explicit free subnet used afterward.",
+    "artifacts/flowdist-full-order-v3-20261013": "Added nested runtime JARs were compressed; Spring Boot requires ZIP_STORED.",
+    "artifacts/flowdist-full-order-final-20261013": "Simultaneous stop produced equal timestamp filenames; frozen process traces collided during copy.",
+    "artifacts/flowdist-full-order-v4-20261013": "Checks passed; a separate processing audit narrows old MQ wording to delivery, not worker success."
+  },
+  "accuracy_eligible": false,
+  "performance_eligible": false
+}

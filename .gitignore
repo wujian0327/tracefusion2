@@ -16,6 +16,7 @@ experiments/sockshop-mirrortaint/*
 !experiments/sockshop-mirrortaint/flowdist-adaptation-20261013.json
 !experiments/sockshop-mirrortaint/flowdist-coverage-20261013.json
 !experiments/sockshop-mirrortaint/flowdist-http-20261013.json
+!experiments/sockshop-mirrortaint/flowdist-full-order-20261013.json
 !experiments/sockshop-mirrortaint/rpc-observer-manifest.mf
 !experiments/sockshop-mirrortaint/tracefusion/
 experiments/sockshop-mirrortaint/tracefusion/*

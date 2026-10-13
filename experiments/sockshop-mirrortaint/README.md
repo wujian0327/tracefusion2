@@ -644,3 +644,58 @@ python3 experiments/sockshop-mirrortaint/flowdist_http_preflight.py \
 
 下一阶段将 HTTP 适配接入完整 Orders.newOrder，恢复真实异步调用与 RabbitMQ，
 并解决 Spring 反射入口与跨服务 DTO 的静态分析范围，再冻结跨进程字段查询。
+
+### 完整订单、真实异步 HTTP 与 RabbitMQ 投递（2026-10-13）
+
+`build_flowdist_spring_apps.py` 在原始 Boot JAR 的副本中添加 Spring 配置和作者
+运行时。逐项校验所有原始归档内容不变；包括业务类、原依赖及原启动入口。
+新增内嵌 JAR 使用 Spring Boot 要求的非压缩格式。两端依赖仍各自隔离。
+`FlowDistSpringHooks` 在原始 AsyncGetService 使用的 RestTemplate 安装 HTTP
+时钟拦截器，并对 newOrder、Shipping URI 的 postResource、postShipping 添加
+Spring 方法 advice。已有异步 advisor 保留，入口事件实际在异步工作线程执行。
+这些是披露的运行边界钩子，只有方法入口写入原始 OTMonitor；返回／异常日志
+为单独核验数据，不能当作完整作者方法序列、语句插桩或字段追踪。
+
+最终证据目录 `artifacts/flowdist-full-order-final-v2-20261013`：
+
+| 检查 | 实际结果 |
+| --- | --- |
+| 完整原始 newOrder | 返回 201；用户、地址、卡、商品和总价符合独立预置 fixture |
+| Spring 异步调用 | newOrder 在 HTTP 线程，Shipping postResource 在 SimpleAsyncTaskExecutor 工作线程 |
+| Shipping HTTP | 原始 Spring 服务执行 postShipping，保留双向 FlowDist 时钟关联 |
+| RabbitMQ 入队 | 暂停本项目 consumer 时，shipping-task 从 0 到 1 条 ready 消息 |
+| RabbitMQ 送达 | 恢复 queue-master 后 ready/unacknowledged 均为 0；consumer 日志包含该 Shipment 的 name |
+| 原版方法查询 | newOrder → postShipping 输出 3 个候选方法，并包含两个查询端点 |
+
+**投递和任务处理须区分**：queue-master 接收后尝试通过 Docker socket 启动
+工作容器，当前原部署没有该 socket，日志记录 AFUNIXSocketException。
+因此这里只验证入队和送达消费端，**未验证 Shipment 工作容器处理成功**。
+消息队列与消费端尚未接入 FlowDist 时钟和语句分析；当前原版轨迹覆盖 Orders／Shipping 两个进程。
+
+该轮使用全新项目、独立数据卷、已缓存镜像的 digest，不进行镜像拉取；
+显式实验网段避免已用完的 Docker 默认地址池。RabbitMQ 线程数做资源限制。
+先确认项目名没有既有容器，再进入清理范围；只停止／清理本项目。
+服务退出时立即失败，不等待完整健康检查超时。
+作者轨迹以毫秒时间戳命名，两个进程同步停止可能重名；现在依次停止，
+复制轨迹时拒绝同名覆盖。测试覆盖项目名碰撞不清理和启动退出立即失败。
+
+失败记录保持原样：首轮 Compose 变量转义告警误判、v2 默认地址池耗尽、
+v3 新增内嵌 JAR 被压缩导致启动失败；final 首轮两个 Remote 文件同名导致
+归档少一端，严格轨迹检查失败。v4 的旧 status 用词较宽，已附加
+shipment-processing-audit.json 澄清只证明 consumer delivery，不证明工作任务完成。
+正式结果使用 final-v2，完整日志及摘要保存为 `flowdist-full-order-20261013.json`。
+
+```bash
+python3 experiments/sockshop-mirrortaint/build_flowdist_spring_apps.py \
+  --repo artifacts/external-tools/flowdist --orders artifacts/sockshop-orders-original-20261012/app.jar \
+  --shipping artifacts/sockshop-five-methods-original-20261013/shipping.jar \
+  --out artifacts/flowdist-spring-apps-new
+python3 experiments/sockshop-mirrortaint/flowdist_full_order.py \
+  --repo artifacts/external-tools/flowdist --apps artifacts/flowdist-spring-apps-new \
+  --out artifacts/flowdist-full-order-new --subnet 10.254.243.0/24
+python3 -m unittest discover -s experiments/sockshop-mirrortaint -p 'test_flowdist_*.py' -v
+```
+
+这一轮没有正式准确率或成本结果，资格继续为 false。下一步将实际执行的
+Spring 入口、异步调用和 HTTP DTO 转换纳入静态语句／分支模型，再冻结跨进程
+字段查询与多请求反例；MQ 工作容器处理另按所需实验范围处理。
