@@ -271,6 +271,10 @@ def runtime(repo,out,adapter=None):
     script.write_text('''#!/bin/sh
 set -eu
 mkdir -p /work/runtime/server/test1 /work/runtime/client/test1
+if [ -f /work/OTBranchInstrumented/entitystmt.out.branch ]; then
+ cp /work/OTBranchInstrumented/entitystmt.out.branch /work/runtime/server/entitystmt.out.branch
+ cp /work/OTBranchInstrumented/entitystmt.out.branch /work/runtime/client/entitystmt.out.branch
+fi
 cp_value="/work/OTInstrumented:/flowdist/tool/*"
 if [ -f /work/runtime-adapter.jar ]; then cp_value="/work/runtime-adapter.jar:$cp_value"; fi
 cd /work/runtime/server

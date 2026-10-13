@@ -499,7 +499,7 @@ Soot Spark 的 PropWorklist。单独排除 JDK 库方法体后，分支映射在
 该图的语句查询只用于排查。使用 21 方法范围时没有输出路径；使用完整 213 方法范围时，
 原版分析器输出 696 段并标为 Local，但来源／目标实测位于不同进程。这一分类及
 共享类型的进程边界仍需核实，不能仅凭退出码 0／输出存在认定完整语句重建正确。
-本轮还没有验证动态分支覆盖，不能把静态分支映射当成运行覆盖。
+截至这一检查点还没有验证动态分支覆盖，不能把静态分支映射当成运行覆盖。
 
 新检查点为 `flowdist-adaptation-20261013.json`，包含修复说明、来源摘要、实际进程信息、
 查询检查及所有日志摘要。主要目录：
@@ -532,3 +532,59 @@ python3 experiments/sockshop-mirrortaint/flowdist_preflight.py trace-inspection 
 来源、目标与 Spring 反射入口。跨服务接入需要选择 Java 对端；不能把 socket 帧附加到
 外部 HTTP 客户端、Go 服务、MongoDB 或 RabbitMQ 的原始协议中。
 本轮没有新增 FlowDist 的 Sock Shop 准确率、Runtime Cost 或 Memory Cost，资格仍为 false。
+
+### FlowDist 同次执行的真实覆盖与语句诊断（2026-10-13，后续进展）
+
+公开 OTBranchInst 在输出映射后直接退出，原有插桩调用被注释。
+恢复调用后又确认：其三参数 instrumentDirect 会排除传入方法，导致候选范围
+内的计数全为零。独立 branch-adapter 改为调用作者原有的两参数接口，并让
+映射与插桩使用完全相同的候选分支列表。原仓库、分析器 JAR 和分支算法保持原样。
+两次 Soot 输出还把类字面量包装为 `LL...;;`，导致 Java 类加载失败；
+normalize_flowdist_class_literals 仅为 CONSTANT_Class 克隆规范化名称，保留
+原 UTF8 业务字符串、原常量池编号与指令字节，逐文件记录修复摘要。
+
+最终在 `artifacts/flowdist-branch-v2-runtime-20261013` 同次采集方法轨迹和真实覆盖：
+
+| 进程 | 命中分支／候选分支 | 命中语句 |
+| --- | --- | --- |
+| server | 279／546 | 1075 |
+| client | 301／546 | 1055 |
+
+四个原始 Thrift 业务操作、两端时钟关联均通过。覆盖报告的语句集合与命中
+分支映射的并集完全一致。19882 条语句与此前诊断静态图逐编号核对通过；
+局部变量名变化仅做结构比对，不重排编号、不修改图。
+作者覆盖报告的分母 19715 是映射最大编号加一，不是完整 19882 条静态语句总数。
+
+`flowdist_statement_diagnostic.py` 使用冻结的同次轨迹、核验后的真实覆盖，
+替换新目录里的静态覆盖文件，运行原版 OT3AnalysisAll 的 stmtcov/postprune。
+在 `artifacts/flowdist-measured-statement-v2-20261013`，add 参数到 recv_add 返回值：
+合并两端覆盖后输出 521 段、类型仍为 Local；单独服务端缺少已执行的 sink，
+单独客户端缺少已执行的 source。两端轨迹与覆盖摘要分别保留。
+Local 是原分析器在合并图中找到路径后的分类，不能解释为两个端点实际位于
+同一进程；这也尚不能证明所有输出段都是精确信息流。图的 JDK 排除和未计算
+CDG 的限制仍存在，正式准确率与性能资格继续为 false。
+
+保留失败目录：branch-runtime 初版类加载失败；branch-runtime-normalized
+业务通过但覆盖为零；measured-statement 初版重命名轨迹使原读者无法发现，
+不可使用其结果。最终使用 v2 目录，不覆盖这些失败证据。
+
+复现真实覆盖、对齐审计与语句诊断（各输出目录须不存在）：
+
+```bash
+python3 experiments/sockshop-mirrortaint/build_flowdist_branch_adapter.py \
+  --repo artifacts/external-tools/flowdist --out artifacts/flowdist-branch-adapter-new
+python3 experiments/sockshop-mirrortaint/flowdist_branch_preflight.py \
+  --repo artifacts/external-tools/flowdist --scope artifacts/flowdist-socket-adapted-20261013 \
+  --branch-adapter artifacts/flowdist-branch-adapter-new/flowdist-branch-adapter.jar \
+  --socket-adapter artifacts/flowdist-socket-adapter-v3-20261013/flowdist-socket-adapter.jar \
+  --out artifacts/flowdist-branch-runtime-new
+python3 experiments/sockshop-mirrortaint/flowdist_statement_diagnostic.py \
+  --repo artifacts/external-tools/flowdist --runtime artifacts/flowdist-branch-runtime-new \
+  --graph artifacts/flowdist-socket-adapted-20261013/work/OT3InstrumentedExcludedJdkPreloaded \
+  --query '<CalculatorHandler: int add(int,int)> - i0 := @parameter0: int; <CalculatorService$Client: int recv_add()> - return $i0' \
+  --out artifacts/flowdist-statement-new
+python3 -m unittest discover -s experiments/sockshop-mirrortaint -p test_flowdist_compatibility.py -v
+```
+
+新增检查点 `flowdist-coverage-20261013.json` 冻结本阶段代码和证据摘要。
+下一步是处理语句图的进程范围和完整性，再接入 Sock Shop Java Orders → Shipping。

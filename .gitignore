@@ -14,6 +14,7 @@ experiments/sockshop-mirrortaint/*
 !experiments/sockshop-mirrortaint/*.py
 !experiments/sockshop-mirrortaint/flowdist-evidence-20261013.json
 !experiments/sockshop-mirrortaint/flowdist-adaptation-20261013.json
+!experiments/sockshop-mirrortaint/flowdist-coverage-20261013.json
 !experiments/sockshop-mirrortaint/rpc-observer-manifest.mf
 !experiments/sockshop-mirrortaint/tracefusion/
 experiments/sockshop-mirrortaint/tracefusion/*
