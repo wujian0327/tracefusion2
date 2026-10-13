@@ -1,0 +1,252 @@
+{
+  "kind": "flowdist-sockshop-preflight",
+  "date": "2026-10-13",
+  "upstream_url": "https://bitbucket.org/wsucailab/flowdist.git",
+  "upstream_commit": "9a683606aa42289e045cdbfa9391b55e79a3ac05",
+  "engine_modified": false,
+  "author_example_modified": false,
+  "accuracy_eligible": false,
+  "performance_eligible": false,
+  "baseline_status": "candidate-compatibility-incomplete",
+  "default_thrift": {
+    "artifact_dir": "artifacts/flowdist-thrift-20261013-repro",
+    "business_status": "example-business-and-traces-passed",
+    "operations": [
+      {
+        "op": "add",
+        "a": 15,
+        "b": 53,
+        "value": 68,
+        "passed": true
+      },
+      {
+        "op": "minus",
+        "a": 15,
+        "b": 53,
+        "value": -38,
+        "passed": true
+      },
+      {
+        "op": "multi",
+        "a": 15,
+        "b": 53,
+        "value": 795,
+        "passed": true
+      },
+      {
+        "op": "divi",
+        "a": 15,
+        "b": 53,
+        "value": 0,
+        "passed": true
+      }
+    ],
+    "source_method_count": 22,
+    "sink_method_count": 22,
+    "method_scope_count": 1150,
+    "configured_query_path_length": 10,
+    "configured_query_limitation": "read source is present in both processes; reported path is client-local, not a validated cross-process flow",
+    "cross_process_query": "<CalculatorHandler: int add(int,int)>; <CalculatorClient: void main(java.lang.String[])>",
+    "cross_process_result": "There is no flow path!",
+    "cross_process_query_kind": "manually specified server add method to client main compatibility check; not an accuracy score"
+  },
+  "optional_socket_thrift": {
+    "artifact_dir": "artifacts/flowdist-thrift-socket-20261013",
+    "socket_wrappers_present": true,
+    "reused_scope_sha256": "dadbc8813a9616fb77a65e812ea7b2e2ebccf3410f88955ed145608f66eae16b",
+    "runtime_exit_code": 3,
+    "business_status": "failed-no-completed-calculation-within-20-second-poll-window",
+    "runtime_elapsed_ms": 23554.080786,
+    "root_cause": "not yet determined; monitor and protocol wiring require further investigation"
+  },
+  "branch_refinement": {
+    "artifact_dir": "artifacts/flowdist-thrift-20261013",
+    "status": "timeout-after-240-seconds",
+    "heap_limit": "3g",
+    "container_memory_limit": "4g",
+    "statement_analysis_completed": false,
+    "source_observation": "OTBranchInst.run exits before commented-out branch instrumentation; no measured dynamic branch coverage validated"
+  },
+  "shipping": {
+    "artifact_dir": "artifacts/flowdist-shipping-20261013",
+    "jar_sha256": "5704afeeca3c34e10873b15b5aeaf25cbe8326772382631ff4e579d5fa358890",
+    "original_application_class_count": 9,
+    "dependency_jar_count": 74,
+    "source_method_count": 0,
+    "sink_method_count": 1,
+    "sinks": "postShipping logging calls, not DTO target fields",
+    "scope_count": 2,
+    "scope_elapsed_ms": 100474.312152,
+    "status": "default-source-sink-boundary-does-not-match-existing-experiment",
+    "runtime_instrumented": false
+  },
+  "next_steps": [
+    "Diagnose optional socket runtime stall and validate a real server-to-client flow before modifying the engine.",
+    "Define and disclose HTTP/DTO sources and sinks matching Shipping id/name queries, including framework entry modelling.",
+    "Complete branch mapping and statement-level refinement with actual coverage evidence under stated resource limits.",
+    "Only then run matched Sock Shop workloads, accuracy oracle and separated online/offline resource measurements."
+  ],
+  "script_sha256": "a03c84edee028412850157a1b75bffa1277cd9185475ea8bab2bd4a670093176",
+  "evidence_logs": [
+    {
+      "path": "artifacts/flowdist-thrift-20261013/branches-runner.log",
+      "sha256": "534b3709899a1e6e401441428db5e57eeedef9d1f0797b18de4f018d4e51fa3b",
+      "bytes": 2646
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013/branches.log",
+      "sha256": "ad0f0ae0cffac575c6e4b8f4537129281dc899b058ecdfedbcc65a6e522da2e3",
+      "bytes": 12371
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013/compile-isolated-deps.log",
+      "sha256": "510a55681778ca19054b27bc02299fd326789e41436184d89d8b698070a6f59c",
+      "bytes": 461
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013/compile-thrift-only.log",
+      "sha256": "a7ef8299c4acb7b9266f56916119bdd81b7c050636b7ff6af591736aff070fb1",
+      "bytes": 1714
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013/compile.log",
+      "sha256": "f7b497d865ec296d2d1719822b5abb5c2b0bd1293eca80d32b1bc17e810d0a39",
+      "bytes": 42128
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013/instrument.log",
+      "sha256": "440fbdd3ee5fb417653dd6c174f02955d357bb737c68690f27c001e39b460113",
+      "bytes": 4027874
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013/method-analysis.log",
+      "sha256": "a49688c3ce43a30f89449d458f03ec0996254fc3aff4516e0d714c21093fcfa4",
+      "bytes": 6555
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013/method-scope.log",
+      "sha256": "743bfae103263d2b9d3bb8d5f662f79e4e602b9495c0e146c10b18b5517612a5",
+      "bytes": 4173384
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013/runtime.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013/source-sink-complete.log",
+      "sha256": "033f875d6bdbc009c8976c4ac854f816a98d78d51d774e8647aaa8e2dc4c4e19",
+      "bytes": 18321
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013/source-sink.log",
+      "sha256": "fecc096a5b968333dd206517bdece2929ef907166b99f32e9297851c76b12ded",
+      "bytes": 298
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013/work/runtime/client/client.log",
+      "sha256": "0a7a6f243cb6761e8b8befcbe1888cffe523e1b5a5f2b0cd8608937a88d46955",
+      "bytes": 286
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013/work/runtime/server/server.log",
+      "sha256": "8cf22859086d2c176d4a96bba3949b8110a2858e8f6e8cae4df90e9809e43151",
+      "bytes": 192
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013-repro/compile.log",
+      "sha256": "510a55681778ca19054b27bc02299fd326789e41436184d89d8b698070a6f59c",
+      "bytes": 461
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013-repro/cross-method-analysis.log",
+      "sha256": "480223f3be024e05a0793692f5bff8299558ca41499131476d65a6e8cacf4e91",
+      "bytes": 393
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013-repro/cross-method-runner.log",
+      "sha256": "b8e0e4b1ffe595d3041872edbcadba9eb9bcb39147908adf6e6107fe50b80e8f",
+      "bytes": 749
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013-repro/instrument.log",
+      "sha256": "9dd4717c5a8329622ff59ca8af6c6176f129c5f44ddb42ab571536cb3a439439",
+      "bytes": 4027876
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013-repro/method-analysis.log",
+      "sha256": "90f09d34b49a7ecc2b0d1485220b619ab75327c1b333541193dabc9fc3f2daba",
+      "bytes": 5929
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013-repro/runtime.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013-repro/scope.log",
+      "sha256": "5f5322f01a43cdbaba4961b58de5c48dfdd84d3d8ea1a1437de9385a0c068f4e",
+      "bytes": 4173380
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013-repro/source-sink.log",
+      "sha256": "b6430b6771a847b54813529cb38add61150807aab33ad433222a45aa46b177ca",
+      "bytes": 18321
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013-repro/work/runtime/client/client.log",
+      "sha256": "23aa417beb170660889e879071951b2d3046d2f316575f6cb42e2aad498aeac0",
+      "bytes": 284
+    },
+    {
+      "path": "artifacts/flowdist-thrift-20261013-repro/work/runtime/server/server.log",
+      "sha256": "8cf22859086d2c176d4a96bba3949b8110a2858e8f6e8cae4df90e9809e43151",
+      "bytes": 192
+    },
+    {
+      "path": "artifacts/flowdist-thrift-socket-20261013/compile.log",
+      "sha256": "510a55681778ca19054b27bc02299fd326789e41436184d89d8b698070a6f59c",
+      "bytes": 461
+    },
+    {
+      "path": "artifacts/flowdist-thrift-socket-20261013/instrument.log",
+      "sha256": "6342431468539335759d133be3cb8a860e02bd4110a34d0ff2fbfc80fd712e36",
+      "bytes": 4027876
+    },
+    {
+      "path": "artifacts/flowdist-thrift-socket-20261013/runtime.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "artifacts/flowdist-thrift-socket-20261013/work/runtime/client/client.log",
+      "sha256": "7c960e7dfa81b5ad41d17d2d97af31c811e628fd29295c0b5c70faf426e46f02",
+      "bytes": 160
+    },
+    {
+      "path": "artifacts/flowdist-thrift-socket-20261013/work/runtime/server/server.log",
+      "sha256": "a64a8f80f15c07d3721fb7554e0702b662613a1ad84d8232694d737ff3352e86",
+      "bytes": 190
+    },
+    {
+      "path": "artifacts/flowdist-shipping-20261013/scope-runner.log",
+      "sha256": "982adf700144b74e5099c7a0232ebd298ccfd3ae2a9c164a04e1da0936c86639",
+      "bytes": 7641
+    },
+    {
+      "path": "artifacts/flowdist-shipping-20261013/scope.log",
+      "sha256": "8cd1c8e57ffe597628276a355dc826a7a6351a4342e422e312c514ed744d07bd",
+      "bytes": 140463
+    },
+    {
+      "path": "artifacts/flowdist-shipping-20261013/source-sink-runner.log",
+      "sha256": "1431f0d002739c3e5f426c6fc2c461a1296bfb9c2ed25ee31f9fc925e0a94938",
+      "bytes": 729
+    },
+    {
+      "path": "artifacts/flowdist-shipping-20261013/source-sink.log",
+      "sha256": "793ddd862c75dfbeaf873de78a559ccdb9581d0df00731055036cedde7601dea",
+      "bytes": 1603
+    }
+  ]
+}

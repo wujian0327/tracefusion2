@@ -388,3 +388,58 @@ python3 experiments/sockshop-mirrortaint/compare_five_methods.py \
 **当前依然是选定字段校准和首轮成本结果。** accuracy_eligible/performance_eligible 保持 false；
 独立审核、数据库 wire 实例 oracle、源码镜像构建资格和多次随机顺序部署尚未完成。
 不能据此宣称通用准确率 100%、重现论文的数值或具有统计保证的性能排名。
+
+## FlowDist 候选基线兼容性预检（2026-10-13）
+
+使用作者仓库 `https://bitbucket.org/wsucailab/flowdist.git`，固定提交
+`9a683606aa42289e045cdbfa9391b55e79a3ac05`。作者源码、例子和工具 JAR 未修改；
+`flowdist_preflight.py` 将绝对路径调整为容器挂载，使用固定 Orders 镜像中的 Java 8，
+限制堆为 1–3 GiB、容器为 4 GiB，默认阶段超时 240 秒。作者脚本原来配置 100 GiB 堆，
+因此本地超时只能说明此次资源配置下未完成，不能推断工具无法完成分析。
+现代 javac 无法直接读取作者 Soot JAR 的非法 ZIP 条目 `/.`，编译时仅提取其中 SLF4J 类，
+不重写 JAR；保留原始编译失败日志和后续通过的证据。
+
+| 检查 | 实际结果 | 对比较资格的影响 |
+| --- | --- | --- |
+| 作者 Thrift 例子默认配置 | 来源／出口各 22 个方法；方法范围 1150 个；插桩后四种计算正确且生成两份进程轨迹 | 方法级流程可运行 |
+| 默认配置来源 read → 客户端 main | 首次输出 19 个方法，脚本重跑输出 10 个；来源在两进程都存在，展示的路径位于客户端 | 随例子随机执行而变化；不能据此证明跨进程传播 |
+| 手工指定服务端 add → 客户端 main | 返回 `There is no flow path!` | 跨进程兼容性检查未通过；不计作准确率 |
+| 原版可选 `-socket` | 字节码确有 socket 包装器；20 秒业务等待内无计算结果，运行检查退出码 3 | 尚未查明协议／监视器问题；不能用于开销测量 |
+| 作者语句级分支映射配置 | 240 秒超时，无映射输出；容器已清理 | 语句级静态图／精化未完成 |
+| 原始 Shipping JAR | 9 个原始应用 class、完整嵌套依赖；默认来源 0、出口方法 1（打印日志）；方法范围 2 | 来源／出口不匹配现有 Shipment.id/name 查询，尚未进行插桩运行 |
+
+源码 `OTBranchInst.run` 在映射输出后调用 `System.exit(0)`，分支探针插桩调用被注释；
+本轮没有验证实际动态分支覆盖。不能把退出码 0、文件存在或方法路径直接当作完整
+FlowDist 语句级分析成功。可选 socket 模式与默认模式的证据分目录保存，不混合结果。
+
+证据索引为 `flowdist-evidence-20261013.json`，包含日志 SHA-256、原始 JAR 摘要及检查状态。
+目录为 `artifacts/flowdist-thrift-20261013`（含历史失败）、
+`artifacts/flowdist-thrift-20261013-repro`（脚本完整重跑的默认方法级流程）、
+`artifacts/flowdist-thrift-socket-20261013`（可选 socket）及
+`artifacts/flowdist-shipping-20261013`。未产生 FlowDist 的 Sock Shop 准确率、Runtime Cost
+或 Memory Cost；不追加到已有五方法实测表，也不把未支持查询填成 0% 或 100%。
+
+从空目录复现默认方法级检查（需要 Docker 和支持 `--release 8` 的 javac）：
+
+```bash
+git clone https://bitbucket.org/wsucailab/flowdist.git artifacts/external-tools/flowdist-new
+git -C artifacts/external-tools/flowdist-new checkout 9a683606aa42289e045cdbfa9391b55e79a3ac05
+docker pull weaveworksdemos/orders@sha256:b622e40e83433baf6374f15e076b53893f79958640fc6667dff597622eff03b9
+python3 experiments/sockshop-mirrortaint/flowdist_preflight.py prepare \
+  --repo artifacts/external-tools/flowdist-new --out artifacts/flowdist-thrift-new
+for stage in source-sink scope instrument runtime method-analysis; do
+  python3 experiments/sockshop-mirrortaint/flowdist_preflight.py "$stage" \
+    --repo artifacts/external-tools/flowdist-new --out artifacts/flowdist-thrift-new || break
+done
+```
+
+`cross-method-analysis` 单独检查服务端到客户端的方法查询；默认配置当前会失败。
+`prepare --socket` 用另一个空目录显式启用原版 socket 开关，之后仍按上述阶段运行。
+`branches` 使用作者分支分析选项，`refine` 要求已生成非空分支映射；完整语句查询生成和
+最终分析尚未集成。`prepare-shipping --shipping-jar <原始shipping.jar>` 原样提取 Spring Boot
+应用 class 和依赖，随后运行 `source-sink`、`scope`；来源空缺会明确记为检查失败。
+脚本拒绝覆盖同名阶段日志，超时会清理自己创建的命名容器。
+
+下一步先诊断 socket 模式业务阻塞，验证真实跨进程传播，再对齐 Shipping HTTP／DTO
+来源和目标、处理 Spring 入口并完成语句级分析。只有边界和业务正确性通过后，才测量
+相同工作负载下的准确率、在线开销及单列离线开销。当前资格标志仍为 false。
