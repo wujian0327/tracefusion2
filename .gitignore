@@ -2,3 +2,21 @@ artifacts/
 __pycache__/
 *.pyc
 
+*.zip
+experiments/
+
+# Keep Sock Shop calibration source reviewable; generated evidence stays ignored.
+!experiments/
+experiments/*
+!experiments/sockshop-mirrortaint/
+experiments/sockshop-mirrortaint/*
+!experiments/sockshop-mirrortaint/*.java
+!experiments/sockshop-mirrortaint/*.py
+!experiments/sockshop-mirrortaint/rpc-observer-manifest.mf
+!experiments/sockshop-mirrortaint/tracefusion/
+experiments/sockshop-mirrortaint/tracefusion/*
+!experiments/sockshop-mirrortaint/tracefusion/*.java
+
+!experiments/sockshop-mirrortaint/boundary/
+experiments/sockshop-mirrortaint/boundary/*
+!experiments/sockshop-mirrortaint/boundary/*.java

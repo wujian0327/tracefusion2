@@ -33,7 +33,7 @@ def final_items(case):
     return items
 
 
-def compose_spec(mode, out, agent=None):
+def compose_spec(mode, out, agent=None, integration_adapter=None, tracefusion_agent=None):
     spec = json.loads((ROOT / 'scenarios/sockshop/compose.json').read_text())
     check_spec(spec)
     spec['services']['orders']['ports'] = ['127.0.0.1:${TF2_ORDERS_PORT:-18082}:80']
@@ -56,6 +56,30 @@ def compose_spec(mode, out, agent=None):
                 ' -javaagent:/tf2/mirrorTaint.jar -Dtaint.env=remote'
                 ' -Dtaint.app=works.weave.socks -Duser.home=/tf2/agent-home'
                 ' -Dtaint.version=tf2-preflight')
+            if integration_adapter:
+                adapted = out / 'integration-adapter.jar'
+                if not adapted.exists():
+                    shutil.copyfile(integration_adapter, adapted)
+                cfg['volumes'].append(str(adapted) + ':/tf2/integration-adapter.jar:ro')
+                cfg['environment']['JAVA_OPTS'] = cfg['environment']['JAVA_OPTS'].replace(
+                    '-javaagent:/tf2/mirrorTaint.jar',
+                    '-javaagent:/tf2/integration-adapter.jar=strings -javaagent:/tf2/integration-adapter.jar=streams'
+                    ' -javaagent:/tf2/mirrorTaint.jar -javaagent:/tf2/integration-adapter.jar=returns'
+                    ' -javaagent:/tf2/integration-adapter.jar=sources -javaagent:/tf2/integration-adapter.jar=fields'
+                    ' -javaagent:/tf2/integration-adapter.jar=threads -javaagent:/tf2/integration-adapter.jar=logging'
+                    ' -Dtf2.mt.logging=true')
+    if mode == 'tracefusion':
+        if not tracefusion_agent:
+            raise ValueError('Provide built independent frontend with --tracefusion-agent')
+        copied = out / 'tracefusion-service-agent.jar'
+        shutil.copyfile(tracefusion_agent, copied)
+        cfg = spec['services']['orders']
+        capture = out / 'tracefusion-events'
+        capture.mkdir(); capture.chmod(0o777)
+        cfg.setdefault('volumes', []).extend([str(copied) + ':/tf2/tracefusion-agent.jar:ro',
+                                              str(capture) + ':/tf2/tracefusion-output:rw'])
+        cfg['environment']['JAVA_OPTS'] += (' -javaagent:/tf2/tracefusion-agent.jar'
+                                           ' -Dtracefusion.service.output=/tf2/tracefusion-output')
     return spec
 
 
@@ -207,9 +231,22 @@ def run(args):
               'cross_service_join_validated': False, 'execution_oracle_available': False,
               'accuracy_eligible': False, 'performance_eligible': False,
               'otel_or_our_collector_installed': False}
+    integration_adapter = getattr(args, 'integration_adapter', None)
+    if integration_adapter:
+        result['configuration'] = 'MirrorTaint original JAR + instrumentation/library/source/thread/logging adapters'
+        result['integration_adapter_sha256'] = hashlib.sha256(integration_adapter.read_bytes()).hexdigest()
+        result['propagation_instrumentation_changed'] = True
+        result['thread_adapter_installed'] = True
+        result['logging_adapter_installed'] = True
+        result['library_adapter_installed'] = True
     deployment = None
+    wire = None
     try:
-        spec = compose_spec(args.mode, out, args.agent.resolve() if args.agent else None)
+        spec = compose_spec(args.mode, out, args.agent.resolve() if args.agent else None,
+                            integration_adapter.resolve() if integration_adapter else None,
+                            args.tracefusion_agent.resolve() if getattr(args, 'tracefusion_agent', None) else None)
+        if getattr(args, 'subnet', None):
+            spec['networks'] = {'default': {'ipam': {'config': [{'subnet': args.subnet}]}}}
         file = out / 'compose.preflight.json'
         save(file, spec)
         for name in ('cases.json', 'sources.json'):
@@ -221,6 +258,10 @@ def run(args):
         if existing.stdout.strip():
             raise RuntimeError('Refusing to reuse an existing Compose project; choose a fresh project')
         deployment.start()
+        if getattr(args, 'wire_capture', False):
+            from wire_capture import WireCapture
+            wire = WireCapture(args.project, out)
+            wire.start()
         front = 'http://127.0.0.1:' + os.environ.get('TF2_FRONT_PORT', '18080')
         cart = 'http://127.0.0.1:' + os.environ.get('TF2_CART_PORT', '18081')
         orders = 'http://127.0.0.1:' + os.environ.get('TF2_ORDERS_PORT', '18082')
@@ -242,6 +283,10 @@ def run(args):
         result.update(status='business-preflight-passed' if all(r['business_passed'] for r in results) else 'business-preflight-failed',
                       cases=results, workload_count=len(results),
                       concurrent_client_requests=count, actual_service_overlap_verified=False)
+        if args.mode == 'tracefusion':
+            result['configuration'] = 'TraceFusion independent Java 8 DTO/stream boundary frontend; offline reconstruction pending'
+            result['tracefusion_agent_sha256'] = hashlib.sha256(args.tracefusion_agent.read_bytes()).hexdigest()
+            result['otel_or_our_collector_installed'] = True
         if args.mode == 'mirrortaint':
             result['agent_logs'] = {name: [{'path': str(p.relative_to(out)), 'bytes': p.stat().st_size}
                                           for p in sorted((out / 'agent-logs' / name).rglob('*')) if p.is_file()]
@@ -252,8 +297,21 @@ def run(args):
     except Exception as exc:
         result['error'] = str(exc)
     finally:
+        if wire:
+            wire.finish()
+            result['capture_errors'] = wire.errors
+            result['independent_wire_capture_installed'] = True
         if deployment:
             deployment.diagnostics()
+        if integration_adapter:
+            diagnostic_log = out / 'compose.log'
+            result['adapter_errors'] = [line for line in diagnostic_log.read_text(errors='replace').splitlines()
+                                        if 'TF2_MT_ADAPTER error' in line] if diagnostic_log.exists() else []
+            result['adapter_error_scan_available'] = diagnostic_log.exists()
+        if args.mode == 'tracefusion':
+            log = out / 'compose.log'
+            result['frontend_errors'] = [line for line in log.read_text(errors='replace').splitlines()
+                                        if 'TF2_SERVICE_FRONTEND error=' in line] if log.exists() else ['missing diagnostics']
         save(out / 'result.json', result)
         bundle = out.with_suffix('.zip')
         with zipfile.ZipFile(bundle, 'w', zipfile.ZIP_DEFLATED) as archive:
@@ -270,12 +328,22 @@ def run(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action', choices=('check', 'run'))
-    parser.add_argument('--mode', choices=('plain', 'mirrortaint'), default='plain')
+    parser.add_argument('--mode', choices=('plain', 'mirrortaint', 'tracefusion'), default='plain')
     parser.add_argument('--agent', type=Path)
+    parser.add_argument('--integration-adapter', type=Path, help='Disclosed companion configuration; never original baseline')
+    parser.add_argument('--tracefusion-agent', type=Path, help='Independent Java 8 DTO/stream observation frontend')
+    parser.add_argument('--wire-capture', action='store_true', help='Independent callee network capture for TraceFusion calibration')
+    parser.add_argument('--subnet', help='Explicit unused subnet when Docker default address pools are exhausted')
     parser.add_argument('--out', type=Path)
     parser.add_argument('--project')
     parser.add_argument('--ready-timeout', type=int, default=300)
     args = parser.parse_args()
+    if args.integration_adapter and args.mode != 'mirrortaint':
+        parser.error('--integration-adapter requires --mode mirrortaint')
+    if args.tracefusion_agent and args.mode != 'tracefusion':
+        parser.error('--tracefusion-agent requires --mode tracefusion')
+    if args.wire_capture and args.mode != 'tracefusion':
+        parser.error('--wire-capture requires --mode tracefusion')
     if args.action == 'check':
         check_spec(json.loads((ROOT / 'scenarios/sockshop/compose.json').read_text()))
         manifest = json.loads((HERE / 'cases.json').read_text())
