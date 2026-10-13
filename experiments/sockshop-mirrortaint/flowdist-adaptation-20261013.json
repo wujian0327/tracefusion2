@@ -1,0 +1,234 @@
+{
+  "kind": "flowdist-compatibility-adaptation-checkpoint",
+  "date": "2026-10-13",
+  "upstream_commit": "9a683606aa42289e045cdbfa9391b55e79a3ac05",
+  "upstream_repository_modified": false,
+  "original_engine_jar_modified": false,
+  "runtime_implementation_adapted": true,
+  "accuracy_eligible": false,
+  "performance_eligible": false,
+  "phase_status": "cross-process method tracing restored; full statement/Sock Shop adaptation incomplete",
+  "corrections_to_first_preflight": {
+    "socket_business_stall": "Thread dumps show InetAddress.getLocalHost DNS wait in OTMonitor initialization. Resolving each unique container hostname locally restores unchanged socket business communication. This was not established to be a socket protocol deadlock.",
+    "clock_wiring": "OTBetterInstr records OTMonitor events, original socket wrappers use dtMonitor clock and first-receive map. Only wiring to OTMonitor restores peer maps and method query.",
+    "diagnostic_dir": "artifacts/flowdist-socket-diagnose-20261013"
+  },
+  "unadapted_with_local_hostname": {
+    "artifact_dir": "artifacts/flowdist-socket-localhost-20261013",
+    "business_passed": true,
+    "cross_process_query": "no flow path",
+    "peer_correlation": "peer-correlation-missing"
+  },
+  "adapter": {
+    "artifact_dir": "artifacts/flowdist-socket-adapter-v3-20261013",
+    "jar_sha256": "9a1321ab83a1387f818bb51f1b74ba979a4affbe55b6b038e241cf05cee91f12",
+    "variant": "clock-and-stream-contract",
+    "modifications": [
+      "Use OTMonitor clock and first-receive map in socket wrappers.",
+      "Read complete metadata under partial reads, stop each payload read at its frame boundary.",
+      "Keep remaining bytes per stream, handle single-byte writes/reads, EOF, skip and zero-length reads."
+    ],
+    "wire_header_format_changed": false,
+    "graph_algorithm_changed": false,
+    "token_mode_required": true,
+    "maximum_frame_bytes": 67108864,
+    "maximum_sender_bytes": 4096,
+    "scope": "replaces exactly two runtime socket classes; original monitor/JAR remains unchanged"
+  },
+  "protocol_validation": {
+    "artifact_dir": "artifacts/flowdist-socket-protocol-final-20261013",
+    "passed_checks": 10,
+    "clock_only_variant_failed": "coalesced frames must not expose headers",
+    "failed_evidence_dir": "artifacts/flowdist-socket-protocol-v1-20261013"
+  },
+  "author_thrift_business": {
+    "artifact_dir": "artifacts/flowdist-socket-adapted-v3-20261013",
+    "operations": [
+      {
+        "op": "add",
+        "a": 1,
+        "b": 39,
+        "value": 40,
+        "passed": true
+      },
+      {
+        "op": "minus",
+        "a": 1,
+        "b": 39,
+        "value": -38,
+        "passed": true
+      },
+      {
+        "op": "multi",
+        "a": 1,
+        "b": 39,
+        "value": 39,
+        "passed": true
+      },
+      {
+        "op": "divi",
+        "a": 1,
+        "b": 39,
+        "value": 0,
+        "passed": true
+      }
+    ],
+    "peer_traces": [
+      {
+        "trace": "Remote1791863584048.em",
+        "process": "55@flowdist-preflight-0d01673b88d9",
+        "peers": {
+          "8@flowdist-preflight-0d01673b88d9": 624
+        },
+        "server_add_first": null,
+        "client_main_last": 3220
+      },
+      {
+        "trace": "Remote1791863584105.em",
+        "process": "8@flowdist-preflight-0d01673b88d9",
+        "peers": {
+          "55@flowdist-preflight-0d01673b88d9": 206
+        },
+        "server_add_first": 479,
+        "client_main_last": null
+      }
+    ],
+    "method_query_path_length": 213,
+    "path_kind": "coarse candidate method list, not a validated field/path result"
+  },
+  "method_query_checks": [
+    {
+      "case": "recv-add",
+      "query": "<CalculatorHandler: int add(int,int)>; <CalculatorService$Client: int recv_add()>",
+      "decision": "candidate-flow",
+      "method_path_length": 21,
+      "artifact_dir": "artifacts/flowdist-query-recv-add-20261013",
+      "result_sha256": "3a15ef6b2a6daec7f111818ffe7c836fde5e39573c675e45014bde956008153d",
+      "check_kind": "compatibility, not accuracy oracle"
+    },
+    {
+      "case": "unused-target",
+      "query": "<CalculatorHandler: int add(int,int)>; <CalculatorService$AsyncClient: void add(int,int,org.apache.thrift.async.AsyncMethodCallback)>",
+      "decision": "no-candidate-flow",
+      "method_path_length": null,
+      "artifact_dir": "artifacts/flowdist-query-unused-target-20261013",
+      "result_sha256": "f3b189e9e8db6e8e9abdaf8817e5d73c778af758431d90958c7f78d8cb7d91ad",
+      "check_kind": "compatibility, not accuracy oracle"
+    },
+    {
+      "case": "backward-time",
+      "query": "<CalculatorHandler: int divi(int,int)>; <CalculatorHandler: int add(int,int)>",
+      "decision": "no-candidate-flow",
+      "method_path_length": null,
+      "artifact_dir": "artifacts/flowdist-query-backward-time-20261013",
+      "result_sha256": "d93da379d2b7b30f44fde7c50cb3122f8299ed22472598546accca446e2002c3",
+      "check_kind": "compatibility, not accuracy oracle"
+    }
+  ],
+  "statement_diagnostics": {
+    "artifact_dir": "artifacts/flowdist-socket-adapted-20261013",
+    "full_configuration_status": "240-second timeout in Soot Spark PropWorklist",
+    "wrapTryCatch_disabled_status": "also 240-second timeout; not fixed by disabling option",
+    "jdk_bodies_excluded_branch_mapping_elapsed_ms": 8122.107875,
+    "jdk_bodies_excluded_without_launcher": "fails because original P2 models require a loaded java.io.FileReader RefType",
+    "launcher": "preloads eleven types required by original P2 models; no model-definition edits",
+    "partial_graph_nodes": 2681,
+    "partial_graph_edges": 8297,
+    "outside_scope_missing_cdg_count": 1735,
+    "inside_scope_missing_cdg_methods": [],
+    "strict_refinement_status": "failed",
+    "actual_dynamic_branch_coverage_validated": false,
+    "narrow_method_scope_statement_query": "no path output",
+    "full_candidate_scope_statement_query": {
+      "artifact_dir": "artifacts/flowdist-statement-fullscope-20261013",
+      "reported_statement_count": 696,
+      "reported_type": "Local",
+      "physical_source_sink_processes_different": true,
+      "qualification": "diagnostic only; library scope restriction, coverage missing and process classification require validation"
+    }
+  },
+  "sockshop_status": "No new FlowDist Sock Shop accuracy/runtime/memory measurement. Original Shipping source count remains zero with default configuration.",
+  "next_steps": [
+    "Validate component/process boundaries and dynamic branch coverage in statement refinement.",
+    "Align Shipping/Orders HTTP and DTO source/sink queries; declare Spring reflection entry points.",
+    "Adapt selected Java-to-Java HTTP communication without adding framing to external clients, Go services, MongoDB or RabbitMQ.",
+    "Build shared independent cross-service path oracle including concurrent requests before producing comparison metrics."
+  ],
+  "source_sha256": {
+    "FlowDistSocketProtocolTest.java": "a777cce3a4f383488089131241172115827539c5870fd9e512197ba09298e10b",
+    "FlowDistStaticLauncher.java": "3fd28c0cf40d094c7d318ce72c1a37af8016f9df508d23498edf9846e389b7e5",
+    "FlowDistTraceProbe.java": "aa8d5661a725a40dbf07015b531bfcf8d783b3f256497407ced6c37bff76e854",
+    "build_flowdist_socket_adapter.py": "90194d400fedf11d18321163eeae6bee7115d358a6f984dc2647858690268af0",
+    "flowdist/dtSocketInputStream.java": "1e714e2a25b4ee37c4a034432d50025755028bdaf26c6434fd4596a509377d35",
+    "flowdist/dtSocketOutputStream.java": "9286ba2f1738e9ef9eb4b31593aa64872d71cb625d107c96a438a30ab24d3d5e",
+    "flowdist_preflight.py": "3ad662d7835c29fb72a2402012417cb16de568f03e72abffd0c0a259de14d763",
+    "flowdist_query.py": "bbbdbd562805f4c5a801e4f37de2894d611f8eb753935e0395432898910e526f"
+  },
+  "evidence_sha256": {
+    "artifacts/flowdist-socket-diagnose-20261013/stack-diagnostic-stage.json": "15486f4dfe43e9d7138b16deabac5825b9d09ff0fb74b12ddbc4d9013f078e26",
+    "artifacts/flowdist-socket-diagnose-20261013/stack-diagnostic.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "artifacts/flowdist-socket-diagnose-20261013/work/client/client.log": "e5bc53f1e363a27822f47eaab6148a71e4d6c21421247e081960f7348d6e2863",
+    "artifacts/flowdist-socket-diagnose-20261013/work/server/server.log": "44113529ab610c5068572f48cf8c13199e57b251dd4d6d9f6bf2e45f853318db",
+    "artifacts/flowdist-socket-localhost-20261013/cross-method-analysis-stage.json": "8761e9adb4af7962d544e10ec32fa0487fa8e424244430897c634058d5e49ea0",
+    "artifacts/flowdist-socket-localhost-20261013/cross-method-analysis.log": "5234abfb3f80870c986b830b142e305711dfe07b02a3d69826db3f8d0627493d",
+    "artifacts/flowdist-socket-localhost-20261013/manifest.json": "6ba121b27ea998b914e8e9ebc90c4046e57c148e546b51c1b697f581f649810a",
+    "artifacts/flowdist-socket-localhost-20261013/runtime-stage.json": "63a5bfc4bb844714bc837346a40fcd3dd6b70b9dff65a72c9310d45bcad6f667",
+    "artifacts/flowdist-socket-localhost-20261013/runtime.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "artifacts/flowdist-socket-localhost-20261013/trace-inspection-stage.json": "e0a5f51101a37235fe6cfb4e756fe265232c9c70a966c58e0b2f54e92025ccd9",
+    "artifacts/flowdist-socket-localhost-20261013/trace-inspection.log": "e87cdf7b9bded37d7efc2dcef2e6f965ebe3b45c4ba2db1e1c85d860eae4ce5f",
+    "artifacts/flowdist-socket-localhost-20261013/work/runtime/client/client.log": "d6102460e25129b41e18d44839ecd853348b7bff11bc794704502cba71427bac",
+    "artifacts/flowdist-socket-localhost-20261013/work/runtime/server/server.log": "ae26fcb1831b96790b9e1e1059c9b507708208306b8b32967026810384bd8ba1",
+    "artifacts/flowdist-socket-adapted-20261013/branches-exclude-jdk-stage.json": "8e41b35a482ba19a816cbb86d486a744ac3eb993322dab5c51690dece17ea6d3",
+    "artifacts/flowdist-socket-adapted-20261013/branches-exclude-jdk.log": "500df433fa70016c007e0086716f45f0e607fe162f5320b20a97a861cf4e1881",
+    "artifacts/flowdist-socket-adapted-20261013/branches-nowrap-stage.json": "85cdb739a6433b334ba21f3c91660d63faa8be567d804a00c5b44d63816edb9c",
+    "artifacts/flowdist-socket-adapted-20261013/branches-nowrap.log": "dd878fef23610c63a49bf14b7f4e391806d7127dd80aefaf814128ae83a4aa47",
+    "artifacts/flowdist-socket-adapted-20261013/branches-stage.json": "4371f8af04395ccc2922fbbd9641e432ffa916e7950bd0ef50b382a237b8ef0d",
+    "artifacts/flowdist-socket-adapted-20261013/branches.log": "329642d5cbad70064994249267581a0e8c8ae442ad1fc7c9293844437e9fcc5c",
+    "artifacts/flowdist-socket-adapted-20261013/cross-method-analysis-stage.json": "62be36e78d35e342904e0808d63ce3f07a15ac0477b94b90d150b1c287a04d87",
+    "artifacts/flowdist-socket-adapted-20261013/cross-method-analysis.log": "b504224e21f32d3ff75d7a8b827cf999409ad0ea8a027f5bbae73df56d09c845",
+    "artifacts/flowdist-socket-adapted-20261013/launcher-compile.log": "312e9bd919c699a2f8409f70240177012720c94095f0f4374d44152defc50f7e",
+    "artifacts/flowdist-socket-adapted-20261013/manifest.json": "6ba121b27ea998b914e8e9ebc90c4046e57c148e546b51c1b697f581f649810a",
+    "artifacts/flowdist-socket-adapted-20261013/refine-exclude-jdk-preloaded-stage.json": "27dfa103fe47eaea2cddcddfaee3b3bdd0c7671ac07b78d1ed8034a502b11447",
+    "artifacts/flowdist-socket-adapted-20261013/refine-exclude-jdk-preloaded.log": "f36ceeb5d64611223c00f50f0f9c2d16cbed2c7454ee62286009c67c67c96c68",
+    "artifacts/flowdist-socket-adapted-20261013/refine-exclude-jdk-stage.json": "4f2256584f4ef1e2c3eb515209a4eda7889314d34d910769b30469c8752bce26",
+    "artifacts/flowdist-socket-adapted-20261013/refine-exclude-jdk.log": "39e04be9703d6f70b70579503ab9b6a9e06b020a813fddf5ede0201f7db70a6d",
+    "artifacts/flowdist-socket-adapted-20261013/refine-preloaded-runner.log": "092d1f0126a5145177571269ee08cdabe20f4d3b8a4d6dc4879f4454db56d979",
+    "artifacts/flowdist-socket-adapted-20261013/runtime-stage.json": "e63e17eeae01deae0cc6736f8ee5327c9008cb97d18586d922f887e2dadc8238",
+    "artifacts/flowdist-socket-adapted-20261013/runtime.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "artifacts/flowdist-socket-adapted-20261013/trace-inspection-stage.json": "e7d10c8609b183026f04fb2f2c77f697bcc405b9d940187b023e6805e3f1cc87",
+    "artifacts/flowdist-socket-adapted-20261013/trace-inspection.log": "e8392285d99642949fd0e6c7adb31d1494824d1e89405959f8021661d468adad",
+    "artifacts/flowdist-socket-adapted-20261013/work/runtime/client/client.log": "164d548147f94b1d3bb9ea126ee6d1db1dc673c456443ecdc76054df763cd90e",
+    "artifacts/flowdist-socket-adapted-20261013/work/runtime/server/server.log": "c7715227be16c0d2699be61216b239af49e23f7c7ab8f3d08b4b1b5ea4e1979e",
+    "artifacts/flowdist-socket-adapted-v3-20261013/cross-method-analysis-stage.json": "62101066f210006928017e49ce4fda284579903358aa583f5c56bc96ec57b4b5",
+    "artifacts/flowdist-socket-adapted-v3-20261013/cross-method-analysis.log": "9d9b23027fed4502516b74ad0f80306da47229fb1a5d4360bf28d16564525591",
+    "artifacts/flowdist-socket-adapted-v3-20261013/manifest.json": "6ba121b27ea998b914e8e9ebc90c4046e57c148e546b51c1b697f581f649810a",
+    "artifacts/flowdist-socket-adapted-v3-20261013/runtime-stage.json": "d2c4fa4c18a1d5cf5f753470e98766879573f21b1e2ac1b2db67092fd2e60e01",
+    "artifacts/flowdist-socket-adapted-v3-20261013/runtime.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "artifacts/flowdist-socket-adapted-v3-20261013/trace-inspection-stage.json": "2c3e53d359f6c038abf96738ac82c03ea924dbbe3f57d108daefe44265984e07",
+    "artifacts/flowdist-socket-adapted-v3-20261013/trace-inspection.log": "2e8572c18235322633ff74b5e76b2dd1c1a7742f7f5e8840b72c7ea00caebc32",
+    "artifacts/flowdist-socket-adapted-v3-20261013/work/runtime/client/client.log": "a9ee6393c6b4b13ff56c5d45fc3b88698beefc04b5266bdee70f9656159193fb",
+    "artifacts/flowdist-socket-adapted-v3-20261013/work/runtime/server/server.log": "8cf22859086d2c176d4a96bba3949b8110a2858e8f6e8cae4df90e9809e43151",
+    "artifacts/flowdist-socket-adapter-20261013/compile.log": "312e9bd919c699a2f8409f70240177012720c94095f0f4374d44152defc50f7e",
+    "artifacts/flowdist-socket-adapter-20261013/manifest.json": "5b952e2f07375f7a286dcf265dd9f5f7ca1c0d6872d74ef97e70eedae0b56234",
+    "artifacts/flowdist-socket-adapter-v3-20261013/compile.log": "312e9bd919c699a2f8409f70240177012720c94095f0f4374d44152defc50f7e",
+    "artifacts/flowdist-socket-adapter-v3-20261013/manifest.json": "e3f58ca67b9747cc165a14f86b6a5254c887ecc67d1cf20735abf3fc29144d2f",
+    "artifacts/flowdist-socket-protocol-v1-20261013/protocol-tests-stage.json": "ba291fe28e75e2671c51e795cbea37119c181692fc7861c064bd3a598a3d99a5",
+    "artifacts/flowdist-socket-protocol-v1-20261013/protocol-tests.log": "33302dd937153b1fd6fb90a1395d31b3464af75426c0076c41595647167b69d3",
+    "artifacts/flowdist-socket-protocol-final-20261013/protocol-tests-stage.json": "192c3d0689553dde104fc7cedea0ab7801b52a55d9e29d485d7aa8dc2844e1d8",
+    "artifacts/flowdist-socket-protocol-final-20261013/protocol-tests.log": "8438bd5cca7562a709c3baf70ca41ad4df8258514078c80c84f77b5e3b41b469",
+    "artifacts/flowdist-statement-diagnostic-20261013/manifest.json": "f2a59bb3b343cedfa8a9cb8423e4dc62be7f540772eff938de9c8b102592c28d",
+    "artifacts/flowdist-statement-diagnostic-20261013/statement-analysis-stage.json": "55e03b6a0b5279465c6e6f7f7f14ae0435999bf2a20407052bf74846821f24ff",
+    "artifacts/flowdist-statement-diagnostic-20261013/statement-analysis.log": "aea22e116b9a97ca4611fc9870b7d9e048d8b7cad73ee35ea9fd081cc8520f62",
+    "artifacts/flowdist-statement-fullscope-20261013/statement-analysis-stage.json": "9ad6b428bbefb225fe3f60dcb309d1105ecf6104d47146bf06d671c577b62f33",
+    "artifacts/flowdist-statement-fullscope-20261013/statement-analysis.log": "46ed161c432d6d7b6ecb0c0a336c1543934181383ef1aa764c1987c075ba59b6",
+    "artifacts/flowdist-query-recv-add-20261013/method-query-stage.json": "2dfdbd78ef85203dfbb2b58a93b6082e4e0ebe4b91979a3e3018c5dd720aa7e2",
+    "artifacts/flowdist-query-recv-add-20261013/method-query.log": "2e113636bd38b3c5d22cbaef7df02429234c6aeb971aef8f45bee6970f859151",
+    "artifacts/flowdist-query-recv-add-20261013/result.json": "3a15ef6b2a6daec7f111818ffe7c836fde5e39573c675e45014bde956008153d",
+    "artifacts/flowdist-query-unused-target-20261013/method-query-stage.json": "566e14d16be11f729434eed3456b81128e2187dc5f5f1f0712391047122c501f",
+    "artifacts/flowdist-query-unused-target-20261013/method-query.log": "33eaa743083f5b94ccc06691289f0baa6c4d84727b284873cde79df28f25b9b9",
+    "artifacts/flowdist-query-unused-target-20261013/result.json": "f3b189e9e8db6e8e9abdaf8817e5d73c778af758431d90958c7f78d8cb7d91ad",
+    "artifacts/flowdist-query-backward-time-20261013/method-query-stage.json": "2e86318a3c5ff418e686fd2cbdf5d3a255529d19cf63674dabb9b1d90d977428",
+    "artifacts/flowdist-query-backward-time-20261013/method-query.log": "a149ecdc4c95c9115d923ffd5ec7374edef49505fa8fa9337a05f7fad379ca1c",
+    "artifacts/flowdist-query-backward-time-20261013/result.json": "d93da379d2b7b30f44fde7c50cb3122f8299ed22472598546accca446e2002c3"
+  }
+}

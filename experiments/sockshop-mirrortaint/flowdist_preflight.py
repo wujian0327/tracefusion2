@@ -114,7 +114,11 @@ def execute(repo,out,name,arguments,entry='java',timeout=240):
         raise ValueError('Refusing to replace stage evidence: '+name)
     container_name='flowdist-preflight-'+uuid.uuid4().hex[:12]
     command=docker(repo,out,entry)
-    command[2:2]=['--name',container_name]
+    # --network none does not add the container hostname to /etc/hosts.
+    # Java 8 getLocalHost() otherwise waits for unreachable DNS during monitor
+    # initialization. Keep each container's identity unique and resolve locally.
+    command[2:2]=['--name',container_name,'--hostname',container_name,
+                 '--add-host',container_name+':127.0.0.1']
     command+=arguments
     start=time.perf_counter_ns()
     timed_out=False
@@ -146,6 +150,24 @@ def static_args(class_name, directory, dependencies=''):
             '-process-dir','/work/classes','-allowphantom']
 
 
+def compile_static_launcher(repo,out):
+    source=Path(__file__).with_name('FlowDistStaticLauncher.java')
+    classes=out/'work/launcher';classes.mkdir(exist_ok=False)
+    deps=out/'launcher-compile-deps'
+    # Compile against extracted classes to bypass the original invalid ZIP entry.
+    with ZipFile(repo/'tool/soot-trunk.jar') as z:
+        for name in z.namelist():
+            if name.endswith('.class') and not name.startswith('/'):
+                file=deps/name;file.parent.mkdir(parents=True,exist_ok=True);file.write_bytes(z.read(name))
+    command=['javac','--release','8','-cp',str(deps),'-d',str(classes),str(source)]
+    p=subprocess.run(command,capture_output=True,text=True,timeout=60)
+    (out/'launcher-compile.log').write_text(p.stdout+p.stderr)
+    if p.returncode:raise ValueError('Static launcher compilation failed')
+    save(out/'launcher-manifest.json',{'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),
+        'compile_command':command,'purpose':'preload signatures required by original P2 models',
+        'model_definitions_modified':False,'engine_jar_modified':False})
+
+
 def stage(repo,out,name):
     work=out/'work'
     if (out/(name+'.log')).exists() or (out/(name+'-stage.json')).exists():
@@ -154,20 +176,34 @@ def stage(repo,out,name):
     dependencies=''.join(':/work/lib/'+f.name for f in sorted((work/'lib').glob('*.jar')))
     if name=='source-sink':
         arguments=['-Xmx2g','-ea','-cp',CP+dependencies,'disttaint.OTBetterSourceSink','/work/classes']
-    elif name in ('scope','instrument','branches','refine'):
+    elif name in ('scope','instrument','branches','refine','branches-nowrap','refine-nowrap','branches-exclude-jdk','refine-exclude-jdk','refine-exclude-jdk-preloaded'):
         klass,directory={'scope':('OTBetterMethods','OTMethods'),'instrument':('OTBetterInstr','OTInstrumented'),
-                         'branches':('OTBranchInst','OTBranches'),'refine':('OT3Inst','OT3Instrumented')}[name]
+                         'branches':('OTBranchInst','OTBranches'),'refine':('OT3Inst','OT3Instrumented'),
+                         'branches-nowrap':('OTBranchInst','OTBranchesNowrap'),
+                         'refine-nowrap':('OT3Inst','OT3InstrumentedNowrap'),
+                         'branches-exclude-jdk':('OTBranchInst','OTBranchesExcludedJdk'),
+                         'refine-exclude-jdk':('OT3Inst','OT3InstrumentedExcludedJdk'),
+                         'refine-exclude-jdk-preloaded':('OT3Inst','OT3InstrumentedExcludedJdkPreloaded')}[name]
         (work/directory).mkdir(exist_ok=True)
         arguments=static_args(klass,directory,dependencies)
         if name=='instrument' and manifest.get('socket_enabled'):
             arguments+=['-socket']
-        if name in ('branches','refine'):
-            arguments+=['-slicectxinsens','-wrapTryCatch','-intraCD','-interCD','-exInterCD','-dumpFunctionList','-serializeVTG']
-        if name=='refine':
-            mapping=work/'OTBranches/entitystmt.out.branch'
+        if name.startswith(('branches','refine')):
+            arguments+=['-slicectxinsens','-intraCD','-interCD','-exInterCD','-dumpFunctionList','-serializeVTG']
+            if not name.endswith('-nowrap'):arguments+=['-wrapTryCatch']
+        if '-exclude-jdk' in name:
+            arguments+=['-no-bodies-for-excluded','-exclude','java.*','-exclude','javax.*',
+                        '-exclude','sun.*','-exclude','com.sun.*']
+        if name.startswith('refine'):
+            branch_directory='OTBranchesExcludedJdk' if '-exclude-jdk' in name else ('OTBranchesNowrap' if name.endswith('-nowrap') else 'OTBranches')
+            mapping=work/branch_directory/'entitystmt.out.branch'
             if not mapping.is_file() or not mapping.stat().st_size:
                 raise ValueError('Validated branch mapping required before refinement')
             shutil.copyfile(mapping,work/'entitystmt.out.branch')
+        if name.endswith('-preloaded'):
+            compile_static_launcher(repo,out)
+            arguments[3]+=':/work/launcher'
+            arguments[4:5]=['FlowDistStaticLauncher',arguments[4]]
     elif name in ('method-analysis','cross-method-analysis'):
         query=PILOT_QUERY if name=='method-analysis' else CROSS_QUERY
         if name=='method-analysis' and PILOT_QUERY not in (work/'sourceSinkMethodPairDiffClass.txt').read_text().splitlines():
@@ -186,9 +222,18 @@ def stage(repo,out,name):
               'scope':['coveredMethods.txt'],'instrument':['OTInstrumented/CalculatorClient.class','OTInstrumented/CalculatorServer.class'],
               'method-analysis':['methodList.out','methodsInPair.out'],
               'cross-method-analysis':['methodList.out','methodsInPair.out'],
-              'branches':['OTBranches/entitystmt.out.branch'],'refine':['OT3Instrumented/staticVtg.dat']}[name]
+              'branches':['OTBranches/entitystmt.out.branch'],'refine':['OT3Instrumented/staticVtg.dat'],
+              'branches-nowrap':['OTBranchesNowrap/entitystmt.out.branch'],
+              'refine-nowrap':['OT3InstrumentedNowrap/staticVtg.dat'],
+              'branches-exclude-jdk':['OTBranchesExcludedJdk/entitystmt.out.branch'],
+              'refine-exclude-jdk':['OT3InstrumentedExcludedJdk/staticVtg.dat'],
+              'refine-exclude-jdk-preloaded':['OT3InstrumentedExcludedJdkPreloaded/staticVtg.dat']}[name]
     missing=[n for n in expected if not (work/n).is_file() or (work/n).stat().st_size==0]
     result.update(expected_outputs=expected,missing_outputs=missing,status='failed' if missing else 'output-present')
+    if name.endswith('-nowrap'):
+        result['configuration_variant']='author options with wrapTryCatch disabled; diagnostic, not full author configuration'
+    if '-exclude-jdk' in name:
+        result['configuration_variant']='JDK library bodies excluded; diagnostic scope restriction, not full author configuration'
     if name=='source-sink':
         for label,file in (('source_method_count','coveredSourceMethods.txt'),('sink_method_count','coveredSinkMethods.txt')):
             result[label]=len((work/file).read_text().splitlines()) if (work/file).exists() else 0
@@ -208,12 +253,26 @@ def stage(repo,out,name):
     return result
 
 
-def runtime(repo,out):
+def runtime(repo,out,adapter=None):
+    if (out/'runtime.log').exists() or (out/'runtime-stage.json').exists():
+        raise ValueError('Refusing to replace runtime evidence')
+    if not adapter and (out/'work/runtime-adapter.jar').exists():
+        raise ValueError('Existing adapter must be explicitly supplied')
+    if adapter:
+        manifest=json.loads((adapter.parent/'manifest.json').read_text())
+        digest=hashlib.sha256(adapter.read_bytes()).hexdigest()
+        if manifest.get('kind')!='flowdist-socket-clock-wiring-adapter' or manifest['jar_sha256']!=digest:
+            raise ValueError('Unverified runtime adapter')
+        with ZipFile(adapter) as z:
+            if set(z.namelist())!={'disttaint/dtSocketInputStream.class','disttaint/dtSocketOutputStream.class'}:
+                raise ValueError('Adapter must replace only the two socket wrappers')
+        shutil.copyfile(adapter,out/'work/runtime-adapter.jar')
     script=out/'work/run-example.sh'
     script.write_text('''#!/bin/sh
 set -eu
 mkdir -p /work/runtime/server/test1 /work/runtime/client/test1
 cp_value="/work/OTInstrumented:/flowdist/tool/*"
+if [ -f /work/runtime-adapter.jar ]; then cp_value="/work/runtime-adapter.jar:$cp_value"; fi
 cd /work/runtime/server
 java -Xmx256m -ea -cp "$cp_value" CalculatorServer > server.log 2>&1 &
 server_pid=$!
@@ -249,19 +308,39 @@ exit 3
     passed={r['op'] for r in checked}=={'add','minus','multi','divi'} and all(r['passed'] for r in checked) and len(traces)==2
     result.update(status='example-business-and-traces-passed' if passed else 'failed',operations=checked,
                   traces={str(p.relative_to(out)):hashlib.sha256(p.read_bytes()).hexdigest() for p in traces})
+    if adapter:result['runtime_adapter_sha256']=digest
     save(out/'runtime-stage.json',result)
     if not passed:raise ValueError('Example business or trace coverage failed')
     return result
 
 
+def inspect_traces(repo,out):
+    source=Path(__file__).with_name('FlowDistTraceProbe.java')
+    classes=out/'work/probe';classes.mkdir(exist_ok=True)
+    command=['javac','--release','8','-d',str(classes),str(source)]
+    subprocess.run(command,check=True,capture_output=True,text=True,timeout=30)
+    result=execute(repo,out,'trace-inspection',['-cp','/work/probe','FlowDistTraceProbe','/work/traces/test1'])
+    traces=json.loads((out/'trace-inspection.log').read_text())
+    identities={t['process'] for t in traces}
+    reciprocal=len(identities)==2 and all(identities-{t['process']} <= set(t['peers']) for t in traces)
+    roles=sum(t['server_add_first'] is not None for t in traces)==1 and sum(t['client_main_last'] is not None for t in traces)==1
+    result.update(traces=traces,reciprocal_peer_correlation=reciprocal,distinct_server_client_roles=roles,
+                  status='peer-correlation-validated' if reciprocal and roles else 'peer-correlation-missing',
+                  compile_command=command,probe_sha256=hashlib.sha256(source.read_bytes()).hexdigest())
+    save(out/'trace-inspection-stage.json',result)
+    return result
+
+
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('action',choices=['prepare','prepare-shipping','source-sink','scope','instrument','runtime','method-analysis','cross-method-analysis','branches','refine'])
+    p.add_argument('action',choices=['prepare','prepare-shipping','source-sink','scope','instrument','runtime','method-analysis','cross-method-analysis','trace-inspection','branches','refine','branches-nowrap','refine-nowrap','branches-exclude-jdk','refine-exclude-jdk','refine-exclude-jdk-preloaded'])
     p.add_argument('--repo',type=Path,required=True);p.add_argument('--out',type=Path,required=True)
     p.add_argument('--shipping-jar',type=Path)
     p.add_argument('--socket',action='store_true',help='Record and enable the optional socket instrumentation in a new Thrift preparation')
+    p.add_argument('--runtime-adapter',type=Path,help='Disclosed socket clock adapter; accepted only for runtime')
     args=p.parse_args();repo=args.repo.resolve();out=args.out.resolve()
     if args.socket and args.action!='prepare':p.error('--socket is only accepted with prepare')
+    if args.runtime_adapter and args.action!='runtime':p.error('--runtime-adapter is only accepted with runtime')
     if args.action=='prepare':
         prepare(repo,out)
         manifest=json.loads((out/'manifest.json').read_text());manifest['socket_enabled']=args.socket
@@ -270,4 +349,5 @@ if __name__=='__main__':
     elif args.action=='prepare-shipping':
         if not args.shipping_jar:p.error('--shipping-jar required')
         prepare_shipping(repo,out,args.shipping_jar.resolve());print('Prepared original Shipping classes and dependencies')
-    else:print(json.dumps(runtime(repo,out) if args.action=='runtime' else stage(repo,out,args.action),indent=2))
+    elif args.action=='trace-inspection':print(json.dumps(inspect_traces(repo,out),indent=2))
+    else:print(json.dumps(runtime(repo,out,args.runtime_adapter.resolve() if args.runtime_adapter else None) if args.action=='runtime' else stage(repo,out,args.action),indent=2))

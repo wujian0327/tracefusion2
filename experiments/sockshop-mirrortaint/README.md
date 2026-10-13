@@ -391,6 +391,9 @@ python3 experiments/sockshop-mirrortaint/compare_five_methods.py \
 
 ## FlowDist 候选基线兼容性预检（2026-10-13）
 
+本节保留首轮预检状态。后续已定位启动等待的 DNS 原因，并修复通信时钟关联，见下节；
+首轮 socket 模式未完成业务，不能据此断言原版通信协议发生死锁。
+
 使用作者仓库 `https://bitbucket.org/wsucailab/flowdist.git`，固定提交
 `9a683606aa42289e045cdbfa9391b55e79a3ac05`。作者源码、例子和工具 JAR 未修改；
 `flowdist_preflight.py` 将绝对路径调整为容器挂载，使用固定 Orders 镜像中的 Java 8，
@@ -443,3 +446,89 @@ done
 下一步先诊断 socket 模式业务阻塞，验证真实跨进程传播，再对齐 Shipping HTTP／DTO
 来源和目标、处理 Spring 入口并完成语句级分析。只有边界和业务正确性通过后，才测量
 相同工作负载下的准确率、在线开销及单列离线开销。当前资格标志仍为 false。
+
+## FlowDist 跨进程适配进展（2026-10-13）
+
+原始仓库及 FLOWDIST.jar 未修改。线程栈显示首轮启动等待发生在
+`InetAddress.getLocalHost`：`--network none` 容器的主机名没有加入 `/etc/hosts`，
+Java 等待不可达 DNS。启动脚本现在给每个容器分配独立主机名并添加本地解析；
+这既消除等待，也避免后续多容器的进程 ID 因同名而碰撞。
+修复环境后，原版 socket 模式四种计算通过，但 OTMonitor 的轨迹没有对端接收映射，
+服务端到客户端查询仍返回无路径。
+
+第二处是运行时引用不一致：OTBetterInstr 的方法事件写入 OTMonitor，
+原版两个 socket 包装器却使用 dtMonitor 的时钟和接收映射。
+`build_flowdist_socket_adapter.py` 生成独立 JAR，只替换两个 socket 类，将引用统一到
+OTMonitor。原版方法插桩输出、监视器和分析器保留；适配 JAR 置于运行时 classpath 前面。
+只修复引用就恢复了两端首次接收映射和跨进程候选方法路径。
+因此配置名称应为 **FlowDist＋socket 时钟／流契约适配层**，不能称为未经修改的原版。
+
+协议检查随后发现原版读取会跨过帧边界，把下一帧元数据交给业务；其剩余字节状态还位于
+共享进程时钟，单字节写入声明长度 4 而实际写入 1，部分头部读取假设一次 read 就读满。
+`--robust-framing` 用本仓库 `flowdist/dtSocket*.java` 修复这些问题。
+保留作者线格式（总长度、逻辑时钟、发送进程 ID 长度／内容、业务字节），不更改图算法。
+接收事件按原版首次接收规则写入 OTMonitor；支持 token 模式，帧上限 64 MiB，
+发送者 ID 上限 4096 字节。其他协议／模式尚未验证。
+
+最终适配层通过 `FlowDistSocketProtocolTest.java` 的 10 项检查，涵盖多帧合并、碎片头部／
+载荷、多输入流交错、零值字节、单字节写入、零长度读取、EOF、截断头部／载荷、
+跳过业务字节和非法帧。只修复时钟引用的早期版本在多帧检查失败，证据仍保留。
+作者 Thrift 例子的四种计算再次通过。`FlowDistTraceProbe.java` 直接读取实际 Remote 轨迹，
+确认两个不同进程、服务端来源与客户端目标的不同角色，以及相互首次接收映射。
+
+在冻结的最终两端轨迹上，原版 OTAnalysisAll 给出：
+
+| 查询检查 | 实际结果 | 含义 |
+| --- | --- | --- |
+| 服务端 add → 客户端 main | 213 个候选方法 | 跨进程关联已恢复；候选集合不等于精确路径 |
+| 服务端 add → 客户端 recv_add | 21 个候选方法 | 实际接收返回值的跨进程正例 |
+| 服务端 add → 未调用的 AsyncClient.add | 无路径 | 实际存在但未执行的目标反例 |
+| 服务端 divi → 本次执行中更早的 add | 无路径 | 四次计算、无第二轮调用时的时间倒序反例 |
+
+这些是兼容性／因果次序检查，**不能换算成通用准确率、precision/recall 或字段级正确率**。
+`flowdist_query.py` 在新目录运行查询，冻结输入轨迹摘要，明确区分无路径与执行失败，
+不覆盖之前的候选方法文件。
+
+完整分支配置以及关闭 wrapTryCatch 的诊断配置均在 240 秒超时；线程栈位于
+Soot Spark 的 PropWorklist。单独排除 JDK 库方法体后，分支映射在约 8.1 秒完成。
+这一范围限制不是完整作者配置。精化接着遇到原版 P2 模型要求未加载 FileReader 类型；
+`FlowDistStaticLauncher.java` 仅预加载原模型使用的 11 个类型签名，没有修改模型定义。
+随后生成 2681 节点／8297 边的图，但报告 1735 个未计算 CDG 的方法，全部位于
+213 个候选方法范围之外；严格检查仍将阶段标为 failed，保留原始诊断，不自动放行。
+
+该图的语句查询只用于排查。使用 21 方法范围时没有输出路径；使用完整 213 方法范围时，
+原版分析器输出 696 段并标为 Local，但来源／目标实测位于不同进程。这一分类及
+共享类型的进程边界仍需核实，不能仅凭退出码 0／输出存在认定完整语句重建正确。
+本轮还没有验证动态分支覆盖，不能把静态分支映射当成运行覆盖。
+
+新检查点为 `flowdist-adaptation-20261013.json`，包含修复说明、来源摘要、实际进程信息、
+查询检查及所有日志摘要。主要目录：
+`artifacts/flowdist-socket-adapted-v3-20261013`、
+`artifacts/flowdist-socket-adapter-v3-20261013`、
+`artifacts/flowdist-socket-protocol-final-20261013`；静态诊断及失败保留在
+`artifacts/flowdist-socket-adapted-20261013` 与 `artifacts/flowdist-statement-*-20261013`。
+
+从空目录复现适配后的方法级流程：
+
+```bash
+python3 experiments/sockshop-mirrortaint/build_flowdist_socket_adapter.py \
+  --repo artifacts/external-tools/flowdist --out artifacts/flowdist-adapter-new --robust-framing
+python3 experiments/sockshop-mirrortaint/flowdist_preflight.py prepare --socket \
+  --repo artifacts/external-tools/flowdist --out artifacts/flowdist-adapted-new
+for stage in source-sink scope instrument; do
+  python3 experiments/sockshop-mirrortaint/flowdist_preflight.py "$stage" \
+    --repo artifacts/external-tools/flowdist --out artifacts/flowdist-adapted-new || break
+done
+python3 experiments/sockshop-mirrortaint/flowdist_preflight.py runtime \
+  --repo artifacts/external-tools/flowdist --out artifacts/flowdist-adapted-new \
+  --runtime-adapter artifacts/flowdist-adapter-new/flowdist-socket-adapter.jar
+python3 experiments/sockshop-mirrortaint/flowdist_preflight.py cross-method-analysis \
+  --repo artifacts/external-tools/flowdist --out artifacts/flowdist-adapted-new
+python3 experiments/sockshop-mirrortaint/flowdist_preflight.py trace-inspection \
+  --repo artifacts/external-tools/flowdist --out artifacts/flowdist-adapted-new
+```
+
+后续先验证语句精化的进程边界和实际分支覆盖，再为 Shipping／Orders 明确 HTTP／DTO
+来源、目标与 Spring 反射入口。跨服务接入需要选择 Java 对端；不能把 socket 帧附加到
+外部 HTTP 客户端、Go 服务、MongoDB 或 RabbitMQ 的原始协议中。
+本轮没有新增 FlowDist 的 Sock Shop 准确率、Runtime Cost 或 Memory Cost，资格仍为 false。
