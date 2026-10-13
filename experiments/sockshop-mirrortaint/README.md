@@ -588,3 +588,59 @@ python3 -m unittest discover -s experiments/sockshop-mirrortaint -p test_flowdis
 
 新增检查点 `flowdist-coverage-20261013.json` 冻结本阶段代码和证据摘要。
 下一步是处理语句图的进程范围和完整性，再接入 Sock Shop Java Orders → Shipping。
+
+### 扩大静态范围与原始 Sock Shop HTTP 接入（2026-10-13）
+
+CDG 报错来自范围不一致：StaticTransferGraphOT 只为候选方法建立局部 CDG，
+InterCDGraphEx.computeAllInterCDs 却遍历所有应用方法。保持原算法，改为使用
+stmtids.out 中全部 1948 个方法作静态范围后，原版生成 24440 节点、121314 边，
+不再报告缺失 CDG；19882 条语句和真实分支覆盖的编号仍逐项对齐。
+该配置扩大了工作范围，关闭候选方法裁剪，因此会改变成本；JDK 方法体排除
+仍保留，不能据此宣称全局图已经完整或直接使用为论文性能数据。
+
+`flowdist_expanded_preflight.py` 固定这个范围变更、原版配置及审计过程。
+首次证据在 `artifacts/flowdist-expanded-runtime-20261013`；真实覆盖为 server
+490／5672 分支、2239 语句，client 470／5672 分支、2042 语句，合并 2888 语句。
+对应 `artifacts/flowdist-expanded-statement-20261013` 的原版语句查询输出 570 段、
+仍标为 Local；范围错误消除后，该分类仍不能解释为实际进程相同。
+这几个长度是原分析器的候选语句输出，不保证逐段有序或字段依赖精确。
+
+HTTP 接入已在 `artifacts/flowdist-sockshop-http-final-20261013` 验证：
+
+- 原始 Orders AsyncGetService.postResource 经真实 HTTP 调用原始 Spring ShippingController.postShipping。
+- 客户端请求拦截器传递版本化 `X-FlowDist-Clock`；服务端 Filter 在业务处理前接收，
+  ResponseBodyAdvice 在业务返回后、响应序列化前发送。JSON 请求体和响应体不变。
+- 使用原始 OTMonitor 的 Lamport 时钟和每个对端的首次接收规则，不使用 traceId/spanId
+  或业务字段值关联；客户端只处理明确配置的 Shipping URI。
+- 两个 JVM 分别使用各自原始依赖目录，避免 Orders Spring Boot 1.4.4 与 Shipping 1.4.0 混装。
+- 普通无时钟头请求返回 201、不同 id/name 值保留，响应不添加时钟头；
+  带时钟的同值 id/name 请求也保持业务返回，原版 Remote 轨迹验证双向对端关系。
+- 原版 OTAnalysisAll 对 postResource → postShipping 输出 3 个候选方法；
+  不能当作完整信息流路径，也不能换算字段级准确率。
+
+这是通信兼容性检查：客户端直接构造原始 AsyncGetService，尚未执行完整
+OrdersController.newOrder 或 Spring 异步代理。方法事件由明确的调用／HandlerMethod
+分派边界钩子记录，尚未进行 Sock Shop 的 Soot 语句与分支插桩。
+RabbitMQ 不可用，原始 Shipping 控制器执行自身的捕获并接受分支；没有验证 MQ 投递。
+Java 时钟检查覆盖首次接收不覆盖、较小远端时钟不会倒退、非法报文不修改状态。
+业务类和原作者分析器 JAR 均未修改，HTTP 适配是披露的协议传输变体。
+
+保留 HTTP 初版 Spring 依赖混装失败目录与 v2 重复终止／返回事件缺少入口的诊断目录；
+最终结果只引用 final 目录。错误检测也已补充没有冒号的 Java 异常行。
+新增检查点为 `flowdist-http-20261013.json`，准确率与性能资格仍为 false。
+
+```bash
+python3 experiments/sockshop-mirrortaint/flowdist_expanded_preflight.py \
+  --repo artifacts/external-tools/flowdist --scope artifacts/flowdist-socket-adapted-20261013 \
+  --mapped-statements artifacts/flowdist-socket-adapted-20261013/work/OT3InstrumentedExcludedJdkPreloaded/stmtids.out \
+  --branch-adapter artifacts/flowdist-branch-adapter-v2-20261013/flowdist-branch-adapter.jar \
+  --socket-adapter artifacts/flowdist-socket-adapter-v3-20261013/flowdist-socket-adapter.jar \
+  --out artifacts/flowdist-expanded-new
+python3 experiments/sockshop-mirrortaint/flowdist_http_preflight.py \
+  --repo artifacts/external-tools/flowdist --orders artifacts/sockshop-orders-original-20261012/app.jar \
+  --shipping artifacts/sockshop-five-methods-original-20261013/shipping.jar \
+  --out artifacts/flowdist-http-new
+```
+
+下一阶段将 HTTP 适配接入完整 Orders.newOrder，恢复真实异步调用与 RabbitMQ，
+并解决 Spring 反射入口与跨服务 DTO 的静态分析范围，再冻结跨进程字段查询。

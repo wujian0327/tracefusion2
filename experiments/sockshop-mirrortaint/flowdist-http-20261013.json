@@ -1,0 +1,218 @@
+{
+  "kind": "flowdist-expanded-static-scope-and-sockshop-http-checkpoint",
+  "date": "2026-10-13",
+  "upstream_commit": "9a683606aa42289e045cdbfa9391b55e79a3ac05",
+  "source_sha256": {
+    "FlowDistTraceProbe.java": "430a3e3f46357d1214cd1003973020e4e165ac9a8364fabd0c324b7ae0950d2f",
+    "FlowDistHttpConfiguration.java": "cca969e5641e97f09da64502dd086a0db0ec4ce91de8e721c9d87e44e65e705a",
+    "FlowDistSockShopHttpProbe.java": "e5f978459c3fb78e49f5d3c8dcbe2c35a6d6e59066e04278d311a86f11e05ab6",
+    "flowdist/FlowDistHttpClock.java": "47d5412ba4eff341c4b90d502ced92f3a111dadc6f7b3c7095e8633297b60bcf",
+    "flowdist/FlowDistHttpClockTest.java": "c9dbb18f9dac0f96679adb572ba4d8c3507546599d9d201e98377f044f10ee05",
+    "flowdist_preflight.py": "836372b8d717a8fd6758c9d0936d39bb8a395462a1f186a1be0b110df233f930",
+    "flowdist_http_preflight.py": "9fd8f118c28f5bf34a74a7f8c288044860fb2683f3b06fe7f8fdd597f3b2404b",
+    "flowdist_expanded_preflight.py": "5cdd166f1fe7a0564c6b2f5f24e2914144b2b876737e70f0f3d86a7c05898c46"
+  },
+  "evidence_sha256": {
+    "artifacts/flowdist-sockshop-http-final-20261013/compile.log": "312e9bd919c699a2f8409f70240177012720c94095f0f4374d44152defc50f7e",
+    "artifacts/flowdist-sockshop-http-final-20261013/http-clock-checks-stage.json": "50635cf5f2f3de1971284d3d802e92716662c45d76f35fd77c323a35d23b753c",
+    "artifacts/flowdist-sockshop-http-final-20261013/http-clock-checks.log": "51610a340bad7a239c9331133e4e31211c372b08c91c47a597e3f9ae3cba64f8",
+    "artifacts/flowdist-sockshop-http-final-20261013/http-method-analysis-stage.json": "80f2bb8f3b05567c8cd6318bda4507a1fa30eb1764b21b94500da7adc6fd1397",
+    "artifacts/flowdist-sockshop-http-final-20261013/http-method-analysis.log": "13fb1d03dccbe2b4c69a8a0372531b7d3691c4556ef1f7da3bbfe4bf0ac2d292",
+    "artifacts/flowdist-sockshop-http-final-20261013/http-runtime-stage.json": "2b717b3af0e11074ac288e863f2aa54c27a20a8652c048d30c4497983e8a117e",
+    "artifacts/flowdist-sockshop-http-final-20261013/http-runtime.log": "d5268e6d2f1368bd16cf88d737f64136b0151143617ec716a1000de06dae7d46",
+    "artifacts/flowdist-sockshop-http-final-20261013/manifest.json": "e5b86dcef8e21d526d67db0eb089da9b3118b3d11233d5ccee279db2f19f860c",
+    "artifacts/flowdist-sockshop-http-final-20261013/result.json": "80ce80cbd3e6de4694d72576ecb7cb3e0f90c897eecbfbf6ad3d11fe91630304",
+    "artifacts/flowdist-sockshop-http-final-20261013/trace-inspection-stage.json": "bf71660eab1136c2674ac2c3e90728350a218be4153a7e285c7cfa7b854c108d",
+    "artifacts/flowdist-sockshop-http-final-20261013/trace-inspection.log": "2e8dfe2a9a24617164fc5e389d1546e13adffbef5c845a8794f52d84e361c127",
+    "artifacts/flowdist-sockshop-http-final-20261013/work/runtime/orders/client.log": "d5268e6d2f1368bd16cf88d737f64136b0151143617ec716a1000de06dae7d46",
+    "artifacts/flowdist-sockshop-http-final-20261013/work/runtime/shipping/server.log": "5b59292776861eb049eb0f0788d3bda446bff56e9b8f74fa0af14409caff37a8",
+    "artifacts/flowdist-expanded-repro-20261013/coverage-audit.json": "eeba8f5aea0bfab1c750abec3bd24d05ae936cc4325cec8f8ffd6bb527c1fe5a",
+    "artifacts/flowdist-expanded-repro-20261013/runtime/branch-probe-instrumentation-stage.json": "5caff57bfe03e684607c50cdab6e63134b0997c9493c84789991f515b09e35b5",
+    "artifacts/flowdist-expanded-repro-20261013/runtime/branch-probe-instrumentation.log": "e1c814aa66aeb05cbc35b4273a5f0cb3490340e4f4b1afb73c644b4c2fc10095",
+    "artifacts/flowdist-expanded-repro-20261013/runtime/cross-method-analysis-stage.json": "314b0aef90e8a39a27311950a3cd8bdfefc64e4b242e550b1d7d14ed42989afd",
+    "artifacts/flowdist-expanded-repro-20261013/runtime/cross-method-analysis.log": "0812df737609222fa156278d36baec9a0cc65e9c4f177c8f73fb99d8b4284520",
+    "artifacts/flowdist-expanded-repro-20261013/runtime/expanded-refinement-stage.json": "3252a1fc76b5c6f8b71d527aaae9835767df92fad7ea74efe50948b362fca32f",
+    "artifacts/flowdist-expanded-repro-20261013/runtime/expanded-refinement.log": "1995cf51e0f6f7e6cbdd53eddf11afe92d71d027d28da98303a61a2e4088635b",
+    "artifacts/flowdist-expanded-repro-20261013/runtime/launcher-compile.log": "312e9bd919c699a2f8409f70240177012720c94095f0f4374d44152defc50f7e",
+    "artifacts/flowdist-expanded-repro-20261013/runtime/launcher-manifest.json": "e299c9273a5dd7e37856bc159992296f98a38019097c9c7b7d6968715ec0dc1f",
+    "artifacts/flowdist-expanded-repro-20261013/runtime/manifest.json": "723a97dcc8f708afc9998cce6ed05bd5b1d31d9cd40a6659f89e9aa3ca761cc6",
+    "artifacts/flowdist-expanded-repro-20261013/runtime/measured-coverage.json": "628bc2bb68545d4ec2b3d79ca533c0cef9f5f1f8215372edc358189a7bc198ce",
+    "artifacts/flowdist-expanded-repro-20261013/runtime/method-on-branches-stage.json": "26a71eb41af41ccf046b90eec0724ec742eafde7a3dfbc5989bd223990c06e4d",
+    "artifacts/flowdist-expanded-repro-20261013/runtime/method-on-branches.log": "fa94a747cb3f315f2be1eb32c072fbca3940b778e1004b032b5658b1547cef82",
+    "artifacts/flowdist-expanded-repro-20261013/runtime/runtime-stage.json": "90cd1e0eb6fed1ff607a4a533e705d6c66d7f215eb6d234c7cdbe193b997efae",
+    "artifacts/flowdist-expanded-repro-20261013/runtime/runtime.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "artifacts/flowdist-expanded-repro-20261013/runtime/trace-inspection-stage.json": "45b67b967230fd7712241375d6864e7c9b15645ad2a240be45a603b2aa8d961f",
+    "artifacts/flowdist-expanded-repro-20261013/runtime/trace-inspection.log": "cdfe0ac6d057b5455d98bdf19410c8b9706db7b90d827ec2e5e581bfc16f71aa",
+    "artifacts/flowdist-expanded-repro-20261013/runtime/work/BranchInput/class-literal-manifest.json": "23b1f77f3cf752839841d9b77f6e6c959b517abd726de5fe79ff3d6cabf79a05",
+    "artifacts/flowdist-expanded-repro-20261013/runtime/work/OTInstrumented/class-literal-manifest.json": "3b791f9f67600dbf4b870cebbf7e34a2c9171d489ecf9677ef642dc435182364",
+    "artifacts/flowdist-expanded-repro-20261013/runtime/work/runtime/client/client.log": "1d39367c47501cc0ca5820df94333e64052b9ad5942bded12a6143567a9e556a",
+    "artifacts/flowdist-expanded-repro-20261013/runtime/work/runtime/server/server.log": "b7fd0caef52006b080e1cc8a2b94efae93e642e6d8611b59eaa5d3ccbb03e767",
+    "artifacts/flowdist-expanded-repro-20261013/scope/manifest.json": "1d53c9299405717f8a00cd161da41a962af645797870e96f46c38e5e87621c3e",
+    "artifacts/flowdist-expanded-repro-20261013/summary.json": "da62727c876e6ab7a950b9b7cfea2ab9ddf726a06e95d42811eec9926c38325f",
+    "artifacts/flowdist-expanded-statement-20261013/client-only/statement-analysis-stage.json": "e20ff6a728e4f864b38fd3fad2b8748deeba960d5616162e4f1dd32dea576256",
+    "artifacts/flowdist-expanded-statement-20261013/client-only/statement-analysis.log": "152ffc6e31f866484bd0ab2677ff355e2814f9def849ce3cc340fee1c87b6f07",
+    "artifacts/flowdist-expanded-statement-20261013/coverage-audit.json": "336fe9bf0925a295bd02b6f5aed940a32af782bc674402bfa35c63f5bda65512",
+    "artifacts/flowdist-expanded-statement-20261013/merged/statement-analysis-stage.json": "d1491fbcd470034ab1c48ca1af97753e8430275a6e0a701d0aca8731a18451b4",
+    "artifacts/flowdist-expanded-statement-20261013/merged/statement-analysis.log": "4a366fe2d08695ebd879a497e32569d9348b658fcd7bbf5ce5f9e7b5ff9a295d",
+    "artifacts/flowdist-expanded-statement-20261013/server-only/statement-analysis-stage.json": "334ddb7ac4615f705df774d8a9a1f07878d5e3fe3cba975673cf1065a38486e4",
+    "artifacts/flowdist-expanded-statement-20261013/server-only/statement-analysis.log": "469410f9cbc65f8684eca38ca5f643e0cb73c4a548ce867f66b8f7c35eac905b",
+    "artifacts/flowdist-expanded-statement-20261013/summary.json": "77f1df1b4bb09817719bae5c616e887c45b37a046776e66778928787f967894f"
+  },
+  "expanded_scope_reproduction": {
+    "method_scope": 1948,
+    "nodes": 24440,
+    "edges": 121314,
+    "cdg_missing_diagnostics": 0,
+    "jdk_library_bodies_excluded": true,
+    "coarse_candidate_pruning_disabled": true,
+    "global_graph_completeness_verified": false,
+    "accuracy_eligible": false,
+    "performance_eligible": false
+  },
+  "original_http_result": {
+    "kind": "sockshop-http-clock-compatibility-result",
+    "business_body_preserved": true,
+    "plain_http_control_passed": true,
+    "reciprocal_process_correlation": true,
+    "method_query": "<works.weave.socks.orders.services.AsyncGetService: java.util.concurrent.Future postResource(java.net.URI,java.lang.Object,org.springframework.core.ParameterizedTypeReference)>; <works.weave.socks.shipping.controllers.ShippingController: works.weave.socks.shipping.entities.Shipment postShipping(works.weave.socks.shipping.entities.Shipment)>",
+    "candidate_method_count": 3,
+    "original_analyzer_jar_modified": false,
+    "full_orders_controller_executed": false,
+    "statement_instrumentation_present": false,
+    "accuracy_eligible": false,
+    "performance_eligible": false
+  },
+  "http_process_trace_audit": {
+    "command": [
+      "docker",
+      "run",
+      "--name",
+      "flowdist-preflight-3db19c3bfd65",
+      "--hostname",
+      "flowdist-preflight-3db19c3bfd65",
+      "--add-host",
+      "flowdist-preflight-3db19c3bfd65:127.0.0.1",
+      "--rm",
+      "--network",
+      "none",
+      "--memory",
+      "4g",
+      "--user",
+      "1000:1000",
+      "--entrypoint",
+      "java",
+      "-v",
+      "/home/wujian/tracefusion2/artifacts/external-tools/flowdist:/flowdist:ro",
+      "-v",
+      "/home/wujian/tracefusion2/artifacts/flowdist-sockshop-http-final-20261013/work:/work:rw",
+      "-w",
+      "/work",
+      "weaveworksdemos/orders@sha256:b622e40e83433baf6374f15e076b53893f79958640fc6667dff597622eff03b9",
+      "-cp",
+      "/work/probe",
+      "FlowDistTraceProbe",
+      "/work/traces/test1",
+      "<works.weave.socks.orders.services.AsyncGetService: java.util.concurrent.Future postResource(java.net.URI,java.lang.Object,org.springframework.core.ParameterizedTypeReference)>",
+      "<works.weave.socks.shipping.controllers.ShippingController: works.weave.socks.shipping.entities.Shipment postShipping(works.weave.socks.shipping.entities.Shipment)>"
+    ],
+    "exit_code": 0,
+    "elapsed_ms": 464.887122,
+    "errors": [],
+    "timeout_seconds": 240,
+    "timed_out": false,
+    "status": "peer-correlation-validated",
+    "accuracy_eligible": false,
+    "performance_eligible": false,
+    "traces": [
+      {
+        "trace": "Remote1791879374588.em",
+        "process": "82@flowdist-preflight-6cc2569013df",
+        "peers": {
+          "7@flowdist-preflight-6cc2569013df": 7
+        },
+        "server_add_first": null,
+        "client_main_last": null,
+        "source_first": 2,
+        "sink_last": null
+      },
+      {
+        "trace": "Remote1791879374608.em",
+        "process": "7@flowdist-preflight-6cc2569013df",
+        "peers": {
+          "82@flowdist-preflight-6cc2569013df": 5
+        },
+        "server_add_first": null,
+        "client_main_last": null,
+        "source_first": null,
+        "sink_last": 5
+      }
+    ],
+    "reciprocal_peer_correlation": true,
+    "distinct_server_client_roles": true,
+    "compile_command": [
+      "javac",
+      "--release",
+      "8",
+      "-d",
+      "/home/wujian/tracefusion2/artifacts/flowdist-sockshop-http-final-20261013/work/probe",
+      "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/FlowDistTraceProbe.java"
+    ],
+    "probe_sha256": "430a3e3f46357d1214cd1003973020e4e165ac9a8364fabd0c324b7ae0950d2f",
+    "source_method": "<works.weave.socks.orders.services.AsyncGetService: java.util.concurrent.Future postResource(java.net.URI,java.lang.Object,org.springframework.core.ParameterizedTypeReference)>",
+    "sink_method": "<works.weave.socks.shipping.controllers.ShippingController: works.weave.socks.shipping.entities.Shipment postShipping(works.weave.socks.shipping.entities.Shipment)>"
+  },
+  "expanded_statement_diagnostic": {
+    "kind": "flowdist-measured-statement-process-diagnostic",
+    "query": "<CalculatorHandler: int add(int,int)> - i0 := @parameter0: int; <CalculatorService$Client: int recv_add()> - return $i0",
+    "input_graph": "/home/wujian/tracefusion2/artifacts/flowdist-expanded-runtime-20261013/work/ExpandedGraph",
+    "runtime": "/home/wujian/tracefusion2/artifacts/flowdist-expanded-runtime-20261013",
+    "results": {
+      "merged": {
+        "status": "process-completed-output-requires-validation",
+        "covered_statements": 2888,
+        "path_lengths": [
+          "570+0+0=570"
+        ],
+        "path_types": [
+          "[The statement path type of <CalculatorHandler: int add(int,int)> - i0 := @parameter0: int; <CalculatorService$Client: int recv_add()> - return $i0 ]: Local"
+        ],
+        "unexecuted_endpoint": false,
+        "log_sha256": "4a366fe2d08695ebd879a497e32569d9348b658fcd7bbf5ce5f9e7b5ff9a295d"
+      },
+      "server-only": {
+        "status": "process-completed-output-requires-validation",
+        "covered_statements": 2239,
+        "path_lengths": [],
+        "path_types": [],
+        "unexecuted_endpoint": true,
+        "log_sha256": "469410f9cbc65f8684eca38ca5f643e0cb73c4a548ce867f66b8f7c35eac905b"
+      },
+      "client-only": {
+        "status": "process-completed-output-requires-validation",
+        "covered_statements": 2042,
+        "path_lengths": [],
+        "path_types": [],
+        "unexecuted_endpoint": true,
+        "log_sha256": "152ffc6e31f866484bd0ab2677ff355e2814f9def849ce3cc340fee1c87b6f07"
+      }
+    },
+    "graph_completeness_verified": false,
+    "accuracy_eligible": false,
+    "performance_eligible": false
+  },
+  "known_limitations": [
+    "Expanded static scope disables coarse method pruning and retains JDK body exclusions; no global completeness claim.",
+    "Original Local classification concerns graph reachability, not physical process identity.",
+    "HTTP method hooks are explicit boundary compatibility hooks, not full Soot statement instrumentation.",
+    "Original Orders AsyncGetService executes directly without full newOrder or Spring async proxy.",
+    "RabbitMQ unavailable: original Shipping controller accepts request via its catch branch.",
+    "No formal normalized accuracy oracle or runtime/memory comparison."
+  ],
+  "discarded_http_runs": {
+    "artifacts/flowdist-sockshop-http-20261013": "Mixed Orders/Shipping Spring dependencies prevented startup.",
+    "artifacts/flowdist-sockshop-http-v2-20261013": "Business passed but monitor returnInto lacked caller entry and duplicate termination generated two traces.",
+    "artifacts/flowdist-sockshop-http-v3-20261013": "Positive compatibility passed; final adds unclocked HTTP control and strict method candidate validation."
+  },
+  "accuracy_eligible": false,
+  "performance_eligible": false
+}

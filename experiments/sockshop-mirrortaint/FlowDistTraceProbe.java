@@ -19,6 +19,8 @@ public final class FlowDistTraceProbe {
     private static String clean(String s) { return s.replace("\0", "").trim(); }
     @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
+        String source=args.length>1?args[1]:"<CalculatorHandler: int add(int,int)>";
+        String sink=args.length>2?args[2]:"<CalculatorClient: void main(java.lang.String[])>";
         File[] files=new File(args[0]).listFiles((d,n)->n.startsWith("Remote") && n.endsWith(".em"));
         if (files==null || files.length!=2) throw new IllegalStateException("Expected two process traces");
         Arrays.sort(files);
@@ -43,7 +45,8 @@ public final class FlowDistTraceProbe {
                 System.out.print(quote(e.getKey())+":"+e.getValue());
             }
             System.out.print("},\"server_add_first\":"+first.get("<CalculatorHandler: int add(int,int)>")+
-                ",\"client_main_last\":"+last.get("<CalculatorClient: void main(java.lang.String[])>")+"}");
+                ",\"client_main_last\":"+last.get("<CalculatorClient: void main(java.lang.String[])>")+
+                ",\"source_first\":"+first.get(source)+",\"sink_last\":"+last.get(sink)+"}");
         }
         System.out.println("]");
     }

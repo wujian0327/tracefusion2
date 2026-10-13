@@ -132,7 +132,7 @@ def execute(repo,out,name,arguments,entry='java',timeout=240):
             subprocess.run(['docker','rm','-f',container_name],stdout=f,stderr=subprocess.STDOUT,timeout=30)
     elapsed=(time.perf_counter_ns()-start)/1e6
     text=log.read_text(errors='replace')
-    errors=[line for line in text.splitlines() if re.match(r'^(Exception in thread|Caused by:|java\.[\w.$]+(?:Exception|Error):|Error:|ERROR\b|Couldn.t)',line)]
+    errors=[line for line in text.splitlines() if re.match(r'^(Exception in thread|Caused by:|java\.[\w.$]+(?:Exception|Error)(?::|$)|Error:|ERROR\b|Couldn.t)',line)]
     result={'command':command,'exit_code':exit_code,'elapsed_ms':elapsed,'errors':errors,
             'timeout_seconds':timeout,'timed_out':timed_out,
             'status':'timeout' if timed_out else ('failed' if exit_code or errors else 'process-completed-output-requires-validation'),
@@ -318,19 +318,22 @@ exit 3
     return result
 
 
-def inspect_traces(repo,out):
+def inspect_traces(repo,out,source_method='<CalculatorHandler: int add(int,int)>',sink_method='<CalculatorClient: void main(java.lang.String[])>'):
     source=Path(__file__).with_name('FlowDistTraceProbe.java')
     classes=out/'work/probe';classes.mkdir(exist_ok=True)
     command=['javac','--release','8','-d',str(classes),str(source)]
     subprocess.run(command,check=True,capture_output=True,text=True,timeout=30)
-    result=execute(repo,out,'trace-inspection',['-cp','/work/probe','FlowDistTraceProbe','/work/traces/test1'])
+    result=execute(repo,out,'trace-inspection',['-cp','/work/probe','FlowDistTraceProbe','/work/traces/test1',source_method,sink_method])
     traces=json.loads((out/'trace-inspection.log').read_text())
     identities={t['process'] for t in traces}
     reciprocal=len(identities)==2 and all(identities-{t['process']} <= set(t['peers']) for t in traces)
-    roles=sum(t['server_add_first'] is not None for t in traces)==1 and sum(t['client_main_last'] is not None for t in traces)==1
+    sources=[t['process'] for t in traces if t['source_first'] is not None]
+    sinks=[t['process'] for t in traces if t['sink_last'] is not None]
+    roles=len(sources)==1 and len(sinks)==1 and sources[0]!=sinks[0]
     result.update(traces=traces,reciprocal_peer_correlation=reciprocal,distinct_server_client_roles=roles,
                   status='peer-correlation-validated' if reciprocal and roles else 'peer-correlation-missing',
-                  compile_command=command,probe_sha256=hashlib.sha256(source.read_bytes()).hexdigest())
+                  compile_command=command,probe_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),
+                  source_method=source_method,sink_method=sink_method)
     save(out/'trace-inspection-stage.json',result)
     return result
 
