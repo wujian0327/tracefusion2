@@ -100,8 +100,21 @@ public final class ServiceRecorder {
             Map<String,Object> event = new LinkedHashMap<>(); event.put("rpc",UUID.randomUUID().toString());
             event.put("uri",invoke(request,"getUrl").toString()); event.put("method",invoke(request,"getMethod").toString());
             event.put("trace_id",mdc("X-B3-TraceId")); event.put("span_id",mdc("X-B3-SpanId"));
+            event.put("request_fields",snapshot(invoke(request,"getBody"),"request#body"));
             RPC.get().push(event); emit("rpc-enter",event);
         } catch (Throwable error) { problem("rpc-enter:" + error); }
+    }
+    /** Independent transport identity; carries no field labels or oracle data. */
+    public static synchronized void httpRequest(Object request) {
+        if (!Boolean.getBoolean("tracefusion.http.instances") || RPC.get().isEmpty()) return;
+        try {
+            Map<String,Object> rpc = RPC.get().peek();
+            if (!"http://shipping/shipping".equals(rpc.get("uri"))) return;
+            Object headers = invoke(request,"getHeaders");
+            Class.forName("org.springframework.http.HttpHeaders",false,Thread.currentThread().getContextClassLoader())
+                .getMethod("set",String.class,String.class).invoke(headers,"X-TraceFusion-Message",rpc.get("rpc"));
+            Map<String,Object> event = new LinkedHashMap<>(rpc); emit("http-send",event);
+        } catch (Throwable error) { problem("http-send:" + error); }
     }
     public static synchronized void rpcExit(Object response) {
         try {

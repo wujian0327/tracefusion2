@@ -65,6 +65,7 @@ public final class BoundaryRecorder {
             event.put("method", method); event.put("receiver", id(self));
             List<Object> arguments = new ArrayList<>(); for (Object arg : args) arguments.add(value(arg));
             event.put("args", arguments); event.put("trace_id", mdc("X-B3-TraceId"));
+            if (method.contains(".postShipping(")) event.put("message_id", requestMessage());
             event.put("begin_ns", System.nanoTime()); event.put("begin_allocated", allocated()); event.put("begin_process_allocated",processAllocated());
             if (!metricsOnly()) {
                 List<Object> inputs = new ArrayList<>();
@@ -100,6 +101,7 @@ public final class BoundaryRecorder {
         if (STACK.get().isEmpty() || metricsOnly()) return;
         try {
             Map<String,Object> event=context(); event.put("boundary", boundary); event.put("instance", UUID.randomUUID().toString());
+            if (boundary.equals("http-request-body")) event.put("message_id", STACK.get().peek().get("message_id"));
             List<Object> fields=snapshot(result,"source"); event.put("fields",fields);
             if (mirror()) {
                 Class<?> heap=Class.forName("com.shadow.taint.agent.runtime.TaintHeap");
@@ -122,6 +124,18 @@ public final class BoundaryRecorder {
             }
             emit("source",event);
         } catch(Throwable error) { problem("source:"+error); }
+    }
+    private static String requestMessage() throws Exception {
+        ClassLoader loader=Thread.currentThread().getContextClassLoader();
+        Class<?> holder=Class.forName("org.springframework.web.context.request.RequestContextHolder",false,loader);
+        Object attributes=holder.getMethod("currentRequestAttributes").invoke(null);
+        Object request=Class.forName("org.springframework.web.context.request.ServletRequestAttributes",false,loader)
+            .getMethod("getRequest").invoke(attributes);
+        String message=(String)Class.forName("javax.servlet.http.HttpServletRequest",false,loader)
+            .getMethod("getHeader",String.class).invoke(request,"X-TraceFusion-Message");
+        if (message!=null && !message.matches("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"))
+            throw new IllegalArgumentException("Invalid HTTP message identity");
+        return message;
     }
     private static Object fieldValue(Object object,String field) throws Exception {
         for(Class<?> c=object.getClass();c!=null;c=c.getSuperclass()) try { Field f=c.getDeclaredField(field);f.setAccessible(true);return f.get(object); } catch(NoSuchFieldException ignored) {}

@@ -10,7 +10,7 @@ import org.objectweb.asm.tree.*;
 public final class ServiceAgent implements ClassFileTransformer, Opcodes {
     private static final String R = "tracefusion/service/ServiceRecorder";
     private static final String APP = "works/weave/socks/orders/";
-    private static final Set<String> DTOS = new HashSet<>(Arrays.asList("Item", "Customer", "Address", "Card", "CustomerOrder"));
+    private static final Set<String> DTOS = new HashSet<>(Arrays.asList("Item", "Customer", "Address", "Card", "CustomerOrder", "Shipment"));
     public static void premain(String args, Instrumentation instrumentation) throws Exception {
         ServiceRecorder.start();
         instrumentation.addTransformer(new ServiceAgent());
@@ -22,8 +22,9 @@ public final class ServiceAgent implements ClassFileTransformer, Opcodes {
     }
     public byte[] transform(final ClassLoader loader, String name, Class<?> prior, ProtectionDomain domain, byte[] bytes) {
         boolean rest = "org/springframework/web/client/RestTemplate".equals(name);
+        boolean transport = Boolean.getBoolean("tracefusion.http.instances") && "org/springframework/http/client/support/HttpAccessor".equals(name);
         boolean dto = name != null && name.startsWith(APP + "entities/") && DTOS.contains(name.substring(name.lastIndexOf('/') + 1));
-        if (!rest && !dto && !(APP + "controllers/OrdersController").equals(name)) return null;
+        if (!rest && !transport && !dto && !(APP + "controllers/OrdersController").equals(name)) return null;
         try {
             if (prior != null) throw new IllegalStateException("Redefinition unsupported");
             ClassNode clazz = new ClassNode(ASM9);
@@ -34,6 +35,15 @@ public final class ServiceAgent implements ClassFileTransformer, Opcodes {
                 boolean rpc = rest && method.name.equals("exchange") && method.desc.equals(
                     "(Lorg/springframework/http/RequestEntity;Lorg/springframework/core/ParameterizedTypeReference;)Lorg/springframework/http/ResponseEntity;");
                 boolean frame = observed(name, method);
+                boolean request = transport && method.name.equals("createRequest") && method.desc.equals(
+                    "(Ljava/net/URI;Lorg/springframework/http/HttpMethod;)Lorg/springframework/http/client/ClientHttpRequest;");
+                if (request) {
+                    for (AbstractInsnNode instruction : method.instructions.toArray()) if (instruction.getOpcode() == ARETURN) {
+                        InsnList hook = new InsnList(); hook.add(new InsnNode(DUP));
+                        hook.add(new MethodInsnNode(INVOKESTATIC, R, "httpRequest", "(Ljava/lang/Object;)V", false));
+                        method.instructions.insertBefore(instruction, hook); changed++;
+                    }
+                }
                 if (!dto && !frame && !rpc) continue;
                 AbstractInsnNode[] original = method.instructions.toArray();
                 boolean initialized = !method.name.equals("<init>");

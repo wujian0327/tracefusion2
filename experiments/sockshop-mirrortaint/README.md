@@ -870,3 +870,71 @@ python3 experiments/sockshop-mirrortaint/compare_flowdist_total_queries.py posit
   --repo artifacts/external-tools/flowdist --scored-queries artifacts/flowdist-total-queries-new \
   --out artifacts/flowdist-positive-controls-new
 ```
+
+
+### 跨 HTTP 消息实例校准（2026-10-13，尚非完整 FlowDist 准确率对比）
+
+本轮分别运行 FlowDist 适配版和 TraceFusion，使用相同原始 Orders／Shipping JAR、
+缓存镜像和业务用例。每组 23 次 newOrder：7 个串行用例、8 个独立客户的同值并发用例，
+以及 8 个复用同一客户、同一 Trace ID 的并发用例。每组业务检查均通过，
+一例付款拒绝不进入 Shipping，实际 Shipping 调用各为 22 次。两组并发请求的客户端区间
+均实测有 8 个请求同时在途；这里不宣称服务器全部同时执行或提供并发性能排名。
+
+TraceFusion 新增 `Shipment` 字段观察、出站 RequestEntity DTO 快照和显式
+`X-TraceFusion-Message` UUID 请求头，需设置 `-Dtracefusion.http.instances=true`。
+头中只有消息标识，没有污点标签、字段来源或 oracle 信息。接收端在原有 postShipping
+观察中读取标识，离线按消息编号连接两个 JVM 的观察，再使用对象、字段、版本的别名关系
+连接接收 DTO 与控制器返回字段。Trace ID 和业务值均不参与消息选择；值只校验已选边的一致性。
+这是本方法新增的 HTTP 实例采集／模型，不是原有采集方案已经具备的能力。
+
+有限的字符串属性模型核验两侧原始 Shipment 的 id/name getter、setter 及 Jackson 注解；
+自定义序列化器不支持。本轮两侧采集到的 Shipment／Controller 原始字节码与未改业务 JAR
+逐字节一致，接收对象确实作为原控制器结果返回，源与汇的字段版本及对象身份保持一致。
+源从 Orders 即将发出的 Shipment 字段开始，尚未连接更上游的客户响应到 Shipment 构造，
+也未连接 RabbitMQ 消费者。
+
+| 本轮限定结果 | FlowDist 适配版 | TraceFusion |
+| --- | --- | --- |
+| newOrder / postShipping 业务检查 | 23 / 22 次通过 | 23 / 22 次通过 |
+| 原始跨进程方法候选查询 | 有候选路径，62 个候选方法 | 此处不比较方法候选数 |
+| 显式跨 HTTP 字段返回路径 | 尚未产出同粒度结果 | 44 条，22 个消息实例 |
+| 字段／消息实例正负查询 | 尚未评分 | 132/132；TP=44、TN=88、FP=0、FN=0、unknown=0 |
+
+132 条查询由预先冻结的三个模式实例化：同消息同字段为正例、同消息不同字段为负例、
+另一消息的同字段为负例。具体消息编号在采集后绑定；此结果属于边界／回显校准，
+不属于独立盲测，也不等于整个 Sock Shop 的准确率。对于共用 Trace ID 的 8 个请求，
+跨请求负例使用另一同 Trace ID 的消息；它们的 Shipment.name 业务值也相同。
+字段模型、采集范围和查询粒度仍不等价，**不能据此给出 FlowDist=0% 或宣称准确率胜出**。
+FlowDist 的原始方法查询、构图、剪枝、时钟记录规则未因本轮改变，仍需保留此前 lambda
+引用／别名模型扩展等适配说明。实际 Local 原始序列验证 Orders 记录了 23 次 newOrder，
+Shipping 记录了 22 次 postShipping，完整业务方法事件并未仅用边界钩子代替。
+
+一次诊断查询误把 NewOrderResource 的包名写成 entities，而实际为 resources；
+其“无路径”结果无效，原始目录保留，并在审计中明确排除。重跑使用实际 Spring 采集的方法签名，
+并新增查询前验证源／汇存在于作者 Remote 证据的检查；有效查询返回 62 个候选方法。
+这是候选方法数量，不是 62 条实际字段或请求路径。
+
+原始证据位于 `artifacts/flowdist-http-instance-pilot-20261013`，离线核验在 `audit.json`，
+源文件和证据摘要在 `flowdist-http-instances-20261013.json`。16 个 FlowDist Python 检查、
+6 个 HTTP 实例对抗检查通过；还复核了原有 DTO／stream 推断在这批并发数据中完成 22 个订单。
+本轮没有预热后计时设计，不替换上一轮 Runtime／Memory 数字，完整准确率／性能排名资格仍为 false。
+
+```bash
+python3 experiments/sockshop-mirrortaint/build_service_frontend.py --out artifacts/tf-http-frontend-new
+python3 experiments/sockshop-mirrortaint/build_boundary_frontend.py --out artifacts/tf-http-observer-new
+python3 experiments/sockshop-mirrortaint/flowdist_http_instances.py \
+  --repo artifacts/external-tools/flowdist --apps artifacts/flowdist-spring-fullmethods-20261013 \
+  --orders artifacts/sockshop-orders-original-20261012/app.jar \
+  --shipping artifacts/sockshop-five-methods-original-20261013/shipping.jar \
+  --boundary artifacts/tf-http-observer-new/boundary-agent.jar \
+  --tracefusion artifacts/tf-http-frontend-new/tracefusion-service-agent.jar \
+  --out artifacts/flowdist-http-instances-new
+python3 experiments/sockshop-mirrortaint/infer_http_instance_sources.py \
+  --run artifacts/flowdist-http-instances-new/tracefusion \
+  --out artifacts/flowdist-http-instances-new/tracefusion/http-inference.json
+```
+
+以上采集、推断可直接重跑。审计脚本还需该目录的原生方法查询与 Local 解码结果，
+本次对应 `flowdist-native-method-query-validated` 和 `flowdist-method-audit`；
+它们的准确命令及输入摘要均保留在 stage JSON。下一步是用原始 statement 查询管线生成
+跨服务字段级结果，区分聚合结果与实例结果，保留 unsupported/unknown 后再统一评分。

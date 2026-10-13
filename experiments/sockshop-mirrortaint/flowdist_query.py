@@ -10,7 +10,15 @@ from pathlib import Path
 import re
 import shutil
 
-from flowdist_preflight import CP, execute, save
+from flowdist_preflight import CP, execute, save, inspect_traces
+
+
+def validate_methods(inspection):
+    traces=inspection['traces']
+    if not any(t['source_first'] is not None for t in traces):
+        raise ValueError('Source method absent from frozen FlowDist traces')
+    if not any(t['sink_last'] is not None for t in traces):
+        raise ValueError('Sink method absent from frozen FlowDist traces')
 
 
 def query(repo,source,out,text):
@@ -20,6 +28,10 @@ def query(repo,source,out,text):
     for file in sorted((source/'work/traces/test1').glob('Remote*.em')):
         shutil.copyfile(file,traces/file.name);inputs[file.name]=hashlib.sha256(file.read_bytes()).hexdigest()
     if len(inputs)!=2:raise ValueError('Expected two frozen process traces')
+    pair=[item.strip() for item in text.split(';')]
+    if len(pair)!=2:raise ValueError('Expected one exact source/sink method pair')
+    inspection=inspect_traces(repo,out,*pair)
+    validate_methods(inspection)
     result=execute(repo,out,'method-query',['-Xmx1g','-ea','-cp',CP,'disttaint.OTAnalysisAll',text,'/work/traces','/work','','-prec'])
     raw=(out/'method-query.log').read_text()
     length=re.search(r'\[The method path length\]: (\d+)',raw)
