@@ -13,12 +13,14 @@ from zipfile import ZipFile, ZIP_DEFLATED, ZIP_STORED
 import flowdist_preflight as tool
 
 
-def build(repo, orders, shipping, out):
+def build(repo, orders, shipping, out, carts=None):
     tool.verify_repository(repo)
     out.mkdir(parents=True, exist_ok=False)
     here = Path(__file__).parent
     evidence = {}
-    for role, original in (('orders', orders), ('shipping', shipping)):
+    roles = [('orders', orders), ('shipping', shipping)]
+    if carts is not None: roles.append(('carts', carts))
+    for role, original in roles:
         folder = out / role
         folder.mkdir()
         libs = folder / 'lib'
@@ -38,7 +40,7 @@ def build(repo, orders, shipping, out):
         config = sources / 'FlowDistHttpConfiguration.java'
         config.write_text('package disttaint.http;\n' + text)
         app_config = sources / 'FlowDistServiceConfiguration.java'
-        app_config.write_text('package works.weave.socks.' + role + '.config;\n'
+        app_config.write_text('package works.weave.socks.' + ('cart' if role == 'carts' else role) + '.config;\n'
             '@org.springframework.context.annotation.Configuration\n'
             'public class FlowDistServiceConfiguration extends disttaint.http.FlowDistHttpConfiguration {\n'
             ' public FlowDistServiceConfiguration() { disttaint.http.FlowDistSpringHooks.initialize(); }\n'
@@ -90,5 +92,6 @@ def build(repo, orders, shipping, out):
 if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
     for flag in ('repo', 'orders', 'shipping', 'out'): p.add_argument('--' + flag, type=Path, required=True)
+    p.add_argument('--carts',type=Path)
     a = p.parse_args()
-    build(a.repo.resolve(), a.orders.resolve(), a.shipping.resolve(), a.out.resolve())
+    build(a.repo.resolve(), a.orders.resolve(), a.shipping.resolve(), a.out.resolve(), a.carts.resolve() if a.carts else None)

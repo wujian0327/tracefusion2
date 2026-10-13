@@ -37,7 +37,7 @@ def freeze(graph,out):
         queries.append({'id':owner+'.'+field+'-to-total','field':field,'owner':owner,
             'expected_dependency':expected,'query':sources[0]+'; '+sinks[0],
             'source_statement_id':rows.index(sources[0]),'sink_statement_id':rows.index(sinks[0])})
-    contract={'scope':'aggregate field-type dependency to total across the serial newOrder workload; Orders JVM only',
+    contract={'scope':'aggregate field-type dependency to total across the selected newOrder workload; Orders JVM only',
         'request_instance_disambiguation_tested':False,'cross_process_path_accuracy_tested':False,
         'oracle':'Independent original business formula: sum(Item.quantity * Item.unitPrice) + literal 4.99F',
         'graph_statement_sha256':hashlib.sha256((graph/'stmtids.out').read_bytes()).hexdigest(),
@@ -93,8 +93,12 @@ def evaluate(repo,pilot,static,out):
         raise ValueError('Frozen statement map changed')
     fd=pilot/'flowdist';tf=pilot/'tracefusion'
     for run in (fd,tf):
-        if json.loads((run/'result.json').read_text())['status']!='business-and-common-observer-passed':
+        execution=json.loads((run/'result.json').read_text())
+        if execution['status'] not in ('business-and-common-observer-passed','business-passed') or execution.get('frontend_errors') or \
+            not execution['cases'] or not all(c['business_passed'] for c in execution['cases']):
             raise ValueError('Incomplete common workload')
+    if json.loads((fd/'protocol.json').read_text())!=json.loads((tf/'protocol.json').read_text()):
+        raise ValueError('Different common workload/observer protocols')
     runtime=fd/'runtime/orders';ids=(runtime/'stmtids.out').read_text().splitlines()
     if canonical_rows(ids)!=canonical_rows((graph/'stmtids.out').read_text().splitlines()):
         raise ValueError('Runtime and graph statement indices differ')
@@ -111,7 +115,7 @@ def evaluate(repo,pilot,static,out):
     subprocess.run(['javac','--release','8','-cp',cp,'-d',str(launcher),str(source)],check=True,capture_output=True,timeout=30)
     claims=orders_claims(tf,'tracefusion')
     business=json.loads((tf/'result.json').read_text())['cases']
-    active=[c for c in business if c['phase']=='accuracy' and c['expected_target']]
+    active=[c for c in business if c['phase']=='accuracy' and c.get('method','newOrder')=='newOrder' and c['expected_target']]
     targets=[(c['case'],(claims.get(c['trace_id']) or {}).get('arg#total')) for c in active]
     if not targets:raise ValueError('No original target field observations')
     tf_fields=set()
@@ -150,6 +154,24 @@ def evaluate(repo,pilot,static,out):
             endpoints_covered=valid,log_sha256=hashlib.sha256(raw.encode()).hexdigest()))
         results['tracefusion'].append(dict(q,prediction=q['field'] in tf_fields if tf_known else None,
             supported_target_count=len(targets)))
+    mt=pilot/'mirrortaint'
+    if (mt/'result.json').is_file():
+        mt_claims=orders_claims(mt,'mirrortaint')
+        mt_business=json.loads((mt/'result.json').read_text())['cases']
+        mt_active=[c for c in mt_business if c['phase']=='accuracy' and c.get('method','newOrder')=='newOrder' and c['expected_target']]
+        if {c['case'] for c in mt_active}!={c['case'] for c in active}:
+            raise ValueError('MirrorTaint has a different selected total-query workload')
+        mt_targets=[(c['case'],(mt_claims.get(c['trace_id']) or {}).get('arg#total')) for c in mt_active]
+        mt_known=bool(mt_targets) and all(row and row['known'] for _,row in mt_targets)
+        mt_fields=set()
+        if mt_known:
+            for _,row in mt_targets:
+                for coordinate in row['sources']:
+                    if len(coordinate)!=5:mt_known=False;continue
+                    mt_fields.add(coordinate[-1])
+        results['mirrortaint']=[dict(q,prediction=q['field'] in mt_fields if mt_known else None,
+            supported_target_count=len(mt_targets),
+            projection='Aggregate field types from actual original-runtime source tags; no expected labels consumed') for q in contract['queries']]
     report={'kind':'flowdist-tracefusion-total-field-type-pilot','scope':contract['scope'],
         'queries':results,'summary':{mode:summarize(rows) for mode,rows in results.items()},
         'cross_process_path_accuracy_tested':False,'request_instance_accuracy_tested':False,
@@ -157,6 +179,7 @@ def evaluate(repo,pilot,static,out):
         'limitations':['Only seven aggregate field-type relations to total in the Orders JVM; not general accuracy.',
             'FlowDist uses original graph/query algorithms with disclosed lambda model and framework exclusions.',
             'TraceFusion uses its independently derived scalar/stream model; predictions do not read expected labels.',
+            'MirrorTaint, when supplied in the pilot, projects its actual source tags to the same aggregate field types; adapters remain disclosed.',
             'Whole-deployment branch coverage includes startup and warmup; not individual request coverage.',
             'Cross-process source instance/path accuracy requires HTTP DTO modeling and separate evaluation.']}
     tool.save(out/'comparison.json',report)

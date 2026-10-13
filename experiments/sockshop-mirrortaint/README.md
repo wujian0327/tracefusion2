@@ -938,3 +938,93 @@ python3 experiments/sockshop-mirrortaint/infer_http_instance_sources.py \
 本次对应 `flowdist-native-method-query-validated` 和 `flowdist-method-audit`；
 它们的准确命令及输入摘要均保留在 stage JSON。下一步是用原始 statement 查询管线生成
 跨服务字段级结果，区分聚合结果与实例结果，保留 unsupported/unknown 后再统一评分。
+
+
+### 三方同批次五方法运行（2026-10-13）
+
+完成 plain、FlowDist 适配版、MirrorTaint 适配版和 TraceFusion 的独立新部署，
+本轮目录为 `artifacts/sockshop-three-five-v3-20261013`。每个配置运行相同的 151 次业务调用：
+26 个校准业务场景（含 8 个不同客户的同值并发 Orders 请求）、5 个方法各 5 次预热、
+各 20 次串行正式测量。总计 604 次业务检查通过、400 个正式计时样本，三服务共用相同
+最终加载的测量器。原业务 JAR、镜像 digest 与基本 JVM 参数在配置间匹配。
+此处的“同批次”是同一协议、构件和测量活动，配置逐一部署，不代表同时运行。
+
+五个方法为 Orders.newOrder、Carts.get/delete/mergeCarts、Shipping.postShipping。
+FlowDist Carts 现已生成 162 个应用方法、1148 个语句映射、195 个分支的静态图，
+包含 1371 个节点、3117 条边。使用原始 OTBetterInstr 记录完整应用方法序列，
+加上此前已披露的分支探针恢复、lambda 引用／别名模型、框架体排除、校验帧和 reporter 修复。
+Carts 没有新增跨 HTTP 时钟连接；已验证的 HTTP 时钟适配仍限于 Orders→Shipping。
+
+第一次 FlowDist Carts 请求因 Soot 丢失方法参数名字而返回 HTTP 500：Spring 无法绑定
+未显式命名的路径参数。`FlowDistParameterNames.java` 从未改业务 JAR 的参数元数据或
+LocalVariableTable 恢复 MethodParameters，修复 20 个类的 88 个参数。
+移除 MethodParameters 后，修复前后规范化 class 字节逐字节相同，证明指令、帧、注解和
+其他 class 数据保持一致。5 项 Java 回归核验宽参数槽位、缺失调试数据、元数据修复及
+反射可见参数名。该修复属于框架兼容，不改 FlowDist 图／传播／遍历规则。
+失败原始目录及各次恢复诊断保留，首轮 plain 的结果没有混入最终批次。
+
+以下是控制器含在线追踪的平均墙钟时间（ms），每格来自 20 个样本。
+
+| 服务 | 方法 | plain | FlowDist＋适配 | MirrorTaint＋适配 | TraceFusion |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Orders | newOrder | 15.600 | 17.429 | 94.246 | 20.734 |
+| Carts | get | 1.510 | 1.684 | 3.540 | 2.266 |
+| Carts | delete | 2.083 | 2.171 | 3.916 | 2.880 |
+| Carts | mergeCarts | 5.527 | 5.473 | 12.137 | 8.282 |
+| Shipping | postShipping | 0.534 | 0.480 | 2.584 | 1.280 |
+
+只有一轮固定顺序部署，FlowDist 两格略低于 plain 是本轮观测，不能解释成加速或负开销优势。
+计时不含静态预处理、离线分析、关闭 JVM 时的事件序列化；FlowDist 缓存事件后序列化与
+其他前端逐事件输出的方式不同，必须保留此范围差异。内存分别记录整个服务的平均 VmRSS
+（导出 MiB）和 JVM 进程分配量增量（KiB/次），不直接对应论文未明确采样方式的 Memory Cost。
+完整时间、百分比、内存及原始样本索引在 `sockshop-three-five-audit-v2-20261013/five-method-costs.csv`
+和 `validation.json`。
+
+准确性结果保持三种分母：
+
+| 查询范围 | TraceFusion | MirrorTaint＋适配 | FlowDist＋适配 |
+| --- | --- | --- | --- |
+| 五方法实际标量字段校准 | 166/166 精确查询；180 TP，0 FP，0 FN | 同左 | 尚未产出相同字段／实例粒度结果 |
+| Orders 同一组 7 条聚合字段类型→total 查询 | 7/7；2 TP、0 FP、0 FN、5 TN | 7/7；2 TP、0 FP、0 FN、5 TN | 5/7；0 TP、0 FP、2 FN、5 TN |
+| Carts 三方法和 Shipping 原生引用控制 | 不据此评分 | 不据此评分 | 原始查询 4/4 正引用控制为可达 |
+
+字段校准分方法为 newOrder 98 个查询／112 个正确关系、get 18／18、delete 18／18、
+mergeCarts 28／28、postShipping 4／4；两侧各 8 个无目标字段／save 检查通过。
+这不是 MirrorTaint Table II 的 69 条关系重现。七条聚合查询投影两侧实际 DTO 来源／标签，
+只使用预测来源，不读取 expected 标签生成结果；FlowDist 仍使用原生图、完整 Local 方法序列
+和与实测分支映射一致的语句覆盖。两条漏依赖涉及流计算／回调模型能力差异，不等于
+原版 FlowDist 的通用准确率为零。引用控制是 CartDAO 结果集合→return/delete/save 引用，
+以及 Shipment 参数→返回引用，不能填进另一套标量字段分母。上述均不是完整跨服务路径评分。
+
+独立验证逐一核对了全部 400 个样本与原始计时事件、604 个业务调用分母、各组镜像及基本
+JVM 参数、标量关系集合和聚合查询计数。16 个 FlowDist Python 检查及 5 个参数名 Java
+检查通过。三服务原生 Local 序列也已解码验证，实验项目容器、网络和卷均已清理。
+
+离线重建／评估重新在每个配置的独立 Python 进程中运行，时间约为 MirrorTaint 输出解码／
+归一化 66.6 ms、TraceFusion 字节码解码／重建／归一化 2145.6 ms；整评估进程峰值 RSS
+分别为 49028、89312 KiB。它们是整批处理，不是每查询时间，也不是纯算法阶段内存。
+最初在部署 runner 同一进程中求得的 ru_maxrss 会累计前序峰值，因此该内存结果明确排除，
+旧 JSON 保留作诊断；本轮在线数字与准确性输出经核对完全未变。
+FlowDist 的静态构建及四个控制／七个查询的独立 Java 容器命令、耗时和原始输出单独保留，
+没有将容器启动包含的单查询耗时与上述 Python 批处理时间混成总成本排名。
+
+检查摘要与源／证据 SHA-256 在 `three-method-five-20261013.json`。
+所有 accuracy_eligible/performance_eligible 仍为 false：逐字段三方对齐、独立人工审核、
+完整分布式路径真值和重复随机顺序的成本测量尚未完成。
+
+```bash
+python3 experiments/sockshop-mirrortaint/three_method_five.py \
+  --repo artifacts/external-tools/flowdist --apps artifacts/flowdist-five-fullmethods-parameters-v4-20261013 \
+  --orders artifacts/sockshop-orders-original-20261012/app.jar \
+  --carts artifacts/sockshop-five-methods-original-20261013/carts.jar \
+  --shipping artifacts/sockshop-five-methods-original-20261013/shipping.jar \
+  --boundary artifacts/sockshop-http-instance-observer-20261013/boundary-agent.jar \
+  --tracefusion artifacts/tracefusion-sockshop-frontend-20261013/tracefusion-service-agent.jar \
+  --mirrortaint artifacts/sockshop-five-mirrortaint-20261013/mirrorTaint.jar \
+  --integration-adapter artifacts/sockshop-five-mirrortaint-20261013/integration-adapter.jar \
+  --out artifacts/sockshop-three-five-new
+```
+
+`flowdist_five_statement_controls.py` 提供 freeze/evaluate 两步重跑引用控制；
+`compare_flowdist_total_queries.py` 提供同轮三方七条聚合查询；
+`audit_three_method_five.py` 验证并导出 CSV。各阶段使用新输出目录保留原始证据。

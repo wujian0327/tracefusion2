@@ -13,7 +13,7 @@ from zipfile import ZipFile, ZIP_STORED
 import flowdist_preflight as tool
 
 
-def build(repo, apps, orders, shipping, out, reporter_adapter=None):
+def build(repo, apps, orders, shipping, out, reporter_adapter=None, carts=None):
     tool.verify_repository(repo)
     manifest=json.loads((apps/'manifest.json').read_text())
     out.mkdir(parents=True,exist_ok=False)
@@ -29,7 +29,9 @@ def build(repo, apps, orders, shipping, out, reporter_adapter=None):
                 if not name.startswith('profile/BranchReporter') or not name.endswith('.class'):
                     raise ValueError('Unexpected reporter class')
                 reporter['BOOT-INF/classes/'+name]=archive.read(name)
-    for role,static in (('orders',orders),('shipping',shipping)):
+    roles=[('orders',orders),('shipping',shipping)]
+    if carts is not None: roles.append(('carts',carts))
+    for role,static in roles:
         source=apps/(role+'-flowdist.jar')
         if hashlib.sha256(source.read_bytes()).hexdigest()!=manifest['apps'][role]['adapted_sha256']:
             raise ValueError('Source Spring application digest mismatch')
@@ -43,7 +45,8 @@ def build(repo, apps, orders, shipping, out, reporter_adapter=None):
         overrides={}
         for file in branches.rglob('*.class'):
             relative=str(file.relative_to(branches))
-            if relative!='AuxInstr.class' and not relative.startswith('works/weave/socks/'+role+'/'):continue
+            package='cart' if role=='carts' else role
+            if relative!='AuxInstr.class' and not relative.startswith('works/weave/socks/'+package+'/'):continue
             data=file.read_bytes()
             if data[:4]!=b'\xca\xfe\xba\xbe':raise ValueError('Invalid branch class')
             overrides['BOOT-INF/classes/'+relative]=data
@@ -74,6 +77,7 @@ def build(repo, apps, orders, shipping, out, reporter_adapter=None):
             'graph_refinement_verified':False,
             'verifier_frames_recomputed':config.get('verifier_frames_recomputed',False),
             'author_method_instrumentation':config.get('author_method_instrumentation',False),
+            'parameter_names_restored':config.get('parameter_names_restored',False),
             'wrap_try_catch_enabled':'-wrapTryCatch' in stage['command']}
     manifest.update(branch_models=models,static_branch_instrumentation=True,
         original_business_classes_modified=True,modification='Author branch probes; bundled ASM Java 8 emission',
@@ -89,5 +93,6 @@ if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     for flag in ('repo','apps','orders','shipping','out'):p.add_argument('--'+flag,type=Path,required=True)
     p.add_argument('--reporter-adapter',type=Path)
+    p.add_argument('--carts',type=Path)
     a=p.parse_args();build(a.repo.resolve(),a.apps.resolve(),a.orders.resolve(),a.shipping.resolve(),a.out.resolve(),
-                          a.reporter_adapter.resolve() if a.reporter_adapter else None)
+                          a.reporter_adapter.resolve() if a.reporter_adapter else None,a.carts.resolve() if a.carts else None)

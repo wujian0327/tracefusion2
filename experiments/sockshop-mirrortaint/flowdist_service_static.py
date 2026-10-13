@@ -110,8 +110,9 @@ def run(repo, jar, branch_adapter, out, role, lambda_adapter=None):
     branch_rows = (work / 'BranchInstrumented/stmtids.out').read_text().splitlines()
     graph_rows = (work / 'ServiceGraph/stmtids.out').read_text().splitlines()
     if canonical_rows(branch_rows) != canonical_rows(graph_rows): raise ValueError('Branch/graph statement indices differ')
-    required = 'postShipping(' if role == 'shipping' else 'newOrder('
-    if not any(required in row for row in branch_rows): raise ValueError('Controller absent from static statement map')
+    required = {'orders':['newOrder('], 'shipping':['postShipping('], 'carts':['get(', 'delete(', 'mergeCarts(']}[role]
+    if any(not any(method in row and 'Controller:' in row for row in branch_rows) for method in required):
+        raise ValueError('Controller absent from static statement map')
     counts = re.search(r'Value Transfer Graph: (\d+) nodes, (\d+) edges', (out / 'service-refinement.log').read_text())
     if not counts or not (work / 'ServiceGraph/staticVtg.dat').is_file(): raise ValueError('Graph output missing')
     tool.save(out / 'result.json', {'role': role, 'application_methods': len(methods), 'mapped_statements': len(branch_rows),
@@ -123,7 +124,7 @@ def run(repo, jar, branch_adapter, out, role, lambda_adapter=None):
 if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
     for flag in ('repo','jar','branch-adapter','out'): p.add_argument('--' + flag, type=Path, required=True)
-    p.add_argument('--role', choices=('orders','shipping'), required=True)
+    p.add_argument('--role', choices=('orders','shipping','carts'), required=True)
     p.add_argument('--lambda-adapter',type=Path)
     a = p.parse_args()
     run(a.repo.resolve(), a.jar.resolve(), a.branch_adapter.resolve(), a.out.resolve(), a.role,

@@ -20,6 +20,7 @@ experiments/sockshop-mirrortaint/*
 !experiments/sockshop-mirrortaint/flowdist-service-statements-20261013.json
 !experiments/sockshop-mirrortaint/flowdist-tracefusion-pilot-20261013.json
 !experiments/sockshop-mirrortaint/flowdist-http-instances-20261013.json
+!experiments/sockshop-mirrortaint/three-method-five-20261013.json
 !experiments/sockshop-mirrortaint/rpc-observer-manifest.mf
 !experiments/sockshop-mirrortaint/tracefusion/
 experiments/sockshop-mirrortaint/tracefusion/*
