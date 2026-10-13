@@ -772,3 +772,101 @@ python3 experiments/sockshop-mirrortaint/audit_flowdist_services.py \
 
 摘要、源文件及证据摘要保存为 `flowdist-service-statements-20261013.json`。
 下一步是建立跨 HTTP 字段转换与异步调用的语句级模型，再用独立正负例评估跨进程路径。
+
+### FlowDist／TraceFusion 首轮共同工作负载对比（2026-10-13）
+
+使用相同原始业务 JAR、缓存镜像 digest 和公共计时器，依次运行 plain、FlowDist 适配版、
+TraceFusion。每组 7 个业务校验用例、5 次预热、20 次串行测量，共 32 次 newOrder；
+所有业务检查通过，测量样本全部保留。原始记录在
+`artifacts/flowdist-tracefusion-pilot-v2-20261013`，字段查询在
+`artifacts/flowdist-total-query-pilot-20261013`。
+
+| 部署配置 | newOrder 平均耗时（ms） | Orders JVM 平均 RSS（MiB） | 每调用进程分配增量（KiB） |
+| --- | --- | --- | --- |
+| 原始服务＋公共计时器 | 16.105 | 502.72 | 121.45 |
+| FlowDist 适配版＋公共计时器 | 18.145 | 520.64 | 147.39 |
+| TraceFusion＋公共计时器 | 21.961 | 496.66 | 1018.01 |
+
+newOrder 控制器耗时包含等待实际异步 HTTP 返回，不包括离线重建、静态预处理或
+进程退出时的轨迹序列化。HTTP 客户端耗时另存。RSS 是整个 Orders JVM 在调用结束后的
+常驻内存，不是单次请求保留内存；分配增量包含后台线程，不能与 RSS 混合解释。
+这是固定顺序、每配置一次部署的初测，尚无随机化多轮或置信区间。
+不能由本轮较低的 TraceFusion RSS 宣称其内存开销更低；其运行时分配量明显更高。
+FlowDist 的内存累计／退出写出与 TraceFusion 的逐条事件写出方式也不同。
+双方采集范围和分析模型不同，只比较当前部署配置，不能归因于核心算法的稳定成本差异。
+
+本轮 FlowDist 已用**作者原 OTBetterInstr**补全应用方法事件，而非三个 entry hook：
+Orders 最终 Local 轨迹包含 136 个方法、5229 次进入和 12201 次返回相关事件；
+Shipping 包含 42 个方法、515 次进入和 1129 次返回相关事件。
+最后一份 Remote 快照验证两进程互相记录对端；完整审计见
+`artifacts/flowdist-fullmethods-trace-audit-20261013`。
+方法字节码插桩没有重写图分析算法；Spring advice 在此模式仅安装 HTTP 时钟和审计，
+避免再次插入边界方法 enter，也避免再次 initialize 清空原监控器。
+
+生命周期注意：最初 launcher 的 `instrumentTerminate()` 空覆盖并未阻止 EAInst
+在 entry-method instrumentation 中直接插入的 main-return terminate。
+实际每进程保留了启动和退出两份 Remote，Local 文件在退出时写入后续完整业务序列。
+原始快照均保留，最终对端审计只选择退出快照。
+源码已移除无效覆盖并纠正声明；不能依赖旧 manifest 的 `terminate_on_main_return=false`。
+当前配置保留作者的 main-return／shutdown 行为，没有改变监控算法。
+
+首次成本测试因公共 CostAgent 反射式计算校验帧时重入定义当前类，
+没有实际计时 enter／exit，严格样本检查失败，保留在
+`artifacts/flowdist-tracefusion-pilot-20261013`。公共观察器现在只读 class 资源计算层级，
+拒绝未知类型／未支持的数组合并；6 项不定义类的层级检查通过。
+修复后**三组全部重跑**，没有沿用旧 observer 的 plain 样本。
+
+#### 首个共同字段依赖子集：七种字段到 total
+
+预先冻结七个聚合字段类型查询：quantity、unitPrice 应影响 total；itemId、
+firstName、street、longNum、ccv 不应影响 total。
+独立语义依据为原始公式 `sum(quantity * unitPrice) + 4.99F`。
+查询范围是整个串行工作负载的 **Orders JVM 内字段类型依赖**，
+没有测试具体请求／对象实例区分，也不是跨进程字段路径准确率。
+
+| 指标 | FlowDist 适配版 | TraceFusion |
+| --- | --- | --- |
+| 正确查询数／总数 | 5 / 7 | 7 / 7 |
+| 正例命中 | 0 / 2 | 2 / 2 |
+| 负例正确 | 5 / 5 | 5 / 5 |
+| 未回答 | 0 | 0 |
+| 正例召回率 | 0% | 100% |
+
+FlowDist 使用真实 Local 序列、实际分支推导覆盖和原 OT3AnalysisAll 的图／剪枝／查询流程；
+独立 probe 只读取作者 `isLocal`／`isNoDependency` 决策及端点节点数。
+七组的源／汇语句都被覆盖、节点均非空，作者均返回 no-dependency，漏掉两条正例。
+另加两条 getter 读取到返回值的正控制，原查询器均找到长度为 2 的 Local 流，
+排除了查询器完全未工作的情况；这些控制不加入七条评测的分母。
+控制证据在 `artifacts/flowdist-query-positive-controls-20261013`。
+TraceFusion 从自己的原字节码、DTO／stream 观测和 RPC 来源记录独立推导，
+推断阶段不读取 oracle 标签。该查询将其来源投影为字段类型，未用 oracle 生成答案。
+未知／无端点答案仍计入总分母并使 exact 失败，不视为正确负例。
+
+**这一差异包含分析模型支持的差异**：FlowDist 当前扩展仅支持 lambda 引用类型／别名，
+没有完整回调体／捕获值及 stream reduction 模型；TraceFusion 有经原字节码校验的
+标量／stream 摘要。尚不能把漏检归因于核心重建算法，也不能写成 FlowDist 总体准确率 71.4%。
+跨 HTTP DTO／跨进程实例路径、并发同值反例和独立多轮成本对比仍待完成。
+
+独立重算核对了原始计时事件、每组 20 个样本、32 个业务用例、七条查询的完整分母及单位。
+13 项 Python 检查通过。结论为“在此限定范围内可分享，需保留限制”，
+正式 `accuracy_eligible`／`performance_eligible` 仍为 false。
+汇总和摘要在 `flowdist-tracefusion-pilot-20261013.json`。
+
+```bash
+python3 experiments/sockshop-mirrortaint/flowdist_runtime_comparison.py \
+  --repo artifacts/external-tools/flowdist --apps artifacts/flowdist-spring-fullmethods-20261013 \
+  --orders artifacts/sockshop-orders-original-20261012/app.jar \
+  --shipping artifacts/sockshop-five-methods-original-20261013/shipping.jar \
+  --boundary artifacts/sockshop-flowdist-cost-observer-20261013/boundary-agent.jar \
+  --tracefusion artifacts/tracefusion-sockshop-frontend-20261013/tracefusion-service-agent.jar \
+  --out artifacts/flowdist-tracefusion-pilot-new
+python3 experiments/sockshop-mirrortaint/compare_flowdist_total_queries.py freeze \
+  --repo artifacts/external-tools/flowdist --pilot artifacts/flowdist-tracefusion-pilot-new \
+  --static artifacts/flowdist-orders-static-lambda-v3-20261013 --out artifacts/flowdist-total-queries-new
+python3 experiments/sockshop-mirrortaint/compare_flowdist_total_queries.py evaluate \
+  --repo artifacts/external-tools/flowdist --pilot artifacts/flowdist-tracefusion-pilot-new \
+  --static artifacts/flowdist-orders-static-lambda-v3-20261013 --out artifacts/flowdist-total-queries-new
+python3 experiments/sockshop-mirrortaint/compare_flowdist_total_queries.py positive-controls \
+  --repo artifacts/external-tools/flowdist --scored-queries artifacts/flowdist-total-queries-new \
+  --out artifacts/flowdist-positive-controls-new
+```

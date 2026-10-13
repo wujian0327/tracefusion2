@@ -105,17 +105,10 @@ public final class CostAgent implements ClassFileTransformer, Opcodes {
                 }
             }
             if (changed == 0) return null;
+            final CostFrameHierarchy hierarchy=new CostFrameHierarchy(loader,bytes);
             ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS) {
                 protected String getCommonSuperClass(String first, String second) {
-                    try {
-                        Class<?> a = Class.forName(first.replace('/', '.'), false, loader);
-                        Class<?> b = Class.forName(second.replace('/', '.'), false, loader);
-                        if (a.isAssignableFrom(b)) return first;
-                        if (b.isAssignableFrom(a)) return second;
-                        if (a.isInterface() || b.isInterface()) return "java/lang/Object";
-                        do { a = a.getSuperclass(); } while (!a.isAssignableFrom(b));
-                        return a.getName().replace('.', '/');
-                    } catch (ClassNotFoundException error) { throw new IllegalStateException(error); }
+                    return hierarchy.common(first,second);
                 }
             };
             clazz.accept(writer);

@@ -31,7 +31,7 @@ public final class FlowDistSpringHooks implements BeanPostProcessor, Ordered {
     private static final URI PEER = URI.create(System.getProperty("flowdist.http.peer", "http://shipping/shipping"));
     public static void initialize() {
         if (INITIALIZED.compareAndSet(false, true)) {
-            try { OTMonitor.initialize(); }
+            try { if (!Boolean.getBoolean("flowdist.method.instrumented")) OTMonitor.initialize(); }
             catch (Exception e) { throw new IllegalStateException("FlowDist initialization failed", e); }
         }
     }
@@ -61,7 +61,10 @@ public final class FlowDistSpringHooks implements BeanPostProcessor, Ordered {
                         && invocation.getArguments().length > 0 && PEER.equals(invocation.getArguments()[0]);
                 if (!selected) return invocation.proceed();
                 String signature = signature(type, invocation.getMethod());
-                synchronized (OTMonitor.class) { OTMonitor.enter(signature); audit("enter", signature); }
+                synchronized (OTMonitor.class) {
+                    if (!Boolean.getBoolean("flowdist.method.instrumented")) OTMonitor.enter(signature);
+                    audit("enter", signature);
+                }
                 try {
                     Object result = invocation.proceed();
                     audit("return", signature);

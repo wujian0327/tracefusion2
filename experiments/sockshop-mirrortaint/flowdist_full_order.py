@@ -108,6 +108,8 @@ def run(args):
         cfg.setdefault('volumes', []).extend([str(out / jar.name) + ':/tf2/app.jar:ro', str(capture) + ':/tf2/output:rw'])
         cfg['entrypoint'] = ['sh', '-c', 'cd /tf2/output && exec java $$JAVA_OPTS -jar /tf2/app.jar --port=80']
         cfg['environment']['JAVA_OPTS'] += ' -Dflowdist.http.peer=http://shipping/shipping -Dflowdist.audit=/tf2/output/spring-events.jsonl'
+        if manifest.get('branch_models',{}).get(role,{}).get('author_method_instrumentation'):
+            cfg['environment']['JAVA_OPTS']+=' -Dflowdist.method.instrumented=true'
     for cfg in spec['services'].values(): cfg['restart'] = 'no'
     file = out / 'compose.preflight.json'
     save(file, spec)
@@ -120,8 +122,11 @@ def run(args):
                     ['docker', 'volume', 'ls', '--quiet']):
         if deployment.command(command + ['--filter', 'label=com.docker.compose.project=' + args.project]).stdout.strip():
             raise ValueError('Fresh Docker project required')
+    full_methods=all(manifest.get('branch_models',{}).get(role,{}).get('author_method_instrumentation')
+        for role in ('orders','shipping'))
     status = {'kind': 'sockshop-flowdist-full-order-compatibility', 'project': args.project,
-        'status': 'failed', 'boundary_method_hooks_only': True, 'accuracy_eligible': False, 'performance_eligible': False}
+        'status': 'failed', 'boundary_method_hooks_only': not full_methods,
+        'author_application_method_events':full_methods,'accuracy_eligible': False, 'performance_eligible': False}
     try:
         deployment.start()
         case = json.loads((HERE / 'cases.json').read_text())['cases'][0]
@@ -181,11 +186,15 @@ def run(args):
         traces = work / 'traces/test1'
         traces.mkdir(parents=True)
         for role in ('orders', 'shipping'):
-            files = list((out / 'runtime' / role / 'test1').glob('Remote*.em'))
-            if len(files) != 1: raise ValueError('Missing unique original process trace for ' + role)
-            target = traces / files[0].name
+            files = sorted((out / 'runtime' / role / 'test1').glob('Remote*.em'))
+            if not files or (not full_methods and len(files)!=1):
+                raise ValueError('Missing unique original process trace for ' + role)
+            # Original method instrumentation flushes at Spring main return and
+            # again at shutdown. Preserve both raw files; query final snapshot.
+            selected=files[-1]
+            target = traces / selected.name
             if target.exists(): raise ValueError('Author process trace filename collision; refusing to overwrite')
-            shutil.copyfile(files[0], target)
+            shutil.copyfile(selected, target)
         inspection = tool.inspect_traces(args.repo.resolve(), out, client[0]['method'], shipping[0]['method'])
         if inspection['status'] != 'peer-correlation-validated': raise ValueError('Full HTTP process correlation failed')
         query = order[0]['method'] + '; ' + shipping[0]['method']

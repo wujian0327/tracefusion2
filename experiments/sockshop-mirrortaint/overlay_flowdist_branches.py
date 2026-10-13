@@ -73,11 +73,15 @@ def build(repo, apps, orders, shipping, out, reporter_adapter=None):
             'statements_sha256':hashlib.sha256((branches/'stmtids.out').read_bytes()).hexdigest(),
             'graph_refinement_verified':False,
             'verifier_frames_recomputed':config.get('verifier_frames_recomputed',False),
+            'author_method_instrumentation':config.get('author_method_instrumentation',False),
             'wrap_try_catch_enabled':'-wrapTryCatch' in stage['command']}
     manifest.update(branch_models=models,static_branch_instrumentation=True,
         original_business_classes_modified=True,modification='Author branch probes; bundled ASM Java 8 emission',
         static_statement_graph_verified=False,accuracy_eligible=False,performance_eligible=False)
     if reporter_adapter:manifest.update(reporter_cache_fixed=True,reporter_adapter_sha256=meta['jar_sha256'])
+    if all(model['author_method_instrumentation'] for model in models.values()):
+        manifest.update(method_instrumentation='original OTBetterInstr selected application enter/returnInto/returnFrom',
+            spring_boundary_duplicate_enter_suppressed=True,original_main_return_and_shutdown_flush=True)
     tool.save(out/'manifest.json',manifest)
 
 
