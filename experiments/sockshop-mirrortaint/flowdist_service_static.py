@@ -62,7 +62,7 @@ def inventory(classes, out):
     return sorted(set(methods))
 
 
-def run(repo, jar, branch_adapter, out, role, lambda_adapter=None):
+def run(repo, jar, branch_adapter, out, role, lambda_adapter=None, data_only=False):
     tool.prepare_shipping(repo, out, jar)
     work = out / 'work'
     methods = inventory(work / 'classes', out)
@@ -105,7 +105,12 @@ def run(repo, jar, branch_adapter, out, role, lambda_adapter=None):
         tool.save(out/'manifest.json',manifest)
     args[3] += ':/work/launcher'
     args[4:5] = ['FlowDistStaticLauncher', args[4]]
-    args += ['-asm-backend','-java-version','8','-slicectxinsens','-intraCD','-interCD','-exInterCD', '-serializeVTG', *restrict]
+    args += ['-asm-backend','-java-version','8','-slicectxinsens']
+    if not data_only:args += ['-intraCD','-interCD','-exInterCD']
+    args += ['-serializeVTG', *restrict]
+    manifest.update(dependency_policy='explicit-data-only' if data_only else 'data-and-control',
+                    refinement_control_dependence_options_enabled=not data_only)
+    tool.save(out/'manifest.json',manifest)
     tool.execute(repo, out, 'service-refinement', args, timeout=120)
     branch_rows = (work / 'BranchInstrumented/stmtids.out').read_text().splitlines()
     graph_rows = (work / 'ServiceGraph/stmtids.out').read_text().splitlines()
@@ -126,6 +131,7 @@ if __name__ == '__main__':
     for flag in ('repo','jar','branch-adapter','out'): p.add_argument('--' + flag, type=Path, required=True)
     p.add_argument('--role', choices=('orders','shipping','carts'), required=True)
     p.add_argument('--lambda-adapter',type=Path)
+    p.add_argument('--data-only',action='store_true')
     a = p.parse_args()
     run(a.repo.resolve(), a.jar.resolve(), a.branch_adapter.resolve(), a.out.resolve(), a.role,
-        a.lambda_adapter.resolve() if a.lambda_adapter else None)
+        a.lambda_adapter.resolve() if a.lambda_adapter else None,a.data_only)

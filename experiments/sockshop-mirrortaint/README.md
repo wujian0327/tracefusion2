@@ -985,15 +985,15 @@ LocalVariableTable 恢复 MethodParameters，修复 20 个类的 88 个参数。
 | 查询范围 | TraceFusion | MirrorTaint＋适配 | FlowDist＋适配 |
 | --- | --- | --- | --- |
 | 五方法实际标量字段校准 | 166/166 精确查询；180 TP，0 FP，0 FN | 同左 | 尚未产出相同字段／实例粒度结果 |
-| Orders 同一组 7 条聚合字段类型→total 查询 | 7/7；2 TP、0 FP、0 FN、5 TN | 7/7；2 TP、0 FP、0 FN、5 TN | 5/7；0 TP、0 FP、2 FN、5 TN |
-| Carts 三方法和 Shipping 原生引用控制 | 不据此评分 | 不据此评分 | 原始查询 4/4 正引用控制为可达 |
+| Orders 同一组 7 条聚合字段类型→total 查询 | 7/7；2 TP、0 FP、0 FN、5 TN | 7/7；2 TP、0 FP、0 FN、5 TN | 原报 5/7 已撤回：分析器解码失败，见下方 2026-10-14 更正 |
+| Carts 三方法和 Shipping 原生引用控制 | 不据此评分 | 不据此评分 | 原报 4/4 已撤回：静态回退不能证明动态图正确 |
 
 字段校准分方法为 newOrder 98 个查询／112 个正确关系、get 18／18、delete 18／18、
 mergeCarts 28／28、postShipping 4／4；两侧各 8 个无目标字段／save 检查通过。
 这不是 MirrorTaint Table II 的 69 条关系重现。七条聚合查询投影两侧实际 DTO 来源／标签，
-只使用预测来源，不读取 expected 标签生成结果；FlowDist 仍使用原生图、完整 Local 方法序列
-和与实测分支映射一致的语句覆盖。两条漏依赖涉及流计算／回调模型能力差异，不等于
-原版 FlowDist 的通用准确率为零。引用控制是 CartDAO 结果集合→return/delete/save 引用，
+只使用预测来源，不读取 expected 标签生成结果。旧 FlowDist 记录虽然保存了完整 Local
+方法序列和语句覆盖，但原分析入口没有正确解码该序列；旧漏报不能归因于回调模型。
+引用控制是 CartDAO 结果集合→return/delete/save 引用，
 以及 Shipment 参数→返回引用，不能填进另一套标量字段分母。上述均不是完整跨服务路径评分。
 
 独立验证逐一核对了全部 400 个样本与原始计时事件、604 个业务调用分母、各组镜像及基本
@@ -1028,3 +1028,84 @@ python3 experiments/sockshop-mirrortaint/three_method_five.py \
 `flowdist_five_statement_controls.py` 提供 freeze/evaluate 两步重跑引用控制；
 `compare_flowdist_total_queries.py` 提供同轮三方七条聚合查询；
 `audit_three_method_five.py` 验证并导出 CSV。各阶段使用新输出目录保留原始证据。
+
+### FlowDist 与 TraceFusion 的共同字段访问查询（2026-10-14）
+
+**更正旧结果：** FlowDist 原 `OT3AnalysisAll` 的 `dtDiver` 将运行时写出的 HashMap
+强制转换成 LinkedHashMap，捕获异常后仍继续执行；动态图为空时又回退到静态图。
+因此旧七条查询的 FlowDist“5/7，TP=0、FN=2”和旧四条引用控制“4/4”均无效，
+也不能将旧漏报归因于流计算／回调模型。原始记录和旧 checkpoint 保留作诊断，
+由本节更正；方法级 Remote 分析、业务成功检查、计时、MirrorTaint/TraceFusion
+既有标量校准不依赖这一错误的语句解析入口。旧入口现在拒绝空事件和解码异常。
+
+新实验 `artifacts/sockshop-field-comparison-20261014` 分别运行两种配置，每种配置的
+五个 API 共 31 次业务检查均通过。新增观察只记录实际字段访问的方法签名和字段声明，
+继续使用对象身份、字段版本和实际读写推断；不按值相等选来源、不读取真值生成预测。
+本轮零预热、每方法一次测量只用于功能验收，不能作为 Runtime/Memory Cost 结果。
+
+共同口径为：**一个 JVM 内，指定字段写／读指令位置之间是否存在显式值依赖，
+对该工作负载聚合**。静态端点限制为只引用一个字段的语句，记录原始方法、字段和语句编号。
+FlowDist refinement 使用原工具开关关闭控制依赖，避免与标量值依赖混算。
+查询冻结在原生预测之前；选择端点时已看过运行观察，因此是校准集，非盲测基准。
+
+20 条查询分为：Carts 的 quantity/unitPrice/itemId 三组 setter→getter 交叉查询（9 条）；
+Shipping 的 id/name 两组 setter→getter 交叉查询（4 条）；Orders 的七种 getter 字段读取
+到 CustomerOrder.total 构造写入（7 条，quantity 和 unitPrice 为正例）。
+前三个 Carts API 都运行了，但九条 DTO 存储查询尚未逐 API／逐请求拆分。
+这不是五方法完整路径，也不含跨 HTTP 字段来源准确率。
+
+新配置明确称为 **FlowDist＋完整事件解码／编号适配**：
+
+- 独立解码器读取原 Map，保留所有方法事件的原时间戳、正负方法编号及次序；进程时钟元数据
+  与方法索引分开，避免同一整数在两个命名空间中碰撞。绕过原 dtDiver 按方法名覆盖重复事件的入口。
+- 仅在原 DynTransferGraph 的四参数查询构图函数中，将运行事件的方法名查回
+  `this.method2idx`，修复把运行编号直接当图编号的问题。独立 class 覆盖加载，原作者 JAR 不改。
+  逆向撤销这一处修改后，整个规范化 class 与原件逐字节相同。
+- 调用原作者的查询动态图构建、语句覆盖裁剪和 OT3AnalysisAll.computeNodes 搜索；
+  没有补写字段边或另写路径搜索。保留此前已披露的 Spring/lambda 模型适配。
+- 解码失败、端点方法未进入、编号不存在、次序异常或空动态图均报错，禁止静态图回退评分。
+  因此这不是“完全未修改的原版 FlowDist”成绩，输入适配和编号修复均单独留证。
+
+最终结果目录为 `artifacts/field-access-query-comparison-v4-20261014`：
+
+| 配置 | TP | FP | FN | TN | unknown | Precision | Recall | F1 | 回答覆盖率 | 全部查询答对比例 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| FlowDist＋适配 | 0 | 0 | 7 | 13 | 0 | 未定义 | 0% | 0% | 100% | 65% |
+| TraceFusion | 7 | 0 | 0 | 7 | 6 | 100% | 100% | 100% | 70% | 70% |
+
+FN 包含未回答的正例；unknown 不计为答对，始终留在全部 20 条查询的覆盖率／答对比例分母中。
+本轮六个 unknown 都是 Carts 负例：部分数据库／反射写入缺少已观察的 reaching write，
+不能凭字段值相同或预期标签将它们补成 TN。因此 TraceFusion 的 F1=100% 不代表完成了全部查询。
+
+| 查询组 | 数量 | FlowDist＋适配答对／unknown | TraceFusion 答对／unknown |
+| --- | ---: | --- | --- |
+| Carts DTO 存储 | 9 | 6／0 | 3／6 |
+| Shipping DTO 存储 | 4 | 2／0 | 4／0 |
+| Orders 派生 total | 7 | 5／0 | 7／0 |
+
+FlowDist 三个服务的原生完整日志分别包含 Orders 8679、Carts 18088、Shipping 1078 个事件
+（精确计数以 checkpoint 为准）。每条查询都产生了非空的真实动态图，并在裁剪后具有唯一字段端点。
+四条独立 getter 字段读取→return 正例全部通过，未计入 20 条查询分母。
+七条跨方法字段正例未检出是当前 Sock Shop 模型／配置的现象，尚未定位全部原因，
+不能推导出 FlowDist 通常不能分析字段，也不能据此宣称完整分布式重建优于原论文。
+
+8 个 Python 字段回归、5 个 Java 日志解码检查及既有 16 个 FlowDist Python 检查通过。
+`audit_field_comparison.py` 独立核对原始日志、查询标签／端点、业务协议、完整事件计数、
+动态图非空、控制查询、混淆矩阵和证据哈希；摘要保存在 `field-comparison-20261014.json`。
+尚需解决 Carts 反射写入、定位 FlowDist 字段漏依赖、补齐请求实例／跨服务路径真值，
+再开展独立测试集和相同最终前端配置的重复成本测量。
+
+```bash
+# 使用已采集的共同工作负载，输出目录须为新目录。
+python3 experiments/sockshop-mirrortaint/compare_field_accesses.py freeze \
+  --repo artifacts/external-tools/flowdist --pilot artifacts/sockshop-field-comparison-20261014 \
+  --orders artifacts/flowdist-orders-data-20261014 --carts artifacts/flowdist-carts-data-20261014 \
+  --shipping artifacts/flowdist-shipping-data-20261014 --out artifacts/field-compare-new
+python3 experiments/sockshop-mirrortaint/compare_field_accesses.py evaluate \
+  --repo artifacts/external-tools/flowdist --pilot artifacts/sockshop-field-comparison-20261014 \
+  --orders artifacts/flowdist-orders-data-20261014 --carts artifacts/flowdist-carts-data-20261014 \
+  --shipping artifacts/flowdist-shipping-data-20261014 --out artifacts/field-compare-new
+python3 experiments/sockshop-mirrortaint/audit_field_comparison.py \
+  --pilot artifacts/sockshop-field-comparison-20261014 --comparison artifacts/field-compare-new \
+  --out /tmp/field-compare-checkpoint.json
+```

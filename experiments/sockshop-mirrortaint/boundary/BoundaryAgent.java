@@ -51,7 +51,7 @@ public final class BoundaryAgent implements ClassFileTransformer, Opcodes {
                     if (dto && !BoundaryRecorder.metricsOnly() && !BoundaryRecorder.mirror() && initialized && instruction instanceof FieldInsnNode) {
                         FieldInsnNode field = (FieldInsnNode) instruction;
                         if (field.getOpcode() == GETFIELD || field.getOpcode() == PUTFIELD) {
-                            observeField(method, field); changed++;
+                            observeField(method, field, clazz.name); changed++;
                         }
                     }
                     if (boundary && instruction instanceof MethodInsnNode) {
@@ -124,7 +124,7 @@ public final class BoundaryAgent implements ClassFileTransformer, Opcodes {
             return writer.toByteArray();
         } catch (Throwable error) { BoundaryRecorder.problem("transform:" + name + ":" + error); return null; }
     }
-    private static void observeField(MethodNode method, FieldInsnNode field) {
+    private static void observeField(MethodNode method, FieldInsnNode field, String owner) {
         Type type = Type.getType(field.desc);
         int object = method.maxLocals++, value = method.maxLocals;
         method.maxLocals += type.getSize();
@@ -139,8 +139,15 @@ public final class BoundaryAgent implements ClassFileTransformer, Opcodes {
         }
         after.add(new VarInsnNode(ALOAD, object));
         after.add(new LdcInsnNode(field.name)); after.add(new VarInsnNode(type.getOpcode(ILOAD), value)); box(after, type);
-        after.add(new MethodInsnNode(INVOKESTATIC, R, field.getOpcode() == GETFIELD ? "read" : "write",
-                                    "(Ljava/lang/Object;Ljava/lang/String;Ljava/lang/Object;)V", false));
+        StringJoiner parameters=new StringJoiner(",");
+        for(Type argument:Type.getArgumentTypes(method.desc))parameters.add(argument.getClassName());
+        // Bind the access method separately from the declaring field owner.
+        String signature="<"+owner.replace('/', '.')+": "+Type.getReturnType(method.desc).getClassName()
+            +" "+method.name+"("+parameters.toString()+")>";
+        after.add(new LdcInsnNode(signature));
+        after.add(new LdcInsnNode(field.owner.replace('/', '.')+"."+field.name));
+        after.add(new MethodInsnNode(INVOKESTATIC, R, field.getOpcode() == GETFIELD ? "readAt" : "writeAt",
+                                    "(Ljava/lang/Object;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;)V", false));
         method.instructions.insertBefore(field, before); method.instructions.insert(field, after);
     }
     private static void arguments(InsnList code, MethodNode method) {

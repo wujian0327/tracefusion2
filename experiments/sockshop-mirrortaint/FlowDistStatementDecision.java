@@ -2,6 +2,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.Map;
+import disttaint.dtDiver;
 import disttaint.OT3AnalysisAll;
 
 /** Read the original analyzer's decision flags; do not implement a new search. */
@@ -10,7 +12,12 @@ public final class FlowDistStatementDecision {
         Field field=OT3AnalysisAll.class.getDeclaredField(name);field.setAccessible(true);return field.get(null);
     }
     public static void main(String[] args) throws Exception {
+        Map<?,?> decoded=dtDiver.getEAs(args[1],"Local",".em");
+        if(!(decoded.get(2) instanceof Map)||((Map<?,?>)decoded.get(2)).isEmpty())
+            throw new IllegalStateException("Empty author-decoded event sequence; statement accuracy is invalid");
         OT3AnalysisAll.main(args);
+        if(value("dvtgExercised")==value("dvtg"))
+            throw new IllegalStateException("Analyzer fell back to static graph; statement accuracy is invalid");
         Method get=OT3AnalysisAll.class.getDeclaredMethod("getNodes",String.class,String.class,ArrayList.class);
         get.setAccessible(true);
         int source=((Set<?>)get.invoke(null,value("method1"),value("stmt1"),value("stmtStrs"))).size();

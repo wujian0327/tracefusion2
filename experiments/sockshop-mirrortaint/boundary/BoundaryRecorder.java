@@ -148,12 +148,23 @@ public final class BoundaryRecorder {
     }
     public static synchronized void read(Object object, String field, Object observed) { field("read",object,field,observed); }
     public static synchronized void write(Object object, String field, Object observed) { field("write",object,field,observed); }
-    private static void field(String kind, Object object, String field, Object observed) {
+    public static synchronized void readAt(Object object,String field,Object observed,String method,String declaration) {
+        fieldAt("read",object,field,observed,method,declaration);
+    }
+    public static synchronized void writeAt(Object object,String field,Object observed,String method,String declaration) {
+        fieldAt("write",object,field,observed,method,declaration);
+    }
+    private static void field(String kind,Object object,String field,Object observed) {
+        fieldAt(kind,object,field,observed,null,null);
+    }
+    private static void fieldAt(String kind,Object object,String field,Object observed,String method,String declaration) {
         try {
             String owner = id(object), key = owner + ":" + field; int version = VERSIONS.containsKey(key) ? VERSIONS.get(key) : 0;
             if (kind.equals("write")) VERSIONS.put(key, ++version);
             Map<String,Object> event = context(); event.put("owner", owner); event.put("field",field);
-            event.put("version",version); event.put("observed",value(observed)); emit(kind,event);
+            event.put("version",version); event.put("observed",value(observed));
+            if(method!=null){event.put("access_method",method);event.put("declared_field",declaration);}
+            emit(kind,event);
         } catch (Throwable error) { problem("field:" + error); }
     }
     public static synchronized void sumStart(Object stream) {
