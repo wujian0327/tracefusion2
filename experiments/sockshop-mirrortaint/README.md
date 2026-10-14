@@ -1315,3 +1315,63 @@ python3 experiments/sockshop-mirrortaint/phosphor_shipping.py evaluate \
 把 Phosphor 加入主表；跨 JVM 还需单独披露消息序列化／传输适配与真值。
 共享引用、重复读取和覆盖版本的严格查询也必须对 MirrorTaint / TraceFusion 同样补测；
 目前只验证了 Phosphor 此配置的限制，不能据此宣称另两个方案优于它。
+
+## 2026-10-14 四工具共同语句级 Shipping 校准
+
+已完成第一轮四工具同口径验证：来源为原版 `ShippingController.postShipping`
+的 `@parameter0` 语句，目标为该方法的 `return r1` 语句。
+原始 class 的独立反汇编显示直接 `aload_1; areturn`；对应 Jimple ID 为 142 → 152。
+这条真值在查询运行前冻结，不从工具的预测结果生成。
+
+四工具使用同一份 Shipping 业务字节码与四个 HTTP 输入：不同字段值、同值字段、
+重复相同输入、相同业务 ID 的新 name。MirrorTaint / TraceFusion / FlowDist 新采集，
+Phosphor 复用已核验的完全相同四场景专项记录，并核对业务 JAR SHA-256。
+每配置业务调用 4/4 成功，RabbitMQ 都未部署，原版控制器捕获队列异常后仍返回入参。
+前三者使用同一 Java8 镜像、`-Xms128m -Xmx2g`；Phosphor 使用该镜像派生的插桩 JRE。
+这是准确性接入口径校准，不提供这轮配置的开销比较。
+
+共同来源配置仅包含入参 Shipment 的 id/name 内容，目标为返回 DTO 的 id/name 内容。
+MT / TF / Phosphor 的实际字段来源统一投影为参数语句，实际返回字段统一投影为返回语句。
+**四次调用的八个字段答案去重后只有一对语句，不是八条或四条语句查询。**
+FlowDist 原生查询在整个本地轨迹上作聚合，不声称能够区分这四次请求。
+
+| 配置 | 聚合语句查询数 | TP | FP | FN | Unknown | Precision | Recall | F1 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| MirrorTaint＋披露适配器 | 1 | 1 | 0 | 0 | 0 | 100% | 100% | 100% |
+| TraceFusion | 1 | 1 | 0 | 0 | 0 | 100% | 100% | 100% |
+| Phosphor 0.0.3＋来源／采集适配器 | 1 | 1 | 0 | 0 | 0 | 100% | 100% | 100% |
+| FlowDist＋披露适配器 | 1 | 1 | 0 | 0 | 0 | 100% | 100% | 100% |
+
+**只有一条阳性关系，没有阴性查询；不能据此评判误报能力或宣布四工具准确率相同。**
+它只证明这组来源／目标可以对齐并被四工具分析，不能恢复旧的四条引用控制结果，
+也不能替代完整五方法、严格字段实例／版本或跨服务路径准确率。
+后续扩展 Carts 与 Orders 时，应冻结更多共同语句对及真实负例，保留不支持／unknown 的覆盖率。
+
+FlowDist 仅读取完整 Local 方法事件及实际语句覆盖，用原作者
+`DynTransferGraph.buildGraph(DynTransferGraph, boolean)` 和 `OT3AnalysisAll.computeNodes`。
+完整事件解码适配、应用观测及原作者 all-query 模式均披露；未覆盖原引擎 class，
+未加自定义图边／路径搜索，不允许空动态图或静态回退。
+本轮动态图有 150 个节点、265 条边，来源／目标各有 1 个节点，原生 `is_local=true`。
+没有启用 Stream 摘要；并未证明另一种 query-conditioned 原生匹配模式也能得到同样答案。
+
+结果保存在 `artifacts/common-statement-shipping-v2-20261014/` 的
+`contract.json`、`comparison.json`、`comparison.md` 和 `main-table.csv`。
+改变共同业务输入、破坏原生查询驱动 class 的两个负对照均拒绝评分。
+MirrorTaint / FlowDist 中断的采集已保存为 `*-interrupted/`，不计 FN；重试使用干净目录，
+本轮专属容器均已停止／删除。源与证据摘要在 `common-statement-20261014.json`。
+
+复现时依赖固定的已构建工具／业务构件和 Phosphor 四场景证据；每个阶段使用新输出，
+不要在已有 native-query 工作目录上重复执行 evaluate：
+
+```bash
+python3 experiments/sockshop-mirrortaint/common_statement_shipping.py freeze \
+  --out artifacts/common-statement-shipping-new
+python3 experiments/sockshop-mirrortaint/common_statement_shipping.py collect \
+  --mode tracefusion --out artifacts/common-statement-shipping-new
+python3 experiments/sockshop-mirrortaint/common_statement_shipping.py collect \
+  --mode mirrortaint --out artifacts/common-statement-shipping-new
+python3 experiments/sockshop-mirrortaint/common_statement_shipping.py collect \
+  --mode flowdist --out artifacts/common-statement-shipping-new
+python3 experiments/sockshop-mirrortaint/common_statement_shipping.py evaluate \
+  --out artifacts/common-statement-shipping-new
+```

@@ -24,6 +24,7 @@ experiments/sockshop-mirrortaint/*
 !experiments/sockshop-mirrortaint/field-comparison-20261014.json
 !experiments/sockshop-mirrortaint/carts-orders-comparison-20261014.json
 !experiments/sockshop-mirrortaint/dynamic-baselines-20261014.json
+!experiments/sockshop-mirrortaint/common-statement-20261014.json
 !experiments/sockshop-mirrortaint/rpc-observer-manifest.mf
 !experiments/sockshop-mirrortaint/tracefusion/
 experiments/sockshop-mirrortaint/tracefusion/*
