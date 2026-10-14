@@ -1375,3 +1375,69 @@ python3 experiments/sockshop-mirrortaint/common_statement_shipping.py collect \
 python3 experiments/sockshop-mirrortaint/common_statement_shipping.py evaluate \
   --out artifacts/common-statement-shipping-new
 ```
+
+## 2026-10-14 五方法双口径结果
+
+已完成 `Orders.newOrder`、`Carts.get/delete/mergeCarts`、`Shipping.postShipping`。
+字段表沿用已审计的请求／业务记录／字段真值；语句表使用另行冻结的物理端点与真值。
+这不是把 166 个字段查询简单去重成 11 个语句查询：Orders 的语句来源是指定 getter
+的字段读指令，字段表的来源则是服务边界字段。两张表的分母不能合并排名。
+
+| 表／配置 | 查询数 | TP | FP | FN | TN | Precision | Recall | F1 | 完全匹配 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| 字段：MirrorTaint＋披露适配器 | 166 | 180 | 0 | 0 | — | 100% | 100% | 100% | 166/166 |
+| 字段：TraceFusion | 166 | 180 | 0 | 0 | — | 100% | 100% | 100% | 166/166 |
+| 语句：TraceFusion | 11 | 6 | 0 | 0 | 5 | 100% | 100% | 100% | 11/11 |
+| 语句：Phosphor 0.0.4＋来源／采集适配器 | 11 | 6 | 0 | 0 | 5 | 100% | 100% | 100% | 11/11 |
+| 语句：FlowDist＋披露适配器 | 11 | 6 | 0 | 0 | 5 | 100% | 100% | 100% | 11/11 |
+
+语句集包含 Orders 的 7 对关系：quantity、unitPrice → 构造器 total 写入为两条阳性，
+itemId、firstName、street、longNum、ccv → 同一写入为五条阴性；Carts 三个方法各一条
+DAO 返回引用内容 → return/delete/save 关系；Shipping 一条入参内容 → return 关系。
+三配置使用相同场景顺序，独立数据库及随机夹具 ID；每配置 31/31 业务调用通过。
+Phosphor 完整部署 11 个服务，包含真实数据库、payment、RabbitMQ 和消费端。
+这里评分的是单 JVM 捕获中的聚合语句关系，未验证消息跨 JVM 标签传播。
+Carts 的 save/delete 帮助方法在多个 API 及夹具中共享，表中按代表性端点关联方法，
+没有按 API 根调用隔离；不能把 11/11 写成逐请求字段实例或端到端路径准确率。
+
+Phosphor 0.0.3 在 Orders/Carts 的 primitive lambda ABI 上失败，原始失败日志保留；
+执行失败记 N/A。最终采用官方 `Phosphor-0.0.4` 标签，提交
+`6c15c9b2bb609b790cacfc9297d9f18724dcb1d6`，原作者 Java 源码和 POM 未修改，
+用 Java8 javac 编译并单独插桩 Java8 JRE；原生 Stream 数值标签探针通过。
+来源赋值和目标观测适配器调用原生标签接口，不增加传播算法；Carts 来源配置覆盖引用
+内容，未将 primitive 字段内容作为来源。工具源码、发布构件及适配器均保存 SHA-256。
+FlowDist 使用原作者 all-query builder 和查询引擎，保留完整事件解码、正常返回观测及
+顺序 Stream 返回模型的披露，不覆盖引擎 class、不作静态图回退。
+
+完整逐方法两表、历史字段配置 Runtime/Memory Cost 及限制在
+`artifacts/two-grain-five-methods-20261014/results.md`；CSV、逐查询答案、原生查询日志
+与冻结契约位于同目录。新增 Phosphor/FlowDist 语句配置没有同口径成本测量，历史
+成本不能移用。当前两表结果持平，仅为有界接入口径校准，不支持优越性结论。
+字段表可能折叠同一请求中同一业务字段的重复读／版本，另有八个无目标检查单独统计。
+
+计分负对照：给真实目标日志添加一个负例来源，必须计为 FP；去掉实际来源赋值后的
+标签，必须把分析标为不可用；更改业务场景列表，必须拒绝评分。原日志保持不变。
+检查点 `two-grain-comparison-20261014.json` 保存结果、来源与证据散列。
+
+复评已有固定构件／捕获（只校验缓存输入与日志散列，不重复执行已有原生工作目录）：
+
+```bash
+python3 experiments/sockshop-mirrortaint/compare_two_grains.py evaluate \
+  --phosphor artifacts/phosphor-004-five-statements-20261014 \
+  --out artifacts/two-grain-five-methods-20261014
+```
+
+完整重采 Phosphor 时使用新目录及已校验的官方 0.0.4 构件／插桩 JRE：
+
+```bash
+python3 experiments/sockshop-mirrortaint/phosphor_five_statements.py build \
+  --tool artifacts/external-tools/phosphor-0.0.4 --out artifacts/phosphor-statement-build-new
+python3 experiments/sockshop-mirrortaint/phosphor_five_statements.py run \
+  --tool artifacts/external-tools/phosphor-0.0.4 \
+  --jre artifacts/phosphor-004-jre-20261014/jre \
+  --build artifacts/phosphor-statement-build-new --out artifacts/phosphor-five-statements-new
+```
+
+新捕获评分使用 `freeze --out <新比较目录>` 冻结端点，然后 `evaluate --phosphor
+<新捕获目录> --out <新比较目录>`；TraceFusion/FlowDist 当前固定捕获路径在比较脚本中
+明确声明。复现实验需缓存业务镜像、工具与静态图，不能只凭检查点 JSON 启动服务。
