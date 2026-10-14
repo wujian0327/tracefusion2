@@ -1,0 +1,655 @@
+{
+  "kind": "dynamic-baselines-and-phosphor-qualification-checkpoint",
+  "date": "2026-10-14",
+  "parent_commit": "8d6c13c155d5fef90582642a7ded9a9647461f0c",
+  "priority": [
+    "MirrorTaint plus disclosed adapters as primary dynamic baseline",
+    "Phosphor qualification before second dynamic baseline inclusion",
+    "FlowDist supplementary; expansion paused",
+    "FlowDroid excluded from field-instance main table"
+  ],
+  "dynamic_baseline_audit": {
+    "kind": "audited-dynamic-baseline-calibration",
+    "grain": "request/business-record/field; repeated reads or versions may be collapsed",
+    "cross_service_path_qualified": false,
+    "version_specific_qualified": false,
+    "accuracy_eligible": false,
+    "performance_eligible": false,
+    "business_per_configuration": 151,
+    "business_total": 453,
+    "raw_cost_samples_checked": 300,
+    "protocol": {
+      "methods": {
+        "get": "works/weave/socks/cart/controllers/CartsController.get",
+        "delete": "works/weave/socks/cart/controllers/CartsController.delete",
+        "mergeCarts": "works/weave/socks/cart/controllers/CartsController.mergeCarts",
+        "postShipping": "works/weave/socks/shipping/controllers/ShippingController.postShipping",
+        "newOrder": "works/weave/socks/orders/controllers/OrdersController.newOrder"
+      },
+      "warmup": 5,
+      "repetitions": 20,
+      "boundary_agent_sha256": "656985da62e636d7eabf86fe95dadd052f0599b826146f337c38d44ea4aeecb1",
+      "offline_cost_reported_separately": true,
+      "runtime": "Inclusive controller wall time, common observer loaded last; serial measurement targets",
+      "memory": "Whole service JVM RSS and separately process-wide/current-thread allocation deltas; KiB",
+      "paper_numeric_reproduction": false,
+      "deployment_rounds_per_configuration": 1,
+      "scope": "Frozen five-controller scalar boundary calibrations; no full distributed path qualification"
+    },
+    "accuracy": [
+      {
+        "method": "newOrder",
+        "configuration": "mirrortaint",
+        "queries": 98,
+        "tp": 112,
+        "fp": 0,
+        "fn": 0,
+        "exact": 98,
+        "unknown": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "exact_rate": 1.0
+      },
+      {
+        "method": "get",
+        "configuration": "mirrortaint",
+        "queries": 18,
+        "tp": 18,
+        "fp": 0,
+        "fn": 0,
+        "exact": 18,
+        "unknown": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "exact_rate": 1.0
+      },
+      {
+        "method": "delete",
+        "configuration": "mirrortaint",
+        "queries": 18,
+        "tp": 18,
+        "fp": 0,
+        "fn": 0,
+        "exact": 18,
+        "unknown": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "exact_rate": 1.0
+      },
+      {
+        "method": "mergeCarts",
+        "configuration": "mirrortaint",
+        "queries": 28,
+        "tp": 28,
+        "fp": 0,
+        "fn": 0,
+        "exact": 28,
+        "unknown": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "exact_rate": 1.0
+      },
+      {
+        "method": "postShipping",
+        "configuration": "mirrortaint",
+        "queries": 4,
+        "tp": 4,
+        "fp": 0,
+        "fn": 0,
+        "exact": 4,
+        "unknown": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "exact_rate": 1.0
+      },
+      {
+        "method": "newOrder",
+        "configuration": "tracefusion",
+        "queries": 98,
+        "tp": 112,
+        "fp": 0,
+        "fn": 0,
+        "exact": 98,
+        "unknown": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "exact_rate": 1.0
+      },
+      {
+        "method": "get",
+        "configuration": "tracefusion",
+        "queries": 18,
+        "tp": 18,
+        "fp": 0,
+        "fn": 0,
+        "exact": 18,
+        "unknown": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "exact_rate": 1.0
+      },
+      {
+        "method": "delete",
+        "configuration": "tracefusion",
+        "queries": 18,
+        "tp": 18,
+        "fp": 0,
+        "fn": 0,
+        "exact": 18,
+        "unknown": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "exact_rate": 1.0
+      },
+      {
+        "method": "mergeCarts",
+        "configuration": "tracefusion",
+        "queries": 28,
+        "tp": 28,
+        "fp": 0,
+        "fn": 0,
+        "exact": 28,
+        "unknown": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "exact_rate": 1.0
+      },
+      {
+        "method": "postShipping",
+        "configuration": "tracefusion",
+        "queries": 4,
+        "tp": 4,
+        "fp": 0,
+        "fn": 0,
+        "exact": 4,
+        "unknown": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "exact_rate": 1.0
+      }
+    ],
+    "costs": [
+      {
+        "method": "newOrder",
+        "configuration": "plain",
+        "n": 20,
+        "controller_ms": 15.6001181,
+        "resident_kB": 507011.0,
+        "allocated_kB": 120.860546875,
+        "runtime_overhead_percent": 0.0
+      },
+      {
+        "method": "get",
+        "configuration": "plain",
+        "n": 20,
+        "controller_ms": 1.5098057,
+        "resident_kB": 500056.8,
+        "allocated_kB": 59.605859375,
+        "runtime_overhead_percent": 0.0
+      },
+      {
+        "method": "delete",
+        "configuration": "plain",
+        "n": 20,
+        "controller_ms": 2.08321225,
+        "resident_kB": 499978.6,
+        "allocated_kB": 76.7609375,
+        "runtime_overhead_percent": 0.0
+      },
+      {
+        "method": "mergeCarts",
+        "configuration": "plain",
+        "n": 20,
+        "controller_ms": 5.52710115,
+        "resident_kB": 500014.4,
+        "allocated_kB": 314.62578125,
+        "runtime_overhead_percent": 0.0
+      },
+      {
+        "method": "postShipping",
+        "configuration": "plain",
+        "n": 20,
+        "controller_ms": 0.533806,
+        "resident_kB": 512527.0,
+        "allocated_kB": 27.162109375,
+        "runtime_overhead_percent": 0.0
+      },
+      {
+        "method": "newOrder",
+        "configuration": "mirrortaint",
+        "n": 20,
+        "controller_ms": 94.24618315000001,
+        "resident_kB": 504335.0,
+        "allocated_kB": 12520.393359375,
+        "runtime_overhead_percent": 504.1376260478439
+      },
+      {
+        "method": "get",
+        "configuration": "mirrortaint",
+        "n": 20,
+        "controller_ms": 3.5395429,
+        "resident_kB": 522300.4,
+        "allocated_kB": 918.153515625,
+        "runtime_overhead_percent": 134.43698086449137
+      },
+      {
+        "method": "delete",
+        "configuration": "mirrortaint",
+        "n": 20,
+        "controller_ms": 3.91594365,
+        "resident_kB": 522250.8,
+        "allocated_kB": 904.746484375,
+        "runtime_overhead_percent": 87.97622037792839
+      },
+      {
+        "method": "mergeCarts",
+        "configuration": "mirrortaint",
+        "n": 20,
+        "controller_ms": 12.1365034,
+        "resident_kB": 522409.4,
+        "allocated_kB": 4318.5609375,
+        "runtime_overhead_percent": 119.58171328201584
+      },
+      {
+        "method": "postShipping",
+        "configuration": "mirrortaint",
+        "n": 20,
+        "controller_ms": 2.58448695,
+        "resident_kB": 509295.4,
+        "allocated_kB": 461.49296875,
+        "runtime_overhead_percent": 384.16221436252124
+      },
+      {
+        "method": "newOrder",
+        "configuration": "tracefusion",
+        "n": 20,
+        "controller_ms": 20.7342787,
+        "resident_kB": 519500.0,
+        "allocated_kB": 1015.38125,
+        "runtime_overhead_percent": 32.9110367440103
+      },
+      {
+        "method": "get",
+        "configuration": "tracefusion",
+        "n": 20,
+        "controller_ms": 2.26574965,
+        "resident_kB": 496276.4,
+        "allocated_kB": 332.399609375,
+        "runtime_overhead_percent": 50.06895589280131
+      },
+      {
+        "method": "delete",
+        "configuration": "tracefusion",
+        "n": 20,
+        "controller_ms": 2.8802822,
+        "resident_kB": 496294.6,
+        "allocated_kB": 353.2015625,
+        "runtime_overhead_percent": 38.26158136310882
+      },
+      {
+        "method": "mergeCarts",
+        "configuration": "tracefusion",
+        "n": 20,
+        "controller_ms": 8.28176325,
+        "resident_kB": 496346.2,
+        "allocated_kB": 1317.62109375,
+        "runtime_overhead_percent": 49.83918378262353
+      },
+      {
+        "method": "postShipping",
+        "configuration": "tracefusion",
+        "n": 20,
+        "controller_ms": 1.2795801,
+        "resident_kB": 501277.6,
+        "allocated_kB": 183.382421875,
+        "runtime_overhead_percent": 139.70882680224653
+      }
+    ],
+    "offline": {
+      "mirrortaint": {
+        "offline_evaluation_and_reconstruction_ms": 66.6306,
+        "offline_process_peak_rss_kB": 49028,
+        "offline_process_scope": "Fresh Python worker; batch decoding/reconstruction/scoring and whole-worker peak RSS; not per-query latency"
+      },
+      "tracefusion": {
+        "offline_evaluation_and_reconstruction_ms": 2145.609748,
+        "offline_process_peak_rss_kB": 89312,
+        "offline_process_scope": "Fresh Python worker; batch decoding/reconstruction/scoring and whole-worker peak RSS; not per-query latency"
+      }
+    },
+    "compatibility": [
+      {
+        "configuration": "plain",
+        "business_passed": 151,
+        "status": "calibration-complete",
+        "no_target_checks_passed": null
+      },
+      {
+        "configuration": "mirrortaint",
+        "business_passed": 151,
+        "status": "calibration-complete",
+        "no_target_checks_passed": 8
+      },
+      {
+        "configuration": "tracefusion",
+        "business_passed": 151,
+        "status": "calibration-complete",
+        "no_target_checks_passed": 8
+      }
+    ],
+    "limitations": [
+      "MirrorTaint includes disclosed field-boundary, integration, stream, thread and logging adapters.",
+      "One deployment per configuration in fixed order; no formal performance ranking.",
+      "Controller time includes online tracing but excludes startup, static analysis, shutdown and offline reconstruction.",
+      "Memory is whole-service JVM RSS in KiB; allocation is a separate per-call delta in KiB.",
+      "No-target cases are separate from field relation accuracy; absence is not an observed empty source answer.",
+      "Independent fixtures define expected answers, but this exporter audits saved normalized claims rather than rerunning engines.",
+      "Unknown queries fail exact matching; version-specific qualification and cross-JVM transport remain separate tasks."
+    ],
+    "source_sha256": {
+      "/home/wujian/tracefusion2/artifacts/sockshop-orders-original-20261012/app.jar": "8a2cb87b9bedf79c7ad407fcd72bc74c6c1241ef67ae967de59f1ec5f5873a2b",
+      "/home/wujian/tracefusion2/artifacts/sockshop-five-methods-original-20261013/carts.jar": "ab0d2da1937c219d649766dd3ba84945c4e2063ac9bff6839993f9dc3d8a548b",
+      "/home/wujian/tracefusion2/artifacts/sockshop-five-methods-original-20261013/shipping.jar": "5704afeeca3c34e10873b15b5aeaf25cbe8326772382631ff4e579d5fa358890",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/plain/evaluation.json": "d67c6acc17893b198df00117ec559c50060700ebdc02cd89bae353d14faad35c",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/plain/result.json": "851a8dce2a806538f156a0b4bfe556e0de8fc37a557778eac7117703b2c0c633",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/plain/protocol.json": "7ddacbea0d266e72cb6ee686b53bc060cd541d42a9756d6e39d0025e5810c736",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/plain/compose.lock.json": "42e08eaf46018aba07d2a8d2f2b204390f9e35e5dfe6c4afc4b618fb572809a6",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/plain/orders.jar": "8a2cb87b9bedf79c7ad407fcd72bc74c6c1241ef67ae967de59f1ec5f5873a2b",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/plain/cost-events/orders/events.jsonl": "1e42f9af8a1a8dcf2ab304512ee1a37bf275fe8fd75276b74f9cdb59594924f7",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/plain/carts.jar": "ab0d2da1937c219d649766dd3ba84945c4e2063ac9bff6839993f9dc3d8a548b",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/plain/cost-events/carts/events.jsonl": "f5906b2f5a0600f5886ef47d619b9d62177998b207b03f8571d2b41074163883",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/plain/shipping.jar": "5704afeeca3c34e10873b15b5aeaf25cbe8326772382631ff4e579d5fa358890",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/plain/cost-events/shipping/events.jsonl": "30c330e8e547d158f55082cce1c1c1203e42aedf923e8d9e6b64eade3514c211",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/mirrortaint/evaluation.json": "58c174e3b1d24ba5b7352835e83be30d3367cf200e677f2238ca7f94cdc37952",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/mirrortaint/result.json": "8e2e7737022918c22409057e8449af468c4784a3b58b679972c7fc6ea02721a8",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/mirrortaint/protocol.json": "7ddacbea0d266e72cb6ee686b53bc060cd541d42a9756d6e39d0025e5810c736",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/mirrortaint/compose.lock.json": "45eb7ef6ac403d63af4e4254660e930352b5eeb6ed57c976497223155b588676",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/mirrortaint/orders.jar": "8a2cb87b9bedf79c7ad407fcd72bc74c6c1241ef67ae967de59f1ec5f5873a2b",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/mirrortaint/cost-events/orders/events.jsonl": "2560fe4dec0da254d22de1e545e9d1c33d4ff46c1aec892504772fb1a9ee0493",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/mirrortaint/carts.jar": "ab0d2da1937c219d649766dd3ba84945c4e2063ac9bff6839993f9dc3d8a548b",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/mirrortaint/cost-events/carts/events.jsonl": "f6d019d7e3a3de74ca963a0a27ba5131cce9447c67235b7bd4cb6fa3bdae4994",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/mirrortaint/shipping.jar": "5704afeeca3c34e10873b15b5aeaf25cbe8326772382631ff4e579d5fa358890",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/mirrortaint/cost-events/shipping/events.jsonl": "77602ddc7f17f8202d413d8137008a7814a020d624e2e5cf9a391a1b57880526",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/tracefusion/evaluation.json": "92051d254d8ad5a2ab5b6a5bb707f39cb9580c2cc3cf2bdb03e127531f504286",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/tracefusion/result.json": "910c653264d19d9b809792ebbdcf72a9d8e9800878c7f8727894328b87085837",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/tracefusion/protocol.json": "7ddacbea0d266e72cb6ee686b53bc060cd541d42a9756d6e39d0025e5810c736",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/tracefusion/compose.lock.json": "90b8b6a7a866c66fdc418dbcd115fac5be51bca49fbbbbb67367560080059312",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/tracefusion/orders.jar": "8a2cb87b9bedf79c7ad407fcd72bc74c6c1241ef67ae967de59f1ec5f5873a2b",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/tracefusion/cost-events/orders/events.jsonl": "42f549b26a33a44b395cde02cab61d3052f74922f5c19c0814c1c5c7bebc82a3",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/tracefusion/carts.jar": "ab0d2da1937c219d649766dd3ba84945c4e2063ac9bff6839993f9dc3d8a548b",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/tracefusion/cost-events/carts/events.jsonl": "8d9f099d54a78e2ca5ac10c8056f00bfc99357b11dc1d22ff9ace2911da283bc",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/tracefusion/shipping.jar": "5704afeeca3c34e10873b15b5aeaf25cbe8326772382631ff4e579d5fa358890",
+      "/home/wujian/tracefusion2/artifacts/sockshop-three-five-v3-20261013/tracefusion/cost-events/shipping/events.jsonl": "9f65e7ca30c1c89b7137eb938da2bf015bd12732cfeeadc70b34fa5655336b2e"
+    }
+  },
+  "phosphor_shipping_qualification": {
+    "kind": "phosphor-shipping-qualification",
+    "configuration": {
+      "image": "weaveworksdemos/orders@sha256:b622e40e83433baf6374f15e076b53893f79958640fc6667dff597622eff03b9",
+      "phosphor_version": "0.0.3",
+      "profile": "multiTaint, explicit data flow; object-wide String source tags",
+      "rabbitmq": "not deployed; original controller accepts its queue exception",
+      "source_and_artifact_sha256": {
+        "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/PhosphorShippingAgent.java": "99d0fa0bba63383aa4b76152340ef0084c63c733312df0bd77faec35b17384c5",
+        "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/PhosphorShippingProbe.java": "00f5e6dff948ec90479d75b287284024bbe84b0b7d3489c6518370e365d5d718",
+        "/home/wujian/tracefusion2/artifacts/external-tools/phosphor-0.0.3/Phosphor-0.0.3.jar": "12d9613d93baaa3dc64e7727bcfba006147e06b244af80b6b5fd33e1af1fd837",
+        "/home/wujian/tracefusion2/artifacts/phosphor-shipping-20261014/shipping.jar": "5704afeeca3c34e10873b15b5aeaf25cbe8326772382631ff4e579d5fa358890",
+        "/home/wujian/tracefusion2/artifacts/phosphor-shipping-20261014/shipping-adapter.jar": "aa970614c7fc26bb75eab1900efc106277092c21c18b7c906b91e9e879d89464",
+        "/home/wujian/tracefusion2/artifacts/phosphor-shipping-20261014/probe-classes/PhosphorShippingProbe.class": "53ca8834c0f87923b148773269a3e4e23ca6419ded2ab54217a1514e5e79277f",
+        "/home/wujian/tracefusion2/artifacts/phosphor-shipping-20261014/jre/lib/rt.jar": "9441dd4e2ad00bb3974d5d091a6bd133b59625bbaaaa98191540026f393f55b7",
+        "/home/wujian/tracefusion2/artifacts/phosphor-shipping-20261014/jre/bin/java": "539eb5a5925c3e418dfc4cffd532f9a7f485b14be116ea02e08536738a6dbac6",
+        "/home/wujian/tracefusion2/artifacts/phosphor-shipping-20261014/runtime-smoke.log": "14306a40da44d743daaaa071bb28a74d2ba195a0cc89872d0aa90081f91426d5",
+        "/home/wujian/tracefusion2/artifacts/phosphor-shipping-20261014/instrument-jre.log": "3f688ffaf17593778b807178c57b6f40226c01e4dcb7a1edbea0e819719e4c83",
+        "/home/wujian/tracefusion2/artifacts/phosphor-shipping-20261014/shipping-probe.log": "67b6210d2fe9c40b5ca07d0bd74e39c190477d03a11b6eb8ecba4fa89a1f0397"
+      }
+    },
+    "status": "bounded-http-calibration-complete",
+    "business_calls": 4,
+    "direct_probe_checks_passed": 12,
+    "shared_reference_field_labels_independent": false,
+    "http_queries": 8,
+    "counts": {
+      "tp": 8,
+      "fp": 0,
+      "fn": 0,
+      "exact": 8
+    },
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "queries": [
+      {
+        "case": "distinct-fields",
+        "invocation": 1,
+        "field": "id",
+        "expected": [
+          "shipping:1:id"
+        ],
+        "actual": [
+          "shipping:1:id"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "exact": true
+      },
+      {
+        "case": "distinct-fields",
+        "invocation": 1,
+        "field": "name",
+        "expected": [
+          "shipping:1:name"
+        ],
+        "actual": [
+          "shipping:1:name"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "exact": true
+      },
+      {
+        "case": "same-value-fields",
+        "invocation": 2,
+        "field": "id",
+        "expected": [
+          "shipping:2:id"
+        ],
+        "actual": [
+          "shipping:2:id"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "exact": true
+      },
+      {
+        "case": "same-value-fields",
+        "invocation": 2,
+        "field": "name",
+        "expected": [
+          "shipping:2:name"
+        ],
+        "actual": [
+          "shipping:2:name"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "exact": true
+      },
+      {
+        "case": "repeat-same-values",
+        "invocation": 3,
+        "field": "id",
+        "expected": [
+          "shipping:3:id"
+        ],
+        "actual": [
+          "shipping:3:id"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "exact": true
+      },
+      {
+        "case": "repeat-same-values",
+        "invocation": 3,
+        "field": "name",
+        "expected": [
+          "shipping:3:name"
+        ],
+        "actual": [
+          "shipping:3:name"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "exact": true
+      },
+      {
+        "case": "same-record-new-name",
+        "invocation": 4,
+        "field": "id",
+        "expected": [
+          "shipping:4:id"
+        ],
+        "actual": [
+          "shipping:4:id"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "exact": true
+      },
+      {
+        "case": "same-record-new-name",
+        "invocation": 4,
+        "field": "name",
+        "expected": [
+          "shipping:4:name"
+        ],
+        "actual": [
+          "shipping:4:name"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "exact": true
+      }
+    ],
+    "main_table_eligible": false,
+    "performance_eligible": false,
+    "limitations": [
+      "This version/profile tags String objects; shared references cannot preserve independent field source tags.",
+      "HTTP target is the controller return Shipment; serialized response tags are not examined.",
+      "No RabbitMQ transport, second JVM, Carts, Orders, parallel workload or cost qualification.",
+      "Direct probes test controlled setters and object reuse; HTTP calls create fresh request DTOs.",
+      "This eight-query qualification is separate from the existing 166-query two-baseline suite."
+    ],
+    "evidence_sha256": {
+      "/home/wujian/tracefusion2/artifacts/phosphor-shipping-20261014/prepared.json": "dae7781585e595c9be481076d709f8ba309cab2ff1cf495fec1d89c7d99924e8",
+      "/home/wujian/tracefusion2/artifacts/phosphor-shipping-20261014/http-cases.json": "17405387810c833a180a599d712a70b4d5033c7b4a664da3578b1d316029214a",
+      "/home/wujian/tracefusion2/artifacts/phosphor-shipping-20261014/http-results.json": "c2e94c6efd9550305b56ba651d2a89ccd8d1205482ec770fa8af48c9c47ddeb5",
+      "/home/wujian/tracefusion2/artifacts/phosphor-shipping-20261014/http-fields.log": "1b1afb8852c1098870653501c0d1968c2ff1ab5dc1e7af2221263205e247d64b"
+    }
+  },
+  "failed_phosphor_adapter_attempts": [
+    {
+      "status": "analysis-unavailable",
+      "business_passed": 4,
+      "field_metrics": null,
+      "reason": "Companion ClassFileTransformer lacked the Phosphor instrumented-array dispatch signature; no source/sink events. Corrected in v2, no taint propagation algorithm changed."
+    },
+    {
+      "status": "analysis-unavailable",
+      "business_passed": 4,
+      "field_metrics": null,
+      "reason": "No PHOSPHOR_BOUNDARY events despite successful HTTP business calls. Companion transformer interoperability required its tagged interface and preloading visitors in one instrumentation domain; final script addresses both.",
+      "replacement": "artifacts/phosphor-shipping-20261014"
+    }
+  ],
+  "negative_controls": {
+    "baseline": [
+      {
+        "fault": "raw-cost-tamper",
+        "rejected": true,
+        "reason": "Raw sample mismatch"
+      },
+      {
+        "fault": "unknown-marked-exact",
+        "rejected": true,
+        "reason": "Incorrect exact flag"
+      }
+    ],
+    "phosphor": [
+      {
+        "fault": "wrong-native-target-tag",
+        "counts": {
+          "tp": 7,
+          "fp": 1,
+          "fn": 1,
+          "exact": 7
+        },
+        "f1": 0.875,
+        "expected_behavior_verified": true
+      },
+      {
+        "fault": "runtime-verification-error",
+        "rejected": true,
+        "reason": "Phosphor instrumentation/runtime compatibility error"
+      }
+    ]
+  },
+  "next_qualification": [
+    "Freeze field instance and version identities without collapsing repeated reads in evaluation.",
+    "Run shared-reference and overwrite cases on MirrorTaint and TraceFusion using the same contract.",
+    "Resolve or disclose the Phosphor object-tag profile limitation, then qualify Carts and Orders.",
+    "Only compare Phosphor costs after matching load, JVM configuration, adapters and deployment rounds.",
+    "Qualify serialized cross-JVM paths independently from the per-service boundary main table."
+  ],
+  "source_sha256": {
+    "experiments/sockshop-mirrortaint/audit_dynamic_baselines.py": "0dfc5f4730d9630ee4e3563a70e2ff4deb90fd4e529dd5fcd5b1c16c91f1c096",
+    "experiments/sockshop-mirrortaint/phosphor_shipping.py": "15794ac16df93a1a55c108675a19d61933317d1fd69f70c5b1ece085a24c6f31",
+    "experiments/sockshop-mirrortaint/PhosphorShippingAgent.java": "99d0fa0bba63383aa4b76152340ef0084c63c733312df0bd77faec35b17384c5",
+    "experiments/sockshop-mirrortaint/PhosphorShippingProbe.java": "00f5e6dff948ec90479d75b287284024bbe84b0b7d3489c6518370e365d5d718"
+  },
+  "evidence_sha256": {
+    "artifacts/dynamic-baseline-audit-20261014/validation.json": "683eb0f533745537b3df7f54cfce6397f464d68105c8ee32d06022753cab3621",
+    "artifacts/dynamic-baseline-audit-20261014/comparison.md": "b133e3fcc5019cd00add5bb9525cf010618657b616b60e9d26767cf6dfad46f0",
+    "artifacts/dynamic-baseline-audit-20261014/field-calibration.csv": "ccb3a571dbb0c3330d7c2854924925a7c5091ef89faa4fa5f3cd07479bd79479",
+    "artifacts/dynamic-baseline-audit-20261014/online-costs.csv": "40d418e86c49f8cf522bee6756a6bd49a3cd63b21258eef750c40126e8ce787e",
+    "artifacts/dynamic-baseline-audit-20261014/negative-controls.json": "a06e2467df9bc35b458fc532fc0b9b622c075277b447beb5e5d5f7d0cf461d49",
+    "artifacts/phosphor-shipping-20261014/prepared.json": "dae7781585e595c9be481076d709f8ba309cab2ff1cf495fec1d89c7d99924e8",
+    "artifacts/phosphor-shipping-20261014/qualification.json": "d3cc7a25ee5a45fec1b76d9193b9067ff081018eb56ebb82dbfe2b4759fb42b5",
+    "artifacts/phosphor-shipping-20261014/compatibility.json": "a52a5928d1a6387bd2e8ec247e4eeac5c39802d9bc7203983d22ed0187e47a54",
+    "artifacts/phosphor-shipping-20261014/http-cases.json": "17405387810c833a180a599d712a70b4d5033c7b4a664da3578b1d316029214a",
+    "artifacts/phosphor-shipping-20261014/http-results.json": "c2e94c6efd9550305b56ba651d2a89ccd8d1205482ec770fa8af48c9c47ddeb5",
+    "artifacts/phosphor-shipping-20261014/http-fields.log": "1b1afb8852c1098870653501c0d1968c2ff1ab5dc1e7af2221263205e247d64b",
+    "artifacts/phosphor-shipping-20261014/http-container.json": "8b6345a6058e5e24f6691c2e74d4a0dd81cac16e75629b98e12f340d848e663c",
+    "artifacts/phosphor-shipping-20261014/negative-controls.json": "b621642674aa8f1c33a6b459768458c339f06f0364cbc58b59553c59c240452e",
+    "artifacts/phosphor-shipping-20261014/shipping-probe.log": "67b6210d2fe9c40b5ca07d0bd74e39c190477d03a11b6eb8ecba4fa89a1f0397",
+    "artifacts/phosphor-shipping-20261014/runtime-smoke.log": "14306a40da44d743daaaa071bb28a74d2ba195a0cc89872d0aa90081f91426d5",
+    "artifacts/phosphor-shipping-20261014/instrument-jre.log": "3f688ffaf17593778b807178c57b6f40226c01e4dcb7a1edbea0e819719e4c83",
+    "artifacts/external-tools/phosphor-0.0.3/manifest.json": "a0d12afafb4e1fde414d0c5a159412d5120ec26de21521d18de4215f7ac8a291",
+    "artifacts/phosphor-java8-qualification-20261014/attempt-status.json": "276521c0ce89575215ff1e2037390fea9fb57905fd6ec11f52d8920200db1f5a",
+    "artifacts/phosphor-java8-qualification-20261014/prepared.json": "0163b58cdb57f59d318d7be9c15471f792f6a80a7a9819d7112407a2ef933a5f",
+    "artifacts/phosphor-java8-qualification-20261014/http-fields.log": "7bef527e3c8f613be517e28475e9902bede233618cc2b148b211ba774ca24ced",
+    "artifacts/phosphor-java8-qualification-20261014/http-results.json": "c2e94c6efd9550305b56ba651d2a89ccd8d1205482ec770fa8af48c9c47ddeb5",
+    "artifacts/phosphor-java8-qualification-v2-20261014/attempt-status.json": "1b303422475cb69c16d9455d7bbcffc376b0b997ffc00a969ce800715d433368",
+    "artifacts/phosphor-java8-qualification-v2-20261014/prepared.json": "eb6b92b319c0c913cb78786561f365a48d17796403ef5f1156fdbb8d1d8371a7",
+    "artifacts/phosphor-java8-qualification-v2-20261014/http-fields.log": "498afff85c5b66bd46a7122c14891a4297820dbdb552d6e13b31f450725ba219",
+    "artifacts/phosphor-java8-qualification-v2-20261014/http-results.json": "c2e94c6efd9550305b56ba651d2a89ccd8d1205482ec770fa8af48c9c47ddeb5"
+  }
+}

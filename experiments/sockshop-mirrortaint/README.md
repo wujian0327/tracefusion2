@@ -3,6 +3,11 @@
 2026-10-12。用户确认先做 Sock Shop，再做 PiggyMetrics。**正式准确率资格尚未完成；2026-10-13 已完成五方法的选定字段校准与首轮开销测量，见文末。**
 这一步冻结原版业务、查询契约和外部 agent，准备真实服务的 API 负载；不把预检当成来源还原。
 
+**2026-10-14 当前优先级：**MirrorTaint＋披露适配器与 TraceFusion 做主对比，
+Phosphor 先做 Shipping 小范围资格检查；FlowDist 保留为补充，暂停扩展。
+已有 166 查询的评分会合并同一请求中同一业务记录字段的多次读取／版本，
+不能作为严格字段版本或完整跨服务路径的准确率。见文末“动态基线复核与 Phosphor 接入”。
+
 **后续主机反馈：**plain 和原版 MirrorTaint 业务均 15/15 通过；异步线程污点状态未初始化，
 且并发文本日志覆盖，来源追踪仍未通过。主机结果来自用户反馈，原始包尚未在当前分支独立复核。
 见 [主机状态与适配校准边界](HOST-STATUS-20261012.md)。
@@ -1208,3 +1213,105 @@ python3 experiments/sockshop-mirrortaint/compare_carts_orders.py evaluate "${com
 `infer_carts_http_sources.py` 重建消息字段路径，`flowdist_stream_model.py` 生成库摘要，
 `qualify_carts_orders.py --all-query-matching --stream-model ...` 先完成阶段资格检查。
 各脚本 `--help` 列出必需输入，所有原输入与旧实验目录保持不变。
+
+## 2026-10-14 动态基线复核与 Phosphor 接入
+
+采用 MirrorTaint＋披露适配器作为主动态基线，Phosphor 作为待资格验证的第二动态基线；
+FlowDist 保留已有结果作为补充，FlowDroid 暂不进入字段实例准确率主表。
+不沿用论文工具之间不同粒度的真值或漏报数；执行／接入失败单列兼容性，不计成传播算法 FN。
+
+`audit_dynamic_baselines.py` 独立读取 `sockshop-three-five-v3-20261013` 的原始记录，
+检查 plain / MirrorTaint / TraceFusion 三配置的镜像、原版业务 JAR、共同 JVM 参数、
+相同负载、453 次业务调用及 300 个原始性能样本，重新计算 TP/FP/FN 和完全匹配率。
+该复核不重跑推断，不引用旧 FlowDist 七查询或四参考查询的无效结果。
+原始成本被篡改、unknown 被标为 exact 的两个负对照均拒绝。
+
+准确率范围是 **request / business-record / field**。Orders 归一化为请求、服务、路由、
+记录 ID、字段；Carts / Shipping 为请求、记录 ID、字段。相同请求中同一记录字段的多次
+读取或版本可能合并，不能据此宣称严格字段实例／版本或跨服务路径准确率。
+当前两方案各 166/166 查询完全匹配，TP=180、FP=0、FN=0，P/R/F1 均 100%；
+另各有 8 个无目标检查通过，未混入 TP。
+
+下表是该轮保存的成本均值，每方法 5 次预热、20 次串行测量。Runtime 为含在线追踪的
+控制器墙钟 ms；Memory 为整服务 JVM RSS KiB。只有每配置一轮固定顺序部署，
+启动、静态分析、结束写盘和离线还原不在 Runtime 中，不能作为正式性能排名。
+
+| 方法 | plain ms | MT＋适配 ms | TraceFusion ms | plain RSS KiB | MT＋适配 RSS KiB | TraceFusion RSS KiB |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| newOrder | 15.600 | 94.246 | 20.734 | 507011.0 | 504335.0 | 519500.0 |
+| get | 1.510 | 3.540 | 2.266 | 500056.8 | 522300.4 | 496276.4 |
+| delete | 2.083 | 3.916 | 2.880 | 499978.6 | 522250.8 | 496294.6 |
+| mergeCarts | 5.527 | 12.137 | 8.282 | 500014.4 | 522409.4 | 496346.2 |
+| postShipping | 0.534 | 2.584 | 1.280 | 512527.0 | 509295.4 | 501277.6 |
+
+结果：`artifacts/dynamic-baseline-audit-20261014/{comparison.md,field-calibration.csv,online-costs.csv,validation.json}`。
+CSV 还保留各方法 TP/FP/FN、Precision/Recall/F1、完全匹配率、unknown、RSS 和独立的分配增量；
+离线还原时间和离线进程峰值 RSS 见 validation.json，未与在线成本混合。
+
+复核命令（输出必须用新目录）：
+
+```bash
+python3 experiments/sockshop-mirrortaint/audit_dynamic_baselines.py \
+  --pilot artifacts/sockshop-three-five-v3-20261013 \
+  --out artifacts/dynamic-baseline-audit-new
+```
+
+
+Phosphor 固定为官方 Maven Central **0.0.3** 发布包（不是论文版本的数值复现），
+JAR SHA-256 `12d9613d93baaa3dc64e7727bcfba006147e06b244af80b6b5fd33e1af1fd837`。
+下载来源及上游校验和保存在 `artifacts/external-tools/phosphor-0.0.3/manifest.json`：
+[官方发布包](https://repo.maven.apache.org/maven2/edu/gmu/swe/phosphor/Phosphor/0.0.3/)。
+JRE 来自固定 digest 的原 Sock Shop Orders Java8 镜像，单独插桩到实验目录，
+不替换主机 JDK。采用 `-multiTaint`、显式数据流，不开启控制依赖传播。
+
+`PhosphorShippingProbe.java` 直接调用原版 Shipment / ShippingController：
+多来源算术、不同 String 对象的同值字段、同一 DTO 的重复请求、字段覆盖、旧引用、
+覆盖为无标签值，共 12 项断言通过。**共享同一个 String 对象的 id/name 不能通过：**
+当前 `MultiTainter.taintedObject` 给对象设标签，第二个字段打标会覆盖第一个字段标签。
+这是本次版本／来源配置的限制，不能据此断言所有 Phosphor 配置都不支持字段分析；
+也不能静默克隆字段对象或给目标补标签来掩盖问题。
+
+`PhosphorShippingAgent.java` 仅在控制器入口给两个声明来源打不同标签，
+返回时读取原生标签，不按值建立来源关系。它在 Phosphor 之前注册，
+提供与插桩 JRE 一致的数组标签转换接口，并预载自身 ASM visitor，避免混合插桩域；
+使用 Phosphor 随包的 ASM，不修改 Phosphor 的传播代码或原版业务 JAR。
+HTTP 夹具在执行前冻结为不同字段值、同值字段、重复相同输入、相同业务 ID 新 name 四场景。
+
+最终 `artifacts/phosphor-shipping-20261014` 已从头用复现脚本构建并完成：
+4/4 HTTP 业务请求、8/8 字段查询，TP=8、FP=0、FN=0，P/R/F1=100%。
+这里的目标是控制器返回的 DTO 字段，不能解释为 HTTP 序列化后或跨服务标签已验证。
+负对照把一个真实目标标签改成其他来源时，评分变成 TP=7、FP=1、FN=1、F1=87.5%；
+注入运行时 VerifyError 时拒绝生成污点指标。结果与逐查询答案见 `qualification.json`。
+
+| 配置／范围 | 业务 | 字段校准 | 当前资格 |
+| --- | --- | --- | --- |
+| MirrorTaint＋披露适配器，五方法 | 151/151 | 166/166，180/0/0 | 有界记录字段校准；严格版本／共享引用待补测 |
+| TraceFusion，五方法 | 151/151 | 166/166，180/0/0 | 有界记录字段校准；严格版本／共享引用待补测 |
+| Phosphor 0.0.3＋入口／采集适配器，Shipping | 4/4 | 8/8，8/0/0 | 专项兼容性通过；共享引用限制，主表资格未完成 |
+| Phosphor 前两次 HTTP 适配尝试 | 各 4/4 | N/A，无来源／目标观测 | 分析接入失败，不计作 FN |
+
+失败尝试保存在 `phosphor-java8-qualification[-v2]-20261014/attempt-status.json`；
+与最终复现环境独立，不覆盖原始日志。完整检查点为 `dynamic-baselines-20261014.json`。
+
+Shipping 专项未部署 RabbitMQ：原版控制器捕获连接异常后仍接受并返回 Shipment。
+因此只验证入口／返回字段和 Spring/Jackson HTTP 的兼容性，不代表配送成功、AMQP
+跨进程标签传播或第二 JVM 的来源重建，也不测此配置的 Runtime / Memory Cost。
+它与 166 查询使用不同场景和分母，不能把二者的百分比直接并排用于排名。
+
+复现（`--work` 为新目录，需要已校验发布包和本地缓存的固定镜像）：
+
+```bash
+python3 experiments/sockshop-mirrortaint/phosphor_shipping.py prepare \
+  --work artifacts/phosphor-shipping-new
+python3 experiments/sockshop-mirrortaint/phosphor_shipping.py http \
+  --work artifacts/phosphor-shipping-new
+python3 experiments/sockshop-mirrortaint/phosphor_shipping.py evaluate \
+  --work artifacts/phosphor-shipping-new
+```
+
+容器只属于本次实验，HTTP 阶段完成或失败均保存日志并停止／删除该容器。
+执行失败保留启动／业务／分析阶段和原因，字段指标记 N/A，不生成虚假的传播 FN。
+后续应先解决／限定共享引用来源定义，再接入 Carts 和 Orders，统一重跑负载后才考虑
+把 Phosphor 加入主表；跨 JVM 还需单独披露消息序列化／传输适配与真值。
+共享引用、重复读取和覆盖版本的严格查询也必须对 MirrorTaint / TraceFusion 同样补测；
+目前只验证了 Phosphor 此配置的限制，不能据此宣称另两个方案优于它。
