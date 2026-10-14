@@ -79,6 +79,13 @@ def configured(args, mode, out):
                 cfg['environment']['JAVA_OPTS'] = (' -javaagent:/tf2/observer.jar -Dtracefusion.boundary.mode=mirrortaint'
                     ' -Dtracefusion.boundary.output=/tf2/boundary ' + cfg['environment']['JAVA_OPTS'])
             cfg['environment']['JAVA_OPTS'] += ' -javaagent:/tf2/observer.jar=cost -Dtracefusion.cost.output=/tf2/cost'
+    if getattr(args,'carts_http',False):
+        if not manifest.get('carts_http_response_clock_available'):raise ValueError('Carts HTTP reply-clock adapter required')
+        if mode=='flowdist':
+            for role in ('orders','carts','shipping'):spec['services'][role]['environment']['JAVA_OPTS']+=' -Dflowdist.http.carts=true'
+        elif mode=='tracefusion':
+            spec['services']['orders']['environment']['JAVA_OPTS']+=' -Dtracefusion.http.instances=true -Dtracefusion.http.carts=true'
+            spec['services']['carts']['environment']['JAVA_OPTS']+=' -Dtracefusion.http.carts=true'
     return spec
 
 
@@ -181,6 +188,7 @@ def run(args):
     out = args.out.resolve()
     out.mkdir(parents=True, exist_ok=False)
     protocol = {'methods': five.METHODS, 'warmup': args.warmup, 'repetitions': args.repetitions,
+                'carts_http_transport_enabled':getattr(args,'carts_http',False),
                 'boundary_agent_sha256': digest(args.boundary), 'offline_cost_reported_separately': True,
                 'runtime': 'Inclusive controller wall time, common observer loaded last; serial measurement targets',
                 'memory': 'Whole service JVM RSS and separately process-wide/current-thread allocation deltas; KiB',
@@ -214,6 +222,7 @@ def run(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--carts-http',action='store_true',help='Opt-in Carts response message identity/clock evidence; not field accuracy')
     for flag in ('repo', 'apps', 'orders', 'carts', 'shipping', 'boundary', 'tracefusion', 'mirrortaint', 'integration-adapter', 'out'):
         parser.add_argument('--' + flag, type=Path, required=True)
     parser.add_argument('--modes', nargs='+', choices=('plain', 'flowdist', 'mirrortaint', 'tracefusion'),

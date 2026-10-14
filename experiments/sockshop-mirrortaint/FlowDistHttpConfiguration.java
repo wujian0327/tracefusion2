@@ -20,6 +20,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import javax.servlet.http.HttpServletResponse;
 import disttaint.OTMonitor;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
 /** HTTP boundary adapter for the selected Java shipping endpoint only. */
 @Configuration
@@ -45,11 +46,22 @@ public class FlowDistHttpConfiguration extends WebMvcConfigurerAdapter {
             public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
                 throws IOException, ServletException {
                 HttpServletRequest http = (HttpServletRequest)request;
+                boolean carts=Boolean.getBoolean("flowdist.http.carts") && http.getMethod().equals("GET")
+                    && http.getRequestURI().matches("/carts/[^/]+/items");
+                if (!http.getRequestURI().equals("/shipping") && !carts) { chain.doFilter(request,response);return; }
                 FlowDistHttpClock.receive(http.getHeader(FlowDistHttpClock.HEADER));
+                if(carts && http.getHeader(FlowDistHttpClock.HEADER)!=null) {
+                    // A response send clock must follow serialization's Item reads.
+                    ContentCachingResponseWrapper cached=new ContentCachingResponseWrapper((HttpServletResponse)response);
+                    chain.doFilter(request,cached);
+                    cached.setHeader(FlowDistHttpClock.HEADER,FlowDistHttpClock.send());
+                    cached.copyBodyToResponse();return;
+                }
                 chain.doFilter(request, response);
             }
         });
         bean.addUrlPatterns("/shipping");
+        if(Boolean.getBoolean("flowdist.http.carts"))bean.addUrlPatterns("/carts/*");
         bean.setOrder(Integer.MIN_VALUE);
         return bean;
     }
@@ -71,12 +83,19 @@ public class FlowDistHttpConfiguration extends WebMvcConfigurerAdapter {
             public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
                 throws IOException {
                 // Explicit peer selection: no metadata added to payment/Go/DB/MQ traffic.
-                if (!request.getURI().equals(peer)) return execution.execute(request, body);
+                if (!request.getURI().equals(peer) && !(Boolean.getBoolean("flowdist.http.carts")
+                    && request.getMethod()==HttpMethod.GET && cartsPeer(request.getURI()))) return execution.execute(request, body);
                 request.getHeaders().set(FlowDistHttpClock.HEADER, FlowDistHttpClock.send());
                 ClientHttpResponse response = execution.execute(request, body);
                 FlowDistHttpClock.receive(response.getHeaders().getFirst(FlowDistHttpClock.HEADER));
                 return response;
             }
         };
+    }
+    public static boolean cartsPeer(URI uri) {
+        return "http".equals(uri.getScheme()) && "carts".equals(uri.getHost())
+            && (uri.getPort()==-1||uri.getPort()==80) && uri.getRawUserInfo()==null
+            && uri.getRawQuery()==null && uri.getRawFragment()==null
+            && uri.getRawPath().matches("/carts/[^/]+/items");
     }
 }

@@ -137,6 +137,20 @@ public final class BoundaryRecorder {
             throw new IllegalArgumentException("Invalid HTTP message identity");
         return message;
     }
+    private static void cartMessage(Map<String,Object> event) throws Exception {
+        ClassLoader loader=Thread.currentThread().getContextClassLoader();
+        Class<?> holder=Class.forName("org.springframework.web.context.request.RequestContextHolder",false,loader);
+        Object attributes=holder.getMethod("getRequestAttributes").invoke(null);
+        if(attributes==null)return;
+        Class<?> servlet=Class.forName("org.springframework.web.context.request.ServletRequestAttributes",false,loader);
+        if(!servlet.isInstance(attributes))return;
+        Object request=servlet.getMethod("getRequest").invoke(attributes);
+        Class<?> http=Class.forName("javax.servlet.http.HttpServletRequest",false,loader);
+        String uri=(String)http.getMethod("getRequestURI").invoke(request);
+        if(!"GET".equals(http.getMethod("getMethod").invoke(request))||!uri.matches("/carts/[^/]+/items"))return;
+        String message=requestMessage();
+        if(message!=null){event.put("message_id",message);event.put("http_uri",uri);}
+    }
     private static Object fieldValue(Object object,String field) throws Exception {
         for(Class<?> c=object.getClass();c!=null;c=c.getSuperclass()) try { Field f=c.getDeclaredField(field);f.setAccessible(true);return f.get(object); } catch(NoSuchFieldException ignored) {}
         throw new NoSuchFieldException(field);
@@ -164,6 +178,7 @@ public final class BoundaryRecorder {
             Map<String,Object> event = context(); event.put("owner", owner); event.put("field",field);
             event.put("version",version); event.put("observed",value(observed));
             if(method!=null){event.put("access_method",method);event.put("declared_field",declaration);}
+            if(Boolean.getBoolean("tracefusion.http.carts"))cartMessage(event);
             emit(kind,event);
         } catch (Throwable error) { problem("field:" + error); }
     }

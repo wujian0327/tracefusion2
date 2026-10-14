@@ -1031,6 +1031,8 @@ python3 experiments/sockshop-mirrortaint/three_method_five.py \
 
 ### FlowDist 与 TraceFusion 的共同字段访问查询（2026-10-14）
 
+本节是单 JVM 字段存储／计算的诊断校准，不作为跨服务主表。跨服务结果见后续“首条跨服务主路径”。
+
 **更正旧结果：** FlowDist 原 `OT3AnalysisAll` 的 `dtDiver` 将运行时写出的 HashMap
 强制转换成 LinkedHashMap，捕获异常后仍继续执行；动态图为空时又回退到静态图。
 因此旧七条查询的 FlowDist“5/7，TP=0、FN=2”和旧四条引用控制“4/4”均无效，
@@ -1109,3 +1111,100 @@ python3 experiments/sockshop-mirrortaint/audit_field_comparison.py \
   --pilot artifacts/sockshop-field-comparison-20261014 --comparison artifacts/field-compare-new \
   --out /tmp/field-compare-checkpoint.json
 ```
+
+### 首条跨服务主路径：Carts 响应字段 → Orders.total（2026-10-14）
+
+已用相同的源字段、目标字段和真值跑通第一组**跨服务字段类型聚合查询**。
+源从 Carts 实际返回的 Item 字段开始，经 HTTP 响应和 Orders 的计算，到
+CustomerOrder.total 字段写入结束，不要求追溯 Carts 数据库赋值。
+因此本组不使用上一节 setter→getter 的 DTO 存储查询，也不混入其 20 条分母。
+
+实际接口是 Orders 请求的 `GET /carts/{customer}/items`，由 Spring Data REST 生成，
+并非 `CartsController.get`。旧 HTTP 时钟适配仅覆盖 Shipping，不能据此认定已经跟踪此路径。
+新增 opt-in `--carts-http` 后，Orders/Carts 都记录了真实 HTTP 关联。
+FlowDist 使用原进程逻辑时钟与首次接收规则；Carts 在实际序列化读完字段后才发送回复时钟，
+通过缓存响应延迟提交实现，避免将回复时钟打在源字段读取之前。仅选择指定的 Java Carts
+GET 路径，未把时钟扩展到 Go、数据库或付款接口。
+
+TraceFusion 为这条 RPC 增加独立消息 UUID，将 Carts 实际 getter 字段读取与 Orders
+反序列化的 Item 快照连接。按消息身份、列表位置和默认 JSON 属性选边，值只检验已选的边。
+再接入已有对象／字段版本与算术／stream 重建；不以 B3 trace、客户编号或业务值选择来源。
+本轮有 15 个成功的 total 目标（含空购物车的常量结果），重建 30 条实际字段来源路径；
+48 个 HTTP 字段绑定另含 itemId 负例及没有成功目标的响应，不与主表查询数混用。
+
+FlowDist 需额外披露以下适配与配置，**本表不是未修改原版 OT3 的 socket 级实验复现**：
+
+- 为已有原生 enter 探针的方法，在真实正常调用返回处补原 OTMonitor.returnInto 观察。
+  异常返回不发成功事件；方法尚未 enter 时不补事件。移除新探针后，规范化 class 完全复原。
+  这修复了框架／异步调用返回后，调用方恢复执行未被完整记录的问题。
+- 从 Jimple 的真实 LambdaMetafactory 目标和直接管道结构，生成通用的顺序
+  `List.stream().mapToDouble(lambda).sum()` 回调返回摘要，使用原生 VTE_RET 边。
+  摘要不引用 quantity/unitPrice、查询标签或预期结果，暂不覆盖 parallel/filter 等其他管道。
+  这是新增库模型，不能称为完全没有模型扩展。
+- 原按源方法条件匹配配置仍有失败的正例，原始诊断保留。主表采用作者 JAR 已有的
+  `DynTransferGraph.buildGraph(DynTransferGraph, boolean)` 全轨迹匹配实现，再用原生语句搜索。
+  这里没有替换图搜索／传播规则，也不加载上一节修复编号查找的 DynTransferGraph class 覆盖。
+  `build_flowdist_field_launcher.py` 构建可复现的此配置，原作者 JAR SHA 保持不变。
+- 跨服务输出组合为：原生进程时钟候选路径、原生 Carts 字段→getter 返回路径、
+  明确披露的默认 JSON 属性名／类型模型、原生 Orders 字段→total 路径。
+  它是高层框架模型适配后的组合结果，不是直接冒充原 OT3 的底层网络语句路径。
+  FlowDist 不读取 TraceFusion 的 UUID 关联或重建结果。
+
+最终 FlowDist 配置的 11 项阶段正例全部通过，包括两边 getter、Orders 回调返回、
+sum、调用方恢复、构造传参和 total 写入。前面的默认匹配失败和静态／动态差异证据
+保留在 `carts-orders-native-*-controls-20261014` 等目录，没有把它们改计为算法 FN。
+
+主表范围是“该次完整工作负载中，某类 Carts 响应字段是否影响某类 Orders 输出字段”。
+TraceFusion 的请求实例路径向此粒度聚合；FlowDist 保留原方法／进程粒度，
+本表**不声称双方都已完成请求实例区分**。
+
+| Carts 源字段 | Orders 目标字段 | 真值 | FlowDist＋上述适配 | TraceFusion |
+| --- | --- | --- | --- | --- |
+| Item.quantity | CustomerOrder.total | 有依赖 | 有依赖 | 有依赖 |
+| Item.unitPrice | CustomerOrder.total | 有依赖 | 有依赖 | 有依赖 |
+| Item.itemId | CustomerOrder.total | 无依赖 | 无依赖 | 无依赖 |
+
+两边都是 TP=2、FP=0、FN=0、TN=1、unknown=0；Precision/Recall/F1=100%，覆盖率=100%。
+**这只有 3 条聚合字段类型查询，属于第一条路径校准，不能据此宣称准确率全面达到 100%
+或任一方法胜出。** 真值来自独立业务公式，查询在组合预测前冻结；端点资格检查时已看到
+采集观察和阶段控制，因此不是盲测基准，也不是论文 Sock Shop 69 条关系的复现。
+
+最终主表为 `artifacts/carts-orders-main-comparison-20261014/main-table.csv`，
+FlowDist 采集为 `sockshop-carts-http-resumptions-20261014/flowdist`，
+TraceFusion 采集为 `sockshop-carts-http-20261014/tracefusion`；两边各 31 次业务检查通过，
+镜像与冻结工作负载／观察器协议匹配。先前 FlowDist HTTP 版本另有 31 次通过的诊断调用。
+实验自己的容器、网络和卷均已清理。
+
+47 项回归检查及 11 个原生阶段正例通过。`audit_carts_orders.py` 独立核对原生查询日志、
+时钟进程关系、未覆盖原生图类、字段端点、消息身份、预测与真值分离、计数和证据哈希；
+可提交摘要在 `carts-orders-comparison-20261014.json`。新增调用返回探针和响应缓存会影响
+开销，**不可把旧配置的 Runtime/Memory Cost 数字拼进本表**；本轮功能采集不构成成本测量。
+
+复用已采集数据的主表生成示例（输出目录须为新目录）：
+
+```bash
+python3 experiments/sockshop-mirrortaint/build_flowdist_field_launcher.py \
+  --repo artifacts/external-tools/flowdist --out artifacts/all-query-driver-new
+comparison_flags=(
+  --repo artifacts/external-tools/flowdist
+  --flowdist artifacts/sockshop-carts-http-resumptions-20261014/flowdist
+  --tracefusion artifacts/sockshop-carts-http-20261014/tracefusion
+  --orders artifacts/flowdist-orders-data-20261014
+  --carts artifacts/flowdist-carts-data-20261014
+  --template artifacts/all-query-driver-new
+  --stream-model artifacts/flowdist-sequential-stream-return-model-20261014/model.tsv
+  --qualification artifacts/carts-orders-native-all-query-stages-20261014
+  --reconstruction artifacts/sockshop-carts-http-20261014/tracefusion/carts-to-total.json
+  --out artifacts/carts-orders-main-new
+)
+python3 experiments/sockshop-mirrortaint/compare_carts_orders.py freeze "${comparison_flags[@]}"
+python3 experiments/sockshop-mirrortaint/compare_carts_orders.py evaluate "${comparison_flags[@]}"
+```
+
+重新采集时，先用 `build_flowdist_spring_apps.py` 构建新版 HTTP 配置；
+`refresh_flowdist_http.py` 将这些配置刷新到已验证的完整方法／分支构件中；
+`build_flowdist_resumptions.py` 补正常调用返回观察。
+`three_method_five.py --carts-http --modes flowdist tracefusion` 用同一工作负载采集，
+`infer_carts_http_sources.py` 重建消息字段路径，`flowdist_stream_model.py` 生成库摘要，
+`qualify_carts_orders.py --all-query-matching --stream-model ...` 先完成阶段资格检查。
+各脚本 `--help` 列出必需输入，所有原输入与旧实验目录保持不变。

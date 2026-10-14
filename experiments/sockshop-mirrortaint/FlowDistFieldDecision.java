@@ -3,13 +3,15 @@ import java.nio.file.*;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 import disttaint.DynTransferGraph;
 import disttaint.OT3AnalysisAll;
 import disttaint.dtStmtUtil;
 
 /** Full recorded events into the author's query builder and statement search.
  * No method-key collapsing, invented events, field edges, or static fallback.
- * Requires the separately audited single method-ID namespace compatibility fix.
+ * Query-conditioned mode requires the audited method-ID lookup fix. The author's
+ * all-query full-trace overload uses its original class with no engine override.
  */
 public final class FlowDistFieldDecision {
     static Object get(String name) throws Exception {
@@ -56,7 +58,19 @@ public final class FlowDistFieldDecision {
         set("applyMethodCoverage",true);
         if(OT3AnalysisAll.init(args[2])!=0)throw new IllegalStateException("Graph initialization failed");
         DynTransferGraph original=(DynTransferGraph)get("dvtg"),exercised=new DynTransferGraph(),pruned=new DynTransferGraph();
-        if(original.buildGraph(exercised,source,false,events)!=0)throw new IllegalStateException("Original graph exercise failed");
+        for(int i=3;i<args.length;i++)if(args[i].endsWith(".tsv"))
+            Class.forName("disttaint.FlowDistStreamModel").getMethod("apply",DynTransferGraph.class,Path.class).invoke(null,original,Paths.get(args[i]));
+        boolean allQueries=Arrays.asList(args).contains("--all-query-matching");
+        int status;
+        if(allQueries) {
+            Path normalized=Paths.get(args[1],"normalized-fulltrace.em");
+            try(ObjectOutputStream out=new ObjectOutputStream(new GZIPOutputStream(Files.newOutputStream(normalized,StandardOpenOption.CREATE_NEW)))) {
+                out.writeObject(events.get(1));out.writeObject(events.get(2));
+            }
+            original.setTrace(normalized.toString());status=original.buildGraph(exercised,false);
+        } else status=original.buildGraph(exercised,source,false,events);
+        if(status!=0)throw new IllegalStateException("Original graph exercise failed");
+        System.out.println("FLOWDIST_GRAPH_POLICY="+(allQueries?"author-full-trace-all-query-matching":"author-query-conditioned-matching"));
         if(exercised.nodeSet().isEmpty()||exercised.edgeSet().isEmpty())throw new IllegalStateException("Empty exercised graph; static fallback forbidden");
         int nodes=exercised.nodeSet().size(),edges=exercised.edgeSet().size();
         List<Integer> covered=(List<Integer>)get("coveredStmts");

@@ -120,7 +120,13 @@ public final class ServiceRecorder {
         if (!Boolean.getBoolean("tracefusion.http.instances") || RPC.get().isEmpty()) return;
         try {
             Map<String,Object> rpc = RPC.get().peek();
-            if (!"http://shipping/shipping".equals(rpc.get("uri"))) return;
+            java.net.URI peer=java.net.URI.create((String)rpc.get("uri"));
+            boolean carts=Boolean.getBoolean("tracefusion.http.carts") && "GET".equals(rpc.get("method"))
+                && "http".equals(peer.getScheme()) && "carts".equals(peer.getHost())
+                && (peer.getPort()==-1||peer.getPort()==80) && peer.getRawUserInfo()==null
+                && peer.getRawQuery()==null && peer.getRawFragment()==null
+                && peer.getRawPath().matches("/carts/[^/]+/items");
+            if (!"http://shipping/shipping".equals(rpc.get("uri")) && !carts) return;
             Object headers = invoke(request,"getHeaders");
             Class.forName("org.springframework.http.HttpHeaders",false,Thread.currentThread().getContextClassLoader())
                 .getMethod("set",String.class,String.class).invoke(headers,"X-TraceFusion-Message",rpc.get("rpc"));

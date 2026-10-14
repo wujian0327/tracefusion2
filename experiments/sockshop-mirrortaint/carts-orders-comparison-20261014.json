@@ -1,0 +1,928 @@
+{
+  "validation_passed": true,
+  "scope": "Aggregate field-type value dependence across Carts HTTP response and Orders total",
+  "business_calls": {
+    "flowdist": 31,
+    "tracefusion": 31
+  },
+  "comparison": {
+    "kind": "distributed-carts-response-to-orders-total-field-type-pilot",
+    "scope": "Aggregate field-type value dependence across Carts HTTP response and Orders total",
+    "results": {
+      "flowdist": [
+        {
+          "id": "quantity-to-total",
+          "property": "quantity",
+          "expected_dependency": true,
+          "endpoints": {
+            "carts": {
+              "method": "<works.weave.socks.cart.entities.Item: int getQuantity()>",
+              "field": "works.weave.socks.cart.entities.Item.quantity",
+              "type": "I",
+              "read_id": 785,
+              "read": "<works.weave.socks.cart.entities.Item: int getQuantity()> - $i0 = r0.<works.weave.socks.cart.entities.Item: int quantity>",
+              "return": "<works.weave.socks.cart.entities.Item: int getQuantity()> - return $i0"
+            },
+            "orders": {
+              "method": "<works.weave.socks.orders.entities.Item: int getQuantity()>",
+              "field": "works.weave.socks.orders.entities.Item.quantity",
+              "type": "I",
+              "read_id": 1138,
+              "read": "<works.weave.socks.orders.entities.Item: int getQuantity()> - $i0 = r0.<works.weave.socks.orders.entities.Item: int quantity>",
+              "return": "<works.weave.socks.orders.entities.Item: int getQuantity()> - return $i0"
+            }
+          },
+          "sink": "<works.weave.socks.orders.entities.CustomerOrder: void <init>(java.lang.String,java.lang.String,works.weave.socks.orders.entities.Customer,works.weave.socks.orders.entities.Address,works.weave.socks.orders.entities.Card,java.util.Collection,works.weave.socks.orders.entities.Shipment,java.util.Date,float)> - r0.<works.weave.socks.orders.entities.CustomerOrder: float total> = f0",
+          "sink_id": 1002,
+          "prediction": true,
+          "producer_flags": {
+            "source_nodes": 1,
+            "sink_nodes": 1,
+            "exercised_nodes": 835,
+            "exercised_edges": 1375,
+            "is_local": true,
+            "no_dependency": false
+          },
+          "receiver_flags": {
+            "source_nodes": 1,
+            "sink_nodes": 1,
+            "exercised_nodes": 1311,
+            "exercised_edges": 2329,
+            "is_local": true,
+            "no_dependency": false
+          },
+          "process_candidate": "candidate-flow",
+          "composition": "Original process-clock candidate AND original producer field-to-return AND shared typed JSON property model AND original receiver field-to-total"
+        },
+        {
+          "id": "unitPrice-to-total",
+          "property": "unitPrice",
+          "expected_dependency": true,
+          "endpoints": {
+            "carts": {
+              "method": "<works.weave.socks.cart.entities.Item: float getUnitPrice()>",
+              "field": "works.weave.socks.cart.entities.Item.unitPrice",
+              "type": "F",
+              "read_id": 782,
+              "read": "<works.weave.socks.cart.entities.Item: float getUnitPrice()> - $f0 = r0.<works.weave.socks.cart.entities.Item: float unitPrice>",
+              "return": "<works.weave.socks.cart.entities.Item: float getUnitPrice()> - return $f0"
+            },
+            "orders": {
+              "method": "<works.weave.socks.orders.entities.Item: float getUnitPrice()>",
+              "field": "works.weave.socks.orders.entities.Item.unitPrice",
+              "type": "F",
+              "read_id": 1135,
+              "read": "<works.weave.socks.orders.entities.Item: float getUnitPrice()> - $f0 = r0.<works.weave.socks.orders.entities.Item: float unitPrice>",
+              "return": "<works.weave.socks.orders.entities.Item: float getUnitPrice()> - return $f0"
+            }
+          },
+          "sink": "<works.weave.socks.orders.entities.CustomerOrder: void <init>(java.lang.String,java.lang.String,works.weave.socks.orders.entities.Customer,works.weave.socks.orders.entities.Address,works.weave.socks.orders.entities.Card,java.util.Collection,works.weave.socks.orders.entities.Shipment,java.util.Date,float)> - r0.<works.weave.socks.orders.entities.CustomerOrder: float total> = f0",
+          "sink_id": 1002,
+          "prediction": true,
+          "producer_flags": {
+            "source_nodes": 1,
+            "sink_nodes": 1,
+            "exercised_nodes": 835,
+            "exercised_edges": 1375,
+            "is_local": true,
+            "no_dependency": false
+          },
+          "receiver_flags": {
+            "source_nodes": 1,
+            "sink_nodes": 1,
+            "exercised_nodes": 1311,
+            "exercised_edges": 2329,
+            "is_local": true,
+            "no_dependency": false
+          },
+          "process_candidate": "candidate-flow",
+          "composition": "Original process-clock candidate AND original producer field-to-return AND shared typed JSON property model AND original receiver field-to-total"
+        },
+        {
+          "id": "itemId-to-total",
+          "property": "itemId",
+          "expected_dependency": false,
+          "endpoints": {
+            "carts": {
+              "method": "<works.weave.socks.cart.entities.Item: java.lang.String getItemId()>",
+              "field": "works.weave.socks.cart.entities.Item.itemId",
+              "type": "Ljava/lang/String;",
+              "read_id": 794,
+              "read": "<works.weave.socks.cart.entities.Item: java.lang.String getItemId()> - $r1 = r0.<works.weave.socks.cart.entities.Item: java.lang.String itemId>",
+              "return": "<works.weave.socks.cart.entities.Item: java.lang.String getItemId()> - return $r1"
+            },
+            "orders": {
+              "method": "<works.weave.socks.orders.entities.Item: java.lang.String getItemId()>",
+              "field": "works.weave.socks.orders.entities.Item.itemId",
+              "type": "Ljava/lang/String;",
+              "read_id": 1147,
+              "read": "<works.weave.socks.orders.entities.Item: java.lang.String getItemId()> - $r1 = r0.<works.weave.socks.orders.entities.Item: java.lang.String itemId>",
+              "return": "<works.weave.socks.orders.entities.Item: java.lang.String getItemId()> - return $r1"
+            }
+          },
+          "sink": "<works.weave.socks.orders.entities.CustomerOrder: void <init>(java.lang.String,java.lang.String,works.weave.socks.orders.entities.Customer,works.weave.socks.orders.entities.Address,works.weave.socks.orders.entities.Card,java.util.Collection,works.weave.socks.orders.entities.Shipment,java.util.Date,float)> - r0.<works.weave.socks.orders.entities.CustomerOrder: float total> = f0",
+          "sink_id": 1002,
+          "prediction": false,
+          "producer_flags": {
+            "source_nodes": 1,
+            "sink_nodes": 1,
+            "exercised_nodes": 835,
+            "exercised_edges": 1375,
+            "is_local": true,
+            "no_dependency": false
+          },
+          "receiver_flags": {
+            "source_nodes": 1,
+            "sink_nodes": 1,
+            "exercised_nodes": 1311,
+            "exercised_edges": 2329,
+            "is_local": false,
+            "no_dependency": true
+          },
+          "process_candidate": "candidate-flow",
+          "composition": "Original process-clock candidate AND original producer field-to-return AND shared typed JSON property model AND original receiver field-to-total"
+        }
+      ],
+      "tracefusion": [
+        {
+          "id": "quantity-to-total",
+          "property": "quantity",
+          "expected_dependency": true,
+          "endpoints": {
+            "carts": {
+              "method": "<works.weave.socks.cart.entities.Item: int getQuantity()>",
+              "field": "works.weave.socks.cart.entities.Item.quantity",
+              "type": "I",
+              "read_id": 785,
+              "read": "<works.weave.socks.cart.entities.Item: int getQuantity()> - $i0 = r0.<works.weave.socks.cart.entities.Item: int quantity>",
+              "return": "<works.weave.socks.cart.entities.Item: int getQuantity()> - return $i0"
+            },
+            "orders": {
+              "method": "<works.weave.socks.orders.entities.Item: int getQuantity()>",
+              "field": "works.weave.socks.orders.entities.Item.quantity",
+              "type": "I",
+              "read_id": 1138,
+              "read": "<works.weave.socks.orders.entities.Item: int getQuantity()> - $i0 = r0.<works.weave.socks.orders.entities.Item: int quantity>",
+              "return": "<works.weave.socks.orders.entities.Item: int getQuantity()> - return $i0"
+            }
+          },
+          "sink": "<works.weave.socks.orders.entities.CustomerOrder: void <init>(java.lang.String,java.lang.String,works.weave.socks.orders.entities.Customer,works.weave.socks.orders.entities.Address,works.weave.socks.orders.entities.Card,java.util.Collection,works.weave.socks.orders.entities.Shipment,java.util.Date,float)> - r0.<works.weave.socks.orders.entities.CustomerOrder: float total> = f0",
+          "sink_id": 1002,
+          "prediction": true,
+          "basis": "Actual same-message Carts field reads -> Orders response DTO -> reconstructed total; aggregate property projection"
+        },
+        {
+          "id": "unitPrice-to-total",
+          "property": "unitPrice",
+          "expected_dependency": true,
+          "endpoints": {
+            "carts": {
+              "method": "<works.weave.socks.cart.entities.Item: float getUnitPrice()>",
+              "field": "works.weave.socks.cart.entities.Item.unitPrice",
+              "type": "F",
+              "read_id": 782,
+              "read": "<works.weave.socks.cart.entities.Item: float getUnitPrice()> - $f0 = r0.<works.weave.socks.cart.entities.Item: float unitPrice>",
+              "return": "<works.weave.socks.cart.entities.Item: float getUnitPrice()> - return $f0"
+            },
+            "orders": {
+              "method": "<works.weave.socks.orders.entities.Item: float getUnitPrice()>",
+              "field": "works.weave.socks.orders.entities.Item.unitPrice",
+              "type": "F",
+              "read_id": 1135,
+              "read": "<works.weave.socks.orders.entities.Item: float getUnitPrice()> - $f0 = r0.<works.weave.socks.orders.entities.Item: float unitPrice>",
+              "return": "<works.weave.socks.orders.entities.Item: float getUnitPrice()> - return $f0"
+            }
+          },
+          "sink": "<works.weave.socks.orders.entities.CustomerOrder: void <init>(java.lang.String,java.lang.String,works.weave.socks.orders.entities.Customer,works.weave.socks.orders.entities.Address,works.weave.socks.orders.entities.Card,java.util.Collection,works.weave.socks.orders.entities.Shipment,java.util.Date,float)> - r0.<works.weave.socks.orders.entities.CustomerOrder: float total> = f0",
+          "sink_id": 1002,
+          "prediction": true,
+          "basis": "Actual same-message Carts field reads -> Orders response DTO -> reconstructed total; aggregate property projection"
+        },
+        {
+          "id": "itemId-to-total",
+          "property": "itemId",
+          "expected_dependency": false,
+          "endpoints": {
+            "carts": {
+              "method": "<works.weave.socks.cart.entities.Item: java.lang.String getItemId()>",
+              "field": "works.weave.socks.cart.entities.Item.itemId",
+              "type": "Ljava/lang/String;",
+              "read_id": 794,
+              "read": "<works.weave.socks.cart.entities.Item: java.lang.String getItemId()> - $r1 = r0.<works.weave.socks.cart.entities.Item: java.lang.String itemId>",
+              "return": "<works.weave.socks.cart.entities.Item: java.lang.String getItemId()> - return $r1"
+            },
+            "orders": {
+              "method": "<works.weave.socks.orders.entities.Item: java.lang.String getItemId()>",
+              "field": "works.weave.socks.orders.entities.Item.itemId",
+              "type": "Ljava/lang/String;",
+              "read_id": 1147,
+              "read": "<works.weave.socks.orders.entities.Item: java.lang.String getItemId()> - $r1 = r0.<works.weave.socks.orders.entities.Item: java.lang.String itemId>",
+              "return": "<works.weave.socks.orders.entities.Item: java.lang.String getItemId()> - return $r1"
+            }
+          },
+          "sink": "<works.weave.socks.orders.entities.CustomerOrder: void <init>(java.lang.String,java.lang.String,works.weave.socks.orders.entities.Customer,works.weave.socks.orders.entities.Address,works.weave.socks.orders.entities.Card,java.util.Collection,works.weave.socks.orders.entities.Shipment,java.util.Date,float)> - r0.<works.weave.socks.orders.entities.CustomerOrder: float total> = f0",
+          "sink_id": 1002,
+          "prediction": false,
+          "basis": "Actual same-message Carts field reads -> Orders response DTO -> reconstructed total; aggregate property projection"
+        }
+      ]
+    },
+    "summary": {
+      "flowdist": {
+        "queries": 3,
+        "tp": 2,
+        "fp": 0,
+        "fn_including_unknown_positive": 0,
+        "tn": 1,
+        "unknown": 0,
+        "answered": 3,
+        "exact_rate": 1.0,
+        "coverage": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "tracefusion": {
+        "queries": 3,
+        "tp": 2,
+        "fp": 0,
+        "fn_including_unknown_positive": 0,
+        "tn": 1,
+        "unknown": 0,
+        "answered": 3,
+        "exact_rate": 1.0,
+        "coverage": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    "flowdist_configuration": "Original process-clock method phase + original all-query full-trace matching + normal-return probes + sequential Stream and default JSON property models",
+    "flowdist_uuid_or_tf_inference_consumed": false,
+    "native_framework_controls_passed": 11,
+    "tracefusion_target_orders": 15,
+    "tracefusion_actual_field_paths": 30,
+    "native_request_instance_resolution_tested": false,
+    "accuracy_eligible": false,
+    "performance_eligible": false,
+    "limitations": [
+      "Three aggregate field-type queries only; neither a full five-API benchmark nor a reproduction of paper accuracy.",
+      "Default source-conditioned native matching diagnostics are retained separately; this configuration uses another author-provided builder without changing its search.",
+      "Distributed FlowDist result is a disclosed composition using a high-level JSON boundary model, not an unmodified OT3 socket-level path report.",
+      "TF UUID-resolved instances are projected to aggregate field types for common scoring; no native per-request claims.",
+      "Normal-return instrumentation changes event volume; no previous runtime/memory numbers qualify this configuration."
+    ]
+  },
+  "query_contract": {
+    "queries": [
+      {
+        "id": "quantity-to-total",
+        "property": "quantity",
+        "expected_dependency": true,
+        "endpoints": {
+          "carts": {
+            "method": "<works.weave.socks.cart.entities.Item: int getQuantity()>",
+            "field": "works.weave.socks.cart.entities.Item.quantity",
+            "type": "I",
+            "read_id": 785,
+            "read": "<works.weave.socks.cart.entities.Item: int getQuantity()> - $i0 = r0.<works.weave.socks.cart.entities.Item: int quantity>",
+            "return": "<works.weave.socks.cart.entities.Item: int getQuantity()> - return $i0"
+          },
+          "orders": {
+            "method": "<works.weave.socks.orders.entities.Item: int getQuantity()>",
+            "field": "works.weave.socks.orders.entities.Item.quantity",
+            "type": "I",
+            "read_id": 1138,
+            "read": "<works.weave.socks.orders.entities.Item: int getQuantity()> - $i0 = r0.<works.weave.socks.orders.entities.Item: int quantity>",
+            "return": "<works.weave.socks.orders.entities.Item: int getQuantity()> - return $i0"
+          }
+        },
+        "sink": "<works.weave.socks.orders.entities.CustomerOrder: void <init>(java.lang.String,java.lang.String,works.weave.socks.orders.entities.Customer,works.weave.socks.orders.entities.Address,works.weave.socks.orders.entities.Card,java.util.Collection,works.weave.socks.orders.entities.Shipment,java.util.Date,float)> - r0.<works.weave.socks.orders.entities.CustomerOrder: float total> = f0",
+        "sink_id": 1002
+      },
+      {
+        "id": "unitPrice-to-total",
+        "property": "unitPrice",
+        "expected_dependency": true,
+        "endpoints": {
+          "carts": {
+            "method": "<works.weave.socks.cart.entities.Item: float getUnitPrice()>",
+            "field": "works.weave.socks.cart.entities.Item.unitPrice",
+            "type": "F",
+            "read_id": 782,
+            "read": "<works.weave.socks.cart.entities.Item: float getUnitPrice()> - $f0 = r0.<works.weave.socks.cart.entities.Item: float unitPrice>",
+            "return": "<works.weave.socks.cart.entities.Item: float getUnitPrice()> - return $f0"
+          },
+          "orders": {
+            "method": "<works.weave.socks.orders.entities.Item: float getUnitPrice()>",
+            "field": "works.weave.socks.orders.entities.Item.unitPrice",
+            "type": "F",
+            "read_id": 1135,
+            "read": "<works.weave.socks.orders.entities.Item: float getUnitPrice()> - $f0 = r0.<works.weave.socks.orders.entities.Item: float unitPrice>",
+            "return": "<works.weave.socks.orders.entities.Item: float getUnitPrice()> - return $f0"
+          }
+        },
+        "sink": "<works.weave.socks.orders.entities.CustomerOrder: void <init>(java.lang.String,java.lang.String,works.weave.socks.orders.entities.Customer,works.weave.socks.orders.entities.Address,works.weave.socks.orders.entities.Card,java.util.Collection,works.weave.socks.orders.entities.Shipment,java.util.Date,float)> - r0.<works.weave.socks.orders.entities.CustomerOrder: float total> = f0",
+        "sink_id": 1002
+      },
+      {
+        "id": "itemId-to-total",
+        "property": "itemId",
+        "expected_dependency": false,
+        "endpoints": {
+          "carts": {
+            "method": "<works.weave.socks.cart.entities.Item: java.lang.String getItemId()>",
+            "field": "works.weave.socks.cart.entities.Item.itemId",
+            "type": "Ljava/lang/String;",
+            "read_id": 794,
+            "read": "<works.weave.socks.cart.entities.Item: java.lang.String getItemId()> - $r1 = r0.<works.weave.socks.cart.entities.Item: java.lang.String itemId>",
+            "return": "<works.weave.socks.cart.entities.Item: java.lang.String getItemId()> - return $r1"
+          },
+          "orders": {
+            "method": "<works.weave.socks.orders.entities.Item: java.lang.String getItemId()>",
+            "field": "works.weave.socks.orders.entities.Item.itemId",
+            "type": "Ljava/lang/String;",
+            "read_id": 1147,
+            "read": "<works.weave.socks.orders.entities.Item: java.lang.String getItemId()> - $r1 = r0.<works.weave.socks.orders.entities.Item: java.lang.String itemId>",
+            "return": "<works.weave.socks.orders.entities.Item: java.lang.String getItemId()> - return $r1"
+          }
+        },
+        "sink": "<works.weave.socks.orders.entities.CustomerOrder: void <init>(java.lang.String,java.lang.String,works.weave.socks.orders.entities.Customer,works.weave.socks.orders.entities.Address,works.weave.socks.orders.entities.Card,java.util.Collection,works.weave.socks.orders.entities.Shipment,java.util.Date,float)> - r0.<works.weave.socks.orders.entities.CustomerOrder: float total> = f0",
+        "sink_id": 1002
+      }
+    ],
+    "scope": "Aggregate field-type value dependence across Carts HTTP response and Orders total",
+    "shared_transport_model": "Default Item JSON property name/type, ordered list body; no custom property annotations",
+    "oracle": "Independent business formula: sum of quantity*unitPrice plus constant shipping cost; itemId is not consumed by formula",
+    "freeze_status": "Endpoint qualification observations available; queries frozen before composite predictions; calibration, not blinded benchmark",
+    "request_instance_scoring": false,
+    "models": {
+      "carts": {
+        "owner": "works.weave.socks.cart.entities.Item",
+        "getters": {
+          "id()Ljava/lang/String;": {
+            "field": "works.weave.socks.cart.entities.Item.id",
+            "primitive": false,
+            "descriptor": "Ljava/lang/String;"
+          },
+          "itemId()Ljava/lang/String;": {
+            "field": "works.weave.socks.cart.entities.Item.itemId",
+            "primitive": false,
+            "descriptor": "Ljava/lang/String;"
+          },
+          "quantity()I": {
+            "field": "works.weave.socks.cart.entities.Item.quantity",
+            "primitive": true,
+            "descriptor": "I"
+          },
+          "getId()Ljava/lang/String;": {
+            "field": "works.weave.socks.cart.entities.Item.id",
+            "primitive": false,
+            "descriptor": "Ljava/lang/String;"
+          },
+          "getItemId()Ljava/lang/String;": {
+            "field": "works.weave.socks.cart.entities.Item.itemId",
+            "primitive": false,
+            "descriptor": "Ljava/lang/String;"
+          },
+          "getQuantity()I": {
+            "field": "works.weave.socks.cart.entities.Item.quantity",
+            "primitive": true,
+            "descriptor": "I"
+          },
+          "getUnitPrice()F": {
+            "field": "works.weave.socks.cart.entities.Item.unitPrice",
+            "primitive": true,
+            "descriptor": "F"
+          }
+        },
+        "setters": {
+          "setId(Ljava/lang/String;)V": {
+            "field": "works.weave.socks.cart.entities.Item.id",
+            "descriptor": "Ljava/lang/String;"
+          },
+          "setItemId(Ljava/lang/String;)V": {
+            "field": "works.weave.socks.cart.entities.Item.itemId",
+            "descriptor": "Ljava/lang/String;"
+          },
+          "setQuantity(I)V": {
+            "field": "works.weave.socks.cart.entities.Item.quantity",
+            "descriptor": "I"
+          },
+          "setUnitPrice(F)V": {
+            "field": "works.weave.socks.cart.entities.Item.unitPrice",
+            "descriptor": "F"
+          }
+        },
+        "class_sha256": "0f6ac57a4251f43cafc2d7085aed160247fd4c358069145d90001e3ae7486613"
+      },
+      "orders": {
+        "owner": "works.weave.socks.orders.entities.Item",
+        "getters": {
+          "id()Ljava/lang/String;": {
+            "field": "works.weave.socks.orders.entities.Item.id",
+            "primitive": false,
+            "descriptor": "Ljava/lang/String;"
+          },
+          "itemId()Ljava/lang/String;": {
+            "field": "works.weave.socks.orders.entities.Item.itemId",
+            "primitive": false,
+            "descriptor": "Ljava/lang/String;"
+          },
+          "quantity()I": {
+            "field": "works.weave.socks.orders.entities.Item.quantity",
+            "primitive": true,
+            "descriptor": "I"
+          },
+          "getId()Ljava/lang/String;": {
+            "field": "works.weave.socks.orders.entities.Item.id",
+            "primitive": false,
+            "descriptor": "Ljava/lang/String;"
+          },
+          "getItemId()Ljava/lang/String;": {
+            "field": "works.weave.socks.orders.entities.Item.itemId",
+            "primitive": false,
+            "descriptor": "Ljava/lang/String;"
+          },
+          "getQuantity()I": {
+            "field": "works.weave.socks.orders.entities.Item.quantity",
+            "primitive": true,
+            "descriptor": "I"
+          },
+          "getUnitPrice()F": {
+            "field": "works.weave.socks.orders.entities.Item.unitPrice",
+            "primitive": true,
+            "descriptor": "F"
+          }
+        },
+        "setters": {
+          "setId(Ljava/lang/String;)V": {
+            "field": "works.weave.socks.orders.entities.Item.id",
+            "descriptor": "Ljava/lang/String;"
+          },
+          "setItemId(Ljava/lang/String;)V": {
+            "field": "works.weave.socks.orders.entities.Item.itemId",
+            "descriptor": "Ljava/lang/String;"
+          },
+          "setQuantity(I)V": {
+            "field": "works.weave.socks.orders.entities.Item.quantity",
+            "descriptor": "I"
+          },
+          "setUnitPrice(F)V": {
+            "field": "works.weave.socks.orders.entities.Item.unitPrice",
+            "descriptor": "F"
+          }
+        },
+        "class_sha256": "68d3fd0667e832cc1d3e1d4e237808b92e10bd9f755d180dc14f21cb054b2cc4"
+      }
+    },
+    "statement_sha256": {
+      "orders": "ecdcbc4bc890c840901671199ed98077d7c993d2028af49a01a01d3cef50c92a",
+      "carts": "c0d723d4e0d969f91dd63a548f37ebafbb3c301a332fc463d7acacce0cafa508"
+    }
+  },
+  "framework_qualification": {
+    "scope": "Framework stage qualification; not a TP/FP/FN evaluation",
+    "controls": [
+      {
+        "id": "carts-quantity-getter",
+        "role": "carts",
+        "source": "<works.weave.socks.cart.entities.Item: int getQuantity()> - $i0 = r0.<works.weave.socks.cart.entities.Item: int quantity>",
+        "sink": "<works.weave.socks.cart.entities.Item: int getQuantity()> - return $i0",
+        "expected": true,
+        "flags": {
+          "source_nodes": 1,
+          "sink_nodes": 1,
+          "exercised_nodes": 835,
+          "exercised_edges": 1375,
+          "is_local": true,
+          "no_dependency": false
+        },
+        "passed": true
+      },
+      {
+        "id": "carts-unitPrice-getter",
+        "role": "carts",
+        "source": "<works.weave.socks.cart.entities.Item: float getUnitPrice()> - $f0 = r0.<works.weave.socks.cart.entities.Item: float unitPrice>",
+        "sink": "<works.weave.socks.cart.entities.Item: float getUnitPrice()> - return $f0",
+        "expected": true,
+        "flags": {
+          "source_nodes": 1,
+          "sink_nodes": 1,
+          "exercised_nodes": 835,
+          "exercised_edges": 1375,
+          "is_local": true,
+          "no_dependency": false
+        },
+        "passed": true
+      },
+      {
+        "id": "orders-quantity-getter",
+        "role": "orders",
+        "source": "<works.weave.socks.orders.entities.Item: int getQuantity()> - $i0 = r0.<works.weave.socks.orders.entities.Item: int quantity>",
+        "sink": "<works.weave.socks.orders.entities.Item: int getQuantity()> - return $i0",
+        "expected": true,
+        "flags": {
+          "source_nodes": 1,
+          "sink_nodes": 1,
+          "exercised_nodes": 1311,
+          "exercised_edges": 2329,
+          "is_local": true,
+          "no_dependency": false
+        },
+        "passed": true
+      },
+      {
+        "id": "orders-quantity-to-mapper",
+        "role": "orders",
+        "source": "<works.weave.socks.orders.entities.Item: int getQuantity()> - $i0 = r0.<works.weave.socks.orders.entities.Item: int quantity>",
+        "sink": "<works.weave.socks.orders.controllers.OrdersController: double lambda$calculateTotal$2(works.weave.socks.orders.entities.Item)> - return $d0",
+        "expected": true,
+        "flags": {
+          "source_nodes": 1,
+          "sink_nodes": 1,
+          "exercised_nodes": 1311,
+          "exercised_edges": 2329,
+          "is_local": true,
+          "no_dependency": false
+        },
+        "passed": true
+      },
+      {
+        "id": "orders-unitPrice-getter",
+        "role": "orders",
+        "source": "<works.weave.socks.orders.entities.Item: float getUnitPrice()> - $f0 = r0.<works.weave.socks.orders.entities.Item: float unitPrice>",
+        "sink": "<works.weave.socks.orders.entities.Item: float getUnitPrice()> - return $f0",
+        "expected": true,
+        "flags": {
+          "source_nodes": 1,
+          "sink_nodes": 1,
+          "exercised_nodes": 1311,
+          "exercised_edges": 2329,
+          "is_local": true,
+          "no_dependency": false
+        },
+        "passed": true
+      },
+      {
+        "id": "orders-unitPrice-to-mapper",
+        "role": "orders",
+        "source": "<works.weave.socks.orders.entities.Item: float getUnitPrice()> - $f0 = r0.<works.weave.socks.orders.entities.Item: float unitPrice>",
+        "sink": "<works.weave.socks.orders.controllers.OrdersController: double lambda$calculateTotal$2(works.weave.socks.orders.entities.Item)> - return $d0",
+        "expected": true,
+        "flags": {
+          "source_nodes": 1,
+          "sink_nodes": 1,
+          "exercised_nodes": 1311,
+          "exercised_edges": 2329,
+          "is_local": true,
+          "no_dependency": false
+        },
+        "passed": true
+      },
+      {
+        "id": "orders-mapper-to-stream-sum",
+        "role": "orders",
+        "source": "<works.weave.socks.orders.controllers.OrdersController: double lambda$calculateTotal$2(works.weave.socks.orders.entities.Item)> - return $d0",
+        "sink": "<works.weave.socks.orders.controllers.OrdersController: float calculateTotal(java.util.List)> - $d1 = interfaceinvoke $r4.<java.util.stream.DoubleStream: double sum()>()",
+        "expected": true,
+        "flags": {
+          "source_nodes": 1,
+          "sink_nodes": 2,
+          "exercised_nodes": 1311,
+          "exercised_edges": 2329,
+          "is_local": true,
+          "no_dependency": false
+        },
+        "passed": true
+      },
+      {
+        "id": "orders-stream-sum-to-total",
+        "role": "orders",
+        "source": "<works.weave.socks.orders.controllers.OrdersController: float calculateTotal(java.util.List)> - $d1 = interfaceinvoke $r4.<java.util.stream.DoubleStream: double sum()>()",
+        "sink": "<works.weave.socks.orders.entities.CustomerOrder: void <init>(java.lang.String,java.lang.String,works.weave.socks.orders.entities.Customer,works.weave.socks.orders.entities.Address,works.weave.socks.orders.entities.Card,java.util.Collection,works.weave.socks.orders.entities.Shipment,java.util.Date,float)> - r0.<works.weave.socks.orders.entities.CustomerOrder: float total> = f0",
+        "expected": true,
+        "flags": {
+          "source_nodes": 2,
+          "sink_nodes": 1,
+          "exercised_nodes": 1311,
+          "exercised_edges": 2329,
+          "is_local": true,
+          "no_dependency": false
+        },
+        "passed": true
+      },
+      {
+        "id": "orders-sum-to-calculate-return",
+        "role": "orders",
+        "source": "<works.weave.socks.orders.controllers.OrdersController: float calculateTotal(java.util.List)> - $d1 = interfaceinvoke $r4.<java.util.stream.DoubleStream: double sum()>()",
+        "sink": "<works.weave.socks.orders.controllers.OrdersController: float calculateTotal(java.util.List)> - return f3",
+        "expected": true,
+        "flags": {
+          "source_nodes": 2,
+          "sink_nodes": 1,
+          "exercised_nodes": 1311,
+          "exercised_edges": 2329,
+          "is_local": true,
+          "no_dependency": false
+        },
+        "passed": true
+      },
+      {
+        "id": "orders-calculate-return-to-caller",
+        "role": "orders",
+        "source": "<works.weave.socks.orders.controllers.OrdersController: float calculateTotal(java.util.List)> - return f3",
+        "sink": "<works.weave.socks.orders.controllers.OrdersController: works.weave.socks.orders.entities.CustomerOrder newOrder(works.weave.socks.orders.resources.NewOrderResource)> - f0 = specialinvoke r0.<works.weave.socks.orders.controllers.OrdersController: float calculateTotal(java.util.List)>($r32)",
+        "expected": true,
+        "flags": {
+          "source_nodes": 1,
+          "sink_nodes": 2,
+          "exercised_nodes": 1311,
+          "exercised_edges": 2329,
+          "is_local": true,
+          "no_dependency": false
+        },
+        "passed": true
+      },
+      {
+        "id": "orders-caller-to-total",
+        "role": "orders",
+        "source": "<works.weave.socks.orders.controllers.OrdersController: works.weave.socks.orders.entities.CustomerOrder newOrder(works.weave.socks.orders.resources.NewOrderResource)> - f0 = specialinvoke r0.<works.weave.socks.orders.controllers.OrdersController: float calculateTotal(java.util.List)>($r32)",
+        "sink": "<works.weave.socks.orders.entities.CustomerOrder: void <init>(java.lang.String,java.lang.String,works.weave.socks.orders.entities.Customer,works.weave.socks.orders.entities.Address,works.weave.socks.orders.entities.Card,java.util.Collection,works.weave.socks.orders.entities.Shipment,java.util.Date,float)> - r0.<works.weave.socks.orders.entities.CustomerOrder: float total> = f0",
+        "expected": true,
+        "flags": {
+          "source_nodes": 2,
+          "sink_nodes": 1,
+          "exercised_nodes": 1311,
+          "exercised_edges": 2329,
+          "is_local": true,
+          "no_dependency": false
+        },
+        "passed": true
+      }
+    ],
+    "all_passed": true,
+    "passed": 11,
+    "failed_stages": [],
+    "accuracy_eligible": false
+  },
+  "tracefusion_instance_evidence": {
+    "target_orders": 15,
+    "source_property_bindings": 48,
+    "actual_total_source_paths": 30,
+    "unresolved_messages": 0
+  },
+  "native_algorithm_jar_sha256": "809cadf28550959291c3c21c1ce3130a6ca84af3bb649a545def0d61905c82d5",
+  "flowdist_run": "artifacts/sockshop-carts-http-resumptions-20261014/flowdist",
+  "tracefusion_run": "artifacts/sockshop-carts-http-20261014/tracefusion",
+  "source_sha256": {
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/audit_carts_orders.py": "dbf16480fa444f3d265ba9d7dcd0dcc871c52d2f65fa8319b8ecdaac8de8cf94",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/compare_carts_orders.py": "208e3e732fe21a60f9913b058d102f45a1481fe75c14c2a3e0cd295af17b09f5",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_carts_http_sources.py": "a23a2bc4e2fb82878115703abbde5a7a796db4af771399eb06190ad14b0263ca",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/flowdist_stream_model.py": "427f4fcc86f12d9fd6db0248c4429d24baa03bd82f9efbed23ff01360e8648c5",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/FlowDistFieldDecision.java": "b41f8139d026dc4d8f77eb3d74bc5781912f80f07fb3bfbba5a6297c51d04c85",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/flowdist/FlowDistStreamModel.java": "b898c1bea84567930eaf4ad277e3b5ff9205c365d9741c8a9a7692f4cf85eb40",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/FlowDistResumeCalls.java": "bd706e3fbb4c4bcc7ca85742896c37b77d37952e947c8dc427038538d39a3902",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/build_flowdist_resumptions.py": "396ebc9d2832f403adedb9af69ef5db8c4c6f439ce9ac97a453272807ec30fac",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/refresh_flowdist_http.py": "4f57dbd5894227a896a1a0bcbbf53d6eeb58f7761e8ece9543f0e63b7b1f85ca",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/qualify_carts_orders.py": "a056e5d917e95d1e3d45395fd323ae494c51e929d708dd761a0f60d290d0706f",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/FlowDistHttpConfiguration.java": "00fd3d6af55b98032cb0b65ffa88527a6abb5eec3fec97b81d7851931d14bb8f",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/tracefusion/ServiceRecorder.java": "78be68129643fdfc1774307438600a68922feb0d434ec4841f1a6061bdde45b0",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/boundary/BoundaryRecorder.java": "35082a2fc96156aadd363e5c085ae4c5104ac3b4e5f1cb68312d47d6dc5d16e2",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/three_method_five.py": "da856f45aef7a10ac998f640a28aa8029f0a25a0c1f0c588b413ec891c4974c9",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/test_carts_http_sources.py": "9d3f9bef37c764d199f6f55eb72a31d180a6704cfef3da85073c2cb856e335b4",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/test_flowdist_stream_model.py": "4dd83041d8a3b706f51272fb19d87829175453eb791c3465a86f93ddf10364ec",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/test_flowdist_resumptions.py": "949eb910d0285d01936893956bfcbcd386839cc04bc23748efb23d0b7144ad22",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_service_sources.py": "e957be67a33b46a50cb84b91403ca3afc45b63c9043a6a1ce64cff369efb3009",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/service_model.py": "ecefe600aa021b1813715f50c6f1bd0289f7dc0bb6a4f6c9c17d23dfd34f3d5e",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_field_access_sites.py": "155ef46bc8228fe047d671791f8dd15ff98af8d082864c01a41367d57e6fe528",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/flowdist_query.py": "ff29feb006d038f31beae5b17298567c2841cef9ca5c0570fa5a232bf5dcca7a",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/flowdist_preflight.py": "7e1806077f55817d5c86f6892debc577b637533db79bf7b5910acc013e23e929",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/flowdist/FlowDistHttpClock.java": "47d5412ba4eff341c4b90d502ced92f3a111dadc6f7b3c7095e8633297b60bcf",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/flowdist/FlowDistSpringHooks.java": "1104c8a69cc075d2389f849ada0745d4f2034ba55b5559e9eb4309a6f7de5edb",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/build_flowdist_spring_apps.py": "493ade4e74626327b55504a8e56dfeb485673030b288cb8dbe8f3bfccd43843e",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/build_flowdist_field_launcher.py": "973dd27503ffeba565529ec8a999fac3ec9a26e62a3fabcf1d71acebd2b8c969"
+  },
+  "evidence_sha256": {
+    "artifacts/carts-orders-main-comparison-20261014/comparison.json": "0ae2e64f406f10f28cc9e3d233db3298eedf48e589429d02307c6ded5ecd7d09",
+    "artifacts/carts-orders-main-comparison-20261014/frozen-queries.json": "98e4a56921e6b7a06e2117473eceb3026b45aeb92e4897d5cf381bc9c013dfc1",
+    "artifacts/carts-orders-main-comparison-20261014/itemId-to-total/producer/field-query-stage.json": "34d696bcdd042f66742e17952d7f5c51c99e41b460a7ce6ca4517b601cafecad",
+    "artifacts/carts-orders-main-comparison-20261014/itemId-to-total/producer/field-query.log": "9c87ba96cf296c229e9e5f69f2565e925f06aa0c888b2519591552ae51d36ee3",
+    "artifacts/carts-orders-main-comparison-20261014/itemId-to-total/producer/work/traces/Local1791947933530.em": "4e41958d3a2d246df3e801d4008149799ec5b8ff8237c48243a74951baab401a",
+    "artifacts/carts-orders-main-comparison-20261014/itemId-to-total/producer/work/traces/normalized-fulltrace.em": "c7eb0eeb8a8e35c60069eb1762632e7ee4dfbc3ebc396c7e7169005dd55090d7",
+    "artifacts/carts-orders-main-comparison-20261014/itemId-to-total/receiver/field-query-stage.json": "86b0f230717947339c4d362b115ee6336ed664fe2f3b75a92478967cb2f5335a",
+    "artifacts/carts-orders-main-comparison-20261014/itemId-to-total/receiver/field-query.log": "5e8d825885b97dfbd418c11d49cbe806039eec31928ec6bc2c0890e1def87441",
+    "artifacts/carts-orders-main-comparison-20261014/itemId-to-total/receiver/work/traces/Local1791947933353.em": "2dc0b4f15b4d517623ac5bfbf5f91e94d63e17da70c5e59962c8cb3f669a7111",
+    "artifacts/carts-orders-main-comparison-20261014/itemId-to-total/receiver/work/traces/normalized-fulltrace.em": "0f7fa28c724a13601f216f2c6cd6521a4d6b8ff60e6a1a826e39988c61475345",
+    "artifacts/carts-orders-main-comparison-20261014/itemId-to-total/remote/method-query-stage.json": "929f5d1f8b047296a58aa6faa067a27eea2d88b9a755041f25dfc3335b9e41b5",
+    "artifacts/carts-orders-main-comparison-20261014/itemId-to-total/remote/method-query.log": "24a04426eacef663129a73089789efb13583a243848e439545c4ff61893d5f80",
+    "artifacts/carts-orders-main-comparison-20261014/itemId-to-total/remote/result.json": "9aad4de86d080a66a2689f80162e96d12f1ed09b4fadd08d926747d2e61bada6",
+    "artifacts/carts-orders-main-comparison-20261014/itemId-to-total/remote/trace-inspection-stage.json": "6ec2a5ec6940e07f939526ec4bfd56cabbc2cb6f175606d9bcefab0838a21f31",
+    "artifacts/carts-orders-main-comparison-20261014/itemId-to-total/remote/trace-inspection.log": "452f52df9dd8a6bfbd91b9c6a792f9691f67b03e63b63fa1722f0f85a2cda891",
+    "artifacts/carts-orders-main-comparison-20261014/main-table.csv": "8a07e1f99a0341d93d9aff84b0db9fe38d62b78fd50086af1c9111889e7d06f8",
+    "artifacts/carts-orders-main-comparison-20261014/method-input/work/traces/test1/Remote1791947943270.em": "9fc8ea23d6bfddeb38b887ac9f98a070ede4dd51d3eb53ab4e8290907438eeb9",
+    "artifacts/carts-orders-main-comparison-20261014/method-input/work/traces/test1/Remote1791947943963.em": "dae8aad798d7093d85ea24f760c49a772ed1a059d6841692142739e621e404b0",
+    "artifacts/carts-orders-main-comparison-20261014/quantity-to-total/producer/field-query-stage.json": "945b2e49c3eb9ed97d65a61bc411a0760bb272c8e745b7444e500e4a6e7abb75",
+    "artifacts/carts-orders-main-comparison-20261014/quantity-to-total/producer/field-query.log": "e446fa25bd1bc6a31d34f9d307a0bc5be273293bfb7cd74d7db354b0165763bc",
+    "artifacts/carts-orders-main-comparison-20261014/quantity-to-total/producer/work/traces/Local1791947933530.em": "4e41958d3a2d246df3e801d4008149799ec5b8ff8237c48243a74951baab401a",
+    "artifacts/carts-orders-main-comparison-20261014/quantity-to-total/producer/work/traces/normalized-fulltrace.em": "c7eb0eeb8a8e35c60069eb1762632e7ee4dfbc3ebc396c7e7169005dd55090d7",
+    "artifacts/carts-orders-main-comparison-20261014/quantity-to-total/receiver/field-query-stage.json": "1474c7c846554b98a4b2b1cdeb8172e72f02a717faed9a5ca88bc246fa1e2dcc",
+    "artifacts/carts-orders-main-comparison-20261014/quantity-to-total/receiver/field-query.log": "6aa10bd4d8c36944eae308988bbf3e35f71103923e51f3191135da37254a7cba",
+    "artifacts/carts-orders-main-comparison-20261014/quantity-to-total/receiver/work/traces/Local1791947933353.em": "2dc0b4f15b4d517623ac5bfbf5f91e94d63e17da70c5e59962c8cb3f669a7111",
+    "artifacts/carts-orders-main-comparison-20261014/quantity-to-total/receiver/work/traces/normalized-fulltrace.em": "0f7fa28c724a13601f216f2c6cd6521a4d6b8ff60e6a1a826e39988c61475345",
+    "artifacts/carts-orders-main-comparison-20261014/quantity-to-total/remote/method-query-stage.json": "b847357eeb4b2b3c9d6570f80519384d0d4898c8497573efa1a46cecbf62b299",
+    "artifacts/carts-orders-main-comparison-20261014/quantity-to-total/remote/method-query.log": "d891cecb6cca4e8be1f85e85a65aae5b35a6e165c02f4fcd0b27ee5e871ff1c3",
+    "artifacts/carts-orders-main-comparison-20261014/quantity-to-total/remote/result.json": "2aa25d5cd7c8982654f7d3ddddaa1449c46e3edb187cefea616167649b03b3d1",
+    "artifacts/carts-orders-main-comparison-20261014/quantity-to-total/remote/trace-inspection-stage.json": "bfe0a99f169bcc1558dd7e91283ac7c9005c6f84d78c679c99ab1937b1539809",
+    "artifacts/carts-orders-main-comparison-20261014/quantity-to-total/remote/trace-inspection.log": "37ea10d1103ad1b0aef87b0eac09952b90c9fc4e3bddedbc5b5d42fe4f3118a5",
+    "artifacts/carts-orders-main-comparison-20261014/unitPrice-to-total/producer/field-query-stage.json": "3a5c085cd7e682b6612958e0ab733a5bab8b95b09d1b48f42c3c59c1358b6f29",
+    "artifacts/carts-orders-main-comparison-20261014/unitPrice-to-total/producer/field-query.log": "f55d712687b95568a1e5446f411081879dab9bf8d222047b7b3f635472a35997",
+    "artifacts/carts-orders-main-comparison-20261014/unitPrice-to-total/producer/work/traces/Local1791947933530.em": "4e41958d3a2d246df3e801d4008149799ec5b8ff8237c48243a74951baab401a",
+    "artifacts/carts-orders-main-comparison-20261014/unitPrice-to-total/producer/work/traces/normalized-fulltrace.em": "c7eb0eeb8a8e35c60069eb1762632e7ee4dfbc3ebc396c7e7169005dd55090d7",
+    "artifacts/carts-orders-main-comparison-20261014/unitPrice-to-total/receiver/field-query-stage.json": "116f7e4bbd582fb92eceb84426dd39341146089e282fe42ee84cc704d8f29ace",
+    "artifacts/carts-orders-main-comparison-20261014/unitPrice-to-total/receiver/field-query.log": "6c2976badb8b1e259d3cee490073653e57b31855c35a13bde62d23248b9f8eca",
+    "artifacts/carts-orders-main-comparison-20261014/unitPrice-to-total/receiver/work/traces/Local1791947933353.em": "2dc0b4f15b4d517623ac5bfbf5f91e94d63e17da70c5e59962c8cb3f669a7111",
+    "artifacts/carts-orders-main-comparison-20261014/unitPrice-to-total/receiver/work/traces/normalized-fulltrace.em": "0f7fa28c724a13601f216f2c6cd6521a4d6b8ff60e6a1a826e39988c61475345",
+    "artifacts/carts-orders-main-comparison-20261014/unitPrice-to-total/remote/method-query-stage.json": "842f040f01a85cc4aa6312edf123f2c29d95e731978add614f4432f0f6db1af7",
+    "artifacts/carts-orders-main-comparison-20261014/unitPrice-to-total/remote/method-query.log": "10d7544034c8071680847b92e540be986821260a34194be15b238b9ee6a0d853",
+    "artifacts/carts-orders-main-comparison-20261014/unitPrice-to-total/remote/result.json": "1def0eb86dc8d8dcf02dd1e5b1883f58eda2951cc44625e5f3290f365f3cdfc9",
+    "artifacts/carts-orders-main-comparison-20261014/unitPrice-to-total/remote/trace-inspection-stage.json": "bb3557c986b2f98a10e374e718222855090e085a47fcb34f67685cf436d4c900",
+    "artifacts/carts-orders-main-comparison-20261014/unitPrice-to-total/remote/trace-inspection.log": "37a42d1a73f7d0932bb91a777ec4e55ae8d0206fc0087ed4268751f0b10cb999",
+    "artifacts/carts-orders-native-all-query-stages-20261014/carts-quantity-getter/control-stage.json": "21c72bdfa3f940d0eba11c9864ba35e157bbca75984f5c00d24fb87f69bea2f7",
+    "artifacts/carts-orders-native-all-query-stages-20261014/carts-quantity-getter/control.log": "a502499c73df0daa16e643ea8f8bc9abe3ce3406ec73c4abf30f8f89b5b0ba61",
+    "artifacts/carts-orders-native-all-query-stages-20261014/carts-unitPrice-getter/control-stage.json": "49199cb44219a0f1a35f7ec536b13d7d464ebfffbd349a8697be0a953fa5978c",
+    "artifacts/carts-orders-native-all-query-stages-20261014/carts-unitPrice-getter/control.log": "3112192d4edd8dcbe6f134e762c5b2a7e01f05346f271b2f22e4ab3e2872057a",
+    "artifacts/carts-orders-native-all-query-stages-20261014/frozen-stage-controls.json": "f42cc564fb9252658ba18babaa97db0804fd3408875b73c192fabcd6732c49c1",
+    "artifacts/carts-orders-native-all-query-stages-20261014/orders-calculate-return-to-caller/control-stage.json": "198bdbc8833b1a8973f660e64aaa444bc80d73aae7d00ac6b406f35fa6f258b1",
+    "artifacts/carts-orders-native-all-query-stages-20261014/orders-calculate-return-to-caller/control.log": "7b7ad1d0671b2c5b12b4f8988eb692d1bf77624a1f2db6d112db42c042d25807",
+    "artifacts/carts-orders-native-all-query-stages-20261014/orders-caller-to-total/control-stage.json": "b0faf8e97dd8be2d442f256ad0e6f4d949dfee5f23770c592ec4b82dbf64b904",
+    "artifacts/carts-orders-native-all-query-stages-20261014/orders-caller-to-total/control.log": "69d11184e16b59257d2bd53ecf0c6237235b3a90d491feb88ccce042cdfb76f4",
+    "artifacts/carts-orders-native-all-query-stages-20261014/orders-mapper-to-stream-sum/control-stage.json": "bc274b973334e70ea6e117def212c8edad0739ff911c6bf5828a81244cc1494b",
+    "artifacts/carts-orders-native-all-query-stages-20261014/orders-mapper-to-stream-sum/control.log": "285ef40fb60733927d130d79562edcfee1ec0cf6c8240d2eae7cedb72d9ce2f9",
+    "artifacts/carts-orders-native-all-query-stages-20261014/orders-quantity-getter/control-stage.json": "4585d8b23379d9fd4e3d3461eca5bfd76023a344e5f3f78856791adfab202288",
+    "artifacts/carts-orders-native-all-query-stages-20261014/orders-quantity-getter/control.log": "dec450d2f41a43e1154e0647234e81dd855cf45537d6bc761bab81f6789f00e8",
+    "artifacts/carts-orders-native-all-query-stages-20261014/orders-quantity-to-mapper/control-stage.json": "4b7c4ecf44d635cbf609e7313c6df9f0cff8c7160576f5587b8ba52ebeb38bb7",
+    "artifacts/carts-orders-native-all-query-stages-20261014/orders-quantity-to-mapper/control.log": "40103e9ac02f61ad6048003a3227d3e92e2dd4edb499bafde52127d6098637a0",
+    "artifacts/carts-orders-native-all-query-stages-20261014/orders-stream-sum-to-total/control-stage.json": "531bb414af4c76b0d670ab189c6c026146eec27508f55d75fecf9e8d9e90fef7",
+    "artifacts/carts-orders-native-all-query-stages-20261014/orders-stream-sum-to-total/control.log": "84171617b66bae348e56e7551fbcb44ae85ece5398b891555519b97f7559b695",
+    "artifacts/carts-orders-native-all-query-stages-20261014/orders-sum-to-calculate-return/control-stage.json": "d0d686a88195c79b62c5022980ae7ab30f2cbc2b4012434cc94d5b3a475e9532",
+    "artifacts/carts-orders-native-all-query-stages-20261014/orders-sum-to-calculate-return/control.log": "5a1d23bf6d472a05aa9b9fd280d01763432011980ee042aaf36ee9e86977de2d",
+    "artifacts/carts-orders-native-all-query-stages-20261014/orders-unitPrice-getter/control-stage.json": "7c4ce5b0908dc972ba0e55857f60706a7e8483eb3b1b42c6efc7a7796c07bddb",
+    "artifacts/carts-orders-native-all-query-stages-20261014/orders-unitPrice-getter/control.log": "9123d0848f8922401b72623b97036b7e0b335f0ebe52b7e511d390518de73305",
+    "artifacts/carts-orders-native-all-query-stages-20261014/orders-unitPrice-to-mapper/control-stage.json": "3c3fdf045c29069a6792d7fd2e59510a1e83f10ca37c5bc31ff54e55de049c6b",
+    "artifacts/carts-orders-native-all-query-stages-20261014/orders-unitPrice-to-mapper/control.log": "d9d1dc9bc078bbace4655ec5d8bc382e850886fb8c28f4f1a421701cf0b9be12",
+    "artifacts/carts-orders-native-all-query-stages-20261014/result.json": "6d1ba79b5992bfa6e92f6ccb3e60b7a81fdcfe2758a778cf805c55e7754e3544",
+    "artifacts/carts-orders-native-qualified-stages-20261014/carts-quantity-getter/control-stage.json": "85314d0dc4e4049fdc371d17adf6a416c155e441d2643091af44c31920e4c6c2",
+    "artifacts/carts-orders-native-qualified-stages-20261014/carts-quantity-getter/control.log": "04287df5b24a37690b99ea45efb9de2d2b56556c119fc3486c2e965937461e31",
+    "artifacts/carts-orders-native-qualified-stages-20261014/carts-unitPrice-getter/control-stage.json": "caa0af4744a3d860926a8114ee112edef0ad4aac8fd8a8efb9a2270ed5ceb55d",
+    "artifacts/carts-orders-native-qualified-stages-20261014/carts-unitPrice-getter/control.log": "ef3eff46a3f9033de2292e4fda7a3f28f28b0188438b0e026cd3cf93fbcdc35e",
+    "artifacts/carts-orders-native-qualified-stages-20261014/frozen-stage-controls.json": "f42cc564fb9252658ba18babaa97db0804fd3408875b73c192fabcd6732c49c1",
+    "artifacts/carts-orders-native-qualified-stages-20261014/orders-calculate-return-to-caller/control-stage.json": "916ec449d21e8ccc9571d6ab642d1777f3eeadd3dd52ed438c0c128f526c874e",
+    "artifacts/carts-orders-native-qualified-stages-20261014/orders-calculate-return-to-caller/control.log": "e17583d0535461595758d30287ab7f6e2a2b1a3b89554893402929148c36f605",
+    "artifacts/carts-orders-native-qualified-stages-20261014/orders-caller-to-total/control-stage.json": "3c89c96a0c98c4c5e1c833f90efdaf25c800c11b48a6cd7d8ba58edc926697ec",
+    "artifacts/carts-orders-native-qualified-stages-20261014/orders-caller-to-total/control.log": "3cc1044dca11121fd7c218ca6e8e6698b4d4e6e04f84601c71910860517fdd39",
+    "artifacts/carts-orders-native-qualified-stages-20261014/orders-mapper-to-stream-sum/control-stage.json": "366cef188dc4033c060ce4840fc6390f3d9766f0a36a22d074a238247b7d1bf6",
+    "artifacts/carts-orders-native-qualified-stages-20261014/orders-mapper-to-stream-sum/control.log": "0f126934be63a5701c57dd98b32436c65f3af4f433d6476d775221f52b4b56fd",
+    "artifacts/carts-orders-native-qualified-stages-20261014/orders-quantity-getter/control-stage.json": "72c03ec0b1db3ca2e503ee567cae02cb98e1f30be7042c666acb72be8927e5a5",
+    "artifacts/carts-orders-native-qualified-stages-20261014/orders-quantity-getter/control.log": "a0222bb442104bb040d018f32a6255455abe671414d5c15d9226c95aa7434100",
+    "artifacts/carts-orders-native-qualified-stages-20261014/orders-quantity-to-mapper/control-stage.json": "b18f429485cef2d2b3a0a2ecf4e2c20f449966e093eb58c3f6a681458a8a32ee",
+    "artifacts/carts-orders-native-qualified-stages-20261014/orders-quantity-to-mapper/control.log": "7ccc4a7145f83dd7664aae527934a38642d0d21930530b0c7a778b738313a209",
+    "artifacts/carts-orders-native-qualified-stages-20261014/orders-stream-sum-to-total/control-stage.json": "9de59a68fd972785c7ae8e879f56e84a7d63349e3194e6bca10b33aa1b6c4363",
+    "artifacts/carts-orders-native-qualified-stages-20261014/orders-stream-sum-to-total/control.log": "5d0cf082e306841b3da0fc6817cdc580065fb94e6dbe8cd0466fdb3928ddd414",
+    "artifacts/carts-orders-native-qualified-stages-20261014/orders-sum-to-calculate-return/control-stage.json": "cb603324557b311df412a6c60ed5d0898ada1de778e46b106636944327c69aeb",
+    "artifacts/carts-orders-native-qualified-stages-20261014/orders-sum-to-calculate-return/control.log": "8d11e6db18ca2c5dc248e6e81da53b3f762eb3cc0b0a0481c7819ad338dd6798",
+    "artifacts/carts-orders-native-qualified-stages-20261014/orders-unitPrice-getter/control-stage.json": "19d3bafa587d323bb06a367cee86f3249c517960004a11decf7294983cdbdc8e",
+    "artifacts/carts-orders-native-qualified-stages-20261014/orders-unitPrice-getter/control.log": "85e278cf1a7c42995f257b0ab84ef9c5d568101f95bb5ec9a021ff39d7d458f2",
+    "artifacts/carts-orders-native-qualified-stages-20261014/orders-unitPrice-to-mapper/control-stage.json": "d344ea233e7a69352192e34e17773dd6931c60793caa4e4b6e8d404cdfbce534",
+    "artifacts/carts-orders-native-qualified-stages-20261014/orders-unitPrice-to-mapper/control.log": "6c43081f2716060a659cfa728c4c753c0a42f1d532857b2c0cbfc28ffa834b39",
+    "artifacts/carts-orders-native-qualified-stages-20261014/result.json": "cd7c1eafc38a3012cbc9bc8c2b331460e5426fc2e9fa661d1d2bbd6e8a914b4a",
+    "artifacts/carts-orders-native-return-controls-20261014/frozen-stage-controls.json": "ea300b9230e6235aaa7d92de0cdf858fa7666888a6c3ee4b2ad3d3013121b885",
+    "artifacts/carts-orders-native-return-controls-20261014/orders-calculate-return-to-caller/control-stage.json": "f2fe89dd5c20f3f6f30ca08fec51c575678022fa6211c9e3a7e6682cb277a60c",
+    "artifacts/carts-orders-native-return-controls-20261014/orders-calculate-return-to-caller/control.log": "66813bd2b87595223ad72b1fc65a4f4b58ac8b38de37f3622857a8ee979bdfbb",
+    "artifacts/carts-orders-native-return-controls-20261014/orders-caller-to-total/control-stage.json": "0b6c96ea8e3d4f85d22b2bcb6d173a15fb64871c0e19a814e07b1aa9a4c475cd",
+    "artifacts/carts-orders-native-return-controls-20261014/orders-caller-to-total/control.log": "58752dbb32033f6dd5c08f560100438d75f200b4791280ddaffef67a260d1983",
+    "artifacts/carts-orders-native-return-controls-20261014/orders-sum-to-calculate-return/control-stage.json": "31d2d3103c9ebe2213c37577bd70c4c75d5f3cdfea687943214fdece39ace4b1",
+    "artifacts/carts-orders-native-return-controls-20261014/orders-sum-to-calculate-return/control.log": "1b11da21990dc47720c0babf69e7132751e28f850d32e8879481de36737fa527",
+    "artifacts/carts-orders-native-return-controls-20261014/result.json": "0c8fc0243b242a718d49dd6449e82129b423c250bd5df1e5a0776bfaa3b07fcb",
+    "artifacts/carts-orders-native-stage-controls-20261014/carts-quantity-getter/control-stage.json": "f7d81145e8f47ca1f9014cf172e546675ca019f8a11064494f6195eada958387",
+    "artifacts/carts-orders-native-stage-controls-20261014/carts-quantity-getter/control.log": "a7ec677ef2c49ac5bc9881cf9735073b9ed0c9d4b09b6cebbceb10586514c0d5",
+    "artifacts/carts-orders-native-stage-controls-20261014/carts-unitPrice-getter/control-stage.json": "7d40be0ff9bbdda286eacad358e952341a5b61466f571b420f2db6bb8a9ffc93",
+    "artifacts/carts-orders-native-stage-controls-20261014/carts-unitPrice-getter/control.log": "6bbeb965259fa8c698722ee6f9bdb64eb477da989a44296e41b4eee052562dd1",
+    "artifacts/carts-orders-native-stage-controls-20261014/frozen-stage-controls.json": "f2e2f4c59b932ca06764327c475a79983f93eb6310e00dc72cd0ffbe76df6c18",
+    "artifacts/carts-orders-native-stage-controls-20261014/orders-mapper-to-stream-sum/control-stage.json": "0e24b50823d99ad6fb9e85a746cf670fbb7c8cf9e4901de25e9287c7efa5ba50",
+    "artifacts/carts-orders-native-stage-controls-20261014/orders-mapper-to-stream-sum/control.log": "fda27c2cc7e177e328a80a3eb20e692a7e91c409f21e9f819357fe31516de459",
+    "artifacts/carts-orders-native-stage-controls-20261014/orders-quantity-getter/control-stage.json": "f4a9dc91a5112b2114c0133b8cddbb30ed11accd859175e00d6313c42bd8db89",
+    "artifacts/carts-orders-native-stage-controls-20261014/orders-quantity-getter/control.log": "14b90b2e0e77a6b58db2daf2ed04ee7aa9c26187975d442ed783643347c861ae",
+    "artifacts/carts-orders-native-stage-controls-20261014/orders-quantity-to-mapper/control-stage.json": "c248bf90061928381d1c28ce2fb29ccbb30332def0fbd56f2cad3dc38c03fefb",
+    "artifacts/carts-orders-native-stage-controls-20261014/orders-quantity-to-mapper/control.log": "d3b187a2f8b4c5603e0153912c1f3321fafc76f9e0037e270a202a081c27094e",
+    "artifacts/carts-orders-native-stage-controls-20261014/orders-stream-sum-to-total/control-stage.json": "756e78c2103598ad8ace5c1e6f02b964e760b407c7d91ed5e8de635c16f97860",
+    "artifacts/carts-orders-native-stage-controls-20261014/orders-stream-sum-to-total/control.log": "37f76fca46ee4e54c806b13be611ca754849ca34f758c529fae67a71dc236c0c",
+    "artifacts/carts-orders-native-stage-controls-20261014/orders-unitPrice-getter/control-stage.json": "e04e594ef9cb99e2c9527dad9f2bca9e961e05c69dd44c95c328f3f7262e6766",
+    "artifacts/carts-orders-native-stage-controls-20261014/orders-unitPrice-getter/control.log": "8902599fc9c213495fc1a38de679828dabf0f7d9b43386555d4182b359f98eba",
+    "artifacts/carts-orders-native-stage-controls-20261014/orders-unitPrice-to-mapper/control-stage.json": "0567ae20dcab0058633256d63a29c3322f3623c79ec31a6a35e3a471122a2f6f",
+    "artifacts/carts-orders-native-stage-controls-20261014/orders-unitPrice-to-mapper/control.log": "58daed604d268b4e64bf475100243b15eb81f64231c8aebf68bbac974d9de32f",
+    "artifacts/carts-orders-native-stage-controls-20261014/result.json": "0bb86b506275d34d28a4b1c7d92eece7f86e9f9fc959ff27491571cd93f1b46d",
+    "artifacts/carts-orders-regressions-20261014.log": "7edc67b830a4f0dd664f450001002483c1004da706ee01974be5ca337c6453ac",
+    "artifacts/carts-orders-static-diagnostics-20261014/orders-caller-to-total/static-diagnostic-stage.json": "9b8b609e5d6ecea227537b02db585eda205f3374687019ecfc804a0e51e78e58",
+    "artifacts/carts-orders-static-diagnostics-20261014/orders-caller-to-total/static-diagnostic.log": "f7f0f09c06c224d6dff588a35e907f9cfea02d556d6c8c1e05e8020974d50814",
+    "artifacts/carts-orders-static-diagnostics-20261014/orders-mapper-to-stream-sum/static-diagnostic-stage.json": "2233c4c88fa3b5def46af3cf922d92b0ab65b204a84fe3177cae9439a4fcf416",
+    "artifacts/carts-orders-static-diagnostics-20261014/orders-mapper-to-stream-sum/static-diagnostic.log": "26348923100705435b15488c77b5fb147276a23ca729e7f5190068a40eb438ff",
+    "artifacts/external-tools/flowdist/tool/FLOWDIST.jar": "809cadf28550959291c3c21c1ce3130a6ca84af3bb649a545def0d61905c82d5",
+    "artifacts/flowdist-all-query-launcher-v2-20261014/compile.log": "312e9bd919c699a2f8409f70240177012720c94095f0f4374d44152defc50f7e",
+    "artifacts/flowdist-all-query-launcher-v2-20261014/manifest.json": "c6d88ebfe92c85c28a58b0e1a453d2ad024e495c531428a160116bea417b63a8",
+    "artifacts/flowdist-carts-data-20261014/manifest.json": "01693c8e9c9aa6d2da33dc7d0bfc7396fc9aa4f81ceeb69228f39be499b8a643",
+    "artifacts/flowdist-carts-data-20261014/work/ServiceGraph/staticVtg.dat": "435efbbe43a6f32e9f7308b809acdd478b746df739d2e3aade28968948744318",
+    "artifacts/flowdist-carts-data-20261014/work/ServiceGraph/stmtids.out": "c0d723d4e0d969f91dd63a548f37ebafbb3c301a332fc463d7acacce0cafa508",
+    "artifacts/flowdist-carts-http-fullmethods-20261014/carts-flowdist.jar": "90a7540cabcd38d4a76e66a56a55dfd0be3e59471dd8b705f4b9b1ab4c068a52",
+    "artifacts/flowdist-carts-http-fullmethods-20261014/manifest.json": "f7aef4354350ab015b56a99e2829a640f970d14c527afcc328365a8fa9280661",
+    "artifacts/flowdist-carts-http-fullmethods-20261014/orders-flowdist.jar": "a70a6a4e5a08474affe392db6ac852a627b45c6056a242718c0acacda34915ae",
+    "artifacts/flowdist-carts-http-fullmethods-20261014/shipping-flowdist.jar": "ae2d2e2d663ca74a38b3fef6ef8e2de1ef434e103fd3b9e99f4c8d9f17db8b42",
+    "artifacts/flowdist-carts-http-resumptions-20261014/carts-flowdist.jar": "a8c56710631b2cd528254791d1180cc1b5cb2e5a0962182b3093281f9eba917b",
+    "artifacts/flowdist-carts-http-resumptions-20261014/carts-resume.log": "410b3a46400540a234ae8c6463cba0525cb2a73ea11e531095bf4e38a6baf490",
+    "artifacts/flowdist-carts-http-resumptions-20261014/manifest.json": "765660866373a6c72da98677809048c6d0889bb15b13eb820968cda762ecefe5",
+    "artifacts/flowdist-carts-http-resumptions-20261014/orders-flowdist.jar": "787a9e85c518a9582a57ce065b9819523f44f2d33dcef6c8436239a113a66c80",
+    "artifacts/flowdist-carts-http-resumptions-20261014/orders-resume.log": "4d8d1cf904691b28e38d963c352280ebe2062a93047ae3fdfed64f6e4fc37e2d",
+    "artifacts/flowdist-carts-http-resumptions-20261014/shipping-flowdist.jar": "356442a0fcc3e92f69e78a2dd67082bf0674846d304b90d94e2d8e4c618b334c",
+    "artifacts/flowdist-carts-http-resumptions-20261014/shipping-resume.log": "2f98327c080ce74462253eefc2a287aaf0bc45d46985730452677b6892892dc5",
+    "artifacts/flowdist-orders-data-20261014/manifest.json": "848d2b4346f773d01eb048ea494d649d58440a123afec5769e5e854d07a2dad2",
+    "artifacts/flowdist-orders-data-20261014/work/ServiceGraph/staticVtg.dat": "4df750cd24cd431faf4c5e74ba7366a544208a940a5f169d240ac96331135d02",
+    "artifacts/flowdist-orders-data-20261014/work/ServiceGraph/stmtids.out": "ecdcbc4bc890c840901671199ed98077d7c993d2028af49a01a01d3cef50c92a",
+    "artifacts/flowdist-sequential-stream-return-model-20261014/model.json": "0756a99e24e46195f5b80f632500d396caca9fb96072edf6a8a5963e910b3eaa",
+    "artifacts/flowdist-sequential-stream-return-model-20261014/model.tsv": "5b7812b06c710cfa3bcaab36f7cbfe68231d5512a8fdfc5e8b4619e1e15bef96",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/boundary-events/carts/events.jsonl": "e11001d2ec98b42ce47d30c448ec5335047df05908ff430e972379092ee2999e",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/boundary-events/carts/works_weave_socks_cart_cart_CartContentsResource.original.class": "be933c0040dc2c66df075fc90c410edd42cf9c3284adf95965d62e5eb9b64d67",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/boundary-events/carts/works_weave_socks_cart_cart_CartResource.original.class": "fa172411e149f4ea3d5d8ec70f01dc995b01c9ddcfd47ea14fd3583f30309205",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/boundary-events/carts/works_weave_socks_cart_controllers_CartsController.original.class": "1410bfc1231dac4788f99356a8399b721cd90810903eb5cc65c50eac455020c8",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/boundary-events/carts/works_weave_socks_cart_entities_Cart.original.class": "682b01efbd5f69434dc9b3112719e7e2c2d1400532c77625a5e8050649853b42",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/boundary-events/carts/works_weave_socks_cart_entities_HealthCheck.original.class": "b1a52307d882185d679139c724a51fd101e52fcc7f9d0bdf3efa46e139c9c5b4",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/boundary-events/carts/works_weave_socks_cart_entities_Item.original.class": "0f6ac57a4251f43cafc2d7085aed160247fd4c358069145d90001e3ae7486613",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/boundary-events/shipping/events.jsonl": "c9738fb915144594283df573c6dcf585c03728df3b56a5a837a95e30ceadb048",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/boundary-events/shipping/works_weave_socks_shipping_controllers_ShippingController.original.class": "02089f8e549b3d39acf426094bfc940074ecaec3403e62296c0fbc590f37bc8d",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/boundary-events/shipping/works_weave_socks_shipping_entities_HealthCheck.original.class": "d2b20af1b765871ba791e588963cffb1767b32785e428dc566d5729c60fc7472",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/boundary-events/shipping/works_weave_socks_shipping_entities_Shipment.original.class": "b2965e0e7e42e9ab51ff29e03f70c416f23d2f76b15ecde33b79afcf557df335",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/boundary-inference-carts.json": "59638128f3f7ecdcac104705f1e4f65d2bc9dfac24bc5eeabba22a1db2a18fb1",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/boundary-inference-shipping.json": "fa3f21af309626a8cd8329c6b00112d4203f63c6214cdfafac6f21a88f34783f",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/carts-to-total.json": "adb94505ef3c4d10cfba4bbab8b0ba0db2301cf5904ac7a531015a270d91d9b8",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/cases.json": "78c1ec0eb89e7e1d0ae24a2dad4dae7c438e9f6314c38743f002a9e05a6df85c",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/compose-ps.json": "5e19f771e598fb991b381492b19a9b13ce54e094a1fae6b97ce71a11d636fa8c",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/compose.lock.json": "47a7d11d4cc3a9195fe6f343e7e5165b6f5dc5d0f82a4bfedbea022f09cefcd4",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/compose.preflight.json": "b82aeef232048b8f52875091e6e99b18e275affcab8cda3719ab96a4b8e00a23",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/cost-events/carts/events.jsonl": "24c9588bc5128a5a46a49241e674f0f8af548a98a2309609185cf3ed5c1eea5c",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/cost-events/carts/works_weave_socks_cart_controllers_CartsController.original.class": "46bc6eea4acf2d1ee23a5ad0575413f478c64df452514320a1a6e535334da431",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/cost-events/orders/events.jsonl": "352d0dbecf9748f7cd324f232eceb8ec1c4994b1115aa85edbb518fbe34e60da",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/cost-events/orders/works_weave_socks_orders_controllers_OrdersController.original.class": "dec2e0741c8f2679029deecd62936c3effda5f9cace839c8d2ce668d12e84069",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/cost-events/shipping/events.jsonl": "182e43d697836336258c153513ab56ecc2d36c3991ce944141e1caec31c9f84f",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/cost-events/shipping/works_weave_socks_shipping_controllers_ShippingController.original.class": "69f47f1aebc8e0d162639f12d1c8d1e559452f9cb5c3948accbfea653cca95d9",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/evaluation.json": "32b8098622836dda44abd9fbbb4a8603e8635931b3669f4f204c868afd7e6360",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/images.json": "926e17cd6aaa6779f53bb37e9df131a6f8101249b3c5dbcd1faed4e3450fbcc8",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/inference.json": "465a448f5ebbafc226ab7af82c1b9a0040e2252c794e761bb4e88cfbdbafe15f",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/progress.json": "acf7ed1a3e9da81800bc7772b5fa4c3389002c9a63d7acc77735cc0b0d88bd04",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/protocol.json": "1ff88f000f0b57e831ff7a67f5b23f1c596a2f30da68066bf083cb13c1415ba0",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/readiness.json": "27c6e6b3df9c72074c8c98178f5e9a9b37d055665a23cb590c95173188e727d6",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/result.json": "d1832718433c6e11be9780b5d65aa82bb870f0e558af4302cd155e636cb9d461",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/service-model.json": "e60cee3e04334767b5ca764ad3d8cdbf262c533fe8ecbcb91ffe43e1d72f884e",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/tracefusion-events/events.jsonl": "6afa5c45b50929b1a090ac05d7070212b0f6f8e84bce57d10e3cc6f90983af0c",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/tracefusion-events/org_springframework_http_client_support_HttpAccessor.original.class": "454da2b64e2e369357af62ab3911ef97a0a0f78dac6862acd58ffb7e7dcbac6a",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/tracefusion-events/org_springframework_web_client_RestTemplate.original.class": "1738b3544d9df8f8be2cbdc16d3af3156e906f36d6e16a169010e5e365b1d8e1",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/tracefusion-events/works_weave_socks_orders_controllers_OrdersController.original.class": "846ffa481d4cc1bbd8ebf970a290f6cd6acafbe83f1b93345f423ecb3607291e",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/tracefusion-events/works_weave_socks_orders_entities_Address.original.class": "2b38dff1566635942361c676bf0991290d0d294a9365763a26b804b072d40a16",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/tracefusion-events/works_weave_socks_orders_entities_Card.original.class": "858418d495cb8e68eb6dad02312432c0105e628d598af3b906498397a7668b35",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/tracefusion-events/works_weave_socks_orders_entities_Customer.original.class": "f9122e09b67ab1a460ef5e72f7a3fde8bb9dee0928428394c3b33e91d757c97c",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/tracefusion-events/works_weave_socks_orders_entities_CustomerOrder.original.class": "c5f52f797e4c20612e1627dd1b59f7f919a2391391b71ce22aaf8f38dbb49419",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/tracefusion-events/works_weave_socks_orders_entities_Item.original.class": "68d3fd0667e832cc1d3e1d4e237808b92e10bd9f755d180dc14f21cb054b2cc4",
+    "artifacts/sockshop-carts-http-20261014/tracefusion/tracefusion-events/works_weave_socks_orders_entities_Shipment.original.class": "8094bc5ed8c60314646a171ec5d5fdd2c8f158eb6842962dc20b674810aa0aa5",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/cases.json": "78c1ec0eb89e7e1d0ae24a2dad4dae7c438e9f6314c38743f002a9e05a6df85c",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/compose-ps.json": "c17547ce9efb83e4fcd2962dcd7f4d47b0988aa677af05b51f59676c736a884b",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/compose.lock.json": "9145a99f38ca611c9750fb715050b6e149ead86c09a0d2250e155a75d8442486",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/compose.preflight.json": "710868f05a3510c258248540b64f7bb923e115ac40077de6849b126eb699d94d",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/cost-events/carts/events.jsonl": "4c5188ed66e909d71dbf2043f6a9b0fdc1c55e9a9561f37b7166b2d8568d202c",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/cost-events/carts/works_weave_socks_cart_controllers_CartsController.original.class": "9145553f40906245272006762a33d102091325bd34c9f7738143269dd5a420c6",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/cost-events/orders/events.jsonl": "63b336c0d90107d65d1478342db4fa7aa018c05d12a18bbb35c9a040cc589482",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/cost-events/orders/works_weave_socks_orders_controllers_OrdersController.original.class": "dbe095897782510ad577730c2411587b59f96c1af462820ab3607091b4bee838",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/cost-events/shipping/events.jsonl": "f5f28706a3a42af37bc15f9cd6873cfb50524e10526114325c45affef9b34385",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/cost-events/shipping/works_weave_socks_shipping_controllers_ShippingController.original.class": "bcb0665609ecbbd21825636e1b032e6f8be8f3cb22ca3c0b0f4e9f79f855fa9f",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/evaluation.json": "9cb52006d04d18729b8b06530e85e8cc93162ccb8af20f933c48513f524ebf85",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/images.json": "926e17cd6aaa6779f53bb37e9df131a6f8101249b3c5dbcd1faed4e3450fbcc8",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/progress.json": "91c9fe23a5bf4bd1c67c33be91caa21602e473d2597487e2f2c857fb1dfb03d2",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/protocol.json": "1ff88f000f0b57e831ff7a67f5b23f1c596a2f30da68066bf083cb13c1415ba0",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/readiness.json": "c28aa08ed69e19fe8b94764180ad0f1757065cb37440efebf687f5342d916bca",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/result.json": "01b4c4325c596e05290a660a146d2815e3a71242e205902841f5a5509152e375",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/runtime/carts/Local1791947933530.em": "4e41958d3a2d246df3e801d4008149799ec5b8ff8237c48243a74951baab401a",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/runtime/carts/entitystmt.out.branch": "8bc12ebffeca7b80fc1262528a48e4dd79b6d68ff1b1d536e946e3ccc68b6fbf",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/runtime/carts/stmtCoverage1.out": "b1501f9a0cd23dfaf44de861f72669485ef215c6795aad279721cb580970429c",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/runtime/carts/stmtids.out": "c0d723d4e0d969f91dd63a548f37ebafbb3c301a332fc463d7acacce0cafa508",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/runtime/carts/test1/Remote1791947933536.em": "6bef351ea661dcffa8b82c15d8534c7d51e49c24085f3ec6d59886656433c438",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/runtime/carts/test1/Remote1791947943963.em": "dae8aad798d7093d85ea24f760c49a772ed1a059d6841692142739e621e404b0",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/runtime/orders/Local1791947933353.em": "2dc0b4f15b4d517623ac5bfbf5f91e94d63e17da70c5e59962c8cb3f669a7111",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/runtime/orders/entitystmt.out.branch": "df1671aec37d0bcd0f45fda186d27fc93e9fc45103c8fd71173ccdee60d3882e",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/runtime/orders/stmtCoverage1.out": "5862cb3e787b7be78e05eb519a0751353cf5d7911614e275b5fb85a451a48f08",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/runtime/orders/stmtids.out": "9d5135b3ae7edc324a57a64206b3ed12ced893cba3c572405a0a420a0f4c11bb",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/runtime/orders/test1/Remote1791947933361.em": "e2bd255da854bfdd17e06bfaeb55f0a652dea7a7a4f5cce77edb98b4d87d8214",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/runtime/orders/test1/Remote1791947943270.em": "9fc8ea23d6bfddeb38b887ac9f98a070ede4dd51d3eb53ab4e8290907438eeb9",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/runtime/shipping/Local1791947933130.em": "16bb85e1a42e32be20d7530a95a57e7b5b21c537f0f86ef59faf8bdcb94cd6e7",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/runtime/shipping/test1/Remote1791947933139.em": "4752d60980d5ac2ee903e7090db7cf626e492a66976d310cb5c98c848a7b6f0f",
+    "artifacts/sockshop-carts-http-resumptions-20261014/flowdist/runtime/shipping/test1/Remote1791947944607.em": "a5d76a932976c894708c07b3a7bedeb2b4a77419d87cc1f46cbc24015eed9dd5"
+  },
+  "accuracy_eligible": false,
+  "performance_eligible": false
+}
