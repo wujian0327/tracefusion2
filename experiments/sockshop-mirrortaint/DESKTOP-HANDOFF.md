@@ -71,6 +71,22 @@ PY
 仍需确认digest引用和RepoDigests就绪。save/load不能被假定保留所有registry digest
 元数据；现有运行器会拒绝缺少固定digest的镜像，不会自动改用未核验的同名标签。
 
+若终端有 HTTPS 代理、Docker daemon 没有代理，可使用不重启 daemon 的准备工具：
+
+```bash
+python3 experiments/sockshop-mirrortaint/prepare_pinned_images.py \
+  --out artifacts/desktop-proxy-images
+```
+
+工具通过终端代理获取固定 manifest/config/layer，逐项验证 SHA-256 和清单中的
+image ID，再通过临时回环 registry 填充 Docker 层缓存，最后拉取原始引用并核验
+原始 RepoDigests。临时 registry 退出时关闭；不改写镜像清单、不使用本地标签代替
+digest。缓存、上游 manifest 和每个镜像的命令/验证结果保存在指定输出目录。
+构建和协议测试同时支持完整 JDK 8（source/target 8）及 JDK 9+（release 8）。
+镜像选择同时显式设置 `dns_search: ["."]`，避免宿主机搜索域被旧 Go 服务优先查询，
+造成 User 到 MongoDB 的 `no reachable servers`；正确性和两种成本配置使用同一设置。
+独立字节码审计识别 JDK 8 与新版 javap 的两种静态方法句柄显示格式。
+
 ## 第一步：重新构建并做正确性复现
 
 旧构建包含源机器绝对路径和源码哈希；不要修改旧freeze/build文件绕过校验。
@@ -116,8 +132,37 @@ python3 experiments/sockshop-mirrortaint/compare_w3c_paths.py \
 
 ## 第二步：④正式成本比较
 
-当前上述脚本是正确性复现，**正式成本测试驱动尚未实现**，重复运行它不能直接
-当作稳定负载的吞吐/延迟实验。台式机复现通过后，下一项编码任务是专门的成本驱动。
+上述脚本是正确性复现，重复运行不能直接当作稳定负载的吞吐/延迟实验。
+专用成本驱动为 `run_sockshop_cost.py`，必须先通过两应用的台式机复现、算法审计、
+协议测试、原镜像 JAR 校验和 W3C 对照验收，不能用旧机器的成绩替代本机验收。
+
+```bash
+python3 -m unittest discover -s experiments/sockshop-mirrortaint \
+  -p test_sockshop_cost.py -v
+
+python3 experiments/sockshop-mirrortaint/run_sockshop_cost.py run \
+  --out artifacts/sockshop-cost-new --build artifacts/desktop-w3c-build \
+  --correctness artifacts/desktop-w3c-run \
+  --rounds 5 --warmup 30 --seconds 60 --rate 2 --concurrency 2 \
+  --cpus 1 --memory 768m --sample-interval 2 --seed 151031
+```
+
+每轮部署使用相同原版 JAR、JVM 参数及 11 个组件的资源限制，仅 TraceFusion
+配置增加观测器/计划/采集目录。固定成功案例模板轮转；独立用户及购物车在预热前
+准备，随机数据库 ID 不当作算法证据关联键。在线计时仅覆盖 POST /orders 的 HTTP
+调用至响应体读完，另保存计划到达至响应的延迟及调度滞后；预热与准备请求不混入
+稳态分位数。每轮每个目标请求均检查原业务输出，TraceFusion 对预热和稳态的全部
+指定字段查询做实例级独立评分；unknown 和背景 unknown 原样保留。
+
+报告分别给出稳态与总采集日志、各组件 CPU/RSS、离线图构建时间、还原/评分/导出
+总时间及独立子进程峰值 RSS。答案延迟按整批答案写出时间计算，含等待当前批次
+结束和采集器关闭，不代表流式增量查询。固定到达率下的吞吐不能解释为最大吞吐。
+RSS 为容器进程 RSS 之和，不代表每请求分配，存在共享页重复计数。
+
+输出 `results.md`、`comparison.json`、环境/配置/源码与输入哈希、每次原始请求、
+采样、事件、答案、评分和清理结果。试验少于 5 轮不标记 performance_eligible；
+失败的配置保留 N/A，不纳入有效轮次的数值。运行中不修改已冻结源码；重跑使用新
+输出目录。重新汇总已有原始结果可使用 `run_sockshop_cost.py report --out ...`。
 
 建议先固定Sock Shop的共同查询与工作负载：原版服务、TraceFusion自动选择观测、
 MirrorTaint加已披露适配器。MirrorTaint需先确认共同查询能完成，不能把本轮新增

@@ -1,0 +1,977 @@
+{
+  "kind": "sockshop-independent-cost-comparison",
+  "date": "2026-10-15",
+  "all_passed": true,
+  "scope": {
+    "applications_cost_measured": [
+      "Sock Shop"
+    ],
+    "configurations_measured": [
+      "original",
+      "TraceFusion automatic selective observation"
+    ],
+    "queries": "Carts response -> Orders.total and returned item fields; outbound Shipment -> returned Shipment",
+    "workload": "Successful order templates, independent fixtures; fixed offered rate, not capacity or saturation throughput",
+    "mirrortaint_adapter": "N/A: common query scope not qualified; external executable artifacts not in handoff",
+    "other_external_baselines": "N/A",
+    "trainticket_cost": "N/A: correctness acceptance only",
+    "answer_latency": "Offline batch; includes remaining steady window and graceful collector shutdown",
+    "rss": "Sum of process RSS within each container; shared pages may be counted repeatedly; not per-request allocation"
+  },
+  "machine": {
+    "cpu_model": "AMD Ryzen 9 7950X 16-Core Processor",
+    "logical_cpus": 32,
+    "visible_memory_kib": 15967452,
+    "platform": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+    "disk": "WSL2 /dev/sdd ext4, Virtual Disk 1T; underlying physical medium not established",
+    "builder_javac": "javac 1.8.0_502",
+    "service_java": {
+      "orders": "openjdk version \"1.8.0_111-internal\"\nOpenJDK Runtime Environment (build 1.8.0_111-internal-alpine-r0-b14)\nOpenJDK 64-Bit Server VM (build 25.111-b14, mixed mode)\n",
+      "carts": "openjdk version \"1.8.0_111-internal\"\nOpenJDK Runtime Environment (build 1.8.0_111-internal-alpine-r0-b14)\nOpenJDK 64-Bit Server VM (build 25.111-b14, mixed mode)\n",
+      "shipping": "openjdk version \"1.8.0_111-internal\"\nOpenJDK Runtime Environment (build 1.8.0_111-internal-alpine-r0-b14)\nOpenJDK 64-Bit Server VM (build 25.111-b14, mixed mode)\n"
+    },
+    "environment_receipt": "artifacts/sockshop-cost-formal-20261015/environment.json",
+    "other_containers_running": "Recorded in environment.json; host not exclusively reserved"
+  },
+  "desktop_acceptance": {
+    "results": {
+      "sockshop": {
+        "queries": 198,
+        "exact": 198,
+        "unknown": 0,
+        "tp": 258,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "trainticket": {
+        "queries": 31,
+        "exact": 31,
+        "unknown": 0,
+        "tp": 30,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    "algorithm_checks": {
+      "all_six_plans_regenerated_without_business_answers": true,
+      "independent_javap_opcode_operands_and_lambda_verified": true,
+      "all_class_hashes_match_original_image_jars": true,
+      "independent_business_database_and_field_instance_oracles_passed": true,
+      "actual_rpc_thread_contexts_match_message_observations": true,
+      "second_application_copy_and_constant_rules_derived_from_code": true,
+      "renamed_second_application_source_requires_no_engine_edits": true,
+      "missing_remote_source_property_returns_unknown": true,
+      "wrong_response_invocation_context_rejected": true,
+      "foreign_equal_valued_rpc_context_rejected": true,
+      "business_trace_labels_and_parent_audit_metadata_unused_by_reconstruction": true,
+      "property_pointer_mismatch_rejected": true,
+      "same_valued_non_source_fields_do_not_gain_origins": true
+    },
+    "w3c_checks": {
+      "exact_baseline_workload_reused": true,
+      "six_original_jars_models_and_local_field_plans_unchanged": true,
+      "local_observation_and_reduction_algorithms_unchanged": true,
+      "same_trace_repeated_and_parallel_requests_remain_distinct": true,
+      "actual_request_headers_and_server_parent_spans_verified": true,
+      "spring_async_tasks_preserve_parent_context": true,
+      "no_custom_response_echo_consumed": true,
+      "all_229_independent_instance_answers_and_logical_origins_preserved": true,
+      "missing_intermediate_field_evidence_returns_unknown": true,
+      "foreign_response_trace_rejected": true,
+      "protocol_parser_and_async_context_boundary_checks_passed": true,
+      "six_original_image_jars_independently_verified": true,
+      "distributed_bytecode_and_evidence_regression_passed": true
+    },
+    "protocol_checks_passed": true,
+    "original_image_jars_matched": 6,
+    "background_unknown": {
+      "sockshop": {
+        "works/weave/socks/cart/entities/Item.id": 43
+      },
+      "trainticket": {}
+    },
+    "canonical_images_verified": 14
+  },
+  "protocol": {
+    "rounds": 5,
+    "warmup": 30.0,
+    "seconds": 60.0,
+    "rate": 2.0,
+    "concurrency": 2,
+    "sample_interval": 2.0,
+    "cpus": 1.0,
+    "memory": "768m",
+    "seed": 151031,
+    "jvm": "-Xms64m -Xmx256m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom -Dspring.zipkin.enabled=false",
+    "order": [
+      [
+        "round-01-1-original",
+        "original"
+      ],
+      [
+        "round-01-2-tracefusion",
+        "tracefusion"
+      ],
+      [
+        "round-02-1-original",
+        "original"
+      ],
+      [
+        "round-02-2-tracefusion",
+        "tracefusion"
+      ],
+      [
+        "round-03-1-original",
+        "original"
+      ],
+      [
+        "round-03-2-tracefusion",
+        "tracefusion"
+      ],
+      [
+        "round-04-1-tracefusion",
+        "tracefusion"
+      ],
+      [
+        "round-04-2-original",
+        "original"
+      ],
+      [
+        "round-05-1-tracefusion",
+        "tracefusion"
+      ],
+      [
+        "round-05-2-original",
+        "original"
+      ]
+    ]
+  },
+  "online_summary": {
+    "original": {
+      "trials": 5,
+      "metrics": {
+        "throughput_rps": {
+          "median": 2.0,
+          "min": 2.0,
+          "max": 2.0,
+          "cv": 0.0
+        },
+        "latency_ms_p50": {
+          "median": 11.598424,
+          "min": 11.41863,
+          "max": 11.703576,
+          "cv": 0.010438195438505219
+        },
+        "latency_ms_p95": {
+          "median": 14.858329,
+          "min": 14.506022,
+          "max": 16.842998,
+          "cv": 0.06434022263920394
+        },
+        "latency_ms_p99": {
+          "median": 20.191899,
+          "min": 18.692726,
+          "max": 21.429698,
+          "cv": 0.048756724958226055
+        }
+      }
+    },
+    "tracefusion": {
+      "trials": 5,
+      "metrics": {
+        "throughput_rps": {
+          "median": 2.0,
+          "min": 2.0,
+          "max": 2.0,
+          "cv": 0.0
+        },
+        "latency_ms_p50": {
+          "median": 13.901857,
+          "min": 13.487727,
+          "max": 14.378758,
+          "cv": 0.023649006816973774
+        },
+        "latency_ms_p95": {
+          "median": 18.726835,
+          "min": 17.732186,
+          "max": 20.262567,
+          "cv": 0.04816184892286952
+        },
+        "latency_ms_p99": {
+          "median": 22.621832,
+          "min": 22.235706,
+          "max": 24.222191,
+          "cv": 0.0386987186573223
+        }
+      }
+    }
+  },
+  "resource_and_offline_summary": {
+    "original": {
+      "jvm_cpu_one_core_percent_mean": {
+        "median": 6.993952236863861,
+        "min": 6.393442357207614,
+        "max": 7.298288407192365
+      },
+      "jvm_rss_bytes_mean": {
+        "median": 1604798208,
+        "min": 1578816512,
+        "max": 1624917504
+      },
+      "jvm_rss_bytes_peak": {
+        "median": 1610555392,
+        "min": 1581961216,
+        "max": 1632919552
+      },
+      "deployment_cpu_one_core_percent_mean": {
+        "median": 9.297473606956075,
+        "min": 8.702734070655275,
+        "max": 9.629895472276903
+      },
+      "deployment_rss_bytes_mean": {
+        "median": 2529043712,
+        "min": 2511682560,
+        "max": 2542193408
+      }
+    },
+    "tracefusion": {
+      "jvm_cpu_one_core_percent_mean": {
+        "median": 8.65948847795655,
+        "min": 8.132827072570045,
+        "max": 8.976408726062115
+      },
+      "jvm_rss_bytes_mean": {
+        "median": 1605325568,
+        "min": 1588096000,
+        "max": 1630191872
+      },
+      "jvm_rss_bytes_peak": {
+        "median": 1611546624,
+        "min": 1591508992,
+        "max": 1636835328
+      },
+      "deployment_cpu_one_core_percent_mean": {
+        "median": 11.063756829242669,
+        "min": 10.423886331896515,
+        "max": 11.325944386237474
+      },
+      "deployment_rss_bytes_mean": {
+        "median": 2523699968,
+        "min": 2499844608,
+        "max": 2552562432
+      },
+      "offline_graph_build_seconds": {
+        "median": 0.276168382,
+        "min": 0.262158915,
+        "max": 0.285697443
+      },
+      "offline_restore_score_export_seconds": {
+        "median": 1.727290628,
+        "min": 1.719716942,
+        "max": 1.807607367
+      },
+      "offline_peak_rss_bytes": {
+        "median": 198672384,
+        "min": 198557696,
+        "max": 199118848
+      },
+      "batch_answer_delay_seconds_p50": {
+        "median": 35.499350744,
+        "min": 35.404886154,
+        "max": 35.704427262
+      },
+      "batch_answer_delay_seconds_p95": {
+        "median": 62.498938427,
+        "min": 62.403132584,
+        "max": 62.704457851
+      },
+      "batch_answer_delay_seconds_p99": {
+        "median": 64.997343314,
+        "min": 64.903004342,
+        "max": 65.200918516
+      }
+    }
+  },
+  "paired_latency_overhead_percent": [
+    {
+      "round": 1,
+      "latency_p50_overhead_percent": 18.120361199198154,
+      "latency_p95_overhead_percent": 22.240170323745545,
+      "latency_p99_overhead_percent": 21.01943825635706
+    },
+    {
+      "round": 2,
+      "latency_p50_overhead_percent": 18.857335104270547,
+      "latency_p95_overhead_percent": 10.836948386504597,
+      "latency_p99_overhead_percent": 8.623451163523699
+    },
+    {
+      "round": 3,
+      "latency_p50_overhead_percent": 22.857817132131242,
+      "latency_p95_overhead_percent": 29.316876643818702,
+      "latency_p99_overhead_percent": 17.269589155532138
+    },
+    {
+      "round": 4,
+      "latency_p50_overhead_percent": 20.109482115846088,
+      "latency_p95_overhead_percent": 26.035942534318647,
+      "latency_p99_overhead_percent": 20.665181619542917
+    },
+    {
+      "round": 5,
+      "latency_p50_overhead_percent": 19.09890699794927,
+      "latency_p95_overhead_percent": 30.143672529182176,
+      "latency_p99_overhead_percent": 4.05824197802509
+    }
+  ],
+  "paired_latency_overhead_percent_median": {
+    "p50": 19.09890699794927,
+    "p95": 26.035942534318647,
+    "p99": 17.269589155532138
+  },
+  "correctness_and_validation": {
+    "all_passed": true,
+    "counts": {
+      "target_requests": 1800,
+      "steady_requests": 1200,
+      "queries": 8325,
+      "tp": 11175,
+      "fp": 0,
+      "fn": 0,
+      "background_unknown": 1875
+    },
+    "trials": [
+      {
+        "trial": "round-01-1-original",
+        "mode": "original",
+        "all_passed": true,
+        "steady_requests": 120,
+        "resource_snapshots": 18,
+        "queries": null
+      },
+      {
+        "trial": "round-01-2-tracefusion",
+        "mode": "tracefusion",
+        "all_passed": true,
+        "steady_requests": 120,
+        "resource_snapshots": 18,
+        "queries": 1665
+      },
+      {
+        "trial": "round-02-1-original",
+        "mode": "original",
+        "all_passed": true,
+        "steady_requests": 120,
+        "resource_snapshots": 18,
+        "queries": null
+      },
+      {
+        "trial": "round-02-2-tracefusion",
+        "mode": "tracefusion",
+        "all_passed": true,
+        "steady_requests": 120,
+        "resource_snapshots": 18,
+        "queries": 1665
+      },
+      {
+        "trial": "round-03-1-original",
+        "mode": "original",
+        "all_passed": true,
+        "steady_requests": 120,
+        "resource_snapshots": 18,
+        "queries": null
+      },
+      {
+        "trial": "round-03-2-tracefusion",
+        "mode": "tracefusion",
+        "all_passed": true,
+        "steady_requests": 120,
+        "resource_snapshots": 18,
+        "queries": 1665
+      },
+      {
+        "trial": "round-04-1-tracefusion",
+        "mode": "tracefusion",
+        "all_passed": true,
+        "steady_requests": 120,
+        "resource_snapshots": 18,
+        "queries": 1665
+      },
+      {
+        "trial": "round-04-2-original",
+        "mode": "original",
+        "all_passed": true,
+        "steady_requests": 120,
+        "resource_snapshots": 18,
+        "queries": null
+      },
+      {
+        "trial": "round-05-1-tracefusion",
+        "mode": "tracefusion",
+        "all_passed": true,
+        "steady_requests": 120,
+        "resource_snapshots": 18,
+        "queries": 1665
+      },
+      {
+        "trial": "round-05-2-original",
+        "mode": "original",
+        "all_passed": true,
+        "steady_requests": 120,
+        "resource_snapshots": 18,
+        "queries": null
+      }
+    ],
+    "checks": [
+      "source hashes match",
+      "10 fresh deployments and resource limits",
+      "180 business responses per deployment",
+      "120 steady responses and 60-second windows",
+      "raw nearest-rank percentiles and throughput",
+      "closed sequential event streams and exact byte counts",
+      "all selected field instances and unknown retained",
+      "per-request batch answer availability",
+      "cleanup returncodes zero",
+      "scheduled arrival latency and dispatch lag independently recomputed"
+    ]
+  },
+  "trials": [
+    {
+      "trial": "round-01-1-original",
+      "mode": "original",
+      "online_latency_ms": {
+        "p50": 11.41863,
+        "p95": 14.506022,
+        "p99": 18.692726
+      },
+      "scheduled_to_response_ms": {
+        "p50": 12.180261,
+        "p95": 15.384204,
+        "p99": 19.398865
+      },
+      "throughput_rps": 2.0,
+      "max_dispatch_lag_ms": 1.191321,
+      "jvm_resources": {
+        "cpu_one_core_percent_mean": 6.643099574607068,
+        "rss_bytes_mean": 1601996544,
+        "rss_bytes_peak": 1609465856
+      },
+      "steady_capture": {
+        "orders": {
+          "events": 0,
+          "bytes": 0
+        },
+        "carts": {
+          "events": 0,
+          "bytes": 0
+        },
+        "shipping": {
+          "events": 0,
+          "bytes": 0
+        }
+      },
+      "offline": null,
+      "completion_to_batch_answers_seconds": null
+    },
+    {
+      "trial": "round-01-2-tracefusion",
+      "mode": "tracefusion",
+      "online_latency_ms": {
+        "p50": 13.487727,
+        "p95": 17.732186,
+        "p99": 22.621832
+      },
+      "scheduled_to_response_ms": {
+        "p50": 14.041729,
+        "p95": 18.249012,
+        "p99": 23.006148
+      },
+      "throughput_rps": 2.0,
+      "max_dispatch_lag_ms": 0.859294,
+      "jvm_resources": {
+        "cpu_one_core_percent_mean": 8.248826568083297,
+        "rss_bytes_mean": 1607820032,
+        "rss_bytes_peak": 1609031680
+      },
+      "steady_capture": {
+        "orders": {
+          "events": 5058,
+          "bytes": 3745333
+        },
+        "carts": {
+          "events": 240,
+          "bytes": 296845
+        },
+        "shipping": {
+          "events": 600,
+          "bytes": 390762
+        }
+      },
+      "offline": {
+        "graph_build_seconds": 0.275774233,
+        "restore_score_export_seconds": 1.727290628,
+        "peak_rss_bytes": 198672384,
+        "answers_ready_ns": 2031948945817,
+        "summary": {
+          "queries": 1665,
+          "exact": 1665,
+          "unknown": 0,
+          "tp": 2235,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "background_unknown": {
+          "works/weave/socks/cart/entities/Item.id": 375
+        },
+        "subprocess_wall_seconds": 1.801729521
+      },
+      "completion_to_batch_answers_seconds": {
+        "p50": 35.482089126,
+        "p95": 62.481997522,
+        "p99": 64.980381071
+      }
+    },
+    {
+      "trial": "round-02-1-original",
+      "mode": "original",
+      "online_latency_ms": {
+        "p50": 11.696255,
+        "p95": 16.842998,
+        "p99": 20.470447
+      },
+      "scheduled_to_response_ms": {
+        "p50": 12.230324,
+        "p95": 17.631393,
+        "p99": 21.234478
+      },
+      "throughput_rps": 2.0,
+      "max_dispatch_lag_ms": 0.910489,
+      "jvm_resources": {
+        "cpu_one_core_percent_mean": 6.993952236863861,
+        "rss_bytes_mean": 1624917504,
+        "rss_bytes_peak": 1632919552
+      },
+      "steady_capture": {
+        "orders": {
+          "events": 0,
+          "bytes": 0
+        },
+        "carts": {
+          "events": 0,
+          "bytes": 0
+        },
+        "shipping": {
+          "events": 0,
+          "bytes": 0
+        }
+      },
+      "offline": null,
+      "completion_to_batch_answers_seconds": null
+    },
+    {
+      "trial": "round-02-2-tracefusion",
+      "mode": "tracefusion",
+      "online_latency_ms": {
+        "p50": 13.901857,
+        "p95": 18.668265,
+        "p99": 22.235706
+      },
+      "scheduled_to_response_ms": {
+        "p50": 14.677695,
+        "p95": 19.448434,
+        "p99": 22.995837
+      },
+      "throughput_rps": 2.0,
+      "max_dispatch_lag_ms": 0.874824,
+      "jvm_resources": {
+        "cpu_one_core_percent_mean": 8.65948847795655,
+        "rss_bytes_mean": 1588096000,
+        "rss_bytes_peak": 1591508992
+      },
+      "steady_capture": {
+        "orders": {
+          "events": 5058,
+          "bytes": 3745333
+        },
+        "carts": {
+          "events": 240,
+          "bytes": 296845
+        },
+        "shipping": {
+          "events": 600,
+          "bytes": 390762
+        }
+      },
+      "offline": {
+        "graph_build_seconds": 0.262158915,
+        "restore_score_export_seconds": 1.720932713,
+        "peak_rss_bytes": 198557696,
+        "answers_ready_ns": 2348860356631,
+        "summary": {
+          "queries": 1665,
+          "exact": 1665,
+          "unknown": 0,
+          "tp": 2235,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "background_unknown": {
+          "works/weave/socks/cart/entities/Item.id": 375
+        },
+        "subprocess_wall_seconds": 1.797838732
+      },
+      "completion_to_batch_answers_seconds": {
+        "p50": 35.404886154,
+        "p95": 62.403132584,
+        "p99": 64.903004342
+      }
+    },
+    {
+      "trial": "round-03-1-original",
+      "mode": "original",
+      "online_latency_ms": {
+        "p50": 11.703576,
+        "p95": 15.668927,
+        "p99": 20.191899
+      },
+      "scheduled_to_response_ms": {
+        "p50": 12.393365,
+        "p95": 16.227985,
+        "p99": 20.906548
+      },
+      "throughput_rps": 2.0,
+      "max_dispatch_lag_ms": 0.904942,
+      "jvm_resources": {
+        "cpu_one_core_percent_mean": 7.298288407192365,
+        "rss_bytes_mean": 1604798208,
+        "rss_bytes_peak": 1610555392
+      },
+      "steady_capture": {
+        "orders": {
+          "events": 0,
+          "bytes": 0
+        },
+        "carts": {
+          "events": 0,
+          "bytes": 0
+        },
+        "shipping": {
+          "events": 0,
+          "bytes": 0
+        }
+      },
+      "offline": null,
+      "completion_to_batch_answers_seconds": null
+    },
+    {
+      "trial": "round-03-2-tracefusion",
+      "mode": "tracefusion",
+      "online_latency_ms": {
+        "p50": 14.378758,
+        "p95": 20.262567,
+        "p99": 23.678957
+      },
+      "scheduled_to_response_ms": {
+        "p50": 15.159348,
+        "p95": 21.470871,
+        "p99": 24.40412
+      },
+      "throughput_rps": 2.0,
+      "max_dispatch_lag_ms": 6.874019,
+      "jvm_resources": {
+        "cpu_one_core_percent_mean": 8.857648048216724,
+        "rss_bytes_mean": 1605276672,
+        "rss_bytes_peak": 1612980224
+      },
+      "steady_capture": {
+        "orders": {
+          "events": 5058,
+          "bytes": 3745333
+        },
+        "carts": {
+          "events": 240,
+          "bytes": 296845
+        },
+        "shipping": {
+          "events": 600,
+          "bytes": 390762
+        }
+      },
+      "offline": {
+        "graph_build_seconds": 0.283658439,
+        "restore_score_export_seconds": 1.734332932,
+        "peak_rss_bytes": 199118848,
+        "answers_ready_ns": 2665014927225,
+        "summary": {
+          "queries": 1665,
+          "exact": 1665,
+          "unknown": 0,
+          "tp": 2235,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "background_unknown": {
+          "works/weave/socks/cart/entities/Item.id": 375
+        },
+        "subprocess_wall_seconds": 1.808771892
+      },
+      "completion_to_batch_answers_seconds": {
+        "p50": 35.499350744,
+        "p95": 62.499659272,
+        "p99": 64.998310347
+      }
+    },
+    {
+      "trial": "round-04-1-tracefusion",
+      "mode": "tracefusion",
+      "online_latency_ms": {
+        "p50": 13.930807,
+        "p95": 18.726835,
+        "p99": 24.222191
+      },
+      "scheduled_to_response_ms": {
+        "p50": 14.676085,
+        "p95": 19.453485,
+        "p99": 24.966191
+      },
+      "throughput_rps": 2.0,
+      "max_dispatch_lag_ms": 1.058702,
+      "jvm_resources": {
+        "cpu_one_core_percent_mean": 8.976408726062115,
+        "rss_bytes_mean": 1630191872,
+        "rss_bytes_peak": 1636835328
+      },
+      "steady_capture": {
+        "orders": {
+          "events": 5058,
+          "bytes": 3745335
+        },
+        "carts": {
+          "events": 240,
+          "bytes": 296845
+        },
+        "shipping": {
+          "events": 600,
+          "bytes": 390762
+        }
+      },
+      "offline": {
+        "graph_build_seconds": 0.285697443,
+        "restore_score_export_seconds": 1.807607367,
+        "peak_rss_bytes": 198938624,
+        "answers_ready_ns": 2825172371908,
+        "summary": {
+          "queries": 1665,
+          "exact": 1665,
+          "unknown": 0,
+          "tp": 2235,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "background_unknown": {
+          "works/weave/socks/cart/entities/Item.id": 375
+        },
+        "subprocess_wall_seconds": 1.885706197
+      },
+      "completion_to_batch_answers_seconds": {
+        "p50": 35.704427262,
+        "p95": 62.704457851,
+        "p99": 65.200918516
+      }
+    },
+    {
+      "trial": "round-04-2-original",
+      "mode": "original",
+      "online_latency_ms": {
+        "p50": 11.598424,
+        "p95": 14.858329,
+        "p99": 20.073886
+      },
+      "scheduled_to_response_ms": {
+        "p50": 12.285638,
+        "p95": 15.637882,
+        "p99": 20.841821
+      },
+      "throughput_rps": 2.0,
+      "max_dispatch_lag_ms": 0.832035,
+      "jvm_resources": {
+        "cpu_one_core_percent_mean": 7.036638069788911,
+        "rss_bytes_mean": 1613770496,
+        "rss_bytes_peak": 1618636800
+      },
+      "steady_capture": {
+        "orders": {
+          "events": 0,
+          "bytes": 0
+        },
+        "carts": {
+          "events": 0,
+          "bytes": 0
+        },
+        "shipping": {
+          "events": 0,
+          "bytes": 0
+        }
+      },
+      "offline": null,
+      "completion_to_batch_answers_seconds": null
+    },
+    {
+      "trial": "round-05-1-tracefusion",
+      "mode": "tracefusion",
+      "online_latency_ms": {
+        "p50": 13.719994,
+        "p95": 18.965296,
+        "p99": 22.299367
+      },
+      "scheduled_to_response_ms": {
+        "p50": 14.449854,
+        "p95": 19.719377,
+        "p99": 23.043949
+      },
+      "throughput_rps": 2.0,
+      "max_dispatch_lag_ms": 1.000244,
+      "jvm_resources": {
+        "cpu_one_core_percent_mean": 8.132827072570045,
+        "rss_bytes_mean": 1605325568,
+        "rss_bytes_peak": 1611546624
+      },
+      "steady_capture": {
+        "orders": {
+          "events": 5058,
+          "bytes": 3745333
+        },
+        "carts": {
+          "events": 240,
+          "bytes": 296845
+        },
+        "shipping": {
+          "events": 600,
+          "bytes": 390762
+        }
+      },
+      "offline": {
+        "graph_build_seconds": 0.276168382,
+        "restore_score_export_seconds": 1.719716942,
+        "peak_rss_bytes": 198578176,
+        "answers_ready_ns": 3140801227953,
+        "summary": {
+          "queries": 1665,
+          "exact": 1665,
+          "unknown": 0,
+          "tp": 2235,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "background_unknown": {
+          "works/weave/socks/cart/entities/Item.id": 375
+        },
+        "subprocess_wall_seconds": 1.793529841
+      },
+      "completion_to_batch_answers_seconds": {
+        "p50": 35.500030006,
+        "p95": 62.498938427,
+        "p99": 64.997343314
+      }
+    },
+    {
+      "trial": "round-05-2-original",
+      "mode": "original",
+      "online_latency_ms": {
+        "p50": 11.519832,
+        "p95": 14.572584,
+        "p99": 21.429698
+      },
+      "scheduled_to_response_ms": {
+        "p50": 12.269549,
+        "p95": 15.333327,
+        "p99": 22.160011
+      },
+      "throughput_rps": 2.0,
+      "max_dispatch_lag_ms": 0.815563,
+      "jvm_resources": {
+        "cpu_one_core_percent_mean": 6.393442357207614,
+        "rss_bytes_mean": 1578816512,
+        "rss_bytes_peak": 1581961216
+      },
+      "steady_capture": {
+        "orders": {
+          "events": 0,
+          "bytes": 0
+        },
+        "carts": {
+          "events": 0,
+          "bytes": 0
+        },
+        "shipping": {
+          "events": 0,
+          "bytes": 0
+        }
+      },
+      "offline": null,
+      "completion_to_batch_answers_seconds": null
+    }
+  ],
+  "evidence": {
+    "build": "artifacts/desktop-portable-build",
+    "acceptance": "artifacts/desktop-portable-acceptance",
+    "cost_run": "artifacts/sockshop-cost-formal-20261015",
+    "report": "artifacts/sockshop-cost-formal-20261015/results.md",
+    "files_sha256": {
+      "artifacts/desktop-portable-build/build.json": "93e2552c197298250022cfdc8e44831ccc18e065c9ba6c4f70bb5f54c58bc8ed",
+      "artifacts/desktop-portable-acceptance/comparison.json": "d2d36689ad500dce860e7dde46f2034a26cc127c695cb8ab39a527342ca1ad58",
+      "artifacts/desktop-portable-acceptance/algorithm-audit.json": "1eb59b11455393ab9d6b474b632ff69aac74c99675867906f645fcbc58ae5734",
+      "artifacts/desktop-portable-acceptance/protocol-checks.json": "74d5e8f812abd2ac0578e7bc291a7134271a299f391524acae62ab723e0cd969",
+      "artifacts/desktop-portable-acceptance/original-image-verification.json": "80d8017fd4d7ac4f7a3b60ce958f70b0e1116ebcc6d0542979dc1b1dfc675c06",
+      "artifacts/desktop-portable-acceptance/w3c-comparison.json": "8fc2fb3be4359d03afbb9acf93abc6fca3e963aeae4249cf6e7785b0ae6f7def",
+      "artifacts/desktop-proxy-images/results.json": "67fea0fe7724211bb7d15f2821d68e56e6340fa5608610f2eab78cb3fb1ade96",
+      "artifacts/sockshop-cost-formal-20261015/comparison.json": "db81cbcc318326c0acc46533c4594189261554f211dfd81b5ffcee52809b4dcd",
+      "artifacts/sockshop-cost-formal-20261015/config.json": "aaff85b10128ff120f4243035797213feafbf3d85fe08b23f7644062342b9fbe",
+      "artifacts/sockshop-cost-formal-20261015/workload.json": "717b01cb6578d40423ab636404e7a35eb61110655221693984a6a2da035a28a5",
+      "artifacts/sockshop-cost-formal-20261015/environment.json": "6b33e459a6f90525d2e441b0322613d514fcf6a8c4ccf8c21d33ae9028f20724",
+      "artifacts/sockshop-cost-formal-20261015/independent-validation.json": "6166ebbc00faf567acfb1c1208f84bc272dd56c5cd267bf0e049138596f2d8c2",
+      "artifacts/sockshop-cost-formal-20261015/evidence-sha256.json": "2ce63bd4037e79ea6f1fe8ab12f9899ae2c06f9cfa6454ec9b36f38571900e35"
+    }
+  },
+  "implementation_sha256": {
+    "experiments/sockshop-mirrortaint/run_sockshop_cost.py": "54275a6506ac9d2e25fa4dda832e91178977c9f376bce56a6be27d4c7353d90c",
+    "experiments/sockshop-mirrortaint/test_sockshop_cost.py": "307969327a0200b9bc65803c3835ced546e2ffe7dab46d356b57575fdef560f6",
+    "experiments/sockshop-mirrortaint/prepare_pinned_images.py": "3159aef437bc5f3bbfe5da3be769c937564dab8e80ed5450ed5abab36fa6a038",
+    "experiments/sockshop-mirrortaint/experiment_environment.py": "91c2609c43a99e18d3aa9e4a1fb113ade860b8ec4fa86133a6823f35eb501e96",
+    "experiments/sockshop-mirrortaint/build_distributed_plans.py": "3c3a2739f81a6ddea612cd240125d6a74d92d3aeb780f5b57685bfb202bdb9b7",
+    "experiments/sockshop-mirrortaint/check_w3c_protocol.py": "b3e770b5093c957180b31a59da59a5b8c8fbcd491e9f1fa5403a7c4c1a79e01c",
+    "experiments/sockshop-mirrortaint/run_distributed_paths.py": "05cc20245405d3952a7df780d919190022792b5eccf27a91cc05cb54afcec854",
+    "experiments/sockshop-mirrortaint/flowdist_full_order.py": "58b8e588fdb54613dfc472eb5026e029946fd988f19c9e7e321d3dfa24e6acdf",
+    "experiments/sockshop-mirrortaint/evaluate_distributed_paths.py": "ba3faf14ee024839644d3f0c229e69f997bafc45f7132a72d18c08d095deff88",
+    "experiments/sockshop-mirrortaint/audit_distributed_paths.py": "6226c32ecb8197c2066473d3e7a50bfbe993aef9192b30554f00b738138c753a"
+  },
+  "performance_eligible": true,
+  "validation_commands": {
+    "behavioral_tests": "python3 -m unittest discover -s experiments/sockshop-mirrortaint -p test_sockshop_cost.py -v",
+    "behavioral_tests_observed_passed": 4,
+    "short_cost_run": "artifacts/sockshop-cost-smoke",
+    "formal_command": "artifacts/sockshop-cost-formal-20261015/command.json",
+    "desktop_commands": "artifacts/desktop-portable-commands.jsonl"
+  }
+}

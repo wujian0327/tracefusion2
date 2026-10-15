@@ -35,7 +35,10 @@ class CachedDeployment(Deployment):
             if not digests: raise ValueError('Cached image has no digest: ' + image)
             images[image] = {'id': inspected['Id'], 'digests': digests}
         locked = copy.deepcopy(spec)
-        for cfg in locked['services'].values(): cfg['image'] = images[cfg['image']]['digests'][0]
+        for cfg in locked['services'].values():
+            image=cfg['image'];digests=images[image]['digests']
+            if '@sha256:' in image and image not in digests:raise ValueError('Missing exact pinned RepoDigest: '+image)
+            cfg['image']=image if '@sha256:' in image else digests[0]
         save(self.out / 'images.json', images)
         self.file = self.out / 'compose.lock.json'
         save(self.file, locked)

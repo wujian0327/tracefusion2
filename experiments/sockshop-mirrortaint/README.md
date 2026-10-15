@@ -1768,3 +1768,54 @@ python3 experiments/sockshop-mirrortaint/run_distributed_paths.py freeze \
 W3C报告使用`compare_w3c_paths.py`，旧UUID报告使用`summarize_distributed_paths.py`。
 旧构建的冻结源码哈希属于当时提交`ce5c182`，当前源码下直接运行旧构建的冻结检查
 会拒绝源码变化；查看旧工件无需重跑，复现旧协议应使用对应提交。
+
+## 台式机复现与独立成本驱动（2026-10-15）
+
+本机在新的绝对目录重新构建六个服务的计划，并完成 Sock Shop 198/198、
+Train Ticket 31/31 个指定字段查询验收，TP258/30、FP/FN0。13项算法审计、
+13项W3C对照检查、协议/异步测试及6个原镜像JAR核验均通过；原始数据与背景
+unknown 保留在 `artifacts/desktop-portable-acceptance/`，构建为
+`artifacts/desktop-portable-build/`。
+
+`experiment_environment.py` 支持 JDK 8 与 JDK 9+ 的 Java 8 目标构建，按迁移
+清单选择原始 digest，并显式设置容器 DNS 搜索域，避免旧 Go 解析器使用宿主机的
+搜索域。`prepare_pinned_images.py` 可通过终端代理和临时回环仓库准备全部14个
+固定镜像，逐项验证 manifest/config/layer 的 SHA-256、原始 RepoDigests 和
+image ID，无需修改或重启 Docker daemon。
+
+`run_sockshop_cost.py` 为专用成本驱动：固定查询/输入模板/JVM/资源限制，预热、
+独立部署和数据卷、随机配置顺序、固定到达率和并发上限、稳态 CPU/RSS 采样，
+区分 HTTP 耗时与计划到达至响应的延迟。逐请求核验原业务，TraceFusion 对每轮
+预热和稳态请求的全部指定字段做实例评分；记录采集事件/字节、离线图构建及
+评分导出耗时/峰值内存、响应完成至整批答案写出的延迟。原版来源答案和未验收
+MirrorTaint＋适配器为 N/A。固定到达率不测最大吞吐，整进程 RSS 不代表每请求
+分配，整批答案延迟不代表流式查询。
+
+命令、前置验收、度量口径及完整输出说明见 [DESKTOP-HANDOFF.md](DESKTOP-HANDOFF.md)。
+短试验在 `artifacts/sockshop-cost-smoke/`，不具备正式五轮结果资格。
+
+正式五轮结果：`artifacts/sockshop-cost-formal-20261015/results.md`，可提交摘要为
+`sockshop-cost-20261015.json`。每个配置每轮预热30秒、稳态60秒、固定2请求/秒、
+最大并发2；11个组件分别限制1 CPU、768 MiB。以下为五个独立部署指标的中位数，
+延迟开销为同轮 TraceFusion/原版比值的中位数：
+
+| 指标 | 原版 | TraceFusion 自动选择性观测 | 同轮延迟开销 |
+| --- | ---: | ---: | ---: |
+| 在线 p50 (ms) | 11.598 | 13.902 | +19.10% |
+| 在线 p95 (ms) | 14.858 | 18.727 | +26.04% |
+| 在线 p99 (ms) | 20.192 | 22.622 | +17.27% |
+| 窗内吞吐 (请求/秒) | 2.000 | 2.000 | — |
+| 三个目标 JVM CPU（单核百分比） | 6.994% | 8.659% | — |
+| 三个目标 JVM RSS 均值之和 (MiB) | 1530.455 | 1530.958 | — |
+
+每轮 TraceFusion 稳态采集5,898条事件、约4.43 MB日志。独立离线进程的图构建
+中位数0.276秒，还原/评分/导出总时间中位数1.727秒，峰值RSS中位数189.47 MiB。
+响应完成至整批答案写出的延迟包含剩余稳态窗口和关闭采集器；逐请求记录在各轮
+`answer-readiness.jsonl`，不能将该批处理延迟解释为流式响应。
+
+10次部署共1,800次目标业务请求（其中1,200次稳态）全部通过。五次 TraceFusion
+共8,325/8,325个指定字段查询完全匹配，TP11,175、FP/FN0；1,875个背景unknown
+原样保留。这是当前所选成功订单路径、固定低到达率下的成本结果，不代表最大
+吞吐、全应用准确率或其他机器开销。MirrorTaint＋适配器及其他未验收配置为N/A。
+原始分位数、吞吐、事件序列/字节、资源限制、字段答案、答案延迟和清理记录已
+独立复核，记录在 `independent-validation.json`；所有本轮实验容器已清理。

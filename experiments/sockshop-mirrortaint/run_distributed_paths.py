@@ -15,6 +15,7 @@ from run_planned_service import HERE,ROOT,save,load,sha
 from host import prepare,submit
 from flowdist_full_order import CachedDeployment
 from sockshop import Deployment,Client
+from experiment_environment import pin_images
 
 
 def freeze(out,build,seed,cases_from=None):
@@ -29,6 +30,7 @@ def freeze(out,build,seed,cases_from=None):
     train_cases += [{'case':'missing','name':'DOES-NOT-EXIST','expected_id':None}]
     save(out/'cases.json',load(cases_from/'cases.json') if cases_from else {'sockshop':cases,'stations':station,'trainticket':train_cases})
     save(out/'freeze.json',{'build':str(build),'build_sha256':sha(build/'build.json'),'cases_sha256':sha(out/'cases.json'),'seed':seed,
+        'images_sha256':sha(ROOT/'artifacts/desktop-inputs/images-lock.json'),
         'query_contracts':['Sock Shop Carts response fields to Orders.total and returned items; outbound Shipment fields round-trip via Shipping.',
                            'Train Ticket Station decoded entity.id through response.data, Basic and TicketInfo; missing station gives constant null.'],
         'baseline_cases':str(cases_from) if cases_from else None,'transport_protocol':'w3c-trace-context',
@@ -38,6 +40,7 @@ def freeze(out,build,seed,cases_from=None):
 def check(out,build):
     f=load(out/'freeze.json');b=load(build/'build.json')
     if sha(build/'build.json')!=f['build_sha256'] or sha(out/'cases.json')!=f['cases_sha256']:raise ValueError('Frozen inputs changed')
+    if f.get('images_sha256')!=sha(ROOT/'artifacts/desktop-inputs/images-lock.json'):raise ValueError('Frozen image manifest changed')
     for path,expected in {**b['sources'],**b['dependencies']}.items():
         if sha(Path(path))!=expected:raise ValueError('Frozen analysis/observer source changed: '+path)
     if sha(build/'distributed-observer.jar')!=b['agent_sha256']:raise ValueError('Collector changed')
@@ -58,7 +61,7 @@ def cleanup(dep,result,dest):
 
 
 def capture_sockshop(out,build):
-    check(out,build);dest=out/'sockshop';dest.mkdir();spec=load(ROOT/'scenarios/sockshop/compose.json')
+    check(out,build);dest=out/'sockshop';dest.mkdir();spec=pin_images(load(ROOT/'scenarios/sockshop/compose.json'),'sockshop')
     spec['networks']={'default':{'ipam':{'config':[{'subnet':'10.254.249.0/24'}]}}}
     for cfg in spec['services'].values():cfg['restart']='no'
     for role,port in [('front-end',18580),('carts',18581),('orders',18582),('shipping',18583)]:spec['services'][role]['ports']=['127.0.0.1:'+str(port)+':'+str(8079 if role=='front-end' else 80)]
@@ -92,13 +95,15 @@ def capture_train(out,build):
         image=manifest[role]['digests'][0];services['ts-'+role+'-service']={'image':image,'platform':'linux/amd64','restart':'no','ports':['127.0.0.1:'+str(18600+list(ports).index(role))+':'+str(port)]}
     services['ts-station-mongo']={'image':'mongo:4.4','restart':'no','volumes':['station-data:/data/db']}
     spec={'services':services,'volumes':{'station-data':{}},'networks':{'default':{'ipam':{'config':[{'subnet':'10.254.249.0/24'}]}}}}
+    pin_images(spec,'trainticket')
     for role in ports:observed(spec,'ts-'+role+'-service',role,dest,build)
     spec['services']['ts-station-service']['depends_on']=['ts-station-mongo']
     save(dest/'compose.json',spec);dep=Deployment(argparse.Namespace(project='tf2-train-paths-'+secrets.token_hex(5)),dest,dest/'compose.json');result={'status':'failed','cases':[],'project':dep.args.project}
     try:
         images={}
         for cfg in spec['services'].values():
-            info=json.loads(dep.command(['docker','image','inspect',cfg['image']]).stdout)[0];images[cfg['image']]={'id':info['Id'],'digests':info.get('RepoDigests')};cfg['image']=info['RepoDigests'][0]
+            info=json.loads(dep.command(['docker','image','inspect',cfg['image']]).stdout)[0];images[cfg['image']]={'id':info['Id'],'digests':info.get('RepoDigests')}
+            if cfg['image'] not in info.get('RepoDigests',[]):raise ValueError('Missing exact pinned RepoDigest: '+cfg['image'])
         save(dest/'images.json',images);save(dest/'compose.lock.json',spec);dep.file=dest/'compose.lock.json';dep.compose('up','-d','--pull','never',timeout=150)
         client=Client(dest);deadline=time.monotonic()+180
         while time.monotonic()<deadline:

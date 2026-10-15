@@ -5,6 +5,7 @@ from pathlib import Path
 import subprocess
 from zipfile import ZipFile
 from run_planned_service import HERE, save, sha
+from experiment_environment import java8_target
 
 
 def check(build,out):
@@ -15,7 +16,7 @@ def check(build,out):
                 path=dest/Path(name).name;path.write_bytes(jar.read(name));libs.append(path)
     if len(libs)!=2:raise ValueError('Expected original Spring web/core dependencies')
     cp=':'.join(map(str,[dest,build/'distributed-observer.jar',*libs]));results=[]
-    commands=[['javac','--release','8','-cp',cp,'-d',str(dest),*[str(HERE/name) for name in ('W3CTraceContextCheck.java','W3CAsyncContextCheck.java')]]]
+    commands=[['javac',*java8_target()[1],'-cp',cp,'-d',str(dest),*[str(HERE/name) for name in ('W3CTraceContextCheck.java','W3CAsyncContextCheck.java')]]]
     commands += [['java','-cp',cp,name] for name in ('W3CTraceContextCheck','W3CAsyncContextCheck')]
     for command in commands:
         result=subprocess.run(command,capture_output=True,text=True,timeout=45)

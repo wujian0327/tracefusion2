@@ -4,6 +4,7 @@ import argparse
 import copy
 from collections import defaultdict
 import json
+import re
 from pathlib import Path
 import shutil
 import struct
@@ -66,7 +67,12 @@ def independent_bytecode(build,model,keys):
             elif r['op']=='invokedynamic':
                 text=disassemble(file,True)
                 for h in n['bootstrap_args']:
-                    if isinstance(h,dict):name,desc=h['handle'].split('(',1);assert 'REF_invokeStatic '+name+':('+desc in text
+                    if isinstance(h,dict):
+                        name,desc=h['handle'].split('(',1)
+                        bootstrap=text.split('BootstrapMethods:',1)[1]
+                        # JDK 8 prints "invokestatic"; newer javap uses the
+                        # explicit method-handle name "REF_invokeStatic".
+                        assert re.search(r'(?m)^\s*#\d+ (?:REF_invokeStatic|invokestatic) '+re.escape(name+':('+desc)+r'\s*$',bootstrap)
             elif r['op'].startswith('if') or r['op']=='goto':assert n['target']==offsets[int(r['operand'])]
             elif r['op']=='ldc':
                 if n['constant_type']=='Float':assert struct.pack('f',float(r['comment'][6:].removesuffix('f')))==struct.pack('f',n['constant'])

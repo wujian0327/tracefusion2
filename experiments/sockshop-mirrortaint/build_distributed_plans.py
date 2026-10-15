@@ -6,6 +6,7 @@ from io import BytesIO
 import json
 from pathlib import Path
 import shutil
+from experiment_environment import java8_target
 from zipfile import ZipFile,ZIP_DEFLATED
 from run_query_planner import JARS,command
 from run_planned_service import HERE,ROOT,save,load,sha
@@ -16,7 +17,9 @@ from plan_distributed_fields import augment,copy_plan
 def build(out,inputs):
     out.mkdir(parents=True,exist_ok=False);tools=out/'tools';tools.mkdir()
     sources=[HERE/n for n in ('QueryObservationAgent.java','QueryBytecodeModel.java','PlannedServiceAgent.java','SpringTransportAgent.java','W3CTraceContext.java')]
-    cp=':'.join(map(str,JARS));command(['javac','--release','8','-cp',cp,'-d',str(tools),*map(str,sources)],out/'compile.log')
+    # JDK 8 has no --release option; its own platform is already Java 8.
+    compiler_version,target=java8_target()
+    cp=':'.join(map(str,JARS));command(['javac',*target,'-cp',cp,'-d',str(tools),*map(str,sources)],out/'compile.log')
     jar=out/'distributed-observer.jar'
     with ZipFile(jar,'w',ZIP_DEFLATED) as z:
         z.writestr('META-INF/MANIFEST.MF','Manifest-Version: 1.0\nPremain-Class: SpringTransportAgent\n\n')
@@ -26,7 +29,7 @@ def build(out,inputs):
             with ZipFile(dep) as dz:
                 for n in dz.namelist():
                     if n.endswith('.class') and n.startswith(('org/objectweb/asm/','com/fasterxml/jackson/')):z.writestr(n,dz.read(n))
-    manifest={'transport_protocol':'w3c-trace-context','agent_sha256':sha(jar),'inputs':{},'sources':{str(p):sha(p) for p in sources+[HERE/n for n in ('plan_distributed_fields.py','plan_service_observations.py','query_observation_planner.py','infer_planned_service.py','infer_distributed_fields.py','transport_context.py','run_distributed_paths.py','evaluate_distributed_paths.py','audit_distributed_paths.py')]},'dependencies':{str(p):sha(p) for p in JARS}}
+    manifest={'compiler_version':compiler_version,'compiler_target':target,'transport_protocol':'w3c-trace-context','agent_sha256':sha(jar),'inputs':{},'sources':{str(p):sha(p) for p in sources+[HERE/n for n in ('experiment_environment.py','plan_distributed_fields.py','plan_service_observations.py','query_observation_planner.py','infer_planned_service.py','infer_distributed_fields.py','transport_context.py','run_distributed_paths.py','evaluate_distributed_paths.py','audit_distributed_paths.py')]},'dependencies':{str(p):sha(p) for p in JARS}}
     for role,config in inputs.items():
         source=Path(config['jar']).resolve()
         dest=out/role;dest.mkdir();app=dest/'app';app.mkdir();extra={}

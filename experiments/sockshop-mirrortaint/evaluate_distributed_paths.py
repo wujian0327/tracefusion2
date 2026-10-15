@@ -31,8 +31,8 @@ def summary(queries):
             'f1':2*tp/(2*tp+fp+fn) if tp+fp+fn else None}
 
 
-def sockshop(out,b):
-    root=out/'sockshop';run=load(root/'run.json');require(run['status']=='business-passed','Business failed');g=Reconstruction(b,root,['orders','carts','shipping']);queries=[];no_target=0
+def sockshop(out,b,graph=None):
+    root=out/'sockshop';run=load(root/'run.json');require(run['status']=='business-passed','Business failed');g=graph if graph is not None else Reconstruction(b,root,['orders','carts','shipping']);queries=[];no_target=0
     source_boundary={'service':'carts','kind':'http-json','phase':'write','direction':'response'}
     ship_boundary={'service':'orders','kind':'http-json','phase':'write','direction':'request'}
     source_json=http(g.rows['carts'],'write','response');client_rpcs=[r for r in g.rows['orders'] if r['kind']=='http-rpc-enter']
