@@ -1724,3 +1724,44 @@ python3 experiments/sockshop-mirrortaint/verify_original_path_images.py \
   --out artifacts/distributed-paths-final-20261015 \
   --build artifacts/distributed-plans-final-build-20261015
 ```
+
+### W3C Trace Context 替换（2026-10-15）
+
+当前通信采集器改为传播标准 `traceparent` / `tracestate`，不再注入
+`X-TraceFusion-Message`，也不要求响应回显自定义标识。每次实际 HTTP RPC
+新建 client span，接收端新建 server span 并记录父关系；内部 `message` 只是
+`trace-id/request-span-id` 组合键。字段桥接仍需方向、JSON pointer、两端字段
+观测和本地依赖，不能按整条 trace 合并来源。Spring `@Async` 的 Callable
+在提交时捕获上下文、执行结束或异常时恢复线程原上下文。
+
+完全复用上一轮冻结的业务案例、六个原业务 JAR/字节码模型及本地字段计划，
+重跑56次目标业务请求。Sock Shop 198/198（TP258、FP0、FN0）、Train Ticket
+31/31（TP30、FP0、FN0），均与替换前一致；一个不存在站点查询的正确来源为空。
+本轮每个应用的目标请求共用一个 trace-id，各次调用使用不同 span，包含8路并发。
+两个应用分别先按自身的具体来源观测、对象、字段和写计数评分；跨部署比较再去掉
+不可复用的 JVM 对象 ID/事件序号，不能把逻辑来源归一化冒充实例评分。
+
+W3C专项检查13项、原跨服务审计13项通过；Java协议边界及异步线程复用/异常恢复
+检查通过，原镜像JAR再次核验6/6一致。缺失中间来源证据返回unknown，错误响应
+上下文拒绝。72条补充负关系仍通过；背景43个Carts数据库id回写unknown依然保留，
+未计入事先指定的目标查询。实验项目和数据卷已清理。
+
+限制：这是当前Spring/Jackson路径的标准上下文传播适配器，尚未集成OpenTelemetry
+SDK/导出器或验证与任意既有tracer共存；也不证明已支持Go、任意线程池、自动重试
+及队列。必要的字段证据不按sampled标志丢弃；外部采样造成证据缺失时不能保证
+相同覆盖率。本轮不作为正式性能比较。
+
+报告：`artifacts/distributed-paths-w3c-20261015/results.md`；对照表：
+`w3c-comparison.csv`；构建：`artifacts/distributed-plans-w3c-final-build-20261015`；
+可提交证据摘要：`w3c-paths-20261015.json`。报告包含复现命令，协议独立检查命令
+与依赖哈希在`protocol-checks.json`。生成新一轮相同案例可使用：
+
+```bash
+python3 experiments/sockshop-mirrortaint/run_distributed_paths.py freeze \
+  --out artifacts/w3c-run-new --build artifacts/w3c-build-new \
+  --cases-from artifacts/distributed-paths-final-20261015 --seed 151031
+```
+
+W3C报告使用`compare_w3c_paths.py`，旧UUID报告使用`summarize_distributed_paths.py`。
+旧构建的冻结源码哈希属于当时提交`ce5c182`，当前源码下直接运行旧构建的冻结检查
+会拒绝源码变化；查看旧工件无需重跑，复现旧协议应使用对应提交。

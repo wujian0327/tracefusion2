@@ -17,7 +17,7 @@ from flowdist_full_order import CachedDeployment
 from sockshop import Deployment,Client
 
 
-def freeze(out,build,seed):
+def freeze(out,build,seed,cases_from=None):
     out.mkdir(parents=True,exist_ok=False);rng=random.Random(seed);cases=load(HERE/'cases.json')['cases']
     for i in range(10):cases.append({'id':'new-'+str(i),'items':[{'key':str(j),'quantity':rng.randint(1,3),'unitPrice':rng.choice([0.,1.25,2.5,5.])} for j in range(rng.randint(0,4))],'expected_target':True})
     station=[{'id':'Success','name':'Success','stayTime':1}, {'id':'ID-OTHER','name':'NAME-OTHER','stayTime':1}]
@@ -27,11 +27,12 @@ def freeze(out,build,seed):
     train_cases += [{'case':'new-'+str(i),'name':station[k]['name'],'expected_id':station[k]['id']} for i in range(10) for k in [rng.randrange(len(station))]]
     train_cases += [{'case':'parallel-'+str(i),'name':'Success','expected_id':'Success'} for i in range(8)]
     train_cases += [{'case':'missing','name':'DOES-NOT-EXIST','expected_id':None}]
-    save(out/'cases.json',{'sockshop':cases,'stations':station,'trainticket':train_cases})
+    save(out/'cases.json',load(cases_from/'cases.json') if cases_from else {'sockshop':cases,'stations':station,'trainticket':train_cases})
     save(out/'freeze.json',{'build':str(build),'build_sha256':sha(build/'build.json'),'cases_sha256':sha(out/'cases.json'),'seed':seed,
         'query_contracts':['Sock Shop Carts response fields to Orders.total and returned items; outbound Shipment fields round-trip via Shipping.',
                            'Train Ticket Station decoded entity.id through response.data, Basic and TicketInfo; missing station gives constant null.'],
-        'new_inputs':'Generated after collector/plan freeze; not an independently authored blind benchmark.'})
+        'baseline_cases':str(cases_from) if cases_from else None,'transport_protocol':'w3c-trace-context',
+        'new_inputs':'Exact frozen baseline inputs reused.' if cases_from else 'Generated after collector/plan freeze; not an independently authored blind benchmark.'})
 
 
 def check(out,build):
@@ -67,9 +68,9 @@ def capture_sockshop(out,build):
     for role in ('orders','carts','shipping'):spec['services'][role]['entrypoint'][2]+=' --port=80'
     save(dest/'compose.json',spec);dep=CachedDeployment(argparse.Namespace(project='tf2-paths-'+secrets.token_hex(5),ready_timeout=180),dest,dest/'compose.json');result={'status':'failed','cases':[],'project':dep.args.project}
     try:
-        dep.start()
+        dep.start();shared_trace=secrets.token_hex(16)
         def run_case(case,name,shared=False):
-            p=dest/name;prepared=prepare(case,name,p,'http://127.0.0.1:18580','http://127.0.0.1:18581',shared=shared);message=secrets.token_hex(16);prepared[1].headers['X-TraceFusion-Message']=message;prepared[-1]['message']=message;save(p/'query-contract.json',prepared[-1]);return prepared
+            p=dest/name;prepared=prepare(case,name,p,'http://127.0.0.1:18580','http://127.0.0.1:18581',shared=shared);span=secrets.token_hex(8);message=shared_trace+'/'+span;prepared[1].headers={'traceparent':'00-'+shared_trace+'-'+span+'-01','tracestate':'research=correctness'};prepared[-1]['message']=message;save(p/'query-contract.json',prepared[-1]);return prepared
         for case in load(out/'cases.json')['sockshop']:
             prepared=run_case(case,case['id']);r=submit(prepared,'http://127.0.0.1:18582',dest/case['id']);r['message']=prepared[-1]['message'];result['cases'].append(r)
             if not r['business_passed']:raise ValueError(r)
@@ -115,8 +116,9 @@ def capture_train(out,build):
         # Independent database facts, separate from collector input and engine.
         audit=dep.compose('exec','-T','ts-station-mongo','mongo','ts','--quiet','--eval','JSON.stringify(db.station.find({},{_id:1,name:1,stayTime:1}).toArray())').stdout
         (dest/'independent-database.json').write_text(audit)
+        shared_trace=secrets.token_hex(16)
         def run_case(c,barrier=None):
-            d=dest/c['case'];d.mkdir();cl=Client(d);message=secrets.token_hex(16);cl.headers={'X-TraceFusion-Message':message}
+            d=dest/c['case'];d.mkdir();cl=Client(d);span=secrets.token_hex(8);message=shared_trace+'/'+span;cl.headers={'traceparent':'00-'+shared_trace+'-'+span+'-01','tracestate':'research=correctness'}
             if barrier:barrier.wait(timeout=30)
             response=cl.request('GET','http://127.0.0.1:18602/api/v1/ticketinfoservice/ticketinfo/'+c['name'],'target-query')
             expected_status=0 if c['expected_id'] is None else 1
@@ -134,7 +136,7 @@ def capture_train(out,build):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('stage',choices=('freeze','sockshop','trainticket'));p.add_argument('--out',type=Path,required=True);p.add_argument('--build',type=Path,required=True);p.add_argument('--seed',type=int,default=151028);a=p.parse_args()
-    if a.stage=='freeze':freeze(a.out.resolve(),a.build.resolve(),a.seed)
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('stage',choices=('freeze','sockshop','trainticket'));p.add_argument('--out',type=Path,required=True);p.add_argument('--build',type=Path,required=True);p.add_argument('--seed',type=int,default=151028);p.add_argument('--cases-from',type=Path);a=p.parse_args()
+    if a.stage=='freeze':freeze(a.out.resolve(),a.build.resolve(),a.seed,a.cases_from.resolve() if a.cases_from else None)
     elif a.stage=='sockshop':capture_sockshop(a.out.resolve(),a.build.resolve())
     else:capture_train(a.out.resolve(),a.build.resolve())

@@ -16,9 +16,11 @@ from plan_service_observations import plan_service
 from infer_distributed_fields import Reconstruction
 from service_model import disassemble,methods,local
 from query_observation_planner import require
+from transport_context import validate_protocol as validate_w3c_protocol
 
 
 def validate_protocol(rows):
+    if any(r.get('transport_protocol')=='w3c-trace-context' for r in rows):return validate_w3c_protocol(rows)
     stacks=defaultdict(list)
     for r in rows:
         thread=r['thread'];kind=r['kind']
@@ -137,18 +139,22 @@ def audit(out,build):
         changed=copy.deepcopy(raw['carts']);next(r for r in changed if r['kind']=='http-json' and r['phase']=='write' and r['direction']=='response' and r['message']==rpc['message'])['fields']=[f for f in next(r for r in changed if r['kind']=='http-json' and r['phase']=='write' and r['direction']=='response' and r['message']==rpc['message'])['fields'] if not f['path'].endswith('/quantity')]
         r=replay({'carts':changed}).query(first['message'],'/total','orders',boundary)
         assert not r['known'];checks['missing_remote_source_property_returns_unknown']=True
-        changed=copy.deepcopy(raw['orders']);events=[r for r in changed if r['kind']=='http-json' and r['phase']=='read' and r['direction']=='response' and r.get('echo')==rpc['message']]
-        events[0]['echo']='forged'
+        w3c=any(r.get('transport_protocol')=='w3c-trace-context' for rows in raw.values() for r in rows)
+        changed=copy.deepcopy(raw['orders']);r=next(r for r in changed if r['kind']=='http-json' and r['phase']=='read' and r['direction']=='response')
+        if w3c:
+            r['request_span_id']='1'*16;r['message']=r['trace_id']+'/'+r['request_span_id']
+        else:r['echo']='forged'
         try:replay({'orders':changed})
-        except ValueError:checks['wrong_response_message_echo_rejected']=True
-        else:raise AssertionError('Wrong response echo accepted')
-        changed=copy.deepcopy(raw['orders']);r=next(r for r in changed if r['kind']=='http-json' and r['phase']=='read' and r['direction']=='response');r['message']='foreign';r['echo']='foreign'
+        except ValueError:checks['wrong_response_invocation_context_rejected']=True
+        else:raise AssertionError('Wrong response context accepted')
+        changed=copy.deepcopy(raw['orders']);r=next(r for r in changed if r['kind']=='http-json' and r['phase']=='read' and r['direction']=='response');r['message']='foreign'
+        if not w3c:r['echo']='foreign'
         try:validate_protocol(changed)
         except ValueError:checks['foreign_equal_valued_rpc_context_rejected']=True
         else:raise AssertionError('Wrong context accepted')
-        changed={role:[{k:v for k,v in r.items() if k not in ('trace_id','parent_message')} for r in rows] for role,rows in raw.items()}
+        changed={role:[{k:v for k,v in r.items() if k!='parent_message' and not (k=='trace_id' and (not w3c or not r['kind'].startswith('http-')))} for r in rows] for role,rows in raw.items()}
         stripped=replay(changed).query(first['message'],'/total','orders',boundary)
-        assert base['source_keys']==stripped['source_keys'];checks['trace_labels_and_parent_metadata_unused_by_reconstruction']=True
+        assert base['source_keys']==stripped['source_keys'];checks['business_trace_labels_and_parent_audit_metadata_unused_by_reconstruction']=True
         changed=copy.deepcopy(raw['carts']);row=next(r for r in changed if r['kind']=='http-json' and r['phase']=='write' and r['direction']=='response' and r['fields']);row['fields'][0]['path']='/wrongProperty'
         try:replay({'carts':changed})
         except ValueError:checks['property_pointer_mismatch_rejected']=True

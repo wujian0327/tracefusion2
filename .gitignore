@@ -42,3 +42,5 @@ experiments/sockshop-mirrortaint/boundary/*
 !experiments/sockshop-mirrortaint/flowdist/
 experiments/sockshop-mirrortaint/flowdist/*
 !experiments/sockshop-mirrortaint/flowdist/*.java
+
+!experiments/sockshop-mirrortaint/w3c-paths-20261015.json

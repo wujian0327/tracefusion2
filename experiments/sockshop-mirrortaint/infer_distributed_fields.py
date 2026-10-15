@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 from infer_planned_service import infer_service
 from query_observation_planner import require
+from transport_context import validate_protocol
 
 
 def coord(f):return (f['owner'],f['field'],f['version'])
@@ -26,6 +27,7 @@ class Reconstruction:
             require(not any(r['kind']=='problem' for r in rows),'Collector problem')
             require(sum(r['kind']=='metrics' for r in rows)==1,'Capture did not close')
             require(rows[0]['plan_sha256']==hashlib.sha256((build/role/'plan.json').read_bytes()).hexdigest(),'Frozen plan differs')
+            if any(r.get('transport_protocol')=='w3c-trace-context' for r in rows):validate_protocol(rows)
             self.rows[role]=rows;self.plans[role]=plan
             self.stats[role]={'events':len(rows),'json_events':sum(r['kind']=='http-json' for r in rows),'log_bytes':path.stat().st_size}
         self.json=[]
@@ -78,7 +80,7 @@ class Reconstruction:
             require(len(sources)==len(receivers)==1,'Ambiguous message/property bridge')
             source,target=sources[0],receivers[0];s,t=self.nodes[source],self.nodes[target]
             require(s['service']!=t['service'],'Remote binding stayed in one service')
-            if binding[1]=='response':
+            if binding[1]=='response' and not any(r.get('transport_protocol')=='w3c-trace-context' for r in self.rows[t['service']]):
                 row=next(r for r in self.rows[t['service']] if r['seq']==t['seq'])
                 require(row.get('echo')==binding[0],'Missing/mismatched response message echo')
             require(equivalent(s['observed'],t['observed']),'JSON property changed; never rematch by value')
@@ -141,4 +143,4 @@ class Reconstruction:
             for parent in self.edges.get(k,[]):edges.append([list(k),list(parent)]);visit(parent)
         visit(tuple(key));return edges
     def export(self):return {'nodes':[{'key':list(k),**n} for k,n in self.nodes.items()],'edges':[[list(k),list(p)] for k,ps in self.edges.items() for p in ps],
-        'stats':self.stats,'unpaired_transport_properties':self.unpaired,'origin_matching_uses_values':False,'origin_matching_uses_trace_ids':False,'oracle_consumed':False}
+        'stats':self.stats,'unpaired_transport_properties':self.unpaired,'origin_matching_uses_values':False,'transport_matching':'validated W3C trace-id + concrete request span-id + direction + JSON pointer' if any(r.get('transport_protocol')=='w3c-trace-context' for rows in self.rows.values() for r in rows) else 'legacy message UUID', 'origin_matching_uses_trace_id_alone':False,'oracle_consumed':False}

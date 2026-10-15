@@ -10,6 +10,8 @@ from run_distributed_paths import check
 
 
 def summarize(out,build,checkpoint=None):
+    if load(build/'build.json').get('transport_protocol')=='w3c-trace-context':
+        raise ValueError('Use compare_w3c_paths.py for W3C captures; this report describes the legacy UUID experiment.')
     check(out,build);audit=load(out/'algorithm-audit.json');assert audit['all_passed']
     image_check=load(out/'original-image-verification.json');assert image_check['all_matched']
     prior=[load(out/'controlled-regression.json'),load(out/'service-regression.json')]

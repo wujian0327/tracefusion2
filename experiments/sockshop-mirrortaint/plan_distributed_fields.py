@@ -82,7 +82,7 @@ def augment(model,plan=None):
     plan['snapshot_fields']=sorted(set(plan['snapshot_fields'])|set(fields));plan['full_snapshot_fields']=fields
     plan['transport_contracts']=['Default Jackson properties backed by verified direct getters/public fields; custom property serializers/mixins/naming strategies excluded.',
         'Nested known DTOs and ordered collections; unknown object shapes are not assigned fabricated origins.',
-        'UUID in actual HTTP request and response headers, phase and JSON pointer identify a cross-process field edge; values only validate it.',
+        'W3C trace-id plus concrete request span-id from traceparent, direction and JSON pointer identify a cross-process field edge; no custom response echo; values only validate it.',
         'Within a process, only the same observed object/declared field/version may be forwarded without a bytecode dependency edge.',
         'All relevant bytecode writes must be in supplied classes; arbitrary reflective/native writes and concurrent mutable DTO sharing excluded.',
         'Transport observation is a common framework model, currently observing admitted DTO properties rather than minimal per-target transport points.']
