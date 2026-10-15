@@ -487,6 +487,6 @@
     "experiments/sockshop-mirrortaint/build_distributed_plans.py": "01b56ef90da9ca1b977e773614ea70abe263cf77783717c80f435b5284e0dabb",
     "experiments/sockshop-mirrortaint/plan_distributed_fields.py": "351b1c094455e82699dde77a9d46974613f931bfdaac403ae354dff54b4946e6",
     "experiments/sockshop-mirrortaint/audit_distributed_paths.py": "71a771f49a46267f202b3adaa3254cad4ca1c54948d80fbc97994cad7a40c622",
-    "experiments/sockshop-mirrortaint/compare_w3c_paths.py": "dc2666bc3bff5f39881e0ef760a8b8ee294060febfbdbf77c6866330a499a174"
+    "experiments/sockshop-mirrortaint/compare_w3c_paths.py": "f455df58a151a813b656502c09dcc1c6118ca4ec478ffeb754b59d312f870135"
   }
 }

@@ -1727,6 +1727,9 @@ python3 experiments/sockshop-mirrortaint/verify_original_path_images.py \
 
 ### W3C Trace Context 替换（2026-10-15）
 
+迁移到台式机的代码包、非Git实验输入、镜像清单、完整复现命令和下一阶段成本
+实验任务，见 [DESKTOP-HANDOFF.md](DESKTOP-HANDOFF.md)。
+
 当前通信采集器改为传播标准 `traceparent` / `tracestate`，不再注入
 `X-TraceFusion-Message`，也不要求响应回显自定义标识。每次实际 HTTP RPC
 新建 client span，接收端新建 server span 并记录父关系；内部 `message` 只是

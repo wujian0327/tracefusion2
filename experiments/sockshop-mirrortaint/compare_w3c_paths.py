@@ -46,8 +46,12 @@ def audit_and_compare(out,build,baseline,baseline_build,checkpoint=None):
             require(current['inputs'][role][key]==old['inputs'][role][key], 'Application/model changed')
         a=load(build/role/'plan.json');b=load(baseline_build/role/'plan.json')
         a.pop('transport_contracts');b.pop('transport_contracts');require(a==b, 'Local field plan changed')
+    def source_hash(manifest,name):
+        candidates=[value for path,value in manifest['sources'].items() if Path(path).name==name]
+        require(len(candidates)==1,'Ambiguous source hash: '+name)
+        return candidates[0]
     for name in ('PlannedServiceAgent.java','QueryBytecodeModel.java','infer_planned_service.py','plan_service_observations.py','query_observation_planner.py'):
-        key=str(HERE/name);require(current['sources'][key]==old['sources'][key], 'Local observation/inference core changed')
+        require(source_hash(current,name)==source_hash(old,name), 'Local observation/inference core changed')
     checks['six_original_jars_models_and_local_field_plans_unchanged']=True
     checks['local_observation_and_reduction_algorithms_unchanged']=True
     table=[];all_raw={}
