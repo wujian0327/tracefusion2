@@ -32,14 +32,25 @@ def summarize(out):
                            scheduled_to_response_ms=percentiles([(r['online_end_ns']-r['scheduled_ns'])/1e6 for r in good]))
             failure=next(run.glob('round-*/failure.json'),None)
             if failure:row['failure']=load(failure)
+        warmup=[load(p) for p in run.glob('round-*/sockshop/warmup-*/cost-request.json')]
+        row['warmup_requests']=len(warmup)
+        row['warmup_failed_requests']=sum(not r['business_passed'] for r in warmup)
         rows.append(row)
-    save(out/'scan-results.json',{'rows':rows,'scope':'Exploratory independent deployments. Offered load is not measured capacity; capture failures do not establish service saturation.'})
+    state=load(out/'scan-status.json') if (out/'scan-status.json').exists() else {'status':'not-recorded'}
+    if state['status']=='cancelled-by-user':
+        for row in rows:
+            if row['name'] in (state.get('current_point'),state.get('remaining_point')):
+                row['status']='N/A: cancelled by user / not run'
+    save(out/'scan-results.json',{'rows':rows,'run_status':state,'scope':'Exploratory supplement only. Offered load is not measured capacity; capture failures do not establish service saturation.'})
     def number(value):return 'N/A' if value is None else f'{value:.3f}'
-    lines=['# Orders.total 共同查询负载扫描','','每个点重新部署，随机配置顺序；固定 JVM、资源、模板、预热及窗口。单点不是五轮正式开销估计。', '',
-           '| 到达率 req/s | 配置 | 成功吞吐 req/s | 错误率 | HTTP p95 ms | 计划到达至响应 p95 ms | 来源验证 |',
-           '| ---: | --- | ---: | ---: | ---: | ---: | --- |']
+    lines=['# Orders.total 共同查询负载扫描（补充材料）','',f"扫描状态：{state['status']}。主要比较采用固定2请求/秒的五轮正式结果；本扫描不是必要验收项。",'',
+           '每个点重新部署，随机配置顺序；固定 JVM、资源、模板、预热及窗口。单点不是五轮正式开销估计。', '',
+           '| 到达率 req/s | 配置 | 窗内成功吞吐 req/s | 稳态错误率 | 预热失败/请求 | HTTP p95 ms | 计划到达至响应 p95 ms | 成功请求来源验证 |',
+           '| ---: | --- | ---: | ---: | --- | ---: | ---: | --- |']
     for r in rows:
-        lines.append(f'| {r["rate"]} | {r["mode"]} | {number(r.get("throughput_rps"))} | {number(r.get("error_rate"))} | {number(r.get("online_latency_ms",{}).get("p95"))} | {number(r.get("scheduled_to_response_ms",{}).get("p95"))} | {"通过" if r["provenance_eligible"] and r["mode"]!="original" else "N/A"} |')
+        error='N/A' if r.get('error_rate') is None else f'{r["error_rate"]*100:.2f}%'
+        warmup=f'{r["warmup_failed_requests"]}/{r["warmup_requests"]}' if r['warmup_requests'] else 'N/A'
+        lines.append(f'| {r["rate"]} | {r["mode"]} | {number(r.get("throughput_rps"))} | {error} | {warmup} | {number(r.get("online_latency_ms",{}).get("p95"))} | {number(r.get("scheduled_to_response_ms",{}).get("p95"))} | {"通过" if r["provenance_eligible"] and r["mode"]!="original" else "N/A"} |')
     lines+=['','资源、采集日志、离线耗时/峰值内存和整批答案等待时间见每点 results.md 与 scan-results.json。失败点保留原始请求、采样及错误日志，来源答案和离线成本为 N/A。', '',
             '结合实际成功吞吐、错误、计划到达延迟、调度滞后和各组件 CPU 判断负载压力。并发上限或客户端排队也可能限制吞吐，不能仅据吞吐相等或某点失败宣称最大服务吞吐相同/不同。','']
     (out/'results.md').write_text('\n'.join(lines))
@@ -76,5 +87,5 @@ if __name__=='__main__':
     p.add_argument('--concurrency',type=int,default=32);p.add_argument('--cpus',type=float,default=1)
     p.add_argument('--memory',default='768m');p.add_argument('--seed',type=int,default=151031)
     a=p.parse_args()
-    if any(r<=0 or not (r*a.seconds).is_integer() or not (r*a.warmup).is_integer() for r in a.rates):p.error('positive rates and integral request counts required')
+    if any(r<=0 or not float(r*a.seconds).is_integer() or not float(r*a.warmup).is_integer() for r in a.rates):p.error('positive rates and integral request counts required')
     main(a)

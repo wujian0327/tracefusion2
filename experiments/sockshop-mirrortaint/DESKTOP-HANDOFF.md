@@ -237,7 +237,14 @@ python3 experiments/sockshop-mirrortaint/calibrate_mirrortaint_total.py \
 --mt-calibration artifacts/mt-total-cal-new --tf-calibration artifacts/tf-total-cal-new
 ```
 
-负载扫描使用 `scan_sockshop_load.py`，传入相同的 build、correctness、bundle 和校准
+当前优先交付固定2请求/秒、相同查询和资源配置的五轮成本比较；用户已明确无需
+继续高负载实验。主报告为 `artifacts/common-total-cost-formal-20261015/results.md`，
+可提交摘要为 `mirrortaint-total-cost-20261015.json`。测量代码固定于 `2853a59`；
+测量后的修改仅补报告展示、扫描取消标记和默认参数类型修复，不重写原始指标。
+后续不要自动继续扫描。已有部分数据保留在
+`artifacts/common-total-load-scan-20261015/`，作为补充材料而非必要验收项。
+
+如以后明确需要容量研究，可选工具为 `scan_sockshop_load.py`，传入相同的 build、correctness、bundle 和校准
 路径，默认到达率2/4/8/16/32、预热10秒、稳态20秒、最大并发32。每点重新部署并随机
 配置顺序。单点扫描不冒充五轮正式成本估计；成功吞吐、错误率、HTTP分位数、计划
 到达至响应分位数、调度滞后及资源一起解释。采集/兼容性失败不是服务饱和的证明，

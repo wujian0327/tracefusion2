@@ -1,0 +1,602 @@
+{
+  "measurement_commit": "2853a59",
+  "parent_cost_commit": "442178f",
+  "scope": "Carts serialized HTTP/JSON response quantity and unitPrice instance sources -> Orders.total; app write counts and concrete call spans; database history excluded",
+  "unsupported_queries": "N/A: other returned fields, Shipment, Train Ticket",
+  "baseline": "Pinned public MirrorTaint native core in Orders plus disclosed receiver/source/string/stream/thread/logging and common HTTP instance adapters. Default native diagnostic output counted. Not an optimized minimum-overhead MirrorTaint claim.",
+  "calibration": {
+    "all_passed": true,
+    "same_logical_fields_json_paths_application_write_counts_and_values": true,
+    "self_instance_scoring_required": true,
+    "cross_run_object_ids_not_compared": true,
+    "results": {
+      "mirrortaint-total-calibration-01": {
+        "summary": {
+          "queries": 24,
+          "exact": 24,
+          "unknown": 0,
+          "tp": 84,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "passed": true,
+        "same_trace_distinct_spans": true,
+        "parallel_requests": 8,
+        "contract": "Carts serialized JSON fields -> Orders.total",
+        "bundle_sha256": "97b54aa1be5fb52707bc853c4e5bf7c041aaf98b323494cb352c39eadd51a0de",
+        "evaluator_sha256": "da0e7b462a12bd1fa2fd2ee040a16ed00f16ef41b1af5da1b2894b9f25426270",
+        "build_sha256": "93e2552c197298250022cfdc8e44831ccc18e065c9ba6c4f70bb5f54c58bc8ed",
+        "cases_sha256": "ec3bed25e184cc3ba95133c2a53176d6a38f7fe5aabeabd0aa48e9178e0d5a63"
+      },
+      "tracefusion-total-calibration-01": {
+        "summary": {
+          "queries": 24,
+          "exact": 24,
+          "unknown": 0,
+          "tp": 84,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "passed": true,
+        "same_trace_distinct_spans": true,
+        "parallel_requests": 8,
+        "contract": "Carts serialized JSON fields -> Orders.total",
+        "bundle_sha256": "97b54aa1be5fb52707bc853c4e5bf7c041aaf98b323494cb352c39eadd51a0de",
+        "evaluator_sha256": "da0e7b462a12bd1fa2fd2ee040a16ed00f16ef41b1af5da1b2894b9f25426270",
+        "build_sha256": "93e2552c197298250022cfdc8e44831ccc18e065c9ba6c4f70bb5f54c58bc8ed",
+        "cases_sha256": "ec3bed25e184cc3ba95133c2a53176d6a38f7fe5aabeabd0aa48e9178e0d5a63"
+      }
+    },
+    "instance_controls": {
+      "all_passed": true,
+      "checks": {
+        "stale_target_version_returns_unknown": true,
+        "same_value_wrong_target_object_returns_unknown": true,
+        "missing_remote_source_returns_unknown": true,
+        "stale_decoded_source_version_returns_unknown": true,
+        "same_value_wrong_source_object_returns_unknown": true,
+        "wrong_call_span_rejected": true,
+        "same_trace_distinct_requests": true,
+        "all_native_predictions_known": true
+      },
+      "adapter_scope": "Records and binds actual boundary evidence; native labels determine dependencies. No expected sources are read by native_predictions."
+    },
+    "sha256": {
+      "artifacts/mirrortaint-total-calibration-01/calibration.json": "aa91179bf436681eaf7f791e90a9f58978a163a07f0b2a99f1c4a473f40cae7b",
+      "artifacts/mirrortaint-total-calibration-01/sockshop/field-results.json": "72fdc64a4849e187bdb2d818d9b47d3e834285a6e2cb68b1b3e8404812183512",
+      "artifacts/tracefusion-total-calibration-01/calibration.json": "aa91179bf436681eaf7f791e90a9f58978a163a07f0b2a99f1c4a473f40cae7b",
+      "artifacts/tracefusion-total-calibration-01/sockshop/field-results.json": "d2e250e17a0e9cbf624b3c3688f5888eaa35e76dff8accada672dd5578f9f094"
+    }
+  },
+  "formal": {
+    "config": {
+      "rounds": 5,
+      "warmup": 30.0,
+      "seconds": 60.0,
+      "rate": 2.0,
+      "concurrency": 2,
+      "cpus": 1.0,
+      "memory": "768m",
+      "seed": 151031,
+      "jvm": "-Xms64m -Xmx256m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom -Dspring.zipkin.enabled=false"
+    },
+    "medians": {
+      "original": {
+        "p50": 11.600004,
+        "p95": 15.37013,
+        "p99": 19.179986,
+        "cpu_one_core_percent_mean": 6.589809112533171,
+        "rss_bytes_mean": 1610382592,
+        "throughput_rps": 2.0,
+        "error_rate": 0.0,
+        "business_requests": 900,
+        "provenance": null
+      },
+      "tracefusion": {
+        "p50": 13.217631,
+        "p95": 18.519801,
+        "p99": 23.211698,
+        "cpu_one_core_percent_mean": 8.257955079202812,
+        "rss_bytes_mean": 1604695381.3333333,
+        "throughput_rps": 2.0,
+        "error_rate": 0.0,
+        "business_requests": 900,
+        "provenance": {
+          "queries": 900,
+          "exact": 900,
+          "tp": 3750,
+          "fp": 0,
+          "fn": 0,
+          "unknown": 0
+        },
+        "capture_events": 5298,
+        "capture_bytes": 4042178,
+        "offline_graph_build_seconds": 0.478607842,
+        "offline_restore_score_export_seconds": 0.621070159,
+        "offline_subprocess_wall_seconds": 0.705059381,
+        "offline_peak_rss_bytes": 171229184,
+        "answer_wait_p95_seconds": 61.342082569,
+        "background_unknown": {
+          "works/weave/socks/cart/entities/Item.id": 1875
+        }
+      },
+      "mirrortaint": {
+        "p50": 66.459073,
+        "p95": 107.227869,
+        "p99": 117.38861,
+        "cpu_one_core_percent_mean": 22.374724901258368,
+        "rss_bytes_mean": 1623199488,
+        "throughput_rps": 2.0,
+        "error_rate": 0.0,
+        "business_requests": 900,
+        "provenance": {
+          "queries": 900,
+          "exact": 900,
+          "tp": 3750,
+          "fp": 0,
+          "fn": 0,
+          "unknown": 0
+        },
+        "capture_events": 5280,
+        "capture_bytes": 69756296,
+        "offline_graph_build_seconds": 0.780736635,
+        "offline_restore_score_export_seconds": 0.916606357,
+        "offline_subprocess_wall_seconds": 0.986298851,
+        "offline_peak_rss_bytes": 171098112,
+        "answer_wait_p95_seconds": 61.600701894,
+        "background_unknown": "N/A: not enumerated by native tag decoder"
+      }
+    },
+    "paired_tf_to_mt_median_ratios": {
+      "latency_p50": 0.1995741572924213,
+      "latency_p95": 0.1727144367664343,
+      "latency_p99": 0.19565153723176382,
+      "cpu_one_core_percent_mean": 0.36963479687218104,
+      "rss_bytes_mean": 0.9940778660541845,
+      "capture_events": 1.003409090909091,
+      "capture_bytes": 0.05794714214757045,
+      "offline_restore_score_export_seconds": 0.6847824390174584,
+      "offline_subprocess_wall_seconds": 0.7222619956950441,
+      "offline_peak_rss_bytes": 1.0007192864678238
+    },
+    "online_summary_with_ranges_and_cv": {
+      "original": {
+        "trials": 5,
+        "metrics": {
+          "throughput_rps": {
+            "median": 2.0,
+            "min": 2.0,
+            "max": 2.0,
+            "cv": 0.0
+          },
+          "error_rate": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "cv": null
+          },
+          "latency_ms_p50": {
+            "median": 11.600004,
+            "min": 11.514832,
+            "max": 11.665905,
+            "cv": 0.004996453084990509
+          },
+          "latency_ms_p95": {
+            "median": 15.37013,
+            "min": 13.888326,
+            "max": 15.987563,
+            "cv": 0.057367701520124825
+          },
+          "latency_ms_p99": {
+            "median": 19.179986,
+            "min": 19.009361,
+            "max": 20.297633,
+            "cv": 0.027800413122959878
+          }
+        }
+      },
+      "tracefusion": {
+        "trials": 5,
+        "metrics": {
+          "throughput_rps": {
+            "median": 2.0,
+            "min": 2.0,
+            "max": 2.0,
+            "cv": 0.0
+          },
+          "error_rate": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "cv": null
+          },
+          "latency_ms_p50": {
+            "median": 13.217631,
+            "min": 13.094568,
+            "max": 14.947443,
+            "cv": 0.05802488252958856
+          },
+          "latency_ms_p95": {
+            "median": 18.519801,
+            "min": 15.895717,
+            "max": 20.993496,
+            "cv": 0.10555300622974269
+          },
+          "latency_ms_p99": {
+            "median": 23.211698,
+            "min": 21.708775,
+            "max": 25.095658,
+            "cv": 0.05702491226666762
+          }
+        }
+      },
+      "mirrortaint": {
+        "trials": 5,
+        "metrics": {
+          "throughput_rps": {
+            "median": 2.0,
+            "min": 2.0,
+            "max": 2.0,
+            "cv": 0.0
+          },
+          "error_rate": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "cv": null
+          },
+          "latency_ms_p50": {
+            "median": 66.459073,
+            "min": 64.779754,
+            "max": 67.481464,
+            "cv": 0.014802254496588788
+          },
+          "latency_ms_p95": {
+            "median": 107.227869,
+            "min": 79.16719,
+            "max": 128.748667,
+            "cv": 0.16692586569132517
+          },
+          "latency_ms_p99": {
+            "median": 117.38861,
+            "min": 115.649102,
+            "max": 138.103421,
+            "cv": 0.08307648124809391
+          }
+        }
+      }
+    }
+  },
+  "load_scan": {
+    "run_status": {
+      "status": "cancelled-by-user",
+      "reason": "User clarified that high-load experiments are unnecessary; fixed-load five-round common-query comparison remains primary.",
+      "cancelled_at": "2026-10-15T12:39:09.669368+00:00",
+      "current_point": "rate-32-2-mirrortaint",
+      "remaining_point": "rate-32-3-tracefusion",
+      "retain_partial_results_as_supplement": true
+    },
+    "scope": "Exploratory supplement only. Offered load is not measured capacity; capture failures do not establish service saturation.",
+    "points": [
+      {
+        "rate": 2.0,
+        "mode": "original",
+        "status": "passed",
+        "provenance_eligible": true,
+        "throughput_rps": 2.0,
+        "error_rate": 0.0,
+        "online_latency_ms": {
+          "p50": 13.372836,
+          "p95": 15.625086,
+          "p99": 16.65707
+        },
+        "scheduled_to_response_ms": {
+          "p50": 14.124969,
+          "p95": 16.341982,
+          "p99": 17.439976
+        },
+        "max_dispatch_lag_ms": 0.816017,
+        "warmup_requests": 20,
+        "warmup_failed_requests": 0
+      },
+      {
+        "rate": 2.0,
+        "mode": "mirrortaint",
+        "status": "passed",
+        "provenance_eligible": true,
+        "throughput_rps": 2.0,
+        "error_rate": 0.0,
+        "online_latency_ms": {
+          "p50": 67.934257,
+          "p95": 134.606373,
+          "p99": 141.530921
+        },
+        "scheduled_to_response_ms": {
+          "p50": 68.708822,
+          "p95": 135.327912,
+          "p99": 142.286926
+        },
+        "max_dispatch_lag_ms": 0.792534,
+        "warmup_requests": 20,
+        "warmup_failed_requests": 0
+      },
+      {
+        "rate": 2.0,
+        "mode": "tracefusion",
+        "status": "passed",
+        "provenance_eligible": true,
+        "throughput_rps": 2.0,
+        "error_rate": 0.0,
+        "online_latency_ms": {
+          "p50": 15.454271,
+          "p95": 17.693272,
+          "p99": 24.17473
+        },
+        "scheduled_to_response_ms": {
+          "p50": 16.179854,
+          "p95": 18.435494,
+          "p99": 24.920248
+        },
+        "max_dispatch_lag_ms": 0.885723,
+        "warmup_requests": 20,
+        "warmup_failed_requests": 0
+      },
+      {
+        "rate": 4.0,
+        "mode": "original",
+        "status": "passed",
+        "provenance_eligible": true,
+        "throughput_rps": 4.0,
+        "error_rate": 0.0,
+        "online_latency_ms": {
+          "p50": 11.994224,
+          "p95": 14.52688,
+          "p99": 17.291563
+        },
+        "scheduled_to_response_ms": {
+          "p50": 12.498666,
+          "p95": 15.006037,
+          "p99": 17.784423
+        },
+        "max_dispatch_lag_ms": 0.792714,
+        "warmup_requests": 40,
+        "warmup_failed_requests": 0
+      },
+      {
+        "rate": 4.0,
+        "mode": "tracefusion",
+        "status": "passed",
+        "provenance_eligible": true,
+        "throughput_rps": 4.0,
+        "error_rate": 0.0,
+        "online_latency_ms": {
+          "p50": 14.220004,
+          "p95": 18.560452,
+          "p99": 21.615854
+        },
+        "scheduled_to_response_ms": {
+          "p50": 14.682123,
+          "p95": 19.052148,
+          "p99": 22.073379
+        },
+        "max_dispatch_lag_ms": 0.821145,
+        "warmup_requests": 40,
+        "warmup_failed_requests": 0
+      },
+      {
+        "rate": 4.0,
+        "mode": "mirrortaint",
+        "status": "passed",
+        "provenance_eligible": true,
+        "throughput_rps": 4.0,
+        "error_rate": 0.0,
+        "online_latency_ms": {
+          "p50": 67.168288,
+          "p95": 117.240742,
+          "p99": 169.607008
+        },
+        "scheduled_to_response_ms": {
+          "p50": 67.643955,
+          "p95": 117.750822,
+          "p99": 170.113754
+        },
+        "max_dispatch_lag_ms": 0.825044,
+        "warmup_requests": 40,
+        "warmup_failed_requests": 0
+      },
+      {
+        "rate": 8.0,
+        "mode": "tracefusion",
+        "status": "passed",
+        "provenance_eligible": true,
+        "throughput_rps": 8.0,
+        "error_rate": 0.0,
+        "online_latency_ms": {
+          "p50": 12.655208,
+          "p95": 21.937189,
+          "p99": 65.73296
+        },
+        "scheduled_to_response_ms": {
+          "p50": 13.048349,
+          "p95": 22.323328,
+          "p99": 66.098409
+        },
+        "max_dispatch_lag_ms": 0.983897,
+        "warmup_requests": 80,
+        "warmup_failed_requests": 0
+      },
+      {
+        "rate": 8.0,
+        "mode": "mirrortaint",
+        "status": "passed",
+        "provenance_eligible": true,
+        "throughput_rps": 3.9,
+        "error_rate": 0.0,
+        "online_latency_ms": {
+          "p50": 6493.157265,
+          "p95": 8215.877526,
+          "p99": 8786.967646
+        },
+        "scheduled_to_response_ms": {
+          "p50": 10147.50623,
+          "p95": 15525.915918,
+          "p99": 16094.997937
+        },
+        "max_dispatch_lag_ms": 11276.619804,
+        "warmup_requests": 80,
+        "warmup_failed_requests": 4
+      },
+      {
+        "rate": 8.0,
+        "mode": "original",
+        "status": "passed",
+        "provenance_eligible": true,
+        "throughput_rps": 8.0,
+        "error_rate": 0.0,
+        "online_latency_ms": {
+          "p50": 11.068941,
+          "p95": 14.635552,
+          "p99": 27.178578
+        },
+        "scheduled_to_response_ms": {
+          "p50": 11.485825,
+          "p95": 15.080805,
+          "p99": 27.51574
+        },
+        "max_dispatch_lag_ms": 0.731762,
+        "warmup_requests": 80,
+        "warmup_failed_requests": 0
+      },
+      {
+        "rate": 16.0,
+        "mode": "tracefusion",
+        "status": "passed",
+        "provenance_eligible": true,
+        "throughput_rps": 16.0,
+        "error_rate": 0.0,
+        "online_latency_ms": {
+          "p50": 11.592703,
+          "p95": 19.200487,
+          "p99": 58.400984
+        },
+        "scheduled_to_response_ms": {
+          "p50": 11.885403,
+          "p95": 19.516179,
+          "p99": 58.7393
+        },
+        "max_dispatch_lag_ms": 0.962666,
+        "warmup_requests": 160,
+        "warmup_failed_requests": 0
+      },
+      {
+        "rate": 16.0,
+        "mode": "mirrortaint",
+        "status": "passed",
+        "provenance_eligible": true,
+        "throughput_rps": 3.65,
+        "error_rate": 0.0,
+        "online_latency_ms": {
+          "p50": 6664.967248,
+          "p95": 8313.193196,
+          "p99": 8767.506556
+        },
+        "scheduled_to_response_ms": {
+          "p50": 28063.025896,
+          "p95": 48275.656022,
+          "p99": 48596.571987
+        },
+        "max_dispatch_lag_ms": 45322.208483,
+        "warmup_requests": 160,
+        "warmup_failed_requests": 6
+      },
+      {
+        "rate": 16.0,
+        "mode": "original",
+        "status": "passed",
+        "provenance_eligible": true,
+        "throughput_rps": 16.0,
+        "error_rate": 0.0,
+        "online_latency_ms": {
+          "p50": 10.220986,
+          "p95": 12.805341,
+          "p99": 35.065158
+        },
+        "scheduled_to_response_ms": {
+          "p50": 10.558703,
+          "p95": 13.085817,
+          "p99": 35.368645
+        },
+        "max_dispatch_lag_ms": 0.806845,
+        "warmup_requests": 160,
+        "warmup_failed_requests": 0
+      },
+      {
+        "rate": 32.0,
+        "mode": "original",
+        "status": "passed",
+        "provenance_eligible": true,
+        "throughput_rps": 32.0,
+        "error_rate": 0.0,
+        "online_latency_ms": {
+          "p50": 9.328573,
+          "p95": 25.26375,
+          "p99": 80.239135
+        },
+        "scheduled_to_response_ms": {
+          "p50": 9.628521,
+          "p95": 25.561467,
+          "p99": 80.54409
+        },
+        "max_dispatch_lag_ms": 0.739528,
+        "warmup_requests": 320,
+        "warmup_failed_requests": 0
+      },
+      {
+        "rate": 32.0,
+        "mode": "mirrortaint",
+        "status": "N/A: cancelled by user / not run",
+        "provenance_eligible": false,
+        "warmup_requests": 0,
+        "warmup_failed_requests": 0
+      },
+      {
+        "rate": 32.0,
+        "mode": "tracefusion",
+        "status": "N/A: cancelled by user / not run",
+        "provenance_eligible": false,
+        "warmup_requests": 0,
+        "warmup_failed_requests": 0
+      }
+    ]
+  },
+  "limits": [
+    "Fixed 2 req/s does not establish equal maximum throughput.",
+    "Single-deployment load points with 10s warmup/20s window are exploratory, not capacity estimates.",
+    "Structured event schemas differ; count alone is not information volume or proof of selective-capture benefit. Strict ablation deferred.",
+    "Capture deltas include cohort drain and sampler boundary; do not infer steady byte/s under overload.",
+    "Answer wait is batch readiness, including remaining window and shutdown, not streaming latency.",
+    "RSS includes summed Docker top process RSS and shared-page duplication.",
+    "No old cost measurements reused."
+  ],
+  "evidence_sha256": {
+    "artifacts/common-total-cost-formal-20261015/config.json": "fa56b5a97807f40094086e3a48fca8d30f5996019a5033524882221ed8f050c9",
+    "artifacts/common-total-cost-formal-20261015/comparison.json": "a3a894b3c966af9df50f8ccbaadd84e6eabeb20ef6c3afd51b3beb84a702e593",
+    "artifacts/common-total-cost-formal-20261015/results.md": "7f2a9927bcd1483a382a33785236e49dbd74165c9da6bc028bedc34c13e1a85f",
+    "artifacts/common-total-cost-formal-20261015/independent-validation.json": "cf93a4d90b35292514d6ed5960f044a0c3756d09aaec0591d02bd747dd5dbe05",
+    "artifacts/common-total-load-scan-20261015/scan.json": "734b8d9074ae9c8d795465210de0edd81f063235796ec681e37780186f0e43e1",
+    "artifacts/common-total-load-scan-20261015/scan-results.json": "dd251ba7bd6abffe0bb65f8c821e5c9b92928f3840645e9378d35fa1a0180057",
+    "artifacts/common-total-load-scan-20261015/results.md": "89cb7c301cdd7719813126640db698ba5f9a85fde1d436707735eb346ab7f9c0",
+    "artifacts/common-total-load-scan-20261015/independent-validation.json": "8fb5a77734f844c5286396eab0cc2e9e25f301d0040bf14cb7b8ecd4bf6598e4",
+    "artifacts/common-total-calibration-comparison.json": "7798fc1b2e5224f14236ce4fe0da05974eca6ded15215aef8d61f24f7e5e8096",
+    "artifacts/mirrortaint-total-calibration-01/calibration.json": "aa91179bf436681eaf7f791e90a9f58978a163a07f0b2a99f1c4a473f40cae7b",
+    "artifacts/mirrortaint-total-calibration-01/instance-audit.json": "a5238c8c400f2f0e84580207a61b7d5b7b06712169b5cb697ded7aea787102af",
+    "artifacts/tracefusion-total-calibration-01/calibration.json": "aa91179bf436681eaf7f791e90a9f58978a163a07f0b2a99f1c4a473f40cae7b",
+    "artifacts/mirrortaint-instance-build/build.json": "97b54aa1be5fb52707bc853c4e5bf7c041aaf98b323494cb352c39eadd51a0de"
+  }
+}

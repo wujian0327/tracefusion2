@@ -445,7 +445,7 @@ def report(out):
         for key in ('events','bytes'):
             denominator=sum(x[key] for x in mt['steady_capture'].values())
             if denominator:ratio['capture_'+key]=sum(x[key] for x in tf['steady_capture'].values())/denominator
-        for key in ('restore_score_export_seconds','peak_rss_bytes'):
+        for key in ('restore_score_export_seconds','subprocess_wall_seconds','peak_rss_bytes'):
             ratio['offline_'+key]=tf['offline'][key]/mt['offline'][key]
         method_ratios.append(ratio)
     summary['tracefusion_to_mirrortaint_ratios']=method_ratios
@@ -461,7 +461,7 @@ def report(out):
         throughput = 'N/A' if r['status']!='passed' else f'{r["throughput_rps"]:.3f}'
         error='N/A' if r['status']!='passed' else f'{r.get("error_rate",0)*100:.2f}%'
         lines.append(f'| {r["trial"]} | {r["mode"]} | {r["status"]} | {latency} | {throughput} | {error} |')
-    lines += ['', '| 轮次 | 三个业务 JVM CPU 单核 % | JVM RSS 均值 / 峰值 MiB | 稳态事件 / 日志字节 | 离线图还原或标签解码 / 评分导出总秒 | 离线峰值 MiB | 答案延迟 p50 / p95 / p99 秒 |',
+    lines += ['', '| 轮次 | 三个业务 JVM CPU 单核 % | JVM RSS 均值 / 峰值 MiB | 采集增量事件 / 字节（含排空） | 离线图还原或标签解码 / 评分导出总秒 / 进程墙时 | 离线峰值 MiB | 答案延迟 p50 / p95 / p99 秒 |',
               '| --- | ---: | --- | --- | --- | ---: | --- |']
     for r in rows:
         if r['status']!='passed':
@@ -471,7 +471,7 @@ def report(out):
         events = sum(e['events'] for e in r['steady_capture'].values())
         size = sum(e['bytes'] for e in r['steady_capture'].values())
         off = r['offline']
-        off_time = 'N/A' if off is None else f'{off["graph_build_seconds"]:.3f} / {off["restore_score_export_seconds"]:.3f}'
+        off_time = 'N/A' if off is None else f'{off["graph_build_seconds"]:.3f} / {off["restore_score_export_seconds"]:.3f} / {off["subprocess_wall_seconds"]:.3f}'
         peak = 'N/A' if off is None else f'{off["peak_rss_bytes"]/2**20:.2f}'
         fresh = 'N/A' if off is None or r['completion_to_batch_answers_seconds'] is None else ' / '.join(f'{r["completion_to_batch_answers_seconds"][p]:.3f}' for p in ('p50','p95','p99'))
         lines.append(f'| {r["trial"]} | {res["cpu_one_core_percent_mean"]:.2f} | {res["rss_bytes_mean"]/2**20:.2f} / {res["rss_bytes_peak"]/2**20:.2f} | {events} / {size} | {off_time} | {peak} | {fresh} |')
@@ -490,17 +490,19 @@ def report(out):
     for r in rows:
         if r['status']=='passed' and r['offline'] is not None:
             s = r['offline']['summary']
-            unknown = sum(r['offline']['background_unknown'].values())
+            unknown = 'N/A（未枚举）' if r['mode']=='mirrortaint' else sum(r['offline']['background_unknown'].values())
             lines.append(f'| {r["trial"]} | {s["exact"]} / {s["queries"]} | {s["tp"]} / {s["fp"]} / {s["fn"]} | {s["unknown"]} | {unknown} |')
     lines += ['', 'CPU 为单核百分比；RSS 是 Docker top 中容器所有进程 RSS 之和，包含共享页重复计数，不能解释为每请求分配。原始 Docker stats/top 在各轮 resources.jsonl。', '',
               '在线延迟从客户端开始 HTTP 调用到响应体读取完成；另保存计划到达至响应的延迟与调度滞后，避免负载不足被隐藏。吞吐为稳态窗口内完成数除以窗口长度，另列排空吞吐。固定到达率不测系统最大吞吐。', '',
-              '结构化事件数计入采集目录所有 JSONL；日志字节计入采集目录全部文件（含 MirrorTaint 原生日志），分别保存稳态增量和部署总量，窗口计数见 capture-window.json。容器控制台日志另存。预热和准备流量不计入在线分位数。', '',
+              '结构化事件数计入采集目录所有 JSONL；字节计入采集目录全部文件（含 MirrorTaint 原生日志和类转储），分别保存请求批次采集增量和部署总量。增量包含排空与采样边界，过载时不能直接除以计划窗口解释成稳态字节/秒；窗口见 capture-window.json。容器控制台日志另存。预热和准备流量不计入在线分位数。', '',
               '离线图构建时间与还原、评分、证据导出总时间分别报告；峰值内存为独立 Python 子进程 ru_maxrss。答案新鲜度按整批答案写出时刻减去每次响应完成时刻，包含剩余采样窗口和采集器关闭，不能解释为流式逐请求延迟。', '',
               '原版服务来源答案及离线代价为 N/A；业务响应逐请求核验。观测配置对预热和稳态的成功请求独立评分，失败请求计入错误率并不伪造来源答案。保留 field-results.json、原始事件和 unknown。其他未运行查询和外部基线为 N/A。', '',
               '完整逐轮 CPU、RSS、事件数、字节、离线及答案延迟见 comparison.json。跨轮分别报告分位数中位数、范围和变异系数，不合并请求伪装为独立部署样本。不引用旧机器开销值。环境记录中的其他运行中容器可能造成主机争用，独立配置顺序已随机化。', '',
               '配置及输入/源码哈希：config.json；机器环境：environment.json；命令：command.json 和各轮 sockshop/commands.log；失败：failure.json；清理：cleanup.json。', '']
     if config.get('query_scope')=='total':
         lines+=['本轮共同查询仅为 Carts 实际序列化响应字段到 Orders.total。Shipping 未安装观测器；MirrorTaint 只在 Orders 加载原版传播核心，Carts 和 Orders 额外安装披露的 HTTP 实例绑定探针。探针不计算业务依赖，原版标签决定来源。对象/字段/应用写计数及具体调用 span 均须匹配；反射和数据库内部写历史不在边界内。', '']
+        lines+=['MirrorTaint 使用固定公开 JAR＋披露的 receiver、来源、字符串、stream、thread、日志和通信绑定适配器，原生默认诊断产物计入成本。这是当前配置的比较，不代表 MirrorTaint 调优后的最低成本。结构化事件格式和标签历史体积不同，不能从事件数或日志量直接推断少采的因果收益；严格消融仍为后续任务。', '',
+                'MT 未枚举未查询字段的图注记，背景 unknown 为 N/A；TF 保留的背景 Item.id unknown 不属于本轮 total 目标。返回 Item、Shipment 和 Train Ticket 的 MT 查询均为 N/A。', '']
     (out/'results.md').write_text('\n'.join(lines))
 
 
