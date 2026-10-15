@@ -1515,6 +1515,25 @@ python3 experiments/sockshop-mirrortaint/audit_security_leak.py \
 `run` 无论成功／失败都停止专属进程、保存退出状态；`audit` 重新生成完整报告。
 已有最终捕获可直接执行最后一步，不能覆盖已有目录重跑采集。
 
+### 主实验机重新构建与复现（2026-10-15）
+
+本机JDK 8重新下载并核验四个固定Log4j JAR，在新目录构建并重新采集四组用例，
+37/37业务调用通过。四组准确性指标及逐查询逻辑来源、实际日志内容、lookup行为
+与历史检查点一致；受控组仍为TP9/FP0/FN1/unknown1，漏洞组TP3/FP0/FN0/TN2，
+缓解和修复组各TN5。12个并发业务帧重叠、每配置80条字节码指令审计及9个负对照通过。
+
+本次仅将构建器接入现有`java8_target()`以支持JDK 8的`-source 8 -target 8`，
+并记录编译器版本、参数及构建器/兼容函数哈希；应用、观测器、还原器、审计器和
+ASM/Jackson依赖均与历史版本一致。新编译class及Agent JAR使用本机实际哈希，
+不假定跨JDK二进制相同，也不覆盖旧检查点。
+
+新报告为`artifacts/security-leak-desktop-reproduction-20261015/results.md`，
+本机对照及命令为同目录`reproduction.json`，构建为
+`artifacts/security-leak-desktop-build-20261015/`；Git内保留
+[本机复现摘要](security-field-flow-desktop-20261015.json)。原始采集、独立回调和审计
+保存在本机artifacts中，需单独备份。本次仍只验证本地lookup求值，不涉及远程代码
+执行、其他工具比较或成本测量；不改变Sock Shop/Train Ticket实验配置。
+
 ## 2026-10-15 查询驱动的自动观测计划：首版
 
 新增 `query_observation_planner.py`：输入原始应用 class 模型、固定入口边界与目标字段，

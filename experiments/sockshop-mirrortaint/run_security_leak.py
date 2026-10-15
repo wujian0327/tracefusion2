@@ -17,6 +17,7 @@ import urllib.parse
 import urllib.request
 from zipfile import ZipFile, ZIP_DEFLATED
 
+from experiment_environment import java8_target
 from security_field_flow import infer
 
 HERE = Path(__file__).resolve().parent
@@ -73,7 +74,8 @@ def build(out):
     log4j = [DEPS/f'log4j-{kind}-2.17.1.jar' for kind in ('api','core')]
     classes = out/'classes';classes.mkdir()
     sources = [HERE/'SecurityLeakLab.java', HERE/'SecurityObservationAgent.java']
-    cmd = ['javac','--release','8','-cp',':'.join(map(str,asm+jackson+log4j)),
+    compiler_version, compiler_target = java8_target()
+    cmd = ['javac',*compiler_target,'-cp',':'.join(map(str,asm+jackson+log4j)),
            '-d',str(classes),*map(str,sources)]
     result = subprocess.run(cmd,text=True,capture_output=True)
     (out/'compile.log').write_text(result.stdout+result.stderr)
@@ -89,12 +91,14 @@ def build(out):
                 for name in source.namelist():
                     if name.startswith('org/objectweb/asm/') and name.endswith('.class'):
                         z.writestr(name,source.read(name))
+    sources += [Path(__file__), HERE/'experiment_environment.py']
     save(out/'manifest.json',{'sources':{str(p):sha(p) for p in sources},
                              'dependencies':{str(p):sha(p) for p in asm+jackson},
                              'log4j':manifest,'agent_sha256':sha(agent),
                              'classes_sha256':{p.name:sha(p) for p in classes.glob('*.class')},
                              'jackson_classpath':list(map(str,jackson)),
                              'java':subprocess.run(['java','-version'],capture_output=True,text=True).stderr,
+                             'compiler_version':compiler_version,'compiler_target':compiler_target,
                              'command':cmd})
 
 

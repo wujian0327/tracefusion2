@@ -1,0 +1,137 @@
+{
+  "kind": "desktop-security-field-flow-reproduction",
+  "recorded_at": "2026-10-15T14:36:07.991493+00:00",
+  "base_commit": "e5a26baa23f2a3a239b3cfc958d6ccb10fbda369",
+  "code_change": "Build compatibility only: reuse java8_target; record compiler and builder/helper hashes. Application, collector, inference and auditor unchanged.",
+  "historical_checkpoint": "experiments/sockshop-mirrortaint/security-field-flow-20261015.json",
+  "historical_checkpoint_sha256": "3398c0c4cbad15c47b647984ac585784387039b0c2604b9f1299909ce061148e",
+  "build": "artifacts/security-leak-desktop-build-20261015",
+  "evidence": "artifacts/security-leak-desktop-reproduction-20261015",
+  "environment": {
+    "platform": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+    "python": "3.10.12",
+    "java": "openjdk version \"1.8.0_502\"\nOpenJDK Runtime Environment (build 1.8.0_502-8u502-ga~us1-0ubuntu1~22.04-b07)\nOpenJDK 64-Bit Server VM (build 25.502-b07, mixed mode)\n",
+    "javac": "javac 1.8.0_502",
+    "compiler_target": [
+      "-source",
+      "8",
+      "-target",
+      "8"
+    ]
+  },
+  "validated": true,
+  "business_calls_passed": 37,
+  "profiles": {
+    "controlled": {
+      "queries": 22,
+      "tp": 9,
+      "fp": 0,
+      "fn_including_unknown_positive": 1,
+      "tn": 12,
+      "unknown": 1,
+      "coverage": 0.9545454545454546,
+      "precision": 1.0,
+      "recall": 0.9,
+      "f1": 0.9473684210526315,
+      "peak_overlapping_frames": 12,
+      "independently_verified_instructions": 80
+    },
+    "cve-vulnerable": {
+      "queries": 5,
+      "tp": 3,
+      "fp": 0,
+      "fn_including_unknown_positive": 0,
+      "tn": 2,
+      "unknown": 0,
+      "coverage": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "peak_overlapping_frames": 1,
+      "independently_verified_instructions": 80
+    },
+    "cve-config-mitigated": {
+      "queries": 5,
+      "tp": 0,
+      "fp": 0,
+      "fn_including_unknown_positive": 0,
+      "tn": 5,
+      "unknown": 0,
+      "coverage": 1.0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "peak_overlapping_frames": 1,
+      "independently_verified_instructions": 80
+    },
+    "cve-fixed": {
+      "queries": 5,
+      "tp": 0,
+      "fp": 0,
+      "fn_including_unknown_positive": 0,
+      "tn": 5,
+      "unknown": 0,
+      "coverage": 1.0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "peak_overlapping_frames": 1,
+      "independently_verified_instructions": 80
+    }
+  },
+  "comparison": {
+    "identical_frozen_contract": true,
+    "all_37_logical_answers_logs_and_lookup_keys_match": true,
+    "application_collector_inference_auditor_sources_identical": true,
+    "asm_jackson_and_log4j_identical": true,
+    "independent_bytecode_audit_passed": true,
+    "negative_controls_passed": 9,
+    "all_own_jvms_stopped": true,
+    "compiled_class_digests_equal_historical": 0,
+    "compiled_classes": 10
+  },
+  "comparison_scope": "Each capture independently audited before normalizing away JVM object IDs, message UUIDs, frame IDs and event sequence numbers. New class and agent hashes recorded; cross-JDK binaries are not assumed equal.",
+  "commands": [
+    "python3 experiments/sockshop-mirrortaint/run_security_leak.py prepare --out artifacts/security-leak-deps",
+    "python3 experiments/sockshop-mirrortaint/run_security_leak.py build --out artifacts/security-leak-desktop-build-20261015",
+    "python3 experiments/sockshop-mirrortaint/run_security_leak.py freeze --out artifacts/security-leak-desktop-reproduction-20261015",
+    "python3 experiments/sockshop-mirrortaint/run_security_leak.py run --build artifacts/security-leak-desktop-build-20261015 --out artifacts/security-leak-desktop-reproduction-20261015",
+    "python3 experiments/sockshop-mirrortaint/audit_security_leak.py --build artifacts/security-leak-desktop-build-20261015 --out artifacts/security-leak-desktop-reproduction-20261015",
+    "python3 artifacts/security-leak-desktop-reproduction-20261015/verify-reproduction.py"
+  ],
+  "source_sha256": {
+    "experiments/sockshop-mirrortaint/SecurityLeakLab.java": "338442283f646f51d05c96cd8b212cb906a2c7d1a05b2e1779022efc8fff65cc",
+    "experiments/sockshop-mirrortaint/SecurityObservationAgent.java": "8f1454f6fd288fe88dcf74dbd77c9e2a7be9851e745b5249db5021cf825d6ae8",
+    "experiments/sockshop-mirrortaint/run_security_leak.py": "d3b9004cfbfa2aa708b8f8d9831f76ecf6269a8fd04e93c8c034e92d4c9b2b74",
+    "experiments/sockshop-mirrortaint/security_field_flow.py": "8c38b0499650b1a10a5534e66d25c3e7602a8485435d7ee9931ec55424b55b32",
+    "experiments/sockshop-mirrortaint/audit_security_leak.py": "065804d48553cde73fbc915d06c5642f02cb02c4acf594118d7972743eedd4a9",
+    "experiments/sockshop-mirrortaint/experiment_environment.py": "91c2609c43a99e18d3aa9e4a1fb113ade860b8ec4fa86133a6823f35eb501e96"
+  },
+  "evidence_sha256": {
+    "artifacts/security-leak-desktop-reproduction-20261015/audit.json": "7ba521c87bfb8c18ad52f0169b870970605bbf40b81443c659ac6009722f28a7",
+    "artifacts/security-leak-desktop-reproduction-20261015/results.json": "6343cf17f38c26e3a7f5d596c5e99cf1ee62a98a5ae50af99b0ece3aafa7886e",
+    "artifacts/security-leak-desktop-reproduction-20261015/results.md": "ac71607c6afdacb946975ad87acfd8e5ea1242a87f61d3af5c7c43c24ee7638d",
+    "artifacts/security-leak-desktop-reproduction-20261015/contract.json": "e85e8a88a29b43848f6a801de706b919403d933fee263e278ccbeba287264878",
+    "artifacts/security-leak-desktop-reproduction-20261015/negative-controls.json": "64667decb54f7dace909dc836c126d5b5956a9c539baf51702f30cafa6131ec6",
+    "artifacts/security-leak-desktop-reproduction-20261015/verify-reproduction.py": "ae9a5933a24200ae6ac6252e1561dab913cac46654337f7db1e55914a2232187",
+    "artifacts/security-leak-desktop-build-20261015/manifest.json": "f9146369113a61c5a7fe5cde143eff757b62778ce2822b50fde34be0a214c534",
+    "artifacts/security-leak-desktop-build-20261015/compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "artifacts/security-leak-deps/manifest.json": "f906106c5af5e4076a52c85c1cc774016f8d37a351624731b6604e86a03883fb"
+  },
+  "limitations": [
+    "New controlled application; no Sock Shop vulnerability claim.",
+    "Known vulnerable library in a small harness, not an original vulnerable production application.",
+    "The local JNDI provider confirms lookup evaluation only, not LDAP access or remote code execution.",
+    "No new-vulnerability discovery claim; no competing-tool or performance measurements.",
+    "Only admitted acyclic reference-copy bytecode and actually observed branch choices.",
+    "Unknown helper calls remain unknown; no value-based origin recovery.",
+    "Single HTTP hop, default three-String DTO schema, no custom serialization.",
+    "Data dependence only; no implicit/control-flow taint.",
+    "JNDI rule uses an explicit sole-literal ${jndi:key} summary, validated against the actual same-frame native lookup argument; it does not reconstruct every internal Log4j statement.",
+    "DTOs are thread-owned and immutable outside the observed Flow writes; the audited fresh Box constructor has no field writes.",
+    "A sensitive-to-log alert presumes the configured log destination is forbidden for that field; it is not a universal vulnerability judgement."
+  ],
+  "remote_code_execution_tested": false,
+  "competing_tools_evaluated": false,
+  "cost_measured": false
+}
