@@ -1,5 +1,8 @@
 # Sock Shop / MirrorTaint：真实 API 接入预检
 
+新用户获取外部工具、构建Phosphor/JRE和准备原版业务的统一入口见
+[baselines/README.md](../../baselines/README.md)。下文保留各阶段的真实记录和限制。
+
 2026-10-12。用户确认先做 Sock Shop，再做 PiggyMetrics。**正式准确率资格尚未完成；2026-10-13 已完成五方法的选定字段校准与首轮开销测量，见文末。**
 这一步冻结原版业务、查询契约和外部 agent，准备真实服务的 API 负载；不把预检当成来源还原。
 

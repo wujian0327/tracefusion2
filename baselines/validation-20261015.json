@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-15",
+  "unit_integrity_tests": {
+    "passed": 6,
+    "failed": 0
+  },
+  "upstream_fetch_verified": [
+    "MirrorTaint pinned raw JAR",
+    "Phosphor pinned source ZIP and source inventory",
+    "FlowDist author Git repository and engine JARs"
+  ],
+  "phosphor_source_rebuild": {
+    "passed": true,
+    "commit": "6c15c9b2bb609b790cacfc9297d9f18724dcb1d6",
+    "actual_compiled_jar_sha256": "9988fbb738249a5a40798d7a2476a4d4619b16970d739903e8bba3653ec6c8ff",
+    "original_java_and_pom_unchanged": true,
+    "native_probe": {
+      "passed": true,
+      "phosphor_sha256": "9988fbb738249a5a40798d7a2476a4d4619b16970d739903e8bba3653ec6c8ff",
+      "probe_source_sha256": "4ea6ae9221f3e64c88c10faf316167668dd8f7fcc66c01bf9977129275ba4dd7",
+      "scope": "One native primitive arithmetic and sequential Stream example; not Sock Shop or cross-service qualification."
+    }
+  },
+  "instrumented_jre_startup": true,
+  "six_original_image_jars_verified": true,
+  "clean_checkout": {
+    "passed": true,
+    "scope": "Clean tracked source export plus new baselines directory; fresh external artifact paths, original image JAR extraction, field builds/freeze and FlowDist author-example compilation. No new business/cost measurements."
+  },
+  "docker_containers_remaining": 0,
+  "new_business_or_cost_results": false,
+  "evidence_directory": "artifacts/baselines-qualification-20261015",
+  "source_sha256": {
+    "baselines/README.md": "bdca8d014eb93b161946dfcb8a587f13d5b6efdd4759551f71f016b949ba9c58",
+    "baselines/apps.lock.json": "f4371c7466c3e994f1afef0922ab01b163311e1f6ee3b93f3bd17499e52a83ca",
+    "baselines/build-deps.lock.json": "0ac1f1013315e98c19811b086c5e608ff8fac3cf579ff94d581d8fe6528a9c3e",
+    "baselines/flowdist/README.md": "701a0298a30e5c1b69bdfa8cd3ec4004a0f222edecf031fc79897ba8e89bc504",
+    "baselines/images.lock.json": "66fb61cae74f692b20bf45cefab809625405741b7f11117578bd9f1e615ca223",
+    "baselines/manage.py": "48d3dbd6a73bf044883ecba918986df21ba3adbbe0344acc0b772d3151902bc5",
+    "baselines/mirrortaint/README.md": "811e70264dbdcdcbfbc3f334dab079415198b6551f728d5227ac73c43295f805",
+    "baselines/phosphor/PropagationProbe.java": "4ea6ae9221f3e64c88c10faf316167668dd8f7fcc66c01bf9977129275ba4dd7",
+    "baselines/phosphor/README.md": "5ae8ed3e4c99e668fa246bfb9259dcc512ed6a9fc3fbaf82204988ec60d3c8ed",
+    "baselines/phosphor/source-hashes.json": "aa391026be02229bdc253ae6989d094b39b4aec7d16de36d1f79f75b6fa06ed6",
+    "baselines/queries.json": "ff9d911f478ddc2d5cc3bf4464f27d212c6206b3c55c3c6ca68e749f79c34117",
+    "baselines/test_manage.py": "99313cf6bcd0fba9ef6edfe7c5b62d40471f057e400fa83db4c9f61085de918a",
+    "baselines/tools.lock.json": "2fdd39ffcd57fd16bd3193777a315a22eb47fc027de935dd6f1ffd34d005815b"
+  }
+}

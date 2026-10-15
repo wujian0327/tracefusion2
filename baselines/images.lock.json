@@ -1,0 +1,87 @@
+{
+  "weaveworksdemos/front-end@sha256:26a2d9b6b291dee2dca32fca3f5bff6c2fa07bb5954359afcbc8001cc70eac71": {
+    "image_id": "sha256:b54402ef78a55ccb3dfbb719669c6740f682621f04cee62ae1f6359fb3b13ee4",
+    "services": [
+      "sockshop/front-end"
+    ]
+  },
+  "weaveworksdemos/user@sha256:6740c0a9afd5f4f643504728104a74501c4d78e6f4e7ded2a7caa351b417df99": {
+    "image_id": "sha256:ab8af7050996d310b5a7a9b7eb0fc9bad9d6add5dc13130146f857fbe122ce8c",
+    "services": [
+      "sockshop/user"
+    ]
+  },
+  "weaveworksdemos/user-db@sha256:b43f0f8a76e0c908805fcec74d1ad7f4af4d93c4612632bd6dc20a87508e0b68": {
+    "image_id": "sha256:196601f91030425db810fa57104b041e414b9b963923ad574e74700c3ea8213e",
+    "services": [
+      "sockshop/user-db"
+    ]
+  },
+  "weaveworksdemos/carts@sha256:434d2f5a6e0e8beef1f253fe96f45b8437a703125fc003434c5282ecf8969a4f": {
+    "image_id": "sha256:c004737361182d3cd7f38e6d9ce4a44f2a349b8dc996834e2cba0defcd0cb522",
+    "services": [
+      "sockshop/carts"
+    ]
+  },
+  "mongo@sha256:d314f7eca9d3f825d091b77c40d2f3c9d6fff4de88dde2962527353476f107ba": {
+    "image_id": "sha256:f76f959b2a4947330df7b5878e81dc268f19f3fa4cef9d1ac8a992d2776eab73",
+    "services": [
+      "sockshop/carts-db",
+      "sockshop/orders-db"
+    ]
+  },
+  "weaveworksdemos/orders@sha256:b622e40e83433baf6374f15e076b53893f79958640fc6667dff597622eff03b9": {
+    "image_id": "sha256:8275c5b9181b2311feccd32f2efe865e9207a52a19e0f69939e5576c6f76dc1c",
+    "services": [
+      "sockshop/orders"
+    ]
+  },
+  "weaveworksdemos/payment@sha256:5ab1c9877480a018d4dda10d6dfa382776e6bca9fc1c60bacbb80903fde8cfe0": {
+    "image_id": "sha256:4f2c23055dcdcd18d14df338e305effa4679620588686e1a3bdcb1684189125f",
+    "services": [
+      "sockshop/payment"
+    ]
+  },
+  "weaveworksdemos/shipping@sha256:983305c948fded487f4a4acdeab5f898e89d577b4bc1ca3de7750076469ccad4": {
+    "image_id": "sha256:4fc533e8180ac3805582d3b2a9f8008d54d346211894d6131d92a82d17ee5458",
+    "services": [
+      "sockshop/shipping"
+    ]
+  },
+  "rabbitmq@sha256:a9f4923559bbcd00b93b02e61615aef5eb6f1d1c98db51053bab0fa6b680db26": {
+    "image_id": "sha256:8cdcbee37f622c52f2b8a572577c4aa94daed06ffe8c3292c93141ed50bef248",
+    "services": [
+      "sockshop/rabbitmq"
+    ]
+  },
+  "weaveworksdemos/queue-master@sha256:6292d3095f4c7aeed8d863527f8ef6d7a75d3128f20fc61e57f398c100142712": {
+    "image_id": "sha256:76f0de7a12acaa2bdbda36d1b7ddd0ec42204e9c0f4e8c59c329f07336cfa2dc",
+    "services": [
+      "sockshop/queue-master"
+    ]
+  },
+  "codewisdom/ts-station-service@sha256:1e9ea348b30926c3a31dde87f063a4325f854b123e70c307abe33ea17137f0ea": {
+    "image_id": "sha256:7cf806ab696534b81de5e0b05599a8c3071110ae9b69991589e09dd5168c7f9b",
+    "services": [
+      "trainticket/ts-station-service"
+    ]
+  },
+  "codewisdom/ts-basic-service@sha256:5d9c0dd7bf47e8575e8d9b456cc6576abac836d62c69ab1989f97bdcc716b102": {
+    "image_id": "sha256:dbd58ca16d23330a501071afd94414b4eca73e3d0f64cff9ccdceb464d807052",
+    "services": [
+      "trainticket/ts-basic-service"
+    ]
+  },
+  "codewisdom/ts-ticketinfo-service@sha256:7a682378d1f75f519af25f2004b3fac0bb3cd3768fd23a0b64fc7554e36f7054": {
+    "image_id": "sha256:7478e572c34ea56b2e8f1162def78243612ccbe4450223c702115fb46be07f01",
+    "services": [
+      "trainticket/ts-ticketinfo-service"
+    ]
+  },
+  "mongo@sha256:4be76f674fc4b27859816811b8baa3c51830eb1dbf4ca81a51e26b79edd662ef": {
+    "image_id": "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+    "services": [
+      "trainticket/ts-station-mongo"
+    ]
+  }
+}

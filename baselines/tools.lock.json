@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "tools": {
+    "mirrortaint": {
+      "repository": "https://github.com/MirrorTaint/MirrorTaint.git",
+      "commit": "54fcbfc5bb3a0d7cd30309098355d999553a861b",
+      "cache": "mirrortaint",
+      "url": "https://raw.githubusercontent.com/MirrorTaint/MirrorTaint/54fcbfc5bb3a0d7cd30309098355d999553a861b/mirrorTaint.jar",
+      "artifact": "mirrorTaint.jar",
+      "sha256": "e4c679206993b45c6727a4ace1d4dcff6df0ded2b80b56b27b8c86741be63fe7",
+      "upstream_source_scope": "Published agent JAR, not complete propagation core source"
+    },
+    "flowdist": {
+      "repository": "https://bitbucket.org/wsucailab/flowdist.git",
+      "commit": "9a683606aa42289e045cdbfa9391b55e79a3ac05",
+      "cache": "flowdist",
+      "artifacts": {
+        "tool/FLOWDIST.jar": "809cadf28550959291c3c21c1ce3130a6ca84af3bb649a545def0d61905c82d5",
+        "tool/soot-trunk.jar": "36afc1eb585178b3792599712c6608672a0568f869811f1ef40007d2d7982de7"
+      }
+    },
+    "phosphor": {
+      "repository": "https://github.com/gmu-swe/phosphor.git",
+      "commit": "6c15c9b2bb609b790cacfc9297d9f18724dcb1d6",
+      "tag": "Phosphor-0.0.4",
+      "cache": "phosphor-0.0.4",
+      "url": "https://codeload.github.com/gmu-swe/phosphor/zip/refs/tags/Phosphor-0.0.4",
+      "archive_sha256": "699d7b9cf9bbda2aedc76f5329d01aebe128d4411ea28e3e9a788629c22a23e4",
+      "source_hashes": "phosphor/source-hashes.json",
+      "artifact": "Phosphor-0.0.4.jar",
+      "historical_compiled_jar_sha256": "c4351aa4a5d7aba5cc569f06a237a9d0c981bf9ddcb9ecac87f21a39d9976a57",
+      "build_hash_policy": "New builds may differ in ZIP timestamps; validate locked source and record actual JAR SHA, then rerun qualification."
+    }
+  },
+  "java8_image": "weaveworksdemos/orders@sha256:b622e40e83433baf6374f15e076b53893f79958640fc6667dff597622eff03b9",
+  "maven_goals": [
+    "org.apache.maven.plugins:maven-resources-plugin:2.6:resources",
+    "org.apache.maven.plugins:maven-compiler-plugin:3.5.1:compile",
+    "org.apache.maven.plugins:maven-jar-plugin:2.3.1:jar",
+    "org.apache.maven.plugins:maven-shade-plugin:3.1.1:shade"
+  ]
+}
