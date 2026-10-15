@@ -15,6 +15,7 @@ import json
 import math
 from pathlib import Path
 import random
+import resource
 import secrets
 import statistics
 import subprocess
@@ -82,8 +83,11 @@ def logical_answers(trial):
 def offline(trial,build):
     policy=load(trial/'observation-policy.json')['policy']
     report=common_query.evaluate(trial,build,'tracefusion')
+    usage=resource.getrusage(resource.RUSAGE_SELF)
+    timing=load(trial/'offline.json')
+    timing['process_cpu_seconds']=usage.ru_utime+usage.ru_stime
+    save(trial/'offline.json',timing)
     if not qualified(policy,report['summary']):raise ValueError('Unexpected provenance result: '+str(report['summary']))
-    capture_breakdown(trial)
     print(json.dumps(report['summary']),flush=True)
 
 
@@ -155,7 +159,7 @@ def report(out):
         for key in ('cpu_one_core_percent_mean','rss_bytes_mean','rss_bytes_peak'):
             values[key]=[r['resources']['observed_jvms'][key] for r in rs]
         for key in ('events','bytes'):values['capture_'+key]=[sum(v[key] for v in r['steady_capture'].values()) for r in rs]
-        for key in ('graph_build_seconds','restore_score_export_seconds','subprocess_wall_seconds','peak_rss_bytes'):
+        for key in ('graph_build_seconds','restore_score_export_seconds','subprocess_wall_seconds','process_cpu_seconds','peak_rss_bytes'):
             values['offline_'+key]=[r['offline'][key] for r in rs]
         values['answer_wait_p95_seconds']=[r['completion_to_batch_answers_seconds']['p95'] for r in rs]
         summaries[policy]={'trials':len(rs),'metrics':{k:{'median':statistics.median(v),'min':min(v),'max':max(v),
@@ -169,7 +173,7 @@ def report(out):
         for p in ('p50','p95','p99'):ratios['latency_'+p]=a['online_latency_ms'][p]/b['online_latency_ms'][p]
         for key in ('cpu_one_core_percent_mean','rss_bytes_mean'):ratios[key]=a['resources']['observed_jvms'][key]/b['resources']['observed_jvms'][key]
         for key in ('events','bytes'):ratios['capture_'+key]=sum(v[key] for v in a['steady_capture'].values())/sum(v[key] for v in b['steady_capture'].values())
-        for key in ('subprocess_wall_seconds','restore_score_export_seconds','peak_rss_bytes'):ratios['offline_'+key]=a['offline'][key]/b['offline'][key]
+        for key in ('subprocess_wall_seconds','restore_score_export_seconds','process_cpu_seconds','peak_rss_bytes'):ratios['offline_'+key]=a['offline'][key]/b['offline'][key]
         paired.append(ratios)
     ratio_medians={k:statistics.median(p[k] for p in paired) for k in paired[0] if k!='round'} if paired else {}
     eligible=state['status']=='passed' and cfg['rounds']>=5 and len(rows)==len(cfg['order']) and all(r['control_qualified'] and r['error_rate']==0 for r in rows)
@@ -230,6 +234,9 @@ def run(args):
             settings=copy.copy(args);settings.build=build;settings.correctness=correctness;settings.mt_bundle=None
             settings.query_scope='total';settings.allow_errors=False;settings.observation_policy=policy;settings.offline_program=Path(__file__).resolve()
             metric=cost.trial_run(settings,trial,'tracefusion',build)
+            # Evidence accounting is outside online sampling and the measured
+            # offline child. Counting JSON a second time is not reconstruction.
+            capture_breakdown(trial)
             if metric['error_rate'] or not qualified(policy,metric['offline']['summary'],round((args.warmup+args.seconds)*args.rate)):
                 raise ValueError('Business/source control failed')
             specs[name]=normalized_spec(load(trial/'sockshop/compose.json'),trial)
