@@ -6,7 +6,8 @@
 
 ## 迁移包
 
-本机生成目录`artifacts/desktop-handoff-20261015/`，把整个目录复制到台式机。
+本机生成目录`artifacts/desktop-handoff-main-20261015/`，把整个目录复制到台式机。
+当前及后续工作分支为`main`；早期`desktop-handoff-20261015`包记录的是旧工作分支。
 
 - `tracefusion2.bundle`：当前已提交分支及其历史，可直接clone，不依赖远端已更新。
 - `experiment-inputs.tar.gz`：六个原版JAR、五个构建依赖、当前构建/证据、旧基线的
@@ -25,7 +26,7 @@ python3 experiments/sockshop-mirrortaint/prepare_desktop_handoff.py \
 台式机在包目录操作：
 
 ```bash
-git clone -b perf/payment-steady-state tracefusion2.bundle tracefusion2
+git clone -b main tracefusion2.bundle tracefusion2
 cd tracefusion2
 tar -xzf ../experiment-inputs.tar.gz
 ```
