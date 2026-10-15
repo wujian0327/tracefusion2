@@ -45,4 +45,5 @@ experiments/sockshop-mirrortaint/flowdist/*
 
 !experiments/sockshop-mirrortaint/w3c-paths-20261015.json
 !experiments/sockshop-mirrortaint/sockshop-cost-20261015.json
+!experiments/sockshop-mirrortaint/mirrortaint-total-cost-20261015.json
 !experiments/sockshop-mirrortaint/DESKTOP-HANDOFF.md

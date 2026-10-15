@@ -7,6 +7,7 @@ from pathlib import Path
 import shutil
 import subprocess
 from zipfile import ZipFile
+from experiment_environment import java8_target
 
 HERE = Path(__file__).resolve().parent
 parser = argparse.ArgumentParser(description=__doc__)
@@ -21,7 +22,7 @@ out = args.out.resolve()
 out.mkdir(parents=True, exist_ok=False)
 sources = [HERE / 'MirrorTaintIntegrationAdapter.java', HERE / 'MirrorTaintThreadAdapter.java', HERE / 'MirrorTaintLogAdapter.java',
            HERE / 'MirrorTaintStreamAdapter.java']
-cmd = [shutil.which('javac'), '--release', '8', '-cp', str(agent), '-d', str(out), *map(str, sources)]
+cmd = [shutil.which('javac'), *java8_target()[1], '-cp', str(agent), '-d', str(out), *map(str, sources)]
 completed = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
 (out / 'compile.log').write_text(completed.stdout + completed.stderr)
 if completed.returncode:

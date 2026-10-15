@@ -99,6 +99,30 @@ class CostProtocolTests(unittest.TestCase):
         self.assertEqual(cost.percentiles(list(range(1, 101))), {'p50': 50, 'p95': 95, 'p99': 99})
         self.assertEqual(cost.percentiles([]), {'p50': None, 'p95': None, 'p99': None})
 
+    def test_load_scan_preserves_http_failures(self):
+        class Busy(BaseHTTPRequestHandler):
+            def do_POST(self):
+                self.rfile.read(int(self.headers['Content-Length']))
+                data=b'{"error":"busy"}'
+                self.send_response(503);self.send_header('Content-Length',str(len(data)));self.end_headers();self.wfile.write(data)
+            def log_message(self,*args):pass
+        server=ThreadingHTTPServer(('127.0.0.1',0),Busy)
+        worker=threading.Thread(target=server.serve_forever,daemon=True);worker.start()
+        try:
+            with tempfile.TemporaryDirectory() as temp:
+                root=Path(temp);prepared=[]
+                for i in range(2):
+                    dest=root/str(i);dest.mkdir()
+                    prepared.append(({'expected_target':True},cost.MeasuredClient(dest),{}, {},{'case':str(i),'message':'trace/'+str(i)}))
+                original_submit=cost.submit
+                with patch.object(cost,'submit',side_effect=lambda p,url,dest:original_submit(p,f'http://127.0.0.1:{server.server_port}',dest)):
+                    result=cost.phase(prepared,0.2,10,1,root,allow_errors=True)
+                self.assertEqual(len(result['requests']),2)
+                self.assertTrue(all(not r['business_passed'] and r['http_status']==503 for r in result['requests']))
+                self.assertTrue(all((root/str(i)/'cost-request.json').exists() for i in range(2)))
+        finally:
+            server.shutdown();server.server_close();worker.join()
+
 
 if __name__=='__main__':
     unittest.main()

@@ -1819,3 +1819,38 @@ MirrorTaint＋适配器为 N/A。固定到达率不测最大吞吐，整进程 R
 吞吐、全应用准确率或其他机器开销。MirrorTaint＋适配器及其他未验收配置为N/A。
 原始分位数、吞吐、事件序列/字节、资源限制、字段答案、答案延迟和清理记录已
 独立复核，记录在 `independent-validation.json`；所有本轮实验容器已清理。
+
+## MirrorTaint 的 Orders.total 共同查询校准（2026-10-15）
+
+恢复固定公开 MirrorTaint JAR 并验证原 SHA-256 后，重新构建兼容适配器及
+`CommonHttpInstanceAgent`。共同来源边界是 Carts 实际序列化的 HTTP/JSON 响应，
+目标是 Orders.total；数据库内部写历史、未校准的返回 Item、Shipment 和
+Train Ticket 查询均为 N/A。MirrorTaint 核心只在 Orders 加载，Carts/Orders
+装载独立实例证据探针；两侧 Shipping 均保持原版。TraceFusion 使用相同原业务 JAR
+上的 Orders.total 计划和 Carts/Orders 观测器，重新测量，不复用前一节成本。
+
+MirrorTaint＋披露适配器与 TraceFusion 均通过24/24个指定 total 查询、TP84、
+FP/FN0。覆盖同 trace 不同 span、8路并发、同值记录、空总额、购物车更新和支付
+拒绝时无目标。双方先按自身实际服务/观测序号/JSON pointer/对象/字段/应用写计数
+评分，再验证逻辑字段和写计数一致；不跨 JVM 比较对象 ID，不按数值合并来源。
+8项实例审计检查错误来源/目标对象、失效来源/目标版本、缺少远端字段等保持 unknown，
+错误调用 span 被拒绝。此处未声称任意共享对象或反射修改已被完整处理。
+
+适配器具体功能和可复现命令见 [DESKTOP-HANDOFF.md](DESKTOP-HANDOFF.md)。
+`native_predictions` 只读取实际原生标签与运行时边界证据，实例 oracle 单独评分；
+它不调用 TraceFusion 的本地字段依赖图来生成 MirrorTaint 答案。
+校准原始证据分别为 `artifacts/mirrortaint-total-calibration-01/`、
+`artifacts/tracefusion-total-calibration-01/`，跨运行口径核验为
+`artifacts/common-total-calibration-comparison.json`。
+
+成本驱动现在支持 `--query-scope total --modes original tracefusion mirrortaint`，
+并校验校准结果、原 JAR、适配器、分析器、应用及输入哈希。负载扫描由
+`scan_sockshop_load.py` 实现，保留失败请求和排队延迟；业务失败请求不伪造来源答案。
+新增加的 HTTP 503 保留测试与原四项行为测试均通过，三配置短试验也通过。
+
+解释成本时须区分事件格式和数量、标签/调用历史体积、公开 JAR 的默认诊断日志，
+以及兼容和通信适配器自身成本。公开 JAR 的原始诊断产物计入采集字节；此配置不是
+MirrorTaint 调优后最低成本的证明。MT 没有枚举未查询字段的图注记；其背景 unknown
+不应与 TraceFusion 图中数据库 ID 的 unknown 直接比较，未校准字段保持 N/A。
+事件数量接近不代表信息量相同，也不能把实测差异直接归因于“少采”。①的严格消融
+仍为后续独立任务，本节不将其冒充已完成。

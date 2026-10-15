@@ -75,6 +75,9 @@ public final class MirrorTaintLogAdapter {
                         field.setAccessible(true);
                         walk(field.get(object), path + "#" + field.getName(),
                             TaintHeap.queryPrimitiveFieldTaint(object, field.getName()), field.getType().isPrimitive(), depth + 1);
+                        Map<String,Object> leaf=(Map<String,Object>)fields.get(path+"#"+field.getName());
+                        if (leaf!=null) leaf.putAll(instance("fieldCoordinate",new Class[]{Object.class,String.class},object,
+                            current.getName().replace('.','/')+"."+field.getName()));
                     }
                 }
             }
@@ -90,6 +93,7 @@ public final class MirrorTaintLogAdapter {
         boolean rpc = owner.equals("org.springframework.web.client.RestTemplate") && method.startsWith("exchange:");
         String id = UUID.randomUUID().toString();
         if (rpc) RPC.get().push(id);
+        if (rpc) instance("rpcStarted",new Class[]{String.class},id);
         emit(id, rpc ? "rpc-request" : "sink", owner, method, value, value instanceof Object[], null);
     }
     public static void sourceCompleted(String owner, String method, Object value) {
@@ -117,6 +121,14 @@ public final class MirrorTaintLogAdapter {
             return (String) type.getMethod("get", String.class).invoke(null, key);
         } catch (ReflectiveOperationException ignored) { return null; }
     }
+    @SuppressWarnings("unchecked")
+    private static Map<String,Object> instance(String name,Class<?>[] types,Object...args){
+        if (!Boolean.getBoolean("tf2.mt.instances")) return Collections.emptyMap();
+        try {
+            Object value=Class.forName("CommonHttpInstanceAgent").getMethod(name,types).invoke(null,args);
+            return value==null?Collections.emptyMap():(Map<String,Object>)value;
+        } catch(Exception e){throw new IllegalStateException("Instance evidence failed: "+name,e);}
+    }
     private static void emit(String id, String phase, String owner, String method, Object value, boolean arguments, String request) {
         try {
             Map<String, Object> event = new LinkedHashMap<>();
@@ -126,6 +138,7 @@ public final class MirrorTaintLogAdapter {
             event.put("trace_id", mdc("X-B3-TraceId") != null ? mdc("X-B3-TraceId") : mdc("traceId"));
             event.put("span_id", mdc("X-B3-SpanId") != null ? mdc("X-B3-SpanId") : mdc("spanId"));
             event.put("available", TaintHeap.available());
+            event.put("instance_context",instance("currentContext",new Class[0]));
             Scan scan = new Scan();
             if (arguments) {
                 Object[] args = (Object[]) value;

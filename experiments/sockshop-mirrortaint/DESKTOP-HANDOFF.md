@@ -179,3 +179,66 @@ MirrorTaint加已披露适配器。MirrorTaint需先确认共同查询能完成�
 
 新机器的CPU、内存、磁盘、操作系统、Docker/JDK版本和资源限制要随结果保存。
 不同机器的绝对耗时分开报告，在同一台机器内比较开销比例。
+
+## MirrorTaint 同口径接续：Orders.total
+
+`mirrortaint_instances.py` 使用固定公开 JAR（来源与 SHA-256 见 `sources.json`）
+及明确披露的适配器。原版 JAR 可从固定提交的原始文件 URL 下载并按清单验哈希；
+不以重新编译的替代核心或旧开销数字补齐结果。
+
+共同边界为 **Carts 实际序列化响应中的字段到 Orders.total**。每次运行先独立按
+服务、序号、JSON pointer、对象身份、字段及应用写计数评分，再跨运行比较逻辑字段。
+不能要求不同 JVM 的对象 ID 相等，也不能按相同数值、整条 trace 或数据库记录 ID
+合并来源。数据库/反射内部写历史不在此来源边界内。
+
+| 层 | 承担的功能 |
+| --- | --- |
+| 固定 MirrorTaint JAR | 本地污点标签、算术/字段传播 |
+| 既有兼容适配器 | 修复字段 receiver/构造处理、启用库规则、清理来源前空槽 |
+| stream / thread 适配器 | 对实际 mapper 返回标签求顺序 sum；捕获异步状态并只合并返回对象可达标签 |
+| 日志适配器 | 输出原生标签和有界对象图，补对象/字段/写计数及调用上下文 |
+| CommonHttpInstanceAgent | 记录 W3C 具体调用、两端 JSON 属性、对象身份和应用写计数；不计算业务依赖 |
+| 离线绑定 | 将原生标签解码到实际响应实例，再按同一调用 span 和 JSON pointer 绑定 Carts 发送端；缺证据保留 unknown |
+
+MirrorTaint 原版 JAR 哈希不变，但运行时插桩、库、流、线程、来源前处理、日志及
+通信绑定均有适配，配置名必须保留“MirrorTaint＋披露适配器”。本轮仅 Orders 装载
+MirrorTaint 核心，Orders/Carts 装载边界探针；两侧 Shipping 均保持原版业务服务。
+TraceFusion 使用同一原版 JAR 的冻结 Orders.total 计划及 Orders/Carts 观测器。
+未校准的返回 Item、Shipment 和 Train Ticket 查询保持 N/A。
+
+构建与真实校准（每次使用新的输出目录）：
+
+```bash
+python3 experiments/sockshop-mirrortaint/mirrortaint_instances.py build \
+  --agent artifacts/external-tools/mirrortaint/mirrorTaint.jar \
+  --build artifacts/desktop-portable-build --out artifacts/mt-instance-build-new
+
+python3 experiments/sockshop-mirrortaint/calibrate_mirrortaint_total.py \
+  --mode mirrortaint --out artifacts/mt-total-cal-new \
+  --build artifacts/desktop-portable-build --bundle artifacts/mt-instance-build-new \
+  --correctness artifacts/desktop-portable-acceptance
+
+python3 experiments/sockshop-mirrortaint/calibrate_mirrortaint_total.py \
+  --mode tracefusion --out artifacts/tf-total-cal-new \
+  --build artifacts/desktop-portable-build --bundle artifacts/mt-instance-build-new \
+  --correctness artifacts/desktop-portable-acceptance
+```
+
+校准覆盖同值记录、购物车更新、空总额、无目标检查、同 trace 不同 span 和8路并发。
+实例审计另外修改临时证据，检查过期来源/目标版本、错误来源/目标对象、缺少远端
+字段返回 unknown，以及错误具体调用 span 被拒绝。它不是任意共享对象/反射写入的
+全程序版本证明。成本入口校验校准成绩、适配器/分析器/原应用/输入哈希，失配拒绝运行。
+
+五轮成本入口沿用 `run_sockshop_cost.py run`，额外指定：
+
+```bash
+--query-scope total --modes original tracefusion mirrortaint \
+--mt-bundle artifacts/mt-instance-build-new \
+--mt-calibration artifacts/mt-total-cal-new --tf-calibration artifacts/tf-total-cal-new
+```
+
+负载扫描使用 `scan_sockshop_load.py`，传入相同的 build、correctness、bundle 和校准
+路径，默认到达率2/4/8/16/32、预热10秒、稳态20秒、最大并发32。每点重新部署并随机
+配置顺序。单点扫描不冒充五轮正式成本估计；成功吞吐、错误率、HTTP分位数、计划
+到达至响应分位数、调度滞后及资源一起解释。采集/兼容性失败不是服务饱和的证明，
+错误请求的来源答案为 N/A；原始在线数据仍保留。

@@ -198,16 +198,16 @@ def spec_for(mode, dest, build, cpu, memory):
 def log_position(dest):
     result = {}
     for role in ROLES:
-        path = dest/role/'events.jsonl'
-        if path.exists():
-            with path.open('rb') as file:
-                result[role] = {'events': sum(1 for _ in file), 'bytes': path.stat().st_size}
-        else:
-            result[role] = {'events': 0, 'bytes': 0}
+        result[role]={'events':0,'bytes':0}
+        for path in (dest/role).rglob('*'):
+            if path.is_file():
+                result[role]['bytes']+=path.stat().st_size
+                if path.suffix=='.jsonl':
+                    with path.open('rb') as file:result[role]['events']+=sum(1 for _ in file)
     return result
 
 
-def phase(prepared, duration, rate, concurrency, dest):
+def phase(prepared, duration, rate, concurrency, dest, allow_errors=False):
     start = time.monotonic_ns()
     records = []
 
@@ -219,6 +219,7 @@ def phase(prepared, duration, rate, concurrency, dest):
         result.update(message=item[-1]['message'], scheduled_ns=scheduled,
                       online_start_ns=getattr(client, 'online_start_ns', None),
                       online_end_ns=getattr(client, 'online_end_ns', None))
+        result['http_status']=client.events[-1].get('status') if client.events and client.events[-1].get('label')=='target-order' else None
         save(dest/name/'cost-request.json', result)
         return result
 
@@ -235,7 +236,7 @@ def phase(prepared, duration, rate, concurrency, dest):
         for future in futures:
             records.append(future.result())
     end = time.monotonic_ns()
-    if not all(r['business_passed'] for r in records):
+    if not allow_errors and not all(r['business_passed'] for r in records):
         raise ValueError('Business oracle failed; inspect cost-request.json')
     return {'start_ns': start, 'scheduled_end_ns': start+round(duration*1e9),
             'drain_end_ns': end, 'requests': records}
@@ -268,7 +269,11 @@ def trial_run(args, trial, mode, build):
     trial.mkdir()
     dest = trial/'sockshop'
     dest.mkdir()
-    spec = spec_for(mode, dest, build, args.cpus, args.memory)
+    common=getattr(args,'query_scope','paths')=='total'
+    if common:
+        from calibrate_mirrortaint_total import common_spec
+        spec=common_spec(mode,dest,build,args.mt_bundle,args.cpus,args.memory)
+    else:spec = spec_for(mode, dest, build, args.cpus, args.memory)
     save(dest/'compose.json', spec)
     project = 'tf2-cost-'+secrets.token_hex(6)
     dep = CachedDeployment(argparse.Namespace(project=project, ready_timeout=240), dest, dest/'compose.json')
@@ -303,11 +308,12 @@ def trial_run(args, trial, mode, build):
                 prepared[-1]['message'] = trace+'/'+span
                 save(dest/name/'query-contract.json', prepared[-1])
                 phases[label].append(prepared)
-        phase(phases['warmup'], args.warmup, args.rate, args.concurrency, dest)
+        phase(phases['warmup'], args.warmup, args.rate, args.concurrency, dest, args.allow_errors)
         before = log_position(dest)
         with Sampler(containers, args.sample_interval, trial/'resources.jsonl') as sampler:
-            steady = phase(phases['steady'], args.seconds, args.rate, args.concurrency, dest)
+            steady = phase(phases['steady'], args.seconds, args.rate, args.concurrency, dest, args.allow_errors)
         after = log_position(dest)
+        save(trial/'capture-window.json',{'before':before,'after':after,'start_ns':steady['start_ns'],'scheduled_end_ns':steady['scheduled_end_ns'],'drain_end_ns':steady['drain_end_ns']})
         save(trial/'steady.json', steady)
         result['cases'] = [load(dest/p[-1]['case']/'cost-request.json')
                            for label in ('warmup', 'steady') for p in phases[label]]
@@ -318,8 +324,10 @@ def trial_run(args, trial, mode, build):
         for role in ROLES:
             dep.compose('stop', '-t', '20', role, timeout=40)
         offline_result = None
-        if mode == 'tracefusion':
+        if mode in ('tracefusion','mirrortaint'):
             command = [sys.executable, str(Path(__file__).resolve()), 'offline', '--out', str(trial), '--build', str(build)]
+            if common:command+=['--query-scope','total','--mode',mode]
+            if args.allow_errors:command+=['--allow-errors']
             started = time.monotonic_ns()
             completed = subprocess.run(command, capture_output=True, text=True, timeout=args.offline_timeout)
             (trial/'offline.log').write_text(completed.stdout+completed.stderr)
@@ -329,32 +337,38 @@ def trial_run(args, trial, mode, build):
             offline_result = load(trial/'offline.json')
             offline_result['subprocess_wall_seconds'] = (time.monotonic_ns()-started)/1e9
         records = steady['requests']
-        completed_in_window = [r for r in records if r['online_end_ns'] <= steady['scheduled_end_ns']]
-        latency = [(r['online_end_ns']-r['online_start_ns'])/1e6 for r in records]
-        offered_latency = [(r['online_end_ns']-r['scheduled_ns'])/1e6 for r in records]
-        freshness = None if offline_result is None else percentiles(
-            [(offline_result['answers_ready_ns']-r['online_end_ns'])/1e9 for r in records])
+        successful=[r for r in records if r['business_passed']]
+        completed_in_window = [r for r in successful if r['online_end_ns'] <= steady['scheduled_end_ns']]
+        latency = [(r['online_end_ns']-r['online_start_ns'])/1e6 for r in successful]
+        offered_latency = [(r['online_end_ns']-r['scheduled_ns'])/1e6 for r in successful]
+        freshness = None if offline_result is None or not successful else percentiles(
+            [(offline_result['answers_ready_ns']-r['online_end_ns'])/1e9 for r in successful])
         if offline_result is not None:
             with (trial/'answer-readiness.jsonl').open('w') as file:
                 for record in records:
                     file.write(json.dumps({'case': record['case'], 'response_complete_ns': record['online_end_ns'],
                                            'batch_answers_ready_ns': offline_result['answers_ready_ns'],
-                                           'delay_seconds': (offline_result['answers_ready_ns']-record['online_end_ns'])/1e9})+'\n')
+                                           'answer_status':'available' if record['business_passed'] else 'N/A: business request failed',
+                                           'delay_seconds': (offline_result['answers_ready_ns']-record['online_end_ns'])/1e9 if record['business_passed'] else None})+'\n')
         events = {role: {key: after[role][key]-before[role][key] for key in ('events', 'bytes')} for role in ROLES}
         console = dep.compose('logs', '--no-color', timeout=90).stdout
         (trial/'container-console.log').write_text(console)
-        metrics = {'mode': mode, 'status': 'passed', 'steady_requests': len(records),
+        provenance_passed=offline_result is None or offline_result['summary']['exact']==offline_result['summary']['queries'] and not offline_result['summary']['unknown']
+        metrics = {'mode': mode, 'status': 'passed' if provenance_passed else 'provenance-failed', 'steady_requests': len(records),
+                   'successful_requests':len(successful),'failed_requests':len(records)-len(successful),
+                   'error_rate':1-len(successful)/len(records),'offered_rate_rps':args.rate,
+                   'http_status_counts':{str(s):sum(r['http_status']==s for r in records) for s in {r['http_status'] for r in records}},
                    'completed_within_window': len(completed_in_window),
                    'throughput_rps': len(completed_in_window)/args.seconds,
-                   'drained_throughput_rps': len(records)/((steady['drain_end_ns']-steady['start_ns'])/1e9),
+                   'drained_throughput_rps': len(successful)/((steady['drain_end_ns']-steady['start_ns'])/1e9),
                    'online_latency_ms': percentiles(latency), 'scheduled_to_response_ms': percentiles(offered_latency),
                    'max_dispatch_lag_ms': max((r['online_start_ns']-r['scheduled_ns'])/1e6 for r in records),
                    'resources': resource_summary, 'steady_capture': events,
                    'total_capture': log_position(dest), 'container_console_bytes': len(console.encode()),
                    'offline': offline_result, 'completion_to_batch_answers_seconds': freshness,
-                   'provenance_status': 'passed' if offline_result else 'N/A: original services emit no field provenance'}
+                   'provenance_status': ('passed' if provenance_passed else 'failed/unknown') if offline_result else 'N/A: original services emit no field provenance'}
         save(trial/'metrics.json', metrics)
-        print(trial.name, mode, 'passed', flush=True)
+        print(trial.name, mode, metrics['status'], flush=True)
         return metrics
     except BaseException as exc:
         save(trial/'failure.json', {'error': str(exc), 'mode': mode, 'project': project})
@@ -390,43 +404,64 @@ def report(out):
         rows.append({'trial': name, 'mode': mode, **load(path)} if path.exists()
                     else {'trial': name, 'mode': mode, 'status': 'N/A: not completed'})
     summaries = {}
-    for mode in ('original', 'tracefusion'):
+    modes=config.get('modes',['original','tracefusion'])
+    for mode in modes:
         valid = [r for r in rows if r['mode']==mode and r['status']=='passed']
         if not valid:
             summaries[mode] = None
             continue
         metrics = {'throughput_rps': [r['throughput_rps'] for r in valid]}
+        metrics['error_rate']=[r.get('error_rate',0) for r in valid]
         for p in ('p50', 'p95', 'p99'):
-            metrics['latency_ms_'+p] = [r['online_latency_ms'][p] for r in valid]
+            values=[r['online_latency_ms'][p] for r in valid if r['online_latency_ms'][p] is not None]
+            if values:metrics['latency_ms_'+p]=values
         summaries[mode] = {'trials': len(valid), 'metrics': {
             k: {'median': statistics.median(v), 'min': min(v), 'max': max(v),
                 'cv': statistics.stdev(v)/statistics.mean(v) if len(v)>1 and statistics.mean(v) else None}
             for k, v in metrics.items()}}
-    summary = {'rows': rows, 'summary': summaries, 'mirrortaint': 'N/A: common query contract and adapter not qualified',
+    summary = {'rows': rows, 'summary': summaries, 'mirrortaint': 'measured: disclosed native agent plus adapters' if 'mirrortaint' in modes else 'N/A: common query contract and adapter not qualified',
                'run_status': state,
                'performance_eligible': state['status']=='passed' and all(r['status']=='passed' for r in rows) and config['rounds']>=5,
                'scope': 'Selected Sock Shop HTTP/JSON paths; fixed offered rate, not saturation throughput.'}
     paired = []
     for round_index in range(config['rounds']):
         pair = {r['mode']: r for r in rows if r['trial'].startswith(f'round-{round_index+1:02d}-') and r['status']=='passed'}
-        if len(pair)!=2:
+        if not {'original','tracefusion'}<=pair.keys():
             continue
         paired.append({'round': round_index+1, **{
             'latency_'+p+'_overhead_percent': (pair['tracefusion']['online_latency_ms'][p]/pair['original']['online_latency_ms'][p]-1)*100
             for p in ('p50', 'p95', 'p99')}})
     summary['paired_latency_overhead_percent'] = paired
+    method_ratios=[]
+    for round_index in range(config['rounds']):
+        pair={r['mode']:r for r in rows if r['trial'].startswith(f'round-{round_index+1:02d}-') and r['status']=='passed'}
+        if not {'tracefusion','mirrortaint'}<=pair.keys():continue
+        tf,mt=pair['tracefusion'],pair['mirrortaint']
+        ratio={'round':round_index+1}
+        for p in ('p50','p95','p99'):
+            if mt['online_latency_ms'][p]:ratio['latency_'+p]=tf['online_latency_ms'][p]/mt['online_latency_ms'][p]
+        for key in ('cpu_one_core_percent_mean','rss_bytes_mean'):
+            ratio[key]=tf['resources']['observed_jvms'][key]/mt['resources']['observed_jvms'][key]
+        for key in ('events','bytes'):
+            denominator=sum(x[key] for x in mt['steady_capture'].values())
+            if denominator:ratio['capture_'+key]=sum(x[key] for x in tf['steady_capture'].values())/denominator
+        for key in ('restore_score_export_seconds','peak_rss_bytes'):
+            ratio['offline_'+key]=tf['offline'][key]/mt['offline'][key]
+        method_ratios.append(ratio)
+    summary['tracefusion_to_mirrortaint_ratios']=method_ratios
     save(out/'comparison.json', summary)
     lines = ['# Sock Shop 成本实验', '',
              '测量单位为原版 POST /orders；固定输入模板，预先准备独立购物车。每个配置每轮重新部署并创建新数据卷。', '',
              f"运行状态：{state['status']}；正式成本资格：{'满足' if summary['performance_eligible'] else '未满足（至少五轮且整次运行通过）'}。", '',
              f"预热 {config['warmup']} 秒；稳态 {config['seconds']} 秒；到达率 {config['rate']} 请求/秒；最大并发 {config['concurrency']}；{config['rounds']} 轮；顺序种子 {config['seed']}。", '',
-             '| 轮次 | 配置 | 状态 | p50 / p95 / p99 (ms) | 窗内吞吐 (req/s) |',
-             '| --- | --- | --- | --- | --- |']
+             '| 轮次 | 配置 | 状态 | 成功请求 p50 / p95 / p99 (ms) | 窗内成功吞吐 (req/s) | 错误率 |',
+             '| --- | --- | --- | --- | --- | --- |']
     for r in rows:
-        latency = 'N/A' if r['status']!='passed' else ' / '.join(f'{r["online_latency_ms"][p]:.3f}' for p in ('p50','p95','p99'))
+        latency = 'N/A' if r['status']!='passed' or r['online_latency_ms']['p50'] is None else ' / '.join(f'{r["online_latency_ms"][p]:.3f}' for p in ('p50','p95','p99'))
         throughput = 'N/A' if r['status']!='passed' else f'{r["throughput_rps"]:.3f}'
-        lines.append(f'| {r["trial"]} | {r["mode"]} | {r["status"]} | {latency} | {throughput} |')
-    lines += ['', '| 轮次 | 三个观测 JVM CPU 单核 % | JVM RSS 均值 / 峰值 MiB | 稳态事件 / 字节 | 离线图构建 / 评分导出总秒 | 离线峰值 MiB | 答案延迟 p50 / p95 / p99 秒 |',
+        error='N/A' if r['status']!='passed' else f'{r.get("error_rate",0)*100:.2f}%'
+        lines.append(f'| {r["trial"]} | {r["mode"]} | {r["status"]} | {latency} | {throughput} | {error} |')
+    lines += ['', '| 轮次 | 三个业务 JVM CPU 单核 % | JVM RSS 均值 / 峰值 MiB | 稳态事件 / 日志字节 | 离线图还原或标签解码 / 评分导出总秒 | 离线峰值 MiB | 答案延迟 p50 / p95 / p99 秒 |',
               '| --- | ---: | --- | --- | --- | ---: | --- |']
     for r in rows:
         if r['status']!='passed':
@@ -438,12 +473,18 @@ def report(out):
         off = r['offline']
         off_time = 'N/A' if off is None else f'{off["graph_build_seconds"]:.3f} / {off["restore_score_export_seconds"]:.3f}'
         peak = 'N/A' if off is None else f'{off["peak_rss_bytes"]/2**20:.2f}'
-        fresh = 'N/A' if off is None else ' / '.join(f'{r["completion_to_batch_answers_seconds"][p]:.3f}' for p in ('p50','p95','p99'))
+        fresh = 'N/A' if off is None or r['completion_to_batch_answers_seconds'] is None else ' / '.join(f'{r["completion_to_batch_answers_seconds"][p]:.3f}' for p in ('p50','p95','p99'))
         lines.append(f'| {r["trial"]} | {res["cpu_one_core_percent_mean"]:.2f} | {res["rss_bytes_mean"]/2**20:.2f} / {res["rss_bytes_peak"]/2**20:.2f} | {events} / {size} | {off_time} | {peak} | {fresh} |')
     if paired:
         lines += ['', '同轮 TraceFusion 相对原版的在线延迟开销（各轮比值的中位数）：'+
                   '；'.join(p+' '+f'{statistics.median(r["latency_"+p+"_overhead_percent"] for r in paired):.2f}%'
                            for p in ('p50','p95','p99'))+'。']
+    if method_ratios:
+        lines+=['','TraceFusion / MirrorTaint＋披露适配器：各同轮成本比值的中位数，低于1表示该项更低；不合并为未定义的总成本。','',
+                '| 成本项 | TF / MT |','| --- | ---: |']
+        for key in sorted(set().union(*(r.keys() for r in method_ratios))-{'round'}):
+            values=[r[key] for r in method_ratios if key in r]
+            lines.append(f'| {key} | {statistics.median(values):.4f} |')
     lines += ['', '| 轮次 | 指定字段 exact / queries | TP / FP / FN | 目标 unknown | 背景 unknown |',
               '| --- | --- | --- | ---: | ---: |']
     for r in rows:
@@ -453,11 +494,13 @@ def report(out):
             lines.append(f'| {r["trial"]} | {s["exact"]} / {s["queries"]} | {s["tp"]} / {s["fp"]} / {s["fn"]} | {s["unknown"]} | {unknown} |')
     lines += ['', 'CPU 为单核百分比；RSS 是 Docker top 中容器所有进程 RSS 之和，包含共享页重复计数，不能解释为每请求分配。原始 Docker stats/top 在各轮 resources.jsonl。', '',
               '在线延迟从客户端开始 HTTP 调用到响应体读取完成；另保存计划到达至响应的延迟与调度滞后，避免负载不足被隐藏。吞吐为稳态窗口内完成数除以窗口长度，另列排空吞吐。固定到达率不测系统最大吞吐。', '',
-              '字段日志事件数和字节分别保存稳态增量及整个部署总量；容器控制台日志另存。预热和准备流量不计入在线分位数。', '',
+              '结构化事件数计入采集目录所有 JSONL；日志字节计入采集目录全部文件（含 MirrorTaint 原生日志），分别保存稳态增量和部署总量，窗口计数见 capture-window.json。容器控制台日志另存。预热和准备流量不计入在线分位数。', '',
               '离线图构建时间与还原、评分、证据导出总时间分别报告；峰值内存为独立 Python 子进程 ru_maxrss。答案新鲜度按整批答案写出时刻减去每次响应完成时刻，包含剩余采样窗口和采集器关闭，不能解释为流式逐请求延迟。', '',
-              '原版服务来源答案及离线代价为 N/A；其业务响应仍逐请求核验。TraceFusion 每轮对预热和稳态所有请求独立评分，保留 field-results.json、图、原始事件和背景 unknown。MirrorTaint＋适配器的共同查询范围未验收，为 N/A；其他外部基线为 N/A。', '',
+              '原版服务来源答案及离线代价为 N/A；业务响应逐请求核验。观测配置对预热和稳态的成功请求独立评分，失败请求计入错误率并不伪造来源答案。保留 field-results.json、原始事件和 unknown。其他未运行查询和外部基线为 N/A。', '',
               '完整逐轮 CPU、RSS、事件数、字节、离线及答案延迟见 comparison.json。跨轮分别报告分位数中位数、范围和变异系数，不合并请求伪装为独立部署样本。不引用旧机器开销值。环境记录中的其他运行中容器可能造成主机争用，独立配置顺序已随机化。', '',
               '配置及输入/源码哈希：config.json；机器环境：environment.json；命令：command.json 和各轮 sockshop/commands.log；失败：failure.json；清理：cleanup.json。', '']
+    if config.get('query_scope')=='total':
+        lines+=['本轮共同查询仅为 Carts 实际序列化响应字段到 Orders.total。Shipping 未安装观测器；MirrorTaint 只在 Orders 加载原版传播核心，Carts 和 Orders 额外安装披露的 HTTP 实例绑定探针。探针不计算业务依赖，原版标签决定来源。对象/字段/应用写计数及具体调用 span 均须匹配；反射和数据库内部写历史不在边界内。', '']
     (out/'results.md').write_text('\n'.join(lines))
 
 
@@ -473,12 +516,24 @@ def run(args):
             raise ValueError('Desktop acceptance failed: '+filename)
     if not load(args.correctness/'original-image-verification.json')['all_matched']:
         raise ValueError('Original image verification required')
+    if args.query_scope=='total':
+        import mirrortaint_instances as mt
+        args.mt_bundle=args.mt_bundle.resolve();mt.verify(args.mt_bundle)
+        for path in (args.mt_calibration,args.tf_calibration):
+            receipt=load(path/'calibration.json')
+            if not receipt['passed'] or receipt['summary']['queries']!=24:raise ValueError('Common total calibration required')
+            if receipt.get('bundle_sha256')!=sha(args.mt_bundle/'build.json') or receipt.get('evaluator_sha256')!=sha(HERE/'mirrortaint_instances.py'):
+                raise ValueError('Calibration does not match the frozen adapter/evaluator')
+            if receipt.get('build_sha256')!=sha(args.build/'build.json') or receipt.get('cases_sha256')!=sha(args.correctness/'cases.json'):
+                raise ValueError('Calibration application/input contract differs')
+        if not load(args.mt_calibration/'instance-audit.json')['all_passed']:raise ValueError('Native instance controls required')
+    if 'mirrortaint' in args.modes and args.query_scope!='total':raise ValueError('MirrorTaint is qualified only for common total queries')
     args.out.mkdir(parents=True, exist_ok=False)
     environment(args.out)
     rng = random.Random(args.seed)
     order = []
     for round_index in range(args.rounds):
-        modes = ['original', 'tracefusion']
+        modes = list(args.modes)
         rng.shuffle(modes)
         order += [(f'round-{round_index+1:02d}-{i+1}-{m}', m) for i, m in enumerate(modes)]
     config = {k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()}
@@ -491,13 +546,16 @@ def run(args):
     save(args.out/'workload.json', {'templates': templates,
                                   'warmup_template_indices': [i % len(templates) for i in range(round(args.warmup*args.rate))],
                                   'steady_template_indices': [i % len(templates) for i in range(round(args.seconds*args.rate))],
-                                  'queries': 'Carts response fields -> Orders.total/returned item fields; Orders outbound Shipment -> returned Shipment'})
+                                  'queries': 'Carts response fields -> Orders.total' if args.query_scope=='total' else 'Carts response fields -> Orders.total/returned item fields; Orders outbound Shipment -> returned Shipment'})
     save(args.out/'command.json', {'argv': [sys.executable, *sys.argv], 'cwd': str(Path.cwd())})
     save(args.out/'run-status.json', {'status': 'running'})
     def verify_sources():
         for source, expected in config['source_sha256'].items():
             if sha(ROOT/source)!=expected:
                 raise ValueError('Frozen cost experiment source changed: '+source)
+        if args.query_scope=='total':
+            import mirrortaint_instances as mt
+            mt.verify(args.mt_bundle)
     try:
         for name, mode in order:
             check(args.correctness, args.build)
@@ -531,6 +589,13 @@ def parser():
     p.add_argument('--memory', default='768m')
     p.add_argument('--seed', type=int, default=151031)
     p.add_argument('--offline-timeout', type=float, default=600)
+    p.add_argument('--query-scope', choices=('paths','total'),default='paths')
+    p.add_argument('--modes', nargs='+',choices=('original','tracefusion','mirrortaint'),default=['original','tracefusion'])
+    p.add_argument('--mode', choices=('tracefusion','mirrortaint'),default='tracefusion')
+    p.add_argument('--mt-bundle',type=Path)
+    p.add_argument('--mt-calibration',type=Path)
+    p.add_argument('--tf-calibration',type=Path)
+    p.add_argument('--allow-errors',action='store_true',help='Load scans: retain failed requests; never synthesize source answers')
     return p
 
 
@@ -540,12 +605,20 @@ if __name__ == '__main__':
     if a.stage=='offline':
         if not a.build:
             p.error('--build is required')
-        offline(a.out.resolve(), a.build.resolve())
+        if a.query_scope=='total':
+            import mirrortaint_instances as mt
+            result=mt.evaluate(a.out.resolve(),a.build.resolve(),a.mode)
+            if not a.allow_errors and (result['summary']['exact']!=result['summary']['queries'] or result['summary']['unknown']):
+                raise ValueError('Common query provenance failed')
+        else:offline(a.out.resolve(), a.build.resolve())
     elif a.stage=='report':
         report(a.out.resolve())
     else:
         if not a.build or not a.correctness:
             p.error('--build and --correctness are required')
+        if a.query_scope=='total' and not all((a.mt_bundle,a.mt_calibration,a.tf_calibration)):
+            p.error('total scope requires --mt-bundle --mt-calibration --tf-calibration')
+        if len(set(a.modes))!=len(a.modes):p.error('Configurations must be unique')
         if min(a.rounds, a.warmup, a.seconds, a.rate, a.concurrency, a.sample_interval, a.cpus)<=0:
             p.error('load, duration and resource settings must be positive')
         if a.seconds < a.sample_interval*3:
