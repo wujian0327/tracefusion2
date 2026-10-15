@@ -1441,3 +1441,73 @@ python3 experiments/sockshop-mirrortaint/phosphor_five_statements.py run \
 新捕获评分使用 `freeze --out <新比较目录>` 冻结端点，然后 `evaluate --phosphor
 <新捕获目录> --out <新比较目录>`；TraceFusion/FlowDist 当前固定捕获路径在比较脚本中
 明确声明。复现实验需缓存业务镜像、工具与静态图，不能只凭检查点 JSON 启动服务。
+
+## 2026-10-15 字段来源 → 安全规则 → 影响确认
+
+已完成新的两 JVM 受控应用实验与 Log4j2 已知漏洞触发／修复对照，共 37/37 业务调用。
+应用夹具为 `SecurityLeakLab.java`，不修改 Sock Shop，也不声称 Sock Shop 存在漏洞。
+`SecurityObservationAgent.java` 是 opt-in 新观测前端：只记录对象身份、字段版本／读写、
+实际分支、HTTP 消息身份与 JSON、真实 Logger.info 参数及原生 JndiLookup 参数。
+不在运行时传播来源标签。`security_field_flow.py` 根据实际原始字节码和分支观测，
+离线重建有界引用复制、局部变量覆盖和对象字段版本；不读取夹具预期答案。
+这是对既有方法的新实验扩展，不把旧配置的性能数字移用过来。
+
+| 配置／判据 | 查询 | TP | FP | FN（含阳性 unknown） | TN | Unknown | Precision | Recall | F1 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 受控敏感字段 → 禁止的日志目的地 | 22 | 9 | 0 | 1 | 12 | 1 | 100% | 90% | 94.7% |
+| Log4j 2.14.1：可控日志参数 → 实际 JNDI lookup | 5 | 3 | 0 | 0 | 2 | 0 | 100% | 100% | 100% |
+| 同库 + formatMsgNoLookups=true | 5 | 0 | 0 | 0 | 5 | 0 | N/A | N/A | N/A |
+| Log4j 2.17.1 修复版 | 5 | 0 | 0 | 0 | 5 | 0 | N/A | N/A | N/A |
+
+缓解版、修复版无阳性样本／预测，P/R/F1 无定义，不写成 100%。受控组覆盖率 21/22
+（95.5%），未知 helper 实际复制了敏感值，但当前未支持其调用模型，保留 unknown，
+按真实泄露的漏检计入 FN。不能仅在成功重建的查询上报告 100%。
+
+受控组包括直接泄露、公开字段、相同值的敏感／公开字段、局部变量覆盖、对象字段复制
+和覆盖、读取但未使用的敏感字段、与敏感值相同的常量、未知调用及 12 个并发请求。
+并发组所有字段值与业务 ID 相同；源服务为每个真实 HTTP 响应生成独立 UUID，关联按
+消息身份及属性选择，值只校验已选边。同步屏障使 12 个实际业务帧同时存活。
+首轮虽然并行发 HTTP，但字段处理帧未重叠，原始记录保留为 `security-leak-20261015`；
+最终采用 `security-leak-v2-20261015`，没有用首轮结果声称已验证帧内并发区分。
+
+已知漏洞使用官方未修改 Log4j API/Core 2.14.1 与 2.17.1 的原始 JAR（固定 SHA-256）。
+五个场景为直接表达式、经字段复制、被覆盖的表达式、普通消息、公开但用户可控字段
+中的表达式。漏洞版三个触发均同时有实际 Logger.info 参数、原生 JndiLookup 参数、
+本地 Context.lookup 回调及日志 `LOCAL_LOOKUP_MARKER`；两种防护配置均无触发。
+`${jndi:key}` 到 lookup 实参采用明确披露的单字面表达式模型，并校验实际 key；不声称
+重建了 Log4j 内部每条语句。仅有 Source→日志关系不会直接算作 JNDI 漏洞触发。
+
+本地 JNDI provider 只返回固定字符串，不联系 LDAP、不加载远程代码。
+因此复现的是 CVE-2021-44228 的危险 lookup 求值路径及防护前后差异，未证明 RCE，
+也不是复现原生产应用或发现新漏洞。官方依据：
+[Apache Log4j 安全公告](https://logging.apache.org/security.html#CVE-2021-44228)。
+
+独立审计用 javap 验证每配置 80 条原始 Flow 指令的 opcode、字段／方法／常量／分支
+操作数，核验原应用和原库 class SHA、业务覆盖和进程清理。九个负／扰动对照通过：
+缺失消息身份保持 unknown；打乱源事件顺序仍保持来源；重复消息身份、缺失分支、
+字段版本破坏、目标参数篡改、HTTP 内容破坏被拒绝；更改请求名称不改变来源；
+lookup 参数不符合库模型时保持 unknown。原始采集不修改。
+
+完整报告为 `artifacts/security-leak-v2-20261015/results.md`，同目录保存 JSON、CSV、
+逐事件／逐查询证据、应用日志、真实回调、审计与负对照结果。
+可提交检查点为 `security-field-flow-20261015.json`。
+当前只支持有界无环引用复制、观测分支、线程独占 DTO、默认三 String JSON 和单跳
+HTTP；不支持一般隐式流或未知 helper。尚未测量该新配置成本或接入其他比较工具。
+
+复现（使用已有固定 ASM 9.7.1 与 Jackson 2.8.6 缓存；两个 JVM 仅监听 localhost）：
+
+```bash
+python3 experiments/sockshop-mirrortaint/run_security_leak.py prepare \
+  --out artifacts/security-leak-deps
+python3 experiments/sockshop-mirrortaint/run_security_leak.py build \
+  --out artifacts/security-leak-build-new
+python3 experiments/sockshop-mirrortaint/run_security_leak.py freeze \
+  --out artifacts/security-leak-new
+python3 experiments/sockshop-mirrortaint/run_security_leak.py run \
+  --build artifacts/security-leak-build-new --out artifacts/security-leak-new
+python3 experiments/sockshop-mirrortaint/audit_security_leak.py \
+  --build artifacts/security-leak-build-new --out artifacts/security-leak-new
+```
+
+`run` 无论成功／失败都停止专属进程、保存退出状态；`audit` 重新生成完整报告。
+已有最终捕获可直接执行最后一步，不能覆盖已有目录重跑采集。

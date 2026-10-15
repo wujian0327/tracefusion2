@@ -1,0 +1,1412 @@
+{
+  "kind": "readonly-field-provenance-security-case-study",
+  "date": "2026-10-15",
+  "scope": "New controlled two-JVM application, plus unmodified official Log4j vulnerability-trigger/fix comparison in a harness",
+  "business_calls_passed": 37,
+  "profiles": {
+    "controlled": {
+      "queries": 22,
+      "tp": 9,
+      "fp": 0,
+      "fn_including_unknown_positive": 1,
+      "tn": 12,
+      "unknown": 1,
+      "coverage": 0.9545454545454546,
+      "precision": 1.0,
+      "recall": 0.9,
+      "f1": 0.9473684210526315,
+      "peak_overlapping_frames": 12,
+      "independently_verified_instructions": 80
+    },
+    "cve-vulnerable": {
+      "queries": 5,
+      "tp": 3,
+      "fp": 0,
+      "fn_including_unknown_positive": 0,
+      "tn": 2,
+      "unknown": 0,
+      "coverage": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "peak_overlapping_frames": 1,
+      "independently_verified_instructions": 80
+    },
+    "cve-config-mitigated": {
+      "queries": 5,
+      "tp": 0,
+      "fp": 0,
+      "fn_including_unknown_positive": 0,
+      "tn": 5,
+      "unknown": 0,
+      "coverage": 1.0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "peak_overlapping_frames": 1,
+      "independently_verified_instructions": 80
+    },
+    "cve-fixed": {
+      "queries": 5,
+      "tp": 0,
+      "fp": 0,
+      "fn_including_unknown_positive": 0,
+      "tn": 5,
+      "unknown": 0,
+      "coverage": 1.0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "peak_overlapping_frames": 1,
+      "independently_verified_instructions": 80
+    }
+  },
+  "queries": {
+    "controlled": [
+      {
+        "id": "direct-leak",
+        "expected": true,
+        "prediction": true,
+        "known": true,
+        "actual_origin": [
+          "secret"
+        ],
+        "expected_origin": [
+          "secret"
+        ],
+        "source_exact": true,
+        "log_value": "SECRET_A",
+        "frame": "f1",
+        "message": "85ca21ac-a178-4361-a315-f8c694f14c7b",
+        "sink_seq": 14,
+        "logger_seq": 17,
+        "field_evidence": [
+          7
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "public-only",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [
+          "publicValue"
+        ],
+        "expected_origin": [
+          "publicValue"
+        ],
+        "source_exact": true,
+        "log_value": "PUBLIC_B",
+        "frame": "f2",
+        "message": "48df0fd2-37ab-4516-8472-e58a4824da99",
+        "sink_seq": 28,
+        "logger_seq": 29,
+        "field_evidence": [
+          20
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "equal-values-public",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [
+          "publicValue"
+        ],
+        "expected_origin": [
+          "publicValue"
+        ],
+        "source_exact": true,
+        "log_value": "SAME",
+        "frame": "f3",
+        "message": "64e1e07f-673d-47d3-abcb-3e934d413b9c",
+        "sink_seq": 40,
+        "logger_seq": 41,
+        "field_evidence": [
+          32
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "equal-values-secret",
+        "expected": true,
+        "prediction": true,
+        "known": true,
+        "actual_origin": [
+          "secret"
+        ],
+        "expected_origin": [
+          "secret"
+        ],
+        "source_exact": true,
+        "log_value": "SAME",
+        "frame": "f4",
+        "message": "28a32c73-c4a4-45fa-a3c0-d95b1d5d6504",
+        "sink_seq": 53,
+        "logger_seq": 54,
+        "field_evidence": [
+          46
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "local-overwrite",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [],
+        "expected_origin": [],
+        "source_exact": true,
+        "log_value": "REDACTED",
+        "frame": "f5",
+        "message": "3ccc46d0-a2b4-4e26-b612-3f06cb9937a4",
+        "sink_seq": 66,
+        "logger_seq": 67,
+        "field_evidence": [],
+        "jndi_lookups": []
+      },
+      {
+        "id": "field-copy",
+        "expected": true,
+        "prediction": true,
+        "known": true,
+        "actual_origin": [
+          "secret"
+        ],
+        "expected_origin": [
+          "secret"
+        ],
+        "source_exact": true,
+        "log_value": "SECRET_D",
+        "frame": "f6",
+        "message": "1d1e0c9f-4f39-409e-aa6c-43f8203c876e",
+        "sink_seq": 81,
+        "logger_seq": 82,
+        "field_evidence": [
+          74,
+          75,
+          76
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "field-overwrite",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [
+          "publicValue"
+        ],
+        "expected_origin": [
+          "publicValue"
+        ],
+        "source_exact": true,
+        "log_value": "PUBLIC_E",
+        "frame": "f7",
+        "message": "280c941b-7cf8-422f-9d43-36feedc1f7bf",
+        "sink_seq": 98,
+        "logger_seq": 99,
+        "field_evidence": [
+          92,
+          93,
+          94
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "read-secret-unused",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [
+          "publicValue"
+        ],
+        "expected_origin": [
+          "publicValue"
+        ],
+        "source_exact": true,
+        "log_value": "PUBLIC_F",
+        "frame": "f8",
+        "message": "e4b8afbb-c381-44f3-b994-c7650de2ef6c",
+        "sink_seq": 112,
+        "logger_seq": 113,
+        "field_evidence": [
+          109
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "constant-equals-secret",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [],
+        "expected_origin": [],
+        "source_exact": true,
+        "log_value": "PUBLIC",
+        "frame": "f9",
+        "message": "eb9a3a5e-018e-49e4-9d29-0536e9f3903a",
+        "sink_seq": 124,
+        "logger_seq": 125,
+        "field_evidence": [],
+        "jndi_lookups": []
+      },
+      {
+        "id": "unsupported-copy",
+        "expected": true,
+        "prediction": null,
+        "known": false,
+        "actual_origin": [],
+        "expected_origin": [
+          "secret"
+        ],
+        "source_exact": null,
+        "log_value": "SECRET_UNKNOWN",
+        "frame": "f10",
+        "message": "fa5d1e83-23ae-4961-9a9b-1dbbe3014206",
+        "sink_seq": 137,
+        "logger_seq": 138,
+        "field_evidence": [],
+        "jndi_lookups": []
+      },
+      {
+        "id": "concurrent-0",
+        "expected": true,
+        "prediction": true,
+        "known": true,
+        "actual_origin": [
+          "secret"
+        ],
+        "expected_origin": [
+          "secret"
+        ],
+        "source_exact": true,
+        "log_value": "PARALLEL_SAME",
+        "frame": "f22",
+        "message": "d9b3a98c-dc76-40eb-b6f6-2edf3a5ff435",
+        "sink_seq": 265,
+        "logger_seq": 266,
+        "field_evidence": [
+          258
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "concurrent-1",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [
+          "publicValue"
+        ],
+        "expected_origin": [
+          "publicValue"
+        ],
+        "source_exact": true,
+        "log_value": "PARALLEL_SAME",
+        "frame": "f21",
+        "message": "cf1775dd-e999-4bc7-8e7d-b1d1123e7901",
+        "sink_seq": 254,
+        "logger_seq": 281,
+        "field_evidence": [
+          246
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "concurrent-2",
+        "expected": true,
+        "prediction": true,
+        "known": true,
+        "actual_origin": [
+          "secret"
+        ],
+        "expected_origin": [
+          "secret"
+        ],
+        "source_exact": true,
+        "log_value": "PARALLEL_SAME",
+        "frame": "f20",
+        "message": "74fbe2c8-586d-468c-a3f6-69ce9da95418",
+        "sink_seq": 244,
+        "logger_seq": 271,
+        "field_evidence": [
+          237
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "concurrent-3",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [
+          "publicValue"
+        ],
+        "expected_origin": [
+          "publicValue"
+        ],
+        "source_exact": true,
+        "log_value": "PARALLEL_SAME",
+        "frame": "f19",
+        "message": "9b20a497-8681-42a4-8bea-cc0a0241595a",
+        "sink_seq": 233,
+        "logger_seq": 282,
+        "field_evidence": [
+          225
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "concurrent-4",
+        "expected": true,
+        "prediction": true,
+        "known": true,
+        "actual_origin": [
+          "secret"
+        ],
+        "expected_origin": [
+          "secret"
+        ],
+        "source_exact": true,
+        "log_value": "PARALLEL_SAME",
+        "frame": "f18",
+        "message": "cfcafbed-b26e-4800-8766-186be9e9bed8",
+        "sink_seq": 223,
+        "logger_seq": 283,
+        "field_evidence": [
+          216
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "concurrent-5",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [
+          "publicValue"
+        ],
+        "expected_origin": [
+          "publicValue"
+        ],
+        "source_exact": true,
+        "log_value": "PARALLEL_SAME",
+        "frame": "f17",
+        "message": "942e8062-e8fc-4136-9a4a-158d78256189",
+        "sink_seq": 212,
+        "logger_seq": 269,
+        "field_evidence": [
+          204
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "concurrent-6",
+        "expected": true,
+        "prediction": true,
+        "known": true,
+        "actual_origin": [
+          "secret"
+        ],
+        "expected_origin": [
+          "secret"
+        ],
+        "source_exact": true,
+        "log_value": "PARALLEL_SAME",
+        "frame": "f16",
+        "message": "4ba8021a-f067-4e21-bf40-08028660405b",
+        "sink_seq": 202,
+        "logger_seq": 285,
+        "field_evidence": [
+          195
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "concurrent-7",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [
+          "publicValue"
+        ],
+        "expected_origin": [
+          "publicValue"
+        ],
+        "source_exact": true,
+        "log_value": "PARALLEL_SAME",
+        "frame": "f15",
+        "message": "b423cb9e-74db-4ff6-86a4-00b8e997e6b4",
+        "sink_seq": 191,
+        "logger_seq": 268,
+        "field_evidence": [
+          183
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "concurrent-8",
+        "expected": true,
+        "prediction": true,
+        "known": true,
+        "actual_origin": [
+          "secret"
+        ],
+        "expected_origin": [
+          "secret"
+        ],
+        "source_exact": true,
+        "log_value": "PARALLEL_SAME",
+        "frame": "f14",
+        "message": "83889779-c957-49df-9511-e70f4735cc64",
+        "sink_seq": 181,
+        "logger_seq": 270,
+        "field_evidence": [
+          174
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "concurrent-9",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [
+          "publicValue"
+        ],
+        "expected_origin": [
+          "publicValue"
+        ],
+        "source_exact": true,
+        "log_value": "PARALLEL_SAME",
+        "frame": "f13",
+        "message": "23b49104-9a07-40a0-b702-6bad3a6675ef",
+        "sink_seq": 170,
+        "logger_seq": 274,
+        "field_evidence": [
+          162
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "concurrent-10",
+        "expected": true,
+        "prediction": true,
+        "known": true,
+        "actual_origin": [
+          "secret"
+        ],
+        "expected_origin": [
+          "secret"
+        ],
+        "source_exact": true,
+        "log_value": "PARALLEL_SAME",
+        "frame": "f12",
+        "message": "4500f2f2-8824-49a3-8658-ae0c555a4ebf",
+        "sink_seq": 160,
+        "logger_seq": 276,
+        "field_evidence": [
+          153
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "concurrent-11",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [
+          "publicValue"
+        ],
+        "expected_origin": [
+          "publicValue"
+        ],
+        "source_exact": true,
+        "log_value": "PARALLEL_SAME",
+        "frame": "f11",
+        "message": "0920cf5d-119b-495a-9adf-f84167bd1472",
+        "sink_seq": 149,
+        "logger_seq": 267,
+        "field_evidence": [
+          141
+        ],
+        "jndi_lookups": []
+      }
+    ],
+    "cve-vulnerable": [
+      {
+        "id": "lookup-direct",
+        "expected": true,
+        "prediction": true,
+        "known": true,
+        "actual_origin": [
+          "secret"
+        ],
+        "expected_origin": [
+          "secret"
+        ],
+        "source_exact": true,
+        "log_value": "LOCAL_LOOKUP_MARKER",
+        "frame": "f1",
+        "message": "860ba87c-81dc-4e5c-ad5c-d313b2d29b81",
+        "sink_seq": 14,
+        "logger_seq": 17,
+        "field_evidence": [
+          7
+        ],
+        "jndi_lookups": [
+          {
+            "seq": 18,
+            "key": "tf2-local-marker"
+          }
+        ]
+      },
+      {
+        "id": "lookup-field-copy",
+        "expected": true,
+        "prediction": true,
+        "known": true,
+        "actual_origin": [
+          "secret"
+        ],
+        "expected_origin": [
+          "secret"
+        ],
+        "source_exact": true,
+        "log_value": "LOCAL_LOOKUP_MARKER",
+        "frame": "f2",
+        "message": "61071bf7-b6e1-41cd-92e0-b37658d5a53c",
+        "sink_seq": 32,
+        "logger_seq": 33,
+        "field_evidence": [
+          25,
+          26,
+          27
+        ],
+        "jndi_lookups": [
+          {
+            "seq": 34,
+            "key": "tf2-local-marker"
+          }
+        ]
+      },
+      {
+        "id": "lookup-overwritten",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [],
+        "expected_origin": [],
+        "source_exact": true,
+        "log_value": "REDACTED",
+        "frame": "f3",
+        "message": "2556e865-170d-4450-9224-713aea44a261",
+        "sink_seq": 46,
+        "logger_seq": 47,
+        "field_evidence": [],
+        "jndi_lookups": []
+      },
+      {
+        "id": "ordinary-message",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [
+          "secret"
+        ],
+        "expected_origin": [
+          "secret"
+        ],
+        "source_exact": true,
+        "log_value": "ORDINARY_MESSAGE",
+        "frame": "f4",
+        "message": "a596585f-adaf-4db5-a960-8c1dbce53bd0",
+        "sink_seq": 59,
+        "logger_seq": 60,
+        "field_evidence": [
+          52
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "public-input-lookup",
+        "expected": true,
+        "prediction": true,
+        "known": true,
+        "actual_origin": [
+          "publicValue"
+        ],
+        "expected_origin": [
+          "publicValue"
+        ],
+        "source_exact": true,
+        "log_value": "LOCAL_LOOKUP_MARKER",
+        "frame": "f5",
+        "message": "c6723061-93d2-40b0-a04a-bf8e9add2643",
+        "sink_seq": 71,
+        "logger_seq": 72,
+        "field_evidence": [
+          63
+        ],
+        "jndi_lookups": [
+          {
+            "seq": 73,
+            "key": "tf2-local-marker"
+          }
+        ]
+      }
+    ],
+    "cve-config-mitigated": [
+      {
+        "id": "lookup-direct",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [
+          "secret"
+        ],
+        "expected_origin": [
+          "secret"
+        ],
+        "source_exact": true,
+        "log_value": "${jndi:tf2-local-marker}",
+        "frame": "f1",
+        "message": "edecebfd-4d26-4fb0-90ab-43a9aa29888e",
+        "sink_seq": 14,
+        "logger_seq": 17,
+        "field_evidence": [
+          7
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "lookup-field-copy",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [
+          "secret"
+        ],
+        "expected_origin": [
+          "secret"
+        ],
+        "source_exact": true,
+        "log_value": "${jndi:tf2-local-marker}",
+        "frame": "f2",
+        "message": "01e33468-674e-4bc6-b8c7-1fc6bc3ef858",
+        "sink_seq": 31,
+        "logger_seq": 32,
+        "field_evidence": [
+          24,
+          25,
+          26
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "lookup-overwritten",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [],
+        "expected_origin": [],
+        "source_exact": true,
+        "log_value": "REDACTED",
+        "frame": "f3",
+        "message": "5ffd10a9-4f3c-47ca-94bb-adae554e1301",
+        "sink_seq": 44,
+        "logger_seq": 45,
+        "field_evidence": [],
+        "jndi_lookups": []
+      },
+      {
+        "id": "ordinary-message",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [
+          "secret"
+        ],
+        "expected_origin": [
+          "secret"
+        ],
+        "source_exact": true,
+        "log_value": "ORDINARY_MESSAGE",
+        "frame": "f4",
+        "message": "03548a4b-3ce0-4081-92ec-47c04ffd3a51",
+        "sink_seq": 57,
+        "logger_seq": 58,
+        "field_evidence": [
+          50
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "public-input-lookup",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [
+          "publicValue"
+        ],
+        "expected_origin": [
+          "publicValue"
+        ],
+        "source_exact": true,
+        "log_value": "${jndi:tf2-local-marker}",
+        "frame": "f5",
+        "message": "6455b82f-78f4-4500-af5f-2a4c283372c2",
+        "sink_seq": 69,
+        "logger_seq": 70,
+        "field_evidence": [
+          61
+        ],
+        "jndi_lookups": []
+      }
+    ],
+    "cve-fixed": [
+      {
+        "id": "lookup-direct",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [
+          "secret"
+        ],
+        "expected_origin": [
+          "secret"
+        ],
+        "source_exact": true,
+        "log_value": "${jndi:tf2-local-marker}",
+        "frame": "f1",
+        "message": "0ff368bb-1eba-48c7-ad19-a58ed01d06dc",
+        "sink_seq": 14,
+        "logger_seq": 17,
+        "field_evidence": [
+          7
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "lookup-field-copy",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [
+          "secret"
+        ],
+        "expected_origin": [
+          "secret"
+        ],
+        "source_exact": true,
+        "log_value": "${jndi:tf2-local-marker}",
+        "frame": "f2",
+        "message": "a67fb2fd-d8ad-4c29-8a62-1cfab5f377bd",
+        "sink_seq": 31,
+        "logger_seq": 32,
+        "field_evidence": [
+          24,
+          25,
+          26
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "lookup-overwritten",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [],
+        "expected_origin": [],
+        "source_exact": true,
+        "log_value": "REDACTED",
+        "frame": "f3",
+        "message": "1f81c086-b651-410c-9620-02486a8717ad",
+        "sink_seq": 44,
+        "logger_seq": 45,
+        "field_evidence": [],
+        "jndi_lookups": []
+      },
+      {
+        "id": "ordinary-message",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [
+          "secret"
+        ],
+        "expected_origin": [
+          "secret"
+        ],
+        "source_exact": true,
+        "log_value": "ORDINARY_MESSAGE",
+        "frame": "f4",
+        "message": "4fb1e011-e24e-4ab5-828c-7fa43589a7cf",
+        "sink_seq": 57,
+        "logger_seq": 58,
+        "field_evidence": [
+          50
+        ],
+        "jndi_lookups": []
+      },
+      {
+        "id": "public-input-lookup",
+        "expected": false,
+        "prediction": false,
+        "known": true,
+        "actual_origin": [
+          "publicValue"
+        ],
+        "expected_origin": [
+          "publicValue"
+        ],
+        "source_exact": true,
+        "log_value": "${jndi:tf2-local-marker}",
+        "frame": "f5",
+        "message": "69f8e998-a9a5-4119-adc9-9ba51c7db607",
+        "sink_seq": 69,
+        "logger_seq": 70,
+        "field_evidence": [
+          61
+        ],
+        "jndi_lookups": []
+      }
+    ]
+  },
+  "contract": {
+    "controlled": [
+      {
+        "id": "direct-leak",
+        "mode": "leak",
+        "secret": "SECRET_A",
+        "publicValue": "PUBLIC_A",
+        "expected_property": "secret",
+        "expected_disclosure": true,
+        "expected_support": true,
+        "expected_log": "SECRET_A"
+      },
+      {
+        "id": "public-only",
+        "mode": "public",
+        "secret": "SECRET_B",
+        "publicValue": "PUBLIC_B",
+        "expected_property": "publicValue",
+        "expected_disclosure": false,
+        "expected_support": true,
+        "expected_log": "PUBLIC_B"
+      },
+      {
+        "id": "equal-values-public",
+        "mode": "public",
+        "secret": "SAME",
+        "publicValue": "SAME",
+        "expected_property": "publicValue",
+        "expected_disclosure": false,
+        "expected_support": true,
+        "expected_log": "SAME"
+      },
+      {
+        "id": "equal-values-secret",
+        "mode": "leak",
+        "secret": "SAME",
+        "publicValue": "SAME",
+        "expected_property": "secret",
+        "expected_disclosure": true,
+        "expected_support": true,
+        "expected_log": "SAME"
+      },
+      {
+        "id": "local-overwrite",
+        "mode": "overwrite",
+        "secret": "SECRET_C",
+        "publicValue": "PUBLIC_C",
+        "expected_property": null,
+        "expected_disclosure": false,
+        "expected_support": true,
+        "expected_log": "REDACTED"
+      },
+      {
+        "id": "field-copy",
+        "mode": "field-copy",
+        "secret": "SECRET_D",
+        "publicValue": "PUBLIC_D",
+        "expected_property": "secret",
+        "expected_disclosure": true,
+        "expected_support": true,
+        "expected_log": "SECRET_D"
+      },
+      {
+        "id": "field-overwrite",
+        "mode": "field-overwrite",
+        "secret": "SECRET_E",
+        "publicValue": "PUBLIC_E",
+        "expected_property": "publicValue",
+        "expected_disclosure": false,
+        "expected_support": true,
+        "expected_log": "PUBLIC_E"
+      },
+      {
+        "id": "read-secret-unused",
+        "mode": "read-unused",
+        "secret": "SECRET_F",
+        "publicValue": "PUBLIC_F",
+        "expected_property": "publicValue",
+        "expected_disclosure": false,
+        "expected_support": true,
+        "expected_log": "PUBLIC_F"
+      },
+      {
+        "id": "constant-equals-secret",
+        "mode": "constant",
+        "secret": "PUBLIC",
+        "publicValue": "PUBLIC",
+        "expected_property": null,
+        "expected_disclosure": false,
+        "expected_support": true,
+        "expected_log": "PUBLIC"
+      },
+      {
+        "id": "unsupported-copy",
+        "mode": "unknown-transform",
+        "secret": "SECRET_UNKNOWN",
+        "publicValue": "PUBLIC_UNKNOWN",
+        "expected_property": "secret",
+        "expected_disclosure": true,
+        "expected_support": false,
+        "expected_log": "SECRET_UNKNOWN"
+      },
+      {
+        "id": "concurrent-0",
+        "mode": "leak",
+        "secret": "PARALLEL_SAME",
+        "publicValue": "PARALLEL_SAME",
+        "expected_property": "secret",
+        "expected_disclosure": true,
+        "concurrent": true,
+        "delay": 33,
+        "expected_support": true,
+        "expected_log": "PARALLEL_SAME"
+      },
+      {
+        "id": "concurrent-1",
+        "mode": "public",
+        "secret": "PARALLEL_SAME",
+        "publicValue": "PARALLEL_SAME",
+        "expected_property": "publicValue",
+        "expected_disclosure": false,
+        "concurrent": true,
+        "delay": 30,
+        "expected_support": true,
+        "expected_log": "PARALLEL_SAME"
+      },
+      {
+        "id": "concurrent-2",
+        "mode": "leak",
+        "secret": "PARALLEL_SAME",
+        "publicValue": "PARALLEL_SAME",
+        "expected_property": "secret",
+        "expected_disclosure": true,
+        "concurrent": true,
+        "delay": 27,
+        "expected_support": true,
+        "expected_log": "PARALLEL_SAME"
+      },
+      {
+        "id": "concurrent-3",
+        "mode": "public",
+        "secret": "PARALLEL_SAME",
+        "publicValue": "PARALLEL_SAME",
+        "expected_property": "publicValue",
+        "expected_disclosure": false,
+        "concurrent": true,
+        "delay": 24,
+        "expected_support": true,
+        "expected_log": "PARALLEL_SAME"
+      },
+      {
+        "id": "concurrent-4",
+        "mode": "leak",
+        "secret": "PARALLEL_SAME",
+        "publicValue": "PARALLEL_SAME",
+        "expected_property": "secret",
+        "expected_disclosure": true,
+        "concurrent": true,
+        "delay": 21,
+        "expected_support": true,
+        "expected_log": "PARALLEL_SAME"
+      },
+      {
+        "id": "concurrent-5",
+        "mode": "public",
+        "secret": "PARALLEL_SAME",
+        "publicValue": "PARALLEL_SAME",
+        "expected_property": "publicValue",
+        "expected_disclosure": false,
+        "concurrent": true,
+        "delay": 18,
+        "expected_support": true,
+        "expected_log": "PARALLEL_SAME"
+      },
+      {
+        "id": "concurrent-6",
+        "mode": "leak",
+        "secret": "PARALLEL_SAME",
+        "publicValue": "PARALLEL_SAME",
+        "expected_property": "secret",
+        "expected_disclosure": true,
+        "concurrent": true,
+        "delay": 15,
+        "expected_support": true,
+        "expected_log": "PARALLEL_SAME"
+      },
+      {
+        "id": "concurrent-7",
+        "mode": "public",
+        "secret": "PARALLEL_SAME",
+        "publicValue": "PARALLEL_SAME",
+        "expected_property": "publicValue",
+        "expected_disclosure": false,
+        "concurrent": true,
+        "delay": 12,
+        "expected_support": true,
+        "expected_log": "PARALLEL_SAME"
+      },
+      {
+        "id": "concurrent-8",
+        "mode": "leak",
+        "secret": "PARALLEL_SAME",
+        "publicValue": "PARALLEL_SAME",
+        "expected_property": "secret",
+        "expected_disclosure": true,
+        "concurrent": true,
+        "delay": 9,
+        "expected_support": true,
+        "expected_log": "PARALLEL_SAME"
+      },
+      {
+        "id": "concurrent-9",
+        "mode": "public",
+        "secret": "PARALLEL_SAME",
+        "publicValue": "PARALLEL_SAME",
+        "expected_property": "publicValue",
+        "expected_disclosure": false,
+        "concurrent": true,
+        "delay": 6,
+        "expected_support": true,
+        "expected_log": "PARALLEL_SAME"
+      },
+      {
+        "id": "concurrent-10",
+        "mode": "leak",
+        "secret": "PARALLEL_SAME",
+        "publicValue": "PARALLEL_SAME",
+        "expected_property": "secret",
+        "expected_disclosure": true,
+        "concurrent": true,
+        "delay": 3,
+        "expected_support": true,
+        "expected_log": "PARALLEL_SAME"
+      },
+      {
+        "id": "concurrent-11",
+        "mode": "public",
+        "secret": "PARALLEL_SAME",
+        "publicValue": "PARALLEL_SAME",
+        "expected_property": "publicValue",
+        "expected_disclosure": false,
+        "concurrent": true,
+        "delay": 0,
+        "expected_support": true,
+        "expected_log": "PARALLEL_SAME"
+      }
+    ],
+    "cve": [
+      {
+        "id": "lookup-direct",
+        "mode": "leak",
+        "secret": "${jndi:tf2-local-marker}",
+        "publicValue": "PUBLIC",
+        "expected_property": "secret",
+        "lookup_capable": true
+      },
+      {
+        "id": "lookup-field-copy",
+        "mode": "field-copy",
+        "secret": "${jndi:tf2-local-marker}",
+        "publicValue": "PUBLIC",
+        "expected_property": "secret",
+        "lookup_capable": true
+      },
+      {
+        "id": "lookup-overwritten",
+        "mode": "overwrite",
+        "secret": "${jndi:tf2-local-marker}",
+        "publicValue": "PUBLIC",
+        "expected_property": null,
+        "lookup_capable": false
+      },
+      {
+        "id": "ordinary-message",
+        "mode": "leak",
+        "secret": "ORDINARY_MESSAGE",
+        "publicValue": "PUBLIC",
+        "expected_property": "secret",
+        "lookup_capable": false
+      },
+      {
+        "id": "public-input-lookup",
+        "mode": "public",
+        "secret": "SECRET",
+        "publicValue": "${jndi:tf2-local-marker}",
+        "expected_property": "publicValue",
+        "lookup_capable": true
+      }
+    ],
+    "controlled_policy": "Record.secret is confidential; the configured file log is forbidden for raw confidential data.",
+    "cve_policy": "Record.secret/publicValue are HTTP-controlled; observe whether a source-derived actual logger argument triggers native JndiLookup in the same synchronous frame.",
+    "profiles": {
+      "controlled": {
+        "version": "2.17.1",
+        "no_lookups": false
+      },
+      "cve-vulnerable": {
+        "version": "2.14.1",
+        "no_lookups": false
+      },
+      "cve-config-mitigated": {
+        "version": "2.14.1",
+        "no_lookups": true
+      },
+      "cve-fixed": {
+        "version": "2.17.1",
+        "no_lookups": false
+      }
+    },
+    "oracle": "Explicit fixture reference-copy/last-write semantics; literal JNDI expression and inert local provider; separate from inference inputs.",
+    "limitations": [
+      "New controlled application; no Sock Shop vulnerability claim.",
+      "Known vulnerable library in a small harness, not an original vulnerable production application.",
+      "The local JNDI provider confirms lookup evaluation only, not LDAP access or remote code execution.",
+      "No new-vulnerability discovery claim; no competing-tool or performance measurements."
+    ]
+  },
+  "negative_controls": [
+    {
+      "control": "missing-message-with-equal-values",
+      "passed": true,
+      "result": "unknown, no guessed source"
+    },
+    {
+      "control": "source-order-shuffled",
+      "passed": true,
+      "result": "all message/property origins unchanged"
+    },
+    {
+      "control": "duplicate-message-id",
+      "passed": true,
+      "rejection": "Duplicate HTTP send identity"
+    },
+    {
+      "control": "missing-branch-observation",
+      "passed": true,
+      "rejection": "Static/runtime instruction mismatch"
+    },
+    {
+      "control": "field-version-corruption",
+      "passed": true,
+      "rejection": "Field version discontinuity"
+    },
+    {
+      "control": "forged-actual-sink",
+      "passed": true,
+      "rejection": "Actual sink argument differs"
+    },
+    {
+      "control": "wire-body-corruption",
+      "passed": true,
+      "rejection": "Message body mismatch"
+    },
+    {
+      "control": "request-label-not-used-for-provenance",
+      "passed": true,
+      "result": "source unchanged"
+    },
+    {
+      "control": "native-lookup-key-does-not-match-message",
+      "passed": true,
+      "result": "unknown, unsupported library relation"
+    }
+  ],
+  "source_sha256": {
+    "experiments/sockshop-mirrortaint/SecurityLeakLab.java": "338442283f646f51d05c96cd8b212cb906a2c7d1a05b2e1779022efc8fff65cc",
+    "experiments/sockshop-mirrortaint/SecurityObservationAgent.java": "8f1454f6fd288fe88dcf74dbd77c9e2a7be9851e745b5249db5021cf825d6ae8",
+    "experiments/sockshop-mirrortaint/run_security_leak.py": "712033266a1c145b9703791238d20dab97fd680e6f76838e48bf7792da2a20d8",
+    "experiments/sockshop-mirrortaint/security_field_flow.py": "8c38b0499650b1a10a5534e66d25c3e7602a8485435d7ee9931ec55424b55b32",
+    "experiments/sockshop-mirrortaint/audit_security_leak.py": "065804d48553cde73fbc915d06c5642f02cb02c4acf594118d7972743eedd4a9",
+    "experiments/sockshop-mirrortaint/README.md": "1bd83ad08d486ee38385779f2661b5f4e205f25438e4efadb3b2f4b676ef89df"
+  },
+  "evidence_sha256": {
+    "artifacts/security-leak-v2-20261015/controlled/source/events.jsonl": "9fe2cd09c096439932137339b8105ef4edd0c9dffb1f823486a848c37103c78a",
+    "artifacts/security-leak-v2-20261015/controlled/source/console.log": "36a9178e0c96ce78016ed779b39d9b84dc18ed33eb6c492f48fc08f8d0f833e0",
+    "artifacts/security-leak-v2-20261015/controlled/source/SecurityLeakLab$Wire.original.class": "1273189209511d5b228f724d512441151c3c2ab2223a2925432709a67ed891cb",
+    "artifacts/security-leak-v2-20261015/controlled/target/SecurityLeakLab$Sink.original.class": "b21160ffdf58829a33623e3c2a5b450ce3498dea5fba0ca45060a6ef6b02736f",
+    "artifacts/security-leak-v2-20261015/controlled/target/org_apache_logging_log4j_core_lookup_JndiLookup.original.class": "ddad241274b834182525eeddc35c3198247507bd2df59645b58b94cd18fada7c",
+    "artifacts/security-leak-v2-20261015/controlled/target/events.jsonl": "17d3a2be46940ba5a2edb993f985911757bbebfa8584663e50b6573983e419fc",
+    "artifacts/security-leak-v2-20261015/controlled/target/console.log": "ee182d1c2f58d0fc44f975bea70372e26ecfec156a6b24e780df613eca1fa944",
+    "artifacts/security-leak-v2-20261015/controlled/target/SecurityLeakLab$Flow.original.class": "1dbd3c71daba758976e420a3bebe89a2781757730df8a43399bbe3484db662e1",
+    "artifacts/security-leak-v2-20261015/controlled/log4j2.xml": "8b8818d7fd8afbb41815524dcd575ae1c008f6e86f74ecf9bc007dfd0f8d5acd",
+    "artifacts/security-leak-v2-20261015/controlled/business.json": "cb0ee2e0bc3c34646094fa97bba86ebceff1a03035f5bc763df7e43ad2bcde2a",
+    "artifacts/security-leak-v2-20261015/controlled/predictions.json": "9d7bf9a742e8bf74266dcda02f8e08e0aaa7e99ec02e5d8facb58ab847f18214",
+    "artifacts/security-leak-v2-20261015/controlled/application.log": "25d91f839dfafa750f5f683c61695abfcf6ac471fd8f206a319683e4c20e0eef",
+    "artifacts/security-leak-v2-20261015/controlled/deployment.json": "22d042f436c7531a20ee9afe2ed703538564a02a3456fb27422f70ee16f1f008",
+    "artifacts/security-leak-v2-20261015/cve-vulnerable/source/events.jsonl": "30ec389ab63ffc04b7d5bad04f01f32b01055118b5164836b1c18dad74208bf2",
+    "artifacts/security-leak-v2-20261015/cve-vulnerable/source/console.log": "3d197891ff0bd1dd88622c748713d2e4e15d4fa6ff5f48ef052b75944d976eaf",
+    "artifacts/security-leak-v2-20261015/cve-vulnerable/source/SecurityLeakLab$Wire.original.class": "1273189209511d5b228f724d512441151c3c2ab2223a2925432709a67ed891cb",
+    "artifacts/security-leak-v2-20261015/cve-vulnerable/target/SecurityLeakLab$Sink.original.class": "b21160ffdf58829a33623e3c2a5b450ce3498dea5fba0ca45060a6ef6b02736f",
+    "artifacts/security-leak-v2-20261015/cve-vulnerable/target/org_apache_logging_log4j_core_lookup_JndiLookup.original.class": "84057480ba7da6fb6d9ea50c53a00848315833c1f34bf8f4a47f11a14499ae3f",
+    "artifacts/security-leak-v2-20261015/cve-vulnerable/target/events.jsonl": "fe46f646306207a383a5ece96972ad166925cb0f72c9713d1fd5de219211a958",
+    "artifacts/security-leak-v2-20261015/cve-vulnerable/target/console.log": "e59e232bad365eacd52045e1bad65ee59501f4b3b57f3e4c1f0fc645d0ae653d",
+    "artifacts/security-leak-v2-20261015/cve-vulnerable/target/SecurityLeakLab$Flow.original.class": "1dbd3c71daba758976e420a3bebe89a2781757730df8a43399bbe3484db662e1",
+    "artifacts/security-leak-v2-20261015/cve-vulnerable/callbacks.jsonl": "b38e1822393ebe573372a40f05727653c1612c409047ee989c465ce37aaf40d6",
+    "artifacts/security-leak-v2-20261015/cve-vulnerable/log4j2.xml": "c0a4fe7e86b77c16933363331e8be5dcac0d47c30cf161ba432a297098c4da1c",
+    "artifacts/security-leak-v2-20261015/cve-vulnerable/business.json": "45882880b48e05b7bce7b86243a5e802f12b5d04e1616754f6370780f6b27028",
+    "artifacts/security-leak-v2-20261015/cve-vulnerable/predictions.json": "bc8fdc4c266f178c70ac94738dcf277d50d3e87939cb6d7d2451ddd2f08f04a5",
+    "artifacts/security-leak-v2-20261015/cve-vulnerable/application.log": "3b77fd84b809b7ef2673c5664c5888d956a8e75fa4f0d4a48bea012d8b6fbcce",
+    "artifacts/security-leak-v2-20261015/cve-vulnerable/deployment.json": "d4c791eb45c89bd7f362fd716647108ba0664904c79b42be669ff94e57944bc2",
+    "artifacts/security-leak-v2-20261015/cve-config-mitigated/source/events.jsonl": "a9ceed5f5cf38a3f20684743859f007447a494d16566346dd603bd93c7fd2aaf",
+    "artifacts/security-leak-v2-20261015/cve-config-mitigated/source/console.log": "5056bd34a73c0a7e9fa3789d03b296159d9f96c564562a090c9f0a27f6182c18",
+    "artifacts/security-leak-v2-20261015/cve-config-mitigated/source/SecurityLeakLab$Wire.original.class": "1273189209511d5b228f724d512441151c3c2ab2223a2925432709a67ed891cb",
+    "artifacts/security-leak-v2-20261015/cve-config-mitigated/target/SecurityLeakLab$Sink.original.class": "b21160ffdf58829a33623e3c2a5b450ce3498dea5fba0ca45060a6ef6b02736f",
+    "artifacts/security-leak-v2-20261015/cve-config-mitigated/target/org_apache_logging_log4j_core_lookup_JndiLookup.original.class": "84057480ba7da6fb6d9ea50c53a00848315833c1f34bf8f4a47f11a14499ae3f",
+    "artifacts/security-leak-v2-20261015/cve-config-mitigated/target/events.jsonl": "a51f5b0dc65c67d295623ac78a09d00f5ccf5c899ad9639730f58121a9e4a35b",
+    "artifacts/security-leak-v2-20261015/cve-config-mitigated/target/console.log": "f4e6a9b8293782673bbd267e6531b551f8df99b7a54012e78304e5d3ee0ba464",
+    "artifacts/security-leak-v2-20261015/cve-config-mitigated/target/SecurityLeakLab$Flow.original.class": "1dbd3c71daba758976e420a3bebe89a2781757730df8a43399bbe3484db662e1",
+    "artifacts/security-leak-v2-20261015/cve-config-mitigated/log4j2.xml": "e0d9af7971db821f7bf5941dd81348aaa03d910b7def64e172cf8cdef4a4329f",
+    "artifacts/security-leak-v2-20261015/cve-config-mitigated/business.json": "45882880b48e05b7bce7b86243a5e802f12b5d04e1616754f6370780f6b27028",
+    "artifacts/security-leak-v2-20261015/cve-config-mitigated/predictions.json": "792ba0cd2e30d2b247358af45f6a8167e53846903a276aaa3338a7ad1d0e5c48",
+    "artifacts/security-leak-v2-20261015/cve-config-mitigated/application.log": "078f61a25f839191aa99267d8d53d4fb86b78e1fed6f1c92448c503114ed79ea",
+    "artifacts/security-leak-v2-20261015/cve-config-mitigated/deployment.json": "ae7d085739ce8bdc1212e816e5e7ec524d100099cbcb834e008cd68cb877c50c",
+    "artifacts/security-leak-v2-20261015/cve-fixed/source/events.jsonl": "df503f76309bd6e591e67c934d516fceef731577523154cc2049a667639b1f39",
+    "artifacts/security-leak-v2-20261015/cve-fixed/source/console.log": "4098a3c0ceda3d434a592ae587d2e70e0d5b1c2594a56bca70493cd5af22a42f",
+    "artifacts/security-leak-v2-20261015/cve-fixed/source/SecurityLeakLab$Wire.original.class": "1273189209511d5b228f724d512441151c3c2ab2223a2925432709a67ed891cb",
+    "artifacts/security-leak-v2-20261015/cve-fixed/target/SecurityLeakLab$Sink.original.class": "b21160ffdf58829a33623e3c2a5b450ce3498dea5fba0ca45060a6ef6b02736f",
+    "artifacts/security-leak-v2-20261015/cve-fixed/target/org_apache_logging_log4j_core_lookup_JndiLookup.original.class": "ddad241274b834182525eeddc35c3198247507bd2df59645b58b94cd18fada7c",
+    "artifacts/security-leak-v2-20261015/cve-fixed/target/events.jsonl": "06f0d54aa461953f677f65ae74846449f75031e0b809db3822bce785be9bf4a5",
+    "artifacts/security-leak-v2-20261015/cve-fixed/target/console.log": "775df04a1aa951c6e00e1ab7f5b01bac6db3c92e8a47cbe54474cd6ee2030a34",
+    "artifacts/security-leak-v2-20261015/cve-fixed/target/SecurityLeakLab$Flow.original.class": "1dbd3c71daba758976e420a3bebe89a2781757730df8a43399bbe3484db662e1",
+    "artifacts/security-leak-v2-20261015/cve-fixed/log4j2.xml": "15270e78a22028896c750f1066b2c63bc62b16e58af979cf428d68231d9a5d3e",
+    "artifacts/security-leak-v2-20261015/cve-fixed/business.json": "45882880b48e05b7bce7b86243a5e802f12b5d04e1616754f6370780f6b27028",
+    "artifacts/security-leak-v2-20261015/cve-fixed/predictions.json": "6f724b246b739011db4e2537eee322f6ccaaaefd252b9c8a9e1d384d9f380bd5",
+    "artifacts/security-leak-v2-20261015/cve-fixed/application.log": "078f61a25f839191aa99267d8d53d4fb86b78e1fed6f1c92448c503114ed79ea",
+    "artifacts/security-leak-v2-20261015/cve-fixed/deployment.json": "62783085db0f9b83c24622fdf2cff115dfa9d6426ce3ac18cd0d09c1ee3d8294",
+    "artifacts/security-leak-v2-20261015/contract.json": "e85e8a88a29b43848f6a801de706b919403d933fee263e278ccbeba287264878",
+    "artifacts/security-leak-v2-20261015/results.json": "220a24bcb4079da934f68511f7f3c8acdf42a9df615a93f3bc1f572ba0c923a8",
+    "artifacts/security-leak-v2-20261015/results.csv": "3e66a04f67f53344d03c66bdfd943ec3dd740ea14de8fd7d73b8f2fa06204247",
+    "artifacts/security-leak-v2-20261015/negative-controls.json": "64667decb54f7dace909dc836c126d5b5956a9c539baf51702f30cafa6131ec6",
+    "artifacts/security-leak-build-v2-20261015/manifest.json": "b4ee18d8170eb920192be6576652911f4ad43418eb33536cab1e4c5fad6683b3",
+    "artifacts/security-leak-deps/manifest.json": "ca93040e8c7e97a55d940a53fa5b2f994f7e41523a103304587004db7bf28fb6",
+    "artifacts/security-leak-v2-20261015/results.md": "ac71607c6afdacb946975ad87acfd8e5ea1242a87f61d3af5c7c43c24ee7638d",
+    "artifacts/security-leak-v2-20261015/audit.json": "fd48ca4b6bad4312793b528eb2d063a8e17de65014ac8825d7ed3d5781839fe7",
+    "artifacts/security-leak-build-v2-20261015/security-observer.jar": "532f942dfa1f01be3cea7eb91406fa0ab7a9f26504566f5302b842368c2ea491"
+  },
+  "build_manifest": {
+    "sources": {
+      "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/SecurityLeakLab.java": "338442283f646f51d05c96cd8b212cb906a2c7d1a05b2e1779022efc8fff65cc",
+      "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/SecurityObservationAgent.java": "8f1454f6fd288fe88dcf74dbd77c9e2a7be9851e745b5249db5021cf825d6ae8"
+    },
+    "dependencies": {
+      "/home/wujian/tracefusion2/artifacts/java-collection-deps/asm-9.7.1.jar": "8cadd43ac5eb6d09de05faecca38b917a040bb9139c7edeb4cc81c740b713281",
+      "/home/wujian/tracefusion2/artifacts/java-collection-deps/asm-tree-9.7.1.jar": "9929881f59eb6b840e86d54570c77b59ce721d104e6dfd7a40978991c2d3b41f",
+      "/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-core-2.8.6.jar": "10a8d607dc66aadee9ef24e8b3d83f04b6c0e033926558cc64e408bcbda0ca9f",
+      "/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-databind-2.8.6.jar": "922413ca2ff5a8f1f86a2eaae8ff02219322ec6ff00d212e7973df8aac4bbaa3",
+      "/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-annotations-2.8.6.jar": "92d7580f361174bda3e015c66adafa326aeb9ef7f4a99a895486cef0dae773f8"
+    },
+    "log4j": [
+      {
+        "file": "log4j-api-2.14.1.jar",
+        "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.14.1/log4j-api-2.14.1.jar",
+        "repository_digest_algorithm": "sha1",
+        "repository_digest": "cd8858fbbde69f46bce8db1152c18a43328aae78",
+        "sha256": "8caf58db006c609949a0068110395a33067a2bad707c3da35e959c0473f9a916"
+      },
+      {
+        "file": "log4j-core-2.14.1.jar",
+        "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.14.1/log4j-core-2.14.1.jar",
+        "repository_digest_algorithm": "sha1",
+        "repository_digest": "9141212b8507ab50a45525b545b39d224614528b",
+        "sha256": "ade7402a70667a727635d5c4c29495f4ff96f061f12539763f6f123973b465b0"
+      },
+      {
+        "file": "log4j-api-2.17.1.jar",
+        "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.17.1/log4j-api-2.17.1.jar",
+        "repository_digest_algorithm": "sha1",
+        "repository_digest": "d771af8e336e372fb5399c99edabe0919aeaf5b2",
+        "sha256": "b0d8a4c8ab4fb8b1888d0095822703b0e6d4793c419550203da9e69196161de4"
+      },
+      {
+        "file": "log4j-core-2.17.1.jar",
+        "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.17.1/log4j-core-2.17.1.jar",
+        "repository_digest_algorithm": "sha1",
+        "repository_digest": "779f60f3844dadc3ef597976fcb1e5127b1f343d",
+        "sha256": "c967f223487980b9364e94a7c7f9a8a01fd3ee7c19bdbf0b0f9f8cb8511f3d41"
+      }
+    ],
+    "agent_sha256": "532f942dfa1f01be3cea7eb91406fa0ab7a9f26504566f5302b842368c2ea491",
+    "classes_sha256": {
+      "SecurityLeakLab$Sink.class": "b21160ffdf58829a33623e3c2a5b450ce3498dea5fba0ca45060a6ef6b02736f",
+      "SecurityObservationAgent.class": "5456f86e3d84b56edbe5794d6f83c5d979bddae0e637a43325fa405d077fe680",
+      "SecurityLeakLab$Wire.class": "1273189209511d5b228f724d512441151c3c2ab2223a2925432709a67ed891cb",
+      "SecurityLeakLab$Box.class": "c0e69b2b507677d933a8cea63c5722d1c04dd5f990cf3d0ac8aae1c8c54ac18e",
+      "SecurityObservationAgent$Recorder.class": "f321739d028cd076669705fa9feb793698b98d2b1b8fa3ed3cfa5889234af9ef",
+      "SecurityLeakLab$Flow.class": "1dbd3c71daba758976e420a3bebe89a2781757730df8a43399bbe3484db662e1",
+      "SecurityLeakLab$Record.class": "eb2b9b1b0fa09cc8b5c15d5ef355308656574e79563b49665de977e9319e015a",
+      "SecurityLeakLab$LocalContextFactory.class": "84b4bdaacf783bcfcaf653370956167c739ee0387d4ecf1e0a58351ee68cf833",
+      "SecurityObservationAgent$1.class": "b1c086ee7e6b1310c489b15c618d51ef8fd47cb2eadc4783c537c003ecc3ba5b",
+      "SecurityLeakLab.class": "4a92fd994ca06bdc0d10a636483ac4252cb6cacc0b1f502a9eef982c53b856cf"
+    },
+    "jackson_classpath": [
+      "/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-core-2.8.6.jar",
+      "/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-databind-2.8.6.jar",
+      "/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-annotations-2.8.6.jar"
+    ],
+    "java": "openjdk version \"21.0.12.1\" 2026-08-18\nOpenJDK Runtime Environment (build 21.0.12.1+1-1-24.04.4-Ubuntu)\nOpenJDK 64-Bit Server VM (build 21.0.12.1+1-1-24.04.4-Ubuntu, mixed mode, sharing)\n",
+    "command": [
+      "javac",
+      "--release",
+      "8",
+      "-cp",
+      "/home/wujian/tracefusion2/artifacts/java-collection-deps/asm-9.7.1.jar:/home/wujian/tracefusion2/artifacts/java-collection-deps/asm-tree-9.7.1.jar:/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-core-2.8.6.jar:/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-databind-2.8.6.jar:/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-annotations-2.8.6.jar:/home/wujian/tracefusion2/artifacts/security-leak-deps/log4j-api-2.17.1.jar:/home/wujian/tracefusion2/artifacts/security-leak-deps/log4j-core-2.17.1.jar",
+      "-d",
+      "/home/wujian/tracefusion2/artifacts/security-leak-build-v2-20261015/classes",
+      "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/SecurityLeakLab.java",
+      "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/SecurityObservationAgent.java"
+    ]
+  },
+  "limitations": [
+    "New controlled application; no Sock Shop vulnerability claim.",
+    "Known vulnerable library in a small harness, not an original vulnerable production application.",
+    "The local JNDI provider confirms lookup evaluation only, not LDAP access or remote code execution.",
+    "No new-vulnerability discovery claim; no competing-tool or performance measurements.",
+    "Only admitted acyclic reference-copy bytecode and actually observed branch choices.",
+    "Unknown helper calls remain unknown; no value-based origin recovery.",
+    "Single HTTP hop, default three-String DTO schema, no custom serialization.",
+    "Data dependence only; no implicit/control-flow taint.",
+    "JNDI rule uses an explicit sole-literal ${jndi:key} summary, validated against the actual same-frame native lookup argument; it does not reconstruct every internal Log4j statement.",
+    "DTOs are thread-owned and immutable outside the observed Flow writes; the audited fresh Box constructor has no field writes.",
+    "A sensitive-to-log alert presumes the configured log destination is forbidden for that field; it is not a universal vulnerability judgement."
+  ],
+  "remote_code_execution_tested": false,
+  "new_vulnerabilities_discovered": false,
+  "sockshop_application_modified": false,
+  "previous_costs_reused": false,
+  "competing_tools_evaluated": false,
+  "online_taint_propagation": false,
+  "first_attempt": {
+    "artifact": "artifacts/security-leak-20261015",
+    "reason_not_final": "Concurrent HTTP calls had only one simultaneous Flow frame; final fixture adds a scheduling barrier and observes twelve overlapping frames."
+  },
+  "official_security_reference": "https://logging.apache.org/security.html#CVE-2021-44228"
+}
