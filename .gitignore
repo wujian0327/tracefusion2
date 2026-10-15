@@ -29,6 +29,7 @@ experiments/sockshop-mirrortaint/*
 !experiments/sockshop-mirrortaint/security-field-flow-20261015.json
 !experiments/sockshop-mirrortaint/query-planning-20261015.json
 !experiments/sockshop-mirrortaint/query-service-planning-20261015.json
+!experiments/sockshop-mirrortaint/distributed-paths-20261015.json
 !experiments/sockshop-mirrortaint/rpc-observer-manifest.mf
 !experiments/sockshop-mirrortaint/tracefusion/
 experiments/sockshop-mirrortaint/tracefusion/*

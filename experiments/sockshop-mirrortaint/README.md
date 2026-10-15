@@ -1666,3 +1666,61 @@ python3 experiments/sockshop-mirrortaint/summarize_planned_service.py \
   --build artifacts/query-service-orders-final-build-20261015 \
   --checkpoint experiments/sockshop-mirrortaint/query-service-planning-20261015.json
 ```
+
+## 扩大真实跨服务路径并迁移到 Train Ticket（2026-10-15）
+
+第三阶段复用同一个冻结 JVM observer JAR、同一规划／还原代码，新增 Spring HTTP / 默认
+Jackson 属性桥接与通用直接字段复制模型，应用于 Sock Shop 和 Train Ticket 镜像版0.2.0。
+原始业务 JAR 及插桩前 class 不变，运行时插入观测；没有修改原业务算法。
+
+| 实际字段路径 | 完全匹配 | TP / FP / FN | Precision / Recall / F1 |
+| --- | --- | --- | --- |
+| Carts.quantity/unitPrice → HTTP → Orders.total | 24/24 | 84 / 0 / 0 | 100% / 100% / 100% |
+| Carts.itemId/quantity/unitPrice → Orders 返回商品字段 | 126/126 | 126 / 0 / 0 | 100% / 100% / 100% |
+| Orders Shipment.id/name → Shipping → Orders 返回 shipment | 48/48 | 48 / 0 / 0 | 100% / 100% / 100% |
+| Train Ticket Station.id → Response.data → Basic → TicketInfo.data | 31/31 | 30 / 0 / 0 | 100% / 100% / 100% |
+
+Sock Shop 合计198个查询来自24个成功订单、42个商品实例；另有1次支付拒绝无目标。
+Train Ticket 共31次公开读请求，30个实际记录读取实例及1个不存在站点的常量null结果。
+查询发起方向 TicketInfo→Basic→Station，字段回传方向相反。空来源也参与完全匹配评分。
+两应用都包含8路并发驱动，另有72条补充字段角色负关系检查，未混入229个目标实例分母。
+不能把同一业务请求的多个目标字段当作独立业务案例。
+
+`plan_distributed_fields.py` 自动导出默认JSON属性、直接getter→构造参数→目标写入、
+根参数复制和常量杀死；例如不配置Station.id为业务答案，也能从Response.data反推该字段。
+`SpringTransportAgent.java` 记录实际消息UUID、JSON位置及对象／字段／应用写计数。
+`infer_distributed_fields.py` 用消息／位置跨进程连接，以对象／字段／版本在进程内转发，
+连接已有Stream金额还原；值只验证已选边，不选择来源。去掉trace／父消息审计标签不改答案。
+原RPC线程上下文另独立核验。不同服务只提供原JAR、入口和目标，不修改这三个核心组件。
+
+迁移仍需查询配置、部署依赖、业务输入与独立真值。通用框架模型是新增工作，不能称为
+任意Java／全部框架的零适配迁移，也不能从本轮推断优于MirrorTaint／FlowDist／Phosphor。
+运输层当前观察已支持DTO属性，尚未完成最少运输观测；完整观测口径与正式成本继续暂缓。
+
+边界限定：Carts来源从响应字段观测开始，不还原其数据库历史；Shipment从Orders出站
+对象字段开始；Station从已解码实体的实际getter读取开始，不还原Mongo存储来源。
+对象／声明字段／应用写计数以及具体观测／消息实例均保留，应用计数不冒充全部反射写
+或数据库版本。背景中43个Carts Item.id数据库回写观察点因未建模写入保留unknown；这与
+已查询的Item.itemId不同，也不属于预先指定的来源边界之后。缺少被查询的quantity消息
+证据会使total为unknown，不能靠数值或业务公式补答案。
+
+新审计13项通过，独立javap核对872条指令及操作数；旧受控13项、旧真实服务19项回归通过。
+独立原镜像JAR核验6/6一致；Train Ticket对应Git提交尚未反查，以镜像digest/JAR/class SHA
+固定身份。本次独立项目与测试卷已清理，原版鉴权未改；站点fixture仅写本次新建Mongo卷。
+
+完整报告：`artifacts/distributed-paths-final-20261015/results.md`；主表 `main-table.csv`；
+两应用各自 `inference-graph.json`、`field-results.json`、原始事件、API与DB真值均在该目录。
+冻结构建：`artifacts/distributed-plans-final-build-20261015`；可提交摘要：
+`distributed-paths-20261015.json`。报告包含完整复现命令，复用本地原镜像／JAR缓存。
+
+```bash
+python3 experiments/sockshop-mirrortaint/evaluate_distributed_paths.py \
+  --out artifacts/distributed-paths-final-20261015 \
+  --build artifacts/distributed-plans-final-build-20261015
+python3 experiments/sockshop-mirrortaint/audit_distributed_paths.py \
+  --out artifacts/distributed-paths-final-20261015 \
+  --build artifacts/distributed-plans-final-build-20261015
+python3 experiments/sockshop-mirrortaint/verify_original_path_images.py \
+  --out artifacts/distributed-paths-final-20261015 \
+  --build artifacts/distributed-plans-final-build-20261015
+```

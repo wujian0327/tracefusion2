@@ -36,10 +36,10 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
                     if(!initialized)continue;
                     if(n instanceof FieldInsnNode) {
                         FieldInsnNode f=(FieldInsnNode)n;String field=f.owner+"."+f.name;
-                        boolean write=f.getOpcode()==PUTFIELD,read=f.getOpcode()==GETFIELD;
-                        if((write&&(tracked.contains(field)||full))||(read&&full)){field(m,f,site,write,full||field.equals(plan.get("target")));changed=true;}
+                        boolean write=f.getOpcode()==PUTFIELD,read=f.getOpcode()==GETFIELD&&(full||((List)plan.getOrDefault("selected_read_sites",Collections.emptyList())).contains(site));
+                        if((write&&(tracked.contains(field)||full))||read){field(m,f,site,write,full||read||field.equals(plan.get("target")));changed=true;}
                     }
-                    if(site.equals(plan.get("producer_callsite"))||site.equals(plan.get("writer_site"))) {
+                    if(site.equals(plan.get("producer_callsite"))||site.equals(plan.get("writer_site"))||((List)plan.getOrDefault("binding_callsites",Collections.emptyList())).contains(site)) {
                         InsnList h=new InsnList();h.add(new LdcInsnNode(site));h.add(new MethodInsnNode(INVOKESTATIC,R,"callsite","(Ljava/lang/String;)V",false));m.instructions.insertBefore(n,h);changed=true;
                     }
                     if(site.equals(((Map)plan.get("reduction")).get("site"))) {

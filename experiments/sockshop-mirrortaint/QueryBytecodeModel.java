@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /** Class-file input only. No application execution, fixtures or query answers. */
 public final class QueryBytecodeModel implements Opcodes {
+    static List<String> annotations(List<AnnotationNode> a,List<AnnotationNode> b){List<String> r=new ArrayList<>();if(a!=null)for(AnnotationNode n:a)r.add(n.desc);if(b!=null)for(AnnotationNode n:b)r.add(n.desc);return r;}
     public static String key(String owner,MethodNode method) {return owner+"."+method.name+method.desc;}
     public static List<Map<String,Object>> instructions(MethodNode method) {
         List<AbstractInsnNode> code=new ArrayList<>();for(AbstractInsnNode n:method.instructions.toArray())if(n.getOpcode()>=0)code.add(n);
@@ -31,11 +32,11 @@ public final class QueryBytecodeModel implements Opcodes {
         List<Path> paths=new ArrayList<>();try(java.util.stream.Stream<Path> files=Files.walk(root)){files.filter(p->p.toString().endsWith(".class")).forEach(paths::add);}Collections.sort(paths);
         for(Path path:paths) {
             byte[] bytes=Files.readAllBytes(path);ClassNode c=new ClassNode(ASM9);new ClassReader(bytes).accept(c,ClassReader.SKIP_DEBUG|ClassReader.SKIP_FRAMES);
-            Map<String,Object> cls=new LinkedHashMap<>();cls.put("access",c.access);cls.put("super",c.superName);List<Object> fields=new ArrayList<>();
-            for(FieldNode f:c.fields){Map<String,Object> field=new LinkedHashMap<>();field.put("name",f.name);field.put("desc",f.desc);field.put("access",f.access);fields.add(field);}cls.put("fields",fields);
+            Map<String,Object> cls=new LinkedHashMap<>();cls.put("access",c.access);cls.put("super",c.superName);cls.put("annotations",annotations(c.visibleAnnotations,c.invisibleAnnotations));List<Object> fields=new ArrayList<>();
+            for(FieldNode f:c.fields){Map<String,Object> field=new LinkedHashMap<>();field.put("name",f.name);field.put("desc",f.desc);field.put("access",f.access);field.put("annotations",annotations(f.visibleAnnotations,f.invisibleAnnotations));fields.add(field);}cls.put("fields",fields);
             cls.put("sha256",QueryObservationAgent.Recorder.hash(bytes));classes.put(c.name,cls);
             for(MethodNode m:c.methods){Map<String,Object> row=new LinkedHashMap<>();row.put("owner",c.name);row.put("name",m.name);row.put("desc",m.desc);row.put("access",m.access);
-                row.put("try_catches",m.tryCatchBlocks.size());row.put("instructions",instructions(m));methods.put(key(c.name,m),row);}
+                row.put("try_catches",m.tryCatchBlocks.size());row.put("annotations",annotations(m.visibleAnnotations,m.invisibleAnnotations));row.put("instructions",instructions(m));methods.put(key(c.name,m),row);}
         }
         Map<String,Object> model=new LinkedHashMap<>();model.put("classes",classes);model.put("methods",methods);
         new ObjectMapper().writerWithDefaultPrettyPrinter().writeValue(Paths.get(args[1]).toFile(),model);

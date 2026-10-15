@@ -29,7 +29,7 @@ def decode(model,key):
     Exception handlers are not entered: runtime incomplete/aborted calls are
     explicitly retained as such, never scored as successful field answers.
     """
-    m=model['methods'][key];code=m['instructions'];args={};slot=0
+    m=model['methods'][key];code=m['instructions'];require(code,'Abstract/native method has no decoded body: '+key);args={};slot=0
     if not m['access']&8:args[0]={'op':'receiver'};slot=1
     for i,d in enumerate(descriptors(m['desc'])):
         args[slot]={'op':'argument','index':i};slot+=2 if d in ('J','D') else 1
@@ -52,6 +52,8 @@ def decode(model,key):
         elif op==89:stack.append(stack[-1])
         elif op==87:pop()
         elif op==187:stack.append({'op':'allocation','site':site,'owner':n['type']})
+        elif op==189:
+            pop();stack.append({'op':'unknown','reason':'unmodeled-array'})
         elif op==192:pass
         elif op==178:stack.append({'op':'unknown','reason':'static:'+field(n)})
         elif op==180:stack.append({'op':'field','field':field(n),'descriptor':n['desc'],'receiver':pop(),'site':site})
