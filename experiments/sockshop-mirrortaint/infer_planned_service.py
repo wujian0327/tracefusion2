@@ -36,8 +36,10 @@ def evaluate(e,fields,summed=None):
     raise ValueError('Unmodeled scalar expression')
 
 
-def infer_service(plan,path):
-    raw=Path(path).read_bytes();rows=[json.loads(l) for l in raw.splitlines()]
+def infer_service(plan,path,rows=None):
+    if rows is None:
+        raw=Path(path).read_bytes();rows=[json.loads(l) for l in raw.splitlines()];log_bytes=len(raw)
+    else:log_bytes=Path(path).stat().st_size
     require(rows and rows[0]['kind']=='start','Capture start missing')
     require([r['seq'] for r in rows]==list(range(1,len(rows)+1)),'Observation sequence gap')
     require(not any(r['kind']=='problem' for r in rows),'Failed collection')
@@ -124,5 +126,5 @@ def infer_service(plan,path):
     return {'mode':mode,'answers':answers,'rejected_roots':rejected,'events':len(rows),'data_events':sum(r['kind'] not in ('class','start','metrics') for r in rows),
             'field_events':sum(r['kind'] in ('read','write') for r in rows),'branch_events':sum(r['kind']=='branch' for r in rows),
             'snapshot_field_records':sum(len(i['fields']) for e in entries.values() for i in e.get('inputs',[]))+sum(len(e.get('input_fields',[])) for e in entries.values())+sum(len(e.get('fields',[])) for e in exits.values()),
-            'log_bytes':len(raw),'hook_metrics':next(r for r in rows if r['kind']=='metrics'),
+            'log_bytes':log_bytes,'hook_metrics':next(r for r in rows if r['kind']=='metrics'),
             'oracle_consumed':False,'origin_matching_uses_values':False,'origin_matching_uses_trace_ids':False}

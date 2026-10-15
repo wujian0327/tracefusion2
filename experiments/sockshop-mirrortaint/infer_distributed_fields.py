@@ -18,11 +18,12 @@ def equivalent(a,b):return a.get('value')==b.get('value')
 
 
 class Reconstruction:
-    def __init__(self,build,root,roles):
+    def __init__(self,build,root,roles,decoded_rows=None):
         self.nodes={};self.edges={};self.rows={};self.plans={};self.providers=defaultdict(list);self.unpaired=[]
         self.stats={};self.local_queries={}
         for role in roles:
-            plan=json.loads((build/role/'plan.json').read_text());path=root/role/'events.jsonl';rows=[json.loads(l) for l in path.read_text().splitlines()]
+            plan=json.loads((build/role/'plan.json').read_text());path=root/role/'events.jsonl'
+            rows=decoded_rows[role] if decoded_rows is not None else [json.loads(l) for l in path.read_text().splitlines()]
             require([r['seq'] for r in rows]==list(range(1,len(rows)+1)),'Event sequence gap')
             require(not any(r['kind']=='problem' for r in rows),'Collector problem')
             require(sum(r['kind']=='metrics' for r in rows)==1,'Capture did not close')
@@ -86,7 +87,7 @@ class Reconstruction:
             require(equivalent(s['observed'],t['observed']),'JSON property changed; never rematch by value')
             self.edges[target]=[source]
     def reductions(self,role,build,root):
-        p=self.plans[role];r=infer_service(p,root/role/'events.jsonl');self.local_queries[role]=r
+        p=self.plans[role];r=infer_service(p,root/role/'events.jsonl',rows=self.rows[role]);self.local_queries[role]=r
         entries={v['frame']:v for v in self.rows[role] if v['kind']=='enter'};exits={v['frame']:v for v in self.rows[role] if v['kind']=='exit'}
         for a in r['answers']:
             calc=entries[a['basis']['producer']];end=exits[a['root_frame']];leaves=[]

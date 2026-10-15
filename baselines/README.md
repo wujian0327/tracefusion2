@@ -109,13 +109,19 @@ python3 experiments/sockshop-mirrortaint/verify_original_path_images.py \
   --build artifacts/baseline-field-build --out artifacts/baseline-field-run
 ```
 
-这部分完成TraceFusion两应用的评分、算法审计、协议测试和原镜像JAR校验；
-随后可按MirrorTaint说明进行共同查询校准。它尚不足以满足当前共同成本驱动的
-全部入口检查：`run_sockshop_cost.py run`还要求`w3c-comparison.json`通过。
-该历史回执由`compare_w3c_paths.py`比较迁移前后的独立捕获生成，需要对应旧工件，
-并要求本地采集/还原核心源码哈希不变。新增boundary策略后此条件不再成立，
-新clone不能按本节命令直接进入共同成本运行，也不能复制旧回执或伪造通过状态。
-最新严格消融使用单独的语义回归对照，见下方摘要；共同成本驱动尚未接入该验收方式。
+这部分完成TraceFusion两应用的评分、算法审计、协议测试和原镜像JAR校验。
+继续生成当前版本的验收回执（在副本上重评分、重审计、检查实际wire及镜像）：
+
+```bash
+python3 experiments/sockshop-mirrortaint/audit_current_acceptance.py \
+  --build artifacts/baseline-field-build --correctness artifacts/baseline-field-run \
+  --out artifacts/baseline-field-acceptance
+```
+
+成本运行显式传入`--acceptance artifacts/baseline-field-acceptance`，回执绑定当前
+构建、原始捕获、审计源码和审计证据，变化后必须重新验收。它不要求旧电脑捕获，
+也不声称本地核心源码未改变。未指定此参数的旧调用仍要求历史`w3c-comparison.json`；
+`compare_w3c_paths.py`保留源码不变条件，不能复制旧回执或伪造迁移对照通过。
 当前种子和业务注册表下，参考结果为Sock Shop 198/198、Train Ticket 31/31。
 运行使用回环端口18580–18583、18600–18602及10.254.249.0/24子网，两应用顺序运行。
 已有输出目录保留为证据，重跑应更换目录名。只清理本次随机部署项目，不清理其他项目。

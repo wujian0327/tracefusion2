@@ -311,7 +311,8 @@ def trial_run(args, trial, mode, build):
                 prepared[-1]['message'] = trace+'/'+span
                 save(dest/name/'query-contract.json', prepared[-1])
                 phases[label].append(prepared)
-        phase(phases['warmup'], args.warmup, args.rate, args.concurrency, dest, args.allow_errors)
+        warmup = phase(phases['warmup'], args.warmup, args.rate, args.concurrency, dest, args.allow_errors)
+        save(trial/'warmup.json', warmup)
         before = log_position(dest)
         with Sampler(containers, args.sample_interval, trial/'resources.jsonl') as sampler:
             steady = phase(phases['steady'], args.seconds, args.rate, args.concurrency, dest, args.allow_errors)
@@ -324,8 +325,14 @@ def trial_run(args, trial, mode, build):
         save(dest/'run.json', result)
         resource_summary = sampler.summary(steady['start_ns'], steady['scheduled_end_ns'])
         # Stop only these three JVMs so every capture has its shutdown metrics.
+        shutdown_started_ns=time.monotonic_ns()
         for role in ROLES:
             dep.compose('stop', '-t', '20', role, timeout=40)
+        capture_closed_ns=time.monotonic_ns()
+        save(trial/'result-timeline.json',{'steady_start_ns':steady['start_ns'],
+            'steady_scheduled_end_ns':steady['scheduled_end_ns'],'steady_drain_end_ns':steady['drain_end_ns'],
+            'shutdown_started_ns':shutdown_started_ns,'capture_closed_upper_bound_ns':capture_closed_ns,
+            'scope':'Host CLOCK_MONOTONIC. Per-response completion in steady.json. Capture closed is a conservative upper bound for raw result durability, not the first native tag availability. Target-field creation is not separately timestamped.'})
         offline_result = None
         if mode in ('tracefusion','mirrortaint'):
             command = [sys.executable, str(getattr(args,'offline_program',Path(__file__).resolve())), 'offline', '--out', str(trial), '--build', str(build)]
@@ -516,11 +523,16 @@ def run(args):
         scored = load(args.correctness/application/'field-results.json')['summary']
         if scored['exact']!=queries or scored['queries']!=queries or scored['fp'] or scored['fn'] or scored['unknown']:
             raise ValueError('Desktop correctness acceptance required before cost experiment')
-    for filename in ('algorithm-audit.json', 'protocol-checks.json', 'w3c-comparison.json'):
+    for filename in ('algorithm-audit.json', 'protocol-checks.json'):
         if not load(args.correctness/filename)['all_passed']:
             raise ValueError('Desktop acceptance failed: '+filename)
     if not load(args.correctness/'original-image-verification.json')['all_matched']:
         raise ValueError('Original image verification required')
+    if getattr(args,'acceptance',None):
+        from audit_current_acceptance import verify
+        verify(args.acceptance.resolve(),args.correctness,args.build)
+    elif not load(args.correctness/'w3c-comparison.json')['all_passed']:
+        raise ValueError('Legacy W3C comparison failed; use --acceptance for a current audit receipt')
     if args.query_scope=='total':
         import mirrortaint_instances as mt
         args.mt_bundle=args.mt_bundle.resolve();mt.verify(args.mt_bundle)
@@ -584,6 +596,7 @@ def parser():
     p.add_argument('--out', type=Path, required=True)
     p.add_argument('--build', type=Path)
     p.add_argument('--correctness', type=Path)
+    p.add_argument('--acceptance',type=Path,help='Current two-application audit directory; otherwise requires the legacy W3C migration receipt')
     p.add_argument('--rounds', type=int, default=5)
     p.add_argument('--warmup', type=float, default=30)
     p.add_argument('--seconds', type=float, default=60)

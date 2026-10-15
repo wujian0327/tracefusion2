@@ -82,6 +82,10 @@ def configure(spec,dest,bundle):
                       ' -javaagent:/tf2/adapter.jar=threads -javaagent:/tf2/adapter.jar=logging'
                       ' -Dtaint.env=remote -Dtaint.app=works.weave.socks -Dtaint.version=instances'
                       ' -Duser.home=/tf2/capture -Dtf2.mt.logging=true -Dtf2.mt.instances=true')
+            if load(bundle/'build.json').get('diagnostics')=='quiet-agent-info':
+                cfg['volumes'].append(str(bundle/'quiet-diagnostics.jar')+':/tf2/quiet-diagnostics.jar:ro')
+                options=options.replace(' -javaagent:/tf2/mirrorTaint.jar',
+                    ' -javaagent:/tf2/quiet-diagnostics.jar -javaagent:/tf2/mirrorTaint.jar')
         options+=' -javaagent:/tf2/instances.jar -Dinstance.schema=/tf2/schema.json -Dinstance.events=/tf2/capture/instances.jsonl'
         cfg['environment']['JAVA_OPTS']=options
 
@@ -198,14 +202,21 @@ def audit_calibration(trial):
     return report
 
 
-def evaluate(trial,build,mode):
+def evaluate(trial,build,mode,result_out=None):
     started=time.monotonic_ns()
+    result_out=result_out or trial
     root=trial/'sockshop';run=load(root/'run.json');rows=protocol_rows(root,mode)
+    native_events=None
+    if mode=='mirrortaint':
+        native_events=[json.loads(l) for l in one(root.glob('orders/**/adapted-events.jsonl'),'native MT log').read_text().splitlines()]
+    decoded=time.monotonic_ns()
     graph=None
-    if mode=='mirrortaint':predictions=native_predictions(root,rows)
+    if mode=='mirrortaint':
+        graph_built=decoded;predictions=native_predictions(root,rows,native_events)
     else:
         from infer_distributed_fields import Reconstruction
-        graph=Reconstruction(build,root,list(ROLES));predictions={}
+        graph=Reconstruction(build,root,list(ROLES),decoded_rows=rows);predictions={}
+        graph_built=time.monotonic_ns()
         boundary={'service':'carts','kind':'http-json','phase':'write','direction':'response'}
         for c in run['cases']:
             if c['business_passed'] and c['expected_target']:predictions[c['message']]=graph.query(c['message'],'/total','orders',boundary)
@@ -237,8 +248,16 @@ def evaluate(trial,build,mode):
             'source_boundary':'Actual Carts JSON response serialization; not database history',
             'instance_key':['service','observation seq','JSON pointer','object identity','field','application write count'],
             'unsupported_queries':'N/A: returned item fields, Shipment and Train Ticket not calibrated for MT here'}
-    save(root/'field-results.json',report);ready=time.monotonic_ns()
-    save(trial/'offline.json',{'graph_build_seconds':(built-started)/1e9,'restore_score_export_seconds':(ready-started)/1e9,
+    scored_at=time.monotonic_ns()
+    output_root=result_out/'sockshop';output_root.mkdir(parents=True,exist_ok=True)
+    save(output_root/'field-results.json',report);ready=time.monotonic_ns()
+    save(result_out/'offline.json',{'graph_build_seconds':(built-started)/1e9,'restore_score_export_seconds':(ready-started)/1e9,
+                             'phases_seconds':{'decode_and_validate':(decoded-started)/1e9,
+                                 'graph_reconstruction':(graph_built-decoded)/1e9,
+                                 'query_or_native_origin_restore':(built-graph_built)/1e9,
+                                 'oracle_score_and_background_accounting':(scored_at-built)/1e9,
+                                 'answer_export':(ready-scored_at)/1e9},
+                             'phase_scope':'Same algorithm, predecoded row reuse avoids duplicate JSON parsing. Graph phase includes schema/sequence validation; native mode has no graph. Scores/oracle and exports are separate. This is current-code timing, never retroactive historical timing.',
                              'peak_rss_bytes':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024,
                              'answers_ready_ns':ready,'summary':report['summary'],'background_unknown':unknown_background})
     return report

@@ -40,15 +40,14 @@ python3 experiments/sockshop-mirrortaint/calibrate_mirrortaint_total.py \
 
 校准通过后才运行原版、TraceFusion、MirrorTaint三配置的五轮成本：
 
-以下是既有正式协议的运行模板，还必须通过成本驱动的全部验收门槛。
-当前`main`新增boundary观测策略后，旧`compare_w3c_paths.py`的核心源码不变检查
-不再适用；[公共准备](../README.md)说明了缺少的回执和限制。
-共同成本驱动接入当前语义回归验收前，不应将下列命令声称为新clone已跑通的完整入口。
+以下运行要求[公共准备](../README.md)中的当前验收回执及匹配构件的重新校准。
+它不依赖旧迁移对照的核心源码不变前提。
 
 ```bash
 python3 experiments/sockshop-mirrortaint/run_sockshop_cost.py run \
   --out artifacts/baseline-common-cost --build artifacts/baseline-field-build \
   --correctness artifacts/baseline-field-run --query-scope total \
+  --acceptance artifacts/baseline-field-acceptance \
   --modes original tracefusion mirrortaint --rounds 5 --warmup 30 --seconds 60 \
   --rate 2 --concurrency 2 --cpus 1 --memory 768m \
   --mt-bundle artifacts/baseline-mt-build \
