@@ -27,6 +27,7 @@ experiments/sockshop-mirrortaint/*
 !experiments/sockshop-mirrortaint/common-statement-20261014.json
 !experiments/sockshop-mirrortaint/two-grain-comparison-20261014.json
 !experiments/sockshop-mirrortaint/security-field-flow-20261015.json
+!experiments/sockshop-mirrortaint/query-planning-20261015.json
 !experiments/sockshop-mirrortaint/rpc-observer-manifest.mf
 !experiments/sockshop-mirrortaint/tracefusion/
 experiments/sockshop-mirrortaint/tracefusion/*

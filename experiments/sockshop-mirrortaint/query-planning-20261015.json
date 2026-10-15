@@ -1,0 +1,1552 @@
+{
+  "kind": "query-driven-jvm-observation-planning",
+  "date": "2026-10-15",
+  "algorithm": "jvm-query-path-partition-v1",
+  "scope": "Controlled single-JVM root-object scalar/String final-field origins; not original Sock Shop services.",
+  "business_calls": 1980,
+  "native_collision_calls": 4,
+  "distinct_case_inputs": 44,
+  "random_cases_after_freeze": 24,
+  "instance_version_grading": true,
+  "same_collector_class_sha256": {
+    "QueryObservationAgent$1.class": "015da4fed7836f56cbf8e62616338e4f61354673e3eae2c027f93fa8f6d6143e",
+    "QueryObservationAgent$Recorder$Frame.class": "078be8eb2272d399f27c82f1af21cb83037e81fdf9f6bb5b2316ced1b299fd30",
+    "QueryObservationAgent$Recorder.class": "090591dc7b48ffa446587cf9ee2c6e2ecbfa4923ced159adfd9927970cd649a7",
+    "QueryObservationAgent.class": "15d59ba6b85a295dfab7c92d1c8aff623bab5a7a64591df1e8a9e75dfe3dcd63"
+  },
+  "same_reconstructor": true,
+  "results": {
+    "base": {
+      "total": {
+        "full": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 572,
+          "branch_events": 88,
+          "data_events": 748,
+          "log_bytes": 318439,
+          "field_hook_calls": 924,
+          "branch_hook_calls": 88,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "selective": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 88,
+          "branch_events": 44,
+          "data_events": 220,
+          "log_bytes": 111254,
+          "field_hook_calls": 264,
+          "branch_hook_calls": 44,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "fixed": {
+          "queries": 44,
+          "answered": 2,
+          "exact": 2,
+          "unknown": 42,
+          "coverage": 0.045454545454545456,
+          "field_events": 88,
+          "branch_events": 0,
+          "data_events": 176,
+          "log_bytes": 100270,
+          "field_hook_calls": 264,
+          "branch_hook_calls": 0,
+          "peak_overlapping_frames": 12,
+          "peak_parallel_test_frames": 12
+        }
+      },
+      "name": {
+        "full": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 572,
+          "branch_events": 88,
+          "data_events": 748,
+          "log_bytes": 318617,
+          "field_hook_calls": 924,
+          "branch_hook_calls": 88,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "selective": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 88,
+          "branch_events": 0,
+          "data_events": 176,
+          "log_bytes": 88422,
+          "field_hook_calls": 176,
+          "branch_hook_calls": 0,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "fixed": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 88,
+          "branch_events": 0,
+          "data_events": 176,
+          "log_bytes": 88418,
+          "field_hook_calls": 176,
+          "branch_hook_calls": 0,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        }
+      },
+      "payload": {
+        "full": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 572,
+          "branch_events": 88,
+          "data_events": 748,
+          "log_bytes": 318540,
+          "field_hook_calls": 924,
+          "branch_hook_calls": 88,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "selective": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 44,
+          "branch_events": 0,
+          "data_events": 132,
+          "log_bytes": 77089,
+          "field_hook_calls": 132,
+          "branch_hook_calls": 0,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "fixed": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 44,
+          "branch_events": 0,
+          "data_events": 132,
+          "log_bytes": 77086,
+          "field_hook_calls": 132,
+          "branch_hook_calls": 0,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        }
+      },
+      "total-name": {
+        "full": {
+          "queries": 88,
+          "answered": 88,
+          "exact": 88,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 572,
+          "branch_events": 88,
+          "data_events": 748,
+          "log_bytes": 322928,
+          "field_hook_calls": 924,
+          "branch_hook_calls": 88,
+          "peak_overlapping_frames": 12,
+          "peak_parallel_test_frames": 12
+        },
+        "selective": {
+          "queries": 88,
+          "answered": 88,
+          "exact": 88,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 176,
+          "branch_events": 44,
+          "data_events": 308,
+          "log_bytes": 156051,
+          "field_hook_calls": 440,
+          "branch_hook_calls": 44,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "fixed": {
+          "queries": 88,
+          "answered": 46,
+          "exact": 46,
+          "unknown": 42,
+          "coverage": 0.5227272727272727,
+          "field_events": 176,
+          "branch_events": 0,
+          "data_events": 264,
+          "log_bytes": 145067,
+          "field_hook_calls": 440,
+          "branch_hook_calls": 0,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        }
+      },
+      "all": {
+        "full": {
+          "queries": 132,
+          "answered": 132,
+          "exact": 132,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 572,
+          "branch_events": 88,
+          "data_events": 748,
+          "log_bytes": 327340,
+          "field_hook_calls": 924,
+          "branch_hook_calls": 88,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "selective": {
+          "queries": 132,
+          "answered": 132,
+          "exact": 132,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 220,
+          "branch_events": 44,
+          "data_events": 352,
+          "log_bytes": 189508,
+          "field_hook_calls": 572,
+          "branch_hook_calls": 44,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "fixed": {
+          "queries": 132,
+          "answered": 90,
+          "exact": 90,
+          "unknown": 42,
+          "coverage": 0.6818181818181818,
+          "field_events": 220,
+          "branch_events": 0,
+          "data_events": 308,
+          "log_bytes": 178524,
+          "field_hook_calls": 572,
+          "branch_hook_calls": 0,
+          "peak_overlapping_frames": 12,
+          "peak_parallel_test_frames": 12
+        }
+      }
+    },
+    "helper": {
+      "total": {
+        "full": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 572,
+          "branch_events": 88,
+          "data_events": 748,
+          "log_bytes": 318439,
+          "field_hook_calls": 924,
+          "branch_hook_calls": 88,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "selective": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 88,
+          "branch_events": 44,
+          "data_events": 220,
+          "log_bytes": 111254,
+          "field_hook_calls": 264,
+          "branch_hook_calls": 44,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "fixed": {
+          "queries": 44,
+          "answered": 2,
+          "exact": 2,
+          "unknown": 42,
+          "coverage": 0.045454545454545456,
+          "field_events": 88,
+          "branch_events": 0,
+          "data_events": 176,
+          "log_bytes": 100270,
+          "field_hook_calls": 264,
+          "branch_hook_calls": 0,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        }
+      },
+      "name": {
+        "full": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 572,
+          "branch_events": 88,
+          "data_events": 748,
+          "log_bytes": 318617,
+          "field_hook_calls": 924,
+          "branch_hook_calls": 88,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "selective": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 88,
+          "branch_events": 0,
+          "data_events": 176,
+          "log_bytes": 88422,
+          "field_hook_calls": 176,
+          "branch_hook_calls": 0,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "fixed": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 88,
+          "branch_events": 0,
+          "data_events": 176,
+          "log_bytes": 88418,
+          "field_hook_calls": 176,
+          "branch_hook_calls": 0,
+          "peak_overlapping_frames": 12,
+          "peak_parallel_test_frames": 12
+        }
+      },
+      "payload": {
+        "full": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 572,
+          "branch_events": 88,
+          "data_events": 748,
+          "log_bytes": 318540,
+          "field_hook_calls": 924,
+          "branch_hook_calls": 88,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "selective": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 44,
+          "branch_events": 0,
+          "data_events": 132,
+          "log_bytes": 77089,
+          "field_hook_calls": 132,
+          "branch_hook_calls": 0,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "fixed": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 44,
+          "branch_events": 0,
+          "data_events": 132,
+          "log_bytes": 77085,
+          "field_hook_calls": 132,
+          "branch_hook_calls": 0,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        }
+      },
+      "total-name": {
+        "full": {
+          "queries": 88,
+          "answered": 88,
+          "exact": 88,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 572,
+          "branch_events": 88,
+          "data_events": 748,
+          "log_bytes": 322928,
+          "field_hook_calls": 924,
+          "branch_hook_calls": 88,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "selective": {
+          "queries": 88,
+          "answered": 88,
+          "exact": 88,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 176,
+          "branch_events": 44,
+          "data_events": 308,
+          "log_bytes": 156051,
+          "field_hook_calls": 440,
+          "branch_hook_calls": 44,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "fixed": {
+          "queries": 88,
+          "answered": 46,
+          "exact": 46,
+          "unknown": 42,
+          "coverage": 0.5227272727272727,
+          "field_events": 176,
+          "branch_events": 0,
+          "data_events": 264,
+          "log_bytes": 145067,
+          "field_hook_calls": 440,
+          "branch_hook_calls": 0,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        }
+      },
+      "all": {
+        "full": {
+          "queries": 132,
+          "answered": 132,
+          "exact": 132,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 572,
+          "branch_events": 88,
+          "data_events": 748,
+          "log_bytes": 327340,
+          "field_hook_calls": 924,
+          "branch_hook_calls": 88,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "selective": {
+          "queries": 132,
+          "answered": 132,
+          "exact": 132,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 220,
+          "branch_events": 44,
+          "data_events": 352,
+          "log_bytes": 189508,
+          "field_hook_calls": 572,
+          "branch_hook_calls": 44,
+          "peak_overlapping_frames": 12,
+          "peak_parallel_test_frames": 12
+        },
+        "fixed": {
+          "queries": 132,
+          "answered": 90,
+          "exact": 90,
+          "unknown": 42,
+          "coverage": 0.6818181818181818,
+          "field_events": 220,
+          "branch_events": 0,
+          "data_events": 308,
+          "log_bytes": 178524,
+          "field_hook_calls": 572,
+          "branch_hook_calls": 0,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        }
+      }
+    },
+    "noise": {
+      "total": {
+        "full": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 11132,
+          "branch_events": 88,
+          "data_events": 11308,
+          "log_bytes": 4021118,
+          "field_hook_calls": 11484,
+          "branch_hook_calls": 88,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "selective": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 88,
+          "branch_events": 44,
+          "data_events": 220,
+          "log_bytes": 111254,
+          "field_hook_calls": 264,
+          "branch_hook_calls": 44,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "fixed": {
+          "queries": 44,
+          "answered": 2,
+          "exact": 2,
+          "unknown": 42,
+          "coverage": 0.045454545454545456,
+          "field_events": 88,
+          "branch_events": 0,
+          "data_events": 176,
+          "log_bytes": 100270,
+          "field_hook_calls": 264,
+          "branch_hook_calls": 0,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        }
+      },
+      "name": {
+        "full": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 11132,
+          "branch_events": 88,
+          "data_events": 11308,
+          "log_bytes": 4021344,
+          "field_hook_calls": 11484,
+          "branch_hook_calls": 88,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "selective": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 88,
+          "branch_events": 0,
+          "data_events": 176,
+          "log_bytes": 88422,
+          "field_hook_calls": 176,
+          "branch_hook_calls": 0,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "fixed": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 88,
+          "branch_events": 0,
+          "data_events": 176,
+          "log_bytes": 88418,
+          "field_hook_calls": 176,
+          "branch_hook_calls": 0,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        }
+      },
+      "payload": {
+        "full": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 11132,
+          "branch_events": 88,
+          "data_events": 11308,
+          "log_bytes": 4021267,
+          "field_hook_calls": 11484,
+          "branch_hook_calls": 88,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "selective": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 44,
+          "branch_events": 0,
+          "data_events": 132,
+          "log_bytes": 77089,
+          "field_hook_calls": 132,
+          "branch_hook_calls": 0,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "fixed": {
+          "queries": 44,
+          "answered": 44,
+          "exact": 44,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 44,
+          "branch_events": 0,
+          "data_events": 132,
+          "log_bytes": 77085,
+          "field_hook_calls": 132,
+          "branch_hook_calls": 0,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        }
+      },
+      "total-name": {
+        "full": {
+          "queries": 88,
+          "answered": 88,
+          "exact": 88,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 11132,
+          "branch_events": 88,
+          "data_events": 11308,
+          "log_bytes": 4025648,
+          "field_hook_calls": 11484,
+          "branch_hook_calls": 88,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "selective": {
+          "queries": 88,
+          "answered": 88,
+          "exact": 88,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 176,
+          "branch_events": 44,
+          "data_events": 308,
+          "log_bytes": 156051,
+          "field_hook_calls": 440,
+          "branch_hook_calls": 44,
+          "peak_overlapping_frames": 12,
+          "peak_parallel_test_frames": 12
+        },
+        "fixed": {
+          "queries": 88,
+          "answered": 46,
+          "exact": 46,
+          "unknown": 42,
+          "coverage": 0.5227272727272727,
+          "field_events": 176,
+          "branch_events": 0,
+          "data_events": 264,
+          "log_bytes": 145067,
+          "field_hook_calls": 440,
+          "branch_hook_calls": 0,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        }
+      },
+      "all": {
+        "full": {
+          "queries": 132,
+          "answered": 132,
+          "exact": 132,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 11132,
+          "branch_events": 88,
+          "data_events": 11308,
+          "log_bytes": 4030101,
+          "field_hook_calls": 11484,
+          "branch_hook_calls": 88,
+          "peak_overlapping_frames": 13,
+          "peak_parallel_test_frames": 12
+        },
+        "selective": {
+          "queries": 132,
+          "answered": 132,
+          "exact": 132,
+          "unknown": 0,
+          "coverage": 1.0,
+          "field_events": 220,
+          "branch_events": 44,
+          "data_events": 352,
+          "log_bytes": 189508,
+          "field_hook_calls": 572,
+          "branch_hook_calls": 44,
+          "peak_overlapping_frames": 12,
+          "peak_parallel_test_frames": 12
+        },
+        "fixed": {
+          "queries": 132,
+          "answered": 90,
+          "exact": 90,
+          "unknown": 42,
+          "coverage": 0.6818181818181818,
+          "field_events": 220,
+          "branch_events": 0,
+          "data_events": 308,
+          "log_bytes": 178524,
+          "field_hook_calls": 572,
+          "branch_hook_calls": 0,
+          "peak_overlapping_frames": 12,
+          "peak_parallel_test_frames": 12
+        }
+      }
+    }
+  },
+  "plans": {
+    "base": {
+      "total": {
+        "plan_sha256": "b3661576391142b979a57eaad208080bd56ee0b4f71af02cf1519c1dfd2c4eb8",
+        "planning_seconds": 0.0017339420001007966,
+        "selected_branches": 1,
+        "selected_sites": 3,
+        "full_sites": 18,
+        "snapshot_fields": 3,
+        "full_snapshot_fields": 8,
+        "certificate": {
+          "candidate_paths": 4,
+          "different_answer_pairs_requiring_optional_evidence": 4,
+          "remaining_ambiguous_pairs": 0,
+          "claim": "Sufficient relative to enumerated model and fixed runtime contracts; inclusion-minimal branch subset, not global minimum."
+        }
+      },
+      "name": {
+        "plan_sha256": "c47a72140ca8307d7cfd18cc7bfddbe8b9ef58832b9bea95c2878112765b4385",
+        "planning_seconds": 0.0010288690000379574,
+        "selected_branches": 0,
+        "selected_sites": 2,
+        "full_sites": 18,
+        "snapshot_fields": 2,
+        "full_snapshot_fields": 8,
+        "certificate": {
+          "candidate_paths": 4,
+          "different_answer_pairs_requiring_optional_evidence": 0,
+          "remaining_ambiguous_pairs": 0,
+          "claim": "Sufficient relative to enumerated model and fixed runtime contracts; inclusion-minimal branch subset, not global minimum."
+        }
+      },
+      "payload": {
+        "plan_sha256": "c3089b756ab2a20334c26e4222eb1cc2f5c24a9922cf84942bbbd6fb3a642c9f",
+        "planning_seconds": 0.0009936490005202359,
+        "selected_branches": 0,
+        "selected_sites": 2,
+        "full_sites": 18,
+        "snapshot_fields": 2,
+        "full_snapshot_fields": 8,
+        "certificate": {
+          "candidate_paths": 4,
+          "different_answer_pairs_requiring_optional_evidence": 0,
+          "remaining_ambiguous_pairs": 0,
+          "claim": "Sufficient relative to enumerated model and fixed runtime contracts; inclusion-minimal branch subset, not global minimum."
+        }
+      },
+      "total-name": {
+        "plan_sha256": "400dd463f29efaa682ffb9c20c5d0f8a9dbfa906084de30ae7748422a761594d",
+        "planning_seconds": 0.0010137250001207576,
+        "selected_branches": 1,
+        "selected_sites": 5,
+        "full_sites": 18,
+        "snapshot_fields": 5,
+        "full_snapshot_fields": 8,
+        "certificate": {
+          "candidate_paths": 4,
+          "different_answer_pairs_requiring_optional_evidence": 4,
+          "remaining_ambiguous_pairs": 0,
+          "claim": "Sufficient relative to enumerated model and fixed runtime contracts; inclusion-minimal branch subset, not global minimum."
+        }
+      },
+      "all": {
+        "plan_sha256": "a631628f36637440d3e9dc01998002f924bd95e0ae60809042f31fec24492166",
+        "planning_seconds": 0.0010759470005723415,
+        "selected_branches": 1,
+        "selected_sites": 7,
+        "full_sites": 18,
+        "snapshot_fields": 7,
+        "full_snapshot_fields": 8,
+        "certificate": {
+          "candidate_paths": 4,
+          "different_answer_pairs_requiring_optional_evidence": 2,
+          "remaining_ambiguous_pairs": 0,
+          "claim": "Sufficient relative to enumerated model and fixed runtime contracts; inclusion-minimal branch subset, not global minimum."
+        }
+      }
+    },
+    "helper": {
+      "total": {
+        "plan_sha256": "285bd6ef918bc2389a37d88a4f9684e75e5ead85896b3e07949dbf937cb1bdc0",
+        "planning_seconds": 0.002036873999713862,
+        "selected_branches": 1,
+        "selected_sites": 3,
+        "full_sites": 18,
+        "snapshot_fields": 3,
+        "full_snapshot_fields": 8,
+        "certificate": {
+          "candidate_paths": 4,
+          "different_answer_pairs_requiring_optional_evidence": 4,
+          "remaining_ambiguous_pairs": 0,
+          "claim": "Sufficient relative to enumerated model and fixed runtime contracts; inclusion-minimal branch subset, not global minimum."
+        }
+      },
+      "name": {
+        "plan_sha256": "37e17dee2f92d0fda36aae38a16b3049496dd322e4650b6c4de174e6b3217615",
+        "planning_seconds": 0.001532293000309437,
+        "selected_branches": 0,
+        "selected_sites": 2,
+        "full_sites": 18,
+        "snapshot_fields": 2,
+        "full_snapshot_fields": 8,
+        "certificate": {
+          "candidate_paths": 4,
+          "different_answer_pairs_requiring_optional_evidence": 0,
+          "remaining_ambiguous_pairs": 0,
+          "claim": "Sufficient relative to enumerated model and fixed runtime contracts; inclusion-minimal branch subset, not global minimum."
+        }
+      },
+      "payload": {
+        "plan_sha256": "40f2ee57a486932133b793de1799d568dda9cf4951f3575f5cfb43bb593f876d",
+        "planning_seconds": 0.0019809929999610176,
+        "selected_branches": 0,
+        "selected_sites": 2,
+        "full_sites": 18,
+        "snapshot_fields": 2,
+        "full_snapshot_fields": 8,
+        "certificate": {
+          "candidate_paths": 4,
+          "different_answer_pairs_requiring_optional_evidence": 0,
+          "remaining_ambiguous_pairs": 0,
+          "claim": "Sufficient relative to enumerated model and fixed runtime contracts; inclusion-minimal branch subset, not global minimum."
+        }
+      },
+      "total-name": {
+        "plan_sha256": "780c35954daff38c952c72964a94206bfc5e6e94b56e4726ffbb8e55081786fe",
+        "planning_seconds": 0.0015600189999531722,
+        "selected_branches": 1,
+        "selected_sites": 5,
+        "full_sites": 18,
+        "snapshot_fields": 5,
+        "full_snapshot_fields": 8,
+        "certificate": {
+          "candidate_paths": 4,
+          "different_answer_pairs_requiring_optional_evidence": 4,
+          "remaining_ambiguous_pairs": 0,
+          "claim": "Sufficient relative to enumerated model and fixed runtime contracts; inclusion-minimal branch subset, not global minimum."
+        }
+      },
+      "all": {
+        "plan_sha256": "208be8ea3afafc41ffea692e3b0ef2d55fde65268af4453402114adaf563b874",
+        "planning_seconds": 0.0018505010002627387,
+        "selected_branches": 1,
+        "selected_sites": 7,
+        "full_sites": 18,
+        "snapshot_fields": 7,
+        "full_snapshot_fields": 8,
+        "certificate": {
+          "candidate_paths": 4,
+          "different_answer_pairs_requiring_optional_evidence": 2,
+          "remaining_ambiguous_pairs": 0,
+          "claim": "Sufficient relative to enumerated model and fixed runtime contracts; inclusion-minimal branch subset, not global minimum."
+        }
+      }
+    },
+    "noise": {
+      "total": {
+        "plan_sha256": "f05658b3bb221b6117f242904bd57e80553c8b9a7eb5ec19b45da0a9a03dd90e",
+        "planning_seconds": 0.12932353999985935,
+        "selected_branches": 1,
+        "selected_sites": 3,
+        "full_sites": 258,
+        "snapshot_fields": 3,
+        "full_snapshot_fields": 8,
+        "certificate": {
+          "candidate_paths": 4,
+          "different_answer_pairs_requiring_optional_evidence": 4,
+          "remaining_ambiguous_pairs": 0,
+          "claim": "Sufficient relative to enumerated model and fixed runtime contracts; inclusion-minimal branch subset, not global minimum."
+        }
+      },
+      "name": {
+        "plan_sha256": "6cff9b8ab013a48aad8bea6dfe9a6f84615123ebaf3383ab5d53099283f6b680",
+        "planning_seconds": 0.11382677599976887,
+        "selected_branches": 0,
+        "selected_sites": 2,
+        "full_sites": 258,
+        "snapshot_fields": 2,
+        "full_snapshot_fields": 8,
+        "certificate": {
+          "candidate_paths": 4,
+          "different_answer_pairs_requiring_optional_evidence": 0,
+          "remaining_ambiguous_pairs": 0,
+          "claim": "Sufficient relative to enumerated model and fixed runtime contracts; inclusion-minimal branch subset, not global minimum."
+        }
+      },
+      "payload": {
+        "plan_sha256": "45face68d380da2ebb03ae70938b84a3305b238734aa8bf10511919a379d697c",
+        "planning_seconds": 0.09534824799993658,
+        "selected_branches": 0,
+        "selected_sites": 2,
+        "full_sites": 258,
+        "snapshot_fields": 2,
+        "full_snapshot_fields": 8,
+        "certificate": {
+          "candidate_paths": 4,
+          "different_answer_pairs_requiring_optional_evidence": 0,
+          "remaining_ambiguous_pairs": 0,
+          "claim": "Sufficient relative to enumerated model and fixed runtime contracts; inclusion-minimal branch subset, not global minimum."
+        }
+      },
+      "total-name": {
+        "plan_sha256": "7dd5497ef920986a8145ff224aebb1efbe691d93a018803eeb674f4f6cd98e10",
+        "planning_seconds": 0.1088569710000229,
+        "selected_branches": 1,
+        "selected_sites": 5,
+        "full_sites": 258,
+        "snapshot_fields": 5,
+        "full_snapshot_fields": 8,
+        "certificate": {
+          "candidate_paths": 4,
+          "different_answer_pairs_requiring_optional_evidence": 4,
+          "remaining_ambiguous_pairs": 0,
+          "claim": "Sufficient relative to enumerated model and fixed runtime contracts; inclusion-minimal branch subset, not global minimum."
+        }
+      },
+      "all": {
+        "plan_sha256": "33fc7f0af59983eba4bcd0462caaa339f6117bc0d8eb9edecc72d5ed8826e203",
+        "planning_seconds": 0.12578607600062242,
+        "selected_branches": 1,
+        "selected_sites": 7,
+        "full_sites": 258,
+        "snapshot_fields": 7,
+        "full_snapshot_fields": 8,
+        "certificate": {
+          "candidate_paths": 4,
+          "different_answer_pairs_requiring_optional_evidence": 2,
+          "remaining_ambiguous_pairs": 0,
+          "claim": "Sufficient relative to enumerated model and fixed runtime contracts; inclusion-minimal branch subset, not global minimum."
+        }
+      }
+    }
+  },
+  "audits": {
+    "base": {
+      "passed": true,
+      "checks": [
+        {
+          "test": "model-independently-matches-javap",
+          "passed": true,
+          "instructions": 69
+        },
+        {
+          "test": "all-evidence-equivalence-classes-have-one-answer",
+          "passed": true
+        },
+        {
+          "test": "changing-only-target-changes-plan",
+          "passed": true
+        },
+        {
+          "test": "tampered-certificate-rejected",
+          "passed": true
+        },
+        {
+          "test": "source-and-target-field-renaming-needs-no-algorithm-change",
+          "passed": true
+        },
+        {
+          "test": "last-write-kills-prior-field-origin",
+          "passed": true
+        },
+        {
+          "test": "unsupported-loop-rejected",
+          "passed": true
+        },
+        {
+          "test": "unmodelled-external-effect-rejected",
+          "passed": true
+        },
+        {
+          "test": "missing-selected-observation-rejected",
+          "passed": true
+        },
+        {
+          "test": "request-label-does-not-select-origins",
+          "passed": true
+        },
+        {
+          "test": "target-version-corruption-rejected",
+          "passed": true
+        },
+        {
+          "test": "equal-value-distinct-objects-stay-ambiguous-without-required-branch",
+          "passed": true
+        },
+        {
+          "test": "repeated-objects-preserve-source-and-target-versions",
+          "passed": true
+        }
+      ],
+      "raw_captures_modified": false
+    },
+    "helper": {
+      "passed": true,
+      "checks": [
+        {
+          "test": "model-independently-matches-javap",
+          "passed": true,
+          "instructions": 75
+        },
+        {
+          "test": "all-evidence-equivalence-classes-have-one-answer",
+          "passed": true
+        },
+        {
+          "test": "changing-only-target-changes-plan",
+          "passed": true
+        },
+        {
+          "test": "tampered-certificate-rejected",
+          "passed": true
+        },
+        {
+          "test": "source-and-target-field-renaming-needs-no-algorithm-change",
+          "passed": true
+        },
+        {
+          "test": "last-write-kills-prior-field-origin",
+          "passed": true
+        },
+        {
+          "test": "unsupported-loop-rejected",
+          "passed": true
+        },
+        {
+          "test": "unmodelled-external-effect-rejected",
+          "passed": true
+        },
+        {
+          "test": "missing-selected-observation-rejected",
+          "passed": true
+        },
+        {
+          "test": "request-label-does-not-select-origins",
+          "passed": true
+        },
+        {
+          "test": "target-version-corruption-rejected",
+          "passed": true
+        },
+        {
+          "test": "equal-value-distinct-objects-stay-ambiguous-without-required-branch",
+          "passed": true
+        },
+        {
+          "test": "repeated-objects-preserve-source-and-target-versions",
+          "passed": true
+        }
+      ],
+      "raw_captures_modified": false
+    },
+    "noise": {
+      "passed": true,
+      "checks": [
+        {
+          "test": "model-independently-matches-javap",
+          "passed": true,
+          "instructions": 629
+        },
+        {
+          "test": "all-evidence-equivalence-classes-have-one-answer",
+          "passed": true
+        },
+        {
+          "test": "changing-only-target-changes-plan",
+          "passed": true
+        },
+        {
+          "test": "tampered-certificate-rejected",
+          "passed": true
+        },
+        {
+          "test": "source-and-target-field-renaming-needs-no-algorithm-change",
+          "passed": true
+        },
+        {
+          "test": "last-write-kills-prior-field-origin",
+          "passed": true
+        },
+        {
+          "test": "unsupported-loop-rejected",
+          "passed": true
+        },
+        {
+          "test": "unmodelled-external-effect-rejected",
+          "passed": true
+        },
+        {
+          "test": "missing-selected-observation-rejected",
+          "passed": true
+        },
+        {
+          "test": "request-label-does-not-select-origins",
+          "passed": true
+        },
+        {
+          "test": "target-version-corruption-rejected",
+          "passed": true
+        },
+        {
+          "test": "equal-value-distinct-objects-stay-ambiguous-without-required-branch",
+          "passed": true
+        },
+        {
+          "test": "repeated-objects-preserve-source-and-target-versions",
+          "passed": true
+        }
+      ],
+      "raw_captures_modified": false
+    }
+  },
+  "collision": {
+    "passed": true,
+    "fixed_semantic_evidence_equal": true,
+    "business_outputs_equal": true,
+    "selected_origins_differ_and_are_known": true,
+    "origins": {
+      "right": [
+        [
+          0,
+          "QueryPlannerFixture$Source.unitPrice"
+        ],
+        [
+          1,
+          "QueryPlannerFixture$Source.quantity"
+        ]
+      ],
+      "left": [
+        [
+          0,
+          "QueryPlannerFixture$Source.quantity"
+        ],
+        [
+          0,
+          "QueryPlannerFixture$Source.unitPrice"
+        ]
+      ]
+    },
+    "normalization": "Alpha-rename root object identities by argument position; omit JVM thread/frame labels and boxed value object identities, which do not select field origins. Retain field values, versions, target writes and sites.",
+    "same_evidence": [
+      {
+        "kind": "enter",
+        "arguments": [
+          {
+            "argument": 0,
+            "owner": "arg:0",
+            "fields": [
+              {
+                "field": "QueryPlannerFixture$Source.quantity",
+                "version": 1,
+                "value": 4
+              },
+              {
+                "field": "QueryPlannerFixture$Source.unitPrice",
+                "version": 1,
+                "value": 2.5
+              }
+            ]
+          },
+          {
+            "argument": 1,
+            "owner": "arg:1",
+            "fields": [
+              {
+                "field": "QueryPlannerFixture$Source.quantity",
+                "version": 1,
+                "value": 4
+              },
+              {
+                "field": "QueryPlannerFixture$Source.unitPrice",
+                "version": 1,
+                "value": 2.5
+              }
+            ]
+          },
+          {
+            "argument": 2,
+            "owner": "arg:2",
+            "fields": [
+              {
+                "field": "QueryPlannerFixture$Orders.total",
+                "version": 0,
+                "value": 0.0
+              }
+            ]
+          },
+          {
+            "argument": 3,
+            "owner": "arg:3",
+            "fields": []
+          },
+          {
+            "argument": 4,
+            "owner": "arg:4",
+            "fields": []
+          }
+        ]
+      },
+      {
+        "kind": "write",
+        "site": "QueryPlannerFixture.process(LQueryPlannerFixture$Source;LQueryPlannerFixture$Source;LQueryPlannerFixture$Orders;LQueryPlannerFixture$Shipment;LQueryPlannerFixture$Noise;)V@11",
+        "owner": "arg:2",
+        "field": "QueryPlannerFixture$Orders.total",
+        "version": 1,
+        "value": 0.0
+      },
+      {
+        "kind": "write",
+        "site": "QueryPlannerFixture.process(LQueryPlannerFixture$Source;LQueryPlannerFixture$Source;LQueryPlannerFixture$Orders;LQueryPlannerFixture$Shipment;LQueryPlannerFixture$Noise;)V@17",
+        "owner": "arg:2",
+        "field": "QueryPlannerFixture$Orders.total",
+        "version": 2,
+        "value": 14.99
+      },
+      {
+        "kind": "exit",
+        "arguments": [
+          {
+            "argument": 0,
+            "owner": "arg:0",
+            "fields": []
+          },
+          {
+            "argument": 1,
+            "owner": "arg:1",
+            "fields": []
+          },
+          {
+            "argument": 2,
+            "owner": "arg:2",
+            "fields": [
+              {
+                "field": "QueryPlannerFixture$Orders.total",
+                "version": 2,
+                "value": 14.99
+              }
+            ]
+          },
+          {
+            "argument": 3,
+            "owner": "arg:3",
+            "fields": []
+          },
+          {
+            "argument": 4,
+            "owner": "arg:4",
+            "fields": []
+          }
+        ]
+      }
+    ],
+    "scope": "Concrete counterexample for removing the selected branch under this bounded field-origin evidence model."
+  },
+  "source_sha256": {
+    "experiments/sockshop-mirrortaint/QueryBytecodeModel.java": "6565b975028812d6b8091d8ea81abf285e4a075b6db4eb5a51a60b1e653946ca",
+    "experiments/sockshop-mirrortaint/QueryPlannerFixture.java": "179dafd850a780dafb5e955a556c16072d578d493242d2b22a87939a3c06b2c7",
+    "experiments/sockshop-mirrortaint/QueryObservationAgent.java": "3f48ead5b09077c8ba8568da0037619c01636766e56f2d8d186e517fb1b99ff4",
+    "experiments/sockshop-mirrortaint/query_observation_planner.py": "3ca005d55a7eaafa1ce90410d0f565df26165b568c59a42f3075a0e9b360b191",
+    "experiments/sockshop-mirrortaint/infer_query_observations.py": "28037e92245d80a8be0c234814b48a59082312904ba126672e17d38f13d5bdd8",
+    "experiments/sockshop-mirrortaint/run_query_planner.py": "0aab16a573100c8ebffcf57abaa217abcff77a73fc3d1596cf5546cfc0690afe",
+    "experiments/sockshop-mirrortaint/audit_query_planner.py": "9b38fcf66b599e77ee1c78f3c4def45fa98bace3c721bec519f698160726014b",
+    "experiments/sockshop-mirrortaint/summarize_query_planner.py": "1fba235b8c9c1e07e336ff919c87f5a09c2f69c5645995e208588a9ed08bada2",
+    "experiments/sockshop-mirrortaint/README.md": "99f9fd5e46afa9ea4d8dd8bafe69833b4dc156652cea840b1601e8294045d366"
+  },
+  "evidence_sha256": {
+    "artifacts/query-planner-20261015/algorithm-audit.json": "69e5306e5b7b930bdebafdc7b05ddb419d00d1e25c5b9e0e948f106df26bf0dd",
+    "artifacts/query-planner-20261015/results.json": "a4ecd90f99243def17bd1cf3719a0502e8a0d3491d107f587c7e15cd04386da8",
+    "artifacts/query-planner-20261015/cases.json": "7e71e24a3a7891a26f661bf45fc772f9cf816e5b4a0ed6c1681a5d46cd2c9a44",
+    "artifacts/query-planner-20261015/freeze.json": "a244ccfcf92e987cd269e177e531ff3d2de5037504518d2901dd670d78fed12d",
+    "artifacts/query-planner-20261015/total-name-selective/run.json": "669d85a361a66fc62852d68bd9139824300bb3932aa895f3ef49a4b1d6292c7e",
+    "artifacts/query-planner-20261015/total-name-selective/business.json": "b42f9a944b16c74ded617bdef6f510e07a9e65222183a983f3cc52538d4a1330",
+    "artifacts/query-planner-20261015/total-name-selective/predictions.json": "0abda1d990be4b8a87a1e8a0cbdb8152a3b7cac6bd794f0a9a353b265cc6b5a6",
+    "artifacts/query-planner-20261015/payload-selective/run.json": "cb851b74262ef06e2482a854108127e4dbaa66778bbf9521c29bd0ac5ad155fd",
+    "artifacts/query-planner-20261015/payload-selective/business.json": "b4f6cdeaa11ecc6a4da894c228b9225455eb8462e2798a4a60ecff3d73ef09dd",
+    "artifacts/query-planner-20261015/payload-selective/predictions.json": "0300d0c1cc1be3b138d5bd3913574a86b33fc064a1d1ab82b6a7319bad5ac36f",
+    "artifacts/query-planner-20261015/payload-fixed/run.json": "fa5ebe1ef50b1fffd38377148dd095274b55bc437b57d4ff6c7d7804641399f9",
+    "artifacts/query-planner-20261015/payload-fixed/business.json": "19fc2fdf7c446abd903c2ec15ff590b240d301920171e01f48677d974c1c1541",
+    "artifacts/query-planner-20261015/payload-fixed/predictions.json": "f2411f24cd5bd021066bb46fdd291ce1b1d331c22bb8789de78027739005a284",
+    "artifacts/query-planner-20261015/all-fixed/run.json": "f29b1e548189e3b712aa10a6809fb170c951eba8caac91bca459354686789fb8",
+    "artifacts/query-planner-20261015/all-fixed/business.json": "37f5888b64e93c241683097a18a0ec9d31d25f4e6dceb123e9aa01115d2f774c",
+    "artifacts/query-planner-20261015/all-fixed/predictions.json": "cf98b94a839f7eb9fa6808e7f7eed1bfe434fa7eda7e2ff399bb7723ed02dfff",
+    "artifacts/query-planner-20261015/total-name-fixed/run.json": "a2985f197c0f48349388bf1b3e8bfec2fadd083e7636417677a21d4a0f1b0360",
+    "artifacts/query-planner-20261015/total-name-fixed/business.json": "0329c40d0cb100d42000cd94fa0db2225d451da9790009acf188fe5d350bf22d",
+    "artifacts/query-planner-20261015/total-name-fixed/predictions.json": "c67cb6b1f8889baf7742d9be3b085df16935f2fd38d10c7c759369eb453bcae5",
+    "artifacts/query-planner-20261015/total-name-full/run.json": "f33dd839976a11cd5a6a51f895ee3d8de1fbdd1a8a9aa1012a55e02450a0ffa6",
+    "artifacts/query-planner-20261015/total-name-full/business.json": "cf0d0d4b03f2cf771a79b5bbdbf22d7b47d98f0fe6ca4a53e29cf7413b8efdc7",
+    "artifacts/query-planner-20261015/total-name-full/predictions.json": "4b86865ff7f0e8889f651ae395aceed4226d80979a31b9ead1b7394ad10e5510",
+    "artifacts/query-planner-20261015/total-fixed/run.json": "515ae2e4b1dc88026d7b886adf4b6fa2ff2038ff1e6d8a5ca1f08de6d47e62bb",
+    "artifacts/query-planner-20261015/total-fixed/business.json": "10c4392364fc875d97479f15cb0f312d9bd3cd45db2e0b1fd1fc059710d92d93",
+    "artifacts/query-planner-20261015/total-fixed/predictions.json": "5c552116e3cf073f9964c431db1ae874608f9047f7ba9979ed26393618dde1f2",
+    "artifacts/query-planner-20261015/total-selective/run.json": "084d139d1e583d8b3154f39ace98904e4858b846c52f3dcd05ff12bdb3bff64c",
+    "artifacts/query-planner-20261015/total-selective/business.json": "9de8d4e3c6ff0ac994317f4dcbacc930f638e36842e234f3ea8da2a2053384f6",
+    "artifacts/query-planner-20261015/total-selective/predictions.json": "527735d8679f3ab0becdcd04e67064929380e3ce19c6e6f3bfca15f1f65282e2",
+    "artifacts/query-planner-20261015/name-selective/run.json": "f7612b17922180414a73688145602dcd4a9ebf688c9d6801abe7e49b5fa5eddf",
+    "artifacts/query-planner-20261015/name-selective/business.json": "6c6a6c163c736234303546cff5141c448dbc3918b4a41cbf83add5fcf7c07e5c",
+    "artifacts/query-planner-20261015/name-selective/predictions.json": "1a9f3da881f77191632cfa99499fed2b37424cf08e4d2662d99a750ba42bf493",
+    "artifacts/query-planner-20261015/total-full/run.json": "6f99d9b881e1e637cbaee5d52de924046d8291701cf338554c7bd9630a093751",
+    "artifacts/query-planner-20261015/total-full/business.json": "4880320f1730cc75f840ea254375c25440a81380515bb2277ef988d37b56c4dd",
+    "artifacts/query-planner-20261015/total-full/predictions.json": "b2f21f7fb47fcc87246bb3ba4470ee7351b66ae9f5e3d65ce1728615e9a7a77d",
+    "artifacts/query-planner-20261015/payload-full/run.json": "6bb98ea08bbaac51bfff9bc387b07cc878d41c1018b393d79a4feb39970a6a97",
+    "artifacts/query-planner-20261015/payload-full/business.json": "5afe81bc2f807998778c56b894a5fb81b1c09bc03d26af905c050566b5afc990",
+    "artifacts/query-planner-20261015/payload-full/predictions.json": "21b022bb5c3b8627690126d6c586e3272a1c85af072c86ff78a48258957d33ce",
+    "artifacts/query-planner-20261015/all-selective/run.json": "2ae6dfc626d0d33b311be3597b9874fd9b501a5d7072a152f0e0eceeae2e9b30",
+    "artifacts/query-planner-20261015/all-selective/business.json": "9acb47d20c6be86b993924c0858a2fc17419f6e16cec02d0899156ab4d8db788",
+    "artifacts/query-planner-20261015/all-selective/predictions.json": "f3634f1e36becdb898ef2d90753e705807bda3c6036774f103d0b1fe8e55ee18",
+    "artifacts/query-planner-20261015/all-full/run.json": "3338c4b4df970ec5fd02d65066fcc2828ddb8abd4f5a9a925b3444628f7b9124",
+    "artifacts/query-planner-20261015/all-full/business.json": "9ab34de35915881667ec079f45c4fe5e00ec06d14a686597c13413befcdffd4c",
+    "artifacts/query-planner-20261015/all-full/predictions.json": "0a742ea326dd073ee55dc39326ebeaae7439c41cea5ff1a7dbc33dfee56f138a",
+    "artifacts/query-planner-20261015/name-fixed/run.json": "86c227598b0b2aad865adda3d9d20adc8f994f50becfcd2304eebe666e16d136",
+    "artifacts/query-planner-20261015/name-fixed/business.json": "e239cd563ffa72b17fc486fdf02db957e9adbcd4edaa719bdb124f0a76f369dd",
+    "artifacts/query-planner-20261015/name-fixed/predictions.json": "966b99abad9209ae1baf4b756ad75163a1254f9743a9ba8611e5c169249063e1",
+    "artifacts/query-planner-20261015/name-full/run.json": "3aee28520278caf1f5a88dce53947d6ec78aef2b331dd4af8857a7a232e0a015",
+    "artifacts/query-planner-20261015/name-full/business.json": "fa4da62879ce9ca9a967865e8277517d913967c00be5a24d1b712831c9345fc3",
+    "artifacts/query-planner-20261015/name-full/predictions.json": "8a9d8d31eababfc418bf174a48b2861e5573d8085c37b0bd1ec066edf218dfc2",
+    "artifacts/query-planner-20261015/total-name-selective/events.jsonl": "774dac28623eb8aba86c1f8fe35d1c9bf5e093a57c5c935d1fd07324c6e54480",
+    "artifacts/query-planner-20261015/payload-selective/events.jsonl": "5ed5e2efb4b7278871484df15a87818e4a91b2e46b47f220970fb2b216078283",
+    "artifacts/query-planner-20261015/payload-fixed/events.jsonl": "54683f580f6221ca328ebc7a742f8fad69435a476ed33565ae69e39059955576",
+    "artifacts/query-planner-20261015/all-fixed/events.jsonl": "6955bd6bee543e60666e14d3501e4dde77ba97ebc195f3204d851acec94b6108",
+    "artifacts/query-planner-20261015/total-name-fixed/events.jsonl": "58820954ef990598a4b8cd1f4cc63f6fef61dd0e583e9bdf344d07ff7722debd",
+    "artifacts/query-planner-20261015/total-name-full/events.jsonl": "864c74722708c80f1f70b6613901648dae636e1163f9c470576e666fc7bb035d",
+    "artifacts/query-planner-20261015/total-fixed/events.jsonl": "6ce2e9d87f9c13afadfa0f16ef5e1d3b56d30b1b9481118ef601cd582fb3ee83",
+    "artifacts/query-planner-20261015/total-selective/events.jsonl": "6d512cfaa4714a0e125c70de29566dc884d9b7f31dc8f1b9d2fb5b8f76774756",
+    "artifacts/query-planner-20261015/name-selective/events.jsonl": "2f1fa00f66c132c43f53977bdb879cbee9f9456ef38e3018a4e111aed93d9f18",
+    "artifacts/query-planner-20261015/total-full/events.jsonl": "8b55b985f8e9a53bdcceb64d2d825881addea87481937850e2ae74cc636df8a5",
+    "artifacts/query-planner-20261015/payload-full/events.jsonl": "b286fd123bd7876eb86064d52deda443296e45a9d7000f58601c4d8e36004e7c",
+    "artifacts/query-planner-20261015/all-selective/events.jsonl": "5f34b207718d139ff34c6905fda39517e4aa5ef04c2213bd70ea9094fb3dd119",
+    "artifacts/query-planner-20261015/all-full/events.jsonl": "6ea5312cc400aa48bda04648f47dc9d6521ca8d2b35b0ce123dda755b4c42fb8",
+    "artifacts/query-planner-20261015/name-fixed/events.jsonl": "ed2f5aa6d352b334f54597573ae948bf08601c5bdabf046e0ae18dd26ade3fea",
+    "artifacts/query-planner-20261015/name-full/events.jsonl": "8a5335cf16fbb0d44cd9cf5a80c7e170040c3d28c1d9abdf51294fc6df46de68",
+    "artifacts/query-planner-build-v2-20261015/name.plan.json": "c47a72140ca8307d7cfd18cc7bfddbe8b9ef58832b9bea95c2878112765b4385",
+    "artifacts/query-planner-build-v2-20261015/all.plan.json": "a631628f36637440d3e9dc01998002f924bd95e0ae60809042f31fec24492166",
+    "artifacts/query-planner-build-v2-20261015/payload.plan.json": "c3089b756ab2a20334c26e4222eb1cc2f5c24a9922cf84942bbbd6fb3a642c9f",
+    "artifacts/query-planner-build-v2-20261015/model.json": "b95db7a2f91e37ddeb5275b75b7e0bee255ce1fc7cccc406cfe71487486daf31",
+    "artifacts/query-planner-build-v2-20261015/total.plan.json": "b3661576391142b979a57eaad208080bd56ee0b4f71af02cf1519c1dfd2c4eb8",
+    "artifacts/query-planner-build-v2-20261015/build.json": "0cff133f47f98331c2c7553a8db91e1adece55c493a54480b8a3763e116f0ef4",
+    "artifacts/query-planner-build-v2-20261015/total-name.plan.json": "400dd463f29efaa682ffb9c20c5d0f8a9dbfa906084de30ae7748422a761594d",
+    "artifacts/query-planner-build-v2-20261015/query-observer.jar": "6720f48b8ae5565b23fd436aa62e3386285d2cc09cb80592227fefbcf5de9aba",
+    "artifacts/query-planner-build-v2-20261015/QueryPlannerFixture.java": "77b4f09dc563c3926fb040d6e424c25e62e9d3db9cfe9825c6962fe6c11368d4",
+    "artifacts/query-planner-helper-20261015/algorithm-audit.json": "feb0c10d492076b21aa6763a8af6861bdc59aec025d49e86fd21e0498f146df1",
+    "artifacts/query-planner-helper-20261015/results.json": "d8c7439b92aaf9cb379766f4297b76bd31165f7e3812bba85bcf0499d9604d02",
+    "artifacts/query-planner-helper-20261015/cases.json": "7e71e24a3a7891a26f661bf45fc772f9cf816e5b4a0ed6c1681a5d46cd2c9a44",
+    "artifacts/query-planner-helper-20261015/freeze.json": "d1477be2937c88f02a35af53988062a3cb24eda09a90293fac7adf1babf94559",
+    "artifacts/query-planner-helper-20261015/total-name-selective/run.json": "6b107d4502543c90de4d6b0f59a4771a9f680d8a04b2f1638354c43a3f32227b",
+    "artifacts/query-planner-helper-20261015/total-name-selective/business.json": "b0a3f1ef05406890383e571fd078c0dd3c0c000180ad75a02a82a667f582381c",
+    "artifacts/query-planner-helper-20261015/total-name-selective/predictions.json": "ee5b49234c2a71c49e5597ebc07094cd27ea6a979c7b790969e4eedfae630ea2",
+    "artifacts/query-planner-helper-20261015/payload-selective/run.json": "aa3f26c84719ba8eb07a309be8625e00c16d4044f443eccaca62d682ea6b4eae",
+    "artifacts/query-planner-helper-20261015/payload-selective/business.json": "740f0b1fa33b83d7f74327d263ffb8a09210120a9f28d1da7effa0cb00eaa822",
+    "artifacts/query-planner-helper-20261015/payload-selective/predictions.json": "1b49e0459ae9d4882dfacc91f9fc9f7aeba76baed94616a03651b0b49762fd2f",
+    "artifacts/query-planner-helper-20261015/payload-fixed/run.json": "735244851dd4b0eb22d4e3d7e71c66a7708411233b4a71dd9271a2e6a41ea395",
+    "artifacts/query-planner-helper-20261015/payload-fixed/business.json": "78cbf0c046da936639f9912b2b039600d3e0af8aa39b1892442c799f959a9de9",
+    "artifacts/query-planner-helper-20261015/payload-fixed/predictions.json": "89745d718ba99d43afe0c42d16bd5d650a0da62483724d93ed45373374957bc4",
+    "artifacts/query-planner-helper-20261015/all-fixed/run.json": "e10d079a61d42c60dbe7fcfccff425aedf7cc715d9875b8bdd827154f6ee4730",
+    "artifacts/query-planner-helper-20261015/all-fixed/business.json": "0670b7dbe454d0d4b07dc7d8f178960d9f25b675fb91d810757a180c797ebd07",
+    "artifacts/query-planner-helper-20261015/all-fixed/predictions.json": "97aed028cc16db98fdf95919ecb783a56939ab8fafe25f2c0f87c4bb5551af1c",
+    "artifacts/query-planner-helper-20261015/total-name-fixed/run.json": "a02675ff3cde64b3472fac2a0dc9df3c307b43e1b0534e6889214c06fa1ac1e0",
+    "artifacts/query-planner-helper-20261015/total-name-fixed/business.json": "1ca5ea52d00c6554a7097c04a5e83b6a246efa269285a83307fa9694a6802c55",
+    "artifacts/query-planner-helper-20261015/total-name-fixed/predictions.json": "4d38ff16d28c995acc6be60dfe87777050ddc9ef95ccc9fad010dacb4dc55979",
+    "artifacts/query-planner-helper-20261015/total-name-full/run.json": "a0e0aececbfe4569f3444f2c09ecc074af9fed50caa0d01d2f029325d265776f",
+    "artifacts/query-planner-helper-20261015/total-name-full/business.json": "4c24d65c1340d8bc0605338f3c571f7028a940213c1e73f5a0ba0e5fae46bd9d",
+    "artifacts/query-planner-helper-20261015/total-name-full/predictions.json": "b08dd437b1959e16b71805e050a7b8260246152c93baa0e4d3264cb291d282f6",
+    "artifacts/query-planner-helper-20261015/total-fixed/run.json": "fe7a0039fd3bed8de4262331e21c6ddaaefee0254dcbeb76e26861383a3ef2c3",
+    "artifacts/query-planner-helper-20261015/total-fixed/business.json": "f69c1333df5951bec0aab9186f2e729466b1e00e84789e4d5e9aade82a8b93cd",
+    "artifacts/query-planner-helper-20261015/total-fixed/predictions.json": "c0aa61e8d65e9581832715b76b657e90662148a5ab588d0569c04f77899c05d9",
+    "artifacts/query-planner-helper-20261015/total-selective/run.json": "d3188067dc4c57d356481678aa0c897186c3cb4d94f2e5f0dde609644d4721d6",
+    "artifacts/query-planner-helper-20261015/total-selective/business.json": "2e4439166ddead7f73149a7ac93571399086c235c2d0061ee79561b769297967",
+    "artifacts/query-planner-helper-20261015/total-selective/predictions.json": "11b7a25ff37f704c42a4008f3bdd07180b52f76bbc5d4fb5d29a20482688ed9a",
+    "artifacts/query-planner-helper-20261015/name-selective/run.json": "de22d5a1bc21904025cbdf9aab97c1db7801246a6c57739aa5a9846a61725bf6",
+    "artifacts/query-planner-helper-20261015/name-selective/business.json": "ea90b56d58a051220de88a33efb0b0abf106d0d9857a353822a6e6da9315f66b",
+    "artifacts/query-planner-helper-20261015/name-selective/predictions.json": "d0745641c2882c85daba5876fe959946e4cfa5d5640633aa833331f8d3f9993e",
+    "artifacts/query-planner-helper-20261015/total-full/run.json": "dbe9f9846e154c76eb616a3df367f0ab8a1a4fd94ebc6296fb4efe65f04d98d6",
+    "artifacts/query-planner-helper-20261015/total-full/business.json": "39a2b4796c719bbba1a5eb549c966e5883f17003a614ff9b4555ce828d88d3b0",
+    "artifacts/query-planner-helper-20261015/total-full/predictions.json": "8adcb5487c93b4756c32ed3c682c5ff4d779d072b6df6d3a18674560fd2db498",
+    "artifacts/query-planner-helper-20261015/payload-full/run.json": "3945a0f90c1a24cf9be9c09cf18ed931ea85ec445cbab18cd6f1c9f0ab52edc8",
+    "artifacts/query-planner-helper-20261015/payload-full/business.json": "784596b7ca73d136c1847fcfe9696d917c0253f3f0dbeb24eb81684d63b058dc",
+    "artifacts/query-planner-helper-20261015/payload-full/predictions.json": "4f148fcb459bee548e410de90df926defe12791636078ed3e71d9f0371029f90",
+    "artifacts/query-planner-helper-20261015/all-selective/run.json": "9a4c76c0eb25be455a2e5b8d645e83013bff9e991a4c53f4080215a5c0f8faac",
+    "artifacts/query-planner-helper-20261015/all-selective/business.json": "28567eee56a131602c931c14e6f1f7addbc5fe995004ba395c226cf017d66c89",
+    "artifacts/query-planner-helper-20261015/all-selective/predictions.json": "f8bca38362690d4a3ff760a1e9dbddc49281fe7038bc46d693dae473fe280a04",
+    "artifacts/query-planner-helper-20261015/all-full/run.json": "e6d875336f3bae94538f77c6ced23b01e487dd3474bfe6f4bb1d6889e34727b1",
+    "artifacts/query-planner-helper-20261015/all-full/business.json": "3b2c26c62746f855ff99a6186269e99b4c574c770df83d2964e636decf652a0f",
+    "artifacts/query-planner-helper-20261015/all-full/predictions.json": "f9fc99ee77410e5960892f833268f69b0bcf185a9cf4f7b1641e60d2b738ef7f",
+    "artifacts/query-planner-helper-20261015/name-fixed/run.json": "a08c957629cebb57c52c691161d56868c6de516c77e83ea96cc825043523efd7",
+    "artifacts/query-planner-helper-20261015/name-fixed/business.json": "c789774538161e489cc00785decc7dd3450f87167ab5ef79ed83a473b74988cc",
+    "artifacts/query-planner-helper-20261015/name-fixed/predictions.json": "199be7d460452df4dc2723049532191a9cf39ef00bf2ca846c522e2b7338d1f6",
+    "artifacts/query-planner-helper-20261015/name-full/run.json": "d4ee696bc6d744cf468ec8a781641eda8e3d568e3918e21251e08a0810772634",
+    "artifacts/query-planner-helper-20261015/name-full/business.json": "bd6923bb188b2b9669003a45aa852d1dea28b3819458558008683a7bb196bca3",
+    "artifacts/query-planner-helper-20261015/name-full/predictions.json": "8794b74016d683de5b5a3b27f726fd6eeab57b334b015b207527393d890331dd",
+    "artifacts/query-planner-helper-20261015/total-name-selective/events.jsonl": "bdf2f4aa6d8e4fc63c1cd611ab31ae90c77ec1db98e3f220e6526db8e7f2a5dd",
+    "artifacts/query-planner-helper-20261015/payload-selective/events.jsonl": "d6cc42aeeb6187121404448bcc74d5730efc1b3a8c529d03c4ad326f20ba9231",
+    "artifacts/query-planner-helper-20261015/payload-fixed/events.jsonl": "db3323ec5f5dc7a3160853da92380d98fb87321966c376ef4c464f9430cfcf4c",
+    "artifacts/query-planner-helper-20261015/all-fixed/events.jsonl": "1a03cf1b3169ae271c0809cc674bfc96966bd4537c5edb48be7e7ee36e6599b0",
+    "artifacts/query-planner-helper-20261015/total-name-fixed/events.jsonl": "619fa69c4e9f4a6e9b8ffc75a1e1f35281a97b715e61758d2d888bc61a02d1e0",
+    "artifacts/query-planner-helper-20261015/total-name-full/events.jsonl": "981796d1bc07b25954150d3c96f4240182bb6c1e2bd38327c3511d558d1fdfd8",
+    "artifacts/query-planner-helper-20261015/total-fixed/events.jsonl": "7a8e7d7ee89c91ee04347304fd310d634c4f57868b6a4881e260e83363ea7fd1",
+    "artifacts/query-planner-helper-20261015/total-selective/events.jsonl": "b1fca966c5f0de0c261efdc6804709468dcdcc7adcbb166740714aaec31f3e8d",
+    "artifacts/query-planner-helper-20261015/name-selective/events.jsonl": "1a4b54e0a64020f8b4d47b3de28a907761eec142ead6222c3850764731fb6fdb",
+    "artifacts/query-planner-helper-20261015/total-full/events.jsonl": "5c8a7c429761783f2062029c0001248a784c1e93b7d97e2300ed765b2e4ef9f0",
+    "artifacts/query-planner-helper-20261015/payload-full/events.jsonl": "e6e1d088444634d258e4797c4024dd26e83ee5e8223f514268131158c64f3dc1",
+    "artifacts/query-planner-helper-20261015/all-selective/events.jsonl": "8ba4599c079e36a53fe05977d8eb6031dc0d1bdea5664d3510f703ba72fd7c20",
+    "artifacts/query-planner-helper-20261015/all-full/events.jsonl": "6837ff55949d1c6395597da9de78d136cb68571a7d76a4a8625904a97b3ce062",
+    "artifacts/query-planner-helper-20261015/name-fixed/events.jsonl": "ce64e077c2340e7f0aec1ef1f549c21f912cbd608d7c4dc4d69becbf51f7202b",
+    "artifacts/query-planner-helper-20261015/name-full/events.jsonl": "d4d9ce5bfdd119541cd84f1a8a746c2759b643db0fe1df391fad9e92ec1bdc87",
+    "artifacts/query-planner-helper-build-20261015/name.plan.json": "37e17dee2f92d0fda36aae38a16b3049496dd322e4650b6c4de174e6b3217615",
+    "artifacts/query-planner-helper-build-20261015/all.plan.json": "208be8ea3afafc41ffea692e3b0ef2d55fde65268af4453402114adaf563b874",
+    "artifacts/query-planner-helper-build-20261015/payload.plan.json": "40f2ee57a486932133b793de1799d568dda9cf4951f3575f5cfb43bb593f876d",
+    "artifacts/query-planner-helper-build-20261015/model.json": "b166eda748b691151e09f842226361652dc51b13845cec03e64ed71f7bc79e8a",
+    "artifacts/query-planner-helper-build-20261015/total.plan.json": "285bd6ef918bc2389a37d88a4f9684e75e5ead85896b3e07949dbf937cb1bdc0",
+    "artifacts/query-planner-helper-build-20261015/build.json": "dfd70e1d18d8b8f14e92203ce9743c7e638e7fb18626af32dc2d064f85b67eb3",
+    "artifacts/query-planner-helper-build-20261015/total-name.plan.json": "780c35954daff38c952c72964a94206bfc5e6e94b56e4726ffbb8e55081786fe",
+    "artifacts/query-planner-helper-build-20261015/query-observer.jar": "730d069e00a7a7760d10baab4497858b999f02ae51359c954ee24e5698cc8518",
+    "artifacts/query-planner-helper-build-20261015/QueryPlannerFixture.java": "3dc1267b4d3a27f4496e4d89ac7e9d365a5ba253c28ab794722fd05672e5300d",
+    "artifacts/query-planner-noise-20261015/algorithm-audit.json": "49574c0cb6c23fcf7996ffd19e5e87cbc8e3871cdf7c3d5d5bf86922311f6a82",
+    "artifacts/query-planner-noise-20261015/results.json": "f5157fe1860159eeaf45f424daf37c43fa61db29cbf3693145dff703878a1b0f",
+    "artifacts/query-planner-noise-20261015/cases.json": "7e71e24a3a7891a26f661bf45fc772f9cf816e5b4a0ed6c1681a5d46cd2c9a44",
+    "artifacts/query-planner-noise-20261015/freeze.json": "f91583c2d5f78c41a7fd2b3aa9af7b78c1afa78725b3ed1bc798fdf70aec19b3",
+    "artifacts/query-planner-noise-20261015/total-name-selective/run.json": "f0e2d4c7c5cd782a89df2b29d48380115e663fe67a814dcf43603791e7cc8e0e",
+    "artifacts/query-planner-noise-20261015/total-name-selective/business.json": "44ee2326f374ae00e921f7bc4f6b4048bde1e542c95e1a5509723ad8dcd1cd44",
+    "artifacts/query-planner-noise-20261015/total-name-selective/predictions.json": "b45db4839c5beff0d9e78c2cef478c6a3c0618e466188937d28636939f849ef1",
+    "artifacts/query-planner-noise-20261015/payload-selective/run.json": "21646c904a602ee3251d1d5c38458a4e6402e16b63b1882255a3e382b16ea21f",
+    "artifacts/query-planner-noise-20261015/payload-selective/business.json": "0f144227242af2dc92320d45fb1794df2e936135a35114dd5fc014180414af1d",
+    "artifacts/query-planner-noise-20261015/payload-selective/predictions.json": "5daf2ab2e75f510925fe6883261ba0c2dafbfb9dbfacdff0fb6a0b41c3380438",
+    "artifacts/query-planner-noise-20261015/payload-fixed/run.json": "949edd80ff29b6ba3154d8b8057c16a873f828da8ab94b9796e286280576c248",
+    "artifacts/query-planner-noise-20261015/payload-fixed/business.json": "949df95cb0322c0ec82884f7e7fe6621322d45b3c40f24d51d2440d081d560fd",
+    "artifacts/query-planner-noise-20261015/payload-fixed/predictions.json": "46c8e443cdb5ad0d7488081ea57abf0d01d8306ce385a345b995941fb40c1271",
+    "artifacts/query-planner-noise-20261015/all-fixed/run.json": "692d856317cba8377cc41b316cdaacf55cae3f168a47dd688107a1fa4f2ce506",
+    "artifacts/query-planner-noise-20261015/all-fixed/business.json": "00fb52ba47a156c9446e44520c98668b5dcf8e965b521f5d68b480be8c01428a",
+    "artifacts/query-planner-noise-20261015/all-fixed/predictions.json": "a81a9a66fd663e98ad714d84489cf3c2779d3a5e0d375f7dba970af4a11624d1",
+    "artifacts/query-planner-noise-20261015/total-name-fixed/run.json": "b3213fb3b3d6ef5e86aa34efe401ad842e2dd8ac07a17df6d32918a6a0410e29",
+    "artifacts/query-planner-noise-20261015/total-name-fixed/business.json": "f1e96112208437eef4790c8d2c11e41da16e9ef814535647c22c9b67f62f382b",
+    "artifacts/query-planner-noise-20261015/total-name-fixed/predictions.json": "0ed8db946eaa3002445fe1c5551c49ae15126313fb97af8c7cf08ff5f2b41e1a",
+    "artifacts/query-planner-noise-20261015/total-name-full/run.json": "a4e928cb33053a75698171824433c58d0cea99e417cbd2f99253d4784ea8488b",
+    "artifacts/query-planner-noise-20261015/total-name-full/business.json": "7cedc09be3852d2dc94fff0a8a3b63171df5cc27532f8b54f30ef2838d503bbe",
+    "artifacts/query-planner-noise-20261015/total-name-full/predictions.json": "852dbee9c99b94d13b0af7a4d0be20900b76890d1c575fb92cc5c233cfd0929b",
+    "artifacts/query-planner-noise-20261015/total-fixed/run.json": "729a022f1c8de43ac28073adc00688a840f5f255f400b9361ba691f1c6b1b185",
+    "artifacts/query-planner-noise-20261015/total-fixed/business.json": "8dcca4584d0f3979ea43a9bf6c6c8110099c1b172066d377d035ba3cbe2ca82b",
+    "artifacts/query-planner-noise-20261015/total-fixed/predictions.json": "343fc82cd50725ac59370b602c306cfaac08de21fa7cc5bfaf5dc16947f367c7",
+    "artifacts/query-planner-noise-20261015/total-selective/run.json": "d5ad4ac8eb9fde1382ef56acb217f87adcdc9d9d7abd6d1112f30114e5b93a34",
+    "artifacts/query-planner-noise-20261015/total-selective/business.json": "6340213fbf9cecb00c2869dc810b5bdb60c8e0126ef178e723e2a224e1d5ca2a",
+    "artifacts/query-planner-noise-20261015/total-selective/predictions.json": "c77891f892617387705d5a271909bd5870ba4ecf35dab79e6fd6f0dd2b02de8f",
+    "artifacts/query-planner-noise-20261015/name-selective/run.json": "6290f3aa491448c41a005e49eb17e95f4bc29ac2ac6793b73f0ba045b07c4e12",
+    "artifacts/query-planner-noise-20261015/name-selective/business.json": "fd79fe552de5fa557bb315098be38deaae40da9f46586d3342f611b43e7037f2",
+    "artifacts/query-planner-noise-20261015/name-selective/predictions.json": "246f9ae5598ea6f39716a2539e65ddd89cac0b40b2c114a979929a961b6d3fd7",
+    "artifacts/query-planner-noise-20261015/total-full/run.json": "07cd6549842709ce61cfb870b5971c37ec24707c991aeb4284be48124ce86094",
+    "artifacts/query-planner-noise-20261015/total-full/business.json": "a7594c032648ac4f76025177df2355105781931906a71d4de2c1ed517b81a2c3",
+    "artifacts/query-planner-noise-20261015/total-full/predictions.json": "9671e64dbd03c2a2c8f02b516deabea610329052fa7a3966de8a259e7bf3b871",
+    "artifacts/query-planner-noise-20261015/payload-full/run.json": "81a92b5bb23263bad3e2d281acbabd3ea3997d14f13ca39ff81f9df4466e2cb6",
+    "artifacts/query-planner-noise-20261015/payload-full/business.json": "0ed786409e4481f3836a6ea235bb57fb2ab960080735c4c80f47bec027f5cf29",
+    "artifacts/query-planner-noise-20261015/payload-full/predictions.json": "0a6aa06f83087f966c98d3c34acee5c1bf45780b793b9090d9b50e614ddfb2b0",
+    "artifacts/query-planner-noise-20261015/all-selective/run.json": "e99cbccea8c08dfcfc3f588ad39692ace7efbc4e038527df377286d447c74e0f",
+    "artifacts/query-planner-noise-20261015/all-selective/business.json": "4a566f817af48f431881047450af184c9ffd377da064d2053139fa681286b7b9",
+    "artifacts/query-planner-noise-20261015/all-selective/predictions.json": "56eebfadadc4a191dc320e5667c1398586298e6450c5debb498a5de6f9aaa8e2",
+    "artifacts/query-planner-noise-20261015/all-full/run.json": "b4bcc1dbe7e7ad1c2e6a7eff3761c63cc169c0a373f9e0ed897e2cf79714eebd",
+    "artifacts/query-planner-noise-20261015/all-full/business.json": "1c2e11d325dfd59523858f28a4f2f3770796498cd4d7bcc39d9c271a0bd5c38c",
+    "artifacts/query-planner-noise-20261015/all-full/predictions.json": "bbace2051d6fcbf0a563c97eaba5cec124fba449d22cc768c3b2353d5df7fa7d",
+    "artifacts/query-planner-noise-20261015/name-fixed/run.json": "fb61c2ddca08afba208d99f2bbe793bb8dc1e8f6e1ad944c1487a6f38e693748",
+    "artifacts/query-planner-noise-20261015/name-fixed/business.json": "b7c756136123ccea164f7cdfa5253d6479dabe0e8325796086d46f66e0bddab9",
+    "artifacts/query-planner-noise-20261015/name-fixed/predictions.json": "84666358320914fab401d72223fac4e8031470f9bd26fad5512029221a852c7c",
+    "artifacts/query-planner-noise-20261015/name-full/run.json": "031ad8e7ab2fa3a3b6d646dc5e4472f1edf67142cfb3ee741e04c43921e979d9",
+    "artifacts/query-planner-noise-20261015/name-full/business.json": "c8f227dbf8d37ab52144bddc321d4bcd1c186198e01cd04c209b7a8b057464ee",
+    "artifacts/query-planner-noise-20261015/name-full/predictions.json": "111bb687ea834e37a9e9215d01454bdef878544df07b93c5c2e23666af8d1996",
+    "artifacts/query-planner-noise-20261015/total-name-selective/events.jsonl": "9ff769fe8ce946816d1adfef6caf62ed9f40d8e40bfdaab3d02d2960fa80594d",
+    "artifacts/query-planner-noise-20261015/payload-selective/events.jsonl": "463334e699df396dc026e0c89e7390d390c826ba7c22f031c800d639e540d6b6",
+    "artifacts/query-planner-noise-20261015/payload-fixed/events.jsonl": "15aaf974cc06d3a8936598d010e4ad4fcf99dc6769d70933a4a270360cec8332",
+    "artifacts/query-planner-noise-20261015/all-fixed/events.jsonl": "2da6adb08965d71b6bfa14a4a2cf416d42f10080be97f8293a202971161732ec",
+    "artifacts/query-planner-noise-20261015/total-name-fixed/events.jsonl": "b2c20717b98476c591596c25cc62a301d40a10381c63c0dd7b29c9197664e505",
+    "artifacts/query-planner-noise-20261015/total-name-full/events.jsonl": "57ac93b73e4a7ed7ff71347c6e9aeb3b98ca0b1db528a7c949a1569a1dc0fb34",
+    "artifacts/query-planner-noise-20261015/total-fixed/events.jsonl": "aba88a9a168b2a85ca50fe3a65ae4964a9633e71cf0814edb88b47231ef809b1",
+    "artifacts/query-planner-noise-20261015/total-selective/events.jsonl": "90aab5480ff9617c47825287acea01ea1f2ba0d54dc9ed168871b1c624a3bfc3",
+    "artifacts/query-planner-noise-20261015/name-selective/events.jsonl": "ae6c45df3a9eabd68edb37b52b66b8d2f2a728e8d8c931ca173afddfab7a9cd4",
+    "artifacts/query-planner-noise-20261015/total-full/events.jsonl": "fea4fce67e818bfebc7d610d501385b11637e30811635091d219d519b1434a6a",
+    "artifacts/query-planner-noise-20261015/payload-full/events.jsonl": "7af48bdd0bd86396715db5858122a1cba4d72c4f0cfc7dd4c73a9181dfc6dcca",
+    "artifacts/query-planner-noise-20261015/all-selective/events.jsonl": "2df4ee7b8e9555b1dc932695baefcee8cdd793cbb4922d96715b9bef12937290",
+    "artifacts/query-planner-noise-20261015/all-full/events.jsonl": "aa78e38325ca8ddc60d89d950c87f1ddac9db6ecf202caa191b08fddec2b0d19",
+    "artifacts/query-planner-noise-20261015/name-fixed/events.jsonl": "449ac7441556b919b60d3c39a0c3eecacc0aebf3c6cf78cc386dd75972a3ded7",
+    "artifacts/query-planner-noise-20261015/name-full/events.jsonl": "fed73fcd0e43e79562e7574f5a73a71d6b28f68fcda6e447e98322d2975d04c5",
+    "artifacts/query-planner-noise-build-20261015/name.plan.json": "6cff9b8ab013a48aad8bea6dfe9a6f84615123ebaf3383ab5d53099283f6b680",
+    "artifacts/query-planner-noise-build-20261015/all.plan.json": "33fc7f0af59983eba4bcd0462caaa339f6117bc0d8eb9edecc72d5ed8826e203",
+    "artifacts/query-planner-noise-build-20261015/payload.plan.json": "45face68d380da2ebb03ae70938b84a3305b238734aa8bf10511919a379d697c",
+    "artifacts/query-planner-noise-build-20261015/model.json": "7a8f9f085657b6a1586a4e560bf064056f4f8811e727b4b8ba6cf4893c398c55",
+    "artifacts/query-planner-noise-build-20261015/total.plan.json": "f05658b3bb221b6117f242904bd57e80553c8b9a7eb5ec19b45da0a9a03dd90e",
+    "artifacts/query-planner-noise-build-20261015/build.json": "9771566bb9a67630759f037599f73a6ede07aad36e42d65a0f615e8fed0798e5",
+    "artifacts/query-planner-noise-build-20261015/total-name.plan.json": "7dd5497ef920986a8145ff224aebb1efbe691d93a018803eeb674f4f6cd98e10",
+    "artifacts/query-planner-noise-build-20261015/query-observer.jar": "730d069e00a7a7760d10baab4497858b999f02ae51359c954ee24e5698cc8518",
+    "artifacts/query-planner-noise-build-20261015/QueryPlannerFixture.java": "cc64a18e940e76141fa1ea12451614f17675d66cb0b55395556ea16830049ec8",
+    "artifacts/query-planner-comparison-20261015/comparison.csv": "4bb387f75a87e083a9e1952002be987fe71534126cd865234122f4b1af28b58b",
+    "artifacts/query-planner-comparison-20261015/results.md": "e835b894dbf0befed9ec54cf583ab20a73deda0282fea99c6cba5afaa86e40ff",
+    "artifacts/query-planner-comparison-20261015/summary.json": "cb924525e8eb95e145f8d201e46825e25b5c5863317719e4ab8a3bc75dd4d158",
+    "artifacts/query-planner-collision-20261015/right.cases.json": "8e9838be4e6b656519600c2bc9b396fdb4f1ab1ae97dbc145d22e3f747d00dec",
+    "artifacts/query-planner-collision-20261015/left.cases.json": "bb7e1197cbd0054fbcdf95a01263e00843499e15ef68adeec8207d868a9ab14c",
+    "artifacts/query-planner-collision-20261015/collision.json": "f4353033f5d3db221b48c11ef5ad80a62d881decd8b14cbc135681e6a00e8ea5",
+    "artifacts/query-planner-collision-20261015/right-fixed/events.jsonl": "24832380364a3e4592f9d0a144d9cc88882369fd781dd7f990d22042c74c68a7",
+    "artifacts/query-planner-collision-20261015/right-fixed/console.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "artifacts/query-planner-collision-20261015/right-fixed/business.json": "afc8b5b6ee8f240ba4de8bf60930c9d217393d073094ac1a27e80fa1670ab931",
+    "artifacts/query-planner-collision-20261015/right-fixed/predictions.json": "f79d607e25123f86afef48afdab78b83b4df79c2f8a4ecd37dfd1f0e302f225a",
+    "artifacts/query-planner-collision-20261015/left-selective/events.jsonl": "8fc260407e2e7db14cca6edcdb3f4ac99c238dced8de9fb7c81e33ca08e64b55",
+    "artifacts/query-planner-collision-20261015/left-selective/console.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "artifacts/query-planner-collision-20261015/left-selective/business.json": "afc8b5b6ee8f240ba4de8bf60930c9d217393d073094ac1a27e80fa1670ab931",
+    "artifacts/query-planner-collision-20261015/left-selective/predictions.json": "6180a2374d5d9da966b31e4906c1e4beb06e47deedfaa395534788f8d10a4c01",
+    "artifacts/query-planner-collision-20261015/left-fixed/events.jsonl": "24832380364a3e4592f9d0a144d9cc88882369fd781dd7f990d22042c74c68a7",
+    "artifacts/query-planner-collision-20261015/left-fixed/console.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "artifacts/query-planner-collision-20261015/left-fixed/business.json": "afc8b5b6ee8f240ba4de8bf60930c9d217393d073094ac1a27e80fa1670ab931",
+    "artifacts/query-planner-collision-20261015/left-fixed/predictions.json": "f79d607e25123f86afef48afdab78b83b4df79c2f8a4ecd37dfd1f0e302f225a",
+    "artifacts/query-planner-collision-20261015/right-selective/events.jsonl": "16eaaa4c589304ed9af47dba3b3553416c2fc313f57536f6441e7839ac212053",
+    "artifacts/query-planner-collision-20261015/right-selective/console.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "artifacts/query-planner-collision-20261015/right-selective/business.json": "afc8b5b6ee8f240ba4de8bf60930c9d217393d073094ac1a27e80fa1670ab931",
+    "artifacts/query-planner-collision-20261015/right-selective/predictions.json": "eb08fdf6375b09d8fc311d3022a4d635340414a672ae71e83be76ae74c7ae782"
+  },
+  "performance_eligible": false,
+  "sockshop_main_table_replaced": false,
+  "general_java_correctness_proven": false,
+  "cost_attribution": "Same collector/reconstructor and application scope; event/byte reduction from planned field/branch observations and snapshot schema. No formal runtime/memory comparison.",
+  "limitations": [
+    "Acyclic bounded path enumeration, exact dispatch, root DTO target fields, thread-owned objects and closed application writes.",
+    "Fixed baseline retains mandatory target writes and field-version counters; not pure boundary-only capture.",
+    "Greedy branch pair separation is sufficient/inclusion-minimal relative to model, not globally minimum or a novelty proof.",
+    "ThreadLocal.get/Boolean.booleanValue have declared read-only ambient contracts; missing external effects are rejected.",
+    "Input generator is authored with this prototype; frozen new inputs are not independent third-party blinded benchmarks.",
+    "Spring/Stream/cross-service adaptation, formal costs, loops, arrays, reflection, recursion and nested heap require further work."
+  ],
+  "java_environment": "openjdk version \"21.0.12.1\" 2026-08-18\nOpenJDK Runtime Environment (build 21.0.12.1+1-1-24.04.4-Ubuntu)\nOpenJDK 64-Bit Server VM (build 21.0.12.1+1-1-24.04.4-Ubuntu, mixed mode, sharing)\n"
+}

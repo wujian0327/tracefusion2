@@ -1511,3 +1511,100 @@ python3 experiments/sockshop-mirrortaint/audit_security_leak.py \
 
 `run` 无论成功／失败都停止专属进程、保存退出状态；`audit` 重新生成完整报告。
 已有最终捕获可直接执行最后一步，不能覆盖已有目录重跑采集。
+
+## 2026-10-15 查询驱动的自动观测计划：首版
+
+新增 `query_observation_planner.py`：输入原始应用 class 模型、固定入口边界与目标字段，
+自动追入可确定分派的应用 helper，生成字段来源与覆盖后的表达式、路径区分需求、
+边界快照字段及插桩位置。采集器 `QueryObservationAgent.java` 仅消费计划，不包含
+quantity/unitPrice/name 的业务配置；`infer_query_observations.py` 用同一个候选一致性
+还原器处理 full、selective、fixed 三种证据。业务值与请求名称不选择来源。
+
+这是新增受控 Java 程序的算法验证，**不是原 Sock Shop Orders / Shipment 服务**；
+尚未替换前文 Spring／Stream／跨服务主表。入口边界仍需配置，换查询字段后无需
+修改采集器、还原器或业务计算模型。原始 class 由 `QueryBytecodeModel.java` 导出，
+方法调用、字段读写及数学操作均从指令导出。
+
+规划步骤：
+
+1. 在有界无环应用调用图中构建字段／局部赋值、算术来源和最后写入关系。
+2. 以最终目标字段的来源集合、根对象身份和目标版本为查询答案。
+3. 固定入口／出口身份和字段版本、所有目标写入，枚举固定证据相同但答案不同的路径对。
+4. 贪心保留能区分这些路径对的分支事实，再删除冗余分支；按答案反推快照字段。
+5. 输出可重新生成／检查的计划与证书；证据不足返回 unknown，未知外部效果拒绝规划。
+
+证书检查“同选定证据的候选路径有同来源及版本答案”。这是声明模型内的充分性检查，
+不是任意 Java 的正确性证明；只保证所选分支按删除意义不可再减，不保证所有观测全局
+最少。框架／库摘要仍需要明确支持；不能借此宣布算法新颖性已确立。
+
+| 受控目标集合 | 额外分支点 | 完整／自动完全匹配 | 完整事件 | 自动事件 | 事件减少 |
+| --- | ---: | --- | ---: | ---: | ---: |
+| Orders.total | 1 | 44/44；44/44 | 748 | 220 | 70.6% |
+| Shipment.name | 0 | 44/44；44/44 | 748 | 176 | 76.5% |
+| Noise.payload | 0 | 44/44；44/44 | 748 | 132 | 82.4% |
+| total + name | 1 | 88/88；88/88 | 748 | 308 | 58.8% |
+| 三个字段 | 1 | 132/132；132/132 | 748 | 352 | 52.9% |
+
+完整观测限定于同一入口及可达方法的实例字段／分支集合，非全 JVM 指令追踪。
+事件数包含入口、出口、字段和分支；另计原始日志字节、字段／分支 hook 调用次数。
+所有模式都为相关字段保留显式写入版本计数，包括入口之外的普通应用赋值，计数开销
+没有伪装为零。fixed 保留入口／出口与必要目标写入，比纯边界快照更强。
+对 name，fixed 已足够；对 payload，目标写入位置本身已区分来源；对 total，删去
+所选分支后 42/44 变为 unknown，仅输入对象实际别名的两个案例仍可确定答案。
+
+44 个输入包含同值异对象、输入别名、覆盖赋值、同对象重复调用、12 个实际重叠并发帧，
+以及计划／算法冻结后生成的 24 个新随机输入。评分保留源和目标的对象／字段／版本；
+完整／选择答案按入口参数对象规范化后逐项一致，未合并为业务字段类型。
+重复对象的目标版本为 2 → 4，来源版本为 1 → 2。
+五个查询集合重复使用这批输入，不能声称有 352 个独立案例；也不是第三方独立盲测。
+
+另外验证两个程序变体，无需修改算法或采集器：
+
+- 将计算方法改名，为字段复制加入两层 helper：重新从 class 生成计划，所有答案保持。
+- 增加 80 段无关字段操作：total 完整事件 748 → 11308，自动选择仍为 220；完整日志
+  318439 → 4021118 B，选择性日志保持 111254 B。
+
+三种程序 × 五组查询 × 三模式共 1980 次业务调用。另有四次原生 JVM 反例执行：
+固定输入值、输出值、字段版本和语义观测，仅隐藏选择不同，quantity 分别来自两个对象。
+去掉选定分支，两者均 unknown；保留分支后正确区分。证据比较对根对象身份做
+alpha 重命名，去掉线程／帧名称及装箱值对象身份，保留字段值、字段版本和写入位置。
+三种程序各 13 项审计通过，包括独立 javap 逐指令操作数核验、证书扰动、未知效果及循环
+拒绝、缺失证据、版本破坏、字段名整体替换和请求名称无关性。
+
+完整报告与 CSV 为 `artifacts/query-planner-comparison-20261015/results.md`、
+`comparison.csv`，摘要为 `summary.json`。实际捕获分别为 `query-planner-20261015`、
+`query-planner-helper-20261015`、`query-planner-noise-20261015`；反例为
+`query-planner-collision-20261015`，均在 `artifacts/` 下。
+可提交证据摘要为 `query-planning-20261015.json`。
+
+复现（复用固定 ASM 9.7.1 / Jackson 2.8.6 缓存，无需 Docker）：
+
+```bash
+python3 experiments/sockshop-mirrortaint/run_query_planner.py build \
+  --out artifacts/query-build-new
+python3 experiments/sockshop-mirrortaint/run_query_planner.py freeze \
+  --build artifacts/query-build-new --out artifacts/query-run-new --seed 241016
+python3 experiments/sockshop-mirrortaint/run_query_planner.py run \
+  --build artifacts/query-build-new --out artifacts/query-run-new
+python3 experiments/sockshop-mirrortaint/run_query_planner.py evaluate \
+  --build artifacts/query-build-new --out artifacts/query-run-new
+python3 experiments/sockshop-mirrortaint/audit_query_planner.py \
+  --build artifacts/query-build-new --out artifacts/query-run-new
+```
+
+`build --helper-depth 2` / `--extra-work 80` 分别生成迁移／无关工作变体；`audit_query_planner.py
+--collision` 使用新输出目录重跑实际歧义反例。对已导出的模型，可直接调用规划器，仅换
+`--target Orders.total` 为 `--target Shipment.name`：
+
+```bash
+python3 experiments/sockshop-mirrortaint/query_observation_planner.py \
+  --model artifacts/query-build-new/model.json \
+  --entry 'QueryPlannerFixture.process(LQueryPlannerFixture$Source;LQueryPlannerFixture$Source;LQueryPlannerFixture$Orders;LQueryPlannerFixture$Shipment;LQueryPlannerFixture$Noise;)V' \
+  --target Shipment.name --out artifacts/query-name-new.plan.json
+```
+
+当前限定根参数对象的最终标量／String 字段、可确定分派、无环路径最多 256、调用深度
+最多 12、线程独占 DTO；不支持一般循环、数组、递归、反射、嵌套 heap 别名或隐式流。
+ThreadLocal.get / Boolean.booleanValue 采用声明的只读环境输入契约。
+本轮衡量记录量和答案保持，尚未完成业务延迟、吞吐、总 CPU、离线耗时及内存的正式
+成本比较。运行文件中的 JVM 整体时间包含启动，旧成本数据不能移用。
