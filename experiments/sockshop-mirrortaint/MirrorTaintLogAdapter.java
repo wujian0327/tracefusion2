@@ -161,7 +161,7 @@ public final class MirrorTaintLogAdapter {
                         A tag=(A)raw;Map<String,Object> compact=new LinkedHashMap<>();
                         List<Map<String,Object>> ids=new ArrayList<>();
                         if(tag.A()!=null)for(com.shadow.taint.agent.model.C source:tag.A()) {
-                            Map<String,Object> id=new LinkedHashMap<>();id.put("A",source.C());ids.add(id);
+                            Map<String,Object> tokenId=new LinkedHashMap<>();tokenId.put("A",source.C());ids.add(tokenId);
                         }
                         compact.put("A",tag.A()==null?null:ids);leaf.put("tag",compact);
                     }
