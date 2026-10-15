@@ -1520,8 +1520,8 @@ python3 experiments/sockshop-mirrortaint/audit_security_leak.py \
 quantity/unitPrice/name 的业务配置；`infer_query_observations.py` 用同一个候选一致性
 还原器处理 full、selective、fixed 三种证据。业务值与请求名称不选择来源。
 
-这是新增受控 Java 程序的算法验证，**不是原 Sock Shop Orders / Shipment 服务**；
-尚未替换前文 Spring／Stream／跨服务主表。入口边界仍需配置，换查询字段后无需
+本节是第一阶段新增受控 Java 程序的算法验证，**不是原 Sock Shop Orders / Shipment 服务**；
+后续真实服务接入见下一节，尚未替换前文跨服务工具主表。入口边界仍需配置，换查询字段后无需
 修改采集器、还原器或业务计算模型。原始 class 由 `QueryBytecodeModel.java` 导出，
 方法调用、字段读写及数学操作均从指令导出。
 
@@ -1608,3 +1608,61 @@ python3 experiments/sockshop-mirrortaint/query_observation_planner.py \
 ThreadLocal.get / Boolean.booleanValue 采用声明的只读环境输入契约。
 本轮衡量记录量和答案保持，尚未完成业务延迟、吞吐、总 CPU、离线耗时及内存的正式
 成本比较。运行文件中的 JVM 整体时间包含启动，旧成本数据不能移用。
+
+## 真实服务的自动规划：Orders.total 与 Shipment.name（2026-10-15）
+
+第二阶段使用**原版 Orders 0.4.7 / Shipping 0.4.8 class**，在完整 Docker Sock Shop
+的真实 HTTP / Mongo / RabbitMQ 业务执行中比较 full 与 selective。输入编译程序、
+入口和目标字段后，`plan_service_observations.py` 从字节码自动生成字段快照、计算摘要、
+真实 lambda bootstrap / 顺序 Stream 依赖及目标写入绑定。核心规划器／采集器／还原器
+无 Orders / Shipment / quantity / unitPrice 等业务名单；业务真值在评分器中独立声明。
+两个服务使用相同 `PlannedServiceAgent` 字节码，计划不同；两个模式共用
+`infer_planned_service.py`。
+
+| 真实目标 | 完整／自动完全匹配 | TP / FP / FN（两模式相同） | 完整业务事件 | 自动业务事件 | 减少 | 日志 B：完整 → 自动 |
+| --- | --- | --- | ---: | ---: | ---: | ---: |
+| CustomerOrder.total | 24/24；24/24 | 68 / 0 / 0 | 4548 | 292 | 93.6% | 1426531 → 89741 |
+| Shipping Shipment.name | 29/29；29/29 | 29 / 0 / 0 | 145 | 58 | 60.0% | 50049 → 23043 |
+
+两模式每种均 25 次下单（24 成功、1 支付拒绝）及 5 次独立 Shipping 请求。
+29 次 Shipping 调用包含 24 次成功下单触发的内部调用，不能当成额外独立输入案例。
+Orders 包含 8 个实际重叠的并发根帧，另有冻结计划后生成的 10 个新业务输入。
+来源／目标对象、字段和版本均参与评分；空购物车为合法空来源，支付拒绝另核验无目标。
+同值来源及 id/name 同值不会按值合并。trace ID 仅供外部评分匹配请求，不参与来源选择。
+
+**本轮来源边界变窄且明确，不能直接混入旧跨服务工具主表：**
+
+- total 从实际金额计算入口的成员对象字段版本开始，追到新建订单的 total；
+  未追到这些对象对应的 HTTP 响应／数据库来源。
+- name 从 Shipping 控制器输入对象字段版本开始，追到原样返回对象字段；
+  声明 RabbitTemplate.convertAndSend 对 DTO 参数只读，未还原 AMQP 消费路径。
+
+服务规划器支持两个可复用的受限模板：唯一 writer/producer 的标量顺序归约，以及只读
+输入对象恒等返回；未知效果、一般循环、无法解析的分派等拒绝规划。它不是任意 Java
+的通用规划器，也没有全局最少事件证明。入口外的应用字段写入仍保留版本 hook，计数
+没有隐藏；full 字段 hook 为 Orders 7913 / Shipping 406，selective 为 164 / 58。
+快照字段记录为 Orders 164 → 94，Shipping 58 → 58，另报告原始字节，避免只看合并事件数。
+反射／native 等未建模写入不在保证内。记录量降低不代表已证明 Runtime / Memory 收益，
+正式多轮成本实验仍待完成。
+
+完整结果与复现命令：`artifacts/query-service-final-20261015/results.md`；
+结构化结果：同目录 `comparison.csv` / `summary.json`。最终构建为
+`artifacts/query-service-orders-final-build-20261015` 与
+`artifacts/query-service-shipping-final-build-20261015`。
+`algorithm-audit.json` 19 项通过，独立 javap 核对 362 条指令及操作数；旧规划器另有
+13 项回归通过（在临时副本验证，旧捕获不变）。换 Shipping 目标为 `Shipment.id` 会自动
+生成不同字段计划，此项是静态检查，尚未额外做 id 查询的真实部署实验。
+可提交证据摘要为 `query-service-planning-20261015.json`。本次实验项目与测试卷已清理。
+
+```bash
+python3 experiments/sockshop-mirrortaint/run_planned_service.py evaluate \
+  --out artifacts/query-service-final-20261015 \
+  --build artifacts/query-service-orders-final-build-20261015
+python3 experiments/sockshop-mirrortaint/audit_planned_service.py \
+  --out artifacts/query-service-final-20261015 \
+  --build artifacts/query-service-orders-final-build-20261015
+python3 experiments/sockshop-mirrortaint/summarize_planned_service.py \
+  --out artifacts/query-service-final-20261015 \
+  --build artifacts/query-service-orders-final-build-20261015 \
+  --checkpoint experiments/sockshop-mirrortaint/query-service-planning-20261015.json
+```

@@ -152,7 +152,7 @@ def resolve_target(model,text):
     owner,field=text.rsplit('.',1);matches=[]
     for name,cls in model['classes'].items():
         canonical_name=name.replace('/','.').replace('$','.')
-        if name.replace('/','.')!=owner and canonical_name!=owner and not canonical_name.endswith('.'+owner):continue
+        if name!=owner and name.replace('/','.')!=owner and canonical_name!=owner and not canonical_name.endswith('.'+owner):continue
         for row in cls['fields']:
             if row['name']==field and not row['access']&8 and scalar(row['desc']):matches.append(name+'.'+field)
     require(len(matches)==1,'Target field is absent or ambiguous: '+text)

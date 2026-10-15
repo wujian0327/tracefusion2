@@ -20,6 +20,7 @@ public final class QueryBytecodeModel implements Opcodes {
             if(n instanceof TypeInsnNode)r.put("type",((TypeInsnNode)n).desc);
             if(n instanceof FieldInsnNode){FieldInsnNode f=(FieldInsnNode)n;r.put("owner",f.owner);r.put("name",f.name);r.put("desc",f.desc);}
             if(n instanceof MethodInsnNode){MethodInsnNode c=(MethodInsnNode)n;r.put("owner",c.owner);r.put("name",c.name);r.put("desc",c.desc);}
+            if(n instanceof InvokeDynamicInsnNode){InvokeDynamicInsnNode c=(InvokeDynamicInsnNode)n;r.put("name",c.name);r.put("desc",c.desc);r.put("bootstrap",c.bsm.getOwner()+"."+c.bsm.getName());List<Object> args=new ArrayList<>();for(Object a:c.bsmArgs){if(a instanceof Handle){Handle h=(Handle)a;Map<String,Object> hrow=new LinkedHashMap<>();hrow.put("handle",h.getOwner()+"."+h.getName()+h.getDesc());hrow.put("tag",h.getTag());args.add(hrow);}else args.add(String.valueOf(a));}r.put("bootstrap_args",args);}
             if(n instanceof JumpInsnNode){AbstractInsnNode target=((JumpInsnNode)n).label;while(target!=null&&target.getOpcode()<0)target=target.getNext();r.put("target",indices.get(target));}
             rows.add(r);
         }
