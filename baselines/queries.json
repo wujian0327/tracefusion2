@@ -1,0 +1,39 @@
+{
+  "orders": {
+    "jar": "artifacts/baselines/apps/orders/original.jar",
+    "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+    "targets": [
+      "works.weave.socks.orders.entities.CustomerOrder.total"
+    ]
+  },
+  "carts": {
+    "jar": "artifacts/baselines/apps/carts/original.jar"
+  },
+  "shipping": {
+    "jar": "artifacts/baselines/apps/shipping/original.jar",
+    "entry": "works/weave/socks/shipping/controllers/ShippingController.postShipping(Lworks/weave/socks/shipping/entities/Shipment;)Lworks/weave/socks/shipping/entities/Shipment;",
+    "targets": [
+      "works.weave.socks.shipping.entities.Shipment.name"
+    ]
+  },
+  "station": {
+    "jar": "artifacts/baselines/apps/station/original.jar",
+    "entry": "fdse/microservice/service/StationServiceImpl.queryForId(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+    "targets": [
+      "edu.fudan.common.util.Response.data"
+    ]
+  },
+  "basic": {
+    "jar": "artifacts/baselines/apps/basic/original.jar",
+    "targets": [
+      "edu.fudan.common.util.Response.data"
+    ],
+    "entry": "fdse/microservice/service/BasicServiceImpl.queryForStationId(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;"
+  },
+  "ticketinfo": {
+    "jar": "artifacts/baselines/apps/ticketinfo/original.jar",
+    "targets": [
+      "edu.fudan.common.util.Response.data"
+    ]
+  }
+}

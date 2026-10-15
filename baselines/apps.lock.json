@@ -1,0 +1,51 @@
+{
+  "orders": {
+    "image": "weaveworksdemos/orders@sha256:b622e40e83433baf6374f15e076b53893f79958640fc6667dff597622eff03b9",
+    "jar_path": "/usr/src/app/app.jar",
+    "sha256": "8a2cb87b9bedf79c7ad407fcd72bc74c6c1241ef67ae967de59f1ec5f5873a2b",
+    "destination": "artifacts/baselines/apps/orders/original.jar",
+    "compatibility_aliases": [
+      "artifacts/sockshop-orders-original-20261012/app.jar",
+      "artifacts/sockshop-carts-http-20261014/tracefusion/orders.jar"
+    ]
+  },
+  "carts": {
+    "image": "weaveworksdemos/carts@sha256:434d2f5a6e0e8beef1f253fe96f45b8437a703125fc003434c5282ecf8969a4f",
+    "jar_path": "/usr/src/app/app.jar",
+    "sha256": "ab0d2da1937c219d649766dd3ba84945c4e2063ac9bff6839993f9dc3d8a548b",
+    "destination": "artifacts/baselines/apps/carts/original.jar",
+    "compatibility_aliases": [
+      "artifacts/sockshop-five-methods-original-20261013/carts.jar"
+    ]
+  },
+  "shipping": {
+    "image": "weaveworksdemos/shipping@sha256:983305c948fded487f4a4acdeab5f898e89d577b4bc1ca3de7750076469ccad4",
+    "jar_path": "/usr/src/app/app.jar",
+    "sha256": "5704afeeca3c34e10873b15b5aeaf25cbe8326772382631ff4e579d5fa358890",
+    "destination": "artifacts/baselines/apps/shipping/original.jar",
+    "compatibility_aliases": [
+      "artifacts/sockshop-five-methods-original-20261013/shipping.jar"
+    ]
+  },
+  "station": {
+    "image": "codewisdom/ts-station-service@sha256:1e9ea348b30926c3a31dde87f063a4325f854b123e70c307abe33ea17137f0ea",
+    "jar_path": "/app/ts-station-service-1.0.jar",
+    "sha256": "0143034bae170d40dfad41c5ab44d30d0c3783dd4e4b3fbddfca26e0d07613f9",
+    "destination": "artifacts/baselines/apps/station/original.jar",
+    "compatibility_aliases": []
+  },
+  "basic": {
+    "image": "codewisdom/ts-basic-service@sha256:5d9c0dd7bf47e8575e8d9b456cc6576abac836d62c69ab1989f97bdcc716b102",
+    "jar_path": "/app/ts-basic-service-1.0.jar",
+    "sha256": "b1018c4efcb96aad39565f6992d2e19dbb3684dc95219068074dc903385151b6",
+    "destination": "artifacts/baselines/apps/basic/original.jar",
+    "compatibility_aliases": []
+  },
+  "ticketinfo": {
+    "image": "codewisdom/ts-ticketinfo-service@sha256:7a682378d1f75f519af25f2004b3fac0bb3cd3768fd23a0b64fc7554e36f7054",
+    "jar_path": "/app/ts-ticketinfo-service-1.0.jar",
+    "sha256": "c903bfcc0c7d51a2b16dc516004b70839652849a8331e70629c6d7bc798e1728",
+    "destination": "artifacts/baselines/apps/ticketinfo/original.jar",
+    "compatibility_aliases": []
+  }
+}

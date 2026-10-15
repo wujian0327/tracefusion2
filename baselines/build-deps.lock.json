@@ -1,0 +1,27 @@
+{
+  "asm-9.7.1.jar": {
+    "url": "https://repo.maven.apache.org/maven2/org/ow2/asm/asm/9.7.1/asm-9.7.1.jar",
+    "path": "artifacts/java-collection-deps/asm-9.7.1.jar",
+    "sha256": "8cadd43ac5eb6d09de05faecca38b917a040bb9139c7edeb4cc81c740b713281"
+  },
+  "asm-tree-9.7.1.jar": {
+    "url": "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-tree/9.7.1/asm-tree-9.7.1.jar",
+    "path": "artifacts/java-collection-deps/asm-tree-9.7.1.jar",
+    "sha256": "9929881f59eb6b840e86d54570c77b59ce721d104e6dfd7a40978991c2d3b41f"
+  },
+  "jackson-core-2.8.6.jar": {
+    "url": "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-core/2.8.6/jackson-core-2.8.6.jar",
+    "path": "artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-core-2.8.6.jar",
+    "sha256": "10a8d607dc66aadee9ef24e8b3d83f04b6c0e033926558cc64e408bcbda0ca9f"
+  },
+  "jackson-databind-2.8.6.jar": {
+    "url": "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.8.6/jackson-databind-2.8.6.jar",
+    "path": "artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-databind-2.8.6.jar",
+    "sha256": "922413ca2ff5a8f1f86a2eaae8ff02219322ec6ff00d212e7973df8aac4bbaa3"
+  },
+  "jackson-annotations-2.8.6.jar": {
+    "url": "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.8.6/jackson-annotations-2.8.6.jar",
+    "path": "artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-annotations-2.8.6.jar",
+    "sha256": "92d7580f361174bda3e015c66adafa326aeb9ef7f4a99a895486cef0dae773f8"
+  }
+}
