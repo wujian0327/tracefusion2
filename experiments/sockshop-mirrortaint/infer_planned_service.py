@@ -42,7 +42,7 @@ def infer_service(plan,path):
     require([r['seq'] for r in rows]==list(range(1,len(rows)+1)),'Observation sequence gap')
     require(not any(r['kind']=='problem' for r in rows),'Failed collection')
     require(len([r for r in rows if r['kind']=='metrics'])==1,'Capture did not close')
-    mode=rows[0]['mode'];require(mode in ('full','selective'),'Unknown mode')
+    mode=rows[0]['mode'];require(mode in ('full','selective','boundary'),'Unknown mode')
     require(rows[0]['plan_sha256']==hashlib.sha256((json.dumps(plan,indent=2)+'\n').encode()).hexdigest(),'Frozen plan differs')
     entries={};exits={};aborts=set();events=defaultdict(list);stacks=defaultdict(list)
     versions={};writes=[]

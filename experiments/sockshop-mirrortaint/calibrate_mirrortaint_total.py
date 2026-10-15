@@ -13,7 +13,9 @@ from flowdist_full_order import CachedDeployment
 import mirrortaint_instances as mt
 
 
-def common_spec(mode,dest,build,bundle,cpu=1,memory='768m'):
+def common_spec(mode,dest,build,bundle,cpu=1,memory='768m',observation_policy='selective'):
+    if observation_policy not in ('full','selective','boundary') or mode!='tracefusion' and observation_policy!='selective':
+        raise ValueError('Observation policies apply only to TraceFusion')
     spec=spec_for('original',dest,build,cpu,memory)
     if mode=='mirrortaint':mt.configure(spec,dest,bundle)
     elif mode=='tracefusion':
@@ -24,14 +26,15 @@ def common_spec(mode,dest,build,bundle,cpu=1,memory='768m'):
             cfg['volumes']=list(dict.fromkeys(cfg['volumes']))
             cfg['entrypoint'][2]+=' --port=80'
             cfg['environment']['JAVA_OPTS']=JVM+(' -javaagent:/tf2/observer.jar -Dservice.plan=/tf2/plan.json'
-                ' -Dservice.events=/tf2/capture/events.jsonl -Dservice.mode=selective')
+                ' -Dservice.events=/tf2/capture/events.jsonl -Dservice.mode='+observation_policy)
     return spec
 
 
 def run(args):
     out=args.out.resolve();out.mkdir(parents=True,exist_ok=False)
     build=args.build.resolve();bundle=args.bundle.resolve();dest=out/'sockshop';dest.mkdir()
-    spec=common_spec(args.mode,dest,build,bundle)
+    policy=getattr(args,'observation_policy','selective')
+    spec=common_spec(args.mode,dest,build,bundle,observation_policy=policy)
     save(dest/'compose.json',spec)
     dep=CachedDeployment(argparse.Namespace(project='tf2-mt-cal-'+secrets.token_hex(5),ready_timeout=240),dest,dest/'compose.json')
     result={'status':'failed','project':dep.args.project,'cases':[],'mode':args.mode}
@@ -62,7 +65,8 @@ def run(args):
     save(out/'calibration.json',{'summary':report['summary'],'passed':report['summary']['exact']==report['summary']['queries'] and not report['summary']['unknown'],
                                'bundle_sha256':sha(bundle/'build.json'),'evaluator_sha256':sha(ROOT/'experiments/sockshop-mirrortaint/mirrortaint_instances.py'),
                                'build_sha256':sha(build/'build.json'),'cases_sha256':sha(args.correctness/'cases.json'),
-                               'same_trace_distinct_spans':True,'parallel_requests':8,'contract':'Carts serialized JSON fields -> Orders.total'})
+                               'same_trace_distinct_spans':True,'parallel_requests':8,'contract':'Carts serialized JSON fields -> Orders.total',
+                               'observation_policy':policy})
     print(report['summary'],flush=True)
 
 

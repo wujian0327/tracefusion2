@@ -13,12 +13,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
     static final String R="PlannedServiceAgent$Recorder";
     static Map<String,Object> plan;static Map<String,String> hashes;
-    static Set<String> frames,tracked;static boolean full;
+    static Set<String> frames,tracked;static boolean full,boundary;static String mode;
     public static void premain(String args,Instrumentation instrumentation)throws Exception {
         plan=new ObjectMapper().readValue(new File(System.getProperty("service.plan")),Map.class);
         hashes=(Map<String,String>)plan.get("class_sha256");frames=new HashSet<>((List<String>)plan.get("frame_methods"));
         tracked=new HashSet<>((List<String>)plan.get("snapshot_fields"));
-        String mode=System.getProperty("service.mode","selective");if(!mode.equals("full")&&!mode.equals("selective"))throw new IllegalArgumentException("Unknown mode");full=mode.equals("full");
+        mode=System.getProperty("service.mode","selective");if(!Arrays.asList("full","selective","boundary").contains(mode))throw new IllegalArgumentException("Unknown mode");full=mode.equals("full");boundary=mode.equals("boundary");
+        // HTTP field coordinates still need the same admitted DTO write counts.
+        // Boundary mode removes internal dependency evidence, not those counts.
+        if(boundary)frames.clear();
         Recorder.start();instrumentation.addTransformer(new PlannedServiceAgent());
     }
     public byte[] transform(final ClassLoader loader,String owner,Class<?> prior,ProtectionDomain domain,byte[] bytes) {
@@ -36,13 +39,13 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
                     if(!initialized)continue;
                     if(n instanceof FieldInsnNode) {
                         FieldInsnNode f=(FieldInsnNode)n;String field=f.owner+"."+f.name;
-                        boolean write=f.getOpcode()==PUTFIELD,read=f.getOpcode()==GETFIELD&&(full||((List)plan.getOrDefault("selected_read_sites",Collections.emptyList())).contains(site));
+                        boolean write=f.getOpcode()==PUTFIELD,read=!boundary&&f.getOpcode()==GETFIELD&&(full||((List)plan.getOrDefault("selected_read_sites",Collections.emptyList())).contains(site));
                         if((write&&(tracked.contains(field)||full))||read){field(m,f,site,write,full||read||field.equals(plan.get("target")));changed=true;}
                     }
-                    if(site.equals(plan.get("producer_callsite"))||site.equals(plan.get("writer_site"))||((List)plan.getOrDefault("binding_callsites",Collections.emptyList())).contains(site)) {
+                    if(!boundary&&(site.equals(plan.get("producer_callsite"))||site.equals(plan.get("writer_site"))||((List)plan.getOrDefault("binding_callsites",Collections.emptyList())).contains(site))) {
                         InsnList h=new InsnList();h.add(new LdcInsnNode(site));h.add(new MethodInsnNode(INVOKESTATIC,R,"callsite","(Ljava/lang/String;)V",false));m.instructions.insertBefore(n,h);changed=true;
                     }
-                    if(site.equals(((Map)plan.get("reduction")).get("site"))) {
+                    if(!boundary&&site.equals(((Map)plan.get("reduction")).get("site"))) {
                         InsnList a=new InsnList();a.add(new InsnNode(DUP));a.add(new MethodInsnNode(INVOKESTATIC,R,"sumStart","(Ljava/lang/Object;)V",false));m.instructions.insertBefore(n,a);
                         InsnList b=new InsnList();b.add(new InsnNode(DUP2));b.add(new MethodInsnNode(INVOKESTATIC,R,"sumEnd","(D)V",false));m.instructions.insert(n,b);changed=true;
                     }
@@ -84,7 +87,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
         static Map<String,Object> row(){Map<String,Object> r=new LinkedHashMap<>();r.put("frame",STACK.get().isEmpty()?null:STACK.get().peek().id);return r;}
         static Map<String,Object> value(Object o){Map<String,Object> r=new LinkedHashMap<>();r.put("object",id(o));if(o==null||o instanceof Number||o instanceof String||o instanceof Boolean)r.put("value",o);return r;}
         static String hash(byte[] data)throws Exception{StringBuilder s=new StringBuilder();for(byte b:MessageDigest.getInstance("SHA-256").digest(data))s.append(String.format("%02x",b&255));return s.toString();}
-        public static synchronized void start()throws Exception{output=Files.newBufferedWriter(Paths.get(System.getProperty("service.events")),StandardOpenOption.CREATE_NEW);Map<String,Object> r=row();r.put("mode",full?"full":"selective");r.put("plan_sha256",hash(Files.readAllBytes(Paths.get(System.getProperty("service.plan")))));emit("start",r);Runtime.getRuntime().addShutdownHook(new Thread(()->{synchronized(Recorder.class){Map<String,Object> m=row();m.put("field_hook_calls",fieldHooks);m.put("branch_hook_calls",branches);emit("metrics",m);}}));}
+        public static synchronized void start()throws Exception{output=Files.newBufferedWriter(Paths.get(System.getProperty("service.events")),StandardOpenOption.CREATE_NEW);Map<String,Object> r=row();r.put("mode",mode);r.put("plan_sha256",hash(Files.readAllBytes(Paths.get(System.getProperty("service.plan")))));emit("start",r);Runtime.getRuntime().addShutdownHook(new Thread(()->{synchronized(Recorder.class){Map<String,Object> m=row();m.put("field_hook_calls",fieldHooks);m.put("branch_hook_calls",branches);emit("metrics",m);}}));}
         public static synchronized void callsite(String site){if(!STACK.get().isEmpty())PENDING.set(site);}
         static List<Object> snapshot(Object o,boolean target)throws Exception{
             List<Object> out=new ArrayList<>();if(o==null)return out;Set<String> wanted=new HashSet<>((List<String>)plan.get(target?"snapshot_fields":full?"full_snapshot_fields":"mapper_fields"));

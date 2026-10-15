@@ -272,7 +272,8 @@ def trial_run(args, trial, mode, build):
     common=getattr(args,'query_scope','paths')=='total'
     if common:
         from calibrate_mirrortaint_total import common_spec
-        spec=common_spec(mode,dest,build,args.mt_bundle,args.cpus,args.memory)
+        spec=common_spec(mode,dest,build,args.mt_bundle,args.cpus,args.memory,
+                         observation_policy=getattr(args,'observation_policy','selective'))
     else:spec = spec_for(mode, dest, build, args.cpus, args.memory)
     save(dest/'compose.json', spec)
     project = 'tf2-cost-'+secrets.token_hex(6)
@@ -325,7 +326,7 @@ def trial_run(args, trial, mode, build):
             dep.compose('stop', '-t', '20', role, timeout=40)
         offline_result = None
         if mode in ('tracefusion','mirrortaint'):
-            command = [sys.executable, str(Path(__file__).resolve()), 'offline', '--out', str(trial), '--build', str(build)]
+            command = [sys.executable, str(getattr(args,'offline_program',Path(__file__).resolve())), 'offline', '--out', str(trial), '--build', str(build)]
             if common:command+=['--query-scope','total','--mode',mode]
             if args.allow_errors:command+=['--allow-errors']
             started = time.monotonic_ns()
