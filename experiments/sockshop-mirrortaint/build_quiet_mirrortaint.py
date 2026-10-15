@@ -10,7 +10,7 @@ from run_query_planner import JARS
 import mirrortaint_instances as mt
 
 
-def build(out,agent,plans):
+def build(out,agent,plans,source_ids_only=False):
     mt.build(out,agent,plans);classes=out/'quiet-classes';classes.mkdir()
     source=HERE/'QuietDiagnosticAgent.java'
     cmd=['javac',*java8_target()[1],'-cp',':'.join(map(str,JARS)),'-d',str(classes),str(source)]
@@ -30,10 +30,15 @@ def build(out,agent,plans):
     manifest['source_sha256'][str(Path(__file__).resolve())]=sha(Path(__file__))
     manifest['files_sha256']['quiet-diagnostics.jar']=sha(jar)
     manifest['diagnostic_scope']='Disclosed runtime adapter replaces only 3 agent-info methods in pinned G.D; keeps error channels, native propagation, native adapted labels and class dumps. Argument construction remains. Not an upstream supported off switch or minimum-overhead configuration.'
+    if source_ids_only:
+        manifest['label_format']='native-source-ids-query-target-v1'
+        manifest['export_target']=load(plans/'orders/plan.json')['target']
+        manifest['export_contract']='Only exported representation changes: retain all candidate RPC source field coordinates and original native source IDs; project sink fields to the declared query target; omit exported stack/location/history. Native propagation and internal history construction unchanged. No expected origin list used.'
     save(out/'build.json',manifest);mt.verify(out)
 
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     for name in ('out','agent','build'):p.add_argument('--'+name,type=Path,required=True)
-    a=p.parse_args();build(a.out.resolve(),a.agent.resolve(),a.build.resolve())
+    p.add_argument('--source-ids-only',action='store_true')
+    a=p.parse_args();build(a.out.resolve(),a.agent.resolve(),a.build.resolve(),a.source_ids_only)

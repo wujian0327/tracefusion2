@@ -44,7 +44,7 @@ def run(a):
         modes=list(bundles);rng.shuffle(modes)
         order.extend((f'round-{i+1:02d}-{j+1}-{m}',m) for j,m in enumerate(modes))
     frozen={str(p.relative_to(ROOT)):sha(p) for p in sorted([*HERE.glob('*.py'),*HERE.glob('*.java'),ROOT/'scripts/sockshop.py'])}
-    cfg={k:str(v) if isinstance(v,Path) else v for k,v in vars(a).items()};cfg.update(order=order,source_sha256=frozen)
+    cfg={k:str(v) if isinstance(v,Path) else v for k,v in vars(a).items()};cfg.update(order=order,source_sha256=frozen,query_scope='total',modes=list(bundles))
     save(a.out/'config.json',cfg);cost.environment(a.out);save(a.out/'command.json',{'argv':sys.argv,'cwd':str(Path.cwd())});save(a.out/'run-status.json',{'status':'running'})
     try:
         for name,variant in order:

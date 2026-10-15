@@ -86,6 +86,9 @@ def configure(spec,dest,bundle):
                 cfg['volumes'].append(str(bundle/'quiet-diagnostics.jar')+':/tf2/quiet-diagnostics.jar:ro')
                 options=options.replace(' -javaagent:/tf2/mirrorTaint.jar',
                     ' -javaagent:/tf2/quiet-diagnostics.jar -javaagent:/tf2/mirrorTaint.jar')
+            output=load(bundle/'build.json')
+            if output.get('label_format')=='native-source-ids-query-target-v1':
+                options+=' -Dtf2.mt.sourceIdsOnly=true -Dtf2.mt.export.target='+output['export_target']
         options+=' -javaagent:/tf2/instances.jar -Dinstance.schema=/tf2/schema.json -Dinstance.events=/tf2/capture/instances.jsonl'
         cfg['environment']['JAVA_OPTS']=options
 

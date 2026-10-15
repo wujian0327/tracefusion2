@@ -144,7 +144,33 @@ public final class MirrorTaintLogAdapter {
                 Object[] args = (Object[]) value;
                 for (int i = 0; i < args.length; i++) scan.walk(args[i], "arg" + (i + 1), null, false, 0);
             } else scan.walk(value, phase.equals("rpc-response") ? "result" : "arg", null, false, 0);
-            event.put("fields", scan.fields); event.put("omissions", scan.omissions);
+            Map<String,Object> exported=scan.fields;
+            if (Boolean.getBoolean("tf2.mt.sourceIdsOnly")) {
+                String target=System.getProperty("tf2.mt.export.target");
+                if(target==null||target.isEmpty())throw new IllegalStateException("Explicit query target required");
+                exported=new LinkedHashMap<>();
+                for(Map.Entry<String,Object> entry:scan.fields.entrySet()) {
+                    Map<String,Object> leaf=(Map<String,Object>)entry.getValue();
+                    // Keep every candidate source field, not a list of expected
+                    // origins. Only the requested sink field is projected.
+                    boolean keep=phase.equals("rpc-response")&&leaf.containsKey("owner")&&leaf.containsKey("field")&&leaf.containsKey("tag")
+                        ||phase.equals("sink")&&target.equals(leaf.get("field"));
+                    if(!keep)continue;
+                    Object raw=leaf.get("tag");
+                    if(raw instanceof A) {
+                        A tag=(A)raw;Map<String,Object> compact=new LinkedHashMap<>();
+                        List<Map<String,Object>> ids=new ArrayList<>();
+                        if(tag.A()!=null)for(com.shadow.taint.agent.model.C source:tag.A()) {
+                            Map<String,Object> id=new LinkedHashMap<>();id.put("A",source.C());ids.add(id);
+                        }
+                        compact.put("A",tag.A()==null?null:ids);leaf.put("tag",compact);
+                    }
+                    exported.put(entry.getKey(),leaf);
+                }
+                event.put("export_profile","native-source-ids-query-target-v1");
+                event.put("export_target",target);
+            }
+            event.put("fields", exported); event.put("omissions", scan.omissions);
             event.put("capture_complete", scan.omissions.isEmpty());
             Path log = Paths.get(System.getProperty("user.home"), "AgentLogs", "ShadowTaint",
                 System.getProperty("taint.version"), "adapted-events.jsonl");

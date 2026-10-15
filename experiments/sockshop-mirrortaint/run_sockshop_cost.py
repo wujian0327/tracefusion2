@@ -511,7 +511,8 @@ def report(out):
               '配置及输入/源码哈希：config.json；机器环境：environment.json；命令：command.json 和各轮 sockshop/commands.log；失败：failure.json；清理：cleanup.json。', '']
     if config.get('query_scope')=='total':
         lines+=['本轮共同查询仅为 Carts 实际序列化响应字段到 Orders.total。Shipping 未安装观测器；MirrorTaint 只在 Orders 加载原版传播核心，Carts 和 Orders 额外安装披露的 HTTP 实例绑定探针。探针不计算业务依赖，原版标签决定来源。对象/字段/应用写计数及具体调用 span 均须匹配；反射和数据库内部写历史不在边界内。', '']
-        lines+=['MirrorTaint 使用固定公开 JAR＋披露的 receiver、来源、字符串、stream、thread、日志和通信绑定适配器，原生默认诊断产物计入成本。这是当前配置的比较，不代表 MirrorTaint 调优后的最低成本。结构化事件格式和标签历史体积不同，不能从事件数或日志量直接推断少采的因果收益；严格消融仍为后续任务。', '',
+        profile=config.get('mt_output_profile',{'diagnostics':'default','label_format':'native-history'})
+        lines+=['MirrorTaint 使用固定公开 JAR＋披露的 receiver、来源、字符串、stream、thread、日志和通信绑定适配器。本轮导出配置为 '+json.dumps(profile,ensure_ascii=False)+'。这是当前配置的比较，不代表 MirrorTaint 调优后的最低成本；结构化事件格式和原生标签表示不同，不能从跨工具事件数或日志量直接归因于少采。严格观测消融另行报告。', '',
                 'MT 未枚举未查询字段的图注记，背景 unknown 为 N/A；TF 保留的背景 Item.id unknown 不属于本轮 total 目标。返回 Item、Shipment 和 Train Ticket 的 MT 查询均为 N/A。', '']
     (out/'results.md').write_text('\n'.join(lines))
 
@@ -558,6 +559,11 @@ def run(args):
                   for p in [*HERE.glob('*.py'), ROOT/'scripts/sockshop.py']}, build_sha256=sha(args.build/'build.json'),
                   cases_sha256=sha(args.correctness/'cases.json'),
                   images_sha256=sha(ROOT/'artifacts/desktop-inputs/images-lock.json'))
+    if args.query_scope=='total':
+        bundle_contract=load(args.mt_bundle/'build.json')
+        config['mt_output_profile']={k:bundle_contract.get(k,'default' if k=='diagnostics' else 'native-history') for k in ('diagnostics','label_format')}
+        config['mt_output_profile']['export_target']=bundle_contract.get('export_target')
+        config['mt_bundle_sha256']=sha(args.mt_bundle/'build.json')
     save(args.out/'config.json', config)
     templates = [c for c in load(args.correctness/'cases.json')['sockshop'] if c['expected_target']]
     save(args.out/'workload.json', {'templates': templates,
