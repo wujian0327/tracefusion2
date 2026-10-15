@@ -226,7 +226,7 @@ def run(args):
         for name,policy in order:
             check(correctness,build)
             if fingerprint(build,correctness)!=frozen:raise ValueError('Frozen sources changed')
-            trial=out/name;trial.mkdir();save(trial/'observation-policy.json',{'policy':policy})
+            trial=out/name
             settings=copy.copy(args);settings.build=build;settings.correctness=correctness;settings.mt_bundle=None
             settings.query_scope='total';settings.allow_errors=False;settings.observation_policy=policy;settings.offline_program=Path(__file__).resolve()
             metric=cost.trial_run(settings,trial,'tracefusion',build)

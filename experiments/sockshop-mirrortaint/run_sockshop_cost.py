@@ -267,6 +267,8 @@ def offline(trial, build):
 
 def trial_run(args, trial, mode, build):
     trial.mkdir()
+    if hasattr(args,'observation_policy'):
+        save(trial/'observation-policy.json',{'policy':args.observation_policy})
     dest = trial/'sockshop'
     dest.mkdir()
     common=getattr(args,'query_scope','paths')=='total'
