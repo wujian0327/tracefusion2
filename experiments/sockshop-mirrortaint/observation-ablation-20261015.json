@@ -1,0 +1,672 @@
+{
+  "date": "2026-10-15",
+  "measurement_commit": "5836f0a",
+  "previous_common_query_commit": "bb8d068",
+  "primary_machine": "Current new machine; future work uses its latest main. Historical handoff packages are snapshots, not update sources.",
+  "contract": "Carts serialized HTTP/JSON field instances -> Orders.total; same frozen query, raw original app JARs, plans, collector binary, JSONL serializer/flush, and offline reconstruction/scoring code for every policy.",
+  "full_scope": "Existing admitted application-class instance field read/write and conditional jump hooks; records emitted inside frozen query frames. Not all JVM/library/native instructions.",
+  "boundary_scope": "Same HTTP/JSON and admitted DTO application write counters; no internal frames, reads, reduction or target-write records. Known total answers unavailable; cost per correct provenance answer N/A.",
+  "protocol": {
+    "rounds": 5,
+    "warmup": 30.0,
+    "seconds": 60.0,
+    "rate": 2.0,
+    "concurrency": 2,
+    "sample_interval": 2.0,
+    "cpus": 1.0,
+    "memory": "768m",
+    "seed": 151031,
+    "jvm": "-Xms64m -Xmx256m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom -Dspring.zipkin.enabled=false"
+  },
+  "frozen": {
+    "build_sha256": "24ea6ba6690c065ff9778563c61df08aaba722789b6e31ce06dc7de069fa73d5",
+    "cases_sha256": "ec3bed25e184cc3ba95133c2a53176d6a38f7fe5aabeabd0aa48e9178e0d5a63",
+    "images_sha256": "66fb61cae74f692b20bf45cefab809625405741b7f11117578bd9f1e615ca223",
+    "sources": {
+      "experiments/sockshop-mirrortaint/AsyncLabelDriver.java": "3f884b1c9ddcd35e3d8dc6bbb5fb2c5d8e7f80f486786769b4ea0235de40626d",
+      "experiments/sockshop-mirrortaint/CommonHttpInstanceAgent.java": "5660e20587a22767c7fb6a61e43c2e68dbc1b1ee7c48e2236af5a65d6b34ac0f",
+      "experiments/sockshop-mirrortaint/FlowDistFieldAdapterTest.java": "3ba07381907f1a28917e88527fb5417f7e359646afe8e7f483f5d9a67a1a6d9e",
+      "experiments/sockshop-mirrortaint/FlowDistFieldDecision.java": "b41f8139d026dc4d8f77eb3d74bc5781912f80f07fb3bfbba5a6297c51d04c85",
+      "experiments/sockshop-mirrortaint/FlowDistFieldIndexPatch.java": "425bc3f92ee2f03acb2aaf0ec6a5775eeab4cbf7b22519d8033f0296d20632b7",
+      "experiments/sockshop-mirrortaint/FlowDistFrames.java": "3704c921909fede031f5a25c17f7552f6111738b0603e407c64ab1a9863f0c40",
+      "experiments/sockshop-mirrortaint/FlowDistHttpConfiguration.java": "00fd3d6af55b98032cb0b65ffa88527a6abb5eec3fec97b81d7851931d14bb8f",
+      "experiments/sockshop-mirrortaint/FlowDistLambdaUtilPatch.java": "14e22175d098ff12b457addc6858fac577c63e1f8049413b4830688b74aada24",
+      "experiments/sockshop-mirrortaint/FlowDistLocalTraceAudit.java": "e897bd3a65668dd518f91a220e01509619829b96897380e26af7b165a8393f32",
+      "experiments/sockshop-mirrortaint/FlowDistParameterNames.java": "6e52d8468a8f184ae5ba208dd23802a5a8e3bc715c197e389cf739ac6d96b359",
+      "experiments/sockshop-mirrortaint/FlowDistResumeCalls.java": "bd706e3fbb4c4bcc7ca85742896c37b77d37952e947c8dc427038538d39a3902",
+      "experiments/sockshop-mirrortaint/FlowDistServiceMethodLauncher.java": "1c55d9d95c15eb920991bc6c5d1c17406e478148fd8dc4acc147912bf604153f",
+      "experiments/sockshop-mirrortaint/FlowDistSockShopHttpProbe.java": "e5f978459c3fb78e49f5d3c8dcbe2c35a6d6e59066e04278d311a86f11e05ab6",
+      "experiments/sockshop-mirrortaint/FlowDistSocketProtocolTest.java": "a777cce3a4f383488089131241172115827539c5870fd9e512197ba09298e10b",
+      "experiments/sockshop-mirrortaint/FlowDistStatementDecision.java": "dbf6586721d7ab5ac90aef4ad284e047641fd4b2701a543ea04dc82f9fbb4ba1",
+      "experiments/sockshop-mirrortaint/FlowDistStaticLauncher.java": "3fd28c0cf40d094c7d318ce72c1a37af8016f9df508d23498edf9846e389b7e5",
+      "experiments/sockshop-mirrortaint/FlowDistStaticPathProbe.java": "738dbb9e7ef903de3eade43f947a424f2e3db11d8c0943dcc6bfa2d53706d11b",
+      "experiments/sockshop-mirrortaint/FlowDistTraceProbe.java": "430a3e3f46357d1214cd1003973020e4e165ac9a8364fabd0c324b7ae0950d2f",
+      "experiments/sockshop-mirrortaint/HeapThreadProbe.java": "a4699ae3f4373ca19fc485ddcc4da0643aba1a7c5af4f92cbeab53174ca6c2ab",
+      "experiments/sockshop-mirrortaint/HttpServerBoundaryObserver.java": "669c06283df9580510546b2139851cc65d0e3347d68a937700028502b5650a81",
+      "experiments/sockshop-mirrortaint/MirrorTaintIntegrationAdapter.java": "14ba37888c924f7fff4d972de6d8738db74bf6a19a88bcd558c2aaa1f5c01205",
+      "experiments/sockshop-mirrortaint/MirrorTaintLogAdapter.java": "21633169f883aeb1d176cf335eefe33dab5bfd22acc1a48312c078a69982753c",
+      "experiments/sockshop-mirrortaint/MirrorTaintStreamAdapter.java": "d7724f8f0c1b001a1208c8b1aebb9a3b35a112a5d58626c583732b264cf1604d",
+      "experiments/sockshop-mirrortaint/MirrorTaintThreadAdapter.java": "162005d05877b5385df67724747c5c416c2a55b4275aaab7a0ca107a2a49583b",
+      "experiments/sockshop-mirrortaint/PhosphorShippingAgent.java": "99d0fa0bba63383aa4b76152340ef0084c63c733312df0bd77faec35b17384c5",
+      "experiments/sockshop-mirrortaint/PhosphorShippingProbe.java": "00f5e6dff948ec90479d75b287284024bbe84b0b7d3489c6518370e365d5d718",
+      "experiments/sockshop-mirrortaint/PhosphorStatementAgent.java": "f128700bb9055bc40d915459f4c43fb55352e10221e8eabeb91c4d2f4a6d705b",
+      "experiments/sockshop-mirrortaint/PlannedServiceAgent.java": "55a0df23c36136babfc53b5582a7777895cfb8795e4d280d86888cf59e233395",
+      "experiments/sockshop-mirrortaint/QueryBytecodeModel.java": "850d49fd3f41f9b2a113a820d56f15fbfc8e18f2c83195f264df6cde6ea8c092",
+      "experiments/sockshop-mirrortaint/QueryObservationAgent.java": "3f48ead5b09077c8ba8568da0037619c01636766e56f2d8d186e517fb1b99ff4",
+      "experiments/sockshop-mirrortaint/QueryPlannerFixture.java": "179dafd850a780dafb5e955a556c16072d578d493242d2b22a87939a3c06b2c7",
+      "experiments/sockshop-mirrortaint/RpcStateObserver.java": "467c8c29b31aca6cb75e55267795c2255126d24a2d2c756edf0ad97a7fbcf384",
+      "experiments/sockshop-mirrortaint/RuntimeScopeProbe.java": "e4f9b45204a9e33c96c9fd3d35c21347e5c4759526714467e22d7a85e5bdda2c",
+      "experiments/sockshop-mirrortaint/SecurityLeakLab.java": "338442283f646f51d05c96cd8b212cb906a2c7d1a05b2e1779022efc8fff65cc",
+      "experiments/sockshop-mirrortaint/SecurityObservationAgent.java": "8f1454f6fd288fe88dcf74dbd77c9e2a7be9851e745b5249db5021cf825d6ae8",
+      "experiments/sockshop-mirrortaint/SpringTransportAgent.java": "a54ee9ae10abb52905c437027410abc1bcbdcab25a3baef0cbb3d7abbaa674dc",
+      "experiments/sockshop-mirrortaint/SyncLabelDriver.java": "375c83f4f9e5bace015a3c1bf4b4b8a6e08093fbf847091792a929350ae2f32f",
+      "experiments/sockshop-mirrortaint/SyncLabelOps.java": "866b413580cc0e813ee38a0df70f01481720c7b79112e8df943b42cba610d1b4",
+      "experiments/sockshop-mirrortaint/W3CAsyncContextCheck.java": "5aa39e26ecb6a04b8e79280ff2c9941e4c2426d5f777910165d071338ea006e4",
+      "experiments/sockshop-mirrortaint/W3CTraceContext.java": "23ea705e55cc2a5f13aa01a982917d685915371f2e2b1f8f480ce8cdd0f5651f",
+      "experiments/sockshop-mirrortaint/W3CTraceContextCheck.java": "27498a2b7304413a8cd1848a897cd94327f328b6b566983c0ea095c0a1a1da1a",
+      "experiments/sockshop-mirrortaint/ZeroCallbackDriver.java": "48d24ca81e215c68cdf7b1bd625fd1117c49f5c2628e2f3fda1d32289d52be06",
+      "experiments/sockshop-mirrortaint/audit_adapted.py": "77739594a5dbb1dbc24668d199d26c2740347da1af5580e220c28567b83f9ad3",
+      "experiments/sockshop-mirrortaint/audit_carts_orders.py": "dbf16480fa444f3d265ba9d7dcd0dcc871c52d2f65fa8319b8ecdaac8de8cf94",
+      "experiments/sockshop-mirrortaint/audit_distributed_paths.py": "6226c32ecb8197c2066473d3e7a50bfbe993aef9192b30554f00b738138c753a",
+      "experiments/sockshop-mirrortaint/audit_dynamic_baselines.py": "0dfc5f4730d9630ee4e3563a70e2ff4deb90fd4e529dd5fcd5b1c16c91f1c096",
+      "experiments/sockshop-mirrortaint/audit_field_comparison.py": "301364095e027cc2e578520bd64f9de4a272b568044746b4ce9728534950b220",
+      "experiments/sockshop-mirrortaint/audit_flowdist_coverage.py": "0b58ab9a46b623b18145c6b042117e3a926b37246a45af1038da56e79e789964",
+      "experiments/sockshop-mirrortaint/audit_flowdist_services.py": "a6bdb10499c835b0f17723cc86a1da17ebf2eb1f5955e438d764cf2e340536f7",
+      "experiments/sockshop-mirrortaint/audit_http_instance_pilot.py": "d25e3ba9a2f901cff930aac98f05aff69bc7f4cd641d9c0a7b493f320e631d6f",
+      "experiments/sockshop-mirrortaint/audit_planned_service.py": "924174c992e321c3691ce2feb3e55c1c969f2004c3e420989aa368a3d1b1c7ef",
+      "experiments/sockshop-mirrortaint/audit_query_planner.py": "9b38fcf66b599e77ee1c78f3c4def45fa98bace3c721bec519f698160726014b",
+      "experiments/sockshop-mirrortaint/audit_rpc_wire.py": "d7ae3489f3b36ad8ad2146a88b6da4a9e2eef4f5f8b3500190d421e03cb79973",
+      "experiments/sockshop-mirrortaint/audit_security_leak.py": "065804d48553cde73fbc915d06c5642f02cb02c4acf594118d7972743eedd4a9",
+      "experiments/sockshop-mirrortaint/audit_service_sources.py": "fdfca80fdc320a5286954719facf12cce35abfd18f6d1c134fdb29167d5fe221",
+      "experiments/sockshop-mirrortaint/audit_three_method_five.py": "2ed3b2225d72a35851af1da088155f344532d2a02a8b613f28867d6788fec31e",
+      "experiments/sockshop-mirrortaint/build_boundary_frontend.py": "e55dd8f6aa4e596071534e010b16d2bb2747e4718816a035eb863fb49007e739",
+      "experiments/sockshop-mirrortaint/build_distributed_plans.py": "3c3a2739f81a6ddea612cd240125d6a74d92d3aeb780f5b57685bfb202bdb9b7",
+      "experiments/sockshop-mirrortaint/build_flowdist_branch_adapter.py": "d2a93cda9f92fc0ac9ccd03317eab5616ab5c488074b241fa236dc2e395524af",
+      "experiments/sockshop-mirrortaint/build_flowdist_field_launcher.py": "973dd27503ffeba565529ec8a999fac3ec9a26e62a3fabcf1d71acebd2b8c969",
+      "experiments/sockshop-mirrortaint/build_flowdist_lambda_adapter.py": "3b1850a5fbaddc5b0d65937d36e1ac2cc58c659859685610a5a0e1cfd5c46ce5",
+      "experiments/sockshop-mirrortaint/build_flowdist_reporter_adapter.py": "80bc2ad69b7c66a8e75f1d3df3def1b4176f6906dba5af225b1e95d58b9cc868",
+      "experiments/sockshop-mirrortaint/build_flowdist_resumptions.py": "396ebc9d2832f403adedb9af69ef5db8c4c6f439ce9ac97a453272807ec30fac",
+      "experiments/sockshop-mirrortaint/build_flowdist_socket_adapter.py": "90194d400fedf11d18321163eeae6bee7115d358a6f984dc2647858690268af0",
+      "experiments/sockshop-mirrortaint/build_flowdist_spring_apps.py": "493ade4e74626327b55504a8e56dfeb485673030b288cb8dbe8f3bfccd43843e",
+      "experiments/sockshop-mirrortaint/build_http_observer.py": "941bd7220bd6670a73a36f656988b86c01e17499f45a18cf7698a2e37d57f1fe",
+      "experiments/sockshop-mirrortaint/build_integration_adapter.py": "ecc4c39804b9c59f06600ee4ed63eb2fd098cd7f44f3e5757560ca43f19044ec",
+      "experiments/sockshop-mirrortaint/build_native.py": "fb77411165345d7c2f88a31999f2e0781518cff3614090d99cfe93da9e7d8ac1",
+      "experiments/sockshop-mirrortaint/build_service_frontend.py": "18470e982d780ef9ebe37548db1c2138c4792e9df426539d02b517d691547cbe",
+      "experiments/sockshop-mirrortaint/calibrate_mirrortaint_total.py": "98975bf8ad8494011b8eeb8943c0d6d4e09cdd48eaad051f7f87535a26523b2b",
+      "experiments/sockshop-mirrortaint/calibration_audit.py": "e6230844a8025c7a84efcd2bea404e6084f440afde1b765b3bb9f5ecb755df26",
+      "experiments/sockshop-mirrortaint/capture_http_peer.py": "6dc3fe1c5dec25a7efae62554dba32851853499db9739114b548a0504ce9ecc1",
+      "experiments/sockshop-mirrortaint/check_w3c_protocol.py": "b3e770b5093c957180b31a59da59a5b8c8fbcd491e9f1fa5403a7c4c1a79e01c",
+      "experiments/sockshop-mirrortaint/common_statement_shipping.py": "ec60d5a26f12907ec8a0ce7acfdab2403fd1815bf0033816a005579cce414430",
+      "experiments/sockshop-mirrortaint/compare_carts_orders.py": "208e3e732fe21a60f9913b058d102f45a1481fe75c14c2a3e0cd295af17b09f5",
+      "experiments/sockshop-mirrortaint/compare_field_accesses.py": "cb7aaf48c8624c71974d5f8544b6f6e48607bf90a95dac5f47f22c958bd7c1bb",
+      "experiments/sockshop-mirrortaint/compare_five_methods.py": "3c0befb08e42a15a79cfaf8818db4214660bd608baac0a88440b128a5741b536",
+      "experiments/sockshop-mirrortaint/compare_flowdist_total_queries.py": "6f0a29b68680ad37156f409ab2e75178bfc22c7ffcff7fadec24f0e6beb4ad66",
+      "experiments/sockshop-mirrortaint/compare_two_grains.py": "dba94bef204acbf6fdfe7c4943f517b36620c6961d720f018dd5554f83e2fb76",
+      "experiments/sockshop-mirrortaint/compare_w3c_paths.py": "f455df58a151a813b656502c09dcc1c6118ca4ec478ffeb754b59d312f870135",
+      "experiments/sockshop-mirrortaint/diagnostic_rpc.py": "bfe9eb2c06214842bdbd21d23bd44cfba116884c168644867fbd1e4114565dd7",
+      "experiments/sockshop-mirrortaint/evaluate_distributed_paths.py": "ba3faf14ee024839644d3f0c229e69f997bafc45f7132a72d18c08d095deff88",
+      "experiments/sockshop-mirrortaint/evaluate_five_methods.py": "24eaf357eda1536b2e679e20aa320483dc3ed6d0706c50459a827c3b264127b7",
+      "experiments/sockshop-mirrortaint/experiment_environment.py": "91c2609c43a99e18d3aa9e4a1fb113ade860b8ec4fa86133a6823f35eb501e96",
+      "experiments/sockshop-mirrortaint/five_methods.py": "ef7287c72e835b7dd2a1283f0b0442b8066a0ada033f30f28bd070842cdf46f4",
+      "experiments/sockshop-mirrortaint/flowdist_branch_preflight.py": "61325ed777ab99cf1bd4c1c125babe36c84c41e7651a7c40402aacff8764a498",
+      "experiments/sockshop-mirrortaint/flowdist_expanded_preflight.py": "5cdd166f1fe7a0564c6b2f5f24e2914144b2b876737e70f0f3d86a7c05898c46",
+      "experiments/sockshop-mirrortaint/flowdist_five_statement_controls.py": "07f6278a7e07f2e4e60b653b27e68d9825b8020422cca00ce65417758f69e154",
+      "experiments/sockshop-mirrortaint/flowdist_full_order.py": "58b8e588fdb54613dfc472eb5026e029946fd988f19c9e7e321d3dfa24e6acdf",
+      "experiments/sockshop-mirrortaint/flowdist_http_instances.py": "7fde0149c275d201ca5eae5531e1052f0308a6bd2c1d118fbc9dc89c5079d709",
+      "experiments/sockshop-mirrortaint/flowdist_http_preflight.py": "9fd8f118c28f5bf34a74a7f8c288044860fb2683f3b06fe7f8fdd597f3b2404b",
+      "experiments/sockshop-mirrortaint/flowdist_preflight.py": "7e1806077f55817d5c86f6892debc577b637533db79bf7b5910acc013e23e929",
+      "experiments/sockshop-mirrortaint/flowdist_query.py": "ff29feb006d038f31beae5b17298567c2841cef9ca5c0570fa5a232bf5dcca7a",
+      "experiments/sockshop-mirrortaint/flowdist_runtime_comparison.py": "8c9d4a368ff844dd4592d4e469e905427032011215f54b86928f03c703f8a999",
+      "experiments/sockshop-mirrortaint/flowdist_service_methods.py": "d55a2b90b944115b630d669b2a7fdab762902fe7145f0e024afb5fbd6437ab9b",
+      "experiments/sockshop-mirrortaint/flowdist_service_static.py": "aded714a75923e7ebf58985bf82b06030a757e55ee7a86aab8f186f6c05a9337",
+      "experiments/sockshop-mirrortaint/flowdist_statement_diagnostic.py": "1de78d4fb050a5f7b510ea2820ed4bb8bb4aa9c385a6c577e612001ac0dd9707",
+      "experiments/sockshop-mirrortaint/flowdist_stream_model.py": "427f4fcc86f12d9fd6db0248c4429d24baa03bd82f9efbed23ff01360e8648c5",
+      "experiments/sockshop-mirrortaint/host.py": "245bb95ea089f2ae6e90df2b9af6ce485628dcb5cc58a5a412f2a053de8b3fcc",
+      "experiments/sockshop-mirrortaint/infer_boundary_sources.py": "7dbe4a1e66ca3c2a66507c8e6662f6a53ac4100bf0656a82a470e931147f8615",
+      "experiments/sockshop-mirrortaint/infer_carts_http_sources.py": "a23a2bc4e2fb82878115703abbde5a7a796db4af771399eb06190ad14b0263ca",
+      "experiments/sockshop-mirrortaint/infer_distributed_fields.py": "082a7c127357899611ac4fbce9ba75f8d3793f7de94ae4325c5185dd1a6384ad",
+      "experiments/sockshop-mirrortaint/infer_field_access_sites.py": "155ef46bc8228fe047d671791f8dd15ff98af8d082864c01a41367d57e6fe528",
+      "experiments/sockshop-mirrortaint/infer_http_instance_sources.py": "5412a1dc2ea17e2caa3f564599649016ec85e4f22eee35c80e7add6ffd740f0a",
+      "experiments/sockshop-mirrortaint/infer_planned_service.py": "45c655fafde952ce98c4fb15cadc9b67969f624459e3def55cf1992a2c822c85",
+      "experiments/sockshop-mirrortaint/infer_query_observations.py": "28037e92245d80a8be0c234814b48a59082312904ba126672e17d38f13d5bdd8",
+      "experiments/sockshop-mirrortaint/infer_service_sources.py": "e957be67a33b46a50cb84b91403ca3afc45b63c9043a6a1ce64cff369efb3009",
+      "experiments/sockshop-mirrortaint/mirrortaint_instances.py": "da0e7b462a12bd1fa2fd2ee040a16ed00f16ef41b1af5da1b2894b9f25426270",
+      "experiments/sockshop-mirrortaint/native_audit.py": "04360c54aa8f4ca87d4a01a97d72b55d5004e407aadc6ee62cca4dd445b73b60",
+      "experiments/sockshop-mirrortaint/native_orders.py": "9778bdc2725cab7f80569f93f44c5dcf188651997bfc89f9da1f97ea2a8ce017",
+      "experiments/sockshop-mirrortaint/normalize_flowdist_class_literals.py": "d54c303101fe115555dffd5b154340f6d5f1ef0f04a2ef2f7c2cb0e1a219697b",
+      "experiments/sockshop-mirrortaint/overlay_flowdist_branches.py": "aee4482760d9b72270ee1af964ecef2e70447e54f639ba72e49112720aa24861",
+      "experiments/sockshop-mirrortaint/phosphor_five_statements.py": "f59cebe2c94d08a9a8a42c6df155da0388c74e60541194d0f39dca7bd4bdfba8",
+      "experiments/sockshop-mirrortaint/phosphor_shipping.py": "15794ac16df93a1a55c108675a19d61933317d1fd69f70c5b1ece085a24c6f31",
+      "experiments/sockshop-mirrortaint/plan_distributed_fields.py": "351b1c094455e82699dde77a9d46974613f931bfdaac403ae354dff54b4946e6",
+      "experiments/sockshop-mirrortaint/plan_service_observations.py": "b4b641a63bb5bf2f6a06e6ff8b83d8923aced0796b40db8aaeeb57718a255fe0",
+      "experiments/sockshop-mirrortaint/prepare_desktop_handoff.py": "8e41a2a49cec9010aab53da99ff10f4128da7f887ef221a413e55764b4800d43",
+      "experiments/sockshop-mirrortaint/prepare_pinned_images.py": "3159aef437bc5f3bbfe5da3be769c937564dab8e80ed5450ed5abab36fa6a038",
+      "experiments/sockshop-mirrortaint/probe_runtime_scope.py": "9a236fbf8046f85b31d2b44a76f79c6cb8b4a7173b796f1c71d3baafabcf0625",
+      "experiments/sockshop-mirrortaint/probe_sync_labels.py": "6977bf864bc8dd2da9141c35a5998d50245f7cb67f2f9ba0975d9a4445cf7747",
+      "experiments/sockshop-mirrortaint/probe_zero_callbacks.py": "8a4c2b70c2fbc20f2bb0d99e3d054584e551b1938396802f132c32513af83a6d",
+      "experiments/sockshop-mirrortaint/qualify_carts_orders.py": "a056e5d917e95d1e3d45395fd323ae494c51e929d708dd761a0f60d290d0706f",
+      "experiments/sockshop-mirrortaint/query_observation_planner.py": "173e89ff8665020eaf1818bb1d38a8c82543e6ad209ce5db48a1983e4148b7e4",
+      "experiments/sockshop-mirrortaint/reframe_flowdist_branches.py": "b091d86955eb334377dab5f9ff66c300f053d021eac3365bb66c40b306dab008",
+      "experiments/sockshop-mirrortaint/refresh_flowdist_http.py": "4f57dbd5894227a896a1a0bcbbf53d6eeb58f7761e8ece9543f0e63b7b1f85ca",
+      "experiments/sockshop-mirrortaint/restore_flowdist_parameters.py": "4100c3087dc2c44c2cf1f35e8f31e9434525a25a626fc2915b7321a18221bf37",
+      "experiments/sockshop-mirrortaint/run_distributed_paths.py": "05cc20245405d3952a7df780d919190022792b5eccf27a91cc05cb54afcec854",
+      "experiments/sockshop-mirrortaint/run_observation_ablation.py": "5a395b700b72682395f5bd7413158646ddc3057ac216c161b5f34587bd257f66",
+      "experiments/sockshop-mirrortaint/run_planned_service.py": "a1bf7d641502c4da5edd02bdc49c94dd5853ea7263da76eb45191abdb2cea1bf",
+      "experiments/sockshop-mirrortaint/run_query_planner.py": "0aab16a573100c8ebffcf57abaa217abcff77a73fc3d1596cf5546cfc0690afe",
+      "experiments/sockshop-mirrortaint/run_rpc_capture.py": "d8c0a33ccb50cddb391e5eec536b00c6a66ee34c4755bab2d5dc92de3dc87e2a",
+      "experiments/sockshop-mirrortaint/run_security_leak.py": "712033266a1c145b9703791238d20dab97fd680e6f76838e48bf7792da2a20d8",
+      "experiments/sockshop-mirrortaint/run_sockshop_cost.py": "dee4df50d984d238351c978adcfe9d8172e10ed371673fb5d093562718ba40bd",
+      "experiments/sockshop-mirrortaint/scan_sockshop_load.py": "6d06b0bfab8d526dfd2ced53ae17974ce7e51332c338f75945a722c03df8c183",
+      "experiments/sockshop-mirrortaint/security_field_flow.py": "8c38b0499650b1a10a5534e66d25c3e7602a8485435d7ee9931ec55424b55b32",
+      "experiments/sockshop-mirrortaint/service_model.py": "ecefe600aa021b1813715f50c6f1bd0289f7dc0bb6a4f6c9c17d23dfd34f3d5e",
+      "experiments/sockshop-mirrortaint/source_audit.py": "d702cc34e1a38aa115b9e098a681ed6182e94b6f3be5223c64cf9843a31fe06e",
+      "experiments/sockshop-mirrortaint/summarize_distributed_paths.py": "1d5baaccca597ec748f4742b2097b886b75299ea48d80e473ab65845b8be0883",
+      "experiments/sockshop-mirrortaint/summarize_planned_service.py": "d94e03b2d94d223fea4a4ab4f26767fa29a295993ce1195141019937062b1ed3",
+      "experiments/sockshop-mirrortaint/summarize_query_planner.py": "1fba235b8c9c1e07e336ff919c87f5a09c2f69c5645995e208588a9ed08bada2",
+      "experiments/sockshop-mirrortaint/test_carts_http_sources.py": "9d3f9bef37c764d199f6f55eb72a31d180a6704cfef3da85073c2cb856e335b4",
+      "experiments/sockshop-mirrortaint/test_field_access_sites.py": "ae0a9b96da2fe7ecb1bfb6c845c2cdc47ba4b207f9e044af4d729c2837587f57",
+      "experiments/sockshop-mirrortaint/test_flowdist_compatibility.py": "017d03b146aa0e5692efaabd1d6301ed6b2d06712e243c10fd46add7aedc4058",
+      "experiments/sockshop-mirrortaint/test_flowdist_cost_hierarchy.java": "e00295220445acc1f513658f4abf2ad925f4f9b87194d33e3fdd7d443738a13a",
+      "experiments/sockshop-mirrortaint/test_flowdist_full_order.py": "31efa99c8b66f5c7034eb428426874377f295f1fb0cbc0eb93cbc41559a2368e",
+      "experiments/sockshop-mirrortaint/test_flowdist_parameter_names.java": "087175d7665941f4a869227a86855f158edffe29829f3ee784d5ee0f3982f189",
+      "experiments/sockshop-mirrortaint/test_flowdist_query_presence.py": "7eae0277e88083f2ed3d6fe2316821b12bf5f9afe00bb7f5e6bb568e90b291e3",
+      "experiments/sockshop-mirrortaint/test_flowdist_query_scoring.py": "36774bb23654b356bce5b82f191663187d72467c902236883f800a48b7ac3c0f",
+      "experiments/sockshop-mirrortaint/test_flowdist_resumptions.py": "949eb910d0285d01936893956bfcbcd386839cc04bc23748efb23d0b7144ad22",
+      "experiments/sockshop-mirrortaint/test_flowdist_service_static.py": "c2cf66dde7fae8d02cb4aa3f30e58cc7ec93ae1a254b22970ffe67ac8b657ec1",
+      "experiments/sockshop-mirrortaint/test_flowdist_stream_model.py": "4dd83041d8a3b706f51272fb19d87829175453eb791c3465a86f93ddf10364ec",
+      "experiments/sockshop-mirrortaint/test_http_instance_sources.py": "85a539ac0e9bd869e57f39a41bdf13278d48b7b0fdd7b78004f7af14c52e566d",
+      "experiments/sockshop-mirrortaint/test_observation_ablation.py": "1dac41f3ac1c22ba798d43c47d54b4edd868866222e4b6cbb560e3a315fc9e7b",
+      "experiments/sockshop-mirrortaint/test_sockshop_cost.py": "334c737ae37127cbf5c14511b9383cd843b8bcb56920f193c28917ef968c3b6f",
+      "experiments/sockshop-mirrortaint/three_method_five.py": "da856f45aef7a10ac998f640a28aa8029f0a25a0c1f0c588b413ec891c4974c9",
+      "experiments/sockshop-mirrortaint/transport_context.py": "e17f112abf65b3df196865f96c394c87d4031ba949de1c7aff5613eceb1c9cc3",
+      "experiments/sockshop-mirrortaint/verify_boundary_sources.py": "78129cfd455cb95e1d3d4ad2ff292303d8fe465a98c5223ab19ff2418c43e946",
+      "experiments/sockshop-mirrortaint/verify_original_path_images.py": "f4340c7468bd7df382ecc143830d06f226a3b38bd3e3eeb312948a7474e1fb09",
+      "experiments/sockshop-mirrortaint/verify_rpc_audit.py": "2850d43fa6f6c3c04d9c1dd6910f39b69ae2f9a83889f23353a3268bd2bc201f",
+      "experiments/sockshop-mirrortaint/verify_service_sources.py": "1bde523789a3edbeee7da3c10f9459d3d3e49cc80892222f626688bacc67e40b",
+      "experiments/sockshop-mirrortaint/wire_capture.py": "290fe20cc61bd20ec969ba519dc22e92dbd39277d53bc583cf39beab818b2a0f",
+      "scripts/sockshop.py": "38179da54c5a4d1c160626b96ac1b8ff278c53f2b570b0492ae89c1b57b696ad"
+    }
+  },
+  "calibration": {
+    "full": {
+      "queries": 24,
+      "exact": 24,
+      "unknown": 0,
+      "tp": 84,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "selective": {
+      "queries": 24,
+      "exact": 24,
+      "unknown": 0,
+      "tp": 84,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "boundary": {
+      "queries": 24,
+      "exact": 0,
+      "unknown": 24,
+      "tp": 0,
+      "fp": 0,
+      "fn": 84,
+      "precision": null,
+      "recall": 0.0,
+      "f1": 0.0
+    }
+  },
+  "regression": {
+    "sockshop": {
+      "queries": 198,
+      "exact": 198,
+      "unknown": 0,
+      "tp": 258,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "trainticket": {
+      "queries": 31,
+      "exact": 31,
+      "unknown": 0,
+      "tp": 30,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  },
+  "all_business_requests": 2700,
+  "summary": {
+    "full": {
+      "trials": 5,
+      "accuracy": {
+        "queries": 900,
+        "exact": 900,
+        "tp": 3750,
+        "fp": 0,
+        "fn": 0,
+        "unknown": 0
+      },
+      "medians": {
+        "latency_p50_ms": 14.335016,
+        "latency_p95_ms": 19.710237,
+        "latency_p99_ms": 25.122482,
+        "cpu_one_core_percent_mean": 7.861704330355002,
+        "rss_bytes_mean": 1613703424,
+        "rss_bytes_peak": 1622327296,
+        "capture_events": 26988,
+        "capture_bytes": 10932748,
+        "offline_graph_build_seconds": 1.226602432,
+        "offline_restore_score_export_seconds": 2.080739233,
+        "offline_subprocess_wall_seconds": 2.199087813,
+        "offline_process_cpu_seconds": 2.180444,
+        "offline_peak_rss_bytes": 374747136,
+        "answer_wait_p95_seconds": 62.868207568
+      }
+    },
+    "selective": {
+      "trials": 5,
+      "accuracy": {
+        "queries": 900,
+        "exact": 900,
+        "tp": 3750,
+        "fp": 0,
+        "fn": 0,
+        "unknown": 0
+      },
+      "medians": {
+        "latency_p50_ms": 13.611511,
+        "latency_p95_ms": 18.189984,
+        "latency_p99_ms": 22.309338,
+        "cpu_one_core_percent_mean": 8.724505056854897,
+        "rss_bytes_mean": 1615125504,
+        "rss_bytes_peak": 1622728704,
+        "capture_events": 5298,
+        "capture_bytes": 4042178,
+        "offline_graph_build_seconds": 0.493965147,
+        "offline_restore_score_export_seconds": 0.628427016,
+        "offline_subprocess_wall_seconds": 0.712148519,
+        "offline_process_cpu_seconds": 0.697801,
+        "offline_peak_rss_bytes": 170090496,
+        "answer_wait_p95_seconds": 61.348234072
+      }
+    },
+    "boundary": {
+      "trials": 5,
+      "accuracy": {
+        "queries": 900,
+        "exact": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 3750,
+        "unknown": 900
+      },
+      "medians": {
+        "latency_p50_ms": 13.166351,
+        "latency_p95_ms": 18.46108,
+        "latency_p99_ms": 25.431594,
+        "cpu_one_core_percent_mean": 8.522535974998648,
+        "rss_bytes_mean": 1606508544,
+        "rss_bytes_peak": 1611128832,
+        "capture_events": 3720,
+        "capture_bytes": 3432418,
+        "offline_graph_build_seconds": 0.390658327,
+        "offline_restore_score_export_seconds": 0.497294222,
+        "offline_subprocess_wall_seconds": 0.573881455,
+        "offline_process_cpu_seconds": 0.561008,
+        "offline_peak_rss_bytes": 165801984,
+        "unknown_result_file_wait_p95_seconds": 61.27447656,
+        "answer_wait_p95_seconds": null
+      }
+    }
+  },
+  "per_service_medians": {
+    "full": {
+      "carts": {
+        "cpu_one_core_percent_mean": 0.8503262548722532,
+        "rss_bytes_mean": 534632704,
+        "rss_bytes_peak": 534642688
+      },
+      "carts-db": {
+        "cpu_one_core_percent_mean": 0.26653009332606903,
+        "rss_bytes_mean": 65548288,
+        "rss_bytes_peak": 65548288
+      },
+      "front-end": {
+        "cpu_one_core_percent_mean": 0.00719333173519114,
+        "rss_bytes_mean": 127297024,
+        "rss_bytes_peak": 127307776
+      },
+      "orders": {
+        "cpu_one_core_percent_mean": 5.815325729110219,
+        "rss_bytes_mean": 536216320,
+        "rss_bytes_peak": 540409856
+      },
+      "orders-db": {
+        "cpu_one_core_percent_mean": 0.2338302168704785,
+        "rss_bytes_mean": 65202432,
+        "rss_bytes_peak": 65331200
+      },
+      "payment": {
+        "cpu_one_core_percent_mean": 0.06444935878752178,
+        "rss_bytes_mean": 9924352,
+        "rss_bytes_peak": 10330112
+      },
+      "queue-master": {
+        "cpu_one_core_percent_mean": 0.8943389699369206,
+        "rss_bytes_mean": 489298944,
+        "rss_bytes_peak": 491200512
+      },
+      "rabbitmq": {
+        "cpu_one_core_percent_mean": 0.17671078845655816,
+        "rss_bytes_mean": 82846720,
+        "rss_bytes_peak": 82849792
+      },
+      "shipping": {
+        "cpu_one_core_percent_mean": 1.3443746361658973,
+        "rss_bytes_mean": 544774144,
+        "rss_bytes_peak": 552714240
+      },
+      "user": {
+        "cpu_one_core_percent_mean": 0.2749336184231869,
+        "rss_bytes_mean": 13789952,
+        "rss_bytes_peak": 13869056
+      },
+      "user-db": {
+        "cpu_one_core_percent_mean": 0.3595080933700876,
+        "rss_bytes_mean": 62681088,
+        "rss_bytes_peak": 62681088
+      },
+      "observed_jvms": {
+        "cpu_one_core_percent_mean": 7.861704330355002,
+        "rss_bytes_mean": 1613703424,
+        "rss_bytes_peak": 1622327296
+      },
+      "deployment": {
+        "cpu_one_core_percent_mean": 10.20785837384176,
+        "rss_bytes_mean": 2528140544,
+        "rss_bytes_peak": 2541273088
+      }
+    },
+    "selective": {
+      "carts": {
+        "cpu_one_core_percent_mean": 0.7948201698666758,
+        "rss_bytes_mean": 541150464,
+        "rss_bytes_peak": 541163520
+      },
+      "carts-db": {
+        "cpu_one_core_percent_mean": 0.2679190473209572,
+        "rss_bytes_mean": 65474560,
+        "rss_bytes_peak": 65474560
+      },
+      "front-end": {
+        "cpu_one_core_percent_mean": 0.007584336261208326,
+        "rss_bytes_mean": 127501568,
+        "rss_bytes_peak": 127504384
+      },
+      "orders": {
+        "cpu_one_core_percent_mean": 6.54358439730182,
+        "rss_bytes_mean": 533576960,
+        "rss_bytes_peak": 535277568
+      },
+      "orders-db": {
+        "cpu_one_core_percent_mean": 0.2355188794871114,
+        "rss_bytes_mean": 64942592,
+        "rss_bytes_peak": 65073152
+      },
+      "payment": {
+        "cpu_one_core_percent_mean": 0.06366695881952265,
+        "rss_bytes_mean": 10010368,
+        "rss_bytes_peak": 10391552
+      },
+      "queue-master": {
+        "cpu_one_core_percent_mean": 1.0023498702155025,
+        "rss_bytes_mean": 493202944,
+        "rss_bytes_peak": 497672192
+      },
+      "rabbitmq": {
+        "cpu_one_core_percent_mean": 0.17617762658082814,
+        "rss_bytes_mean": 82598400,
+        "rss_bytes_peak": 82640896
+      },
+      "shipping": {
+        "cpu_one_core_percent_mean": 1.3701417497060142,
+        "rss_bytes_mean": 538934528,
+        "rss_bytes_peak": 543105024
+      },
+      "user": {
+        "cpu_one_core_percent_mean": 0.27666218903250483,
+        "rss_bytes_mean": 13744128,
+        "rss_bytes_peak": 13897728
+      },
+      "user-db": {
+        "cpu_one_core_percent_mean": 0.3616199222831406,
+        "rss_bytes_mean": 62704640,
+        "rss_bytes_peak": 62709760
+      },
+      "observed_jvms": {
+        "cpu_one_core_percent_mean": 8.724505056854897,
+        "rss_bytes_mean": 1615125504,
+        "rss_bytes_peak": 1622728704
+      },
+      "deployment": {
+        "cpu_one_core_percent_mean": 11.024102082566667,
+        "rss_bytes_mean": 2537166080,
+        "rss_bytes_peak": 2544238592
+      }
+    },
+    "boundary": {
+      "carts": {
+        "cpu_one_core_percent_mean": 0.7512222655722542,
+        "rss_bytes_mean": 538787328,
+        "rss_bytes_peak": 538914816
+      },
+      "carts-db": {
+        "cpu_one_core_percent_mean": 0.2674532706394447,
+        "rss_bytes_mean": 65728512,
+        "rss_bytes_peak": 65728512
+      },
+      "front-end": {
+        "cpu_one_core_percent_mean": 0.007210701027098769,
+        "rss_bytes_mean": 127533056,
+        "rss_bytes_peak": 127537152
+      },
+      "orders": {
+        "cpu_one_core_percent_mean": 6.266759654393739,
+        "rss_bytes_mean": 531982336,
+        "rss_bytes_peak": 532860928
+      },
+      "orders-db": {
+        "cpu_one_core_percent_mean": 0.2338906851821405,
+        "rss_bytes_mean": 65111808,
+        "rss_bytes_peak": 65236992
+      },
+      "payment": {
+        "cpu_one_core_percent_mean": 0.06319929048135842,
+        "rss_bytes_mean": 9974016,
+        "rss_bytes_peak": 10350592
+      },
+      "queue-master": {
+        "cpu_one_core_percent_mean": 0.9338068153104423,
+        "rss_bytes_mean": 500881920,
+        "rss_bytes_peak": 503803904
+      },
+      "rabbitmq": {
+        "cpu_one_core_percent_mean": 0.17762755679741726,
+        "rss_bytes_mean": 82038784,
+        "rss_bytes_peak": 82038784
+      },
+      "shipping": {
+        "cpu_one_core_percent_mean": 1.4049236396914841,
+        "rss_bytes_mean": 556410112,
+        "rss_bytes_peak": 561688576
+      },
+      "user": {
+        "cpu_one_core_percent_mean": 0.27454289474814514,
+        "rss_bytes_mean": 13661184,
+        "rss_bytes_peak": 13856768
+      },
+      "user-db": {
+        "cpu_one_core_percent_mean": 0.36598054445476824,
+        "rss_bytes_mean": 62312960,
+        "rss_bytes_peak": 62328832
+      },
+      "observed_jvms": {
+        "cpu_one_core_percent_mean": 8.522535974998648,
+        "rss_bytes_mean": 1606508544,
+        "rss_bytes_peak": 1611128832
+      },
+      "deployment": {
+        "cpu_one_core_percent_mean": 10.859887685422063,
+        "rss_bytes_mean": 2532697344,
+        "rss_bytes_peak": 2538717184
+      }
+    }
+  },
+  "paired_selective_over_full": {
+    "latency_p50": {
+      "median": 0.9450373623133157,
+      "min": 0.9323134635984813,
+      "max": 0.9591059644413416,
+      "rounds_below_one": 5
+    },
+    "latency_p95": {
+      "median": 0.929610676253266,
+      "min": 0.8489077016473386,
+      "max": 1.0383906596353967,
+      "rounds_below_one": 4
+    },
+    "latency_p99": {
+      "median": 0.8880228474240721,
+      "min": 0.7565398775189742,
+      "max": 1.2176686053547503,
+      "rounds_below_one": 4
+    },
+    "cpu_one_core_percent_mean": {
+      "median": 1.0836429313317173,
+      "min": 0.9765483965323256,
+      "max": 1.1384855160274774,
+      "rounds_below_one": 1
+    },
+    "rss_bytes_mean": {
+      "median": 1.001551592847281,
+      "min": 0.9705415469925046,
+      "max": 1.0109531176659305,
+      "rounds_below_one": 2
+    },
+    "capture_events": {
+      "median": 0.19630947087594486,
+      "min": 0.19630947087594486,
+      "max": 0.19630947087594486,
+      "rounds_below_one": 5
+    },
+    "capture_bytes": {
+      "median": 0.36973119658479275,
+      "min": 0.36973119658479275,
+      "max": 0.3697313795214158,
+      "rounds_below_one": 5
+    },
+    "offline_subprocess_wall_seconds": {
+      "median": 0.33087369940328987,
+      "min": 0.3130072540998916,
+      "max": 0.349337452744767,
+      "rounds_below_one": 5
+    },
+    "offline_restore_score_export_seconds": {
+      "median": 0.309921448479748,
+      "min": 0.29152972338874533,
+      "max": 0.32752284202395243,
+      "rounds_below_one": 5
+    },
+    "offline_process_cpu_seconds": {
+      "median": 0.3249255656187455,
+      "min": 0.3093325219545187,
+      "max": 0.34600001767444327,
+      "rounds_below_one": 5
+    },
+    "offline_peak_rss_bytes": {
+      "median": 0.45388070957799126,
+      "min": 0.4535173408509801,
+      "max": 0.45487360672055654,
+      "rounds_below_one": 5
+    }
+  },
+  "observation_components": {
+    "full": {
+      "transport": {
+        "events": 3720,
+        "bytes": 3441527
+      },
+      "local-evidence": {
+        "events": 23268,
+        "bytes": 7491221
+      },
+      "metadata": {
+        "events": 0,
+        "bytes": 0
+      }
+    },
+    "selective": {
+      "transport": {
+        "events": 3720,
+        "bytes": 3434206
+      },
+      "local-evidence": {
+        "events": 1578,
+        "bytes": 607972
+      },
+      "metadata": {
+        "events": 0,
+        "bytes": 0
+      }
+    },
+    "boundary": {
+      "transport": {
+        "events": 3720,
+        "bytes": 3432418
+      },
+      "local-evidence": {
+        "events": 0,
+        "bytes": 0
+      },
+      "metadata": {
+        "events": 0,
+        "bytes": 0
+      }
+    }
+  },
+  "limits": [
+    "Five independent deployments per policy, selected query and fixed 2 req/s only; no maximum throughput claim.",
+    "No old cost figures reused. Do not pool with other machines or the MirrorTaint comparison block.",
+    "CPU and latency changes are reported even if inconsistent with collection/restore savings; no blanket resource-improvement claim.",
+    "This isolates observation-policy effects within one engine and format, not the exact causal fraction of the total cross-tool MirrorTaint gap.",
+    "Policy changes include hooks, snapshots and event output; this is not a logging-I/O-only ablation.",
+    "RSS sums process RSS with shared-page duplication. Offline CPU includes process startup/imports; peak is independent child ru_maxrss.",
+    "Generic raw batch-readiness timestamps for boundary describe an unknown-result file; known-answer latency and cost per correct answer N/A.",
+    "Inputs reused from frozen acceptance; not an independently authored blind validation set.",
+    "Legacy W3C transport-only unchanged-core comparison is inapplicable to the added collector mode and was not marked passed; new semantic regression comparison passed."
+  ],
+  "evidence_sha256": {
+    "artifacts/observation-ablation-formal-20261015/config.json": "7ec16fd0b621b12d7df87f035959b0b6faf283fbbb93062cc74caafb65afb923",
+    "artifacts/observation-ablation-formal-20261015/results.md": "8b35e0ac3aada08211b3ebc7bae6ed4e7348e5b78b515dfff943d64228e4b0e4",
+    "artifacts/observation-ablation-formal-20261015/comparison.json": "09e8146dc0f59d4e447439696a1a708c6b713e540ec7bdeb099ae5f6fb803eec",
+    "artifacts/observation-ablation-formal-20261015/independent-validation.json": "9fa41a2f4c80cf7110e97013f32d515226b67310e0914538f07685dbc2e8ebb7",
+    "artifacts/observation-ablation-formal-20261015/observation-components.json": "409d23b6cee3ea97236d15d86e7bf8f6d1e82fb643a0f12b2fff97d4183e63c1",
+    "artifacts/observation-ablation-calibration-revalidated-20261015/calibration.json": "eec113605a61610a361931f316b1c9d6b93a47bda866bcbcc1f58e1cc6f39e90",
+    "artifacts/observation-ablation-regression-20261015/algorithm-audit.json": "a6d1de0aad7905944f2e7688d6fdb3912b143b98ac6f5f9fa410f287c9f3bacb",
+    "artifacts/observation-ablation-regression-20261015/protocol-checks.json": "066b07cf947e7f2c29a392bea05e7ffa1a78267e755636c08485c177bf85d246",
+    "artifacts/observation-ablation-regression-20261015/original-image-verification.json": "9bdc6a5be8be22d16c9c565e68f47215c4005e5f52cec5b90bccd35b3f3fc038",
+    "artifacts/observation-ablation-regression-20261015/ablation-regression-comparison.json": "a11928233537204ad7f43121d0b672b23bde37735fb809fca4a0b59c0d84edcd"
+  }
+}

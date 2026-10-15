@@ -15,7 +15,30 @@
 
 此前旧电脑生成的 `desktop-handoff-main-20261015` 等包均为历史快照，不作为后续
 更新源。旧机只保留代码和证据备份；不同机器的绝对成本分开报告。本文件下方旧迁移
-步骤仅供重建历史环境时参考。当前阶段优先严格观测消融，不自动续跑已取消的高负载扫描。
+步骤仅供重建历史环境时参考。严格观测消融五轮已完成，主报告为
+`artifacts/observation-ablation-formal-20261015/results.md`，可提交摘要为
+`observation-ablation-20261015.json`。不自动续跑已取消的高负载扫描。
+
+本轮测量实现固定于`5836f0a`；测量后仅修正报告中boundary已知答案等待为N/A的
+展示，并保留原报告及原清单在`measurement-reports-5836f0a/`。事件、指标、输入、
+预测和真值未改写，独立复核通过。full/selective各900/900准确；boundary900个
+unknown。少采显著减少采集与离线成本，但本轮在线CPU同轮比值中位数增加8.36%，
+不宣称所有资源均改善，不将本实验当作MirrorTaint跨工具差距的完整因果分解。
+
+新运行使用新构建/回归目录，先按下方流程完成两应用回归、算法/协议审计与原镜像
+校验，再调用（不要直接复用历史绝对路径或修改冻结清单）：
+
+```bash
+python3 experiments/sockshop-mirrortaint/run_observation_ablation.py calibrate \
+  --out artifacts/ablation-cal-new --build artifacts/ablation-build-new \
+  --correctness artifacts/ablation-regression-new
+
+python3 experiments/sockshop-mirrortaint/run_observation_ablation.py run \
+  --out artifacts/ablation-cost-new --build artifacts/ablation-build-new \
+  --correctness artifacts/ablation-regression-new --calibration artifacts/ablation-cal-new \
+  --rounds 5 --warmup 30 --seconds 60 --rate 2 --concurrency 2 \
+  --cpus 1 --memory 768m --sample-interval 2 --seed 151031
+```
 
 当前已完成W3C通信关联替换：Sock Shop 198/198、Train Ticket 31/31个指定字段查询
 完全匹配，TP分别258/30、FP和FN为0。代码基线为`0bb0e92`；本文件所在提交补充

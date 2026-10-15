@@ -5,7 +5,7 @@ full means the existing admitted-class instance-field/conditional-branch policy,
 with records inside the frozen query frames, not all JVM/native instructions.
 boundary keeps HTTP/JSON plus identical admitted DTO write counters, but removes
 internal frames, reads, reductions and target-write records. Its total answers
-must remain unknown; it is a cost floor, not an equally capable alternative.
+must remain unknown; it is an incomplete-answer control, not an equally capable alternative.
 """
 import argparse
 from collections import Counter
@@ -183,7 +183,7 @@ def report(out):
     lines=['# Orders.total 严格观测消融','',f"状态：{state['status']}；五轮资格：{eligible}。",'',
            f"{cfg['rounds']}轮独立部署；预热{cfg['warmup']}秒、窗口{cfg['seconds']}秒；{cfg['rate']}请求/秒，并发{cfg['concurrency']}；每容器{cfg['cpus']}核/{cfg['memory']}。",'',
            '三种策略共用同一采集器 JAR、原业务 JAR、冻结计划、HTTP/JSON 边界、逐事件 JSONL 格式与同步flush策略，以及相同离线还原器/评分器。Shipping 不装观测器。', '',
-           'full 是已纳入应用类的实例字段读写、条件分支策略，记录限于冻结查询帧；不是所有JVM/库/本地指令的完整追踪。selective 使用自动计划。boundary 保留同样的HTTP/JSON证据和DTO写计数，但删除内部帧、读取、归约和目标写入记录；它必须保留unknown，不能当作同准确率替代方案。','',
+           'full 是已纳入应用类的实例字段读写、条件跳转策略，记录限于冻结查询帧；不是所有JVM/库/本地指令的完整追踪。selective 使用自动计划。boundary 保留同样的HTTP/JSON证据和DTO写计数，但删除内部帧、读取、归约和目标写入记录；它必须保留unknown，不能当作同准确率替代方案。','',
            '| 轮次 | 策略 | p50 / p95 / p99 ms | CPU单核% | JVM RSS均值MiB | 采集事件 / 字节 | exact / queries | unknown |',
            '| --- | --- | --- | ---: | ---: | --- | --- | ---: |']
     for r in rows:
@@ -193,14 +193,21 @@ def report(out):
     if summaries:
         lines+=['','| 各轮中位数 | full | selective | boundary |','| --- | ---: | ---: | ---: |']
         for key in next(iter(summaries.values()))['metrics']:
-            vals=[f'{summaries[p]["metrics"][key]["median"]:.6g}' if p in summaries else 'N/A' for p in POLICIES]
+            vals=[f'{summaries[p]["metrics"][key]["median"]:.6g}' if p in summaries and not (p=='boundary' and key=='answer_wait_p95_seconds') else 'N/A' for p in POLICIES]
             lines.append('| '+key+' | '+' | '.join(vals)+' |')
     if ratio_medians:
         lines+=['','| 同轮成本比中位数 | selective / full |','| --- | ---: |']
         for key,value in ratio_medians.items():lines.append(f'| {key} | {value:.4f} |')
+        cpu=ratio_medians['cpu_one_core_percent_mean']
+        lines+=['','同轮比值中位数显示：事件减少'+f'{(1-ratio_medians["capture_events"])*100:.2f}%'+
+                '，采集字节减少'+f'{(1-ratio_medians["capture_bytes"])*100:.2f}%'+
+                '，离线进程墙时减少'+f'{(1-ratio_medians["offline_subprocess_wall_seconds"])*100:.2f}%'+
+                '，离线峰值内存减少'+f'{(1-ratio_medians["offline_peak_rss_bytes"])*100:.2f}%'+
+                '。在线CPU'+('增加' if cpu>=1 else '减少')+f'{abs(cpu-1)*100:.2f}%。'+
+                '应分别解释采集、离线和在线成本，不据此宣称所有资源均改善。']
     lines+=['','完整成本、范围与变异系数见 comparison.json；逐事件类别、边界字段数、输入快照字段数与整次部署hook计数见 observation-breakdown.json。资源原始采样、逐请求计时、独立真值、答案、unknown与清理均保留。', '',
             'CPU是三个业务JVM的单核百分比之和；RSS为进程RSS求和，含共享页重复计数。采集增量含排空和采样边界。离线进程墙时含启动，峰值内存为独立子进程ru_maxrss。答案等待是响应完成至整批结果写出，含剩余窗口与关闭采集器，不是流式延迟。', '',
-            '只将full与selective的同准确率结果用于成本收益比较。boundary不提供total来源答案，每个正确答案的成本为N/A。只改变观测策略仍同时改变钩子、快照字段和输出量；本实验不把CPU差异全部归因于JSON写出，也不将其用于分解MirrorTaint的日志/适配器成本。', '',
+            '只将full与selective的同准确率结果用于成本收益比较。boundary不提供total来源答案，已知来源答案的等待时间及每个正确答案的成本为N/A。公共驱动原始批次写出时间表示unknown结果文件就绪，不能解释为已知来源答案可用。只改变观测策略仍同时改变钩子、快照字段和输出量；本实验不把CPU差异全部归因于JSON写出，也不将其用于分解MirrorTaint的日志/适配器成本。', '',
             '固定2请求/秒的完成吞吐不代表最大容量；不混入旧机器或旧配置开销。本机最新main是后续版本基准，旧迁移包仅是历史快照。','']
     (out/'results.md').write_text('\n'.join(lines))
 
