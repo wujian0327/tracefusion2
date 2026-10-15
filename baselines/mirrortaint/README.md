@@ -5,6 +5,10 @@
 公开构件不包含完整传播核心源码，因此直接获取作者JAR；不将本仓库适配器称为其源码。
 文件SHA见[版本锁](../tools.lock.json)。
 
+最新诊断关闭及来源标识导出复核见
+[当前汇总](../../experiments/sockshop-mirrortaint/FAIRNESS-EXPANSION-20261015.md)。
+下面的默认配置成本是对应冻结版本的历史结果；不能当作调优后最低成本。
+
 ```bash
 python3 baselines/manage.py fetch --tool mirrortaint
 python3 baselines/manage.py doctor --tool mirrortaint
@@ -87,3 +91,41 @@ full与selective均900/900完全匹配；按同轮比值的中位数，selective
 boundary仅保留HTTP/JSON及DTO写计数，900个查询全部unknown，不能作为同准确率方案。
 该消融支持选择性观测的采集和离线收益，仍不能分解MirrorTaint的事件格式、
 标签历史、适配器和计算位置对跨工具差距的各自贡献。
+
+## 可选的来源标识/查询目标导出配置
+
+公开JAR的配置/日志类检查未发现原生诊断关闭属性。`QuietDiagnosticAgent`是单独
+披露的运行时适配器，只关闭三个agent-info方法，保留专用错误通道及原生传播。
+`--source-ids-only`另将导出标签投影为原生来源标识，保留所有RPC候选来源字段，
+sink仅导出声明的查询目标。没有输入预期来源列表，内部传播和历史构造不变。
+它不输出完整内部传播历史；原对象扫描仍执行，不称最低开销实现。
+
+完成公共准备和当前验收后，用新目录重新构建、校准；不得沿用默认配置的旧回执：
+
+```bash
+python3 experiments/sockshop-mirrortaint/build_quiet_mirrortaint.py \
+  --agent artifacts/external-tools/mirrortaint/mirrorTaint.jar \
+  --build artifacts/baseline-field-build --out artifacts/baseline-mt-sourceids-build \
+  --source-ids-only
+python3 experiments/sockshop-mirrortaint/calibrate_mirrortaint_total.py \
+  --mode mirrortaint --build artifacts/baseline-field-build \
+  --bundle artifacts/baseline-mt-sourceids-build --correctness artifacts/baseline-field-run \
+  --out artifacts/baseline-mt-sourceids-calibration
+python3 experiments/sockshop-mirrortaint/calibrate_mirrortaint_total.py \
+  --mode tracefusion --build artifacts/baseline-field-build \
+  --bundle artifacts/baseline-mt-sourceids-build --correctness artifacts/baseline-field-run \
+  --out artifacts/baseline-tf-sourceids-calibration
+python3 experiments/sockshop-mirrortaint/run_sockshop_cost.py run \
+  --out artifacts/baseline-sourceids-cost --build artifacts/baseline-field-build \
+  --correctness artifacts/baseline-field-run --acceptance artifacts/baseline-field-acceptance \
+  --query-scope total --modes mirrortaint tracefusion \
+  --mt-bundle artifacts/baseline-mt-sourceids-build \
+  --mt-calibration artifacts/baseline-mt-sourceids-calibration \
+  --tf-calibration artifacts/baseline-tf-sourceids-calibration \
+  --rounds 5 --warmup 30 --seconds 60 --rate 2 --concurrency 2 \
+  --cpus 1 --memory 768m --sample-interval 2 --seed 151061
+```
+
+本入口仍只校准当前Orders.total来源集合与实例坐标查询，其他任务保持N/A。
+原来boundary策略的unknown只说明其与原还原器的组合；完整边界重放在额外契约下
+可恢复同批答案，见汇总中的条件性检查，不能声称任何边界方法都不够。

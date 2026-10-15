@@ -4,6 +4,10 @@
 固定上游版本、校验工具文件、获取依赖，并链接本仓库的适配器和实验入口。
 所有命令均在仓库根目录执行，默认在`main`工作。
 
+当前公平性复核及更精简输出配置的比较见
+[2026-10-15至16报告](../experiments/sockshop-mirrortaint/FAIRNESS-EXPANSION-20261015.md)。
+默认诊断、quiet、来源标识导出属于分别披露的配置，不能拼接各块绝对开销。
+
 | 工具 | 固定版本 | 已有比较及范围 | 具体说明 |
 | --- | --- | --- | --- |
 | MirrorTaint＋披露适配器 | `54fcbfc5bb3a0d7cd30309098355d999553a861b`公开JAR | 已校准Carts实际响应字段→Orders.total，并完成共同查询五轮成本比较 | [说明](mirrortaint/README.md) |
@@ -40,8 +44,9 @@ Git保存上述入口、锁文件、适配器、测试和结果摘要。上游�
 ## clone后的公共准备
 
 环境：Linux/WSL2，Python 3标准库、Git、完整JDK（含javac/javap）、Docker和
-Compose v2；从源码构建Phosphor另需Maven。本轮入口实测宿主JDK 21；部分历史
-Phosphor/FlowDist脚本使用`--release 8`，完整执行这些脚本需宿主JDK 9以上。
+Compose v2；从源码构建Phosphor另需Maven。历史入口验证机使用JDK 21；新主实验机
+使用JDK 8完成字段构建、成本与Log4j复现。部分历史Phosphor/FlowDist脚本仍使用
+`--release 8`，完整执行这些脚本需宿主JDK 9以上。
 服务仍用镜像里的Java8；Phosphor核心编译固定调用原版镜像里的javac8。
 
 ```bash

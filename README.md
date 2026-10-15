@@ -4,6 +4,10 @@
 [基线实验入口](baselines/README.md)，包含MirrorTaint、Phosphor和FlowDist。
 clone后先准备工具及运行依赖，再按各自已校准的查询口径进行实验。
 
+Sock Shop / Train Ticket的最新正确性、严格消融、MirrorTaint诊断与导出配置核验见
+[2026-10-15至16实验汇总](experiments/sockshop-mirrortaint/FAIRNESS-EXPANSION-20261015.md)。
+历史阶段报告保留原口径，原始工件需单独备份，推送由用户手动完成。
+
 ## 当前实验方向（2026-10-12）
 
 定位为**面向多语言服务程序的低开销字段级动态溯源**，优先软件工程方向。
