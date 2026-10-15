@@ -103,9 +103,19 @@ python3 experiments/sockshop-mirrortaint/evaluate_distributed_paths.py \
   --build artifacts/baseline-field-build --out artifacts/baseline-field-run
 python3 experiments/sockshop-mirrortaint/audit_distributed_paths.py \
   --build artifacts/baseline-field-build --out artifacts/baseline-field-run
+python3 experiments/sockshop-mirrortaint/check_w3c_protocol.py \
+  --build artifacts/baseline-field-build --out artifacts/baseline-field-run
+python3 experiments/sockshop-mirrortaint/verify_original_path_images.py \
+  --build artifacts/baseline-field-build --out artifacts/baseline-field-run
 ```
 
-这部分是TraceFusion的两应用验收；随后按MirrorTaint说明进行共同查询校准和成本比较。
+这部分完成TraceFusion两应用的评分、算法审计、协议测试和原镜像JAR校验；
+随后可按MirrorTaint说明进行共同查询校准。它尚不足以满足当前共同成本驱动的
+全部入口检查：`run_sockshop_cost.py run`还要求`w3c-comparison.json`通过。
+该历史回执由`compare_w3c_paths.py`比较迁移前后的独立捕获生成，需要对应旧工件，
+并要求本地采集/还原核心源码哈希不变。新增boundary策略后此条件不再成立，
+新clone不能按本节命令直接进入共同成本运行，也不能复制旧回执或伪造通过状态。
+最新严格消融使用单独的语义回归对照，见下方摘要；共同成本驱动尚未接入该验收方式。
 当前种子和业务注册表下，参考结果为Sock Shop 198/198、Train Ticket 31/31。
 运行使用回环端口18580–18583、18600–18602及10.254.249.0/24子网，两应用顺序运行。
 已有输出目录保留为证据，重跑应更换目录名。只清理本次随机部署项目，不清理其他项目。
@@ -113,6 +123,7 @@ python3 experiments/sockshop-mirrortaint/audit_distributed_paths.py \
 ## 实验报告入口
 
 - [最新共同字段查询成本摘要](../experiments/sockshop-mirrortaint/mirrortaint-total-cost-20261015.json)
+- [同格式、同还原器的严格观测消融](../experiments/sockshop-mirrortaint/observation-ablation-20261015.json)
 - [五方法、字段与语句两种口径摘要](../experiments/sockshop-mirrortaint/two-grain-comparison-20261014.json)
 - [完整实验记录及历次适配说明](../experiments/sockshop-mirrortaint/README.md)
 - [台式机迁移与已有正式成本命令](../experiments/sockshop-mirrortaint/DESKTOP-HANDOFF.md)
@@ -126,3 +137,5 @@ python3 experiments/sockshop-mirrortaint/audit_distributed_paths.py \
 测试、Phosphor源码重建/JRE启动/原生标签样例、六个镜像JAR提取均通过；干净源码
 目录中重新获取依赖、生成六服务计划/冻结输入和编译作者Thrift示例也通过。
 这轮未重新运行完整业务或正式成本实验；相关历史准确性仍引用各自原始证据。
+该摘要的源码哈希对应入口验证当时的文件，保留为历史记录；本次补充结果和复现限制
+没有重写该回执，也不代表重新完成新clone的整套成本运行。

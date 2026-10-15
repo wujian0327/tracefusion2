@@ -40,6 +40,11 @@ python3 experiments/sockshop-mirrortaint/calibrate_mirrortaint_total.py \
 
 校准通过后才运行原版、TraceFusion、MirrorTaint三配置的五轮成本：
 
+以下是既有正式协议的运行模板，还必须通过成本驱动的全部验收门槛。
+当前`main`新增boundary观测策略后，旧`compare_w3c_paths.py`的核心源码不变检查
+不再适用；[公共准备](../README.md)说明了缺少的回执和限制。
+共同成本驱动接入当前语义回归验收前，不应将下列命令声称为新clone已跑通的完整入口。
+
 ```bash
 python3 experiments/sockshop-mirrortaint/run_sockshop_cost.py run \
   --out artifacts/baseline-common-cost --build artifacts/baseline-field-build \
@@ -52,5 +57,34 @@ python3 experiments/sockshop-mirrortaint/run_sockshop_cost.py run \
 ```
 
 当前Item、Shipment、Train Ticket的MirrorTaint实例查询没有共同成本校准，保持N/A。
-日志、诊断产物和适配器计入测量；批次答案等待时间不是流式延迟。共同查询成本优势
-不自动归因于少采，事件格式、标签历史及计算位置等仍需要消融区分。
+日志、诊断产物和适配器计入测量；批次答案等待时间不是流式延迟。
+
+## 已完成的共同查询成本与消融
+
+共同成本测量代码为`2853a59`，结果见
+[版本化摘要](../../experiments/sockshop-mirrortaint/mirrortaint-total-cost-20261015.json)，
+本机原始报告为`artifacts/common-total-cost-formal-20261015/results.md`。
+两种观测配置均为900/900个查询完全匹配、TP3750、FP/FN/目标unknown均为0。
+固定2请求/秒、五轮独立部署下，各轮指标中位数为：
+
+| 指标 | TraceFusion自动选择性观测 | MirrorTaint＋披露适配器 |
+| --- | ---: | ---: |
+| 在线p95延迟（ms） | 18.520 | 107.228 |
+| 三个业务JVM的CPU（单核百分比之和） | 8.258 | 22.375 |
+| 稳态请求对应采集事件数 | 5298 | 5280 |
+| 稳态请求对应采集字节 | 4,042,178 | 69,756,296 |
+| 离线还原/评分/导出（秒） | 0.621 | 0.917 |
+
+这些数值限定于冻结查询、输入、机器和配置；完成相同固定负载不代表最大吞吐相同。
+MirrorTaint的默认原生诊断输出计入成本，没有验证其最低开销调优配置。
+两者事件格式不同且事件数接近，不能将这张表的成本差异解释为少采事件的收益。
+
+另已完成同采集器、同JSONL格式、同离线还原器的
+[严格观测消融](../../experiments/sockshop-mirrortaint/observation-ablation-20261015.json)，
+测量代码为`5836f0a`，本机报告为`artifacts/observation-ablation-formal-20261015/results.md`。
+full与selective均900/900完全匹配；按同轮比值的中位数，selective的事件减少80.37%、
+采集字节减少63.03%、离线进程墙时减少66.91%、离线峰值内存减少54.61%，
+但在线CPU增加8.36%。full限于已纳入应用类、冻结查询帧内的实例字段读写和条件跳转。
+boundary仅保留HTTP/JSON及DTO写计数，900个查询全部unknown，不能作为同准确率方案。
+该消融支持选择性观测的采集和离线收益，仍不能分解MirrorTaint的事件格式、
+标签历史、适配器和计算位置对跨工具差距的各自贡献。
