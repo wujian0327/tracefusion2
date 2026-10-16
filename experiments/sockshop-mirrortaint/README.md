@@ -1,5 +1,9 @@
 # Sock Shop / MirrorTaint：真实 API 接入预检
 
+当前主表、可保留结论、已知限制和工件入口见
+[截至2026-10-16的论文结果与证据清单](PAPER-EVIDENCE-20261016.md)。
+下文各日期记录保留当时口径，未完成事项需与最新清单对照。
+
 新用户获取外部工具、构建Phosphor/JRE和准备原版业务的统一入口见
 [baselines/README.md](../../baselines/README.md)。下文保留各阶段的真实记录和限制。
 

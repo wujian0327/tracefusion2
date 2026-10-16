@@ -1,0 +1,772 @@
+{
+  "as_of": "2026-10-16",
+  "legacy_correctness": {
+    "sockshop": {
+      "queries": 198,
+      "exact": 198,
+      "unknown": 0,
+      "tp": 258,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "trainticket": {
+      "queries": 31,
+      "exact": 31,
+      "unknown": 0,
+      "tp": 30,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  },
+  "train_calibration": {
+    "selective": {
+      "requests": 20,
+      "exact": 38,
+      "tp": 92,
+      "fp": 0,
+      "fn": 0,
+      "unknown": 0,
+      "unavailable_requests": [
+        "missing-train"
+      ],
+      "max_overlapping_roots": 8,
+      "distinct_root_frames": 20,
+      "one_shared_trace": true,
+      "events": 2496,
+      "bytes": 1286154
+    },
+    "full": {
+      "requests": 20,
+      "exact": 38,
+      "tp": 92,
+      "fp": 0,
+      "fn": 0,
+      "unknown": 0,
+      "unavailable_requests": [
+        "missing-train"
+      ],
+      "max_overlapping_roots": 8,
+      "distinct_root_frames": 20,
+      "one_shared_trace": true,
+      "events": 5216,
+      "bytes": 1894722
+    }
+  },
+  "security": {
+    "controlled": {
+      "queries": 22,
+      "tp": 9,
+      "fp": 0,
+      "fn_including_unknown_positive": 1,
+      "tn": 12,
+      "unknown": 1
+    },
+    "cve-vulnerable": {
+      "queries": 5,
+      "tp": 3,
+      "fp": 0,
+      "fn_including_unknown_positive": 0,
+      "tn": 2,
+      "unknown": 0
+    },
+    "cve-config-mitigated": {
+      "queries": 5,
+      "tp": 0,
+      "fp": 0,
+      "fn_including_unknown_positive": 0,
+      "tn": 5,
+      "unknown": 0
+    },
+    "cve-fixed": {
+      "queries": 5,
+      "tp": 0,
+      "fp": 0,
+      "fn_including_unknown_positive": 0,
+      "tn": 5,
+      "unknown": 0
+    }
+  },
+  "source_sha256": {
+    "artifacts/fairness-expansion-20261015/source-ids-cost/independent-validation.json": "683a745b79dfa2d0ae2844f1258634dd4a651dd5e450e0351d1e31282aff0d8d",
+    "artifacts/fairness-expansion-20261015/source-ids-cost/config.json": "5458ce15c699bc195495dc0763774e729290c168947b729ae431711a2a755ec4",
+    "artifacts/fairness-expansion-20261015/source-ids-cost/round-01-1-tracefusion/metrics.json": "30223204deb97be088fc1c56e3e6662e3fd09119ee2b46e3b2f88ce306a4bfdf",
+    "artifacts/fairness-expansion-20261015/source-ids-cost/round-01-2-mirrortaint/metrics.json": "79f71b5ee5a78881dbf8e59b2a43a6bd3cf5b401743173154d68cb525b389cb2",
+    "artifacts/fairness-expansion-20261015/source-ids-cost/round-02-1-tracefusion/metrics.json": "2e29cbda35547bdc8fa3ade6f3f525d81a1b2f423cc662d98918cb25cf0fda06",
+    "artifacts/fairness-expansion-20261015/source-ids-cost/round-02-2-mirrortaint/metrics.json": "9ba0d3c7efbc9df9b2fe74d4754b8cff5cadeb1969fc63e9a722f616a40ee29c",
+    "artifacts/fairness-expansion-20261015/source-ids-cost/round-03-1-tracefusion/metrics.json": "3bbc63b27168db1a81b5998ce0437a00e31ff87554a07ec90680139f6f2f332c",
+    "artifacts/fairness-expansion-20261015/source-ids-cost/round-03-2-mirrortaint/metrics.json": "03dac9f0cbb68de91d5f87e054950eedc492387bafba7238fda62ac4d16976fc",
+    "artifacts/fairness-expansion-20261015/source-ids-cost/round-04-1-tracefusion/metrics.json": "b574291d616a9fdb5c767fc803674b589d9824cb307de3c708dff74ff64332b8",
+    "artifacts/fairness-expansion-20261015/source-ids-cost/round-04-2-mirrortaint/metrics.json": "5921ed61fb6ac7a8a2a3b4b42dab4d33d0b39a196b7a9bdca90d147083d5df7c",
+    "artifacts/fairness-expansion-20261015/source-ids-cost/round-05-1-tracefusion/metrics.json": "8db80f16bff4e61b6b60ab3e250e616ff9a5d3b309fdc4ffa6177344885fe047",
+    "artifacts/fairness-expansion-20261015/source-ids-cost/round-05-2-mirrortaint/metrics.json": "ba7af53a689a7e8100aa4f257c09acd1fff001618c7e5e0629908654a6838d76",
+    "artifacts/observation-ablation-formal-20261015/comparison.json": "09e8146dc0f59d4e447439696a1a708c6b713e540ec7bdeb099ae5f6fb803eec",
+    "artifacts/observation-ablation-formal-20261015/config.json": "7ec16fd0b621b12d7df87f035959b0b6faf283fbbb93062cc74caafb65afb923",
+    "artifacts/observation-ablation-formal-20261015/round-01-1-full/metrics.json": "cee72ada9d8a33c64c9cd8f55f9fb5f924f82434826678e47d5d311f3360b5a8",
+    "artifacts/observation-ablation-formal-20261015/round-01-2-boundary/metrics.json": "f9cbdd131d6a6dac4ca97db9c1c4e997e7df13c031d20d1885c5ba715571fe1d",
+    "artifacts/observation-ablation-formal-20261015/round-01-3-selective/metrics.json": "e679ff92bee46251a6650bda8fdda0a9aab898b9c343e0a5c6e1d7c407cf70b0",
+    "artifacts/observation-ablation-formal-20261015/round-02-1-full/metrics.json": "328a1a07bf3a90b96856993b9e83954eebc562d5c3096c56dc22bbde0730b93b",
+    "artifacts/observation-ablation-formal-20261015/round-02-2-selective/metrics.json": "e1015c13b4b8ad0781f844c24ca53f99383c7643e6a342d246ac485055f44aa6",
+    "artifacts/observation-ablation-formal-20261015/round-02-3-boundary/metrics.json": "f66463806b1a6acf4c259466c6954c3d3bf3dc80b858f962420600b60e9c88df",
+    "artifacts/observation-ablation-formal-20261015/round-03-1-selective/metrics.json": "64dab7e49e48dea0db65adb25b1e94779d204d6f4a990c346331f70dc47ce208",
+    "artifacts/observation-ablation-formal-20261015/round-03-2-boundary/metrics.json": "56e540a96070c2c30cbbe966b86c5149349a80d9b56c0b666e07c0e82faf036a",
+    "artifacts/observation-ablation-formal-20261015/round-03-3-full/metrics.json": "3d1cc987fd885d68fb1e9e66f3e7be16bb76361b4b5df8e121b5c8f3d747bfa4",
+    "artifacts/observation-ablation-formal-20261015/round-04-1-selective/metrics.json": "2f3365754c3638753c748380e2c8810824a5cfa2c90222ca98355cd428799095",
+    "artifacts/observation-ablation-formal-20261015/round-04-2-boundary/metrics.json": "72e05338dfe55397724abf095aa943726c70725405425448b177d66af98c7a12",
+    "artifacts/observation-ablation-formal-20261015/round-04-3-full/metrics.json": "1a3780500313c0bef446612c1e612373a9ba9885e28383569720ce44d16e7865",
+    "artifacts/observation-ablation-formal-20261015/round-05-1-full/metrics.json": "2c4bab0e25adb719532271fcf18e49a06cefc62240ea2e27d622237ccb66b39d",
+    "artifacts/observation-ablation-formal-20261015/round-05-2-boundary/metrics.json": "b632d122567df4c23fe2ac0c2bb2072c0f4504ead0180c2aed119901415edbe3",
+    "artifacts/observation-ablation-formal-20261015/round-05-3-selective/metrics.json": "a1393d94025b7ee66bdcecac1affd3ee8d8460ed30e85b37773c7c32461dec68",
+    "artifacts/trainticket-cost-formal-20261016/independent-audit.json": "1f54803903f5608be55907303f08e16f06f4f1ec335370328d4b779dfe605c4b",
+    "artifacts/trainticket-cost-formal-20261016/config.json": "f970bb768b242c02d445601a42b80a5adf37f97225077245fc22dd64ed2fc8b4",
+    "artifacts/trainticket-cost-formal-20261016/round-01-01-original/metrics.json": "41811ee1b99ef94691e8311494c653613e0dbea1313defbb299f2f2306a48cec",
+    "artifacts/trainticket-cost-formal-20261016/round-01-02-full/metrics.json": "606f65bf60aeea85f06657b983acb97c838d6f14cffac8222324feefbb8e93bf",
+    "artifacts/trainticket-cost-formal-20261016/round-01-03-selective/metrics.json": "cf99904632f98ccf12de40424c3e26a98b49aef164ff45e9dcb4fa4eec7e8401",
+    "artifacts/trainticket-cost-formal-20261016/round-02-01-original/metrics.json": "7de8b66dd076c489bddb72d182e82f2fcd99bf2bae3c178c534a8be710bbe347",
+    "artifacts/trainticket-cost-formal-20261016/round-02-02-selective/metrics.json": "859b6abf394626facacd4d8794cbccd00ebb5eadf1e01e094cbf0930eedb505b",
+    "artifacts/trainticket-cost-formal-20261016/round-02-03-full/metrics.json": "598d331229ace06fcfa2113da75489ad07403e22cd60956030758dda96c36432",
+    "artifacts/trainticket-cost-formal-20261016/round-03-01-selective/metrics.json": "33f3214b165ff9376a37bfa1085815ae2a1c9497256914ce6955f5b2314803e4",
+    "artifacts/trainticket-cost-formal-20261016/round-03-02-full/metrics.json": "9bffaf5cf048e082c0cac4086a6498ef78a4228479e7765940297503c820489b",
+    "artifacts/trainticket-cost-formal-20261016/round-03-03-original/metrics.json": "166d127194ce2c66ad5e2fead9d5dd1f0df5a61e26fab2f95f2ad106de8ea140",
+    "artifacts/trainticket-cost-formal-20261016/round-04-01-original/metrics.json": "a5c7be2f8207f64e24eb180b4538bca399109581b8a63753ecf1b9943ac561e8",
+    "artifacts/trainticket-cost-formal-20261016/round-04-02-selective/metrics.json": "cc9376ea9455db2c1a0a656bf5f494e0923646a4e3664d3349001a4c98fe5b2e",
+    "artifacts/trainticket-cost-formal-20261016/round-04-03-full/metrics.json": "282803a728b91af5f9e3bb8abd847510efc6473d80b28b9bd61fb813447e3b28",
+    "artifacts/trainticket-cost-formal-20261016/round-05-01-original/metrics.json": "05fae477336a17cdcef8518dce5bd8d6e2fcae16660d392b0b1930546b459e8d",
+    "artifacts/trainticket-cost-formal-20261016/round-05-02-full/metrics.json": "0aaa6235c21131cd59f491863c586c24f26c2b9764da1d3bf39b60ed42ea5f2a",
+    "artifacts/trainticket-cost-formal-20261016/round-05-03-selective/metrics.json": "17eca4abd8dd38adf077d049842762aae7fe5e8e456a7a18216963e8d9aa6992",
+    "artifacts/trainticket-multisource-20261016/legacy-correctness/comparison.json": "d2d36689ad500dce860e7dde46f2034a26cc127c695cb8ab39a527342ca1ad58",
+    "artifacts/trainticket-multisource-20261016/validation-02/independent-audit.json": "3fdba307460455e2d9feb8cd9701b9ed2d55b537ac4b154b3a797508d5703a24",
+    "artifacts/security-leak-desktop-reproduction-20261015/results.json": "6343cf17f38c26e3a7f5d596c5e99cf1ee62a98a5ae50af99b0ece3aafa7886e",
+    "experiments/sockshop-mirrortaint/summarize_paper_evidence.py": "a4ee789dc3ce452352caf7c3bb01d418a33740ded90a443713095eadca170085"
+  },
+  "validation_scope": "Arithmetic independently recomputed from saved per-deployment metrics and per-query security predictions; reuse existing raw-evidence audit receipts. No new experiment, raw-timing re-audit or blind validation.",
+  "blocks": {
+    "sockshop_common": {
+      "source": "artifacts/fairness-expansion-20261015/source-ids-cost",
+      "comparison": "tracefusion/mirrortaint",
+      "groups": {
+        "mirrortaint": {
+          "deployments": 5,
+          "steady_requests": 600,
+          "medians": {
+            "p50_ms": 24.250252,
+            "p95_ms": 32.560012,
+            "cpu_one_core_percent": 12.385173902458705,
+            "rss_mean_bytes": 1610758144,
+            "events": 5280,
+            "bytes": 8165872,
+            "offline_core_seconds": 0.479981067,
+            "offline_total_seconds": 0.702973661,
+            "offline_wall_seconds": 0.77129319,
+            "offline_cpu_seconds": null,
+            "offline_peak_bytes": 99885056
+          },
+          "accuracy": {
+            "queries": 900,
+            "exact": 900,
+            "tp": 3750,
+            "fp": 0,
+            "fn": 0,
+            "unknown": 0
+          }
+        },
+        "tracefusion": {
+          "deployments": 5,
+          "steady_requests": 600,
+          "medians": {
+            "p50_ms": 13.367984,
+            "p95_ms": 18.657704,
+            "cpu_one_core_percent": 8.480956965393753,
+            "rss_mean_bytes": 1592023552,
+            "events": 5298,
+            "bytes": 4042178,
+            "offline_core_seconds": 0.23736476899999998,
+            "offline_total_seconds": 0.458577391,
+            "offline_wall_seconds": 0.53200054,
+            "offline_cpu_seconds": null,
+            "offline_peak_bytes": 93863936
+          },
+          "accuracy": {
+            "queries": 900,
+            "exact": 900,
+            "tp": 3750,
+            "fp": 0,
+            "fn": 0,
+            "unknown": 0
+          }
+        }
+      },
+      "paired": {
+        "p50_ms": {
+          "ratios": [
+            0.5512513436973768,
+            0.55087714192432,
+            0.5451283104770466,
+            0.5440767277099593,
+            0.5713871102240687
+          ],
+          "median": 0.55087714192432,
+          "change_percent": -44.912285807568,
+          "min": 0.5440767277099593,
+          "max": 0.5713871102240687
+        },
+        "p95_ms": {
+          "ratios": [
+            0.5133873514603777,
+            0.5611356728127526,
+            0.6092908483682491,
+            0.5730250959366968,
+            0.5559892492920429
+          ],
+          "median": 0.5611356728127526,
+          "change_percent": -43.88643271872474,
+          "min": 0.5133873514603777,
+          "max": 0.6092908483682491
+        },
+        "cpu_one_core_percent": {
+          "ratios": [
+            0.6965296427337884,
+            0.6353088355085084,
+            0.6729070579301126,
+            0.6822510775195119,
+            0.7140826618602387
+          ],
+          "median": 0.6822510775195119,
+          "change_percent": -31.774892248048815,
+          "min": 0.6353088355085084,
+          "max": 0.7140826618602387
+        },
+        "rss_mean_bytes": {
+          "ratios": [
+            1.0009237893601668,
+            0.9845256470731835,
+            0.9801092189974863,
+            0.989170508748472,
+            1.010447492580835
+          ],
+          "median": 0.989170508748472,
+          "change_percent": -1.082949125152799,
+          "min": 0.9801092189974863,
+          "max": 1.010447492580835
+        },
+        "events": {
+          "ratios": [
+            1.003409090909091,
+            1.003409090909091,
+            1.003409090909091,
+            1.003409090909091,
+            1.003409090909091
+          ],
+          "median": 1.003409090909091,
+          "change_percent": 0.3409090909090917,
+          "min": 1.003409090909091,
+          "max": 1.003409090909091
+        },
+        "bytes": {
+          "ratios": [
+            0.4950089837313149,
+            0.49500873880952334,
+            0.49500873880952334,
+            0.49500873880952334,
+            0.49500873880952334
+          ],
+          "median": 0.49500873880952334,
+          "change_percent": -50.499126119047666,
+          "min": 0.49500873880952334,
+          "max": 0.4950089837313149
+        },
+        "offline_core_seconds": {
+          "ratios": [
+            0.49796005790234377,
+            0.4876988023362398,
+            0.48401727131173217,
+            0.502844153958581,
+            0.5029027259527302
+          ],
+          "median": 0.49796005790234377,
+          "change_percent": -50.203994209765625,
+          "min": 0.48401727131173217,
+          "max": 0.5029027259527302
+        },
+        "offline_total_seconds": {
+          "ratios": [
+            0.6444370979071433,
+            0.6437191942772356,
+            0.6417070402348672,
+            0.6753162644601247,
+            0.6600380186830471
+          ],
+          "median": 0.6444370979071433,
+          "change_percent": -35.55629020928567,
+          "min": 0.6417070402348672,
+          "max": 0.6753162644601247
+        },
+        "offline_wall_seconds": {
+          "ratios": [
+            0.6776621131209332,
+            0.6734025796336485,
+            0.6793930624739227,
+            0.7106233640790385,
+            0.6913678039864453
+          ],
+          "median": 0.6793930624739227,
+          "change_percent": -32.060693752607726,
+          "min": 0.6734025796336485,
+          "max": 0.7106233640790385
+        },
+        "offline_cpu_seconds": null,
+        "offline_peak_bytes": {
+          "ratios": [
+            0.9406626753055032,
+            0.9396908695830429,
+            0.9388324040669072,
+            0.9407611149883001,
+            0.9440389294403893
+          ],
+          "median": 0.9406626753055032,
+          "change_percent": -5.933732469449682,
+          "min": 0.9388324040669072,
+          "max": 0.9440389294403893
+        }
+      }
+    },
+    "sockshop_ablation": {
+      "source": "artifacts/observation-ablation-formal-20261015",
+      "comparison": "selective/full",
+      "groups": {
+        "boundary": {
+          "deployments": 5,
+          "steady_requests": 600,
+          "medians": {
+            "p50_ms": 13.166351,
+            "p95_ms": 18.46108,
+            "cpu_one_core_percent": 8.522535974998648,
+            "rss_mean_bytes": 1606508544,
+            "events": 3720,
+            "bytes": 3432418,
+            "offline_core_seconds": null,
+            "offline_total_seconds": 0.497294222,
+            "offline_wall_seconds": 0.573881455,
+            "offline_cpu_seconds": 0.561008,
+            "offline_peak_bytes": 165801984
+          },
+          "accuracy": {
+            "queries": 900,
+            "exact": 0,
+            "tp": 0,
+            "fp": 0,
+            "fn": 3750,
+            "unknown": 900
+          }
+        },
+        "full": {
+          "deployments": 5,
+          "steady_requests": 600,
+          "medians": {
+            "p50_ms": 14.335016,
+            "p95_ms": 19.710237,
+            "cpu_one_core_percent": 7.861704330355002,
+            "rss_mean_bytes": 1613703424,
+            "events": 26988,
+            "bytes": 10932748,
+            "offline_core_seconds": null,
+            "offline_total_seconds": 2.080739233,
+            "offline_wall_seconds": 2.199087813,
+            "offline_cpu_seconds": 2.180444,
+            "offline_peak_bytes": 374747136
+          },
+          "accuracy": {
+            "queries": 900,
+            "exact": 900,
+            "tp": 3750,
+            "fp": 0,
+            "fn": 0,
+            "unknown": 0
+          }
+        },
+        "selective": {
+          "deployments": 5,
+          "steady_requests": 600,
+          "medians": {
+            "p50_ms": 13.611511,
+            "p95_ms": 18.189984,
+            "cpu_one_core_percent": 8.724505056854897,
+            "rss_mean_bytes": 1615125504,
+            "events": 5298,
+            "bytes": 4042178,
+            "offline_core_seconds": null,
+            "offline_total_seconds": 0.628427016,
+            "offline_wall_seconds": 0.712148519,
+            "offline_cpu_seconds": 0.697801,
+            "offline_peak_bytes": 170090496
+          },
+          "accuracy": {
+            "queries": 900,
+            "exact": 900,
+            "tp": 3750,
+            "fp": 0,
+            "fn": 0,
+            "unknown": 0
+          }
+        }
+      },
+      "paired": {
+        "p50_ms": {
+          "ratios": [
+            0.9323134635984813,
+            0.9450373623133157,
+            0.9373568888936015,
+            0.9576730162929648,
+            0.9591059644413416
+          ],
+          "median": 0.9450373623133157,
+          "change_percent": -5.49626376866843,
+          "min": 0.9323134635984813,
+          "max": 0.9591059644413416
+        },
+        "p95_ms": {
+          "ratios": [
+            0.947399710853792,
+            0.929610676253266,
+            0.8489077016473386,
+            1.0383906596353967,
+            0.8795855385386722
+          ],
+          "median": 0.929610676253266,
+          "change_percent": -7.038932374673401,
+          "min": 0.8489077016473386,
+          "max": 1.0383906596353967
+        },
+        "cpu_one_core_percent": {
+          "ratios": [
+            1.1384855160274774,
+            1.1144211562610498,
+            0.9765483965323256,
+            1.0700808069465335,
+            1.0836429313317173
+          ],
+          "median": 1.0836429313317173,
+          "change_percent": 8.36429313317173,
+          "min": 0.9765483965323256,
+          "max": 1.1384855160274774
+        },
+        "rss_mean_bytes": {
+          "ratios": [
+            1.0109531176659305,
+            0.998414174159157,
+            0.9705415469925046,
+            1.0036635034121362,
+            1.001551592847281
+          ],
+          "median": 1.001551592847281,
+          "change_percent": 0.15515928472809026,
+          "min": 0.9705415469925046,
+          "max": 1.0109531176659305
+        },
+        "events": {
+          "ratios": [
+            0.19630947087594486,
+            0.19630947087594486,
+            0.19630947087594486,
+            0.19630947087594486,
+            0.19630947087594486
+          ],
+          "median": 0.19630947087594486,
+          "change_percent": -80.36905291240551,
+          "min": 0.19630947087594486,
+          "max": 0.19630947087594486
+        },
+        "bytes": {
+          "ratios": [
+            0.36973119658479275,
+            0.3697313795214158,
+            0.36973119658479275,
+            0.36973119658479275,
+            0.36973119658479275
+          ],
+          "median": 0.36973119658479275,
+          "change_percent": -63.02688034152073,
+          "min": 0.36973119658479275,
+          "max": 0.3697313795214158
+        },
+        "offline_core_seconds": null,
+        "offline_total_seconds": {
+          "ratios": [
+            0.29852592876610645,
+            0.3206046448959092,
+            0.309921448479748,
+            0.32752284202395243,
+            0.29152972338874533
+          ],
+          "median": 0.309921448479748,
+          "change_percent": -69.0078551520252,
+          "min": 0.29152972338874533,
+          "max": 0.32752284202395243
+        },
+        "offline_wall_seconds": {
+          "ratios": [
+            0.3207411522527677,
+            0.3421683471144166,
+            0.33087369940328987,
+            0.349337452744767,
+            0.3130072540998916
+          ],
+          "median": 0.33087369940328987,
+          "change_percent": -66.912630059671,
+          "min": 0.3130072540998916,
+          "max": 0.349337452744767
+        },
+        "offline_cpu_seconds": {
+          "ratios": [
+            0.31685498219217456,
+            0.33845953115322,
+            0.3249255656187455,
+            0.34600001767444327,
+            0.3093325219545187
+          ],
+          "median": 0.3249255656187455,
+          "change_percent": -67.50744343812545,
+          "min": 0.3093325219545187,
+          "max": 0.34600001767444327
+        },
+        "offline_peak_bytes": {
+          "ratios": [
+            0.45487360672055654,
+            0.45388070957799126,
+            0.45364857039845297,
+            0.4535173408509801,
+            0.45433972165433095
+          ],
+          "median": 0.45388070957799126,
+          "change_percent": -54.61192904220087,
+          "min": 0.4535173408509801,
+          "max": 0.45487360672055654
+        }
+      }
+    },
+    "trainticket_ablation": {
+      "source": "artifacts/trainticket-cost-formal-20261016",
+      "comparison": "selective/full",
+      "groups": {
+        "full": {
+          "deployments": 5,
+          "steady_requests": 600,
+          "medians": {
+            "p50_ms": 25.542869,
+            "p95_ms": 32.085381,
+            "cpu_one_core_percent": 14.57786719946112,
+            "rss_mean_bytes": 2017673456.9411764,
+            "events": 31529,
+            "bytes": 11645394,
+            "offline_core_seconds": 2.8063130480004475,
+            "offline_total_seconds": 3.475380914,
+            "offline_wall_seconds": 3.581107359,
+            "offline_cpu_seconds": 3.520602,
+            "offline_peak_bytes": 311054336
+          },
+          "accuracy": {
+            "queries": 1800,
+            "exact": 1800,
+            "tp": 4330,
+            "fp": 0,
+            "fn": 0,
+            "unknown": 0
+          }
+        },
+        "original": {
+          "deployments": 5,
+          "steady_requests": 600,
+          "medians": {
+            "p50_ms": 20.972897,
+            "p95_ms": 27.292291,
+            "cpu_one_core_percent": 11.187470131267748,
+            "rss_mean_bytes": 2010221869.1764705,
+            "events": 0,
+            "bytes": 0,
+            "offline_core_seconds": null,
+            "offline_total_seconds": null,
+            "offline_wall_seconds": null,
+            "offline_cpu_seconds": null,
+            "offline_peak_bytes": null
+          },
+          "accuracy": null
+        },
+        "selective": {
+          "deployments": 5,
+          "steady_requests": 600,
+          "medians": {
+            "p50_ms": 24.280881,
+            "p95_ms": 30.238441,
+            "cpu_one_core_percent": 14.710013251981938,
+            "rss_mean_bytes": 2012857283.764706,
+            "events": 14845,
+            "bytes": 7852266,
+            "offline_core_seconds": 1.0242309889872558,
+            "offline_total_seconds": 1.545777332,
+            "offline_wall_seconds": 1.637505927,
+            "offline_cpu_seconds": 1.591223,
+            "offline_peak_bytes": 268992512
+          },
+          "accuracy": {
+            "queries": 1800,
+            "exact": 1800,
+            "tp": 4330,
+            "fp": 0,
+            "fn": 0,
+            "unknown": 0
+          }
+        }
+      },
+      "paired": {
+        "p50_ms": {
+          "ratios": [
+            0.9439067770034327,
+            0.9385410499017467,
+            0.9416094957853012,
+            0.9929615735949816,
+            0.9524170293383426
+          ],
+          "median": 0.9439067770034327,
+          "change_percent": -5.609322299656727,
+          "min": 0.9385410499017467,
+          "max": 0.9929615735949816
+        },
+        "p95_ms": {
+          "ratios": [
+            0.98086124278643,
+            0.8500612862306997,
+            0.9653876940181316,
+            0.8746006151870275,
+            1.0992043697408487
+          ],
+          "median": 0.9653876940181316,
+          "change_percent": -3.4612305981868374,
+          "min": 0.8500612862306997,
+          "max": 1.0992043697408487
+        },
+        "cpu_one_core_percent": {
+          "ratios": [
+            1.011011826182052,
+            0.9644950693527977,
+            0.9231589563642318,
+            1.0588241719995743,
+            1.012356717334883
+          ],
+          "median": 1.011011826182052,
+          "change_percent": 1.1011826182051987,
+          "min": 0.9231589563642318,
+          "max": 1.0588241719995743
+        },
+        "rss_mean_bytes": {
+          "ratios": [
+            0.9871562800226213,
+            0.99037834722711,
+            0.9892703788968131,
+            0.9741976938619306,
+            1.0328391509249775
+          ],
+          "median": 0.9892703788968131,
+          "change_percent": -1.072962110318687,
+          "min": 0.9741976938619306,
+          "max": 1.0328391509249775
+        },
+        "events": {
+          "ratios": [
+            0.47083637286307845,
+            0.47083637286307845,
+            0.47083637286307845,
+            0.47083637286307845,
+            0.47083637286307845
+          ],
+          "median": 0.47083637286307845,
+          "change_percent": -52.91636271369215,
+          "min": 0.47083637286307845,
+          "max": 0.47083637286307845
+        },
+        "bytes": {
+          "ratios": [
+            0.6742808358394744,
+            0.6742808358394744,
+            0.6742808358394744,
+            0.6742808358394744,
+            0.6742808358394744
+          ],
+          "median": 0.6742808358394744,
+          "change_percent": -32.57191641605256,
+          "min": 0.6742808358394744,
+          "max": 0.6742808358394744
+        },
+        "offline_core_seconds": {
+          "ratios": [
+            0.3590896950502872,
+            0.3424977240261721,
+            0.3780385091954614,
+            0.37928674367417375,
+            0.3663056399701848
+          ],
+          "median": 0.3663056399701848,
+          "change_percent": -63.36943600298153,
+          "min": 0.3424977240261721,
+          "max": 0.37928674367417375
+        },
+        "offline_total_seconds": {
+          "ratios": [
+            0.4414746824444783,
+            0.4241913302166937,
+            0.45512829443479447,
+            0.4611281940392681,
+            0.44477925449066325
+          ],
+          "median": 0.44477925449066325,
+          "change_percent": -55.522074550933674,
+          "min": 0.4241913302166937,
+          "max": 0.4611281940392681
+        },
+        "offline_wall_seconds": {
+          "ratios": [
+            0.4533381828103073,
+            0.4364919767130809,
+            0.4670777091872895,
+            0.4729209275959122,
+            0.4572624506452279
+          ],
+          "median": 0.4572624506452279,
+          "change_percent": -54.273754935477214,
+          "min": 0.4364919767130809,
+          "max": 0.4729209275959122
+        },
+        "offline_cpu_seconds": {
+          "ratios": [
+            0.4483886144905294,
+            0.4312716774449174,
+            0.4620682947957186,
+            0.46782198363491345,
+            0.4519746906921033
+          ],
+          "median": 0.4519746906921033,
+          "change_percent": -54.80253093078967,
+          "min": 0.4312716774449174,
+          "max": 0.46782198363491345
+        },
+        "offline_peak_bytes": {
+          "ratios": [
+            0.8646975941849594,
+            0.8651424959173998,
+            0.8642296962998053,
+            0.8633241215949468,
+            0.8650841741971178
+          ],
+          "median": 0.8646975941849594,
+          "change_percent": -13.53024058150406,
+          "min": 0.8633241215949468,
+          "max": 0.8651424959173998
+        }
+      }
+    }
+  }
+}
