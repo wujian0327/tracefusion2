@@ -5,6 +5,7 @@ from collections import Counter
 import json
 import math
 from pathlib import Path
+import random
 import statistics
 from run_planned_service import load,save,sha
 from run_train_multisource import ROLES
@@ -100,6 +101,7 @@ def audit_trial(root,name,mode,config):
         for r,rows in native.items():
             assert [x['seq'] for x in rows]==list(range(1,len(rows)+1)) and not any(x['kind']=='problem' for x in rows)
             assert rows[0]['mode']==mode and sum(x['kind']=='metrics' for x in rows)==1
+            assert rows[0]['plan_sha256']==sha(Path(config['build'])/r/'plan.json')
             validate_protocol(rows)
             for x in rows:
                 if x['kind']=='http-json' and x['phase']=='write' and x['direction']=='response':
@@ -124,6 +126,12 @@ def audit_trial(root,name,mode,config):
                     tp+=len(expected)
             populations[label]={'queries':len(phase['requests'])*2,'exact':len(phase['requests'])*2,'tp':tp,'fp':0,'fn':0,'unknown':0}
         off=m['offline'];assert off['populations']==populations
+        native_offline=load(trial/'offline.json')
+        assert all(off[k]==v for k,v in native_offline.items())
+        assert off['peak_rss_bytes']>0 and 0<off['process_cpu_seconds']<=off['subprocess_wall_seconds']+.02
+        assert all(v>=0 for v in off['phases'].values())
+        assert sum(off['phases'].values())<=off['restore_score_export_seconds']+.001
+        assert 0<off['core_seconds']<=off['restore_score_export_seconds']<=off['subprocess_wall_seconds']
         for k in ('queries','exact','tp','fp','fn','unknown'):assert off['summary'][k]==sum(p[k] for p in populations.values())
         equal(off['core_seconds'],off['phases']['validate_graph_reconstruct_seconds']+off['phases']['target_origin_restore_seconds'])
         timeline=load(trial/'result-timeline.json');assert steady['drain_end_ns']<=timeline['shutdown_started_ns']<=timeline['capture_closed_upper_bound_ns']<=off['answers_ready_ns']<=off['scored_evidence_ready_ns']
@@ -138,18 +146,29 @@ def audit_trial(root,name,mode,config):
 
 def audit(root):
     config=load(root/'config.json');assert load(root/'run-status.json')['status']=='passed';rows=[]
+    for path,key in [(root/'templates.json','templates_sha256'),(root/'database-fixtures.json','fixtures_sha256'),(Path(config['build'])/'build.json','build_sha256'),(Path(config['inputs']),'inputs_sha256')]:assert sha(path)==config[key]
+    build=Path(config['build']);manifest=load(build/'build.json')
+    assert sha(build/'distributed-observer.jar')==manifest['agent_sha256']
+    for path,digest in {**manifest['sources'],**manifest['dependencies']}.items():assert sha(Path(path))==digest
+    for role,record in manifest['inputs'].items():
+        for name,key in [('original.jar','original_jar_sha256'),('model.json','model_sha256'),('plan.json','plan_sha256')]:assert sha(build/role/name)==record[key]
+    rng=random.Random(config['seed']);expected_order=[]
+    for i in range(config['rounds']):
+        modes=['original','full','selective'];rng.shuffle(modes);expected_order.extend([f'round-{i+1:02d}-{j+1:02d}-{m}',m] for j,m in enumerate(modes))
+    assert config['order']==expected_order
     for filename,digest in {**config['source_sha256'],**config['calibration_evidence_sha256']}.items():assert sha(Path(filename))==digest
     for name,mode in config['order']:rows.append(audit_trial(root,name,mode,config))
     pairs=[]
     def metric(r,k):
         if k.startswith('latency_'):return r['online_latency_ms'][k.removeprefix('latency_')]
         if k in ('cpu','rss_mean','rss_peak'):return r['resources']['observed_jvms'][{'cpu':'cpu_one_core_percent_mean','rss_mean':'rss_bytes_mean','rss_peak':'rss_bytes_peak'}[k]]
+        if k.startswith('deployment_'):return r['resources']['deployment'][{'deployment_cpu':'cpu_one_core_percent_mean','deployment_rss_mean':'rss_bytes_mean','deployment_rss_peak':'rss_bytes_peak'}[k]]
         if k in ('capture_events','capture_bytes'):return sum(v[k.removeprefix('capture_')] for v in r['steady_capture'].values())
         if k=='console_bytes':return r['container_console_bytes']
         if k=='answer_p95':return r['completion_to_batch_answers_seconds']['p95'] if r['offline'] else None
         if k.startswith('offline_'):return r['offline'][k.removeprefix('offline_')] if r['offline'] else None
         return r[k]
-    metrics=['latency_p50','latency_p95','latency_p99','throughput_rps','cpu','rss_mean','rss_peak','capture_events','capture_bytes','console_bytes','offline_core_seconds','offline_restore_score_export_seconds','offline_subprocess_wall_seconds','offline_process_cpu_seconds','offline_peak_rss_bytes','answer_p95']
+    metrics=['latency_p50','latency_p95','latency_p99','throughput_rps','cpu','rss_mean','rss_peak','deployment_cpu','deployment_rss_mean','deployment_rss_peak','capture_events','capture_bytes','console_bytes','offline_core_seconds','offline_restore_score_export_seconds','offline_subprocess_wall_seconds','offline_process_cpu_seconds','offline_peak_rss_bytes','answer_p95']
     summary={mode:{key:{'median':statistics.median(v),'min':min(v),'max':max(v)} if (v:=[metric(r,key) for r in rows if r['mode']==mode and metric(r,key) is not None]) else None for key in metrics} for mode in ('original','full','selective')}
     for num,den in [('selective','full'),('selective','original'),('full','original')]:
         ratios={}

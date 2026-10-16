@@ -3,8 +3,12 @@
 新用户获取外部工具、构建Phosphor/JRE和准备原版业务的统一入口见
 [baselines/README.md](../../baselines/README.md)。下文保留各阶段的真实记录和限制。
 
-2026-10-16新增原版Train Ticket多来源价格路径：full/selective各38/38、TP92、FP/FN0，
-事件减少52.15%、字节减少32.12%；未做新路径正式成本测量。
+2026-10-16正式低负载成本：原版/full/selective五轮15次部署通过；两观测配置各1800/1800、TP4330。
+selective/full配对中位数：事件减少52.92%、字节减少32.57%、离线核心减少63.37%，
+在线CPU未改善（+1.10%）。见[正式成本、逐轮统计与N/A](TRAINTICKET-COST-20261016.md)。
+
+此前2026-10-16新增原版Train Ticket多来源价格路径：full/selective各38/38、TP92、FP/FN0，
+事件减少52.15%、字节减少32.12%；该次校准仅含记录量，正式成本见上方报告。
 见[多来源路径、冻结新输入与适用范围](TRAINTICKET-MULTISOURCE-20261016.md)。
 
 此前方法核验、配对统计、严格边界条件及MirrorTaint诊断/来源标识导出对照统一见

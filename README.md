@@ -4,7 +4,12 @@
 [基线实验入口](baselines/README.md)，包含MirrorTaint、Phosphor和FlowDist。
 clone后先准备工具及运行依赖，再按各自已校准的查询口径进行实验。
 
-Train Ticket 新增原版多来源价格路径：full/selective 各 38/38 查询准确、TP92、FP/FN0；
+Train Ticket 价格路径的五轮低负载成本实验已完成：full/selective各1800/1800查询准确、TP4330；
+selective相对full的配对中位数：事件减少52.92%、字节减少32.57%、离线核心时间减少63.37%，
+在线CPU未见改善（+1.10%），p95改善不稳定。协议、完整成本和逐轮不确定性见
+[2026-10-16正式成本报告](experiments/sockshop-mirrortaint/TRAINTICKET-COST-20261016.md)。
+
+此前Train Ticket原版多来源价格路径校准：full/selective各38/38查询准确、TP92、FP/FN0；
 事件减少52.15%、日志字节减少32.12%，仅为正确性与记录量验证。旧路径新采集仍为198/198、31/31。
 范围、N/A、通用核心扩展和复现步骤见
 [2026-10-16多来源路径报告](experiments/sockshop-mirrortaint/TRAINTICKET-MULTISOURCE-20261016.md)。

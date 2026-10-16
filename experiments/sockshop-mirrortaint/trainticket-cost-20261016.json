@@ -1,0 +1,1250 @@
+{
+  "measurement_code_commit": "a7a43cbfebc833755f7f10f374a120d01436d99e",
+  "performance_eligible": true,
+  "config_sha256": "f970bb768b242c02d445601a42b80a5adf37f97225077245fc22dd64ed2fc8b4",
+  "independent_audit_sha256": "1f54803903f5608be55907303f08e16f06f4f1ec335370328d4b779dfe605c4b",
+  "summary": {
+    "original": {
+      "latency_p50": {
+        "median": 20.972897,
+        "min": 20.69843,
+        "max": 21.178442
+      },
+      "latency_p95": {
+        "median": 27.292291,
+        "min": 26.414522,
+        "max": 28.726724
+      },
+      "latency_p99": {
+        "median": 35.691062,
+        "min": 33.596574,
+        "max": 42.979317
+      },
+      "throughput_rps": {
+        "median": 2.0,
+        "min": 2.0,
+        "max": 2.0
+      },
+      "cpu": {
+        "median": 11.187470131267748,
+        "min": 10.858754706790181,
+        "max": 11.341458941039
+      },
+      "rss_mean": {
+        "median": 2010221869.1764705,
+        "min": 1977951894.5882354,
+        "max": 2026935958.5882354
+      },
+      "rss_peak": {
+        "median": 2018787328,
+        "min": 1987661824,
+        "max": 2036789248
+      },
+      "deployment_cpu": {
+        "median": 12.35548464638033,
+        "min": 11.984131356323884,
+        "max": 12.521185951285512
+      },
+      "deployment_rss_mean": {
+        "median": 2441957857.882353,
+        "min": 2410436246.5882354,
+        "max": 2462492792.470588
+      },
+      "deployment_rss_peak": {
+        "median": 2450563072,
+        "min": 2420187136,
+        "max": 2472394752
+      },
+      "capture_events": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "capture_bytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "console_bytes": {
+        "median": 987746,
+        "min": 987566,
+        "max": 987956
+      },
+      "offline_core_seconds": null,
+      "offline_restore_score_export_seconds": null,
+      "offline_subprocess_wall_seconds": null,
+      "offline_process_cpu_seconds": null,
+      "offline_peak_rss_bytes": null,
+      "answer_p95": null
+    },
+    "full": {
+      "latency_p50": {
+        "median": 25.542869,
+        "min": 25.04736,
+        "max": 25.870878
+      },
+      "latency_p95": {
+        "median": 32.085381,
+        "min": 31.051546,
+        "max": 35.454946
+      },
+      "latency_p99": {
+        "median": 40.093473,
+        "min": 37.249073,
+        "max": 44.285187
+      },
+      "throughput_rps": {
+        "median": 2.0,
+        "min": 2.0,
+        "max": 2.0
+      },
+      "cpu": {
+        "median": 14.57786719946112,
+        "min": 14.530464410516604,
+        "max": 15.562795719847092
+      },
+      "rss_mean": {
+        "median": 2017673456.9411764,
+        "min": 2005395576.4705882,
+        "max": 2088623887.0588236
+      },
+      "rss_peak": {
+        "median": 2032414720,
+        "min": 2022268928,
+        "max": 2099142656
+      },
+      "deployment_cpu": {
+        "median": 15.743638554695309,
+        "min": 15.708491758045048,
+        "max": 16.745479162228715
+      },
+      "deployment_rss_mean": {
+        "median": 2452598543.0588236,
+        "min": 2439539049.4117646,
+        "max": 2521591808
+      },
+      "deployment_rss_peak": {
+        "median": 2467348480,
+        "min": 2456436736,
+        "max": 2532143104
+      },
+      "capture_events": {
+        "median": 31529,
+        "min": 31529,
+        "max": 31529
+      },
+      "capture_bytes": {
+        "median": 11645394,
+        "min": 11645394,
+        "max": 11645394
+      },
+      "console_bytes": {
+        "median": 987860,
+        "min": 987608,
+        "max": 987952
+      },
+      "offline_core_seconds": {
+        "median": 2.8063130480004475,
+        "min": 2.7961103440029547,
+        "max": 2.8710477910062764
+      },
+      "offline_restore_score_export_seconds": {
+        "median": 3.475380914,
+        "min": 3.456084897,
+        "max": 3.542481411
+      },
+      "offline_subprocess_wall_seconds": {
+        "median": 3.581107359,
+        "min": 3.560570154,
+        "max": 3.644432113
+      },
+      "offline_process_cpu_seconds": {
+        "median": 3.520602,
+        "min": 3.5017229999999997,
+        "max": 3.586389
+      },
+      "offline_peak_rss_bytes": {
+        "median": 311054336,
+        "min": 310943744,
+        "max": 311279616
+      },
+      "answer_p95": {
+        "median": 64.244488156,
+        "min": 62.978396449,
+        "max": 64.291278305
+      }
+    },
+    "selective": {
+      "latency_p50": {
+        "median": 24.280881,
+        "min": 24.051408,
+        "max": 24.871066
+      },
+      "latency_p95": {
+        "median": 30.238441,
+        "min": 29.979587,
+        "max": 35.268391
+      },
+      "latency_p99": {
+        "median": 38.593129,
+        "min": 37.731485,
+        "max": 42.843294
+      },
+      "throughput_rps": {
+        "median": 2.0,
+        "min": 2.0,
+        "max": 2.0
+      },
+      "cpu": {
+        "median": 14.710013251981938,
+        "min": 14.366934254843775,
+        "max": 15.435398166989176
+      },
+      "rss_mean": {
+        "median": 2012857283.764706,
+        "min": 1989721630.1176472,
+        "max": 2071251064.4705882
+      },
+      "rss_peak": {
+        "median": 2030395392,
+        "min": 2008363008,
+        "max": 2083442688
+      },
+      "deployment_cpu": {
+        "median": 15.877716525406617,
+        "min": 15.535365559405383,
+        "max": 16.616252430247876
+      },
+      "deployment_rss_mean": {
+        "median": 2447869590.5882354,
+        "min": 2422005037.1764708,
+        "max": 2503440504.470588
+      },
+      "deployment_rss_peak": {
+        "median": 2465427456,
+        "min": 2440712192,
+        "max": 2515668992
+      },
+      "capture_events": {
+        "median": 14845,
+        "min": 14845,
+        "max": 14845
+      },
+      "capture_bytes": {
+        "median": 7852266,
+        "min": 7852266,
+        "max": 7852266
+      },
+      "console_bytes": {
+        "median": 987749,
+        "min": 987521,
+        "max": 987803
+      },
+      "offline_core_seconds": {
+        "median": 1.0242309889872558,
+        "min": 0.9833273339900188,
+        "max": 1.0620416890160413
+      },
+      "offline_restore_score_export_seconds": {
+        "median": 1.545777332,
+        "min": 1.502689902,
+        "max": 1.593698187
+      },
+      "offline_subprocess_wall_seconds": {
+        "median": 1.637505927,
+        "min": 1.590765377,
+        "max": 1.68386814
+      },
+      "offline_process_cpu_seconds": {
+        "median": 1.591223,
+        "min": 1.546708,
+        "max": 1.638183
+      },
+      "offline_peak_rss_bytes": {
+        "median": 268992512,
+        "min": 268713984,
+        "max": 269074432
+      },
+      "answer_p95": {
+        "median": 62.313571987,
+        "min": 60.97606967,
+        "max": 62.465079454
+      }
+    }
+  },
+  "paired": [
+    {
+      "comparison": "selective/full",
+      "metrics": {
+        "latency_p50": {
+          "n_deployments": 5,
+          "ratios": [
+            0.9439067770034327,
+            0.9385410499017467,
+            0.9416094957853012,
+            0.9929615735949816,
+            0.9524170293383426
+          ],
+          "median": 0.9439067770034327,
+          "min": 0.9385410499017467,
+          "max": 0.9929615735949816,
+          "lower_count": 5,
+          "higher_count": 0,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.9385410499017467,
+            0.9929615735949816
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.0625,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "latency_p95": {
+          "n_deployments": 5,
+          "ratios": [
+            0.98086124278643,
+            0.8500612862306997,
+            0.9653876940181316,
+            0.8746006151870275,
+            1.0992043697408487
+          ],
+          "median": 0.9653876940181316,
+          "min": 0.8500612862306997,
+          "max": 1.0992043697408487,
+          "lower_count": 4,
+          "higher_count": 1,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.8500612862306997,
+            1.0992043697408487
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.375,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "latency_p99": {
+          "n_deployments": 5,
+          "ratios": [
+            0.9876138846691018,
+            0.8734417221722468,
+            0.9574776423085124,
+            0.9388266422692485,
+            1.1501841669992698
+          ],
+          "median": 0.9574776423085124,
+          "min": 0.8734417221722468,
+          "max": 1.1501841669992698,
+          "lower_count": 4,
+          "higher_count": 1,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.8734417221722468,
+            1.1501841669992698
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.375,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "throughput_rps": {
+          "n_deployments": 5,
+          "ratios": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "median": 1.0,
+          "min": 1.0,
+          "max": 1.0,
+          "lower_count": 0,
+          "higher_count": 0,
+          "exploratory_paired_bootstrap_percentile_95": [
+            1.0,
+            1.0
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 1.0,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "cpu": {
+          "n_deployments": 5,
+          "ratios": [
+            1.011011826182052,
+            0.9644950693527977,
+            0.9231589563642318,
+            1.0588241719995743,
+            1.012356717334883
+          ],
+          "median": 1.011011826182052,
+          "min": 0.9231589563642318,
+          "max": 1.0588241719995743,
+          "lower_count": 2,
+          "higher_count": 3,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.9231589563642318,
+            1.0588241719995743
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 1.0,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "rss_mean": {
+          "n_deployments": 5,
+          "ratios": [
+            0.9871562800226213,
+            0.99037834722711,
+            0.9892703788968131,
+            0.9741976938619306,
+            1.0328391509249775
+          ],
+          "median": 0.9892703788968131,
+          "min": 0.9741976938619306,
+          "max": 1.0328391509249775,
+          "lower_count": 4,
+          "higher_count": 1,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.9741976938619306,
+            1.0328391509249775
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.375,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "rss_peak": {
+          "n_deployments": 5,
+          "ratios": [
+            0.991541053091368,
+            0.9912373159745664,
+            0.9918761330393268,
+            0.976491065121779,
+            1.0302500617761556
+          ],
+          "median": 0.991541053091368,
+          "min": 0.976491065121779,
+          "max": 1.0302500617761556,
+          "lower_count": 4,
+          "higher_count": 1,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.976491065121779,
+            1.0302500617761556
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.375,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "deployment_cpu": {
+          "n_deployments": 5,
+          "ratios": [
+            1.0108032524694481,
+            0.9657382457081063,
+            0.9277349073681405,
+            1.0554264424021804,
+            1.0107728208390792
+          ],
+          "median": 1.0107728208390792,
+          "min": 0.9277349073681405,
+          "max": 1.0554264424021804,
+          "lower_count": 2,
+          "higher_count": 3,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.9277349073681405,
+            1.0554264424021804
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 1.0,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "deployment_rss_mean": {
+          "n_deployments": 5,
+          "ratios": [
+            0.989737018735681,
+            0.9912342196010272,
+            0.9908382028634749,
+            0.9780461514309129,
+            1.026194069356763
+          ],
+          "median": 0.9908382028634749,
+          "min": 0.9780461514309129,
+          "max": 1.026194069356763,
+          "lower_count": 4,
+          "higher_count": 1,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.9780461514309129,
+            1.026194069356763
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.375,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "deployment_rss_peak": {
+          "n_deployments": 5,
+          "ratios": [
+            0.9933551494257855,
+            0.9919618845247186,
+            0.9929821088317538,
+            0.979938498768196,
+            1.0241130801912905
+          ],
+          "median": 0.9929821088317538,
+          "min": 0.979938498768196,
+          "max": 1.0241130801912905,
+          "lower_count": 4,
+          "higher_count": 1,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.979938498768196,
+            1.0241130801912905
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.375,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "capture_events": {
+          "n_deployments": 5,
+          "ratios": [
+            0.47083637286307845,
+            0.47083637286307845,
+            0.47083637286307845,
+            0.47083637286307845,
+            0.47083637286307845
+          ],
+          "median": 0.47083637286307845,
+          "min": 0.47083637286307845,
+          "max": 0.47083637286307845,
+          "lower_count": 5,
+          "higher_count": 0,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.47083637286307845,
+            0.47083637286307845
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.0625,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "capture_bytes": {
+          "n_deployments": 5,
+          "ratios": [
+            0.6742808358394744,
+            0.6742808358394744,
+            0.6742808358394744,
+            0.6742808358394744,
+            0.6742808358394744
+          ],
+          "median": 0.6742808358394744,
+          "min": 0.6742808358394744,
+          "max": 0.6742808358394744,
+          "lower_count": 5,
+          "higher_count": 0,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.6742808358394744,
+            0.6742808358394744
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.0625,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "console_bytes": {
+          "n_deployments": 5,
+          "ratios": [
+            0.9996568339643269,
+            1.0001863077946525,
+            0.9998562673023296,
+            1.0001427691958753,
+            0.9997024146922118
+          ],
+          "median": 0.9998562673023296,
+          "min": 0.9996568339643269,
+          "max": 1.0001863077946525,
+          "lower_count": 3,
+          "higher_count": 2,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.9996568339643269,
+            1.0001863077946525
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 1.0,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "offline_core_seconds": {
+          "n_deployments": 5,
+          "ratios": [
+            0.3590896950502872,
+            0.3424977240261721,
+            0.3780385091954614,
+            0.37928674367417375,
+            0.3663056399701848
+          ],
+          "median": 0.3663056399701848,
+          "min": 0.3424977240261721,
+          "max": 0.37928674367417375,
+          "lower_count": 5,
+          "higher_count": 0,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.3424977240261721,
+            0.37928674367417375
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.0625,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "offline_restore_score_export_seconds": {
+          "n_deployments": 5,
+          "ratios": [
+            0.4414746824444783,
+            0.4241913302166937,
+            0.45512829443479447,
+            0.4611281940392681,
+            0.44477925449066325
+          ],
+          "median": 0.44477925449066325,
+          "min": 0.4241913302166937,
+          "max": 0.4611281940392681,
+          "lower_count": 5,
+          "higher_count": 0,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.4241913302166937,
+            0.4611281940392681
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.0625,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "offline_subprocess_wall_seconds": {
+          "n_deployments": 5,
+          "ratios": [
+            0.4533381828103073,
+            0.4364919767130809,
+            0.4670777091872895,
+            0.4729209275959122,
+            0.4572624506452279
+          ],
+          "median": 0.4572624506452279,
+          "min": 0.4364919767130809,
+          "max": 0.4729209275959122,
+          "lower_count": 5,
+          "higher_count": 0,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.4364919767130809,
+            0.4729209275959122
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.0625,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "offline_process_cpu_seconds": {
+          "n_deployments": 5,
+          "ratios": [
+            0.4483886144905294,
+            0.4312716774449174,
+            0.4620682947957186,
+            0.46782198363491345,
+            0.4519746906921033
+          ],
+          "median": 0.4519746906921033,
+          "min": 0.4312716774449174,
+          "max": 0.46782198363491345,
+          "lower_count": 5,
+          "higher_count": 0,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.4312716774449174,
+            0.46782198363491345
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.0625,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "offline_peak_rss_bytes": {
+          "n_deployments": 5,
+          "ratios": [
+            0.8646975941849594,
+            0.8651424959173998,
+            0.8642296962998053,
+            0.8633241215949468,
+            0.8650841741971178
+          ],
+          "median": 0.8646975941849594,
+          "min": 0.8633241215949468,
+          "max": 0.8651424959173998,
+          "lower_count": 5,
+          "higher_count": 0,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.8633241215949468,
+            0.8651424959173998
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.0625,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "answer_p95": {
+          "n_deployments": 5,
+          "ratios": [
+            0.9723025468320456,
+            0.9682061327074041,
+            0.9709882086380908,
+            0.9694819216615037,
+            0.9673524681521729
+          ],
+          "median": 0.9694819216615037,
+          "min": 0.9673524681521729,
+          "max": 0.9723025468320456,
+          "lower_count": 5,
+          "higher_count": 0,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.9673524681521729,
+            0.9723025468320456
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.0625,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        }
+      }
+    },
+    {
+      "comparison": "selective/original",
+      "metrics": {
+        "latency_p50": {
+          "n_deployments": 5,
+          "ratios": [
+            1.1521328471538055,
+            1.1654498045830466,
+            1.161991899868734,
+            1.1858669787011302,
+            1.147521238814451
+          ],
+          "median": 1.161991899868734,
+          "min": 1.147521238814451,
+          "max": 1.1858669787011302,
+          "lower_count": 0,
+          "higher_count": 5,
+          "exploratory_paired_bootstrap_percentile_95": [
+            1.147521238814451,
+            1.1858669787011302
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.0625,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "latency_p95": {
+          "n_deployments": 5,
+          "ratios": [
+            1.115965603620451,
+            1.0669670310833521,
+            1.1338343759785403,
+            1.0436131526866759,
+            1.3351894461690428
+          ],
+          "median": 1.115965603620451,
+          "min": 1.0436131526866759,
+          "max": 1.3351894461690428,
+          "lower_count": 0,
+          "higher_count": 5,
+          "exploratory_paired_bootstrap_percentile_95": [
+            1.0436131526866759,
+            1.3351894461690428
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.0625,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "latency_p99": {
+          "n_deployments": 5,
+          "ratios": [
+            0.9181195362756515,
+            0.8999800997302958,
+            1.14263448409948,
+            1.0571690189549416,
+            1.2724404529397175
+          ],
+          "median": 1.0571690189549416,
+          "min": 0.8999800997302958,
+          "max": 1.2724404529397175,
+          "lower_count": 2,
+          "higher_count": 3,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.8999800997302958,
+            1.2724404529397175
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 1.0,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "throughput_rps": {
+          "n_deployments": 5,
+          "ratios": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "median": 1.0,
+          "min": 1.0,
+          "max": 1.0,
+          "lower_count": 0,
+          "higher_count": 0,
+          "exploratory_paired_bootstrap_percentile_95": [
+            1.0,
+            1.0
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 1.0,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "cpu": {
+          "n_deployments": 5,
+          "ratios": [
+            1.2981667838209037,
+            1.2976760340896896,
+            1.2963896448215904,
+            1.4214703788581884,
+            1.3148650301974054
+          ],
+          "median": 1.2981667838209037,
+          "min": 1.2963896448215904,
+          "max": 1.4214703788581884,
+          "lower_count": 0,
+          "higher_count": 5,
+          "exploratory_paired_bootstrap_percentile_95": [
+            1.2963896448215904,
+            1.4214703788581884
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.0625,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "rss_mean": {
+          "n_deployments": 5,
+          "ratios": [
+            0.9879222369061862,
+            0.9940495296412435,
+            1.0176472386775297,
+            1.0038465031400607,
+            1.0456835891861014
+          ],
+          "median": 1.0038465031400607,
+          "min": 0.9879222369061862,
+          "max": 1.0456835891861014,
+          "lower_count": 2,
+          "higher_count": 3,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.9879222369061862,
+            1.0456835891861014
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 1.0,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "rss_peak": {
+          "n_deployments": 5,
+          "ratios": [
+            0.9931879777834494,
+            0.9979284514312149,
+            1.0214994157879445,
+            1.0063849512229948,
+            1.0440782546045704
+          ],
+          "median": 1.0063849512229948,
+          "min": 0.9931879777834494,
+          "max": 1.0440782546045704,
+          "lower_count": 2,
+          "higher_count": 3,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.9931879777834494,
+            1.0440782546045704
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 1.0,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "deployment_cpu": {
+          "n_deployments": 5,
+          "ratios": [
+            1.2708155013336913,
+            1.2698561332450613,
+            1.2690569549993105,
+            1.3865212201199444,
+            1.2842525008106618
+          ],
+          "median": 1.2708155013336913,
+          "min": 1.2690569549993105,
+          "max": 1.3865212201199444,
+          "lower_count": 0,
+          "higher_count": 5,
+          "exploratory_paired_bootstrap_percentile_95": [
+            1.2690569549993105,
+            1.3865212201199444
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.0625,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "deployment_rss_mean": {
+          "n_deployments": 5,
+          "ratios": [
+            0.9903390323604291,
+            0.9955534633721158,
+            1.0155296967729321,
+            1.001518936759923,
+            1.0381310424806944
+          ],
+          "median": 1.001518936759923,
+          "min": 0.9903390323604291,
+          "max": 1.0381310424806944,
+          "lower_count": 2,
+          "higher_count": 3,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.9903390323604291,
+            1.0381310424806944
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 1.0,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "deployment_rss_peak": {
+          "n_deployments": 5,
+          "ratios": [
+            0.9946866757920743,
+            0.9987564392711129,
+            1.0186929016054402,
+            1.003619875019052,
+            1.0368604001397839
+          ],
+          "median": 1.003619875019052,
+          "min": 0.9946866757920743,
+          "max": 1.0368604001397839,
+          "lower_count": 2,
+          "higher_count": 3,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.9946866757920743,
+            1.0368604001397839
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 1.0,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "console_bytes": {
+          "n_deployments": 5,
+          "ratios": [
+            0.9998309182656872,
+            1.0002339084172602,
+            1.0000577071433345,
+            0.9997995843906606,
+            0.999698367133759
+          ],
+          "median": 0.9998309182656872,
+          "min": 0.999698367133759,
+          "max": 1.0002339084172602,
+          "lower_count": 3,
+          "higher_count": 2,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.999698367133759,
+            1.0002339084172602
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 1.0,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        }
+      }
+    },
+    {
+      "comparison": "full/original",
+      "metrics": {
+        "latency_p50": {
+          "n_deployments": 5,
+          "ratios": [
+            1.2206002491172023,
+            1.2417675334553075,
+            1.23404862107899,
+            1.1942727797690516,
+            1.204851660004074
+          ],
+          "median": 1.2206002491172023,
+          "min": 1.1942727797690516,
+          "max": 1.2417675334553075,
+          "lower_count": 0,
+          "higher_count": 5,
+          "exploratory_paired_bootstrap_percentile_95": [
+            1.1942727797690516,
+            1.2417675334553075
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.0625,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "latency_p95": {
+          "n_deployments": 5,
+          "ratios": [
+            1.1377405436575478,
+            1.255164831484616,
+            1.1744860463875408,
+            1.1932453905986633,
+            1.2146871709433165
+          ],
+          "median": 1.1932453905986633,
+          "min": 1.1377405436575478,
+          "max": 1.255164831484616,
+          "lower_count": 0,
+          "higher_count": 5,
+          "exploratory_paired_bootstrap_percentile_95": [
+            1.1377405436575478,
+            1.255164831484616
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.0625,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "latency_p99": {
+          "n_deployments": 5,
+          "ratios": [
+            0.9296340913466054,
+            1.0303836843195995,
+            1.193379807119619,
+            1.126053492047953,
+            1.1062927915791116
+          ],
+          "median": 1.1062927915791116,
+          "min": 0.9296340913466054,
+          "max": 1.193379807119619,
+          "lower_count": 1,
+          "higher_count": 4,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.9296340913466054,
+            1.193379807119619
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.375,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "throughput_rps": {
+          "n_deployments": 5,
+          "ratios": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "median": 1.0,
+          "min": 1.0,
+          "max": 1.0,
+          "lower_count": 0,
+          "higher_count": 0,
+          "exploratory_paired_bootstrap_percentile_95": [
+            1.0,
+            1.0
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 1.0,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "cpu": {
+          "n_deployments": 5,
+          "ratios": [
+            1.284027298397936,
+            1.3454460010463976,
+            1.404297316171085,
+            1.3424989875077764,
+            1.2988159288940182
+          ],
+          "median": 1.3424989875077764,
+          "min": 1.284027298397936,
+          "max": 1.404297316171085,
+          "lower_count": 0,
+          "higher_count": 5,
+          "exploratory_paired_bootstrap_percentile_95": [
+            1.284027298397936,
+            1.404297316171085
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.0625,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "rss_mean": {
+          "n_deployments": 5,
+          "ratios": [
+            1.0007759226163737,
+            1.0037068484225369,
+            1.028684635046246,
+            1.030434078693613,
+            1.0124360489720212
+          ],
+          "median": 1.0124360489720212,
+          "min": 1.0007759226163737,
+          "max": 1.030434078693613,
+          "lower_count": 0,
+          "higher_count": 5,
+          "exploratory_paired_bootstrap_percentile_95": [
+            1.0007759226163737,
+            1.030434078693613
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.0625,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "rss_peak": {
+          "n_deployments": 5,
+          "ratios": [
+            1.0016609747896437,
+            1.0067502860806545,
+            1.0298659094234333,
+            1.030613578729968,
+            1.0134221713169083
+          ],
+          "median": 1.0134221713169083,
+          "min": 1.0016609747896437,
+          "max": 1.030613578729968,
+          "lower_count": 0,
+          "higher_count": 5,
+          "exploratory_paired_bootstrap_percentile_95": [
+            1.0016609747896437,
+            1.030613578729968
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.0625,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "deployment_cpu": {
+          "n_deployments": 5,
+          "ratios": [
+            1.2572332926600889,
+            1.3149071592520054,
+            1.3679090275900634,
+            1.3137071087248704,
+            1.2705649324291857
+          ],
+          "median": 1.3137071087248704,
+          "min": 1.2572332926600889,
+          "max": 1.3679090275900634,
+          "lower_count": 0,
+          "higher_count": 5,
+          "exploratory_paired_bootstrap_percentile_95": [
+            1.2572332926600889,
+            1.3679090275900634
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.0625,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "deployment_rss_mean": {
+          "n_deployments": 5,
+          "ratios": [
+            1.0006082561461802,
+            1.0043574401344084,
+            1.024919804099297,
+            1.023999670459997,
+            1.0116322764673682
+          ],
+          "median": 1.0116322764673682,
+          "min": 1.0006082561461802,
+          "max": 1.024919804099297,
+          "lower_count": 0,
+          "higher_count": 5,
+          "exploratory_paired_bootstrap_percentile_95": [
+            1.0006082561461802,
+            1.024919804099297
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.0625,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "deployment_rss_peak": {
+          "n_deployments": 5,
+          "ratios": [
+            1.0013404333455747,
+            1.0068496127244344,
+            1.0258925035456432,
+            1.0241661862255886,
+            1.012447180096667
+          ],
+          "median": 1.012447180096667,
+          "min": 1.0013404333455747,
+          "max": 1.0258925035456432,
+          "lower_count": 0,
+          "higher_count": 5,
+          "exploratory_paired_bootstrap_percentile_95": [
+            1.0013404333455747,
+            1.0258925035456432
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 0.0625,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        },
+        "console_bytes": {
+          "n_deployments": 5,
+          "ratios": [
+            1.0001741440616876,
+            1.0000475917558929,
+            1.0002014687986587,
+            0.9996568641840099,
+            0.9999959512366947
+          ],
+          "median": 1.0000475917558929,
+          "min": 0.9996568641840099,
+          "max": 1.0002014687986587,
+          "lower_count": 2,
+          "higher_count": 3,
+          "exploratory_paired_bootstrap_percentile_95": [
+            0.9996568641840099,
+            1.0002014687986587
+          ],
+          "distribution_free_median_range_coverage": 0.9375,
+          "exact_two_sided_sign_p_unadjusted": 1.0,
+          "caveat": "Bootstrap reuses only five deployment pairs; its narrow intervals do not establish stable population effects. The observed range covers a continuous population median with only 93.75% confidence for n=5. Sign tests are descriptive, unadjusted for multiple metrics."
+        }
+      }
+    }
+  ],
+  "populations": {
+    "original": {
+      "deployments": 5,
+      "warmup_requests": 300,
+      "steady_requests": 600,
+      "populations": null,
+      "provenance_status": "N/A: no observer, business responses checked"
+    },
+    "full": {
+      "deployments": 5,
+      "warmup_requests": 300,
+      "steady_requests": 600,
+      "populations": {
+        "warmup": {
+          "queries": 600,
+          "exact": 600,
+          "tp": 1470,
+          "fp": 0,
+          "fn": 0,
+          "unknown": 0
+        },
+        "steady": {
+          "queries": 1200,
+          "exact": 1200,
+          "tp": 2860,
+          "fp": 0,
+          "fn": 0,
+          "unknown": 0
+        }
+      }
+    },
+    "selective": {
+      "deployments": 5,
+      "warmup_requests": 300,
+      "steady_requests": 600,
+      "populations": {
+        "warmup": {
+          "queries": 600,
+          "exact": 600,
+          "tp": 1470,
+          "fp": 0,
+          "fn": 0,
+          "unknown": 0
+        },
+        "steady": {
+          "queries": 1200,
+          "exact": 1200,
+          "tp": 2860,
+          "fp": 0,
+          "fn": 0,
+          "unknown": 0
+        }
+      }
+    }
+  },
+  "scope": "Five matched independent low-rate deployments; selected two Train Ticket value-origin queries; not saturation throughput"
+}
