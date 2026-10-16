@@ -114,8 +114,9 @@ def resource_snapshot(containers):
 
 
 class Sampler:
-    def __init__(self, containers, interval, path):
+    def __init__(self, containers, interval, path, observed_roles=None):
         self.containers, self.interval, self.path = containers, interval, path
+        self.observed_roles = tuple(observed_roles) if observed_roles is not None else ROLES
         self.stop = threading.Event()
         self.rows, self.errors = [], []
 
@@ -159,7 +160,7 @@ class Sampler:
             result[role] = {'samples': len(rows), 'cpu_one_core_percent_mean': cpu,
                             'rss_bytes_mean': statistics.mean(r['rss_bytes'] for r in rows),
                             'rss_bytes_peak': max(r['rss_bytes'] for r in rows)}
-        for group, members in [('observed_jvms', ROLES), ('deployment', self.containers)]:
+        for group, members in [('observed_jvms', self.observed_roles), ('deployment', self.containers)]:
             snapshots = [r for r in self.rows if all(start <= r[m]['monotonic_ns'] <= end for m in members)]
             if len(snapshots) < 2:
                 raise ValueError('Insufficient aligned resource snapshots')
