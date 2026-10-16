@@ -39,7 +39,8 @@ def infer_collection(plan, rows):
         exits = [r for r in rows if r['kind'] == 'exit' and r['frame'] == root['frame']]
         if not exits: continue  # Aborted calls remain without completed targets.
         require(len(exits) == 1, 'Root exits duplicated'); end = exits[0]
-        events = [r for r in rows if r.get('frame') == root['frame'] and r['kind'] in ('collection-call-enter', 'collection-call-exit', 'branch', 'collection-catch')]
+        events = [r for r in rows if r.get('frame') == root['frame'] and r['kind'] in ('collection-call-enter', 'collection-call-exit', 'branch', 'collection-catch')
+                  and (r['kind']!='branch' or r['site'].startswith(entry+'@'))]
         # Keep full mode's extra field/branch observations outside this stream.
         pos = 0; pc = 0; stack = []; locals_ = {}; bindings = {}; maps = {}; builders = {}; steps = 0
         if not method['access'] & 8: locals_[0] = Value({'object': root['receiver']}); slot = 1

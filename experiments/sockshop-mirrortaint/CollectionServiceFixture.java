@@ -18,7 +18,9 @@ public final class CollectionServiceFixture {
         public Map<String,String> getCells(){return cells;}
         public void setCells(Map<String,String> v){cells=v;}
     }
+    public static void irrelevant(Input in){if(in.getScale()>0)System.out.println("IRRELEVANT_HELPER_BRANCH");}
     public static Output transform(Input in,String left,String right,boolean zero) {
+        irrelevant(in);
         Output out=new Output();int a=in.getLabels().indexOf(left),b=in.getLabels().indexOf(right);
         Map<String,String> values=new HashMap<>();
         // Irrelevant collection and field work must not join the target slice.
