@@ -27,6 +27,15 @@ public final class QueryBytecodeModel implements Opcodes {
         }
         return rows;
     }
+    static List<Map<String,Object>> handlers(MethodNode method) {
+        List<AbstractInsnNode> code=new ArrayList<>();for(AbstractInsnNode n:method.instructions.toArray())if(n.getOpcode()>=0)code.add(n);
+        List<Map<String,Object>> out=new ArrayList<>();
+        for(TryCatchBlockNode t:method.tryCatchBlocks){Map<String,Object> r=new LinkedHashMap<>();
+            for(String name:Arrays.asList("start","end","handler")){AbstractInsnNode n=name.equals("start")?t.start:name.equals("end")?t.end:t.handler;
+                while(n!=null&&n.getOpcode()<0)n=n.getNext();int index=n==null?code.size():code.indexOf(n);if(index<0)throw new IllegalStateException("Missing handler label");r.put(name,index);}
+            r.put("type",t.type);out.add(r);
+        }return out;
+    }
     public static void main(String[] args) throws Exception {
         Path root=Paths.get(args[0]);Map<String,Object> classes=new TreeMap<>(),methods=new TreeMap<>();
         List<Path> paths=new ArrayList<>();try(java.util.stream.Stream<Path> files=Files.walk(root)){files.filter(p->p.toString().endsWith(".class")).forEach(paths::add);}Collections.sort(paths);
@@ -36,7 +45,7 @@ public final class QueryBytecodeModel implements Opcodes {
             for(FieldNode f:c.fields){Map<String,Object> field=new LinkedHashMap<>();field.put("name",f.name);field.put("desc",f.desc);field.put("access",f.access);field.put("annotations",annotations(f.visibleAnnotations,f.invisibleAnnotations));fields.add(field);}cls.put("fields",fields);
             cls.put("sha256",QueryObservationAgent.Recorder.hash(bytes));classes.put(c.name,cls);
             for(MethodNode m:c.methods){Map<String,Object> row=new LinkedHashMap<>();row.put("owner",c.name);row.put("name",m.name);row.put("desc",m.desc);row.put("access",m.access);
-                row.put("try_catches",m.tryCatchBlocks.size());row.put("annotations",annotations(m.visibleAnnotations,m.invisibleAnnotations));row.put("instructions",instructions(m));methods.put(key(c.name,m),row);}
+                row.put("try_catches",m.tryCatchBlocks.size());row.put("exception_handlers",handlers(m));row.put("annotations",annotations(m.visibleAnnotations,m.invisibleAnnotations));row.put("instructions",instructions(m));methods.put(key(c.name,m),row);}
         }
         Map<String,Object> model=new LinkedHashMap<>();model.put("classes",classes);model.put("methods",methods);
         new ObjectMapper().writerWithDefaultPrettyPrinter().writeValue(Paths.get(args[1]).toFile(),model);

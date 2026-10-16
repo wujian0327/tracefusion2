@@ -11,6 +11,7 @@ from pathlib import Path
 from infer_planned_service import infer_service
 from query_observation_planner import require
 from transport_context import validate_protocol
+from infer_collection_service import infer_collection
 
 
 def coord(f):return (f['owner'],f['field'],f['version'])
@@ -39,17 +40,24 @@ class Reconstruction:
                 paths=set()
                 for f in r['fields']:
                     require(f['path'] not in paths,'Repeated JSON pointer');paths.add(f['path'])
-                    owner=f['field'].rsplit('.',1)[0];ps=[p for p in self.plans[role]['json_schema'][owner] if p['field']==f['field']]
+                    schema_field=f.get('schema_field',f['field']);owner=schema_field.rsplit('.',1)[0];ps=[p for p in self.plans[role]['json_schema'][owner] if p['field']==schema_field]
                     require(len(ps)==1,'Unknown property')
                     suffix=ps[0]['property'].replace('~','~0').replace('/','~1')
-                    require(f['path'].endswith('/'+suffix),'JSON pointer/property mismatch')
+                    if f['field'].startswith(('@list:','@map:')):
+                        require(self.plans[role].get('collection_elements'),'Collection fields not admitted')
+                        require('/'+suffix+'/' in f['path'],'Collection parent property mismatch')
+                        leaf=f['field'].split(':',1)[1].replace('~','~0').replace('/','~1')
+                        require(f['path'].endswith('/'+leaf),'Collection key/index pointer mismatch')
+                    else:require(f['path'].endswith('/'+suffix),'JSON pointer/property mismatch')
                     key=(role,r['seq'],f['path']);node=dict(f,service=role,seq=r['seq'],kind='http-json',message=r['message'],direction=r['direction'],phase=r['phase'],uri=r.get('uri'))
                     self.add(key,node);self.json.append((key,r))
                     if r['phase']=='read':self.providers[(role,coord(f))].append(key)
         self.bridge()
+        for role in self.plans:self.conversions(role)
         for role,plan in self.plans.items():
             if plan['profile']=='mapped-reduction':self.reductions(role,build,root)
             if plan['profile']=='field-copy':self.copies(role)
+            if plan['profile']=='collection-computation':self.collections(role)
         # Same-process forwarding is only the same object/field/version. It does
         # not use matching payloads or business keys. Multiple candidates fail
         # closed rather than selecting the latest or an equal-valued candidate.
@@ -119,10 +127,39 @@ class Reconstruction:
                 arg=root['args'][source['index']];require(arg['object']==writer['args'][rule['parameter']]['object']==write['observed']['object'],'Root argument/write identity differs')
                 key=(role,'argument',root['frame'],source['index']);self.add(key,dict(service=role,seq=root['seq'],kind='argument',field='@argument:'+str(source['index']),owner=arg['object'],version=0,observed=arg));leaves=[key]
             key=(role,'copy-write',write['seq']);self.add(key,dict(write,service=role,kind='bytecode-copy',constant=source['kind']=='constant'),leaves);self.providers[(role,coord(write))].append(key)
+    def collections(self,role):
+        result=infer_collection(self.plans[role],self.rows[role]);self.local_queries[role]=result
+        fields={coord(f):f for f in result['fields']}
+        for answer in result['answers']:
+            leaves=[]
+            for coordinate in answer['sources']:
+                coordinate=tuple(coordinate);f=fields[coordinate];key=(role,'collection-input',answer['root_frame'],*coordinate)
+                if key not in self.nodes:
+                    # Reads are anchored before the completed root's output;
+                    # only actual preceding HTTP reads can bind the coordinate.
+                    self.add(key,dict(f,service=role,seq=answer['seq'],kind='input-snapshot'));self.alias(key)
+                leaves.append(key)
+            key=(role,'collection-result',answer['root_frame'],answer['field'])
+            node=dict(answer,service=role,kind='bytecode-collection')
+            if not answer['known']:node['unknown']='Opaque scalar or unsupported effect reached the target'
+            self.add(key,node,leaves);self.providers[(role,coord(answer))].append(key)
+    def conversions(self,role):
+        for row in self.rows[role]:
+            if row['kind']!='json-conversion':continue
+            require(self.plans[role].get('json_conversion_methods'),'Undeclared JSON conversion')
+            source={f['path']:f for f in row['input']};target={f['path']:f for f in row['output']}
+            require(len(source)==len(row['input']) and len(target)==len(row['output']),'Duplicate conversion pointer')
+            for path,f in target.items():
+                if path not in source:continue
+                s=source[path];require(equivalent(s['observed'],f['observed']),'Conversion scalar coercion unsupported')
+                src=(role,'conversion-input',row['seq'],path);dst=(role,'conversion-output',row['seq'],path)
+                self.add(src,dict(s,service=role,seq=row['seq'],kind='input-snapshot'));self.alias(src)
+                self.add(dst,dict(f,service=role,seq=row['seq'],kind='json-conversion'),[src]);self.providers[(role,coord(f))].append(dst)
     def origins(self,key,trail=(),boundary=None):
         require(key not in trail,'Provenance cycle')
         n=self.nodes[key]
-        if boundary is not None and all(n.get(k)==v for k,v in boundary.items()):return [key],True
+        boundaries=boundary if isinstance(boundary,list) else [boundary] if boundary is not None else []
+        if any(all(n.get(k)==v for k,v in b.items()) for b in boundaries):return [key],True
         if n.get('unknown'):return [],False
         if key not in self.edges:
             unbound=n['kind']=='input-snapshot' or (n['kind']=='http-json' and n['phase']=='read')
