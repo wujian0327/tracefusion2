@@ -1,5 +1,7 @@
 # TraceFusion 2
 
+对外交流可先阅读[方法与实验进展简版](experiments/sockshop-mirrortaint/RESEARCH-SUMMARY-20261016.md)。
+
 截至2026-10-16的当前结果、论文主表、结论边界和原始工件索引统一见
 [论文结果与证据清单](experiments/sockshop-mirrortaint/PAPER-EVIDENCE-20261016.md)。
 该入口区分外部比较与内部消融，并保留在线CPU未改善、unknown及未校准任务的N/A。
