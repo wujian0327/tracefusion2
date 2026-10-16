@@ -1,0 +1,240 @@
+{
+  "kind": "original-trainticket-multisource-query-validation",
+  "measurement_code_commit": "166fa3e",
+  "implementation_initial_commit": "cf58728",
+  "date": "2026-10-16",
+  "final_build": "build-09",
+  "final_inputs": "validation-02",
+  "seed": 161133,
+  "results": {
+    "selective": {
+      "requests": 20,
+      "exact": 38,
+      "tp": 92,
+      "fp": 0,
+      "fn": 0,
+      "unknown": 0,
+      "unavailable_requests": [
+        "missing-train"
+      ],
+      "max_overlapping_roots": 8,
+      "distinct_root_frames": 20,
+      "one_shared_trace": true,
+      "roles": {
+        "train": {
+          "events": 56,
+          "bytes": 40995,
+          "kinds": {
+            "start": 1,
+            "class": 10,
+            "http-framework": 4,
+            "http-server-context": 20,
+            "http-json": 20,
+            "metrics": 1
+          }
+        },
+        "price": {
+          "events": 56,
+          "bytes": 41867,
+          "kinds": {
+            "start": 1,
+            "class": 10,
+            "http-framework": 4,
+            "http-server-context": 20,
+            "http-json": 20,
+            "metrics": 1
+          }
+        },
+        "route": {
+          "events": 57,
+          "bytes": 62174,
+          "kinds": {
+            "start": 1,
+            "class": 11,
+            "http-framework": 4,
+            "http-server-context": 20,
+            "http-json": 20,
+            "metrics": 1
+          }
+        },
+        "station": {
+          "events": 172,
+          "bytes": 122166,
+          "kinds": {
+            "start": 1,
+            "class": 10,
+            "http-framework": 4,
+            "http-server-context": 78,
+            "http-json": 78,
+            "metrics": 1
+          }
+        },
+        "basic": {
+          "events": 2155,
+          "bytes": 1018952,
+          "kinds": {
+            "start": 1,
+            "class": 16,
+            "http-framework": 4,
+            "http-server-context": 20,
+            "http-json": 177,
+            "enter": 20,
+            "http-rpc-enter": 138,
+            "http-request-context": 138,
+            "http-rpc-exit": 137,
+            "branch": 138,
+            "collection-call-enter": 634,
+            "collection-call-exit": 630,
+            "json-conversion": 58,
+            "write": 19,
+            "exit": 19,
+            "collection-catch": 3,
+            "http-rpc-abort": 1,
+            "abort": 1,
+            "metrics": 1
+          }
+        }
+      },
+      "events": 2496,
+      "bytes": 1286154
+    },
+    "full": {
+      "requests": 20,
+      "exact": 38,
+      "tp": 92,
+      "fp": 0,
+      "fn": 0,
+      "unknown": 0,
+      "unavailable_requests": [
+        "missing-train"
+      ],
+      "max_overlapping_roots": 8,
+      "distinct_root_frames": 20,
+      "one_shared_trace": true,
+      "roles": {
+        "train": {
+          "events": 56,
+          "bytes": 41013,
+          "kinds": {
+            "start": 1,
+            "class": 10,
+            "http-framework": 4,
+            "http-server-context": 20,
+            "http-json": 20,
+            "metrics": 1
+          }
+        },
+        "price": {
+          "events": 56,
+          "bytes": 41865,
+          "kinds": {
+            "start": 1,
+            "class": 10,
+            "http-framework": 4,
+            "http-server-context": 20,
+            "http-json": 20,
+            "metrics": 1
+          }
+        },
+        "route": {
+          "events": 57,
+          "bytes": 62175,
+          "kinds": {
+            "start": 1,
+            "class": 11,
+            "http-framework": 4,
+            "http-server-context": 20,
+            "http-json": 20,
+            "metrics": 1
+          }
+        },
+        "station": {
+          "events": 172,
+          "bytes": 122170,
+          "kinds": {
+            "start": 1,
+            "class": 10,
+            "http-framework": 4,
+            "http-server-context": 78,
+            "http-json": 78,
+            "metrics": 1
+          }
+        },
+        "basic": {
+          "events": 4875,
+          "bytes": 1627499,
+          "kinds": {
+            "start": 1,
+            "class": 16,
+            "http-framework": 4,
+            "http-server-context": 20,
+            "http-json": 177,
+            "enter": 20,
+            "collection-call-enter": 1200,
+            "write": 817,
+            "collection-call-exit": 1196,
+            "read": 692,
+            "http-rpc-enter": 138,
+            "http-request-context": 138,
+            "http-rpc-exit": 137,
+            "branch": 236,
+            "json-conversion": 58,
+            "exit": 19,
+            "collection-catch": 3,
+            "http-rpc-abort": 1,
+            "abort": 1,
+            "metrics": 1
+          }
+        }
+      },
+      "events": 5216,
+      "bytes": 1894722
+    }
+  },
+  "event_reduction_percent": 52.14723926380368,
+  "byte_reduction_percent": 32.11911826642642,
+  "same_answers": true,
+  "current_legacy_acceptance": {
+    "sockshop": {
+      "queries": 198,
+      "exact": 198,
+      "unknown": 0,
+      "tp": 258,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "trainticket": {
+      "queries": 31,
+      "exact": 31,
+      "unknown": 0,
+      "tp": 30,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  },
+  "new_formal_cost_measurement": false,
+  "no_business_formula_in_inference": true,
+  "independent_audit_sha256": "3fdba307460455e2d9feb8cd9701b9ed2d55b537ac4b154b3a797508d5703a24",
+  "evidence_sha256": {
+    "artifacts/trainticket-multisource-20261016/build-09/build.json": "92a0b9b301c6dee9c75999beec32da3e9a53207d6fe4f56f1f99259bd7d948c6",
+    "artifacts/trainticket-multisource-20261016/validation-02/freeze.json": "5cac821c7575bc2f060e4afef4c30c365f2c14e16605965abf2e27f9af614535",
+    "artifacts/trainticket-multisource-20261016/image-jar-verification.json": "5bee3f897edd7054c64612162db6580eefa31bff430f59b3e69268020cb37dbe",
+    "artifacts/trainticket-multisource-20261016/legacy-acceptance/current-acceptance.json": "c776284e1c8d900980d3b7a74d07656b91e6cad61e10f391db787919e85a35ef",
+    "artifacts/trainticket-multisource-20261016/controls-08/results.json": "7ca33c7f8d3aac37e6a20cc9f4e04db505cbce5c613d938b0bc083ca7676e49e"
+  },
+  "limitations": [
+    "Bounded acyclic collection computation profile, explicitly enabled; no all-JVM guarantee",
+    "Explicit pinned default-Jackson utility summary added alongside generic collection rules",
+    "Value origins exclude branch/index selectors; selectors retained in local replay",
+    "Collection epoch denotes observed contents, not a complete collection mutation history; received collections read-only in admitted code",
+    "One fresh deployment per policy: record counts/correctness only, all online and offline performance costs N/A",
+    "Inputs generated after rule/build freeze, not an independent third-party blind benchmark",
+    "Missing upstream train: original HTTP 404 propagates as Basic HTTP 500; two price targets N/A per policy"
+  ]
+}

@@ -21,6 +21,9 @@ def audit(out,build):
     for file,digest in manifest['sources'].items():
         snapshot=out/'sources'/Path(file).relative_to(ROOT)
         if sha(snapshot)!=digest:raise ValueError('Frozen source snapshot differs')
+        if sha(Path(file))!=digest:raise ValueError('Audit must run with the frozen source version: '+file)
+    driver=Path(__file__).with_name('run_train_multisource.py')
+    if sha(driver)!=frozen['driver_sha256']:raise ValueError('Frozen driver changed')
     for mode in ('selective','full'):
         dest=out/mode;run=load(dest/'run.json');pred=load(dest/'predictions.json');rows={}
         if run['status']!='business-passed' or run['cleanup_returncode']:raise ValueError('Incomplete deployment/cleanup')
@@ -39,6 +42,15 @@ def audit(out,build):
                         if k in raw:raise ValueError('Duplicated source/target JSON pointer instance')
                         raw[k]=(r,f)
         by_case={(p['case'],p['key']):p for p in pred};tp=0;exact=0;unavailable=[];canonical=[]
+        messages=[c['message'] for c in run['cases']]
+        if len(messages)!=len(set(messages)) or len({m.split('/')[0] for m in messages})!=1:raise ValueError('Same-trace distinct request instance control missing')
+        entry=load(build/'basic/plan.json')['entry'];root_frames={r['frame'] for r in rows['basic'] if r['kind']=='enter' and r['method']==entry}
+        active=set();max_active=0
+        for r in rows['basic']:
+            if r['frame'] not in root_frames:continue
+            if r['kind']=='enter':active.add(r['frame']);max_active=max(max_active,len(active))
+            if r['kind'] in ('exit','abort'):active.remove(r['frame'])
+        if active or max_active<2:raise ValueError('Overlapping root execution or cleanup control missing')
         for c in run['cases']:
             body=c['body'];station={s['name']:s['_id'] for s in db['station']};train=next((v for v in db['train'] if v['_id']==body['trip']['trainTypeId']),None)
             if train is None:
@@ -82,7 +94,7 @@ def audit(out,build):
         if exact!=len(pred) or len(run['cases'])!=20:raise ValueError('Population differs')
         semantic[mode]=sorted(canonical)
         stats={r:{'events':len(rs),'bytes':(dest/r/'events.jsonl').stat().st_size,'kinds':dict(Counter(x['kind'] for x in rs))} for r,rs in rows.items()}
-        results[mode]={'requests':20,'exact':exact,'tp':tp,'fp':0,'fn':0,'unknown':0,'unavailable_requests':unavailable,'roles':stats,'events':sum(s['events'] for s in stats.values()),'bytes':sum(s['bytes'] for s in stats.values())}
+        results[mode]={'requests':20,'exact':exact,'tp':tp,'fp':0,'fn':0,'unknown':0,'unavailable_requests':unavailable,'max_overlapping_roots':max_active,'distinct_root_frames':len(root_frames),'one_shared_trace':True,'roles':stats,'events':sum(s['events'] for s in stats.values()),'bytes':sum(s['bytes'] for s in stats.values())}
     if semantic['full']!=semantic['selective']:raise ValueError('Policy answers differ')
     result={'all_passed':True,'results':results,'same_logical_answers':True,'auditor_sha256':sha(Path(__file__)),'source_oracle':'Raw independent database readbacks plus root-parent RPC span and raw server JSON field coordinates; does not invoke planner/reconstructor','not_formal_performance_measurement':True}
     save(out/'independent-audit.json',result);print(json.dumps(result,indent=2))

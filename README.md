@@ -4,7 +4,12 @@
 [基线实验入口](baselines/README.md)，包含MirrorTaint、Phosphor和FlowDist。
 clone后先准备工具及运行依赖，再按各自已校准的查询口径进行实验。
 
-Sock Shop / Train Ticket的最新正确性、严格消融、MirrorTaint诊断与导出配置核验见
+Train Ticket 新增原版多来源价格路径：full/selective 各 38/38 查询准确、TP92、FP/FN0；
+事件减少52.15%、日志字节减少32.12%，仅为正确性与记录量验证。旧路径新采集仍为198/198、31/31。
+范围、N/A、通用核心扩展和复现步骤见
+[2026-10-16多来源路径报告](experiments/sockshop-mirrortaint/TRAINTICKET-MULTISOURCE-20261016.md)。
+
+此前Sock Shop / Train Ticket正确性、严格消融、MirrorTaint诊断与导出配置核验见
 [2026-10-15至16实验汇总](experiments/sockshop-mirrortaint/FAIRNESS-EXPANSION-20261015.md)。
 历史阶段报告保留原口径，原始工件需单独备份，推送由用户手动完成。
 

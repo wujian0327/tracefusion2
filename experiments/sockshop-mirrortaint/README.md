@@ -3,7 +3,11 @@
 新用户获取外部工具、构建Phosphor/JRE和准备原版业务的统一入口见
 [baselines/README.md](../../baselines/README.md)。下文保留各阶段的真实记录和限制。
 
-最新方法核验、配对统计、严格边界条件及MirrorTaint诊断/来源标识导出对照统一见
+2026-10-16新增原版Train Ticket多来源价格路径：full/selective各38/38、TP92、FP/FN0，
+事件减少52.15%、字节减少32.12%；未做新路径正式成本测量。
+见[多来源路径、冻结新输入与适用范围](TRAINTICKET-MULTISOURCE-20261016.md)。
+
+此前方法核验、配对统计、严格边界条件及MirrorTaint诊断/来源标识导出对照统一见
 [2026-10-15至16进展说明](FAIRNESS-EXPANSION-20261015.md)。各历史阶段的数据不合并口径。
 
 2026-10-12。用户确认先做 Sock Shop，再做 PiggyMetrics。**正式准确率资格尚未完成；2026-10-13 已完成五方法的选定字段校准与首轮开销测量，见文末。**
