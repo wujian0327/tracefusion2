@@ -41,7 +41,7 @@ public final class QueryBytecodeModel implements Opcodes {
         List<Path> paths=new ArrayList<>();try(java.util.stream.Stream<Path> files=Files.walk(root)){files.filter(p->p.toString().endsWith(".class")).forEach(paths::add);}Collections.sort(paths);
         for(Path path:paths) {
             byte[] bytes=Files.readAllBytes(path);ClassNode c=new ClassNode(ASM9);new ClassReader(bytes).accept(c,ClassReader.SKIP_DEBUG|ClassReader.SKIP_FRAMES);
-            Map<String,Object> cls=new LinkedHashMap<>();cls.put("access",c.access);cls.put("super",c.superName);cls.put("annotations",annotations(c.visibleAnnotations,c.invisibleAnnotations));List<Object> fields=new ArrayList<>();
+            Map<String,Object> cls=new LinkedHashMap<>();cls.put("access",c.access);cls.put("super",c.superName);cls.put("interfaces",c.interfaces);cls.put("annotations",annotations(c.visibleAnnotations,c.invisibleAnnotations));List<Object> fields=new ArrayList<>();
             for(FieldNode f:c.fields){Map<String,Object> field=new LinkedHashMap<>();field.put("name",f.name);field.put("desc",f.desc);field.put("access",f.access);field.put("annotations",annotations(f.visibleAnnotations,f.invisibleAnnotations));fields.add(field);}cls.put("fields",fields);
             cls.put("sha256",QueryObservationAgent.Recorder.hash(bytes));classes.put(c.name,cls);
             for(MethodNode m:c.methods){Map<String,Object> row=new LinkedHashMap<>();row.put("owner",c.name);row.put("name",m.name);row.put("desc",m.desc);row.put("access",m.access);

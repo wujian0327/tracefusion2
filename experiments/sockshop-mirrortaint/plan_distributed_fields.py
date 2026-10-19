@@ -21,6 +21,12 @@ def json_schema(model):
                     prop=suffix if len(suffix)>1 and suffix[:2].isupper() else suffix[:1].lower()+suffix[1:]
                     if prop==f['name']:getter=k;break
             if getter is None and not f['access']&1:continue
+            if getter is None:
+                suffix=f['name'][:1].upper()+f['name'][1:]
+                competing=[m for m in model['methods'].values() if m['owner']==owner and not m['access']&8
+                           and m['name'] in ('get'+suffix,'is'+suffix) and m['desc'].startswith('()')]
+                if competing:
+                    rejected.append({'field':key,'reason':'Public field has an unverified serialization getter'});continue
             annotations=c.get('annotations',[])+f.get('annotations',[])+(model['methods'][getter].get('annotations',[]) if getter else [])
             custom=[a for a in annotations if a.startswith('Lcom/fasterxml/jackson/') and a!='Lcom/fasterxml/jackson/annotation/JsonIgnoreProperties;']
             if custom:rejected.append({'field':key,'annotations':custom});continue

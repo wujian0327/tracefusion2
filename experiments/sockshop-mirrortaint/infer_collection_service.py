@@ -42,7 +42,7 @@ def infer_collection(plan, rows):
         events = [r for r in rows if r.get('frame') == root['frame'] and r['kind'] in ('collection-call-enter', 'collection-call-exit', 'branch', 'collection-catch')
                   and (r['kind']!='branch' or r['site'].startswith(entry+'@'))]
         # Keep full mode's extra field/branch observations outside this stream.
-        pos = 0; pc = 0; stack = []; locals_ = {}; bindings = {}; maps = {}; builders = {}; steps = 0
+        pos = 0; pc = 0; stack = []; locals_ = {}; bindings = {}; maps = {}; builders = {}; steps = 0; scalar_writes=[]
         if not method['access'] & 8: locals_[0] = Value({'object': root['receiver']}); slot = 1
         else: slot = 0
         for i, d in enumerate(descriptors(method['desc'])):
@@ -152,6 +152,8 @@ def infer_collection(plan, rows):
                         value=Value(actual)
                     elif key in plan['collection_setters']:
                         require(len(args)==1,'Setter arity'); value=Value(actual)
+                        if plan.get('profile')=='bounded-scalar' and pc in plan['collection_writer_sites']:
+                            scalar_writes.append((call,ret,args[0]))
                     elif ins['owner'].startswith('org/slf4j/'):
                         value=Value(actual)
                     # Opaque calls supply only a concrete runtime boundary
@@ -182,6 +184,15 @@ def infer_collection(plan, rows):
                 require(pos==len(events),'Unconsumed replay observations'); break
             else: raise ValueError('Unsupported replay opcode '+str(op))
             pc+=1
+        for call,ret,value in scalar_writes:
+            writes=[r for r in rows if r['kind']=='write' and r.get('frame')==root['frame'] and
+                    r['field']==plan['target'] and r['owner']==call['receiver']['object'] and call['seq']<r['seq']<ret['seq']]
+            require(len(writes)==1,'Scalar setter actual write absent or ambiguous')
+            write=writes[0]
+            if not value.unknown:bind(value,write['observed'])
+            answers.append({'root_frame':root['frame'],'owner':write['owner'],'field':write['field'],'version':write['version'],
+                'observed':write['observed'],'known':not value.unknown,'sources':[list(k) for k in sorted(value.sources)],
+                'selectors':[list(k) for k in sorted(value.selectors)],'target_field':plan['target'],'seq':write['seq']})
         # Only the Map passed at an actual target setter is an answer. Other
         # local maps must not accidentally supply a query provider.
         selected_maps=set()

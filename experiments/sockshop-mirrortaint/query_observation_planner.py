@@ -154,9 +154,10 @@ def resolve_target(model,text):
         canonical_name=name.replace('/','.').replace('$','.')
         if name!=owner and name.replace('/','.')!=owner and canonical_name!=owner and not canonical_name.endswith('.'+owner):continue
         for row in cls['fields']:
-            if row['name']==field and not row['access']&8 and scalar(row['desc']):matches.append(name+'.'+field)
+            if row['name']==field and not row['access']&8:matches.append((name+'.'+field,row['desc']))
     require(len(matches)==1,'Target field is absent or ambiguous: '+text)
-    return matches[0]
+    require(scalar(matches[0][1]),'Target type unsupported by scalar profile: '+matches[0][1]+' for '+text)
+    return matches[0][0]
 
 
 def abstract_answer(state,targets,arguments):

@@ -33,6 +33,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
                 if((m.access&(ACC_ABSTRACT|ACC_NATIVE))!=0)continue;String key=owner+"."+m.name+m.desc;
                 List<AbstractInsnNode> code=new ArrayList<>();for(AbstractInsnNode n:m.instructions.toArray())if(n.getOpcode()>=0)code.add(n);
                 if(CollectionServiceHooks.instrument(m,key,code))changed=true;
+                if(ResponseBindingHooks.instrument(m,key,code))changed=true;
                 boolean initialized=!m.name.equals("<init>");AbstractInsnNode entry=null;
                 for(int i=0;i<code.size();i++) {
                     AbstractInsnNode n=code.get(i);String site=key+"@"+i;
@@ -66,8 +67,30 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
             }
             Recorder.transformed(owner);
             if(!changed)return null;
-            ClassWriter w=new ClassWriter(ClassWriter.COMPUTE_MAXS|ClassWriter.COMPUTE_FRAMES){protected String getCommonSuperClass(String a,String b){try{Class<?> x=Class.forName(a.replace('/','.'),false,loader),y=Class.forName(b.replace('/','.'),false,loader);if(x.isAssignableFrom(y))return a;if(y.isAssignableFrom(x))return b;if(x.isInterface()||y.isInterface())return "java/lang/Object";do{x=x.getSuperclass();}while(!x.isAssignableFrom(y));return x.getName().replace('.','/');}catch(Exception e){throw new IllegalStateException(e);}}};cls.accept(w);return w.toByteArray();
+            ClassWriter w=new ClassWriter(ClassWriter.COMPUTE_MAXS|ClassWriter.COMPUTE_FRAMES){protected String getCommonSuperClass(String a,String b){return commonType(loader,a,b);}};cls.accept(w);return w.toByteArray();
         }catch(Throwable e){Recorder.problem("transform:"+owner+":"+e);return null;}
+    }
+    // Loading application classes during another transform suppresses recursive
+    // transformation. Read hierarchy bytes instead, so required write counters
+    // cannot silently disappear when frame computation sees a DTO type.
+    static ClassReader hierarchy(ClassLoader loader,String name){try(InputStream in=loader==null?ClassLoader.getSystemResourceAsStream(name+".class"):loader.getResourceAsStream(name+".class")){if(in==null)throw new IllegalStateException("Missing hierarchy: "+name);return new ClassReader(in);}catch(IOException e){throw new IllegalStateException(e);}}
+    static boolean assignable(ClassLoader loader,String target,String from,Set<String> seen){if(target.equals(from)||target.equals("java/lang/Object"))return true;if(!seen.add(from))return false;ClassReader r=hierarchy(loader,from);for(String i:r.getInterfaces())if(assignable(loader,target,i,seen))return true;return r.getSuperName()!=null&&assignable(loader,target,r.getSuperName(),seen);}
+    static String commonType(ClassLoader loader,String a,String b){
+        if(a.equals(b))return a;
+        if(a.equals("java/lang/Object")||b.equals("java/lang/Object"))return "java/lang/Object";
+        if(a.startsWith("[")||b.startsWith("[")){
+            if(a.startsWith("[")&&b.startsWith("[")){
+                String x=a.substring(1),y=b.substring(1);if(x.length()==1||y.length()==1)return "java/lang/Object";
+                String inner=commonType(loader,x.startsWith("L")?x.substring(1,x.length()-1):x,y.startsWith("L")?y.substring(1,y.length()-1):y);
+                return inner.startsWith("[")?"["+inner:"[L"+inner+";";
+            }
+            String other=a.startsWith("[")?b:a;
+            return other.equals("java/lang/Cloneable")||other.equals("java/io/Serializable")?other:"java/lang/Object";
+        }
+        if(assignable(loader,a,b,new HashSet<>()))return a;if(assignable(loader,b,a,new HashSet<>()))return b;
+        if((hierarchy(loader,a).getAccess()&ACC_INTERFACE)!=0||(hierarchy(loader,b).getAccess()&ACC_INTERFACE)!=0)return "java/lang/Object";
+        do{a=hierarchy(loader,a).getSuperName();}while(a!=null&&!assignable(loader,a,b,new HashSet<>()));
+        return a==null?"java/lang/Object":a;
     }
     static void branch(InsnList h,String site,boolean taken){h.add(new LdcInsnNode(site));h.add(new InsnNode(taken?ICONST_1:ICONST_0));h.add(new MethodInsnNode(INVOKESTATIC,R,"branch","(Ljava/lang/String;Z)V",false));}
     static void field(MethodNode m,FieldInsnNode f,String site,boolean write,boolean log) {
@@ -81,6 +104,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
     public static final class Recorder {
         static final ObjectMapper JSON=new ObjectMapper();static BufferedWriter output;static long seq,framesCounter,fieldHooks,branches;
         static final IdentityHashMap<Object,String> IDS=new IdentityHashMap<>();static final Map<String,Integer> VERSIONS=new HashMap<>();
+        static final Set<String> CHECKED_CLASSES=new HashSet<>();
         static final ThreadLocal<Deque<Frame>> STACK=new ThreadLocal<Deque<Frame>>(){protected Deque<Frame> initialValue(){return new ArrayDeque<>();}};
         static final ThreadLocal<String> PENDING=new ThreadLocal<>();static final Map<String,Set<String>> ACTIVE=new HashMap<>();
         static class Frame{String id,method;List<String> locked=new ArrayList<>();List<Object> inputs;}
@@ -107,9 +131,10 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
                 f.inputs=inputs;r.put("inputs",inputs);for(Object member:(List<?>)a){String o=id(member);Set<String> users=ACTIVE.computeIfAbsent(o,k->new HashSet<>());if(!users.isEmpty()&&!users.contains(f.id))throw new IllegalStateException("Concurrent shared mapper DTO");users.add(f.id);f.locked.add(o);}
             }
             STACK.get().push(f);emit("enter",r);
+            if(method.equals(plan.get("entry")))ResponseBindingHooks.enter(args);
         }catch(Throwable e){problem("enter:"+e);throw new IllegalStateException(e);}}
         public static synchronized void exit(Object result){try{Frame f=STACK.get().peek();Map<String,Object> r=row();r.put("result",value(result));
-            if(f.method.equals(plan.get("entry")))r.put("fields",snapshot(result,true));
+            if(f.method.equals(plan.get("entry"))){r.put("fields",snapshot(result,true));ResponseBindingHooks.exit(result);}
             for(String o:f.locked)ACTIVE.get(o).remove(f.id);
             emit("exit",r);STACK.get().pop();
         }catch(Throwable e){problem("exit:"+e);throw new IllegalStateException(e);}}
@@ -119,7 +144,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
         public static synchronized void branch(String site,boolean taken){branches++;if(!STACK.get().isEmpty()){Map<String,Object> r=row();r.put("site",site);r.put("taken",taken);emit("branch",r);}}
         public static synchronized void sumStart(Object s){Map<String,Object> r=row();r.put("parallel",((java.util.stream.DoubleStream)s).isParallel());emit("sum-enter",r);}
         public static synchronized void sumEnd(double d){Map<String,Object> r=row();r.put("value",d);emit("sum-exit",r);}
-        public static synchronized void transformed(String owner){Map<String,Object> r=row();r.put("class",owner);emit("class",r);}
+        public static synchronized void transformed(String owner){CHECKED_CLASSES.add(owner);Map<String,Object> r=row();r.put("class",owner);emit("class",r);}
         public static synchronized void problem(String message){Map<String,Object> r=row();r.put("message",message);emit("problem",r);System.err.println("QUERY_SERVICE: "+message);}
         static void emit(String kind,Map<String,Object> r){try{if(++seq>1000000)throw new IllegalStateException("Event bound");r.put("seq",seq);r.put("kind",kind);r.put("thread",Thread.currentThread().getId());output.write(JSON.writeValueAsString(r));output.newLine();output.flush();}catch(Exception e){throw new IllegalStateException(e);}}
     }

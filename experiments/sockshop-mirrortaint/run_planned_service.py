@@ -24,7 +24,7 @@ def save(p,v):p.write_text(json.dumps(v,indent=2,ensure_ascii=False)+'\n')
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def build(out,jar,entry,target):
     out.mkdir(parents=True,exist_ok=False);(out/'tools').mkdir();(out/'app').mkdir()
-    cp=':'.join(map(str,JARS));src=[HERE/n for n in ('QueryObservationAgent.java','QueryBytecodeModel.java','PlannedServiceAgent.java','CollectionServiceHooks.java','SpringTransportAgent.java','W3CTraceContext.java')]
+    cp=':'.join(map(str,JARS));src=[HERE/n for n in ('QueryObservationAgent.java','QueryBytecodeModel.java','PlannedServiceAgent.java','CollectionServiceHooks.java','ResponseBindingHooks.java','SpringTransportAgent.java','W3CTraceContext.java')]
     _,compiler_target=java8_target()
     command(['javac',*compiler_target,'-cp',cp,'-d',str(out/'tools'),*map(str,src)],out/'compile.log')
     with ZipFile(jar) as z:
@@ -37,7 +37,7 @@ def build(out,jar,entry,target):
     with ZipFile(agent,'w',ZIP_DEFLATED) as z:
         z.writestr('META-INF/MANIFEST.MF','Manifest-Version: 1.0\nPremain-Class: PlannedServiceAgent\n\n')
         for f in (out/'tools').glob('PlannedServiceAgent*.class'):z.write(f,f.name)
-        for prefix in ('CollectionServiceHooks','SpringTransportAgent','W3CTraceContext'):
+        for prefix in ('CollectionServiceHooks','ResponseBindingHooks','SpringTransportAgent','W3CTraceContext'):
             for f in (out/'tools').glob(prefix+'*.class'):z.write(f,f.name)
         for dep in JARS:
             with ZipFile(dep) as dz:

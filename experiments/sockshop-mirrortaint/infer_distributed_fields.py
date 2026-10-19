@@ -12,6 +12,7 @@ from infer_planned_service import infer_service
 from query_observation_planner import require
 from transport_context import validate_protocol
 from infer_collection_service import infer_collection
+import infer_response_binding as response_binding
 
 
 def coord(f):return (f['owner'],f['field'],f['version'])
@@ -49,26 +50,39 @@ class Reconstruction:
                         leaf=f['field'].split(':',1)[1].replace('~','~0').replace('/','~1')
                         require(f['path'].endswith('/'+leaf),'Collection key/index pointer mismatch')
                     else:require(f['path'].endswith('/'+suffix),'JSON pointer/property mismatch')
-                    key=(role,r['seq'],f['path']);node=dict(f,service=role,seq=r['seq'],kind='http-json',message=r['message'],direction=r['direction'],phase=r['phase'],uri=r.get('uri'))
+                    key=(role,r['seq'],f['path']);node=dict(f,service=role,seq=r['seq'],kind='http-json',message=r['message'],direction=r['direction'],phase=r['phase'],uri=r.get('uri'),parent_message=r.get('parent_message'))
                     self.add(key,node);self.json.append((key,r))
                     if r['phase']=='read':self.providers[(role,coord(f))].append(key)
         self.bridge()
+        for role in self.plans:response_binding.sources(self,role)
         for role in self.plans:self.conversions(role)
         for role,plan in self.plans.items():
             if plan['profile']=='mapped-reduction':self.reductions(role,build,root)
             if plan['profile']=='field-copy':self.copies(role)
-            if plan['profile']=='collection-computation':self.collections(role)
+            if plan['profile'] in ('collection-computation','bounded-scalar'):self.collections(role)
+        for role in self.plans:response_binding.bind_outputs(self,role)
         # Same-process forwarding is only the same object/field/version. It does
         # not use matching payloads or business keys. Multiple candidates fail
         # closed rather than selecting the latest or an equal-valued candidate.
         for key,r in self.json:
-            if r['phase']=='write':self.alias(key)
+            if r['phase']=='write':
+                binding=self.plans[key[0]].get('response_binding')
+                if binding and response_binding.matches(binding['path'],self.nodes[key]['path']):continue
+                self.alias(key)
 
     def add(self,key,node,edges=None):
         require(key not in self.nodes,'Duplicate evidence node');self.nodes[key]=node
         if edges is not None:self.edges[key]=list(edges)
     def alias(self,key):
         n=self.nodes[key];possible=[k for k in self.providers[(n['service'],coord(n))] if self.nodes[k]['seq']<n['seq']]
+        if self.plans[n['service']].get('response_binding'):
+            frame=n.get('root_frame',n.get('frame'))
+            root_messages={r['frame']:r.get('message') for r in self.rows[n['service']] if r['kind']=='binding-return'}
+            message=n.get('message') or root_messages.get(frame)
+            possible=[k for k in possible if (
+                self.nodes[k].get('root_frame',self.nodes[k].get('frame'))==frame and frame is not None
+                or self.nodes[k]['kind']=='http-json' and self.nodes[k].get('direction')=='response'
+                and self.nodes[k].get('parent_message')==message and message is not None)]
         if len(possible)==1:
             if not equivalent(self.nodes[possible[0]]['observed'],n['observed']):
                 n['unknown']='Value changed outside counted application writes; no forwarding edge';return
@@ -126,7 +140,7 @@ class Reconstruction:
             elif source['kind']=='argument':
                 arg=root['args'][source['index']];require(arg['object']==writer['args'][rule['parameter']]['object']==write['observed']['object'],'Root argument/write identity differs')
                 key=(role,'argument',root['frame'],source['index']);self.add(key,dict(service=role,seq=root['seq'],kind='argument',field='@argument:'+str(source['index']),owner=arg['object'],version=0,observed=arg));leaves=[key]
-            key=(role,'copy-write',write['seq']);self.add(key,dict(write,service=role,kind='bytecode-copy',constant=source['kind']=='constant'),leaves);self.providers[(role,coord(write))].append(key)
+            key=(role,'copy-write',write['seq']);self.add(key,dict(write,service=role,kind='bytecode-copy',root_frame=root['frame'],constant=source['kind']=='constant'),leaves);self.providers[(role,coord(write))].append(key)
     def collections(self,role):
         result=infer_collection(self.plans[role],self.rows[role]);self.local_queries[role]=result
         fields={coord(f):f for f in result['fields']}
@@ -137,7 +151,7 @@ class Reconstruction:
                 if key not in self.nodes:
                     # Reads are anchored before the completed root's output;
                     # only actual preceding HTTP reads can bind the coordinate.
-                    self.add(key,dict(f,service=role,seq=answer['seq'],kind='input-snapshot'));self.alias(key)
+                    self.add(key,dict(f,service=role,seq=answer['seq'],kind='input-snapshot',root_frame=answer['root_frame']));self.alias(key)
                 leaves.append(key)
             key=(role,'collection-result',answer['root_frame'],answer['field'])
             node=dict(answer,service=role,kind='bytecode-collection')
@@ -153,8 +167,8 @@ class Reconstruction:
                 if path not in source:continue
                 s=source[path];require(equivalent(s['observed'],f['observed']),'Conversion scalar coercion unsupported')
                 src=(role,'conversion-input',row['seq'],path);dst=(role,'conversion-output',row['seq'],path)
-                self.add(src,dict(s,service=role,seq=row['seq'],kind='input-snapshot'));self.alias(src)
-                self.add(dst,dict(f,service=role,seq=row['seq'],kind='json-conversion'),[src]);self.providers[(role,coord(f))].append(dst)
+                self.add(src,dict(s,service=role,seq=row['seq'],kind='input-snapshot',root_frame=row.get('frame')));self.alias(src)
+                self.add(dst,dict(f,service=role,seq=row['seq'],kind='json-conversion',root_frame=row.get('frame')),[src]);self.providers[(role,coord(f))].append(dst)
     def origins(self,key,trail=(),boundary=None):
         require(key not in trail,'Provenance cycle')
         n=self.nodes[key]
@@ -169,6 +183,8 @@ class Reconstruction:
             values,ok=self.origins(parent,trail+(key,),boundary);origins.update(values);known&=ok
         return sorted(origins,key=str),known
     def query(self,message,path,role,boundary=None):
+        binding=self.plans[role].get('response_binding')
+        if binding:require(response_binding.matches(binding['path'],path),'Query path outside frozen response binding')
         candidates=[key for key,r in self.json if key[0]==role and r['message']==message and r['phase']=='write' and r['direction']=='response' and self.nodes[key]['path']==path]
         require(len(candidates)==1,'Query target absent or duplicated: '+str((role,message,path)))
         key=candidates[0];origins,known=self.origins(key,boundary=boundary)

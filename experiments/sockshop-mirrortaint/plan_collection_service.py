@@ -105,7 +105,7 @@ def closure(graph, seeds):
     return seen
 
 
-def plan_collection(model, entry, target):
+def plan_collection(model, entry, target, scalar_target=False):
     target = any_target(model, target); m = model['methods'][entry]; c = m['instructions']
     graph, operands, states, steps = analyze(m); getters, setters = direct_accessors(model)
     writers = [i for i, x in enumerate(c) if x['op'] in (182, 183, 185) and callee(x) in setters and setters[callee(x)]['field'] == target]
@@ -140,10 +140,11 @@ def plan_collection(model, entry, target):
             require(not passed or key in setters, 'Local mutable allocation escapes to an opaque argument')
     selected = closure(graph, writers)
     calls = [i for i in sorted(selected) if i >= 0 and c[i]['op'] in (182, 183, 184, 185) and c[i]['name'] != '<init>']
-    require(any(c[i]['owner'] in ('java/util/Map', 'java/util/HashMap') and c[i]['name'] == 'put' for i in calls), 'No collection result mutation')
+    if not scalar_target:
+        require(any(c[i]['owner'] in ('java/util/Map', 'java/util/HashMap') and c[i]['name'] == 'put' for i in calls), 'No collection result mutation')
     branches = [i for i, x in enumerate(c) if 153 <= x['op'] <= 166 or x['op'] in (198, 199)]
     schema, _ = json_schema(model)
-    return {'algorithm': 'acyclic-collection-defuse-v1', 'profile': 'collection-computation', 'entry': entry, 'target': target,
+    return {'algorithm': 'acyclic-collection-defuse-v1', 'profile': 'bounded-scalar' if scalar_target else 'collection-computation', 'entry': entry, 'target': target,
         'model_sha256': digest(model), 'class_sha256': {o: v['sha256'] for o, v in model['classes'].items()},
         'frame_methods': [entry], 'producer_method': None, 'writer_method': None, 'reduction': {},
         'snapshot_fields': [target], 'mapper_fields': [], 'full_snapshot_fields': [],

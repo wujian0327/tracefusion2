@@ -16,14 +16,15 @@ public final class CollectionServiceHooks implements Opcodes {
     static String id(Object x){return PlannedServiceAgent.Recorder.id(x);}
     static void emit(String kind,Map<String,Object> r){PlannedServiceAgent.Recorder.emit(kind,r);}
     static Map<String,Object> row(){return PlannedServiceAgent.Recorder.row();}
-    static boolean enabled(){return "collection-computation".equals(plan().get("profile"));}
+    static boolean enabled(){return "collection-computation".equals(plan().get("profile"))||"bounded-scalar".equals(plan().get("profile"));}
     static boolean mutate(MethodInsnNode c){return (c.owner.startsWith("java/util/")&&Arrays.asList("add","addAll","set","put","putAll","remove","removeAll","retainAll","clear","replace","replaceAll","sort","compute","computeIfAbsent","computeIfPresent","merge").contains(c.name));}
     static boolean instrument(MethodNode m,String key,List<AbstractInsnNode> code){
-        if(!enabled())return false;boolean root=key.equals(plan().get("entry")),changed=false;
+        if(!enabled()&&!ResponseBindingHooks.enabled())return false;boolean root=key.equals(plan().get("entry")),changed=false;
         if(((List)plan().getOrDefault("json_conversion_methods",Collections.emptyList())).contains(key)){
             int token=m.maxLocals++;InsnList h=new InsnList();h.add(new VarInsnNode(ALOAD,0));h.add(new MethodInsnNode(INVOKESTATIC,R,"convertStart","(Ljava/lang/Object;)Ljava/lang/Object;",false));h.add(new VarInsnNode(ASTORE,token));m.instructions.insert(h);
             for(AbstractInsnNode n:code)if(n.getOpcode()==ARETURN){InsnList e=new InsnList();e.add(new InsnNode(DUP));e.add(new VarInsnNode(ALOAD,token));e.add(new MethodInsnNode(INVOKESTATIC,R,"convertEnd","(Ljava/lang/Object;Ljava/lang/Object;)V",false));m.instructions.insertBefore(n,e);}changed=true;
         }
+        if(!enabled())return changed;
         List selected=(List)plan().get("collection_selected_calls");
         for(int i=0;i<code.size();i++){
             AbstractInsnNode n=code.get(i);
