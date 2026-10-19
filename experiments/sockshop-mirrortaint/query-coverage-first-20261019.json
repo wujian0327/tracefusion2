@@ -1,0 +1,1190 @@
+{
+  "kind": "frozen-first-pass-new-query-coverage",
+  "as_of": "2026-10-19",
+  "audit": {
+    "all_passed": true,
+    "algorithm_commit": "a84ce9de4c970c667e340da9de58e345574a7acf",
+    "pool_commit": "dfd929c",
+    "pool_sha256": "d5234e99c7c009a7d7a9a072d69f6b4f33ac77996cf42d37fa6eb50355e28b5c",
+    "apps": {
+      "sockshop": {
+        "candidate_queries": 37,
+        "selected_queries": 10,
+        "native_default_accepted": 0,
+        "accepted_including_explicit_profile": 0,
+        "planning_rejected": 10,
+        "planning_acceptance_rate": 0.0,
+        "runtime_requests": 0,
+        "generated_target_instances": 0,
+        "known": 0,
+        "unknown": 0,
+        "no_target_NA": 0,
+        "invalid_evidence": 0,
+        "unexecuted_rejected_queries": 10,
+        "answerability_rate": null,
+        "known_answer_exact_rate": null,
+        "known_answer_relation_tp": 0,
+        "known_answer_relation_fp": 0,
+        "known_answer_relation_fn": 0
+      },
+      "trainticket": {
+        "candidate_queries": 54,
+        "selected_queries": 10,
+        "native_default_accepted": 0,
+        "accepted_including_explicit_profile": 0,
+        "planning_rejected": 10,
+        "planning_acceptance_rate": 0.0,
+        "runtime_requests": 0,
+        "generated_target_instances": 0,
+        "known": 0,
+        "unknown": 0,
+        "no_target_NA": 0,
+        "invalid_evidence": 0,
+        "unexecuted_rejected_queries": 10,
+        "answerability_rate": null,
+        "known_answer_exact_rate": null,
+        "known_answer_relation_tp": 0,
+        "known_answer_relation_fp": 0,
+        "known_answer_relation_fn": 0
+      }
+    },
+    "attempt_counts": {
+      "plan_service": 20,
+      "copy_plan": 20,
+      "plan_collection": 20
+    },
+    "rejection_counts_by_function": {
+      "plan_service": {
+        "Target has neither a modeled write nor an identity return": 16,
+        "CFG/path bound exceeded": 2,
+        "Target field is absent or ambiguous": 2
+      },
+      "copy_plan": {
+        "No automatic field-copy binding": 17,
+        "CFG/path bound exceeded": 2,
+        "Unmodeled back edge": 1
+      },
+      "plan_collection": {
+        "Unsupported instruction in collection profile": 3,
+        "No direct target setter call": 15,
+        "No collection result mutation": 1,
+        "Loops/back edges are not admitted": 1
+      }
+    },
+    "historical_positive_controls": "4/4 accepted, not held-out coverage",
+    "core_or_library_changes": 0,
+    "new_business_runs": 0,
+    "auditor_sha256": "92f1db98d7712c3a00ee96908404cd7d34212769c7321b07e38b8940a896a7e2",
+    "scope": "Audit of preselection, all selected planner outcomes, original field declarations and frozen files. No runtime source-instance accuracy evaluated because no query was accepted.",
+    "negative_controls": {
+      "dropped_query_rejected": true
+    },
+    "recorded_at_utc": "2026-10-19T10:39:26.467908+00:00"
+  },
+  "queries": [
+    {
+      "id": "sockshop-carts-get-quantity",
+      "application": "sockshop",
+      "query": {
+        "application": "sockshop",
+        "role": "carts",
+        "entry": "works/weave/socks/cart/controllers/ItemsController.get(Ljava/lang/String;Ljava/lang/String;)Lworks/weave/socks/cart/entities/Item;",
+        "http": "GET /carts/{customerId}/items/{itemId}",
+        "target": "works.weave.socks.cart.entities.Item.quantity",
+        "path": "/quantity",
+        "shape_note": "scalar or built-in leaf",
+        "source_boundary": {
+          "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+          "selection_origins": "separate; not counted as data origins"
+        },
+        "manual_configuration": {
+          "entry": 1,
+          "target_field_or_map_path": 1,
+          "source_boundary": 1,
+          "profile_attempts": "same two frozen attempts for every query",
+          "new_library_summaries": 0,
+          "core_changes": 0
+        },
+        "id": "sockshop-carts-get-quantity",
+        "rank": "0a88848002a04b6d5fff9f1047a08e03707401b62d6053d3d1b15bf746e33477"
+      },
+      "attempts": [
+        {
+          "configuration": "native-default",
+          "function": "plan_service",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Target has neither a modeled write nor an identity return",
+          "elapsed_seconds": 0.00047273997915908694
+        },
+        {
+          "configuration": "native-default",
+          "function": "copy_plan",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No automatic field-copy binding",
+          "elapsed_seconds": 0.0005395029438659549
+        },
+        {
+          "configuration": "explicit-collection",
+          "function": "plan_collection",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Unsupported instruction in collection profile: 186",
+          "elapsed_seconds": 0.00018724403344094753
+        }
+      ],
+      "status": "planning-rejected",
+      "chosen_plan": null
+    },
+    {
+      "id": "sockshop-orders-newOrder-address-number",
+      "application": "sockshop",
+      "query": {
+        "application": "sockshop",
+        "role": "orders",
+        "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+        "http": "POST /orders",
+        "target": "works.weave.socks.orders.entities.Address.number",
+        "path": "/address/number",
+        "shape_note": "scalar or built-in leaf",
+        "source_boundary": {
+          "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+          "selection_origins": "separate; not counted as data origins"
+        },
+        "manual_configuration": {
+          "entry": 1,
+          "target_field_or_map_path": 1,
+          "source_boundary": 1,
+          "profile_attempts": "same two frozen attempts for every query",
+          "new_library_summaries": 0,
+          "core_changes": 0
+        },
+        "id": "sockshop-orders-newOrder-address-number",
+        "rank": "08c172e9aeb73096edf785ea1ab2561e0fbd019504cc2b9f941847c74a3f7163"
+      },
+      "attempts": [
+        {
+          "configuration": "native-default",
+          "function": "plan_service",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Target has neither a modeled write nor an identity return",
+          "elapsed_seconds": 0.0010463139624334872
+        },
+        {
+          "configuration": "native-default",
+          "function": "copy_plan",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No automatic field-copy binding",
+          "elapsed_seconds": 0.0017143089789897203
+        },
+        {
+          "configuration": "explicit-collection",
+          "function": "plan_collection",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No direct target setter call",
+          "elapsed_seconds": 0.008305159048177302
+        }
+      ],
+      "status": "planning-rejected",
+      "chosen_plan": null
+    },
+    {
+      "id": "sockshop-carts-getItems-each-quantity",
+      "application": "sockshop",
+      "query": {
+        "application": "sockshop",
+        "role": "carts",
+        "entry": "works/weave/socks/cart/controllers/ItemsController.getItems(Ljava/lang/String;)Ljava/util/List;",
+        "http": "GET /carts/{customerId}/items",
+        "target": "works.weave.socks.cart.entities.Item.quantity",
+        "path": "/*/quantity",
+        "shape_note": "scalar or built-in leaf",
+        "source_boundary": {
+          "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+          "selection_origins": "separate; not counted as data origins"
+        },
+        "manual_configuration": {
+          "entry": 1,
+          "target_field_or_map_path": 1,
+          "source_boundary": 1,
+          "profile_attempts": "same two frozen attempts for every query",
+          "new_library_summaries": 0,
+          "core_changes": 0
+        },
+        "id": "sockshop-carts-getItems-each-quantity",
+        "rank": "2be9ad0b918b0a6c2b9eb1b6a2c95db61987bbead516bf64db893b9c2ef7a356"
+      },
+      "attempts": [
+        {
+          "configuration": "native-default",
+          "function": "plan_service",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Target has neither a modeled write nor an identity return",
+          "elapsed_seconds": 0.0001772239920683205
+        },
+        {
+          "configuration": "native-default",
+          "function": "copy_plan",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No automatic field-copy binding",
+          "elapsed_seconds": 0.00040612899465486407
+        },
+        {
+          "configuration": "explicit-collection",
+          "function": "plan_collection",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No direct target setter call",
+          "elapsed_seconds": 0.00030187697848305106
+        }
+      ],
+      "status": "planning-rejected",
+      "chosen_plan": null
+    },
+    {
+      "id": "sockshop-orders-newOrder-customer-addresses-each-country",
+      "application": "sockshop",
+      "query": {
+        "application": "sockshop",
+        "role": "orders",
+        "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+        "http": "POST /orders",
+        "target": "works.weave.socks.orders.entities.Address.country",
+        "path": "/customer/addresses/*/country",
+        "shape_note": "scalar or built-in leaf",
+        "source_boundary": {
+          "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+          "selection_origins": "separate; not counted as data origins"
+        },
+        "manual_configuration": {
+          "entry": 1,
+          "target_field_or_map_path": 1,
+          "source_boundary": 1,
+          "profile_attempts": "same two frozen attempts for every query",
+          "new_library_summaries": 0,
+          "core_changes": 0
+        },
+        "id": "sockshop-orders-newOrder-customer-addresses-each-country",
+        "rank": "0a31b48dd137766c8dc049d077304a7eea10f34cb71d8791bef5f9564a55a405"
+      },
+      "attempts": [
+        {
+          "configuration": "native-default",
+          "function": "plan_service",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Target has neither a modeled write nor an identity return",
+          "elapsed_seconds": 0.001105304982047528
+        },
+        {
+          "configuration": "native-default",
+          "function": "copy_plan",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No automatic field-copy binding",
+          "elapsed_seconds": 0.001671208010520786
+        },
+        {
+          "configuration": "explicit-collection",
+          "function": "plan_collection",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No direct target setter call",
+          "elapsed_seconds": 0.008077443984802812
+        }
+      ],
+      "status": "planning-rejected",
+      "chosen_plan": null
+    },
+    {
+      "id": "sockshop-carts-getItems-each-unitPrice",
+      "application": "sockshop",
+      "query": {
+        "application": "sockshop",
+        "role": "carts",
+        "entry": "works/weave/socks/cart/controllers/ItemsController.getItems(Ljava/lang/String;)Ljava/util/List;",
+        "http": "GET /carts/{customerId}/items",
+        "target": "works.weave.socks.cart.entities.Item.unitPrice",
+        "path": "/*/unitPrice",
+        "shape_note": "scalar or built-in leaf",
+        "source_boundary": {
+          "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+          "selection_origins": "separate; not counted as data origins"
+        },
+        "manual_configuration": {
+          "entry": 1,
+          "target_field_or_map_path": 1,
+          "source_boundary": 1,
+          "profile_attempts": "same two frozen attempts for every query",
+          "new_library_summaries": 0,
+          "core_changes": 0
+        },
+        "id": "sockshop-carts-getItems-each-unitPrice",
+        "rank": "3622915d51ddff95da13d411c829ee7b82f79f179c0c5e08d26bb1cd156d589d"
+      },
+      "attempts": [
+        {
+          "configuration": "native-default",
+          "function": "plan_service",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Target has neither a modeled write nor an identity return",
+          "elapsed_seconds": 0.00029216596158221364
+        },
+        {
+          "configuration": "native-default",
+          "function": "copy_plan",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No automatic field-copy binding",
+          "elapsed_seconds": 0.0005021620308980346
+        },
+        {
+          "configuration": "explicit-collection",
+          "function": "plan_collection",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No direct target setter call",
+          "elapsed_seconds": 0.00037367799086496234
+        }
+      ],
+      "status": "planning-rejected",
+      "chosen_plan": null
+    },
+    {
+      "id": "sockshop-orders-newOrder-address-country",
+      "application": "sockshop",
+      "query": {
+        "application": "sockshop",
+        "role": "orders",
+        "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+        "http": "POST /orders",
+        "target": "works.weave.socks.orders.entities.Address.country",
+        "path": "/address/country",
+        "shape_note": "scalar or built-in leaf",
+        "source_boundary": {
+          "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+          "selection_origins": "separate; not counted as data origins"
+        },
+        "manual_configuration": {
+          "entry": 1,
+          "target_field_or_map_path": 1,
+          "source_boundary": 1,
+          "profile_attempts": "same two frozen attempts for every query",
+          "new_library_summaries": 0,
+          "core_changes": 0
+        },
+        "id": "sockshop-orders-newOrder-address-country",
+        "rank": "0c0db82df60fcd89f4100c7cdffa4300052031c86650daf0571625f25f0bf8e7"
+      },
+      "attempts": [
+        {
+          "configuration": "native-default",
+          "function": "plan_service",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Target has neither a modeled write nor an identity return",
+          "elapsed_seconds": 0.001092535036150366
+        },
+        {
+          "configuration": "native-default",
+          "function": "copy_plan",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No automatic field-copy binding",
+          "elapsed_seconds": 0.001638886984437704
+        },
+        {
+          "configuration": "explicit-collection",
+          "function": "plan_collection",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No direct target setter call",
+          "elapsed_seconds": 0.007809008006006479
+        }
+      ],
+      "status": "planning-rejected",
+      "chosen_plan": null
+    },
+    {
+      "id": "sockshop-carts-addToCart-unitPrice",
+      "application": "sockshop",
+      "query": {
+        "application": "sockshop",
+        "role": "carts",
+        "entry": "works/weave/socks/cart/controllers/ItemsController.addToCart(Ljava/lang/String;Lworks/weave/socks/cart/entities/Item;)Lworks/weave/socks/cart/entities/Item;",
+        "http": "POST /carts/{customerId}/items",
+        "target": "works.weave.socks.cart.entities.Item.unitPrice",
+        "path": "/unitPrice",
+        "shape_note": "scalar or built-in leaf",
+        "source_boundary": {
+          "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+          "selection_origins": "separate; not counted as data origins"
+        },
+        "manual_configuration": {
+          "entry": 1,
+          "target_field_or_map_path": 1,
+          "source_boundary": 1,
+          "profile_attempts": "same two frozen attempts for every query",
+          "new_library_summaries": 0,
+          "core_changes": 0
+        },
+        "id": "sockshop-carts-addToCart-unitPrice",
+        "rank": "79a7e2cd9199c0696d7a7379631291d836699203a3ddd3840bc531617254f1f4"
+      },
+      "attempts": [
+        {
+          "configuration": "native-default",
+          "function": "plan_service",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Target has neither a modeled write nor an identity return",
+          "elapsed_seconds": 0.0006600749911740422
+        },
+        {
+          "configuration": "native-default",
+          "function": "copy_plan",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No automatic field-copy binding",
+          "elapsed_seconds": 0.0008940809639170766
+        },
+        {
+          "configuration": "explicit-collection",
+          "function": "plan_collection",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Unsupported instruction in collection profile: 186",
+          "elapsed_seconds": 0.00013515300815925002
+        }
+      ],
+      "status": "planning-rejected",
+      "chosen_plan": null
+    },
+    {
+      "id": "sockshop-orders-newOrder-customer-firstName",
+      "application": "sockshop",
+      "query": {
+        "application": "sockshop",
+        "role": "orders",
+        "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+        "http": "POST /orders",
+        "target": "works.weave.socks.orders.entities.Customer.firstName",
+        "path": "/customer/firstName",
+        "shape_note": "scalar or built-in leaf",
+        "source_boundary": {
+          "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+          "selection_origins": "separate; not counted as data origins"
+        },
+        "manual_configuration": {
+          "entry": 1,
+          "target_field_or_map_path": 1,
+          "source_boundary": 1,
+          "profile_attempts": "same two frozen attempts for every query",
+          "new_library_summaries": 0,
+          "core_changes": 0
+        },
+        "id": "sockshop-orders-newOrder-customer-firstName",
+        "rank": "10b6fa73162421925e95dc7edd4b9a559b213b7016ada28c61a2a2e2064a59bf"
+      },
+      "attempts": [
+        {
+          "configuration": "native-default",
+          "function": "plan_service",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Target has neither a modeled write nor an identity return",
+          "elapsed_seconds": 0.001212467032019049
+        },
+        {
+          "configuration": "native-default",
+          "function": "copy_plan",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No automatic field-copy binding",
+          "elapsed_seconds": 0.0016292069922201335
+        },
+        {
+          "configuration": "explicit-collection",
+          "function": "plan_collection",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No direct target setter call",
+          "elapsed_seconds": 0.008013192971702665
+        }
+      ],
+      "status": "planning-rejected",
+      "chosen_plan": null
+    },
+    {
+      "id": "sockshop-carts-get-customerId",
+      "application": "sockshop",
+      "query": {
+        "application": "sockshop",
+        "role": "carts",
+        "entry": "works/weave/socks/cart/controllers/CartsController.get(Ljava/lang/String;)Lworks/weave/socks/cart/entities/Cart;",
+        "http": "GET /carts/{customerId}",
+        "target": "works.weave.socks.cart.entities.Cart.customerId",
+        "path": "/customerId",
+        "shape_note": "scalar or built-in leaf",
+        "source_boundary": {
+          "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+          "selection_origins": "separate; not counted as data origins"
+        },
+        "manual_configuration": {
+          "entry": 1,
+          "target_field_or_map_path": 1,
+          "source_boundary": 1,
+          "profile_attempts": "same two frozen attempts for every query",
+          "new_library_summaries": 0,
+          "core_changes": 0
+        },
+        "id": "sockshop-carts-get-customerId",
+        "rank": "b12d8176b33babb461d27a475afff3c779bf4bdbd86530ff5ad9248775470268"
+      },
+      "attempts": [
+        {
+          "configuration": "native-default",
+          "function": "plan_service",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Target has neither a modeled write nor an identity return",
+          "elapsed_seconds": 0.00018461397849023342
+        },
+        {
+          "configuration": "native-default",
+          "function": "copy_plan",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No automatic field-copy binding",
+          "elapsed_seconds": 0.00046228000428527594
+        },
+        {
+          "configuration": "explicit-collection",
+          "function": "plan_collection",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No direct target setter call",
+          "elapsed_seconds": 0.0003111970145255327
+        }
+      ],
+      "status": "planning-rejected",
+      "chosen_plan": null
+    },
+    {
+      "id": "sockshop-orders-newOrder-customer-lastName",
+      "application": "sockshop",
+      "query": {
+        "application": "sockshop",
+        "role": "orders",
+        "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+        "http": "POST /orders",
+        "target": "works.weave.socks.orders.entities.Customer.lastName",
+        "path": "/customer/lastName",
+        "shape_note": "scalar or built-in leaf",
+        "source_boundary": {
+          "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+          "selection_origins": "separate; not counted as data origins"
+        },
+        "manual_configuration": {
+          "entry": 1,
+          "target_field_or_map_path": 1,
+          "source_boundary": 1,
+          "profile_attempts": "same two frozen attempts for every query",
+          "new_library_summaries": 0,
+          "core_changes": 0
+        },
+        "id": "sockshop-orders-newOrder-customer-lastName",
+        "rank": "2466fc11e7faa977d18870eed28d61912f66a93a44fcebc4f04b88c047f28039"
+      },
+      "attempts": [
+        {
+          "configuration": "native-default",
+          "function": "plan_service",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Target has neither a modeled write nor an identity return",
+          "elapsed_seconds": 0.0010721349972300231
+        },
+        {
+          "configuration": "native-default",
+          "function": "copy_plan",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No automatic field-copy binding",
+          "elapsed_seconds": 0.0016184469568543136
+        },
+        {
+          "configuration": "explicit-collection",
+          "function": "plan_collection",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No direct target setter call",
+          "elapsed_seconds": 0.008211625972762704
+        }
+      ],
+      "status": "planning-rejected",
+      "chosen_plan": null
+    },
+    {
+      "id": "trainticket-basic-queryForTravel-data-status",
+      "application": "trainticket",
+      "query": {
+        "application": "trainticket",
+        "role": "basic",
+        "entry": "fdse/microservice/service/BasicServiceImpl.queryForTravel(Lfdse/microservice/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+        "http": "POST /api/v1/basicservice/basic/travel",
+        "target": "fdse.microservice.entity.TravelResult.status",
+        "path": "/data/status",
+        "shape_note": "scalar or built-in leaf",
+        "source_boundary": {
+          "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+          "selection_origins": "separate; not counted as data origins"
+        },
+        "manual_configuration": {
+          "entry": 1,
+          "target_field_or_map_path": 1,
+          "source_boundary": 1,
+          "profile_attempts": "same two frozen attempts for every query",
+          "new_library_summaries": 0,
+          "core_changes": 0
+        },
+        "id": "trainticket-basic-queryForTravel-data-status",
+        "rank": "0ce632104ccc009f110fd39de386a96c8bfc59f69bf147afe0657f98d420b91c"
+      },
+      "attempts": [
+        {
+          "configuration": "native-default",
+          "function": "plan_service",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "CFG/path bound exceeded: fdse/microservice/service/BasicServiceImpl.queryForTravel(Lfdse/microservice/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+          "elapsed_seconds": 0.020707650983240455
+        },
+        {
+          "configuration": "native-default",
+          "function": "copy_plan",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "CFG/path bound exceeded: fdse/microservice/service/BasicServiceImpl.queryForTravel(Lfdse/microservice/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+          "elapsed_seconds": 0.019110044988337904
+        },
+        {
+          "configuration": "explicit-collection",
+          "function": "plan_collection",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No collection result mutation",
+          "elapsed_seconds": 0.004373768984805793
+        }
+      ],
+      "status": "planning-rejected",
+      "chosen_plan": null
+    },
+    {
+      "id": "trainticket-price-findByRouteIdAndTrainType-data-firstClassPriceRate",
+      "application": "trainticket",
+      "query": {
+        "application": "trainticket",
+        "role": "price",
+        "entry": "price/service/PriceServiceImpl.findByRouteIdAndTrainType(Ljava/lang/String;Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+        "http": "GET /api/v1/priceservice/prices/{route}/{train}",
+        "target": "price.entity.PriceConfig.firstClassPriceRate",
+        "path": "/data/firstClassPriceRate",
+        "shape_note": "scalar or built-in leaf",
+        "source_boundary": {
+          "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+          "selection_origins": "separate; not counted as data origins"
+        },
+        "manual_configuration": {
+          "entry": 1,
+          "target_field_or_map_path": 1,
+          "source_boundary": 1,
+          "profile_attempts": "same two frozen attempts for every query",
+          "new_library_summaries": 0,
+          "core_changes": 0
+        },
+        "id": "trainticket-price-findByRouteIdAndTrainType-data-firstClassPriceRate",
+        "rank": "1fd5b806634af3f335fcbc27881753c14677deedcdc19814c4145107aa3aefa2"
+      },
+      "attempts": [
+        {
+          "configuration": "native-default",
+          "function": "plan_service",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Target has neither a modeled write nor an identity return",
+          "elapsed_seconds": 0.0002400859957560897
+        },
+        {
+          "configuration": "native-default",
+          "function": "copy_plan",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No automatic field-copy binding",
+          "elapsed_seconds": 0.00029048603028059006
+        },
+        {
+          "configuration": "explicit-collection",
+          "function": "plan_collection",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No direct target setter call",
+          "elapsed_seconds": 0.0003398180124349892
+        }
+      ],
+      "status": "planning-rejected",
+      "chosen_plan": null
+    },
+    {
+      "id": "trainticket-route-getRouteByStartAndTerminal-data-each-stations-each",
+      "application": "trainticket",
+      "query": {
+        "application": "trainticket",
+        "role": "route",
+        "entry": "route/service/RouteServiceImpl.getRouteByStartAndTerminal(Ljava/lang/String;Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+        "http": "GET /api/v1/routeservice/routes/{start}/{terminal}",
+        "target": "route.entity.Route.stations",
+        "path": "/data/*/stations/*",
+        "shape_note": "scalar or built-in leaf",
+        "source_boundary": {
+          "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+          "selection_origins": "separate; not counted as data origins"
+        },
+        "manual_configuration": {
+          "entry": 1,
+          "target_field_or_map_path": 1,
+          "source_boundary": 1,
+          "profile_attempts": "same two frozen attempts for every query",
+          "new_library_summaries": 0,
+          "core_changes": 0
+        },
+        "id": "trainticket-route-getRouteByStartAndTerminal-data-each-stations-each",
+        "rank": "054806972bf01b0d6672b605b61a4aa4da0d703c36575d3cfaafc5f60816d10d"
+      },
+      "attempts": [
+        {
+          "configuration": "native-default",
+          "function": "plan_service",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Target field is absent or ambiguous: route.entity.Route.stations",
+          "elapsed_seconds": 0.00011257198639214039
+        },
+        {
+          "configuration": "native-default",
+          "function": "copy_plan",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Unmodeled back edge",
+          "elapsed_seconds": 0.0002843770198523998
+        },
+        {
+          "configuration": "explicit-collection",
+          "function": "plan_collection",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Loops/back edges are not admitted",
+          "elapsed_seconds": 0.0002555059618316591
+        }
+      ],
+      "status": "planning-rejected",
+      "chosen_plan": null
+    },
+    {
+      "id": "trainticket-station-query-data-each-name",
+      "application": "trainticket",
+      "query": {
+        "application": "trainticket",
+        "role": "station",
+        "entry": "fdse/microservice/service/StationServiceImpl.query(Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+        "http": "GET /api/v1/stationservice/stations",
+        "target": "fdse.microservice.entity.Station.name",
+        "path": "/data/*/name",
+        "shape_note": "scalar or built-in leaf",
+        "source_boundary": {
+          "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+          "selection_origins": "separate; not counted as data origins"
+        },
+        "manual_configuration": {
+          "entry": 1,
+          "target_field_or_map_path": 1,
+          "source_boundary": 1,
+          "profile_attempts": "same two frozen attempts for every query",
+          "new_library_summaries": 0,
+          "core_changes": 0
+        },
+        "id": "trainticket-station-query-data-each-name",
+        "rank": "1105f4bc5d26091e09c5d05f0ac155d4898e6e91ec88e4eb03d894d404b4b822"
+      },
+      "attempts": [
+        {
+          "configuration": "native-default",
+          "function": "plan_service",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Target has neither a modeled write nor an identity return",
+          "elapsed_seconds": 0.0002557359985075891
+        },
+        {
+          "configuration": "native-default",
+          "function": "copy_plan",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No automatic field-copy binding",
+          "elapsed_seconds": 0.0002750959829427302
+        },
+        {
+          "configuration": "explicit-collection",
+          "function": "plan_collection",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No direct target setter call",
+          "elapsed_seconds": 0.0002619359875097871
+        }
+      ],
+      "status": "planning-rejected",
+      "chosen_plan": null
+    },
+    {
+      "id": "trainticket-ticketinfo-queryForTravel-data-trainType-id",
+      "application": "trainticket",
+      "query": {
+        "application": "trainticket",
+        "role": "ticketinfo",
+        "entry": "ticketinfo/service/TicketInfoServiceImpl.queryForTravel(Lticketinfo/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+        "http": "POST /api/v1/ticketinfoservice/ticketinfo",
+        "target": "ticketinfo.entity.TrainType.id",
+        "path": "/data/trainType/id",
+        "shape_note": "scalar or built-in leaf",
+        "source_boundary": {
+          "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+          "selection_origins": "separate; not counted as data origins"
+        },
+        "manual_configuration": {
+          "entry": 1,
+          "target_field_or_map_path": 1,
+          "source_boundary": 1,
+          "profile_attempts": "same two frozen attempts for every query",
+          "new_library_summaries": 0,
+          "core_changes": 0
+        },
+        "id": "trainticket-ticketinfo-queryForTravel-data-trainType-id",
+        "rank": "257383313e730d4fba84ba028e419cf90372dd29c1c97646b4b1bbcb8129bb86"
+      },
+      "attempts": [
+        {
+          "configuration": "native-default",
+          "function": "plan_service",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Target has neither a modeled write nor an identity return",
+          "elapsed_seconds": 0.0001594639616087079
+        },
+        {
+          "configuration": "native-default",
+          "function": "copy_plan",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No automatic field-copy binding",
+          "elapsed_seconds": 0.0003094470012001693
+        },
+        {
+          "configuration": "explicit-collection",
+          "function": "plan_collection",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Unsupported instruction in collection profile: 189",
+          "elapsed_seconds": 0.00018946401542052627
+        }
+      ],
+      "status": "planning-rejected",
+      "chosen_plan": null
+    },
+    {
+      "id": "trainticket-train-query-data-each-confortClass",
+      "application": "trainticket",
+      "query": {
+        "application": "trainticket",
+        "role": "train",
+        "entry": "train/service/TrainServiceImpl.query(Lorg/springframework/http/HttpHeaders;)Ljava/util/List;",
+        "http": "GET /api/v1/trainservice/trains",
+        "target": "train.entity.TrainType.confortClass",
+        "path": "/data/*/confortClass",
+        "shape_note": "scalar or built-in leaf",
+        "source_boundary": {
+          "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+          "selection_origins": "separate; not counted as data origins"
+        },
+        "manual_configuration": {
+          "entry": 1,
+          "target_field_or_map_path": 1,
+          "source_boundary": 1,
+          "profile_attempts": "same two frozen attempts for every query",
+          "new_library_summaries": 0,
+          "core_changes": 0
+        },
+        "id": "trainticket-train-query-data-each-confortClass",
+        "rank": "00246942d8872bbf8e2a462672b4340c4e128e6c6525535ef118162f4c1863ac"
+      },
+      "attempts": [
+        {
+          "configuration": "native-default",
+          "function": "plan_service",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Target has neither a modeled write nor an identity return",
+          "elapsed_seconds": 0.00019547500414773822
+        },
+        {
+          "configuration": "native-default",
+          "function": "copy_plan",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No automatic field-copy binding",
+          "elapsed_seconds": 0.00017688400112092495
+        },
+        {
+          "configuration": "explicit-collection",
+          "function": "plan_collection",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No direct target setter call",
+          "elapsed_seconds": 0.00022957503097131848
+        }
+      ],
+      "status": "planning-rejected",
+      "chosen_plan": null
+    },
+    {
+      "id": "trainticket-basic-queryForTravel-data-trainType-economyClass",
+      "application": "trainticket",
+      "query": {
+        "application": "trainticket",
+        "role": "basic",
+        "entry": "fdse/microservice/service/BasicServiceImpl.queryForTravel(Lfdse/microservice/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+        "http": "POST /api/v1/basicservice/basic/travel",
+        "target": "fdse.microservice.entity.TrainType.economyClass",
+        "path": "/data/trainType/economyClass",
+        "shape_note": "scalar or built-in leaf",
+        "source_boundary": {
+          "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+          "selection_origins": "separate; not counted as data origins"
+        },
+        "manual_configuration": {
+          "entry": 1,
+          "target_field_or_map_path": 1,
+          "source_boundary": 1,
+          "profile_attempts": "same two frozen attempts for every query",
+          "new_library_summaries": 0,
+          "core_changes": 0
+        },
+        "id": "trainticket-basic-queryForTravel-data-trainType-economyClass",
+        "rank": "10eaaf6444d0ba4e6720a67faba873d2c69a9696e8d49c1b070dad7971e3a1cc"
+      },
+      "attempts": [
+        {
+          "configuration": "native-default",
+          "function": "plan_service",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "CFG/path bound exceeded: fdse/microservice/service/BasicServiceImpl.queryForTravel(Lfdse/microservice/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+          "elapsed_seconds": 0.020040276984218508
+        },
+        {
+          "configuration": "native-default",
+          "function": "copy_plan",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "CFG/path bound exceeded: fdse/microservice/service/BasicServiceImpl.queryForTravel(Lfdse/microservice/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+          "elapsed_seconds": 0.019834671053104103
+        },
+        {
+          "configuration": "explicit-collection",
+          "function": "plan_collection",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No direct target setter call",
+          "elapsed_seconds": 0.004253157007042319
+        }
+      ],
+      "status": "planning-rejected",
+      "chosen_plan": null
+    },
+    {
+      "id": "trainticket-price-findAllPriceConfig-data-each-trainType",
+      "application": "trainticket",
+      "query": {
+        "application": "trainticket",
+        "role": "price",
+        "entry": "price/service/PriceServiceImpl.findAllPriceConfig(Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+        "http": "GET /api/v1/priceservice/prices",
+        "target": "price.entity.PriceConfig.trainType",
+        "path": "/data/*/trainType",
+        "shape_note": "scalar or built-in leaf",
+        "source_boundary": {
+          "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+          "selection_origins": "separate; not counted as data origins"
+        },
+        "manual_configuration": {
+          "entry": 1,
+          "target_field_or_map_path": 1,
+          "source_boundary": 1,
+          "profile_attempts": "same two frozen attempts for every query",
+          "new_library_summaries": 0,
+          "core_changes": 0
+        },
+        "id": "trainticket-price-findAllPriceConfig-data-each-trainType",
+        "rank": "534aa1225fa84263f83b7d1e2298d7d3b15fe21aa0c27dfdac37623c9c5c6531"
+      },
+      "attempts": [
+        {
+          "configuration": "native-default",
+          "function": "plan_service",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Target has neither a modeled write nor an identity return",
+          "elapsed_seconds": 0.0002813260070979595
+        },
+        {
+          "configuration": "native-default",
+          "function": "copy_plan",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No automatic field-copy binding",
+          "elapsed_seconds": 0.00034504797076806426
+        },
+        {
+          "configuration": "explicit-collection",
+          "function": "plan_collection",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No direct target setter call",
+          "elapsed_seconds": 0.00037908897502347827
+        }
+      ],
+      "status": "planning-rejected",
+      "chosen_plan": null
+    },
+    {
+      "id": "trainticket-route-getAllRoutes-data-each-distances-each",
+      "application": "trainticket",
+      "query": {
+        "application": "trainticket",
+        "role": "route",
+        "entry": "route/service/RouteServiceImpl.getAllRoutes(Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+        "http": "GET /api/v1/routeservice/routes",
+        "target": "route.entity.Route.distances",
+        "path": "/data/*/distances/*",
+        "shape_note": "scalar or built-in leaf",
+        "source_boundary": {
+          "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+          "selection_origins": "separate; not counted as data origins"
+        },
+        "manual_configuration": {
+          "entry": 1,
+          "target_field_or_map_path": 1,
+          "source_boundary": 1,
+          "profile_attempts": "same two frozen attempts for every query",
+          "new_library_summaries": 0,
+          "core_changes": 0
+        },
+        "id": "trainticket-route-getAllRoutes-data-each-distances-each",
+        "rank": "32c3e71eeb2796e006d7a3ea53bd5865bceec1b9e4c56689ef1b97414489112b"
+      },
+      "attempts": [
+        {
+          "configuration": "native-default",
+          "function": "plan_service",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Target field is absent or ambiguous: route.entity.Route.distances",
+          "elapsed_seconds": 0.00011435302440077066
+        },
+        {
+          "configuration": "native-default",
+          "function": "copy_plan",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No automatic field-copy binding",
+          "elapsed_seconds": 0.0003077569999732077
+        },
+        {
+          "configuration": "explicit-collection",
+          "function": "plan_collection",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No direct target setter call",
+          "elapsed_seconds": 0.0002909370232373476
+        }
+      ],
+      "status": "planning-rejected",
+      "chosen_plan": null
+    },
+    {
+      "id": "trainticket-station-query-data-each-id",
+      "application": "trainticket",
+      "query": {
+        "application": "trainticket",
+        "role": "station",
+        "entry": "fdse/microservice/service/StationServiceImpl.query(Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+        "http": "GET /api/v1/stationservice/stations",
+        "target": "fdse.microservice.entity.Station.id",
+        "path": "/data/*/id",
+        "shape_note": "scalar or built-in leaf",
+        "source_boundary": {
+          "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+          "selection_origins": "separate; not counted as data origins"
+        },
+        "manual_configuration": {
+          "entry": 1,
+          "target_field_or_map_path": 1,
+          "source_boundary": 1,
+          "profile_attempts": "same two frozen attempts for every query",
+          "new_library_summaries": 0,
+          "core_changes": 0
+        },
+        "id": "trainticket-station-query-data-each-id",
+        "rank": "6719214762b7f654899ec2bd3e30bb4498f68dd418878b2401dcca8f4cce3498"
+      },
+      "attempts": [
+        {
+          "configuration": "native-default",
+          "function": "plan_service",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "Target has neither a modeled write nor an identity return",
+          "elapsed_seconds": 0.00022824498591944575
+        },
+        {
+          "configuration": "native-default",
+          "function": "copy_plan",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No automatic field-copy binding",
+          "elapsed_seconds": 0.0002777169574983418
+        },
+        {
+          "configuration": "explicit-collection",
+          "function": "plan_collection",
+          "status": "rejected",
+          "error_type": "ValueError",
+          "reason": "No direct target setter call",
+          "elapsed_seconds": 0.0002951960195787251
+        }
+      ],
+      "status": "planning-rejected",
+      "chosen_plan": null
+    }
+  ],
+  "pool_sha256": "d5234e99c7c009a7d7a9a072d69f6b4f33ac77996cf42d37fa6eb50355e28b5c",
+  "raw_evidence": "artifacts/query-coverage-first-20261019",
+  "first_pass_preserved": true,
+  "runtime_source_accuracy_evaluated": false
+}

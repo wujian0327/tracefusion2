@@ -1,5 +1,9 @@
 # TraceFusion 2
 
+2026-10-19冻结后的新查询覆盖首轮：从Sock Shop 37、Train Ticket 54个候选中各预选10个，
+当前规划接口均拒绝；四个历史查询规划正控制仍通过。该负结果收紧自动规划的适用范围，
+不改变此前选定路径的正确性和成本数据。见[新查询覆盖结果与完整拒绝原因](experiments/sockshop-mirrortaint/QUERY-COVERAGE-20261019.md)。
+
 对外交流可先阅读[方法与实验进展简版](experiments/sockshop-mirrortaint/RESEARCH-SUMMARY-20261016.md)。
 
 截至2026-10-16的当前结果、论文主表、结论边界和原始工件索引统一见

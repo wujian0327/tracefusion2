@@ -12,6 +12,9 @@ import json
 from pathlib import Path
 import re
 import subprocess
+import sys
+import time
+import traceback
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT = ROOT / 'artifacts/query-coverage-first-20261019'
@@ -147,9 +150,93 @@ def pool(out):
     print(json.dumps({'candidates':len(candidates),'selected':selected},indent=2))
 
 
+def check_freeze(out):
+    frozen = load(out/'freeze.json')
+    assert sha(out/'frozen-code.tar') == frozen['source_archive_sha256']
+    for name, expected in frozen['sources'].items():
+        assert sha(out/'code'/name) == expected, name
+    for name, expected in frozen['dependencies'].items():
+        assert sha(ROOT/name) == expected, name
+    for value in frozen['jars'].values():
+        assert sha(ROOT/value['frozen']) == value['sha256']
+    seal = load(out/'logs/01-pool-sealed-before-planning.json')
+    assert sha(out/'pool.json') == seal['pool_sha256']
+    return frozen
+
+
+def plan(out):
+    frozen = check_freeze(out); pool_ = load(out/'pool.json')
+    assert not (out/'planning.json').exists(), 'First-pass results are immutable'
+    preregistered = subprocess.check_output(['git','show','dfd929c:experiments/sockshop-mirrortaint/query-coverage-pool-20261019.json'],cwd=ROOT)
+    assert hashlib.sha256(preregistered).hexdigest() == sha(out/'pool.json')
+    stage = out/'planning'; stage.mkdir()
+    # Frozen module ROOT resolves artifacts here; its source files stay untouched.
+    artifact_link=out/'code/artifacts'
+    if artifact_link.is_symlink():
+        assert artifact_link.resolve()==(ROOT/'artifacts').resolve()
+    else:
+        assert not artifact_link.exists()
+        artifact_link.symlink_to(ROOT/'artifacts',target_is_directory=True)
+    inputs = {}
+    for role, jar in frozen['jars'].items():
+        targets = sorted({q['target'] for q in pool_['candidates'] if q['role']==role})
+        if role not in ('orders','carts','shipping'):
+            targets += ['edu.fudan.common.util.Response.data']
+        if role == 'basic': targets += ['edu.fudan.common.util.JsonUtils.LOGGER']
+        inputs[role] = {'jar':str(ROOT/jar['frozen']), 'targets':sorted(set(targets))}
+    save(stage/'boundary-inputs.json',inputs)
+    for command, filename in [(['java','-version'],'java-version.txt'),(['javac','-version'],'javac-version.txt')]:
+        r=subprocess.run(command,capture_output=True,text=True);(stage/filename).write_text(r.stdout+r.stderr)
+    cmd=[sys.executable,str(out/'code/experiments/sockshop-mirrortaint/build_distributed_plans.py'),
+         '--out',str(stage/'build'),'--inputs',str(stage/'boundary-inputs.json')]
+    save(stage/'build-command.json',cmd)
+    with (stage/'build-console.log').open('w') as log:
+        subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT,check=True)
+    sys.path.insert(0,str(out/'code/experiments/sockshop-mirrortaint'))
+    from plan_service_observations import plan_service
+    from plan_distributed_fields import copy_plan,augment
+    from plan_collection_service import plan_collection
+    results=[]
+    for query_id in pool_['selected_ids']:
+        query=next(q for q in pool_['candidates'] if q['id']==query_id)
+        dest=stage/query_id;dest.mkdir();model=load(stage/'build'/query['role']/'model.json')
+        result={'id':query_id,'application':query['application'],'query':query,'attempts':[],
+                'status':'planning-rejected','chosen_plan':None}
+        for mode,functions in [('native-default',[plan_service,copy_plan]),('explicit-collection',[plan_collection])]:
+            accepted=False
+            for function in functions:
+                started=time.perf_counter()
+                record={'configuration':mode,'function':function.__name__}
+                try:
+                    local=function(model,query['entry'],query['target']);p=augment(model,local)
+                    if mode=='explicit-collection':p['collection_elements']=True
+                    if query['role']=='basic':
+                        p['json_conversion_methods']=['edu/fudan/common/util/JsonUtils.conveterObject(Ljava/lang/Object;Ljava/lang/Class;)Ljava/lang/Object;']
+                        p['json_conversion_contract']='Existing frozen default Jackson object-to-JSON-to-object relative pointer contract'
+                    filename=mode+'.plan.json';save(dest/filename,p)
+                    record.update(status='accepted',profile=p['profile'],plan_sha256=sha(dest/filename))
+                    if result['chosen_plan'] is None:
+                        result['chosen_plan']=str((dest/filename).relative_to(out));result['status']='planning-accepted'
+                    accepted=True
+                except Exception as error:
+                    record.update(status='rejected' if isinstance(error,ValueError) else 'experiment-error',
+                                  error_type=type(error).__name__,reason=str(error))
+                    (dest/(mode+'-'+function.__name__+'.traceback.txt')).write_text(traceback.format_exc())
+                record['elapsed_seconds']=time.perf_counter()-started;result['attempts'].append(record)
+                if accepted:break
+        save(dest/'result.json',result);results.append(result)
+        print(query_id,result['status'],[(x['function'],x.get('reason',x.get('profile'))) for x in result['attempts']],flush=True)
+    check_freeze(out)
+    save(out/'planning.json',{'algorithm_commit':frozen['algorithm_commit'],'pool_commit':'dfd929c',
+                            'pool_sha256':sha(out/'pool.json'),'results':results,'frozen_source_check':'passed'})
+    save(out/'logs/02-first-planning-completed.json',{'queries':len(results),
+        'accepted':sum(r['status']=='planning-accepted' for r in results),'all_attempts_preserved':True,
+        'planning_sha256':sha(out/'planning.json'),'recorded_at_utc':datetime.now(timezone.utc).isoformat()})
+
+
 if __name__ == '__main__':
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('stage',choices=['pool'])
+    parser.add_argument('stage',choices=['pool','plan'])
     parser.add_argument('--out',type=Path,default=DEFAULT)
     args=parser.parse_args()
-    pool(args.out.resolve())
+    {'pool':pool,'plan':plan}[args.stage](args.out.resolve())
