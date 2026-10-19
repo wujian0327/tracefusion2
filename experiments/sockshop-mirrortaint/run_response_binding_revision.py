@@ -30,7 +30,7 @@ from infer_distributed_fields import Reconstruction
 
 HOME=ROOT/'artifacts/response-binding-revision-20261019'
 FIRST=ROOT/'artifacts/query-coverage-first-20261019'
-BOUNDARY=[{'kind':'binding-source'},{'kind':'http-json','direction':'response','phase':'read'}]
+BOUNDARY=[{'kind':'binding-source'},{'kind':'argument'},{'kind':'http-json','direction':'response','phase':'read'}]
 ROLES={'station':12345,'train':14567,'route':11178,'price':16579,'basic':15680}
 
 
@@ -207,7 +207,7 @@ def capture_train(dest,build,q,seed):
                 for k,v in substitutions.items():path=path.replace('{'+k+'}',v)
                 if '{' in path:raise ValueError('No preregistered request generator for '+q['http'])
             response,status=request_raw(cl,method,'http://127.0.0.1:'+str(ports[role])+path,body)
-            r={**c,'message':message,'response':response,'http_status':status,'database_documents':docs}
+            r={**c,'message':message,'response':response,'http_status':status,'request_path':path,'database_documents':docs}
             # Business check independent of TF: query methods preserve stored
             # objects/list order. Missing-entity branches may return no data.
             if role!='basic' and status==200:
@@ -274,7 +274,7 @@ def source_coord(role,row,f):
     return (role,row.get('message'),row.get('frame'),row['seq'],f['owner'],f['field'],f['version'],f['path'])
 
 
-def predicted_coord(s):return (s['service'],s.get('message'),s.get('root_frame',s.get('frame')),s['seq'],s['owner'],s['field'],s['version'],s['path'])
+def predicted_coord(s):return (s['service'],s.get('message'),s.get('root_frame',s.get('frame')),s['seq'],s['owner'],s['field'],s['version'],s.get('path'))
 
 
 def oracle(q,c,path,rows):
@@ -290,13 +290,29 @@ def oracle(q,c,path,rows):
     if len(root)!=1:raise ValueError('Independent root-call witness absent/ambiguous')
     frame=root[0]['frame']
     if role=='basic' and q['target'].endswith('TravelResult.status'):return []
+    if role=='station' and '.queryById(' in q['entry']:
+        # Reviewed original offsets 0..31: one repository read then getName;
+        # offsets 35..57: missing ID is copied directly from argument zero.
+        if not c['database_documents']:
+            assert c['response']['status']==0 and c['response']['data']==c['request_path'].rsplit('/',1)[-1]
+            arg=root[0]['args'][0]
+            return [(role,None,None,root[0]['seq'],arg['object'],'@argument:0',0,None)]
+        candidates=[source_coord(role,r,f) for r in rows[role] if r['kind']=='binding-source' and r['frame']==frame
+                    for f in r['fields'] if f['path']=='/name' and f['field']=='fdse/microservice/entity/Station.name']
+        if len(candidates)==1:return candidates
+        raise ValueError('Independent Station getName projection absent/ambiguous')
     if role in ('station','train','route','price'):
         # For the read/list methods in this protocol, Response.data wraps the
         # repository result without reordering or remapping its members.
         relative=path.removeprefix('/data')
         candidates=[]
-        for r in rows[role]:
-            if r['kind']=='binding-source' and r.get('frame')==frame:
+        returns=[r for r in rows[role] if r['kind']=='binding-source' and r.get('frame')==frame]
+        if role=='train' and '.retrieve(' in q['entry']:
+            # Original offsets5 and31 call findById twice. Only the SECOND
+            # invocation is returned; never select a same-valued first object.
+            if len(returns)!=2:raise ValueError('Independent Train two-read contract differs')
+            returns=returns[1:]
+        for r in returns:
                 for f in r['fields']:
                     if f['path']==relative:
                         declared=q['target'].rsplit('.',1);declared=declared[0].replace('.','/')+'.'+declared[1]
@@ -357,6 +373,8 @@ def evaluate(dest,build,q):
                 for k,v in docs[at].items():
                     if k=='_class' or k=='_id' and not isinstance(v,str):continue
                     if item.get('id' if k=='_id' else k)!=v:raise ValueError('Independent business audit: database field projection differs')
+            if q['role']=='station' and '.queryById(' in q['entry'] and docs:
+                if c['response']['status']!=1 or c['response']['data']!=docs[0]['name']:raise ValueError('Independent Station getName business projection differs')
         if q['role']=='basic' and c['http_status']==200:
             if c['response'].get('data',{}).get('status')!=(c['expected_status']==1):raise ValueError('Independent Basic literal-status branch oracle differs')
         targets=leaves(c['response'],q['path']) if 200<=c['http_status']<300 else []

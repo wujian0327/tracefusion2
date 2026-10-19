@@ -1,7 +1,14 @@
 # TraceFusion 2
 
+2026-10-19已完成有界响应目标绑定修订（冻结核心 `803b92f`）及独立封存测试：
+Train Ticket新入口接纳10/12查询，71/71实际目标来源完全匹配；Sock Shop旧入口新字段
+接纳8/10计划，但24个实际目标全部unknown，不能视作来源查询成功。
+见[完整修订与覆盖报告](experiments/sockshop-mirrortaint/RESPONSE-BINDING-REVISION-20261019.md)和
+[最新算法说明](experiments/sockshop-mirrortaint/RESPONSE-BINDING-ALGORITHM-20261019.md)。
+性能实验暂缓，旧成本表不直接适用于本修订版。
+
 2026-10-19冻结后的新查询覆盖首轮：从Sock Shop 37、Train Ticket 54个候选中各预选10个，
-当前规划接口均拒绝；四个历史查询规划正控制仍通过。该负结果收紧自动规划的适用范围，
+原冻结版规划接口均拒绝；四个历史查询规划正控制仍通过。该负结果收紧自动规划的适用范围，
 不改变此前选定路径的正确性和成本数据。见[新查询覆盖结果与完整拒绝原因](experiments/sockshop-mirrortaint/QUERY-COVERAGE-20261019.md)。
 
 对外交流可先阅读[方法与实验进展简版](experiments/sockshop-mirrortaint/RESEARCH-SUMMARY-20261016.md)。

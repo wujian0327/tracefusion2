@@ -1,0 +1,59 @@
+{
+  "version": "response-binding-v2-frozen",
+  "commit": "803b92f15653dd570bd6b2b21acb14b69da594ce",
+  "utc": "2026-10-19T11:48:06.090674+00:00",
+  "heldout_sha256": "f502e69c7a2f2635379a23376a1d8cdad776d022a324eaaaad89429ac694f21e",
+  "sources": {
+    "experiments/sockshop-mirrortaint/QueryObservationAgent.java": "3f48ead5b09077c8ba8568da0037619c01636766e56f2d8d186e517fb1b99ff4",
+    "experiments/sockshop-mirrortaint/QueryBytecodeModel.java": "194f7710c0b77f69caa644209a037f5476595f5c91af9daabaddf70cae12546f",
+    "experiments/sockshop-mirrortaint/PlannedServiceAgent.java": "d5ddc94aa61effd5dbfe48f84a30f80a3d93b428e15dfcc4215812d2873f3ebb",
+    "experiments/sockshop-mirrortaint/CollectionServiceHooks.java": "c0ed62088996c049922e4b3a0e8eeaa57045a6ff0941de4ba4ce8b2767ba5ff0",
+    "experiments/sockshop-mirrortaint/ResponseBindingHooks.java": "1df8167bbb12189b474313237948b7f250e60a029acd8793b29a6e2bbca246b9",
+    "experiments/sockshop-mirrortaint/SpringTransportAgent.java": "f369af754992a98ac7c4532bf155f3c19ba2a4f4f20e274a0cc74e0aa6a3f2f9",
+    "experiments/sockshop-mirrortaint/W3CTraceContext.java": "23ea705e55cc2a5f13aa01a982917d685915371f2e2b1f8f480ce8cdd0f5651f",
+    "experiments/sockshop-mirrortaint/experiment_environment.py": "91c2609c43a99e18d3aa9e4a1fb113ade860b8ec4fa86133a6823f35eb501e96",
+    "experiments/sockshop-mirrortaint/plan_distributed_fields.py": "69f87a010de48b0c4457813cc8f2e2c46ba4c0d1215d58964d41d79f4303bf0a",
+    "experiments/sockshop-mirrortaint/plan_service_observations.py": "b4b641a63bb5bf2f6a06e6ff8b83d8923aced0796b40db8aaeeb57718a255fe0",
+    "experiments/sockshop-mirrortaint/plan_collection_service.py": "b0af8f163934d70fafb1099a10207e8b0e408f89718444f2f88fbe7fe9b1f315",
+    "experiments/sockshop-mirrortaint/query_observation_planner.py": "1d7ba77430c902ca00259a7a4ad3bf3bb955fe91f8a885d5efc7f9500b56a30d",
+    "experiments/sockshop-mirrortaint/infer_planned_service.py": "1642a44de9ff16557b32c757b6cadabdd1d02aed5fb04326bd8f4472334276ff",
+    "experiments/sockshop-mirrortaint/infer_distributed_fields.py": "732a163eb07eed9b179568c74496825c26bf26ee3b2de73795c9e58bcaf102eb",
+    "experiments/sockshop-mirrortaint/transport_context.py": "e17f112abf65b3df196865f96c394c87d4031ba949de1c7aff5613eceb1c9cc3",
+    "experiments/sockshop-mirrortaint/run_distributed_paths.py": "05cc20245405d3952a7df780d919190022792b5eccf27a91cc05cb54afcec854",
+    "experiments/sockshop-mirrortaint/evaluate_distributed_paths.py": "ba3faf14ee024839644d3f0c229e69f997bafc45f7132a72d18c08d095deff88",
+    "experiments/sockshop-mirrortaint/audit_distributed_paths.py": "6226c32ecb8197c2066473d3e7a50bfbe993aef9192b30554f00b738138c753a",
+    "experiments/sockshop-mirrortaint/infer_collection_service.py": "2e3e47b0fbfb81e5ef207d7525cd8f38a02e2d3fc1a5c7bc742674b1467d5929",
+    "experiments/sockshop-mirrortaint/plan_response_binding.py": "7e879d7877b561c183936eefc0d4b87d40e7fe9a3ba04f777c36bb266fd96b4c",
+    "experiments/sockshop-mirrortaint/infer_response_binding.py": "d517ae0ac581571664e777d4a4d219feb6a2e4017ffcd314b1fcabe2cc33bdba",
+    "experiments/sockshop-mirrortaint/build_distributed_plans.py": "80f3e2ecda3da4e529337719b539313a2e8f9d88447345f94ff48377b104189e"
+  },
+  "dependencies": {
+    "/home/wujian/tracefusion2/artifacts/java-collection-deps/asm-9.7.1.jar": "8cadd43ac5eb6d09de05faecca38b917a040bb9139c7edeb4cc81c740b713281",
+    "/home/wujian/tracefusion2/artifacts/java-collection-deps/asm-tree-9.7.1.jar": "9929881f59eb6b840e86d54570c77b59ce721d104e6dfd7a40978991c2d3b41f",
+    "/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-core-2.8.6.jar": "10a8d607dc66aadee9ef24e8b3d83f04b6c0e033926558cc64e408bcbda0ca9f",
+    "/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-databind-2.8.6.jar": "922413ca2ff5a8f1f86a2eaae8ff02219322ec6ff00d212e7973df8aac4bbaa3",
+    "/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-annotations-2.8.6.jar": "92d7580f361174bda3e015c66adafa326aeb9ef7f4a99a895486cef0dae773f8"
+  },
+  "observer_sha256": "a9f274589c47af6a5c0ae65153a14a3f5169e9b22667302b220a79efa0333ced",
+  "build_sha256": "96ad4072af1ef70d04e00fd9f5e640b0b89eb1c3307541d66fc2fde0852d552f",
+  "business_jars": {
+    "orders": "8a2cb87b9bedf79c7ad407fcd72bc74c6c1241ef67ae967de59f1ec5f5873a2b",
+    "carts": "ab0d2da1937c219d649766dd3ba84945c4e2063ac9bff6839993f9dc3d8a548b",
+    "shipping": "5704afeeca3c34e10873b15b5aeaf25cbe8326772382631ff4e579d5fa358890",
+    "station": "0143034bae170d40dfad41c5ab44d30d0c3783dd4e4b3fbddfca26e0d07613f9",
+    "basic": "b1018c4efcb96aad39565f6992d2e19dbb3684dc95219068074dc903385151b6",
+    "ticketinfo": "c903bfcc0c7d51a2b16dc516004b70839652849a8331e70629c6d7bc798e1728",
+    "train": "61fa90fbf47542397655f1ee70b6f4a3ead0d4528cb665339ca43a56b04c6f08",
+    "route": "fd65028763bfd7b3c97fabd0f081453d7e78167696e692b3b5c7cd92c79e26f8",
+    "price": "dc6b002e0dd58a5371e192cf03ebce2adc638ce42c786dbc0911b9fb849d9f7a"
+  },
+  "development_audit_sha256": "90e3761052c57a975b94b0c836dee4d215821f1f9bddb7807827ada3c794a644",
+  "heldout_planner_calls_so_far": 0,
+  "drivers_at_freeze": {
+    "run_response_binding_revision.py": "36dde8310779033cb9f48a44fcd62b077c2e97367b9bae45d3bee91ed496311c",
+    "audit_response_binding_revision.py": "e07b09d5afbe7a6ddb8529c75c6fd0ad8b2feda97d054499a85de8e437e9c0a8",
+    "run_binding_semantics.py": "887b3a0f5817b0adfa0a9d86b6d11004ccd29085052c9a8f52b0a8bcfea436a6",
+    "BindingSemanticFixture.java": "2a404701149126fb3f69b1c705fa674e61fb6edf97e71c7ec93b0ee77506adfb"
+  },
+  "oracle_rule": "Heldout business oracle may be authored/reviewed from original code after this algorithm freeze; it never enters frozen algorithm sources. Preserve first planning/runtime results."
+}

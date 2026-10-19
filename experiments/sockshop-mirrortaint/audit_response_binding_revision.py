@@ -16,14 +16,19 @@ def stage(root):
     for app in ('sockshop','trainticket'):
         ps=[p for p in plans if p['application']==app];rs=[runtime[p['id']] for p in ps if p['id'] in runtime]
         d={'selected':len(ps),'accepted':sum(p['status']=='accepted' for p in ps),'rejected':sum(p['status']=='rejected' for p in ps),'runtime_queries':len(rs)}
+        d['invalid_capture_queries']=sum(bool(r.get('invalid_reason')) for r in rs)
         for key in ('requests','target_instances','known','unknown','N/A_requests','evidence_invalid','oracle_unavailable','known_oracle_checked','exact','tp','fp','fn'):d[key]=sum(r.get(key,0) for r in rs)
         assert d['target_instances']==d['known']+d['unknown']+d['evidence_invalid']
         d['answerability']=d['known']/d['target_instances'] if d['target_instances'] else None
         d['known_exact_rate']=d['exact']/d['known_oracle_checked'] if d['known_oracle_checked'] else None
         d['accepted_with_known_answer']=sum(r['known']>0 for r in rs)
         d['known_without_independent_oracle']=d['known']-d['known_oracle_checked']
+        d.update(oracle_checked_targets=0,all_oracle_tp=0,all_oracle_fp=0,all_oracle_fn_including_unknown=0)
         for r in rs:
             for q in r['predictions']:
+                if 'expected' in q:
+                    wanted={tuple(x) for x in q['expected']};actual={tuple(x) for x in q.get('actual',[])} if q['status']=='known' else set()
+                    d['oracle_checked_targets']+=1;d['all_oracle_tp']+=len(wanted&actual);d['all_oracle_fp']+=len(actual-wanted);d['all_oracle_fn_including_unknown']+=len(wanted-actual)
                 if q['status']=='known':
                     a=q['answer'];assert a['known'] and a['target']['observed'].get('value')==q['client_value']
                     assert all(s['kind'] in ('binding-source','http-json','argument','field-read') for s in a['sources'])
@@ -37,7 +42,7 @@ def stage(root):
 def audit(root,development,heldout=None):
     checks={};first=load(ROOT/'artifacts/query-coverage-first-20261019/planning.json')
     # The first report is preserved rather than overwritten by development fixes.
-    checks['original_first_pass_preserved']=len(first['results'])==20
+    checks['original_first_pass_preserved']=len(first['results'])==20 and all(r['status']=='planning-rejected' and r['chosen_plan'] is None for r in first['results'])
     sealed=load(HERE/'response-binding-heldout-20261019.json');pool=load(ROOT/'artifacts/query-coverage-first-20261019/pool.json')
     dev=set(pool['selected_ids']);test={q['id'] for q in sealed['queries']}
     assert not dev&test and len(dev)==20 and len(test)==22
@@ -57,6 +62,7 @@ def audit(root,development,heldout=None):
         checks['frozen_algorithm_sources_unchanged_after_test']=True
     for name in ('semantics-final','collection-controls-final'):
         r=load(root/name/'results.json');assert r['all_passed'];checks[name]=True
+    assert load(root/'additional-refusal-audit.json')['all_passed'];checks['additional_refusal_controls']=True
     old=load(root/'legacy-offline-final/comparison.json')['results']
     assert old['sockshop']['queries']==old['sockshop']['exact']==198 and old['sockshop']['tp']==258
     assert old['trainticket']['queries']==old['trainticket']['exact']==31 and old['trainticket']['tp']==30
@@ -68,7 +74,9 @@ def audit(root,development,heldout=None):
     assert load(root/'historical-positive-controls.json')['all_passed'];checks['four_planning_positive_controls']=True
     for group in ('development','heldout'):
         if group not in result:continue
-        for d in result[group]['groups'].values():assert d['known_without_independent_oracle']==0
+        for d in result[group]['groups'].values():
+            assert d['known_without_independent_oracle']==0
+            assert d['runtime_queries']==d['accepted'],'Accepted query runtime missing'
     result['all_passed']=all(checks.values());result['historical_business']=old
     result['price_regression']={m:{k:v for k,v in r.items() if k not in ('target_unavailable_queries',)} for m,r in price.items()}
     save(root/'audit.json',result);print(json.dumps({k:v for k,v in result.items() if k not in ('development','heldout')},ensure_ascii=False,indent=2));return result
