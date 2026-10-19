@@ -1,0 +1,2457 @@
+{
+  "algorithm_commit": "a84ce9de4c970c667e340da9de58e345574a7acf",
+  "eligibility": "Reviewed public domain-response endpoints of the nine historically deployed original Java services. Exclude health/welcome, transport status/msg, authenticated admin mutations, void responses and previously evaluated/debugged entry+target paths. Lists use one wildcard query family, not a new query per index. Nested DTO fields are leaves; built-in Date/UUID are single fields.",
+  "inventory_boundary": "Bounded reviewed endpoint catalogue, not all APIs or all applications. TicketInfo travel response shape is inherited from the original Basic RPC; actual generic deserialization may reject evidence.",
+  "selection": "Sort service names; round-robin services; within each service SHA256(query-coverage-20261019\\n+id); stop at10 per application. No replacements after planning.",
+  "novelty": "New declared/evaluated entry+target query relative to retained development evidence, not proof authors never inspected its class or used the field as an input. No numeric-only variants. Not third-party blind selection.",
+  "planning": {
+    "attempts": [
+      "native-default: plan_service then copy_plan as existing builder",
+      "explicit-collection: plan_collection with frozen collection-computation profile"
+    ],
+    "order_fixed": true,
+    "chosen_plan": "first accepted in this fixed order; all attempts retained",
+    "no_core_or_library_changes": true,
+    "source_boundary": "declared per candidate before planning",
+    "historical_queries": "excluded by entry+target semantic identity, including earlier artifact reports and development use; numeric changes never novel",
+    "candidate_selection": "define complete audited inventory and deterministic round-robin by service with SHA-256 rank seeded query-coverage-20261019, select up to10 per app before any planner call"
+  },
+  "history_sources": [
+    {
+      "file": "artifacts/distributed-paths-final-20261015/sockshop/field-results.json",
+      "sha256": "b9ae0362fe250fd64c6ed22b4645be72cdee4a9ced00ee164c1671ef6237775e"
+    },
+    {
+      "file": "artifacts/distributed-paths-final-20261015/trainticket/field-results.json",
+      "sha256": "38232f180339839446c61507dec917b914c01721c8228793d6604a87446200a0"
+    }
+  ],
+  "excluded_known_targets": [
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Item.id",
+      "path": "/items/*/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "reason": "previously evaluated or explicitly debugged target"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Item.itemId",
+      "path": "/items/*/itemId",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "reason": "previously evaluated or explicitly debugged target"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Item.quantity",
+      "path": "/items/*/quantity",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "reason": "previously evaluated or explicitly debugged target"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Item.unitPrice",
+      "path": "/items/*/unitPrice",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "reason": "previously evaluated or explicitly debugged target"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Shipment.id",
+      "path": "/shipment/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "reason": "previously evaluated or explicitly debugged target"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Shipment.name",
+      "path": "/shipment/name",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "reason": "previously evaluated or explicitly debugged target"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.CustomerOrder.total",
+      "path": "/total",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "reason": "previously evaluated or explicitly debugged target"
+    },
+    {
+      "application": "sockshop",
+      "role": "carts",
+      "entry": "works/weave/socks/cart/controllers/ItemsController.get(Ljava/lang/String;Ljava/lang/String;)Lworks/weave/socks/cart/entities/Item;",
+      "http": "GET /carts/{customerId}/items/{itemId}",
+      "target": "works.weave.socks.cart.entities.Item.id",
+      "path": "/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "reason": "previously evaluated or explicitly debugged target"
+    },
+    {
+      "application": "sockshop",
+      "role": "carts",
+      "entry": "works/weave/socks/cart/controllers/ItemsController.getItems(Ljava/lang/String;)Ljava/util/List;",
+      "http": "GET /carts/{customerId}/items",
+      "target": "works.weave.socks.cart.entities.Item.id",
+      "path": "/*/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "reason": "previously evaluated or explicitly debugged target"
+    },
+    {
+      "application": "sockshop",
+      "role": "carts",
+      "entry": "works/weave/socks/cart/controllers/ItemsController.addToCart(Ljava/lang/String;Lworks/weave/socks/cart/entities/Item;)Lworks/weave/socks/cart/entities/Item;",
+      "http": "POST /carts/{customerId}/items",
+      "target": "works.weave.socks.cart.entities.Item.id",
+      "path": "/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "reason": "previously evaluated or explicitly debugged target"
+    },
+    {
+      "application": "sockshop",
+      "role": "shipping",
+      "entry": "works/weave/socks/shipping/controllers/ShippingController.postShipping(Lworks/weave/socks/shipping/entities/Shipment;)Lworks/weave/socks/shipping/entities/Shipment;",
+      "http": "POST /shipping",
+      "target": "works.weave.socks.shipping.entities.Shipment.id",
+      "path": "/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "reason": "previously evaluated or explicitly debugged target"
+    },
+    {
+      "application": "sockshop",
+      "role": "shipping",
+      "entry": "works/weave/socks/shipping/controllers/ShippingController.postShipping(Lworks/weave/socks/shipping/entities/Shipment;)Lworks/weave/socks/shipping/entities/Shipment;",
+      "http": "POST /shipping",
+      "target": "works.weave.socks.shipping.entities.Shipment.name",
+      "path": "/name",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "reason": "previously evaluated or explicitly debugged target"
+    },
+    {
+      "application": "trainticket",
+      "role": "basic",
+      "entry": "fdse/microservice/service/BasicServiceImpl.queryForTravel(Lfdse/microservice/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/basicservice/basic/travel",
+      "target": "fdse.microservice.entity.TravelResult.prices",
+      "path": "/data/prices/economyClass",
+      "shape_note": "declared Map price key from original bytecode",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "reason": "previously evaluated or explicitly debugged target"
+    },
+    {
+      "application": "trainticket",
+      "role": "basic",
+      "entry": "fdse/microservice/service/BasicServiceImpl.queryForTravel(Lfdse/microservice/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/basicservice/basic/travel",
+      "target": "fdse.microservice.entity.TravelResult.prices",
+      "path": "/data/prices/confortClass",
+      "shape_note": "declared Map price key from original bytecode",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "reason": "previously evaluated or explicitly debugged target"
+    }
+  ],
+  "candidates": [
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.CustomerOrder.id",
+      "path": "/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-id",
+      "rank": "e83d69dbbe3ab95a86ee297e153a146b86161425c80cbbc64e61c01dd1e58b34"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.CustomerOrder.customerId",
+      "path": "/customerId",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-customerId",
+      "rank": "3927d77ff5af87e3f5fc328d00f51677ff961b613f30888d9c3d3c0516b7ac22"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Customer.id",
+      "path": "/customer/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-customer-id",
+      "rank": "4d4c3c02bcadba2ffac083c2b127a1ad56cd46d53e58ed02529fc11c3c23d569"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Customer.firstName",
+      "path": "/customer/firstName",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-customer-firstName",
+      "rank": "10b6fa73162421925e95dc7edd4b9a559b213b7016ada28c61a2a2e2064a59bf"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Customer.lastName",
+      "path": "/customer/lastName",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-customer-lastName",
+      "rank": "2466fc11e7faa977d18870eed28d61912f66a93a44fcebc4f04b88c047f28039"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Customer.username",
+      "path": "/customer/username",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-customer-username",
+      "rank": "36161ec9f89215a5f49d0c30e6586570bd33ef2d9dc57415f24ceff05ddc0b81"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Address.id",
+      "path": "/customer/addresses/*/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-customer-addresses-each-id",
+      "rank": "95e0d4e57ef7e965e6efdc362f40c580c2b57e2cd703c698b90daba2239e9989"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Address.number",
+      "path": "/customer/addresses/*/number",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-customer-addresses-each-number",
+      "rank": "f2ab5447de7f49016f1cc122071901c28f6f034fd014bd22c6cd06dbdac1cfee"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Address.street",
+      "path": "/customer/addresses/*/street",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-customer-addresses-each-street",
+      "rank": "6a788ccfe5d3ac782f4561840e17f092fc9a92af516ce2f18400c85a8dc1cacb"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Address.city",
+      "path": "/customer/addresses/*/city",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-customer-addresses-each-city",
+      "rank": "50a5bea50623e062ebb99b4cc57c5a44468d51dc03e8933cc75f0ddd2d376a3f"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Address.postcode",
+      "path": "/customer/addresses/*/postcode",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-customer-addresses-each-postcode",
+      "rank": "f1f18b80b59f4c55899cba05412f3640f82c2cb520b8ec4a0fef5a8798aa66ec"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Address.country",
+      "path": "/customer/addresses/*/country",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-customer-addresses-each-country",
+      "rank": "0a31b48dd137766c8dc049d077304a7eea10f34cb71d8791bef5f9564a55a405"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Card.id",
+      "path": "/customer/cards/*/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-customer-cards-each-id",
+      "rank": "c069a0ce7eb485941db83ec5f25ff422385fc8a1bf7c13db24741a59009c9fbe"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Card.longNum",
+      "path": "/customer/cards/*/longNum",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-customer-cards-each-longNum",
+      "rank": "dea04fee8526e2cdcf47519cc61166a1a5f00cf8574ed20205911ef9fe47dd88"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Card.expires",
+      "path": "/customer/cards/*/expires",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-customer-cards-each-expires",
+      "rank": "ff4491c3ab4d5cde78d5ba7a66e9b8bf3696db126f49f6dc10083da7072dc5ca"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Card.ccv",
+      "path": "/customer/cards/*/ccv",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-customer-cards-each-ccv",
+      "rank": "5c0a144d4ca85fb3ea55d5839500f6d0be6ef02015d80f4656cff5ded4a246cb"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Address.id",
+      "path": "/address/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-address-id",
+      "rank": "7c683a5136ea5f04a3d2765b8e1eeb0d7dfa17be5a8f6b32c5f4689dd328b71e"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Address.number",
+      "path": "/address/number",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-address-number",
+      "rank": "08c172e9aeb73096edf785ea1ab2561e0fbd019504cc2b9f941847c74a3f7163"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Address.street",
+      "path": "/address/street",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-address-street",
+      "rank": "54044d6de21813e31c37568b744eb2e6e6caefc618c9fb93fd3b257dd4e6405e"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Address.city",
+      "path": "/address/city",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-address-city",
+      "rank": "6eb7a02deaaf9a3568a23fd2e5d30bc3990eef64846a888a090f7457b919414c"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Address.postcode",
+      "path": "/address/postcode",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-address-postcode",
+      "rank": "41f70c69ebf7c066b53c10a045eaf5f7cfa4ba0d95a582cb6ee43bd77d322fec"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Address.country",
+      "path": "/address/country",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-address-country",
+      "rank": "0c0db82df60fcd89f4100c7cdffa4300052031c86650daf0571625f25f0bf8e7"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Card.id",
+      "path": "/card/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-card-id",
+      "rank": "526ec1acb66eb8a330ef0c393ac94ab37af19b44e0f5200d6071bb1a2cd98525"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Card.longNum",
+      "path": "/card/longNum",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-card-longNum",
+      "rank": "351f655a58bd64aa779de9854b4fe14cc641e4e90373f1dfced2cb94b409932c"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Card.expires",
+      "path": "/card/expires",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-card-expires",
+      "rank": "ef2217018183e731b44e10aa141dca70630d281991d4e616beaaf200d22f6fcc"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Card.ccv",
+      "path": "/card/ccv",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-card-ccv",
+      "rank": "b687e4c5a2d5313bdf52dc4281598195ac73529ba351cff6a213f4d4dbac7b7a"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.CustomerOrder.date",
+      "path": "/date",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-date",
+      "rank": "cc028b916bb5c257b34eeab8968a7e2c10ac6763b2d3ed7c76c51d165deafb14"
+    },
+    {
+      "application": "sockshop",
+      "role": "carts",
+      "entry": "works/weave/socks/cart/controllers/CartsController.get(Ljava/lang/String;)Lworks/weave/socks/cart/entities/Cart;",
+      "http": "GET /carts/{customerId}",
+      "target": "works.weave.socks.cart.entities.Cart.customerId",
+      "path": "/customerId",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-carts-get-customerId",
+      "rank": "b12d8176b33babb461d27a475afff3c779bf4bdbd86530ff5ad9248775470268"
+    },
+    {
+      "application": "sockshop",
+      "role": "carts",
+      "entry": "works/weave/socks/cart/controllers/ItemsController.get(Ljava/lang/String;Ljava/lang/String;)Lworks/weave/socks/cart/entities/Item;",
+      "http": "GET /carts/{customerId}/items/{itemId}",
+      "target": "works.weave.socks.cart.entities.Item.itemId",
+      "path": "/itemId",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-carts-get-itemId",
+      "rank": "c3bd2ba200ac7b5257aa67a0284ee812aac2bce2da66bff1cac3659600300469"
+    },
+    {
+      "application": "sockshop",
+      "role": "carts",
+      "entry": "works/weave/socks/cart/controllers/ItemsController.get(Ljava/lang/String;Ljava/lang/String;)Lworks/weave/socks/cart/entities/Item;",
+      "http": "GET /carts/{customerId}/items/{itemId}",
+      "target": "works.weave.socks.cart.entities.Item.quantity",
+      "path": "/quantity",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-carts-get-quantity",
+      "rank": "0a88848002a04b6d5fff9f1047a08e03707401b62d6053d3d1b15bf746e33477"
+    },
+    {
+      "application": "sockshop",
+      "role": "carts",
+      "entry": "works/weave/socks/cart/controllers/ItemsController.get(Ljava/lang/String;Ljava/lang/String;)Lworks/weave/socks/cart/entities/Item;",
+      "http": "GET /carts/{customerId}/items/{itemId}",
+      "target": "works.weave.socks.cart.entities.Item.unitPrice",
+      "path": "/unitPrice",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-carts-get-unitPrice",
+      "rank": "deb907cd3acbbefbf25681a25e942283f8b6a21e741d72d323e334d5daae61c4"
+    },
+    {
+      "application": "sockshop",
+      "role": "carts",
+      "entry": "works/weave/socks/cart/controllers/ItemsController.getItems(Ljava/lang/String;)Ljava/util/List;",
+      "http": "GET /carts/{customerId}/items",
+      "target": "works.weave.socks.cart.entities.Item.itemId",
+      "path": "/*/itemId",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-carts-getItems-each-itemId",
+      "rank": "c9407b380d29cba718cc1cfe5eb5d21571d9eecfb18d36e97d31d3feec3af925"
+    },
+    {
+      "application": "sockshop",
+      "role": "carts",
+      "entry": "works/weave/socks/cart/controllers/ItemsController.getItems(Ljava/lang/String;)Ljava/util/List;",
+      "http": "GET /carts/{customerId}/items",
+      "target": "works.weave.socks.cart.entities.Item.quantity",
+      "path": "/*/quantity",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-carts-getItems-each-quantity",
+      "rank": "2be9ad0b918b0a6c2b9eb1b6a2c95db61987bbead516bf64db893b9c2ef7a356"
+    },
+    {
+      "application": "sockshop",
+      "role": "carts",
+      "entry": "works/weave/socks/cart/controllers/ItemsController.getItems(Ljava/lang/String;)Ljava/util/List;",
+      "http": "GET /carts/{customerId}/items",
+      "target": "works.weave.socks.cart.entities.Item.unitPrice",
+      "path": "/*/unitPrice",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-carts-getItems-each-unitPrice",
+      "rank": "3622915d51ddff95da13d411c829ee7b82f79f179c0c5e08d26bb1cd156d589d"
+    },
+    {
+      "application": "sockshop",
+      "role": "carts",
+      "entry": "works/weave/socks/cart/controllers/ItemsController.addToCart(Ljava/lang/String;Lworks/weave/socks/cart/entities/Item;)Lworks/weave/socks/cart/entities/Item;",
+      "http": "POST /carts/{customerId}/items",
+      "target": "works.weave.socks.cart.entities.Item.itemId",
+      "path": "/itemId",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-carts-addToCart-itemId",
+      "rank": "b70a686142037a7574b5e7117b6af82af84f0f2c286474bd36c904ef9d6488bc"
+    },
+    {
+      "application": "sockshop",
+      "role": "carts",
+      "entry": "works/weave/socks/cart/controllers/ItemsController.addToCart(Ljava/lang/String;Lworks/weave/socks/cart/entities/Item;)Lworks/weave/socks/cart/entities/Item;",
+      "http": "POST /carts/{customerId}/items",
+      "target": "works.weave.socks.cart.entities.Item.quantity",
+      "path": "/quantity",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-carts-addToCart-quantity",
+      "rank": "fe74142baa522926ac851b34c156a33917aa961dfe5e604c4c6ea4aad8393eb5"
+    },
+    {
+      "application": "sockshop",
+      "role": "carts",
+      "entry": "works/weave/socks/cart/controllers/ItemsController.addToCart(Ljava/lang/String;Lworks/weave/socks/cart/entities/Item;)Lworks/weave/socks/cart/entities/Item;",
+      "http": "POST /carts/{customerId}/items",
+      "target": "works.weave.socks.cart.entities.Item.unitPrice",
+      "path": "/unitPrice",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-carts-addToCart-unitPrice",
+      "rank": "79a7e2cd9199c0696d7a7379631291d836699203a3ddd3840bc531617254f1f4"
+    },
+    {
+      "application": "trainticket",
+      "role": "station",
+      "entry": "fdse/microservice/service/StationServiceImpl.query(Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/stationservice/stations",
+      "target": "fdse.microservice.entity.Station.id",
+      "path": "/data/*/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-station-query-data-each-id",
+      "rank": "6719214762b7f654899ec2bd3e30bb4498f68dd418878b2401dcca8f4cce3498"
+    },
+    {
+      "application": "trainticket",
+      "role": "station",
+      "entry": "fdse/microservice/service/StationServiceImpl.query(Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/stationservice/stations",
+      "target": "fdse.microservice.entity.Station.name",
+      "path": "/data/*/name",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-station-query-data-each-name",
+      "rank": "1105f4bc5d26091e09c5d05f0ac155d4898e6e91ec88e4eb03d894d404b4b822"
+    },
+    {
+      "application": "trainticket",
+      "role": "station",
+      "entry": "fdse/microservice/service/StationServiceImpl.query(Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/stationservice/stations",
+      "target": "fdse.microservice.entity.Station.stayTime",
+      "path": "/data/*/stayTime",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-station-query-data-each-stayTime",
+      "rank": "cfc6abe458099fb4d5188c2cca827fba55e6145ffda57cd0f29af6392049fd0c"
+    },
+    {
+      "application": "trainticket",
+      "role": "station",
+      "entry": "fdse/microservice/service/StationServiceImpl.queryById(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/stationservice/stations/name/{id}",
+      "target": "edu.fudan.common.util.Response.data",
+      "path": "/data",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-station-queryById-data",
+      "rank": "99fb1331cf16a3defd7d387665c91d349034c79a43b1716f5f6781110544c94f"
+    },
+    {
+      "application": "trainticket",
+      "role": "station",
+      "entry": "fdse/microservice/service/StationServiceImpl.queryForIdBatch(Ljava/util/List;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/stationservice/stations/idlist",
+      "target": "edu.fudan.common.util.Response.data",
+      "path": "/data/*",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-station-queryForIdBatch-data-each",
+      "rank": "ab0fb7d2b86a97388857a4ec9b9c36dea5cf2918bf3dc5a2b3b0e005e9d40ec3"
+    },
+    {
+      "application": "trainticket",
+      "role": "station",
+      "entry": "fdse/microservice/service/StationServiceImpl.queryByIdBatch(Ljava/util/List;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/stationservice/stations/namelist",
+      "target": "edu.fudan.common.util.Response.data",
+      "path": "/data/*",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-station-queryByIdBatch-data-each",
+      "rank": "a3148f0c06a15731e3d0e47a2b5f9aab85bcd3c1efe44254803e83458bcfa855"
+    },
+    {
+      "application": "trainticket",
+      "role": "basic",
+      "entry": "fdse/microservice/service/BasicServiceImpl.queryForTravel(Lfdse/microservice/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/basicservice/basic/travel",
+      "target": "fdse.microservice.entity.TravelResult.status",
+      "path": "/data/status",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-basic-queryForTravel-data-status",
+      "rank": "0ce632104ccc009f110fd39de386a96c8bfc59f69bf147afe0657f98d420b91c"
+    },
+    {
+      "application": "trainticket",
+      "role": "basic",
+      "entry": "fdse/microservice/service/BasicServiceImpl.queryForTravel(Lfdse/microservice/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/basicservice/basic/travel",
+      "target": "fdse.microservice.entity.TravelResult.percent",
+      "path": "/data/percent",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-basic-queryForTravel-data-percent",
+      "rank": "56392efa7a63ab67d89c89af3f6e1aa44d77d9071add8687c05f1e3f5c2a8326"
+    },
+    {
+      "application": "trainticket",
+      "role": "basic",
+      "entry": "fdse/microservice/service/BasicServiceImpl.queryForTravel(Lfdse/microservice/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/basicservice/basic/travel",
+      "target": "fdse.microservice.entity.TrainType.id",
+      "path": "/data/trainType/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-basic-queryForTravel-data-trainType-id",
+      "rank": "23fa0110cbf12ecb4e7e4e39e0487992817461493c268a25f2cc20771e09731b"
+    },
+    {
+      "application": "trainticket",
+      "role": "basic",
+      "entry": "fdse/microservice/service/BasicServiceImpl.queryForTravel(Lfdse/microservice/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/basicservice/basic/travel",
+      "target": "fdse.microservice.entity.TrainType.economyClass",
+      "path": "/data/trainType/economyClass",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-basic-queryForTravel-data-trainType-economyClass",
+      "rank": "10eaaf6444d0ba4e6720a67faba873d2c69a9696e8d49c1b070dad7971e3a1cc"
+    },
+    {
+      "application": "trainticket",
+      "role": "basic",
+      "entry": "fdse/microservice/service/BasicServiceImpl.queryForTravel(Lfdse/microservice/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/basicservice/basic/travel",
+      "target": "fdse.microservice.entity.TrainType.confortClass",
+      "path": "/data/trainType/confortClass",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-basic-queryForTravel-data-trainType-confortClass",
+      "rank": "2435bdff858b442e6297ee0a974b3e67f5781973bc1ff30e7b02cf7abb500f87"
+    },
+    {
+      "application": "trainticket",
+      "role": "basic",
+      "entry": "fdse/microservice/service/BasicServiceImpl.queryForTravel(Lfdse/microservice/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/basicservice/basic/travel",
+      "target": "fdse.microservice.entity.TrainType.averageSpeed",
+      "path": "/data/trainType/averageSpeed",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-basic-queryForTravel-data-trainType-averageSpeed",
+      "rank": "b73a0e30967568bf45505fa782223133aa68759f917934c80c3e1ba5c622c0eb"
+    },
+    {
+      "application": "trainticket",
+      "role": "ticketinfo",
+      "entry": "ticketinfo/service/TicketInfoServiceImpl.queryForTravel(Lticketinfo/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/ticketinfoservice/ticketinfo",
+      "target": "ticketinfo.entity.TravelResult.status",
+      "path": "/data/status",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-ticketinfo-queryForTravel-data-status",
+      "rank": "454896fffa58e5f843c08d1ee1cc168213c883d406a33abca65bfc7257bbffcb"
+    },
+    {
+      "application": "trainticket",
+      "role": "ticketinfo",
+      "entry": "ticketinfo/service/TicketInfoServiceImpl.queryForTravel(Lticketinfo/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/ticketinfoservice/ticketinfo",
+      "target": "ticketinfo.entity.TravelResult.percent",
+      "path": "/data/percent",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-ticketinfo-queryForTravel-data-percent",
+      "rank": "93fc47a350b36d75260321859c3f8831c8b88e824eac321bfd8e576fd9adb414"
+    },
+    {
+      "application": "trainticket",
+      "role": "ticketinfo",
+      "entry": "ticketinfo/service/TicketInfoServiceImpl.queryForTravel(Lticketinfo/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/ticketinfoservice/ticketinfo",
+      "target": "ticketinfo.entity.TrainType.id",
+      "path": "/data/trainType/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-ticketinfo-queryForTravel-data-trainType-id",
+      "rank": "257383313e730d4fba84ba028e419cf90372dd29c1c97646b4b1bbcb8129bb86"
+    },
+    {
+      "application": "trainticket",
+      "role": "ticketinfo",
+      "entry": "ticketinfo/service/TicketInfoServiceImpl.queryForTravel(Lticketinfo/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/ticketinfoservice/ticketinfo",
+      "target": "ticketinfo.entity.TrainType.economyClass",
+      "path": "/data/trainType/economyClass",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-ticketinfo-queryForTravel-data-trainType-economyClass",
+      "rank": "ffb4303c2ce341168fd44fddab9b801ed4ef1d495e488555472799f1b104df8d"
+    },
+    {
+      "application": "trainticket",
+      "role": "ticketinfo",
+      "entry": "ticketinfo/service/TicketInfoServiceImpl.queryForTravel(Lticketinfo/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/ticketinfoservice/ticketinfo",
+      "target": "ticketinfo.entity.TrainType.confortClass",
+      "path": "/data/trainType/confortClass",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-ticketinfo-queryForTravel-data-trainType-confortClass",
+      "rank": "788b329dab85f4e10c251a3079bd44a49f061387cc97533ba34ab90309aff3d4"
+    },
+    {
+      "application": "trainticket",
+      "role": "ticketinfo",
+      "entry": "ticketinfo/service/TicketInfoServiceImpl.queryForTravel(Lticketinfo/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/ticketinfoservice/ticketinfo",
+      "target": "ticketinfo.entity.TrainType.averageSpeed",
+      "path": "/data/trainType/averageSpeed",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed",
+      "rank": "e7a594edc9bd7692045f3c2b835d7e7b2e5e8b5d87a1abcea3beb09d4ea7de75"
+    },
+    {
+      "application": "trainticket",
+      "role": "ticketinfo",
+      "entry": "ticketinfo/service/TicketInfoServiceImpl.queryForTravel(Lticketinfo/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/ticketinfoservice/ticketinfo",
+      "target": "ticketinfo.entity.TravelResult.prices",
+      "path": "/data/prices/economyClass",
+      "shape_note": "declared Map price key from original bytecode",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-ticketinfo-queryForTravel-data-prices-economyClass",
+      "rank": "be5d008c0e85ee2c44baed800a73037034151b14bb0266b5a105a10924682697"
+    },
+    {
+      "application": "trainticket",
+      "role": "ticketinfo",
+      "entry": "ticketinfo/service/TicketInfoServiceImpl.queryForTravel(Lticketinfo/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/ticketinfoservice/ticketinfo",
+      "target": "ticketinfo.entity.TravelResult.prices",
+      "path": "/data/prices/confortClass",
+      "shape_note": "declared Map price key from original bytecode",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-ticketinfo-queryForTravel-data-prices-confortClass",
+      "rank": "d909809fcab4e16b3eec53b420d4c7dabcbe4e1617a6738f8de6403eda831863"
+    },
+    {
+      "application": "trainticket",
+      "role": "ticketinfo",
+      "entry": "ticketinfo/service/TicketInfoServiceImpl.queryForTravel(Lticketinfo/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/ticketinfoservice/ticketinfo",
+      "target": "ticketinfo.entity.TravelResult.message",
+      "path": "/data/message",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-ticketinfo-queryForTravel-data-message",
+      "rank": "97ca1b14411fe061a66f1f3968d06f3908e731aca32806a6d7da132619415a0d"
+    },
+    {
+      "application": "trainticket",
+      "role": "train",
+      "entry": "train/service/TrainServiceImpl.retrieve(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ltrain/entity/TrainType;",
+      "http": "GET /api/v1/trainservice/trains/{id}",
+      "target": "train.entity.TrainType.id",
+      "path": "/data/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-train-retrieve-data-id",
+      "rank": "85afc34c85996c4e0c0b3a4a8d2dc377ce309c91ae447a125fa236e60d17c58d"
+    },
+    {
+      "application": "trainticket",
+      "role": "train",
+      "entry": "train/service/TrainServiceImpl.retrieve(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ltrain/entity/TrainType;",
+      "http": "GET /api/v1/trainservice/trains/{id}",
+      "target": "train.entity.TrainType.economyClass",
+      "path": "/data/economyClass",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-train-retrieve-data-economyClass",
+      "rank": "6308d0c2abd708e06c80b4bdaf9874920f0cd72f5da6ea96f5b1649c124e6d3c"
+    },
+    {
+      "application": "trainticket",
+      "role": "train",
+      "entry": "train/service/TrainServiceImpl.retrieve(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ltrain/entity/TrainType;",
+      "http": "GET /api/v1/trainservice/trains/{id}",
+      "target": "train.entity.TrainType.confortClass",
+      "path": "/data/confortClass",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-train-retrieve-data-confortClass",
+      "rank": "ced302a9514490b27f8c8c1fd346852021f29e9064795e63f8ee4418d223ac22"
+    },
+    {
+      "application": "trainticket",
+      "role": "train",
+      "entry": "train/service/TrainServiceImpl.retrieve(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ltrain/entity/TrainType;",
+      "http": "GET /api/v1/trainservice/trains/{id}",
+      "target": "train.entity.TrainType.averageSpeed",
+      "path": "/data/averageSpeed",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-train-retrieve-data-averageSpeed",
+      "rank": "a35c1f52aedf032ccfcf211b7839661bbbaf2296e91b0ad5be33fe09e33103bb"
+    },
+    {
+      "application": "trainticket",
+      "role": "train",
+      "entry": "train/service/TrainServiceImpl.query(Lorg/springframework/http/HttpHeaders;)Ljava/util/List;",
+      "http": "GET /api/v1/trainservice/trains",
+      "target": "train.entity.TrainType.id",
+      "path": "/data/*/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-train-query-data-each-id",
+      "rank": "4babe874ba2946c5e139b583da67eab2d6b966dc5fed823545d082aeec849d00"
+    },
+    {
+      "application": "trainticket",
+      "role": "train",
+      "entry": "train/service/TrainServiceImpl.query(Lorg/springframework/http/HttpHeaders;)Ljava/util/List;",
+      "http": "GET /api/v1/trainservice/trains",
+      "target": "train.entity.TrainType.economyClass",
+      "path": "/data/*/economyClass",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-train-query-data-each-economyClass",
+      "rank": "519a80a4608b357c6063b3a6a9c184310198b5e4acbe5f84317159ff51a7fd6e"
+    },
+    {
+      "application": "trainticket",
+      "role": "train",
+      "entry": "train/service/TrainServiceImpl.query(Lorg/springframework/http/HttpHeaders;)Ljava/util/List;",
+      "http": "GET /api/v1/trainservice/trains",
+      "target": "train.entity.TrainType.confortClass",
+      "path": "/data/*/confortClass",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-train-query-data-each-confortClass",
+      "rank": "00246942d8872bbf8e2a462672b4340c4e128e6c6525535ef118162f4c1863ac"
+    },
+    {
+      "application": "trainticket",
+      "role": "train",
+      "entry": "train/service/TrainServiceImpl.query(Lorg/springframework/http/HttpHeaders;)Ljava/util/List;",
+      "http": "GET /api/v1/trainservice/trains",
+      "target": "train.entity.TrainType.averageSpeed",
+      "path": "/data/*/averageSpeed",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-train-query-data-each-averageSpeed",
+      "rank": "6ee9e6ecc2687d0e2ebf39b879a69a821c38a5af0db2663125da677dfa5cc260"
+    },
+    {
+      "application": "trainticket",
+      "role": "route",
+      "entry": "route/service/RouteServiceImpl.getRouteById(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/routeservice/routes/{id}",
+      "target": "route.entity.Route.id",
+      "path": "/data/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-route-getRouteById-data-id",
+      "rank": "831b012c985680cc706910856c87735778a89384b35c496c05bc50da843bf4b0"
+    },
+    {
+      "application": "trainticket",
+      "role": "route",
+      "entry": "route/service/RouteServiceImpl.getRouteById(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/routeservice/routes/{id}",
+      "target": "route.entity.Route.stations",
+      "path": "/data/stations/*",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-route-getRouteById-data-stations-each",
+      "rank": "ff28f4347fe17c846be702740881e19d9b75a35784b1a06ea2f47a813158dc07"
+    },
+    {
+      "application": "trainticket",
+      "role": "route",
+      "entry": "route/service/RouteServiceImpl.getRouteById(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/routeservice/routes/{id}",
+      "target": "route.entity.Route.distances",
+      "path": "/data/distances/*",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-route-getRouteById-data-distances-each",
+      "rank": "de6a9903998fa1f636e5511f0ef51f3c02bfdfc28fcaf26a3edb432ba082ce8d"
+    },
+    {
+      "application": "trainticket",
+      "role": "route",
+      "entry": "route/service/RouteServiceImpl.getRouteById(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/routeservice/routes/{id}",
+      "target": "route.entity.Route.startStationId",
+      "path": "/data/startStationId",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-route-getRouteById-data-startStationId",
+      "rank": "917d0f01148f8780963a859cc14ff2ff9eebe038d1ef51b8e0e754218ad7a2b7"
+    },
+    {
+      "application": "trainticket",
+      "role": "route",
+      "entry": "route/service/RouteServiceImpl.getRouteById(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/routeservice/routes/{id}",
+      "target": "route.entity.Route.terminalStationId",
+      "path": "/data/terminalStationId",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-route-getRouteById-data-terminalStationId",
+      "rank": "4f125421d733abce67410801a755b2f3330da62f89e137dc9e5b7fe5ffaf51aa"
+    },
+    {
+      "application": "trainticket",
+      "role": "route",
+      "entry": "route/service/RouteServiceImpl.getRouteByStartAndTerminal(Ljava/lang/String;Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/routeservice/routes/{start}/{terminal}",
+      "target": "route.entity.Route.id",
+      "path": "/data/*/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-route-getRouteByStartAndTerminal-data-each-id",
+      "rank": "9cf10b7c5a45fc58a4949956b5cca5bad23dc7621a336c513c563a7a2e1069ee"
+    },
+    {
+      "application": "trainticket",
+      "role": "route",
+      "entry": "route/service/RouteServiceImpl.getRouteByStartAndTerminal(Ljava/lang/String;Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/routeservice/routes/{start}/{terminal}",
+      "target": "route.entity.Route.stations",
+      "path": "/data/*/stations/*",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-route-getRouteByStartAndTerminal-data-each-stations-each",
+      "rank": "054806972bf01b0d6672b605b61a4aa4da0d703c36575d3cfaafc5f60816d10d"
+    },
+    {
+      "application": "trainticket",
+      "role": "route",
+      "entry": "route/service/RouteServiceImpl.getRouteByStartAndTerminal(Ljava/lang/String;Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/routeservice/routes/{start}/{terminal}",
+      "target": "route.entity.Route.distances",
+      "path": "/data/*/distances/*",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-route-getRouteByStartAndTerminal-data-each-distances-each",
+      "rank": "556672352548b3dee9e6f2ea7d34f0cbaa9d661458db617e19cae935755ac79d"
+    },
+    {
+      "application": "trainticket",
+      "role": "route",
+      "entry": "route/service/RouteServiceImpl.getRouteByStartAndTerminal(Ljava/lang/String;Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/routeservice/routes/{start}/{terminal}",
+      "target": "route.entity.Route.startStationId",
+      "path": "/data/*/startStationId",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-route-getRouteByStartAndTerminal-data-each-startStationId",
+      "rank": "3e14a0cd220ac906b41bc4726c3d5b9427c29ec5c412d0216866a9a9db4c5557"
+    },
+    {
+      "application": "trainticket",
+      "role": "route",
+      "entry": "route/service/RouteServiceImpl.getRouteByStartAndTerminal(Ljava/lang/String;Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/routeservice/routes/{start}/{terminal}",
+      "target": "route.entity.Route.terminalStationId",
+      "path": "/data/*/terminalStationId",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-route-getRouteByStartAndTerminal-data-each-terminalStationId",
+      "rank": "ec3a06ab5719b74e603c14cb55a514214ed45ffe4b738662e0b89816c261ef56"
+    },
+    {
+      "application": "trainticket",
+      "role": "route",
+      "entry": "route/service/RouteServiceImpl.getAllRoutes(Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/routeservice/routes",
+      "target": "route.entity.Route.id",
+      "path": "/data/*/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-route-getAllRoutes-data-each-id",
+      "rank": "627fbf065990fbf91f2d2b21d0c150a047d557c4f84449794a00e198569ce21e"
+    },
+    {
+      "application": "trainticket",
+      "role": "route",
+      "entry": "route/service/RouteServiceImpl.getAllRoutes(Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/routeservice/routes",
+      "target": "route.entity.Route.stations",
+      "path": "/data/*/stations/*",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-route-getAllRoutes-data-each-stations-each",
+      "rank": "40c3065b59fa927cae00c4e4583ae395555f5f32cee1a151e2b2e2c30d5fd095"
+    },
+    {
+      "application": "trainticket",
+      "role": "route",
+      "entry": "route/service/RouteServiceImpl.getAllRoutes(Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/routeservice/routes",
+      "target": "route.entity.Route.distances",
+      "path": "/data/*/distances/*",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-route-getAllRoutes-data-each-distances-each",
+      "rank": "32c3e71eeb2796e006d7a3ea53bd5865bceec1b9e4c56689ef1b97414489112b"
+    },
+    {
+      "application": "trainticket",
+      "role": "route",
+      "entry": "route/service/RouteServiceImpl.getAllRoutes(Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/routeservice/routes",
+      "target": "route.entity.Route.startStationId",
+      "path": "/data/*/startStationId",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-route-getAllRoutes-data-each-startStationId",
+      "rank": "776b85ff7bf649a716151d14cfbb38b05623c2d77139479eee43db8d2076d781"
+    },
+    {
+      "application": "trainticket",
+      "role": "route",
+      "entry": "route/service/RouteServiceImpl.getAllRoutes(Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/routeservice/routes",
+      "target": "route.entity.Route.terminalStationId",
+      "path": "/data/*/terminalStationId",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-route-getAllRoutes-data-each-terminalStationId",
+      "rank": "5f99218fe10f86c27477209d1345101188149f398cb3e3a0994b09fd97c52810"
+    },
+    {
+      "application": "trainticket",
+      "role": "price",
+      "entry": "price/service/PriceServiceImpl.findByRouteIdAndTrainType(Ljava/lang/String;Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/priceservice/prices/{route}/{train}",
+      "target": "price.entity.PriceConfig.id",
+      "path": "/data/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-price-findByRouteIdAndTrainType-data-id",
+      "rank": "714348759bb09f5fd791daaa80a2d74d45f1f346dbdc0cf70b4f143612028b0a"
+    },
+    {
+      "application": "trainticket",
+      "role": "price",
+      "entry": "price/service/PriceServiceImpl.findByRouteIdAndTrainType(Ljava/lang/String;Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/priceservice/prices/{route}/{train}",
+      "target": "price.entity.PriceConfig.trainType",
+      "path": "/data/trainType",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-price-findByRouteIdAndTrainType-data-trainType",
+      "rank": "7503f36bd4a4040a9c1e56cc038865e5b35f64d6599a8e59525687d7509a3cd5"
+    },
+    {
+      "application": "trainticket",
+      "role": "price",
+      "entry": "price/service/PriceServiceImpl.findByRouteIdAndTrainType(Ljava/lang/String;Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/priceservice/prices/{route}/{train}",
+      "target": "price.entity.PriceConfig.routeId",
+      "path": "/data/routeId",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-price-findByRouteIdAndTrainType-data-routeId",
+      "rank": "fb21e4fefef56775855298bd73aff689dba1b4aba514f7e8a4cc2832fcf43b61"
+    },
+    {
+      "application": "trainticket",
+      "role": "price",
+      "entry": "price/service/PriceServiceImpl.findByRouteIdAndTrainType(Ljava/lang/String;Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/priceservice/prices/{route}/{train}",
+      "target": "price.entity.PriceConfig.basicPriceRate",
+      "path": "/data/basicPriceRate",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-price-findByRouteIdAndTrainType-data-basicPriceRate",
+      "rank": "bde6b2f96d6e70b2f871dbc8c894ff379769b707a35eb3f9a4e449c6a0d4563c"
+    },
+    {
+      "application": "trainticket",
+      "role": "price",
+      "entry": "price/service/PriceServiceImpl.findByRouteIdAndTrainType(Ljava/lang/String;Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/priceservice/prices/{route}/{train}",
+      "target": "price.entity.PriceConfig.firstClassPriceRate",
+      "path": "/data/firstClassPriceRate",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-price-findByRouteIdAndTrainType-data-firstClassPriceRate",
+      "rank": "1fd5b806634af3f335fcbc27881753c14677deedcdc19814c4145107aa3aefa2"
+    },
+    {
+      "application": "trainticket",
+      "role": "price",
+      "entry": "price/service/PriceServiceImpl.findAllPriceConfig(Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/priceservice/prices",
+      "target": "price.entity.PriceConfig.id",
+      "path": "/data/*/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-price-findAllPriceConfig-data-each-id",
+      "rank": "c2f0bc63dab3de77a86feaa724725a51fc094eaab6ebaf6232e462626c980626"
+    },
+    {
+      "application": "trainticket",
+      "role": "price",
+      "entry": "price/service/PriceServiceImpl.findAllPriceConfig(Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/priceservice/prices",
+      "target": "price.entity.PriceConfig.trainType",
+      "path": "/data/*/trainType",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-price-findAllPriceConfig-data-each-trainType",
+      "rank": "534aa1225fa84263f83b7d1e2298d7d3b15fe21aa0c27dfdac37623c9c5c6531"
+    },
+    {
+      "application": "trainticket",
+      "role": "price",
+      "entry": "price/service/PriceServiceImpl.findAllPriceConfig(Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/priceservice/prices",
+      "target": "price.entity.PriceConfig.routeId",
+      "path": "/data/*/routeId",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-price-findAllPriceConfig-data-each-routeId",
+      "rank": "fd38ee2488557a51f09cb01d4d6936638cb64c12e51275d8e4abeed0b93dd851"
+    },
+    {
+      "application": "trainticket",
+      "role": "price",
+      "entry": "price/service/PriceServiceImpl.findAllPriceConfig(Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/priceservice/prices",
+      "target": "price.entity.PriceConfig.basicPriceRate",
+      "path": "/data/*/basicPriceRate",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-price-findAllPriceConfig-data-each-basicPriceRate",
+      "rank": "efb1808b4ed61655c932cd7eca65b8242d82b1a57dcdc559323b123fd6a49ea8"
+    },
+    {
+      "application": "trainticket",
+      "role": "price",
+      "entry": "price/service/PriceServiceImpl.findAllPriceConfig(Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "GET /api/v1/priceservice/prices",
+      "target": "price.entity.PriceConfig.firstClassPriceRate",
+      "path": "/data/*/firstClassPriceRate",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-price-findAllPriceConfig-data-each-firstClassPriceRate",
+      "rank": "e9c5e4d585d799219a385304b4554b4a770050e96d70955c3fd619adce3c5297"
+    }
+  ],
+  "selected_ids": [
+    "sockshop-carts-get-quantity",
+    "sockshop-orders-newOrder-address-number",
+    "sockshop-carts-getItems-each-quantity",
+    "sockshop-orders-newOrder-customer-addresses-each-country",
+    "sockshop-carts-getItems-each-unitPrice",
+    "sockshop-orders-newOrder-address-country",
+    "sockshop-carts-addToCart-unitPrice",
+    "sockshop-orders-newOrder-customer-firstName",
+    "sockshop-carts-get-customerId",
+    "sockshop-orders-newOrder-customer-lastName",
+    "trainticket-basic-queryForTravel-data-status",
+    "trainticket-price-findByRouteIdAndTrainType-data-firstClassPriceRate",
+    "trainticket-route-getRouteByStartAndTerminal-data-each-stations-each",
+    "trainticket-station-query-data-each-name",
+    "trainticket-ticketinfo-queryForTravel-data-trainType-id",
+    "trainticket-train-query-data-each-confortClass",
+    "trainticket-basic-queryForTravel-data-trainType-economyClass",
+    "trainticket-price-findAllPriceConfig-data-each-trainType",
+    "trainticket-route-getAllRoutes-data-each-distances-each",
+    "trainticket-station-query-data-each-id"
+  ],
+  "created_at_utc": "2026-10-19T10:33:51.734326+00:00"
+}
