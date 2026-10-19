@@ -154,6 +154,7 @@ class Reconstruction:
                     self.add(key,dict(f,service=role,seq=answer['seq'],kind='input-snapshot',root_frame=answer['root_frame']));self.alias(key)
                 leaves.append(key)
             key=(role,'collection-result',answer['root_frame'],answer['field'])
+            if self.plans[role]['profile']=='bounded-scalar':key+= (answer['version'],answer['seq'])
             node=dict(answer,service=role,kind='bytecode-collection')
             if not answer['known']:node['unknown']='Opaque scalar or unsupported effect reached the target'
             self.add(key,node,leaves);self.providers[(role,coord(answer))].append(key)

@@ -17,6 +17,7 @@ import subprocess
 import time
 import traceback
 import uuid
+from zipfile import ZipFile
 from run_planned_service import ROOT,HERE,load,save,sha
 from build_distributed_plans import build
 from plan_response_binding import plan_response
@@ -88,6 +89,34 @@ def verify_build(build):
     for role,v in m['inputs'].items():
         for file,key in [('original.jar','original_jar_sha256'),('model.json','model_sha256'),('plan.json','plan_sha256')]:
             if sha(build/role/file)!=v[key]:raise ValueError('Frozen application/plan changed')
+
+
+def reuse_forward_captures(out,base,previous):
+    """Only unchanged forward plans/compiled observer classes may reuse captures.
+
+    Raw evidence stays immutable. Re-evaluation uses the new frozen offline
+    implementation and records the actual original collector artifact separately.
+    """
+    def classes(jar):
+        import hashlib
+        with ZipFile(jar) as z:return {n:hashlib.sha256(z.read(n)).hexdigest() for n in z.namelist() if n.endswith('.class')}
+    reports=[]
+    for q in load(out/'planning.json'):
+        if q['status']!='accepted':continue
+        dest=out/q['id'];old=previous/q['id'];plan=load(dest/'plan.json')
+        if plan['profile']!='response-forward':continue
+        assert sha(dest/'plan.json')==sha(old/'plan.json'),'Changed plan cannot reuse capture'
+        assert classes(base/'distributed-observer.jar')==classes(old/'build/distributed-observer.jar'),'Changed runtime observer cannot reuse capture'
+        query=load(dest/'query.json');query_build(dest/'build',base,query,plan);runtime=dest/'capture';runtime.mkdir()
+        for file in (old/'capture').iterdir():
+            if file.name in ('evaluation.json','evaluation-first-development-driver.json','evaluation-v0-201-filter-error.json','field-graph.json','reconstruction-error.txt'):continue
+            (runtime/file.name).symlink_to(file.resolve(),target_is_directory=file.is_dir())
+        save(runtime/'reuse.json',{'original_capture':str((old/'capture').resolve()),'original_build_sha256':sha(old/'build/build.json'),
+             'original_observer_jar_sha256':sha(old/'build/distributed-observer.jar'),'new_observer_jar_sha256':sha(base/'distributed-observer.jar'),
+             'all_compiled_observer_class_hashes_identical':True,'target_plan_hash_identical':True,
+             'purpose':'Re-evaluate unchanged forward evidence under revised offline implementation; no invented new deployment.'})
+        reports.append(evaluate(runtime,dest/'build',query))
+    save(out/'runtime-summary.json',reports)
 
 
 def context(client,trace):
@@ -269,7 +298,11 @@ def oracle(q,c,path,rows):
         for r in rows[role]:
             if r['kind']=='binding-source' and r.get('frame')==frame:
                 for f in r['fields']:
-                    if f['path']==relative:candidates.append(source_coord(role,r,f))
+                    if f['path']==relative:
+                        declared=q['target'].rsplit('.',1);declared=declared[0].replace('.','/')+'.'+declared[1]
+                        if f.get('schema_field',f['field'])!=declared:raise ValueError('Source field differs from independently declared business field')
+                        if f['field'].startswith('@list:') and f['field']!='@list:'+path.rsplit('/',1)[-1]:raise ValueError('Source list slot differs')
+                        candidates.append(source_coord(role,r,f))
         if len(candidates)==1:return candidates
         raise ValueError('Independent repository-return target projection absent/ambiguous: '+relative)
     if role=='orders':
@@ -315,6 +348,17 @@ def evaluate(dest,build,q):
     except Exception as e:invalid=str(e);(dest/'reconstruction-error.txt').write_text(traceback.format_exc())
     result={'id':q['id'],'application':q['application'],'requests':len(run['cases']),'target_instances':0,'known':0,'unknown':0,'N/A_requests':0,'evidence_invalid':0,'oracle_unavailable':0,'known_oracle_checked':0,'exact':0,'tp':0,'fp':0,'fn':0,'invalid_reason':invalid,'predictions':[]}
     for c in run['cases']:
+        if q['role'] in COLLECTION and 200<=c['http_status']<300:
+            data=c['response'].get('data') if isinstance(c['response'],dict) else c['response']
+            actual=data if isinstance(data,list) else [data] if isinstance(data,dict) else []
+            docs=c['database_documents']
+            for at,item in enumerate(actual):
+                if at>=len(docs):raise ValueError('Independent business audit: result cardinality differs')
+                for k,v in docs[at].items():
+                    if k=='_class' or k=='_id' and not isinstance(v,str):continue
+                    if item.get('id' if k=='_id' else k)!=v:raise ValueError('Independent business audit: database field projection differs')
+        if q['role']=='basic' and c['http_status']==200:
+            if c['response'].get('data',{}).get('status')!=(c['expected_status']==1):raise ValueError('Independent Basic literal-status branch oracle differs')
         targets=leaves(c['response'],q['path']) if 200<=c['http_status']<300 else []
         if not targets:result['N/A_requests']+=1
         for path,value in targets:
@@ -325,6 +369,8 @@ def evaluate(dest,build,q):
             else:
                 try:
                     answer=graph.query(c['message'],path,q['role'],boundary=BOUNDARY);item['answer']=answer
+                    if answer['target']['observed'].get('value')!=value:raise ValueError('Collected target differs from actual client JSON')
+                    item['unknown_reasons']=sorted({n['unknown'] for n in graph.nodes.values() if n.get('unknown') and n.get('root_frame') in {r['frame'] for r in raw[q['role']] if r['kind']=='binding-return' and r.get('message')==c['message']}})
                     item['status']='known' if answer['known'] else 'unknown';result[item['status']]+=1
                     if answer['known'] and expected is not None:
                         wanted=set(expected);actual={predicted_coord(s) for s in answer['sources']};result['known_oracle_checked']+=1;result['exact']+=int(wanted==actual)
@@ -356,8 +402,10 @@ def capture_all(out,base,only=None):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('action',choices=('plan','capture','evaluate'));p.add_argument('--stage',choices=('development','heldout'),default='development');p.add_argument('--out',type=Path,required=True);p.add_argument('--base',type=Path,required=True);p.add_argument('--only');a=p.parse_args();out=a.out.resolve();base=a.base.resolve()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('action',choices=('plan','capture','evaluate','reuse-forward'));p.add_argument('--stage',choices=('development','heldout'),default='development');p.add_argument('--out',type=Path,required=True);p.add_argument('--base',type=Path,required=True);p.add_argument('--only');p.add_argument('--previous',type=Path);a=p.parse_args();out=a.out.resolve();base=a.base.resolve()
     if a.action=='plan':plan_all(out,base,a.stage)
+    elif a.action=='reuse-forward':
+        assert a.stage=='development' and a.previous;reuse_forward_captures(out,base,a.previous.resolve())
     elif a.action=='capture':capture_all(out,base,a.only)
     else:
         reports=[]

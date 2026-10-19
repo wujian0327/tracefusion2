@@ -138,13 +138,18 @@ def plan_collection(model, entry, target, scalar_target=False):
         for value in operands[i][:-1] if x['op']!=184 else operands[i]:
             passed=allocations(value)
             require(not passed or key in setters, 'Local mutable allocation escapes to an opaque argument')
-    selected = closure(graph, writers)
+    # A call whose result is unused may still enter a handler and change which
+    # target write executes. Retain its actual completion/failure evidence and
+    # operand definitions; it is not safe to drop it as an off-slice value.
+    exception_calls={i for i,x in enumerate(c) if i in states and x['op'] in (182,183,184,185)
+                     and x['name']!='<init>' and any(h['start']<=i<h['end'] for h in m['exception_handlers'])}
+    selected = closure(graph, set(writers)|exception_calls)
     calls = [i for i in sorted(selected) if i >= 0 and c[i]['op'] in (182, 183, 184, 185) and c[i]['name'] != '<init>']
     if not scalar_target:
         require(any(c[i]['owner'] in ('java/util/Map', 'java/util/HashMap') and c[i]['name'] == 'put' for i in calls), 'No collection result mutation')
     branches = [i for i, x in enumerate(c) if 153 <= x['op'] <= 166 or x['op'] in (198, 199)]
     schema, _ = json_schema(model)
-    return {'algorithm': 'acyclic-collection-defuse-v1', 'profile': 'bounded-scalar' if scalar_target else 'collection-computation', 'entry': entry, 'target': target,
+    return {'algorithm': 'acyclic-collection-defuse-v2-exception-effects', 'profile': 'bounded-scalar' if scalar_target else 'collection-computation', 'entry': entry, 'target': target,
         'model_sha256': digest(model), 'class_sha256': {o: v['sha256'] for o, v in model['classes'].items()},
         'frame_methods': [entry], 'producer_method': None, 'writer_method': None, 'reduction': {},
         'snapshot_fields': [target], 'mapper_fields': [], 'full_snapshot_fields': [],
@@ -152,6 +157,7 @@ def plan_collection(model, entry, target, scalar_target=False):
         'collection_getters': getters, 'collection_setters': setters,
         'collection_selected_calls': calls, 'collection_branches': branches,
         'collection_writer_sites': writers, 'collection_effect_edges': effects,
+        'collection_exception_calls':sorted(exception_calls),
         'planning_stats': {'instructions': len(c), 'reachable_instructions': len(states), 'worklist_steps': steps,
                            'selected_calls': len(calls), 'all_nonconstructor_calls': sum(x['op'] in (182,183,184,185) and x['name'] != '<init>' for x in c)},
         'contracts': ['Acyclic original root bytecode, explicit exception-handler table and observed branch/handler path.',

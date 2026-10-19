@@ -24,6 +24,9 @@ public class BindingSemanticFixture {
     public static Input overwrite(Input x){x.setText("SAME");return x;}
     public static Box map(Input x){return new Box(x.getCells());}
     public static Output constant(Input x){Output r=new Output();r.setFlag(true);return r;}
+    public static Output overwriteFlag(Input x){Output r=new Output();r.setFlag(true);r.setFlag(false);return r;}
+    public static void mayThrow(boolean trigger){if(trigger)throw new IllegalStateException("fixture-trigger");}
+    public static Output catchUnused(Input x,boolean trigger){Output r=new Output();try{mayThrow(trigger);r.setFlag(true);}catch(Exception e){r.setFlag(false);}return r;}
     static void publish(Object result,W3CTraceContext context)throws Exception{
         Map row=context.fields();row.put("uri","fixture:actual-jackson-serialization");row.put("direction","response");row.put("phase","write");
         row.put("fields",SpringTransportAgent.Transport.snapshot(result));
@@ -51,6 +54,8 @@ public class BindingSemanticFixture {
                 case "overwrite":result=overwrite(left);break;
                 case "map":result=map(left);break;
                 case "constant":result=constant(left);break;
+                case "overwrite-flag":result=overwriteFlag(left);break;
+                case "catch-unused":result=catchUnused(left,i%2==0);break;
                 default:throw new IllegalArgumentException(args[0]);
             }
             publish(result,context);SpringTransportAgent.Transport.ASYNC.remove();

@@ -12,7 +12,7 @@ from run_planned_service import HERE,save,load
 from infer_distributed_fields import Reconstruction
 
 
-def run(out,base):
+def run(out,base,only=None):
     out.mkdir(parents=True,exist_ok=False);classes=out/'classes';classes.mkdir()
     _,target=java8_target();cp=':'.join(map(str,[base/'tools',*JARS]))
     command(['javac',*target,'-cp',cp,'-d',str(classes),str(HERE/'BindingSemanticFixture.java')],out/'compile.log')
@@ -26,9 +26,12 @@ def run(out,base):
       'opaque':('opaque(LBindingSemanticFixture$Input;)LBindingSemanticFixture$Input;','BindingSemanticFixture$Input.text','/text'),
       'overwrite':('overwrite(LBindingSemanticFixture$Input;)LBindingSemanticFixture$Input;','BindingSemanticFixture$Input.text','/text'),
       'map':('map(LBindingSemanticFixture$Input;)LBindingSemanticFixture$Box;','BindingSemanticFixture$Box.data','/data/k'),
-      'constant':('constant(LBindingSemanticFixture$Input;)LBindingSemanticFixture$Output;','BindingSemanticFixture$Output.flag','/flag')}
+      'constant':('constant(LBindingSemanticFixture$Input;)LBindingSemanticFixture$Output;','BindingSemanticFixture$Output.flag','/flag'),
+      'overwrite-flag':('overwriteFlag(LBindingSemanticFixture$Input;)LBindingSemanticFixture$Output;','BindingSemanticFixture$Output.flag','/flag'),
+      'catch-unused':('catchUnused(LBindingSemanticFixture$Input;Z)LBindingSemanticFixture$Output;','BindingSemanticFixture$Output.flag','/flag')}
     result={}
     for name,(method,field,path) in cases.items():
+        if only and name!=only:continue
         dest=out/name;dest.mkdir();config={'fixture':{'jar':str(jar),'entry':'BindingSemanticFixture.'+method,'targets':[field],'response_path':path}}
         build(dest/'build',config);capture=dest/'capture';(capture/'fixture').mkdir(parents=True)
         log=capture/'fixture/events.jsonl'
@@ -40,7 +43,7 @@ def run(out,base):
             answer=graph.query(wire['message'],path,'fixture')
             assert answer['known']==(name!='opaque'),(name,answer)
             expected=[]
-            if name not in ('constant','overwrite','opaque'):
+            if name not in ('constant','overwrite','overwrite-flag','catch-unused','opaque'):
                 arg=0 if name!='choose' or i%2==0 else 1
                 source=next(r for r in rows if r['kind']=='binding-input' and r['message']==wire['message'] and r['argument']==arg)
                 expected=[f for f in source['fields'] if f['field']==('@map:k' if name=='map' else 'BindingSemanticFixture$Input.text')]
@@ -80,4 +83,4 @@ def run(out,base):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--base',type=Path,required=True);a=p.parse_args();run(a.out.resolve(),a.base.resolve())
+    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--base',type=Path,required=True);p.add_argument('--only');a=p.parse_args();run(a.out.resolve(),a.base.resolve(),a.only)
