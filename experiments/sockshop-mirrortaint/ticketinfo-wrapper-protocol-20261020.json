@@ -1,0 +1,101 @@
+{
+  "parent_commit": "d5e65809bd405ecf60943f94fb64fd79f333afb8",
+  "parent_algorithm": "3f78922334dc867228599f4d1f4d0f6abde256a7",
+  "queries": [
+    {
+      "application": "trainticket",
+      "role": "ticketinfo",
+      "entry": "ticketinfo/service/TicketInfoServiceImpl.queryForTravel(Lticketinfo/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/ticketinfoservice/ticketinfo",
+      "target": "ticketinfo.entity.TrainType.id",
+      "path": "/data/trainType/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-ticketinfo-queryForTravel-data-trainType-id",
+      "rank": "257383313e730d4fba84ba028e419cf90372dd29c1c97646b4b1bbcb8129bb86",
+      "exposure_group": "development20"
+    },
+    {
+      "application": "trainticket",
+      "role": "ticketinfo",
+      "entry": "ticketinfo/service/TicketInfoServiceImpl.queryForTravel(Lticketinfo/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/ticketinfoservice/ticketinfo",
+      "target": "ticketinfo.entity.TravelResult.prices",
+      "path": "/data/prices/economyClass",
+      "shape_note": "declared Map price key from original bytecode",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-ticketinfo-queryForTravel-data-prices-economyClass",
+      "rank": "be5d008c0e85ee2c44baed800a73037034151b14bb0266b5a105a10924682697",
+      "exposure_group": "model20"
+    },
+    {
+      "application": "trainticket",
+      "role": "ticketinfo",
+      "entry": "ticketinfo/service/TicketInfoServiceImpl.queryForTravel(Lticketinfo/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/ticketinfoservice/ticketinfo",
+      "target": "ticketinfo.entity.TrainType.averageSpeed",
+      "path": "/data/trainType/averageSpeed",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed",
+      "rank": "e7a594edc9bd7692045f3c2b835d7e7b2e5e8b5d87a1abcea3beb09d4ea7de75",
+      "exposure_group": "model20"
+    }
+  ],
+  "original_targets": 21,
+  "previously_fixed_gaps": 75,
+  "remaining_gaps": 94,
+  "reserved_candidates": 29,
+  "reserved_protocol_sha256": "87c40107282aaccb8e049fc5ffe37bb1e66deacfeabd0f015a08544bc1972fae",
+  "scope": [
+    "Pinned HttpEntity request-body/null-header wrapper and actual ResponseEntity body identity",
+    "Concrete Class literal witness and actual decoded Map field coordinates; no declared DTO/runtime shape substitution",
+    "Actual RPC-read boundary preserved; unknown for unmodeled effects"
+  ],
+  "deferred": [
+    "Orders save/async",
+    "Date",
+    "performance",
+    "held-out29"
+  ],
+  "acceptance": [
+    "Independent real-library semantic controls including identical messages/objects and mutation/missing evidence",
+    "Original TicketInfo21 full then selective with independent source coordinates",
+    "Cart15 and Cart6, Station/Route60 and old213 offline compatibility",
+    "Freeze after development, preserve first failures and final raw evidence"
+  ],
+  "truth": "Use original business code, actual client and RPC payloads/call/message/object/field/version facts; no TF graph or baseline labels to decide expected sources."
+}
