@@ -28,7 +28,7 @@ def infer_application(plan,rows):
         while changed:
             before=len(family);family.update(k for k,r in all_enters.items() if r.get('parent') in family);changed=len(family)!=before
         relevant=[r for r in rows if r.get('frame') in family and root['seq']<=r['seq']<=end['seq']]
-        methods=cfg['methods'];events=[r for r in relevant if r['kind'] in ('enter','exit','abort','collection-call-enter','collection-call-exit','collection-call-throw','execution-constructed','execution-lambda','execution-array','execution-array-throw','collection-catch','branch','read','write') and (r['kind'] not in ('read','write','branch') or r['site'].rsplit('@',1)[0] in methods)]
+        methods=cfg['methods'];events=[r for r in relevant if r['kind'] in ('enter','exit','abort','collection-call-enter','collection-call-exit','collection-call-throw','execution-constructed','execution-constructor-throw','execution-lambda','execution-array','execution-array-throw','collection-catch','branch','read','write') and (r['kind'] not in ('read','write','branch') or r['site'].rsplit('@',1)[0] in methods)]
         writes=[r for r in relevant if r['kind']=='write'];providers=defaultdict(list)
         for row in relevant:
             if row['kind'] in ('binding-source','binding-input'):
@@ -67,7 +67,9 @@ def infer_application(plan,rows):
                 todo.extend(heap_refs.get(owner,()))
                 for (o,_,_),v in state.fields.items():
                     if o==owner and identity(v) is not None and 'value' not in v.observed:todo.append(identity(v))
-                if owner in state.streams:todo.append(state.streams[owner][0])
+                if owner in state.streams:
+                    todo.append(state.streams[owner][0])
+                    if len(state.streams[owner])==3:todo.append(identity(state.streams[owner][2]))
                 if owner in state.optionals and state.optionals[owner] is not None:todo.append(identity(state.optionals[owner]))
                 if owner in state.lambdas:todo.extend(identity(v) for v in state.lambdas[owner][1] if 'value' not in v.observed)
                 if owner in state.arrays:
@@ -119,7 +121,7 @@ def infer_application(plan,rows):
         def execute(begin,args,receiver):
             nonlocal fr,method,code,entry,allocation_count,total_steps,branch_count,pos
             saved=(fr,method,code,entry)
-            entry=begin['method'];method=methods[entry];code=method['instructions'];fr=Frame(begin['frame']);slot=0
+            entry=begin['method'];method=methods[entry];code=method['instructions'];fr=Frame(begin['frame']);fr.pc=cfg.get('constructor_starts',{}).get(entry,0);slot=0
             if not method['access']&8:fr.locals[0]=receiver;slot=1
             require(len(args)==len(begin['args']),'Application argument count differs')
             for index,desc in enumerate(descriptors(method['desc'])):
@@ -205,23 +207,53 @@ def infer_application(plan,rows):
                     elif op in (182,183,184,185):
                         args=[pop() for _ in descriptors(ins['desc'])][::-1];recv=None if op==184 else pop();key=callee(ins)
                         if ins['name']=='<init>':
-                            event=take('execution-constructed');bind(recv,event['receiver'])
+                            effect=cfg['constructors'].get(key);require(effect is not None,'Execution constructor effects absent')
+                            child_error=None
+                            if effect.get('kind')=='frame':
+                                begin=take('enter',check_frame=False);require(begin['method']==key and begin['parent']==fr.invocation and begin['callsite']==entry+'@'+str(fr.pc),'Constructor Frame binding differs')
+                                bind(recv,{'object':begin['receiver']});_,child_error=execute(begin,args,recv)
+                            if pos<len(events) and events[pos]['kind']=='execution-constructor-throw':
+                                failure=take('execution-constructor-throw')
+                                if child_error:require(child_error.get('object')==failure['exception']['object'],'Constructor exception identity differs')
+                                else:raise ValueError('Shortcut constructor unexpectedly threw; required effects not explained')
+                                if handle(failure['exception'],failure['exception_type']):continue
+                                take('abort');return None,failure['exception']
+                            require(child_error is None,'Aborted constructor has successful completion');event=take('execution-constructed');bind(recv,event['receiver'])
                             require(event['receiver_type']==ins['owner'].replace('/','.'),'Execution constructor type differs')
                             require(len(args)==len(event['args']),'Execution constructor arity differs')
                             for a,b in zip(args,event['args']):bind(a,b)
                             owner=identity(recv)
                             if key=='java/util/ArrayList.<init>()V':state.containers[owner]=Container(owner,[],0,True)
-                            else:
-                                require(key in cfg['constructors'],'Execution constructor effects absent')
-                                for name,index in cfg['constructors'][key].items():
+                            elif effect.get('kind')!='frame':
+                                fields=effect['fields'] if effect.get('kind')=='assignments' else {name:{'argument':index} for name,index in effect.items()}
+                                for name,expression in fields.items():
+                                    value=args[expression['argument']] if 'argument' in expression else Value({'value':expression['constant']})
                                     matching=[w for w in writes if w['owner']==owner and w['field']==name and w['seq']<event['seq']]
-                                    require(len(matching)==1,'Execution constructor write missing/ambiguous');w=matching[0];bind(args[index],w['observed']);write_field(w,args[index])
+                                    require(len(matching)==1,'Execution constructor write missing/ambiguous');w=matching[0];bind(value,w['observed']);write_field(w,value)
                         else:
                             call=take('collection-call-enter');require(call['callee']==key,'Execution invoked method differs')
                             if recv is not None:bind(recv,call['receiver'])
                             require(len(args)==len(call['args']),'Execution call arity differs')
                             for a,b in zip(args,call['args']):bind(a,b)
-                            child_value=None;child_error=None
+                            child_value=None;child_error=None;filter_selection=None;filter_executed=False;filter_selectors=frozenset()
+                            stream=state.streams.get(identity(recv)) if recv is not None else None
+                            if key=='java/util/stream/Stream.findFirst()Ljava/util/Optional;' and stream and len(stream)==3:
+                                owner,epoch,predicate=stream;c=state.containers[owner];require(c.epoch==epoch,'Filter source container changed')
+                                declaration,captured=state.lambdas.get(identity(predicate),(None,None));implementation=declaration['bootstrap_args'][1] if declaration else None
+                                if implementation and implementation['handle'] in methods:
+                                    filter_executed=True;accepted=False
+                                    for index,member in enumerate(c.elements):
+                                        begin=take('enter',check_frame=False);require(begin['method']==implementation['handle'] and begin['parent']==fr.invocation and begin.get('callback_call_id')==call['call_id'] and begin['callsite']==entry+'@'+str(fr.pc),'Filter callback implementation/instance differs')
+                                        bound=list(captured)+[member];child_recv=None if implementation['tag']==6 else bound.pop(0)
+                                        if child_recv is not None:require(begin['receiver']==identity(child_recv),'Filter captured receiver differs')
+                                        predicate_value,child_error=execute(begin,bound,child_recv)
+                                        if child_error is not None:break
+                                        require(isinstance(predicate_value.observed.get('value'),(int,bool)) and predicate_value.observed['value'] in (0,1),'Filter predicate result not boolean')
+                                        filter_selectors|=predicate_value.origins|predicate_value.selectors
+                                        if predicate_value.unknown:poison([predicate,Value({'object':owner})],events[pos-1]['seq'])
+                                        if predicate_value.observed['value']:
+                                            filter_selection=Value(member.observed,member.origins,member.selectors|filter_selectors,member.unknown,member.allocation);accepted=True;break
+                                    if not accepted and child_error is None:require(not (pos<len(events) and events[pos]['kind']=='enter'),'Filter callback count exceeds source membership')
                             permitted=cfg['call_targets'].get(entry+'@'+str(fr.pc),[])
                             expected_impl=None
                             if ins['op'] in (183,184):expected_impl=key if key in permitted else None
@@ -242,6 +274,7 @@ def infer_application(plan,rows):
                                     expected_impl=implementation;permitted=[implementation]
                                     bound=list(captured)+(args if key.startswith('java/util/function/Supplier.') else [])
                                     child_recv=None if handle_spec['tag']==6 else bound.pop(0);child_args=bound
+                            if filter_executed:require(not (pos<len(events) and events[pos]['kind']=='enter'),'Filter has unexpected additional callback')
                             if pos<len(events) and events[pos]['kind']=='enter' and expected_impl is None:
                                 # An opaque callback may itself enter instrumented bodies.
                                 # Validate their closed extent, then conservatively poison
@@ -296,10 +329,16 @@ def infer_application(plan,rows):
                                 fact=ret.get('contract');require(fact and fact['kind']=='list-stream' and fact['valid'] and ret['result_type']=='java.util.stream.ReferencePipeline$Head','Sequential stream contract absent/invalid');c=container(call)
                                 require(fact['source']==c.owner and fact['epoch']==c.epoch and fact['elements']==call['collection'],'Stream source identity/stage differs')
                                 require(observed['object'] not in state.streams,'Stream instance reused');state.streams[observed['object']]=(c.owner,c.epoch);v=Value(observed)
-                            elif key=='java/util/stream/Stream.findFirst()Ljava/util/Optional;' and identity(recv) in state.streams:
-                                fact=ret.get('contract');require(fact and fact['kind']=='stream-first' and fact['valid'] and ret['result_type']=='java.util.Optional','findFirst contract absent/invalid');owner,epoch=state.streams.pop(identity(recv));c=state.containers[owner]
-                                require(owner==fact['source'] and epoch==fact['epoch']==c.epoch and fact['present']==bool(c.elements),'findFirst source stage differs')
-                                selected=c.elements[0] if c.elements else None
+                            elif key=='java/util/stream/Stream.filter(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;' and identity(recv) in state.streams:
+                                fact=ret.get('contract');require(fact and fact['kind']=='stream-filter' and fact['valid'],'Filter contract missing/invalid')
+                                owner,epoch=state.streams.pop(identity(recv));require(fact['source']==owner and fact['epoch']==epoch and fact['predicate']==identity(args[0]),'Filter source/predicate instance differs')
+                                require(any(p['java_runtime_version']==runtime[0]['java_runtime_version'] and p['class_sha256']['java/util/stream/ReferencePipeline$2']==fact['filter_class_sha256'] for p in cfg['library_contracts']['filter_profiles']),'Unmodeled filter runtime')
+                                state.streams[observed['object']]=(owner,epoch,args[0]);v=Value(observed)
+                            elif key=='java/util/stream/Stream.findFirst()Ljava/util/Optional;' and identity(recv) in state.streams and (len(state.streams[identity(recv)])==2 or filter_executed):
+                                fact=ret.get('contract');require(fact and fact['kind']==('filter-first' if filter_executed else 'stream-first') and fact['valid'] and ret['result_type']=='java.util.Optional','findFirst contract absent/invalid');stream=state.streams.pop(identity(recv));owner,epoch=stream[:2];c=state.containers[owner]
+                                require(owner==fact['source'] and epoch==fact['epoch']==c.epoch and fact['present']==(filter_selection is not None if filter_executed else bool(c.elements)),'findFirst source stage differs')
+                                if filter_executed:require(fact['predicate']==identity(stream[2]),'Filter terminal predicate differs')
+                                selected=filter_selection if filter_executed else c.elements[0] if c.elements else None
                                 if selected is not None and (owner in poisoned_at or c.escaped):selected=Value(selected.observed,selected.origins,selected.selectors,True,selected.allocation)
                                 if selected:bind(selected,fact['selected'])
                                 else:require(fact['selected'].get('value','not-null') is None,'Empty Optional selected object differs')
@@ -333,6 +372,15 @@ def infer_application(plan,rows):
                                 elif ins['name']=='next':
                                     require(index<len(c.elements),'Execution iterator outside contents');v=c.elements[index].project(observed);bind(c.elements[index],observed);state.iterators[identity(recv)][1]+=1
                                 else:raise ValueError('Execution iterator method unsupported')
+                            elif key=='org/slf4j/LoggerFactory.getLogger(Ljava/lang/Class;)Lorg/slf4j/Logger;':
+                                fact=ret.get('contract');require(fact and fact['kind']=='logger-factory','Logging factory witness absent')
+                                if fact.get('valid'):
+                                    require(any(p['class_sha256']==fact['class_sha256'] for p in cfg['library_contracts']['logger_factory_profiles']),'Unmodeled logging factory/binder version');v=Value(observed)
+                                else:poison(args,ret['seq'])
+                            elif key=='java/lang/String.equals(Ljava/lang/Object;)Z' and isinstance(recv.observed.get('value'),str) and 'value' in args[0].observed:
+                                fact=ret.get('contract');require(fact and fact['kind']=='string-equality' and fact['valid'],'String equality witness absent')
+                                require(any(p['java_runtime_version']==runtime[0]['java_runtime_version'] and p['class_sha256']['java/lang/String']==fact['class_sha256'] for p in cfg['library_contracts']['filter_profiles']),'Unmodeled String runtime')
+                                require(observed.get('value')==(recv.observed['value']==args[0].observed['value']),'String equality contradicts operands');v=combine(observed,[recv,args[0]])
                             elif key=='java/lang/Object.getClass()Ljava/lang/Class;':
                                 fact=ret.get('contract');require(fact and fact['kind']=='object-class' and fact['valid'] and fact['receiver_type']==call['receiver_type'] and ret['result_type']=='java.lang.Class','Object.getClass runtime identity differs');v=Value(observed)
                             elif key=='java/lang/Integer.valueOf(I)Ljava/lang/Integer;':v=args[0].project(observed);same_value(args[0].observed,observed)

@@ -52,6 +52,7 @@ def plan_execution(model, entry, target, response_path, source_calls=None, appli
     for ins in method['instructions']:
         if ins['op']==183 and ins['name']=='<init>':
             key=callee(ins)
+            if application_calls:continue
             if key=='java/util/ArrayList.<init>()V':constructors[key]={}
             else:
                 require(key in model['methods'],'Unknown constructor: '+key)

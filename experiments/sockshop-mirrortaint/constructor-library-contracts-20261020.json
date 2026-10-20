@@ -1,0 +1,44 @@
+{
+  "logger_factory_profiles": [
+    {
+      "role_reference_only": "carts",
+      "class_sha256": {
+        "org/slf4j/LoggerFactory": "b2420bc5bc7b179ded2b92b8bb8d06a098e8f418206ee2ac8e2e0db20be3470b",
+        "ch/qos/logback/classic/Logger": "4df3e2000af2124c532746f00fabd6beda3de6633b25ccf221e989b0263347a2",
+        "ch/qos/logback/classic/LoggerContext": "e601934adf8c21bea3c393f30ea9c70fb68f09aeb97b34df5aa067cc4bacc5c7"
+      }
+    },
+    {
+      "role_reference_only": "ticketinfo",
+      "class_sha256": {
+        "org/slf4j/LoggerFactory": "dc3d336c87469ae107bd6805bd7858b6dbab06bde0960a0fbf393ef65d96ba9f",
+        "ch/qos/logback/classic/Logger": "e4e66819595a4289e43f0e7a5d86ab5b96f2fbd22621cf1b20bf8b1d45b65906",
+        "ch/qos/logback/classic/LoggerContext": "82ee6b135a8de2d45355fd793ec8929d6023e1943864de2519d4d4bab70fd56f"
+      }
+    }
+  ],
+  "scope": "Original fixed slf4j LoggerFactory + default logback LoggerContext/Logger; only getLogger(Class), no application callbacks or entity arguments.",
+  "filter_profiles": [
+    {
+      "java_runtime_version": "1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01",
+      "class_sha256": {
+        "java/lang/String": "969d15cf90e6cc029cd231abf9573f9f4d441c97e5f9062f8dbb5465719b8569",
+        "java/util/stream/ReferencePipeline$2": "d4b909ba6dd604bb90e639223344d7747568a5e257c10958271b1ab9b88a3ff5"
+      }
+    },
+    {
+      "java_runtime_version": "1.8.0_111-internal-alpine-r0-b14",
+      "class_sha256": {
+        "java/lang/String": "969d15cf90e6cc029cd231abf9573f9f4d441c97e5f9062f8dbb5465719b8569",
+        "java/util/stream/ReferencePipeline$2": "d4b909ba6dd604bb90e639223344d7747568a5e257c10958271b1ab9b88a3ff5"
+      }
+    },
+    {
+      "java_runtime_version": "1.8.0_111-8u111-b14-2~bpo8+1-b14",
+      "class_sha256": {
+        "java/lang/String": "969d15cf90e6cc029cd231abf9573f9f4d441c97e5f9062f8dbb5465719b8569",
+        "java/util/stream/ReferencePipeline$2": "d4b909ba6dd604bb90e639223344d7747568a5e257c10958271b1ab9b88a3ff5"
+      }
+    }
+  ]
+}

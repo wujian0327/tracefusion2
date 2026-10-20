@@ -26,7 +26,7 @@ public final class ResponseBindingHooks implements Opcodes {
         return true;
     }
     static boolean instrument(MethodNode m,String key,List<AbstractInsnNode> code){
-        if(!enabled()||m.name.equals("<init>"))return false;
+        if(!enabled()||(m.name.equals("<init>")&&!ExecutionKernelHooks.method(key)))return false;
         boolean changed=false;
         for(AbstractInsnNode n:code){
             if(!(n instanceof MethodInsnNode))continue;MethodInsnNode c=(MethodInsnNode)n;if(c.name.equals("<init>"))continue;

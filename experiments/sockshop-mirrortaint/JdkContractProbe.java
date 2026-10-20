@@ -11,5 +11,6 @@ public final class JdkContractProbe {
         StringBuilder out=new StringBuilder();for(byte x:digest.digest())out.append(String.format("%02x",x&255));return out.toString();
     }
     static Map<String,String> hashes()throws Exception{Map<String,String> r=new TreeMap<>();for(String name:CLASSES)r.put(name,hash(name));return r;}
-    public static void main(String[] args)throws Exception{System.out.println("java.runtime.version="+System.getProperty("java.runtime.version"));for(Map.Entry<String,String> e:hashes().entrySet())System.out.println(e.getKey()+"="+e.getValue());}
+    static Map<String,String> selected(String[] names)throws Exception{Map<String,String> r=new TreeMap<>();for(String n:names)r.put(n,hash(n));return r;}
+    public static void main(String[] args)throws Exception{System.out.println("java.runtime.version="+System.getProperty("java.runtime.version"));for(Map.Entry<String,String> e:(args.length==0?hashes():selected(args)).entrySet())System.out.println(e.getKey()+"="+e.getValue());}
 }
