@@ -1,0 +1,530 @@
+{
+  "all_passed": true,
+  "algorithm_commit": "19b11b6d4fd1d344550c307a0acabe4dbf7548cd",
+  "first_algorithm_commit": "16abcda0cfed541c889d92eb1a8620fe10f5e0ca",
+  "ticketinfo": {
+    "full": {
+      "queries": 3,
+      "entries": 1,
+      "targets": 21,
+      "correct": 21,
+      "tp": 21,
+      "fp": 0,
+      "fn": 0,
+      "unknown": 0,
+      "query_requests": 24,
+      "N/A_query_requests": 3,
+      "per_query": [
+        {
+          "query": "trainticket-ticketinfo-queryForTravel-data-trainType-id",
+          "targets": 7,
+          "correct": 7,
+          "tp": 7,
+          "fp": 0,
+          "fn": 0,
+          "unknown": 0,
+          "requests": 8,
+          "N/A_requests": 1,
+          "faults": {
+            "class-literal": true,
+            "rpc-body": true,
+            "rpc-parent": true,
+            "getbody": true,
+            "missing-read": true,
+            "ambiguous-read": true,
+            "converter-version": true
+          }
+        },
+        {
+          "query": "trainticket-ticketinfo-queryForTravel-data-prices-economyClass",
+          "targets": 7,
+          "correct": 7,
+          "tp": 7,
+          "fp": 0,
+          "fn": 0,
+          "unknown": 0,
+          "requests": 8,
+          "N/A_requests": 1,
+          "faults": {
+            "class-literal": true,
+            "rpc-body": true,
+            "rpc-parent": true,
+            "getbody": true,
+            "missing-read": true,
+            "ambiguous-read": true,
+            "converter-version": true
+          }
+        },
+        {
+          "query": "trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed",
+          "targets": 7,
+          "correct": 7,
+          "tp": 7,
+          "fp": 0,
+          "fn": 0,
+          "unknown": 0,
+          "requests": 8,
+          "N/A_requests": 1,
+          "faults": {
+            "class-literal": true,
+            "rpc-body": true,
+            "rpc-parent": true,
+            "getbody": true,
+            "missing-read": true,
+            "ambiguous-read": true,
+            "converter-version": true
+          }
+        }
+      ]
+    },
+    "selective": {
+      "queries": 3,
+      "entries": 1,
+      "targets": 21,
+      "correct": 21,
+      "tp": 21,
+      "fp": 0,
+      "fn": 0,
+      "unknown": 0,
+      "query_requests": 24,
+      "N/A_query_requests": 3,
+      "per_query": [
+        {
+          "query": "trainticket-ticketinfo-queryForTravel-data-trainType-id",
+          "targets": 7,
+          "correct": 7,
+          "tp": 7,
+          "fp": 0,
+          "fn": 0,
+          "unknown": 0,
+          "requests": 8,
+          "N/A_requests": 1,
+          "faults": {
+            "class-literal": true,
+            "rpc-body": true,
+            "rpc-parent": true,
+            "getbody": true,
+            "missing-read": true,
+            "ambiguous-read": true,
+            "converter-version": true
+          }
+        },
+        {
+          "query": "trainticket-ticketinfo-queryForTravel-data-prices-economyClass",
+          "targets": 7,
+          "correct": 7,
+          "tp": 7,
+          "fp": 0,
+          "fn": 0,
+          "unknown": 0,
+          "requests": 8,
+          "N/A_requests": 1,
+          "faults": {
+            "class-literal": true,
+            "rpc-body": true,
+            "rpc-parent": true,
+            "getbody": true,
+            "missing-read": true,
+            "ambiguous-read": true,
+            "converter-version": true
+          }
+        },
+        {
+          "query": "trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed",
+          "targets": 7,
+          "correct": 7,
+          "tp": 7,
+          "fp": 0,
+          "fn": 0,
+          "unknown": 0,
+          "requests": 8,
+          "N/A_requests": 1,
+          "faults": {
+            "class-literal": true,
+            "rpc-body": true,
+            "rpc-parent": true,
+            "getbody": true,
+            "missing-read": true,
+            "ambiguous-read": true,
+            "converter-version": true
+          }
+        }
+      ]
+    }
+  },
+  "loop60": {
+    "full": 60,
+    "selective": 60
+  },
+  "cart15": {
+    "full": 15,
+    "selective": 15
+  },
+  "cart6_restore": [
+    {
+      "mode": "full",
+      "requests": 6,
+      "targets": 6,
+      "unknown": 0,
+      "known": 6,
+      "exact": 6,
+      "application_frames": 30,
+      "methods": [
+        "works/weave/socks/cart/action/FirstResultOrDefault.get()Ljava/lang/Object;",
+        "works/weave/socks/cart/cart/CartResource.value()Ljava/util/function/Supplier;",
+        "works/weave/socks/cart/configuration/BeanConfiguration$1.findByCustomerId(Ljava/lang/String;)Ljava/util/List;",
+        "works/weave/socks/cart/controllers/CartsController.get(Ljava/lang/String;)Lworks/weave/socks/cart/entities/Cart;",
+        "works/weave/socks/cart/controllers/ItemsController.getItems(Ljava/lang/String;)Ljava/util/List;"
+      ]
+    },
+    {
+      "mode": "selective",
+      "requests": 6,
+      "targets": 6,
+      "unknown": 0,
+      "known": 6,
+      "exact": 6,
+      "application_frames": 30,
+      "methods": [
+        "works/weave/socks/cart/action/FirstResultOrDefault.get()Ljava/lang/Object;",
+        "works/weave/socks/cart/cart/CartResource.value()Ljava/util/function/Supplier;",
+        "works/weave/socks/cart/configuration/BeanConfiguration$1.findByCustomerId(Ljava/lang/String;)Ljava/util/List;",
+        "works/weave/socks/cart/controllers/CartsController.get(Ljava/lang/String;)Lworks/weave/socks/cart/entities/Cart;",
+        "works/weave/socks/cart/controllers/ItemsController.getItems(Ljava/lang/String;)Ljava/util/List;"
+      ]
+    }
+  ],
+  "controls": {
+    "semantics-final-full": {
+      "targets": 12,
+      "known": 6,
+      "expected_unknown": 6,
+      "aborted": 2,
+      "N/A_requests": 2,
+      "faults": {
+        "missing-class-literal": true,
+        "wrong-class-literal": true,
+        "wrong-class-hash": true,
+        "missing-entity-witness": true,
+        "wrong-entity-body": true,
+        "wrong-library-hash": true,
+        "wrong-rpc-body": true,
+        "changed-rpc-fields": true,
+        "wrong-rpc-parent": true,
+        "missing-rpc-read": true,
+        "ambiguous-rpc-read": true,
+        "wrong-getbody-result": true
+      }
+    },
+    "semantics-final-selective": {
+      "targets": 12,
+      "known": 6,
+      "expected_unknown": 6,
+      "aborted": 2,
+      "N/A_requests": 2,
+      "faults": {
+        "missing-class-literal": true,
+        "wrong-class-literal": true,
+        "wrong-class-hash": true,
+        "missing-entity-witness": true,
+        "wrong-entity-body": true,
+        "wrong-library-hash": true,
+        "wrong-rpc-body": true,
+        "changed-rpc-fields": true,
+        "wrong-rpc-parent": true,
+        "missing-rpc-read": true,
+        "ambiguous-rpc-read": true,
+        "wrong-getbody-result": true
+      }
+    },
+    "application-semantics-frozen-full": {
+      "targets": 34,
+      "known": 26,
+      "expected_unknown": 8,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-child": true,
+        "wrong-parent": true,
+        "duplicate-call-id": true,
+        "missing-constructor-write": true,
+        "same-value-wrong-argument": true,
+        "wrong-exception": true
+      }
+    },
+    "application-semantics-frozen-selective": {
+      "targets": 34,
+      "known": 26,
+      "expected_unknown": 8,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-child": true,
+        "wrong-parent": true,
+        "duplicate-call-id": true,
+        "missing-constructor-write": true,
+        "same-value-wrong-argument": true,
+        "wrong-exception": true
+      }
+    },
+    "constructor-development-full": {
+      "targets": 24,
+      "known": 20,
+      "expected_unknown": 4,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-constructor-frame": true,
+        "wrong-constructor-parent": true,
+        "wrong-constructor-receiver": true,
+        "missing-constructor-write": true,
+        "missing-constructor-completion": true,
+        "wrong-constructor-exception": true,
+        "wrong-constructor-argument": true,
+        "missing-filter-callback": true,
+        "wrong-filter-member": true,
+        "wrong-filter-predicate": true,
+        "wrong-filter-result": true,
+        "filter-runtime-hash": true
+      }
+    },
+    "constructor-development-selective": {
+      "targets": 24,
+      "known": 20,
+      "expected_unknown": 4,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-constructor-frame": true,
+        "wrong-constructor-parent": true,
+        "wrong-constructor-receiver": true,
+        "missing-constructor-write": true,
+        "missing-constructor-completion": true,
+        "wrong-constructor-exception": true,
+        "wrong-constructor-argument": true,
+        "missing-filter-callback": true,
+        "wrong-filter-member": true,
+        "wrong-filter-predicate": true,
+        "wrong-filter-result": true,
+        "filter-runtime-hash": true
+      }
+    },
+    "contracts-development-full": {
+      "targets": 44,
+      "known": 38,
+      "expected_unknown": 6,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-child": true,
+        "wrong-parent": true,
+        "duplicate-call-id": true,
+        "missing-constructor-write": true,
+        "same-value-wrong-argument": true,
+        "wrong-exception": true,
+        "lambda-capture": true,
+        "lambda-handle": true,
+        "array-position": true,
+        "array-version": true,
+        "missing-contract": true,
+        "stream-source": true,
+        "array-slot-version": true,
+        "array-owner": true,
+        "missing-array-store": true,
+        "optional-presence": true
+      }
+    },
+    "contracts-development-selective": {
+      "targets": 44,
+      "known": 38,
+      "expected_unknown": 6,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-child": true,
+        "wrong-parent": true,
+        "duplicate-call-id": true,
+        "missing-constructor-write": true,
+        "same-value-wrong-argument": true,
+        "wrong-exception": true,
+        "lambda-capture": true,
+        "lambda-handle": true,
+        "array-position": true,
+        "array-version": true,
+        "missing-contract": true,
+        "stream-source": true,
+        "array-slot-version": true,
+        "array-owner": true,
+        "missing-array-store": true,
+        "optional-presence": true
+      }
+    }
+  },
+  "legacy_offline": {
+    "all_passed": true,
+    "source_sha256": "e4c7574eafe35f7ef68f38b78d360b15f15b5bc14dd72eaa4e6fa25272fb0d2a",
+    "states": {
+      "unknown": 88,
+      "known_correct": 213
+    },
+    "captures": 40,
+    "scope": "Reused original capture and independent truth, revised offline fast paths; no new runtime validation."
+  },
+  "constructor_write_refused": true,
+  "newly_fixed_baseline_gaps": 21,
+  "previously_fixed": 75,
+  "cumulative_development_repairs": 96,
+  "remaining_baseline_gaps": 73,
+  "reserved_candidates": 29,
+  "whole_62_full_selective_acceptance": false,
+  "goal_382_of_431_met": false,
+  "new_performance": false,
+  "first_frozen_full": "21 unknown, no wrong; original Boot JAXB converter not yet in pinned set",
+  "source_boundary": "Actual RPC decoded response fields, unchanged task boundary; target return snapshot is never a source",
+  "replay_proof": [
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/ticketinfo-final/full-trainticket-ticketinfo-queryForTravel-data-trainType-id/build",
+      "role": "ticketinfo",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/ticketinfo-final/full-trainticket-ticketinfo-queryForTravel-data-prices-economyClass/build",
+      "role": "ticketinfo",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/ticketinfo-final/full-trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed/build",
+      "role": "ticketinfo",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/ticketinfo-final/selective-trainticket-ticketinfo-queryForTravel-data-trainType-id/build",
+      "role": "ticketinfo",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/ticketinfo-final/selective-trainticket-ticketinfo-queryForTravel-data-prices-economyClass/build",
+      "role": "ticketinfo",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/ticketinfo-final/selective-trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed/build",
+      "role": "ticketinfo",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/loop-final/full-trainticket-route-getRouteByStartAndTerminal-data-each-stations-each/build",
+      "role": "route",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/loop-final/full-trainticket-route-getRouteByStartAndTerminal-data-each-terminalStationId/build",
+      "role": "route",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/loop-final/full-trainticket-station-queryByIdBatch-data-each/build",
+      "role": "station",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/loop-final/full-trainticket-station-queryForIdBatch-data-each/build",
+      "role": "station",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/loop-final/selective-trainticket-route-getRouteByStartAndTerminal-data-each-stations-each/build",
+      "role": "route",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/loop-final/selective-trainticket-route-getRouteByStartAndTerminal-data-each-terminalStationId/build",
+      "role": "route",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/loop-final/selective-trainticket-station-queryByIdBatch-data-each/build",
+      "role": "station",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/loop-final/selective-trainticket-station-queryForIdBatch-data-each/build",
+      "role": "station",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/cart-gaps-frozen/full-sockshop-carts-get-itemId/build",
+      "role": "carts",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/cart-gaps-frozen/full-sockshop-carts-get-quantity/build",
+      "role": "carts",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/cart-gaps-frozen/full-sockshop-carts-get-unitPrice/build",
+      "role": "carts",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/cart-gaps-frozen/selective-sockshop-carts-get-itemId/build",
+      "role": "carts",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/cart-gaps-frozen/selective-sockshop-carts-get-quantity/build",
+      "role": "carts",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/cart-gaps-frozen/selective-sockshop-carts-get-unitPrice/build",
+      "role": "carts",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/cart-restore-final/full/build",
+      "role": "carts",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "build": "artifacts/ticketinfo-wrapper-revision-20261020/cart-restore-final/selective/build",
+      "role": "carts",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true
+    },
+    {
+      "capture": "artifacts/ticketinfo-wrapper-revision-20261020/constructor-development",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true,
+      "offline_replayed_after_final_freeze": true
+    },
+    {
+      "capture": "artifacts/ticketinfo-wrapper-revision-20261020/contracts-development",
+      "same_generated_plan": true,
+      "same_all_agent_classes": true,
+      "offline_replayed_after_final_freeze": true
+    }
+  ]
+}

@@ -1,5 +1,11 @@
 # TraceFusion 2
 
+2026-10-20完成[TicketInfo包装与来源实例修订](experiments/sockshop-mirrortaint/TICKETINFO-WRAPPER-REVISION-20261020.md)，
+最终冻结 `19b11b6`。原版TicketInfo同入口三个字段的21个基线差距，full/selective各21/21来源匹配，
+新Agent回归Cart各15/15、旧Cart读取各6/6、Station/Route各60/60。首冻结21个unknown及修订后新部署分别保留。
+本轮新增修复21个，开发台账累计96、剩余73；旧213成功仅原捕获离线兼容复算，尚未完成62查询统一版本验收。
+29候选继续封存，无新成本结论。见[HTTP包装与实际Map绑定机制](experiments/sockshop-mirrortaint/TICKETINFO-WRAPPER-ALGORITHM-20261020.md)。
+
 2026-10-20完成[构造器与过滤链修订](experiments/sockshop-mirrortaint/CONSTRUCTOR-EFFECT-REVISION-20261020.md)，
 冻结 `3f78922`。原版Cart单项GET三个字段的15个基线差距，full/selective各15/15来源匹配，
 同值第二商品保护各3/3；新Agent循环回归各60/60、旧Cart读取各6/6，拒绝保护继续通过。
