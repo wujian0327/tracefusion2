@@ -1,5 +1,11 @@
 # TraceFusion 2
 
+2026-10-20完成[公共契约与对象数组阶段](experiments/sockshop-mirrortaint/KERNEL-CONTRACT-REVISION-20261020.md)，
+冻结 `ade72a8`。统一内核下原版Cart读取full/selective各6/6来源匹配；空Cart首次创建各保留1个unknown，后续读取各1个已知匹配。
+新增Supplier/数组控制各38已知匹配、6预期unknown、2异常根，16项必要证据扰动均拒绝；新Agent原版循环回归各60/60。
+Cart单项GET的15个和TicketInfo的21个原差距实例仍在构造器规则处规划拒绝，新增修复0、剩余109；逐实例结果已保存。
+本轮未做性能或全62查询验收，29候选继续封存。见[算法机制](experiments/sockshop-mirrortaint/KERNEL-CONTRACT-ALGORITHM-20261020.md)。
+
 2026-10-20完成[非递归应用调用与字段效果首版](experiments/sockshop-mirrortaint/APPLICATION-CALL-REVISION-20261020.md)，
 冻结 `87226aa`。full/selective小程序各26个已知来源匹配、8个预期unknown；新Agent原版循环回归各60/60。
 Cart真实嵌套Frame已核验，但新通用路径仍各6个unknown，旧read-forward保留。此阶段未新增修复基线反例，

@@ -1,0 +1,198 @@
+{
+  "all_passed": true,
+  "algorithm_commit": "ade72a8d5c594cbd60be1c43041d01c1675c148e",
+  "cart_restoration": {
+    "full": {
+      "targets": 6,
+      "exact": 6,
+      "tp": 6,
+      "fp": 0,
+      "fn": 0,
+      "unknown": 0
+    },
+    "selective": {
+      "targets": 6,
+      "exact": 6,
+      "tp": 6,
+      "fp": 0,
+      "fn": 0,
+      "unknown": 0
+    }
+  },
+  "creation_guard": {
+    "full": {
+      "known_exact": 1,
+      "unknown": 1,
+      "independent_source_reads": [
+        2,
+        1
+      ]
+    },
+    "selective": {
+      "known_exact": 1,
+      "unknown": 1,
+      "independent_source_reads": [
+        2,
+        1
+      ]
+    }
+  },
+  "business_loop_totals": {
+    "full": {
+      "targets": 60,
+      "exact": 60,
+      "tp": 60,
+      "fp": 0,
+      "fn": 0,
+      "unknown": 0
+    },
+    "selective": {
+      "targets": 60,
+      "exact": 60,
+      "tp": 60,
+      "fp": 0,
+      "fn": 0,
+      "unknown": 0
+    }
+  },
+  "semantic_controls": {
+    "semantics-frozen-full": {
+      "targets": 44,
+      "known": 38,
+      "expected_unknown": 6,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-child": true,
+        "wrong-parent": true,
+        "duplicate-call-id": true,
+        "missing-constructor-write": true,
+        "same-value-wrong-argument": true,
+        "wrong-exception": true,
+        "lambda-capture": true,
+        "lambda-handle": true,
+        "array-position": true,
+        "array-version": true,
+        "missing-contract": true,
+        "stream-source": true,
+        "array-slot-version": true,
+        "array-owner": true,
+        "missing-array-store": true,
+        "optional-presence": true
+      }
+    },
+    "semantics-frozen-selective": {
+      "targets": 44,
+      "known": 38,
+      "expected_unknown": 6,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-child": true,
+        "wrong-parent": true,
+        "duplicate-call-id": true,
+        "missing-constructor-write": true,
+        "same-value-wrong-argument": true,
+        "wrong-exception": true,
+        "lambda-capture": true,
+        "lambda-handle": true,
+        "array-position": true,
+        "array-version": true,
+        "missing-contract": true,
+        "stream-source": true,
+        "array-slot-version": true,
+        "array-owner": true,
+        "missing-array-store": true,
+        "optional-presence": true
+      }
+    },
+    "application-semantics-frozen-full": {
+      "targets": 34,
+      "known": 26,
+      "expected_unknown": 8,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-child": true,
+        "wrong-parent": true,
+        "duplicate-call-id": true,
+        "missing-constructor-write": true,
+        "same-value-wrong-argument": true,
+        "wrong-exception": true
+      }
+    },
+    "application-semantics-frozen-selective": {
+      "targets": 34,
+      "known": 26,
+      "expected_unknown": 8,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-child": true,
+        "wrong-parent": true,
+        "duplicate-call-id": true,
+        "missing-constructor-write": true,
+        "same-value-wrong-argument": true,
+        "wrong-exception": true
+      }
+    }
+  },
+  "gap_queries": [
+    {
+      "query": "sockshop-carts-get-quantity",
+      "targets": 5,
+      "status": "planning_rejected",
+      "reason": "Necessary constructor effects unsupported: works/weave/socks/cart/item/FoundItem.<init>(Ljava/util/function/Supplier;Ljava/util/function/Supplier;)V@4 opcode 182"
+    },
+    {
+      "query": "trainticket-ticketinfo-queryForTravel-data-trainType-id",
+      "targets": 7,
+      "status": "planning_rejected",
+      "reason": "Unknown constructor: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V"
+    },
+    {
+      "query": "sockshop-carts-get-itemId",
+      "targets": 5,
+      "status": "planning_rejected",
+      "reason": "Necessary constructor effects unsupported: works/weave/socks/cart/item/FoundItem.<init>(Ljava/util/function/Supplier;Ljava/util/function/Supplier;)V@4 opcode 182"
+    },
+    {
+      "query": "sockshop-carts-get-unitPrice",
+      "targets": 5,
+      "status": "planning_rejected",
+      "reason": "Necessary constructor effects unsupported: works/weave/socks/cart/item/FoundItem.<init>(Ljava/util/function/Supplier;Ljava/util/function/Supplier;)V@4 opcode 182"
+    },
+    {
+      "query": "trainticket-ticketinfo-queryForTravel-data-prices-economyClass",
+      "targets": 7,
+      "status": "planning_rejected",
+      "reason": "Unknown constructor: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V"
+    },
+    {
+      "query": "trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed",
+      "targets": 7,
+      "status": "planning_rejected",
+      "reason": "Unknown constructor: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V"
+    }
+  ],
+  "gap_targets": 36,
+  "newly_fixed_baseline_gaps": 0,
+  "remaining_baseline_gaps": 109,
+  "reserved_candidates": 29,
+  "original_jars": 9,
+  "legacy_offline": {
+    "all_passed": true,
+    "source_sha256": "e4c7574eafe35f7ef68f38b78d360b15f15b5bc14dd72eaa4e6fa25272fb0d2a",
+    "states": {
+      "unknown": 88,
+      "known_correct": 213
+    },
+    "captures": 40,
+    "scope": "Reused original capture and independent truth, revised offline fast paths; no new runtime validation."
+  },
+  "constructor_write_refusal": true,
+  "whole_62_full_selective_acceptance": false,
+  "goal_382_of_431_met": false,
+  "new_performance": false,
+  "scope": "Cart restored through shared kernel; 36 exposed gap instances still planning-rejected, not runtime unknown. 213 old successes are offline replay only."
+}
