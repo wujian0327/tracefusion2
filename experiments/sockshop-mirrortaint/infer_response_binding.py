@@ -10,9 +10,20 @@ def matches(pattern,path):
 def sources(graph,role):
     plan=graph.plans[role]; config=plan.get('response_binding')
     if not config:return
+    if plan.get('read_forward_contracts'):audit_read_effects(graph.rows[role],plan)
     graph.binding_blocked=getattr(graph,'binding_blocked',{})
     for row in graph.rows[role]:
         kind=row['kind']
+        if kind=='binding-call-summary' and not row['root_effects_verified']:
+            for f in row['fields']:
+                scope=(role,row['frame'],(f['owner'],f['field'],f['version']))
+                graph.binding_blocked.setdefault(scope,[]).append(row['seq'])
+            continue
+        if kind=='binding-call-exit' and not row['valid']:
+            for f in row['detail']['effect_fields']:
+                scope=(role,row['frame'],(f['owner'],f['field'],f['version']))
+                graph.binding_blocked.setdefault(scope,[]).append(row['seq'])
+            continue
         if kind not in ('binding-source','binding-input','binding-opaque-touch','binding-opaque-result'):continue
         if kind=='binding-source':require(row['callee'] in config['source_calls'],'Undeclared source call')
         for index,f in enumerate(row['fields']):
@@ -23,6 +34,49 @@ def sources(graph,role):
             node=dict(f,service=role,seq=row['seq'],kind='binding-source',root_frame=row['frame'],
                       source_kind=kind,message=row.get('message'),callee=row.get('callee'),argument=row.get('argument'))
             graph.add(key,node);graph.providers[(role,coord)].append(key)
+
+
+def audit_read_effects(rows,plan):
+    """A missing/mispaired contract witness can never silently certify a call."""
+    stacks={};counts={};streams={};optional={};runtime=[]
+    classes={r['class'] for r in rows if r['kind']=='class'}
+    for r in rows:
+        k=r['kind'];thread=r['thread'];stack=stacks.setdefault(thread,[])
+        if k=='binding-call-runtime':
+            require(any(r['java_runtime_version']==p['java_runtime_version'] and r['class_sha256']==p['class_sha256'] for p in plan['read_forward_contracts']['runtime_profiles']),'Read-effect runtime pin differs')
+            runtime.append(r)
+        elif k=='binding-call-enter':
+            require(r.get('call_id') and r.get('mode') in {'existing','composed','opaque','list-stream','stream-first','optional-present'},'Invalid read-effect call declaration')
+            stack.append(r);counts[(thread,r['frame'])]=counts.get((thread,r['frame']),0)+1
+        elif k=='binding-call-exit':
+            require(bool(stack),'Read-effect exit without entry');start=stack.pop()
+            require(all(r.get(k)==start.get(k) for k in ('call_id','callee','receiver','receiver_type','mode','implementation','frame')),'Read-effect call pairing differs')
+            if not r['valid']:continue
+            mode=r['mode'];d=r['detail']
+            if mode=='composed':
+                require(r['implementation'] in plan['read_forward_contracts']['composed_methods'],'Undeclared composed implementation')
+                require(r['implementation'].split('.')[0] in classes,'Composed implementation lacks checked class')
+            elif mode=='list-stream':
+                require(r['callee'] in ('java/util/Collection.stream()Ljava/util/stream/Stream;','java/util/List.stream()Ljava/util/stream/Stream;'),'Wrong list stream contract')
+                require(start['detail']['element_ids']==d['element_ids'],'List changed during stream creation')
+                streams[d['result_object']]=d['element_ids']
+            elif mode=='stream-first':
+                require(r['callee']=='java/util/stream/Stream.findFirst()Ljava/util/Optional;' and r['receiver'] in streams,'Stream first lacks actual list creation')
+                ids=streams.pop(r['receiver']);require(ids==d['element_ids'],'Stream membership differs')
+                require(d['present']==bool(ids) and d['selected_object']==(ids[0] if ids else None),'Stream did not select actual first object')
+                optional[d['result_object']]=d['selected_object']
+            elif mode=='optional-present':
+                # Present Optional never executes its Supplier. Result identity
+                # must be the contained value, not a same-valued replacement.
+                require(r['callee']=='java/util/Optional.orElseGet(Ljava/util/function/Supplier;)Ljava/lang/Object;' and r['receiver_type']=='java.util.Optional','Wrong Optional contract')
+                require(d['selected_object'] is not None and d['selected_object']==d['result_object']==start['detail']['selected_object'],'Optional selected identity differs')
+                require(optional.get(r['receiver'])==d['selected_object'],'Optional result lacks checked findFirst witness')
+        elif k=='binding-call-summary':
+            require(r['root_effects_verified']==(plan['entry'] in plan['read_forward_contracts']['composed_methods']),'Root effect proof differs from frozen analysis')
+            require(r['calls']==counts.pop((thread,r['frame']),0),'Executed call witness count differs')
+            require(r['unpaired']==0 and not stack,'Read-effect call evidence incomplete (including exceptional calls)')
+    require(not any(stacks.values()) and not counts,'Missing read-effect completion/summary')
+    if any(r['kind']=='binding-return' for r in rows):require(len(runtime)==1,'Missing/ambiguous read-effect runtime witness')
 
 
 def bind_outputs(graph,role):

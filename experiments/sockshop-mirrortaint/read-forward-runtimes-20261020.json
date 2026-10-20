@@ -1,0 +1,51 @@
+{
+  "scope": "Original frozen application image JDK bytecodes for the finite sequential list/Optional model; not arbitrary Java runtimes.",
+  "profiles": [
+    {
+      "java_runtime_version": "1.8.0_111-internal-alpine-r0-b14",
+      "class_sha256": {
+        "java/lang/AbstractStringBuilder": "ed068f98fc51426114bc17e0269e20ec369bb27735104314f656762a5091a8c7",
+        "java/lang/StringBuilder": "8a633c327af08a908fe652e7e33ab8688c7f04716440c063abaf4d0b46207da2",
+        "java/lang/invoke/LambdaMetafactory": "3a9cf971b5671d920296cba927fd2cbbc4fc7cb507b7896f949a89cd5a3481b9",
+        "java/util/ArrayList": "44d389d8bc103dd9e778117a2cbf839ca10a3de41b3f5018b97687e824372664",
+        "java/util/Arrays$ArrayList": "831476e4ac20d9181d546a5779a449d0ad818e1c6567e366c1f109cab22f7ed9",
+        "java/util/Collection": "ca1ddb2f24e559e7b173c90fd6c4aba85a1c41acb207b55d60eb012a5835e37e",
+        "java/util/Collections$EmptyList": "f57c68d98e4f457d2239ce29e2df9dc2fee5e6c233225a741880a9e4720c2c24",
+        "java/util/Collections$SingletonList": "945cc9e6088847dcafb29888c7c7c94fc533ec5017659558f4b28ee80c73da1c",
+        "java/util/Optional": "344c2b339959c507d08f6627a5f14f0970e9a7efcdb25311e4f4d7946ad14463",
+        "java/util/stream/ReferencePipeline": "47ca2288fbde84141bdd7ed17545d12160c2aa3f007b7b71619ed299bcc5513b",
+        "java/util/stream/ReferencePipeline$Head": "a27510ffb223a0649930c92dd059451a11f02bd585813e17c62babb1988713c6",
+        "java/util/stream/StreamSupport": "fb78afbf101ab0c13772b2ae1aedad6ef9a0176ae20e4ab1bddbae62cd75d28c"
+      },
+      "images": {
+        "orders": "weaveworksdemos/orders@sha256:b622e40e83433baf6374f15e076b53893f79958640fc6667dff597622eff03b9",
+        "carts": "weaveworksdemos/carts@sha256:434d2f5a6e0e8beef1f253fe96f45b8437a703125fc003434c5282ecf8969a4f",
+        "shipping": "weaveworksdemos/shipping@sha256:983305c948fded487f4a4acdeab5f898e89d577b4bc1ca3de7750076469ccad4"
+      }
+    },
+    {
+      "java_runtime_version": "1.8.0_111-8u111-b14-2~bpo8+1-b14",
+      "class_sha256": {
+        "java/lang/AbstractStringBuilder": "ed068f98fc51426114bc17e0269e20ec369bb27735104314f656762a5091a8c7",
+        "java/lang/StringBuilder": "8a633c327af08a908fe652e7e33ab8688c7f04716440c063abaf4d0b46207da2",
+        "java/lang/invoke/LambdaMetafactory": "3a9cf971b5671d920296cba927fd2cbbc4fc7cb507b7896f949a89cd5a3481b9",
+        "java/util/ArrayList": "44d389d8bc103dd9e778117a2cbf839ca10a3de41b3f5018b97687e824372664",
+        "java/util/Arrays$ArrayList": "831476e4ac20d9181d546a5779a449d0ad818e1c6567e366c1f109cab22f7ed9",
+        "java/util/Collection": "ca1ddb2f24e559e7b173c90fd6c4aba85a1c41acb207b55d60eb012a5835e37e",
+        "java/util/Collections$EmptyList": "f57c68d98e4f457d2239ce29e2df9dc2fee5e6c233225a741880a9e4720c2c24",
+        "java/util/Collections$SingletonList": "945cc9e6088847dcafb29888c7c7c94fc533ec5017659558f4b28ee80c73da1c",
+        "java/util/Optional": "344c2b339959c507d08f6627a5f14f0970e9a7efcdb25311e4f4d7946ad14463",
+        "java/util/stream/ReferencePipeline": "47ca2288fbde84141bdd7ed17545d12160c2aa3f007b7b71619ed299bcc5513b",
+        "java/util/stream/ReferencePipeline$Head": "a27510ffb223a0649930c92dd059451a11f02bd585813e17c62babb1988713c6",
+        "java/util/stream/StreamSupport": "fb78afbf101ab0c13772b2ae1aedad6ef9a0176ae20e4ab1bddbae62cd75d28c"
+      },
+      "images": {
+        "basic": "codewisdom/ts-basic-service@sha256:5d9c0dd7bf47e8575e8d9b456cc6576abac836d62c69ab1989f97bdcc716b102",
+        "station": "codewisdom/ts-station-service@sha256:1e9ea348b30926c3a31dde87f063a4325f854b123e70c307abe33ea17137f0ea",
+        "train": "codewisdom/ts-train-service@sha256:5b49d42e8daf389d4f0a787f76f7c424a9aa698a4d711704589b74e84fac54c1",
+        "route": "codewisdom/ts-route-service@sha256:fc5947172659ad347c6ed56e1b825ee58cb6221aa9ab34b77eb727e232dbbbd5",
+        "price": "codewisdom/ts-price-service@sha256:5a77b41ee671501f664b88cafb10c1332ade4aba5354ad6dabe2ce0f4dbdbf42"
+      }
+    }
+  ]
+}

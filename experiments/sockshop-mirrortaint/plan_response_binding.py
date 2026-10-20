@@ -19,7 +19,7 @@ def pure_constructor(method):
     return True
 
 
-def plan_response(model, entry, target, response_path, source_calls=None):
+def plan_response(model, entry, target, response_path, source_calls=None, read_forward_contracts=False):
     require(entry in model['methods'],'Entry method absent: '+entry)
     target=any_target(model,target);owner,name=target.rsplit('.',1)
     row=next(f for f in model['classes'][owner]['fields'] if f['name']==name)
@@ -114,4 +114,13 @@ def plan_response(model, entry, target, response_path, source_calls=None):
         'Read-return source calls are an explicit Spring Data boundary contract, not database history reconstruction.',
         'Opaque call results/effects touching the target remain unknown; no equal-value origin selection.',
         'No general loops, invokedynamic, reference array creation, reflective/native or shared mutable source support.']
+    if read_forward_contracts and plan['profile']=='response-forward':
+        from plan_read_effects import read_effects
+        plan['read_forward_contracts']=read_effects(model)
+        plan['planning_caveats']={'unresolved_necessary_calls':sorted({callee(i) for i in root['instructions']
+            if i['op'] in (182,183,184,185) and i['name']!='<init>' and callee(i) not in calls|transparent
+            and callee(i) not in plan['read_forward_contracts']['composed_methods']}),
+            'runtime_conditions':plan['read_forward_contracts']['contracts'],
+            'root_effects_including_constructors_proved':entry in plan['read_forward_contracts']['composed_methods'],
+            'meaning':'Accepted target binding; end-to-end answer remains conditional on required sources and call effects.'}
     return plan

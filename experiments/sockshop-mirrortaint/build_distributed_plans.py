@@ -18,14 +18,14 @@ from plan_response_binding import plan_response
 
 def build(out,inputs):
     out.mkdir(parents=True,exist_ok=False);tools=out/'tools';tools.mkdir()
-    sources=[HERE/n for n in ('QueryObservationAgent.java','QueryBytecodeModel.java','PlannedServiceAgent.java','CollectionServiceHooks.java','ResponseBindingHooks.java','SpringTransportAgent.java','W3CTraceContext.java')]
+    sources=[HERE/n for n in ('QueryObservationAgent.java','QueryBytecodeModel.java','PlannedServiceAgent.java','CollectionServiceHooks.java','ResponseBindingHooks.java','ReadEffectHooks.java','JdkContractProbe.java','SourceEvidenceHooks.java','SpringTransportAgent.java','W3CTraceContext.java')]
     # JDK 8 has no --release option; its own platform is already Java 8.
     compiler_version,target=java8_target()
     cp=':'.join(map(str,JARS));command(['javac',*target,'-cp',cp,'-d',str(tools),*map(str,sources)],out/'compile.log')
     jar=out/'distributed-observer.jar'
     with ZipFile(jar,'w',ZIP_DEFLATED) as z:
         z.writestr('META-INF/MANIFEST.MF','Manifest-Version: 1.0\nPremain-Class: SpringTransportAgent\n\n')
-        for prefix in ('PlannedServiceAgent','CollectionServiceHooks','ResponseBindingHooks','SpringTransportAgent','W3CTraceContext'):
+        for prefix in ('PlannedServiceAgent','CollectionServiceHooks','ResponseBindingHooks','ReadEffectHooks','JdkContractProbe','SourceEvidenceHooks','SpringTransportAgent','W3CTraceContext'):
             for f in tools.glob(prefix+'*.class'):z.write(f,f.name)
         for dep in JARS:
             with ZipFile(dep) as dz:
@@ -53,12 +53,13 @@ def build(out,inputs):
         if config.get('entry'):
             entry=config['entry'];target=config['targets'][0]
             if config.get('response_path'):
-                local=plan_response(model,entry,target,config['response_path'],config.get('source_calls'))
+                local=plan_response(model,entry,target,config['response_path'],config.get('source_calls'),config.get('read_forward_contracts',False))
             elif config.get('profile')=='collection-computation':local=plan_collection(model,entry,target)
             else:
                 try:local=plan_service(model,entry,target)
                 except ValueError:local=copy_plan(model,entry,target)
         p=augment(model,local)
+        if config.get('source_evidence'):p['source_evidence']=True
         if any(c.get('profile')=='collection-computation' for c in inputs.values()):p['collection_elements']=True
         if config.get('json_conversion_methods'):
             for key in config['json_conversion_methods']:
@@ -69,7 +70,7 @@ def build(out,inputs):
         manifest['inputs'][role]={'query_config':config,'original_source':str(source),'original_jar_sha256':sha(source),'plan_sha256':sha(dest/'plan.json'),'model_sha256':sha(dest/'model.json'),'extra_classes':extra,'profile':p['profile'],'schema_classes':len(p['json_schema'])}
         print(role,p['profile'],len(p['json_schema']),'DTO schemas',flush=True)
     manifest['sources'][str(HERE/'infer_collection_service.py')]=sha(HERE/'infer_collection_service.py')
-    for name in ('plan_response_binding.py','infer_response_binding.py'):
+    for name in ('plan_response_binding.py','infer_response_binding.py','plan_read_effects.py','read-forward-runtimes-20261020.json'):
         manifest['sources'][str(HERE/name)]=sha(HERE/name)
     manifest['builder_sha256']=sha(Path(__file__));save(out/'build.json',manifest)
 
