@@ -24,6 +24,10 @@ def audit(root):
                 for fault in ('missing-runtime','missing-summary','missing-call-start','missing-call-end','missing-source','wrong-pairing','wrong-source-version','ambiguous-message'):
                     broken=copy.deepcopy(rows)
                     at=next(i for i,r in enumerate(broken) if r.get('message')==c['message'] and r['kind']=={'missing-runtime':'binding-call-summary','missing-summary':'binding-call-summary','missing-call-start':'binding-call-enter','missing-call-end':'binding-call-exit','missing-source':'binding-source','wrong-pairing':'binding-call-exit','wrong-source-version':'binding-source','ambiguous-message':'http-json'}[fault])
+                    if kind=='train' and fault in ('missing-source','wrong-source-version'):
+                        # Original retrieve returns its SECOND findById. Removing
+                        # the unused first source must not poison that answer.
+                        at=[i for i,r in enumerate(broken) if r.get('message')==c['message'] and r['kind']=='binding-source'][-1]
                     if fault=='missing-runtime':broken=[r for r in broken if r['kind']!='binding-call-runtime']
                     elif fault.startswith('missing'):broken.pop(at)
                     elif fault=='wrong-pairing':broken[at]['call_id']='unrelated-call'

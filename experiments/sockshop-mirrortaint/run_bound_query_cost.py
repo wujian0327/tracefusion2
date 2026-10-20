@@ -19,6 +19,10 @@ from infer_distributed_fields import Reconstruction
 JVM=cost.JVM
 
 
+def driver_sources():
+    return {str(p):sha(p) for p in (Path(__file__).resolve(),HERE/'run_response_binding_revision.py',HERE/'run_sockshop_model_revision.py',HERE/'run_sockshop_cost.py',ROOT/'scripts/sockshop.py')}
+
+
 def query(kind):
     file='sockshop-model-heldout-20261020.json' if kind=='cart' else 'response-binding-heldout-20261019.json'
     ident='sockshop-carts-getItems-each-itemId' if kind=='cart' else 'trainticket-train-retrieve-data-economyClass'
@@ -111,7 +115,10 @@ def offline(trial,build,kind):
     t=time.perf_counter();g=Reconstruction(build,dest,[role],decoded_rows={role:rows});phases['validate_graph_reconstruct_seconds']=time.perf_counter()-t
     t=time.perf_counter();answers=[]
     for c in cases:
-        for path,value in old.leaves(c['response'],q['path']):answers.append({'case':c['case'],'path':path,'answer':g.query(c['message'],path,role,boundary=old.BOUNDARY)})
+        for path,value in old.leaves(c['response'],q['path']):
+            answer=g.query(c['message'],path,role,boundary=old.BOUNDARY)
+            if answer['target']['observed'].get('value')!=value:raise ValueError('Collected target differs from actual client JSON')
+            answers.append({'case':c['case'],'path':path,'answer':answer})
     phases['target_origin_restore_seconds']=time.perf_counter()-t
     t=time.perf_counter();save(trial/'answers.json',answers);phases['answer_export_seconds']=time.perf_counter()-t;ready=time.monotonic_ns()
     t=time.perf_counter();bycase={c['case']:c for c in cases};scored=[]
@@ -173,7 +180,7 @@ def freeze(args):
     args.out.mkdir();ts=templates(args.kind);save(args.out/'templates.json',ts);order=[];rng=random.Random(args.seed)
     for i in range(args.rounds):
         modes=['original','full','selective'];rng.shuffle(modes);order.extend((f'round-{i+1:02d}-{j+1:02d}-{m}',m) for j,m in enumerate(modes))
-    cfg={k:str(v) if isinstance(v,Path) else v for k,v in vars(args).items()};cfg.update(order=order,query=query(args.kind),jvm=JVM,build_sha256=sha(args.build/'build.json'),templates_sha256=sha(args.out/'templates.json'),driver_sha256=sha(Path(__file__)),image_lock_sha256=sha(ROOT/'artifacts/desktop-inputs/images-lock.json'))
+    cfg={k:str(v) if isinstance(v,Path) else v for k,v in vars(args).items()};cfg.update(order=order,query=query(args.kind),jvm=JVM,build_sha256=sha(args.build/'build.json'),templates_sha256=sha(args.out/'templates.json'),driver_sha256=sha(Path(__file__)),source_sha256=driver_sources(),image_lock_sha256=sha(ROOT/'artifacts/desktop-inputs/images-lock.json'))
     save(args.out/'config.json',cfg);cost.environment(args.out);save(args.out/'run-status.json',{'status':'frozen'})
 
 
@@ -181,9 +188,11 @@ def run(args):
     c=load(args.out/'config.json');save(args.out/'run-status.json',{'status':'running'})
     try:
         for name,mode in c['order']:
-            if sha(Path(__file__))!=c['driver_sha256'] or sha(args.build/'build.json')!=c['build_sha256'] or sha(args.out/'templates.json')!=c['templates_sha256']:raise ValueError('Frozen input/driver changed')
+            if driver_sources()!=c['source_sha256'] or sha(args.build/'build.json')!=c['build_sha256'] or sha(args.out/'templates.json')!=c['templates_sha256'] or sha(ROOT/'artifacts/desktop-inputs/images-lock.json')!=c['image_lock_sha256']:raise ValueError('Frozen input/driver changed')
             trial_run(args.out/name,args.build,c['kind'],mode,load(args.out/'templates.json'),c['warmup'],c['seconds'],c['rate'],c['concurrency'],c['sample_interval'])
             save(args.out/'progress.json',{'completed':sum((args.out/n/'metrics.json').exists() for n,_ in c['order']),'total':len(c['order']),'last':name})
+            if sum((args.out/n/'metrics.json').exists() for n,_ in c['order'])%3==0:
+                log=args.out/'logs';log.mkdir(exist_ok=True);save(log/(name[:8]+'.json'),{'round':name[:8],'all_three_passed':True,'results':{m:load(args.out/n/'metrics.json') for n,m in c['order'] if n[:8]==name[:8]}})
         save(args.out/'run-status.json',{'status':'passed'})
     except BaseException as e:save(args.out/'run-status.json',{'status':'failed','error':str(e)});raise
 

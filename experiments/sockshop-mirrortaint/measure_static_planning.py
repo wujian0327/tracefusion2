@@ -16,12 +16,15 @@ from run_bound_query_cost import query
 def worker(out,base,kind):
     started=time.perf_counter();phase={};result={};roles=['carts'] if kind=='cart' else ['train'] if kind=='train' else list(load(base/'build.json')['inputs'])
     for role in roles:
-        d=out/role;d.mkdir();app=d/'app';app.mkdir();jar=base/role/'original.jar';cfg=load(base/'build.json')['inputs'][role]['query_config'];t=time.perf_counter()
+        d=out/role;d.mkdir();app=d/'app';app.mkdir();jar=base/role/'original.jar';declared=load(base/'build.json')['inputs'][role];cfg=declared['query_config'];t=time.perf_counter()
         with ZipFile(jar) as z:
             for n in z.namelist():
                 if n.startswith('BOOT-INF/classes/') and n.endswith('.class'):
                     f=app/n[len('BOOT-INF/classes/'):];f.parent.mkdir(parents=True,exist_ok=True);f.write_bytes(z.read(n))
-            missing={target.rsplit('.',1)[0].replace('.','/')+'.class' for target in cfg.get('targets',[]) if not (app/(target.rsplit('.',1)[0].replace('.','/')+'.class')).exists()}
+            # query_build retains the frozen base model, including dependency
+            # wrapper classes. Re-extract exactly that declared class universe.
+            requested_classes=set(declared.get('extra_classes',{}))|{target.rsplit('.',1)[0].replace('.','/')+'.class' for target in cfg.get('targets',[])}
+            missing={n for n in requested_classes if not (app/n).exists()}
             for n in z.namelist():
                 if missing and n.startswith('BOOT-INF/lib/') and n.endswith('.jar'):
                     with ZipFile(BytesIO(z.read(n))) as lib:
