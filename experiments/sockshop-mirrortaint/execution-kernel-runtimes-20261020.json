@@ -1,0 +1,24 @@
+{
+  "scope": "Explicit original Train Ticket pinned image and host control JDK; finite list/iterator contracts only.",
+  "image": "codewisdom/ts-station-service@sha256:1e9ea348b30926c3a31dde87f063a4325f854b123e70c307abe33ea17137f0ea",
+  "profiles": [
+    {
+      "java_runtime_version": "1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01",
+      "class_sha256": {
+        "java/util/ArrayList": "0976edaa24bd7790c9778c846ef4c4cdfe396242cb1e298cd190454083366199",
+        "java/util/ArrayList$Itr": "bd506b236bae483df9bbba161be4da3d997ded523d003d644009282116eb76c5",
+        "java/util/Arrays$ArrayList": "831476e4ac20d9181d546a5779a449d0ad818e1c6567e366c1f109cab22f7ed9",
+        "java/util/Iterator": "1d247755bf0b54925b0255147d83997ebdac379aa63ee44505e054ad663d8434"
+      }
+    },
+    {
+      "java_runtime_version": "1.8.0_111-8u111-b14-2~bpo8+1-b14",
+      "class_sha256": {
+        "java/util/ArrayList": "44d389d8bc103dd9e778117a2cbf839ca10a3de41b3f5018b97687e824372664",
+        "java/util/ArrayList$Itr": "22e7fb39e29d3d8f9536343bab79af9dc805d11343bf1731ee799076351d6e2e",
+        "java/util/Arrays$ArrayList": "831476e4ac20d9181d546a5779a449d0ad818e1c6567e366c1f109cab22f7ed9",
+        "java/util/Iterator": "1d247755bf0b54925b0255147d83997ebdac379aa63ee44505e054ad663d8434"
+      }
+    }
+  ]
+}

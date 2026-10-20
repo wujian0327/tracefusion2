@@ -33,6 +33,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
                 if((m.access&(ACC_ABSTRACT|ACC_NATIVE))!=0)continue;String key=owner+"."+m.name+m.desc;
                 List<AbstractInsnNode> code=new ArrayList<>();for(AbstractInsnNode n:m.instructions.toArray())if(n.getOpcode()>=0)code.add(n);
                 if(CollectionServiceHooks.instrument(m,key,code))changed=true;
+                if(ExecutionKernelHooks.instrument(m,key,code))changed=true;
                 if(ResponseBindingHooks.instrument(m,key,code))changed=true;
                 boolean initialized=!m.name.equals("<init>");AbstractInsnNode entry=null;
                 for(int i=0;i<code.size();i++) {
@@ -42,7 +43,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
                     if(n instanceof FieldInsnNode) {
                         FieldInsnNode f=(FieldInsnNode)n;String field=f.owner+"."+f.name;
                         boolean write=f.getOpcode()==PUTFIELD,read=!boundary&&f.getOpcode()==GETFIELD&&(full||((List)plan.getOrDefault("selected_read_sites",Collections.emptyList())).contains(site));
-                        if((write&&(tracked.contains(field)||full))||read){field(m,f,site,write,full||read||field.equals(plan.get("target")));changed=true;}
+                        if((write&&(tracked.contains(field)||full))||read){field(m,f,site,write,full||read||field.equals(plan.get("target"))||ExecutionKernelHooks.enabled());changed=true;}
                     }
                     if(!boundary&&(site.equals(plan.get("producer_callsite"))||site.equals(plan.get("writer_site"))||((List)plan.getOrDefault("binding_callsites",Collections.emptyList())).contains(site))) {
                         InsnList h=new InsnList();h.add(new LdcInsnNode(site));h.add(new MethodInsnNode(INVOKESTATIC,R,"callsite","(Ljava/lang/String;)V",false));m.instructions.insertBefore(n,h);changed=true;

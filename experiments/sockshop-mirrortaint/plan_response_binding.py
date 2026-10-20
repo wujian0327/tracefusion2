@@ -19,7 +19,10 @@ def pure_constructor(method):
     return True
 
 
-def plan_response(model, entry, target, response_path, source_calls=None, read_forward_contracts=False):
+def plan_response(model, entry, target, response_path, source_calls=None, read_forward_contracts=False, execution_kernel=False):
+    if execution_kernel:
+        from plan_execution_kernel import plan_execution
+        return plan_execution(model, entry, target, response_path, source_calls)
     require(entry in model['methods'],'Entry method absent: '+entry)
     target=any_target(model,target);owner,name=target.rsplit('.',1)
     row=next(f for f in model['classes'][owner]['fields'] if f['name']==name)

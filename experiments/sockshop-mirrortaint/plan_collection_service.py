@@ -24,7 +24,7 @@ def direct_accessors(model):
     return getters, setters
 
 
-def analyze(method):
+def analyze(method, allow_loops=False):
     code = method['instructions']; handlers = method.get('exception_handlers', [])
     require(len(handlers) == method['try_catches'], 'Explicit exception table required; rebuild the bytecode model')
     n = len(code); require(0 < n < 5000, 'Method size bound')
@@ -60,6 +60,9 @@ def analyze(method):
         elif 54 <= op <= 58: locals_[ins['var']] = pop()
         elif op in (0,): pass
         elif op in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 178, 187): push()
+        elif op == 132 and allow_loops:
+            require(ins['var'] in locals_, 'Uninitialized IINC local')
+            used.append(locals_[ins['var']]); locals_[ins['var']] = frozenset({pc})
         elif op == 89: require(stack, 'Empty DUP'); stack.append(stack[-1])
         elif op == 87: pop()
         elif op == 180: pop(); push()
@@ -83,7 +86,7 @@ def analyze(method):
         previous = operands.get(pc)
         operands[pc] = used if previous is None else [a | b for a, b in zip(previous, used)]
         if op == 167 or 153 <= op <= 166 or op in (198, 199):
-            require(ins['target'] > pc, 'Loops/back edges are not admitted')
+            require(allow_loops or ins['target'] > pc, 'Loops/back edges are not admitted')
             enqueue(ins['target'], stack, locals_)
         if op != 167 and not 172 <= op <= 177 and op != 191:
             enqueue(pc + 1, stack, locals_)

@@ -123,6 +123,12 @@ def bind_outputs(graph,role):
         if len(candidates)!=1:
             node['unknown']='Root-to-serialized target witness missing or ambiguous';continue
         ret,f=candidates[0];local=(role,'bound-return',ret['seq'],node['path'])
+        if graph.plans[role]['profile']=='execution-dependency':
+            provider=getattr(graph,'execution_outputs',{}).get((role,ret['seq'],f['path']))
+            require(provider is not None,'Execution target proof absent')
+            require((graph.nodes[provider]['owner'],graph.nodes[provider]['field'],graph.nodes[provider]['version'])==(f['owner'],f['field'],f['version']),'Execution target coordinate differs')
+            graph.edges[key]=[provider]
+            continue
         graph.add(local,dict(f,service=role,seq=ret['seq'],kind='input-snapshot',root_frame=ret['frame'],message=ret.get('message')))
         graph.alias(local)
         if local not in graph.edges:graph.nodes[local]['unknown']='No source or computed provider for actual returned field'

@@ -12,6 +12,7 @@ from infer_planned_service import infer_service
 from query_observation_planner import require
 from transport_context import validate_protocol
 from infer_collection_service import infer_collection
+from infer_execution_kernel import infer_execution
 import infer_response_binding as response_binding
 
 
@@ -60,6 +61,7 @@ class Reconstruction:
             if plan['profile']=='mapped-reduction':self.reductions(role,build,root)
             if plan['profile']=='field-copy':self.copies(role)
             if plan['profile'] in ('collection-computation','bounded-scalar'):self.collections(role)
+            if plan['profile']=='execution-dependency':self.executions(role)
         for role in self.plans:response_binding.bind_outputs(self,role)
         # Same-process forwarding is only the same object/field/version. It does
         # not use matching payloads or business keys. Multiple candidates fail
@@ -158,6 +160,17 @@ class Reconstruction:
             node=dict(answer,service=role,kind='bytecode-collection')
             if not answer['known']:node['unknown']='Opaque scalar or unsupported effect reached the target'
             self.add(key,node,leaves);self.providers[(role,coord(answer))].append(key)
+    def executions(self,role):
+        result=infer_execution(self.plans[role],self.rows[role]);self.local_queries[role]=result
+        self.execution_outputs=getattr(self,'execution_outputs',{})
+        for answer in result['answers']:
+            key=(role,'execution-result',answer['seq'],answer['path'])
+            leaves=[(role,'binding-source',seq,index) for seq,index in answer['origins']]
+            require(all(k in self.nodes for k in leaves),'Execution source witness absent from graph')
+            node=dict(answer,service=role,kind='bytecode-execution')
+            if not answer['known']:node['unknown']='Necessary unmodeled dependency/effect in execution'
+            self.add(key,node,leaves)
+            self.execution_outputs[(role,answer['seq'],answer['path'])]=key
     def conversions(self,role):
         for row in self.rows[role]:
             if row['kind']!='json-conversion':continue
