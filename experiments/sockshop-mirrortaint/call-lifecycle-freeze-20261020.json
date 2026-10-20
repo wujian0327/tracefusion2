@@ -1,0 +1,72 @@
+{
+  "algorithm_commit": "2b3b9297e8382162865075d22459480980a45bbc",
+  "previous_algorithm_commit": "c3e6739ca92f870821ce264f8ae1eb32cb681477",
+  "core_sources": {
+    "experiments/sockshop-mirrortaint/QueryObservationAgent.java": "3f48ead5b09077c8ba8568da0037619c01636766e56f2d8d186e517fb1b99ff4",
+    "experiments/sockshop-mirrortaint/QueryBytecodeModel.java": "194f7710c0b77f69caa644209a037f5476595f5c91af9daabaddf70cae12546f",
+    "experiments/sockshop-mirrortaint/PlannedServiceAgent.java": "d2d5c7013082e9f6acc19088628ccc056e8df5757ca3d466c34e6c3126a93330",
+    "experiments/sockshop-mirrortaint/CollectionServiceHooks.java": "c0ed62088996c049922e4b3a0e8eeaa57045a6ff0941de4ba4ce8b2767ba5ff0",
+    "experiments/sockshop-mirrortaint/ResponseBindingHooks.java": "10befbf989162fd62fdbc2d36c3ad0874c29ab7700d6fc4a9dbd7ab5d070c976",
+    "experiments/sockshop-mirrortaint/ReadEffectHooks.java": "5e9cdc51b2984601c600f062b31a8d3ae376bf3f72749dd501af726d7e6ced6d",
+    "experiments/sockshop-mirrortaint/JdkContractProbe.java": "990766210b9879f0805b798b242e5d3fc0ca9825286cc9fda0fe9bcbc56eccf4",
+    "experiments/sockshop-mirrortaint/SourceEvidenceHooks.java": "b986525b391ccc68a327fdd07c18dfdf9f252459574800542a7b66461875a6e2",
+    "experiments/sockshop-mirrortaint/SpringTransportAgent.java": "9bbec838af10982dd99b5a2f80e8b1bf1b62ec9611e104dbb1a9c377936953a8",
+    "experiments/sockshop-mirrortaint/W3CTraceContext.java": "23ea705e55cc2a5f13aa01a982917d685915371f2e2b1f8f480ce8cdd0f5651f",
+    "experiments/sockshop-mirrortaint/experiment_environment.py": "91c2609c43a99e18d3aa9e4a1fb113ade860b8ec4fa86133a6823f35eb501e96",
+    "experiments/sockshop-mirrortaint/plan_distributed_fields.py": "69f87a010de48b0c4457813cc8f2e2c46ba4c0d1215d58964d41d79f4303bf0a",
+    "experiments/sockshop-mirrortaint/plan_service_observations.py": "b4b641a63bb5bf2f6a06e6ff8b83d8923aced0796b40db8aaeeb57718a255fe0",
+    "experiments/sockshop-mirrortaint/plan_collection_service.py": "b0af8f163934d70fafb1099a10207e8b0e408f89718444f2f88fbe7fe9b1f315",
+    "experiments/sockshop-mirrortaint/query_observation_planner.py": "1d7ba77430c902ca00259a7a4ad3bf3bb955fe91f8a885d5efc7f9500b56a30d",
+    "experiments/sockshop-mirrortaint/infer_planned_service.py": "1642a44de9ff16557b32c757b6cadabdd1d02aed5fb04326bd8f4472334276ff",
+    "experiments/sockshop-mirrortaint/infer_distributed_fields.py": "732a163eb07eed9b179568c74496825c26bf26ee3b2de73795c9e58bcaf102eb",
+    "experiments/sockshop-mirrortaint/transport_context.py": "e17f112abf65b3df196865f96c394c87d4031ba949de1c7aff5613eceb1c9cc3",
+    "experiments/sockshop-mirrortaint/run_distributed_paths.py": "05cc20245405d3952a7df780d919190022792b5eccf27a91cc05cb54afcec854",
+    "experiments/sockshop-mirrortaint/evaluate_distributed_paths.py": "ba3faf14ee024839644d3f0c229e69f997bafc45f7132a72d18c08d095deff88",
+    "experiments/sockshop-mirrortaint/audit_distributed_paths.py": "6226c32ecb8197c2066473d3e7a50bfbe993aef9192b30554f00b738138c753a",
+    "experiments/sockshop-mirrortaint/infer_collection_service.py": "2e3e47b0fbfb81e5ef207d7525cd8f38a02e2d3fc1a5c7bc742674b1467d5929",
+    "experiments/sockshop-mirrortaint/plan_response_binding.py": "2c9bd08c6f1a1d8886e88aa056182fca144431f4bb6acd530b0215fce90a9e0c",
+    "experiments/sockshop-mirrortaint/infer_response_binding.py": "13865aaacd616de7e84980a71e7bc949673fec6e3cd39930c1964d2dee47ba3c",
+    "experiments/sockshop-mirrortaint/plan_read_effects.py": "df2a656176b888f8ad7523a72ba83a8b54875d592434432871e50842ab035d6a",
+    "experiments/sockshop-mirrortaint/read-forward-runtimes-20261020.json": "1fca4ceccb7c396f61dedc5da2bd1b166b65fff5e9d07f9f3b4da00731c9ee08"
+  },
+  "dependencies": {
+    "/home/wujian/tracefusion2/artifacts/java-collection-deps/asm-9.7.1.jar": "8cadd43ac5eb6d09de05faecca38b917a040bb9139c7edeb4cc81c740b713281",
+    "/home/wujian/tracefusion2/artifacts/java-collection-deps/asm-tree-9.7.1.jar": "9929881f59eb6b840e86d54570c77b59ce721d104e6dfd7a40978991c2d3b41f",
+    "/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-core-2.8.6.jar": "10a8d607dc66aadee9ef24e8b3d83f04b6c0e033926558cc64e408bcbda0ca9f",
+    "/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-databind-2.8.6.jar": "922413ca2ff5a8f1f86a2eaae8ff02219322ec6ff00d212e7973df8aac4bbaa3",
+    "/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-annotations-2.8.6.jar": "92d7580f361174bda3e015c66adafa326aeb9ef7f4a99a895486cef0dae773f8"
+  },
+  "agent_sha256": "62dd71aa4de2308520dd6c15277ff414b0e2f7fa6ef43770da00b23dc187db4a",
+  "original_jars": {
+    "orders": "8a2cb87b9bedf79c7ad407fcd72bc74c6c1241ef67ae967de59f1ec5f5873a2b",
+    "carts": "ab0d2da1937c219d649766dd3ba84945c4e2063ac9bff6839993f9dc3d8a548b",
+    "shipping": "5704afeeca3c34e10873b15b5aeaf25cbe8326772382631ff4e579d5fa358890",
+    "station": "0143034bae170d40dfad41c5ab44d30d0c3783dd4e4b3fbddfca26e0d07613f9",
+    "basic": "b1018c4efcb96aad39565f6992d2e19dbb3684dc95219068074dc903385151b6",
+    "ticketinfo": "c903bfcc0c7d51a2b16dc516004b70839652849a8331e70629c6d7bc798e1728",
+    "train": "61fa90fbf47542397655f1ee70b6f4a3ead0d4528cb665339ca43a56b04c6f08",
+    "route": "fd65028763bfd7b3c97fabd0f081453d7e78167696e692b3b5c7cd92c79e26f8",
+    "price": "dc6b002e0dd58a5371e192cf03ebce2adc638ce42c786dbc0911b9fb849d9f7a"
+  },
+  "scope": "Reliability lifecycle repair, no new business semantics; prior heldout first results unchanged",
+  "before_formal_cost_measurements": true,
+  "required_primary_evidence": "effects and lifecycle, identities and versions, response/serialization binding, HTTP/JSON fields",
+  "diagnostic_candidate": "source_evidence raw HTTP bytes; primary-off gate requires separate calibration audit",
+  "builds": {
+    "base-build": "c788fb58b22ec6eefda3f04be325dd9e87a58f72bf4ee6072ea055432386fe63",
+    "legacy-build": "d4a197b06cadae85c51da0b392de2d0b441703595500effa7ed6edc7ef0d8b57",
+    "price-build": "2e10429a9b4cadb7f615c0031cd4cfd05493538d172514c0cd8f679208e26dce",
+    "cart-cost-build": "13aeac371eecc417c1d3322294867294394d4d802b79734d8028c7409aed6a93",
+    "train-cost-build": "4ad07a5e3f094071a8d971521e22e37133d18436d906d9a7059cb58b3de9897c"
+  },
+  "completed_regressions": {
+    "mixed_lifecycle": "/home/wujian/tracefusion2/artifacts/call-lifecycle-revision-20261020/semantics-complete/results.json",
+    "basic": "/home/wujian/tracefusion2/artifacts/call-lifecycle-revision-20261020/basic-mixed/results.json",
+    "read_semantics": "/home/wujian/tracefusion2/artifacts/call-lifecycle-revision-20261020/read-semantics/results.json",
+    "binding_semantics": "/home/wujian/tracefusion2/artifacts/call-lifecycle-revision-20261020/binding-semantics/results.json",
+    "collection": "/home/wujian/tracefusion2/artifacts/call-lifecycle-revision-20261020/collection-controls/results.json",
+    "historical": "/home/wujian/tracefusion2/artifacts/call-lifecycle-revision-20261020/historical-business",
+    "price": "/home/wujian/tracefusion2/artifacts/call-lifecycle-revision-20261020/price-business/independent-audit.json",
+    "create_guard": "/home/wujian/tracefusion2/artifacts/call-lifecycle-revision-20261020/cart-create-guard/checks.json"
+  }
+}

@@ -5,7 +5,7 @@ Uses the existing low-rate sampler, nearest-rank percentiles, independent
 deployments and subprocess offline measurement. Oracle projections are fixed
 original-code projections; no inference edges decide their expected sources.
 """
-import argparse,copy,json,random,resource,secrets,statistics,subprocess,sys,time
+import argparse,copy,json,random,resource,secrets,statistics,subprocess,sys,time,urllib.request,urllib.error
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from collections import Counter
@@ -86,10 +86,19 @@ def request(kind,dest,endpoint,t,index,label,start,rate,trace):
     name=f'{label}-{index:05d}';cd=dest/name;cd.mkdir();client=old.Client(cd);message=old.context(client,trace)
     if kind=='cart':path='/carts/'+t['customer_id']+'/items';docs=[]
     else:path='/api/v1/trainservice/trains/'+t['document']['_id'];docs=[t['document']]
+    req=urllib.request.Request(endpoint+path,method='GET',headers={'Content-Type':'application/json',**client.headers})
     began=time.monotonic_ns();response=None;status=None;error=None
-    try:response,status=old.request_raw(client,'GET',endpoint+path)
+    try:
+        try:
+            with client.opener.open(req,timeout=20) as r:status,raw=r.status,r.read()
+        except urllib.error.HTTPError as r:status,raw=r.code,r.read()
     except Exception as e:error=str(e)
-    ended=time.monotonic_ns();passed=status==200 and error is None
+    ended=time.monotonic_ns()
+    # HTTP timer ends before JSON decode, oracle checks, or client evidence I/O.
+    if error is None:
+        try:response=json.loads(raw)
+        except (ValueError,UnicodeDecodeError) as e:error=str(e)
+    passed=status==200 and error is None
     if passed and kind=='cart':passed=[{k:i[k] for k in ('itemId','quantity','unitPrice')} for i in response]==t['items']
     if passed and kind!='cart':passed=all(response.get('data',{}).get('id' if k=='_id' else k)==v for k,v in docs[0].items() if k!='_class')
     c={'case':name,'template_case':t['case'],'message':message,'http_status':status,'response':response,'request_path':path,'database_documents':docs,'fixture':{'expected_items':{i['itemId']:i for i in t.get('items',[])},'customer_id':t.get('customer_id')},'error':error,'business_passed':passed,'scheduled_ns':start+round(index/rate*1e9),'online_start_ns':began,'online_end_ns':ended}
@@ -180,7 +189,7 @@ def freeze(args):
     args.out.mkdir();ts=templates(args.kind);save(args.out/'templates.json',ts);order=[];rng=random.Random(args.seed)
     for i in range(args.rounds):
         modes=['original','full','selective'];rng.shuffle(modes);order.extend((f'round-{i+1:02d}-{j+1:02d}-{m}',m) for j,m in enumerate(modes))
-    cfg={k:str(v) if isinstance(v,Path) else v for k,v in vars(args).items()};cfg.update(order=order,query=query(args.kind),jvm=JVM,build_sha256=sha(args.build/'build.json'),templates_sha256=sha(args.out/'templates.json'),driver_sha256=sha(Path(__file__)),source_sha256=driver_sources(),image_lock_sha256=sha(ROOT/'artifacts/desktop-inputs/images-lock.json'))
+    cfg={k:str(v) if isinstance(v,Path) else v for k,v in vars(args).items()};cfg.update(order=order,query=query(args.kind),jvm=JVM,latency_scope='HTTP open through complete response-body read; JSON decoding, business checks and client evidence writes excluded',build_sha256=sha(args.build/'build.json'),templates_sha256=sha(args.out/'templates.json'),driver_sha256=sha(Path(__file__)),source_sha256=driver_sources(),image_lock_sha256=sha(ROOT/'artifacts/desktop-inputs/images-lock.json'))
     save(args.out/'config.json',cfg);cost.environment(args.out);save(args.out/'run-status.json',{'status':'frozen'})
 
 

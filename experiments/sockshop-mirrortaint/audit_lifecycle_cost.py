@@ -5,12 +5,13 @@ from pathlib import Path
 from run_planned_service import load,save,sha
 from run_bound_query_cost import query
 import run_response_binding_revision as old
-from run_sockshop_cost import percentiles
+from run_sockshop_cost import percentiles,Sampler
 
 
 def values(m):
     r=m['resources']['observed_jvms'];off=m['offline']
     result={'p50_ms':m['online_latency_ms']['p50'],'p95_ms':m['online_latency_ms']['p95'],'p99_ms':m['online_latency_ms']['p99'],'throughput_rps':m['throughput_rps'],'error_rate':m['error_rate'],'online_cpu_percent':r['cpu_one_core_percent_mean'],'online_rss_mean_bytes':r['rss_bytes_mean'],'online_rss_peak_bytes':r['rss_bytes_peak'],'capture_events':sum(x['events'] for x in m['steady_capture'].values()),'capture_bytes':sum(x['bytes'] for x in m['steady_capture'].values()),'whole_capture_events':sum(x['events'] for x in m['total_capture'].values()),'whole_capture_bytes':sum(x['bytes'] for x in m['total_capture'].values()),'console_bytes':m['container_console_bytes']}
+    deployment=m['resources']['deployment'];result.update(deployment_cpu_percent=deployment['cpu_one_core_percent_mean'],deployment_rss_mean_bytes=deployment['rss_bytes_mean'],deployment_rss_peak_bytes=deployment['rss_bytes_peak'])
     if off:
         result.update(offline_core_seconds=off['core_seconds'],offline_child_wall_seconds=off['subprocess_wall_seconds'],offline_child_cpu_seconds=off['process_cpu_seconds'],offline_child_peak_rss_bytes=off['peak_rss_bytes'],answer_wait_p50_seconds=m['completion_to_batch_answers_seconds']['p50'],answer_wait_p95_seconds=m['completion_to_batch_answers_seconds']['p95'])
         for k,v in off['phases'].items():result['offline_'+k]=v
@@ -22,8 +23,9 @@ def audit(root):
     for f,h in frozen['core_sources'].items():assert sha(Path(__file__).resolve().parents[2]/f)==h,('Core changed',f)
     assert load(root/'bound-calibration-audit.json')['all_passed'] and load(root/'price-raw-toggle-audit.json')['all_passed']
     results={};projects=set();csvrows=[]
+    mapping=load(root/'formal-run-map.json') if (root/'formal-run-map.json').exists() else {k:'cost-'+k for k in ('cart','train','price')}
     for kind in ('cart','train','price'):
-        home=root/('cost-'+kind);cfg=load(home/'config.json');assert load(home/'run-status.json')['status']=='passed'
+        home=root/mapping[kind];cfg=load(home/'config.json');assert load(home/'run-status.json')['status']=='passed'
         assert cfg['rounds']==5 and len(cfg['order'])==15
         summaries={};records={};populations={};specs=[]
         for name,mode in cfg['order']:
@@ -38,6 +40,11 @@ def audit(root):
             assert {r['case'] for r in cases}=={r['case'] for r in warm['requests']+steady['requests']}
             measured=steady['requests'];assert m['online_latency_ms']==percentiles([(r['online_end_ns']-r['online_start_ns'])/1e6 for r in measured])
             assert m['throughput_rps']==sum(r['online_end_ns']<=steady['scheduled_end_ns'] for r in measured)/cfg['seconds'] and m['error_rate']==0
+            samples=[json.loads(l) for l in (d/'resources.jsonl').read_text().splitlines()]
+            observed=['ts-'+r+'-service' for r in ('station','train','route','price','basic')] if kind=='price' else ['carts' if kind=='cart' else 'ts-train-service']
+            sampler=Sampler({r:None for r in samples[0]},cfg['sample_interval'],d/'unused-audit-sampler.jsonl',observed_roles=observed)
+            sampler.rows=samples
+            assert sampler.summary(steady['start_ns'],steady['scheduled_end_ns'])==m['resources'],'Raw resource aggregation differs'
             spec=json.dumps(load(dest/'compose.json'),sort_keys=True).replace(str(dest),'$CAPTURE').replace('-Dservice.mode='+mode,'-Dservice.mode=$POLICY')
             if mode!='original':specs.append(spec)
             if mode!='original':
