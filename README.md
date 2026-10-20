@@ -1,5 +1,10 @@
 # TraceFusion 2
 
+2026-10-20完成[非递归应用调用与字段效果首版](experiments/sockshop-mirrortaint/APPLICATION-CALL-REVISION-20261020.md)，
+冻结 `87226aa`。full/selective小程序各26个已知来源匹配、8个预期unknown；新Agent原版循环回归各60/60。
+Cart真实嵌套Frame已核验，但新通用路径仍各6个unknown，旧read-forward保留。此阶段未新增修复基线反例，
+开发缺口仍109；未达382/431全量验收、未测成本、29候选继续封存。
+
 2026-10-20完成[统一执行依赖内核的循环试点](experiments/sockshop-mirrortaint/EXECUTION-KERNEL-PILOT-20261020.md)，
 冻结核心 `bc69ebe`。原版Station/Route四个已暴露查询的60个循环反例，full/selective各60/60正确；
 额外过滤、重复读取及缺失项保护各32/32正确。旧213个正确答案在原捕获离线复算中保持正确。

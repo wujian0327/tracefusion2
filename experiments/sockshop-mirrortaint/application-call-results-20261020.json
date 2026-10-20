@@ -1,0 +1,180 @@
+{
+  "all_passed": true,
+  "algorithm_commit": "87226aaf5bf8d996c9a87f4388b863b8a2795d94",
+  "previous_algorithm_commit": "d06be34d882e1a959aca603c4762601b1d08133d",
+  "original_jars": 9,
+  "business_totals": {
+    "full": {
+      "targets": 60,
+      "exact": 60,
+      "known": 60,
+      "unknown": 0,
+      "tp": 60,
+      "fp": 0,
+      "fn": 0
+    },
+    "selective": {
+      "targets": 60,
+      "exact": 60,
+      "known": 60,
+      "unknown": 0,
+      "tp": 60,
+      "fp": 0,
+      "fn": 0
+    }
+  },
+  "business_capture_reuse": [
+    {
+      "capture": "artifacts/application-call-revision-20261020/business-frozen/full-trainticket-route-getRouteByStartAndTerminal-data-each-stations-each/capture",
+      "plan_equal_to_final_generation": true,
+      "plan_sha256": "d432823fda7d0f77029c21316fb5706129ee69a53a153f69f45c7bd1272a3720",
+      "observer_classes_equal_to_final": true,
+      "original_deployment_commit": "d06be34",
+      "offline_decoder_commit": "87226aaf5bf8d996c9a87f4388b863b8a2795d94"
+    },
+    {
+      "capture": "artifacts/application-call-revision-20261020/business-frozen/full-trainticket-route-getRouteByStartAndTerminal-data-each-terminalStationId/capture",
+      "plan_equal_to_final_generation": true,
+      "plan_sha256": "d6f79009abc1fe4e75610bb70425a930ecdec1a453fac6ee36f7d95eacf51b01",
+      "observer_classes_equal_to_final": true,
+      "original_deployment_commit": "d06be34",
+      "offline_decoder_commit": "87226aaf5bf8d996c9a87f4388b863b8a2795d94"
+    },
+    {
+      "capture": "artifacts/application-call-revision-20261020/business-frozen/full-trainticket-station-queryByIdBatch-data-each/capture",
+      "plan_equal_to_final_generation": true,
+      "plan_sha256": "e4246273317b2efea25bef3ac9d9ebf3adaa3a63cea67699c82acf533882579d",
+      "observer_classes_equal_to_final": true,
+      "original_deployment_commit": "d06be34",
+      "offline_decoder_commit": "87226aaf5bf8d996c9a87f4388b863b8a2795d94"
+    },
+    {
+      "capture": "artifacts/application-call-revision-20261020/business-frozen/full-trainticket-station-queryForIdBatch-data-each/capture",
+      "plan_equal_to_final_generation": true,
+      "plan_sha256": "61afa7a4455225814bd8960f18f1332c5376af1d80df635663dba770ebe73605",
+      "observer_classes_equal_to_final": true,
+      "original_deployment_commit": "d06be34",
+      "offline_decoder_commit": "87226aaf5bf8d996c9a87f4388b863b8a2795d94"
+    },
+    {
+      "capture": "artifacts/application-call-revision-20261020/business-frozen/selective-trainticket-route-getRouteByStartAndTerminal-data-each-stations-each/capture",
+      "plan_equal_to_final_generation": true,
+      "plan_sha256": "d432823fda7d0f77029c21316fb5706129ee69a53a153f69f45c7bd1272a3720",
+      "observer_classes_equal_to_final": true,
+      "original_deployment_commit": "d06be34",
+      "offline_decoder_commit": "87226aaf5bf8d996c9a87f4388b863b8a2795d94"
+    },
+    {
+      "capture": "artifacts/application-call-revision-20261020/business-frozen/selective-trainticket-route-getRouteByStartAndTerminal-data-each-terminalStationId/capture",
+      "plan_equal_to_final_generation": true,
+      "plan_sha256": "d6f79009abc1fe4e75610bb70425a930ecdec1a453fac6ee36f7d95eacf51b01",
+      "observer_classes_equal_to_final": true,
+      "original_deployment_commit": "d06be34",
+      "offline_decoder_commit": "87226aaf5bf8d996c9a87f4388b863b8a2795d94"
+    },
+    {
+      "capture": "artifacts/application-call-revision-20261020/business-frozen/selective-trainticket-station-queryByIdBatch-data-each/capture",
+      "plan_equal_to_final_generation": true,
+      "plan_sha256": "e4246273317b2efea25bef3ac9d9ebf3adaa3a63cea67699c82acf533882579d",
+      "observer_classes_equal_to_final": true,
+      "original_deployment_commit": "d06be34",
+      "offline_decoder_commit": "87226aaf5bf8d996c9a87f4388b863b8a2795d94"
+    },
+    {
+      "capture": "artifacts/application-call-revision-20261020/business-frozen/selective-trainticket-station-queryForIdBatch-data-each/capture",
+      "plan_equal_to_final_generation": true,
+      "plan_sha256": "61afa7a4455225814bd8960f18f1332c5376af1d80df635663dba770ebe73605",
+      "observer_classes_equal_to_final": true,
+      "original_deployment_commit": "d06be34",
+      "offline_decoder_commit": "87226aaf5bf8d996c9a87f4388b863b8a2795d94"
+    }
+  ],
+  "semantic_totals": {
+    "full": {
+      "targets": 34,
+      "known": 26,
+      "expected_unknown": 8,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-child": true,
+        "wrong-parent": true,
+        "duplicate-call-id": true,
+        "missing-constructor-write": true,
+        "same-value-wrong-argument": true,
+        "wrong-exception": true
+      }
+    },
+    "selective": {
+      "targets": 34,
+      "known": 26,
+      "expected_unknown": 8,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-child": true,
+        "wrong-parent": true,
+        "duplicate-call-id": true,
+        "missing-constructor-write": true,
+        "same-value-wrong-argument": true,
+        "wrong-exception": true
+      }
+    }
+  },
+  "extra_guards": {
+    "full-budget": "analysis_limited",
+    "full-duplicate-frame": "rejected",
+    "selective-budget": "analysis_limited",
+    "selective-duplicate-frame": "rejected"
+  },
+  "cart_nested": {
+    "complete": true,
+    "results": [
+      {
+        "mode": "full",
+        "requests": 6,
+        "targets": 6,
+        "unknown": 6,
+        "known": 0,
+        "application_frames": 18,
+        "methods": [
+          "works/weave/socks/cart/action/FirstResultOrDefault.get()Ljava/lang/Object;",
+          "works/weave/socks/cart/controllers/CartsController.get(Ljava/lang/String;)Lworks/weave/socks/cart/entities/Cart;",
+          "works/weave/socks/cart/controllers/ItemsController.getItems(Ljava/lang/String;)Ljava/util/List;"
+        ]
+      },
+      {
+        "mode": "selective",
+        "requests": 6,
+        "targets": 6,
+        "unknown": 6,
+        "known": 0,
+        "application_frames": 18,
+        "methods": [
+          "works/weave/socks/cart/action/FirstResultOrDefault.get()Ljava/lang/Object;",
+          "works/weave/socks/cart/controllers/CartsController.get(Ljava/lang/String;)Lworks/weave/socks/cart/entities/Cart;",
+          "works/weave/socks/cart/controllers/ItemsController.getItems(Ljava/lang/String;)Ljava/util/List;"
+        ]
+      }
+    ],
+    "scope": "Original app nested frames; finite Supplier/stream library semantics still unknown; not a capability improvement over old read-forward profile."
+  },
+  "constructor_write_failure_still_rejected": true,
+  "legacy_offline": {
+    "all_passed": true,
+    "source_sha256": "e4c7574eafe35f7ef68f38b78d360b15f15b5bc14dd72eaa4e6fa25272fb0d2a",
+    "states": {
+      "unknown": 88,
+      "known_correct": 213
+    },
+    "captures": 40,
+    "scope": "Reused original capture and independent truth, revised offline fast paths; no new runtime validation."
+  },
+  "remaining_baseline_gap_development_instances": 109,
+  "new_baseline_gaps_claimed_fixed": 0,
+  "remaining_reserved_candidates": 29,
+  "whole_62_full_selective_acceptance_run": false,
+  "goal_382_of_431_met": false,
+  "performance_measured": false,
+  "scope": "Nonrecursive supported bytecode application calls; general libraries/save/async/arrays/lambda still outside this stage. Cart new generic path remains unknown; old read-forward profile retained."
+}
