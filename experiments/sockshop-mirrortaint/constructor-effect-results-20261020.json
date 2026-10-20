@@ -1,0 +1,269 @@
+{
+  "all_passed": true,
+  "algorithm_commit": "3f78922334dc867228599f4d1f4d0f6abde256a7",
+  "cart_new_gap_repairs": {
+    "full": {
+      "targets": 15,
+      "exact": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "unknown": 0
+    },
+    "selective": {
+      "targets": 15,
+      "exact": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "unknown": 0
+    }
+  },
+  "same_value_second_member_guards": {
+    "full": 3,
+    "selective": 3
+  },
+  "real_cart_required_evidence_faults": {
+    "full-logger-version": "Unmodeled logging factory/binder version",
+    "full-missing-logger-contract": "Logging factory witness absent",
+    "full-filter-capture-identity": "Filter captured receiver differs",
+    "full-missing-required-constructor-field": "Application instruction site differs",
+    "selective-logger-version": "Unmodeled logging factory/binder version",
+    "selective-missing-logger-contract": "Logging factory witness absent",
+    "selective-filter-capture-identity": "Filter captured receiver differs",
+    "selective-missing-required-constructor-field": "Application instruction site differs"
+  },
+  "cart_restoration": {
+    "full": {
+      "targets": 6,
+      "exact": 6,
+      "tp": 6,
+      "fp": 0,
+      "fn": 0,
+      "unknown": 0
+    },
+    "selective": {
+      "targets": 6,
+      "exact": 6,
+      "tp": 6,
+      "fp": 0,
+      "fn": 0,
+      "unknown": 0
+    }
+  },
+  "creation_guard": {
+    "full": {
+      "known_exact": 1,
+      "unknown": 1,
+      "independent_source_reads": [
+        2,
+        1
+      ]
+    },
+    "selective": {
+      "known_exact": 1,
+      "unknown": 1,
+      "independent_source_reads": [
+        2,
+        1
+      ]
+    }
+  },
+  "business_loop_totals": {
+    "full": {
+      "targets": 60,
+      "exact": 60,
+      "tp": 60,
+      "fp": 0,
+      "fn": 0,
+      "unknown": 0
+    },
+    "selective": {
+      "targets": 60,
+      "exact": 60,
+      "tp": 60,
+      "fp": 0,
+      "fn": 0,
+      "unknown": 0
+    }
+  },
+  "semantic_controls": {
+    "semantics-frozen-full": {
+      "targets": 24,
+      "known": 20,
+      "expected_unknown": 4,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-constructor-frame": true,
+        "wrong-constructor-parent": true,
+        "wrong-constructor-receiver": true,
+        "missing-constructor-write": true,
+        "missing-constructor-completion": true,
+        "wrong-constructor-exception": true,
+        "wrong-constructor-argument": true,
+        "missing-filter-callback": true,
+        "wrong-filter-member": true,
+        "wrong-filter-predicate": true,
+        "wrong-filter-result": true,
+        "filter-runtime-hash": true
+      }
+    },
+    "semantics-frozen-selective": {
+      "targets": 24,
+      "known": 20,
+      "expected_unknown": 4,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-constructor-frame": true,
+        "wrong-constructor-parent": true,
+        "wrong-constructor-receiver": true,
+        "missing-constructor-write": true,
+        "missing-constructor-completion": true,
+        "wrong-constructor-exception": true,
+        "wrong-constructor-argument": true,
+        "missing-filter-callback": true,
+        "wrong-filter-member": true,
+        "wrong-filter-predicate": true,
+        "wrong-filter-result": true,
+        "filter-runtime-hash": true
+      }
+    },
+    "contracts-frozen-full": {
+      "targets": 44,
+      "known": 38,
+      "expected_unknown": 6,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-child": true,
+        "wrong-parent": true,
+        "duplicate-call-id": true,
+        "missing-constructor-write": true,
+        "same-value-wrong-argument": true,
+        "wrong-exception": true,
+        "lambda-capture": true,
+        "lambda-handle": true,
+        "array-position": true,
+        "array-version": true,
+        "missing-contract": true,
+        "stream-source": true,
+        "array-slot-version": true,
+        "array-owner": true,
+        "missing-array-store": true,
+        "optional-presence": true
+      }
+    },
+    "contracts-frozen-selective": {
+      "targets": 44,
+      "known": 38,
+      "expected_unknown": 6,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-child": true,
+        "wrong-parent": true,
+        "duplicate-call-id": true,
+        "missing-constructor-write": true,
+        "same-value-wrong-argument": true,
+        "wrong-exception": true,
+        "lambda-capture": true,
+        "lambda-handle": true,
+        "array-position": true,
+        "array-version": true,
+        "missing-contract": true,
+        "stream-source": true,
+        "array-slot-version": true,
+        "array-owner": true,
+        "missing-array-store": true,
+        "optional-presence": true
+      }
+    },
+    "application-semantics-frozen-full": {
+      "targets": 34,
+      "known": 26,
+      "expected_unknown": 8,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-child": true,
+        "wrong-parent": true,
+        "duplicate-call-id": true,
+        "missing-constructor-write": true,
+        "same-value-wrong-argument": true,
+        "wrong-exception": true
+      }
+    },
+    "application-semantics-frozen-selective": {
+      "targets": 34,
+      "known": 26,
+      "expected_unknown": 8,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-child": true,
+        "wrong-parent": true,
+        "duplicate-call-id": true,
+        "missing-constructor-write": true,
+        "same-value-wrong-argument": true,
+        "wrong-exception": true
+      }
+    }
+  },
+  "gap_queries": [
+    {
+      "id": "sockshop-carts-get-quantity",
+      "targets": 5,
+      "status": "known_correct_both_modes"
+    },
+    {
+      "id": "trainticket-ticketinfo-queryForTravel-data-trainType-id",
+      "targets": 7,
+      "status": "planning_rejected",
+      "reason": "Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V"
+    },
+    {
+      "id": "sockshop-carts-get-itemId",
+      "targets": 5,
+      "status": "known_correct_both_modes"
+    },
+    {
+      "id": "sockshop-carts-get-unitPrice",
+      "targets": 5,
+      "status": "known_correct_both_modes"
+    },
+    {
+      "id": "trainticket-ticketinfo-queryForTravel-data-prices-economyClass",
+      "targets": 7,
+      "status": "planning_rejected",
+      "reason": "Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V"
+    },
+    {
+      "id": "trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed",
+      "targets": 7,
+      "status": "planning_rejected",
+      "reason": "Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V"
+    }
+  ],
+  "newly_fixed_baseline_gaps": 15,
+  "previously_fixed": 60,
+  "remaining_baseline_gaps": 94,
+  "reserved_candidates": 29,
+  "original_jars": 9,
+  "legacy_offline": {
+    "all_passed": true,
+    "source_sha256": "e4c7574eafe35f7ef68f38b78d360b15f15b5bc14dd72eaa4e6fa25272fb0d2a",
+    "states": {
+      "unknown": 88,
+      "known_correct": 213
+    },
+    "captures": 40,
+    "scope": "Reused original capture and independent truth, revised offline fast paths; no new runtime validation."
+  },
+  "constructor_write_refusal": true,
+  "whole_62_full_selective_acceptance": false,
+  "goal_382_of_431_met": false,
+  "new_performance": false,
+  "scope": "Original Cart15 newly correct, TicketInfo21 still planning-rejected. Original213 successes retained by old-capture offline replay, not new full deployment."
+}

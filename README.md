@@ -1,5 +1,11 @@
 # TraceFusion 2
 
+2026-10-20完成[构造器与过滤链修订](experiments/sockshop-mirrortaint/CONSTRUCTOR-EFFECT-REVISION-20261020.md)，
+冻结 `3f78922`。原版Cart单项GET三个字段的15个基线差距，full/selective各15/15来源匹配，
+同值第二商品保护各3/3；新Agent循环回归各60/60、旧Cart读取各6/6，拒绝保护继续通过。
+本轮实际新增修复15个，开发台账累计75、剩余94；TicketInfo21个仍规划拒绝。
+未做性能或62查询全量验收，29候选继续封存。见[构造器与过滤机制](experiments/sockshop-mirrortaint/CONSTRUCTOR-EFFECT-ALGORITHM-20261020.md)。
+
 2026-10-20完成[公共契约与对象数组阶段](experiments/sockshop-mirrortaint/KERNEL-CONTRACT-REVISION-20261020.md)，
 冻结 `ade72a8`。统一内核下原版Cart读取full/selective各6/6来源匹配；空Cart首次创建各保留1个unknown，后续读取各1个已知匹配。
 新增Supplier/数组控制各38已知匹配、6预期unknown、2异常根，16项必要证据扰动均拒绝；新Agent原版循环回归各60/60。

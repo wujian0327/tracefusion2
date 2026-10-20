@@ -1,0 +1,73 @@
+query,case,path,mode,status,source_index,reason
+sockshop-carts-get-quantity,group-0,/quantity,full,known_correct,0,
+sockshop-carts-get-quantity,group-1,/quantity,full,known_correct,0,
+sockshop-carts-get-quantity,group-3,/quantity,full,known_correct,0,
+sockshop-carts-get-quantity,group-4,/quantity,full,known_correct,0,
+sockshop-carts-get-quantity,group-5,/quantity,full,known_correct,0,
+sockshop-carts-get-itemId,group-0,/itemId,full,known_correct,0,
+sockshop-carts-get-itemId,group-1,/itemId,full,known_correct,0,
+sockshop-carts-get-itemId,group-3,/itemId,full,known_correct,0,
+sockshop-carts-get-itemId,group-4,/itemId,full,known_correct,0,
+sockshop-carts-get-itemId,group-5,/itemId,full,known_correct,0,
+sockshop-carts-get-unitPrice,group-0,/unitPrice,full,known_correct,0,
+sockshop-carts-get-unitPrice,group-1,/unitPrice,full,known_correct,0,
+sockshop-carts-get-unitPrice,group-3,/unitPrice,full,known_correct,0,
+sockshop-carts-get-unitPrice,group-4,/unitPrice,full,known_correct,0,
+sockshop-carts-get-unitPrice,group-5,/unitPrice,full,known_correct,0,
+sockshop-carts-get-quantity,group-0,/quantity,selective,known_correct,0,
+sockshop-carts-get-quantity,group-1,/quantity,selective,known_correct,0,
+sockshop-carts-get-quantity,group-3,/quantity,selective,known_correct,0,
+sockshop-carts-get-quantity,group-4,/quantity,selective,known_correct,0,
+sockshop-carts-get-quantity,group-5,/quantity,selective,known_correct,0,
+sockshop-carts-get-itemId,group-0,/itemId,selective,known_correct,0,
+sockshop-carts-get-itemId,group-1,/itemId,selective,known_correct,0,
+sockshop-carts-get-itemId,group-3,/itemId,selective,known_correct,0,
+sockshop-carts-get-itemId,group-4,/itemId,selective,known_correct,0,
+sockshop-carts-get-itemId,group-5,/itemId,selective,known_correct,0,
+sockshop-carts-get-unitPrice,group-0,/unitPrice,selective,known_correct,0,
+sockshop-carts-get-unitPrice,group-1,/unitPrice,selective,known_correct,0,
+sockshop-carts-get-unitPrice,group-3,/unitPrice,selective,known_correct,0,
+sockshop-carts-get-unitPrice,group-4,/unitPrice,selective,known_correct,0,
+sockshop-carts-get-unitPrice,group-5,/unitPrice,selective,known_correct,0,
+trainticket-ticketinfo-queryForTravel-data-trainType-id,normal,/data/trainType/id,full,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-id,equal-values,/data/trainType/id,full,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-id,permuted,/data/trainType/id,full,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-id,short-distances,/data/trainType/id,full,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-id,missing-route,/data/trainType/id,full,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-id,missing-price,/data/trainType/id,full,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-id,missing-station,/data/trainType/id,full,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-id,normal,/data/trainType/id,selective,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-id,equal-values,/data/trainType/id,selective,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-id,permuted,/data/trainType/id,selective,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-id,short-distances,/data/trainType/id,selective,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-id,missing-route,/data/trainType/id,selective,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-id,missing-price,/data/trainType/id,selective,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-id,missing-station,/data/trainType/id,selective,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-prices-economyClass,normal,/data/prices/economyClass,full,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-prices-economyClass,equal-values,/data/prices/economyClass,full,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-prices-economyClass,permuted,/data/prices/economyClass,full,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-prices-economyClass,short-distances,/data/prices/economyClass,full,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-prices-economyClass,missing-route,/data/prices/economyClass,full,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-prices-economyClass,missing-price,/data/prices/economyClass,full,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-prices-economyClass,missing-station,/data/prices/economyClass,full,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-prices-economyClass,normal,/data/prices/economyClass,selective,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-prices-economyClass,equal-values,/data/prices/economyClass,selective,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-prices-economyClass,permuted,/data/prices/economyClass,selective,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-prices-economyClass,short-distances,/data/prices/economyClass,selective,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-prices-economyClass,missing-route,/data/prices/economyClass,selective,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-prices-economyClass,missing-price,/data/prices/economyClass,selective,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-prices-economyClass,missing-station,/data/prices/economyClass,selective,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed,normal,/data/trainType/averageSpeed,full,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed,equal-values,/data/trainType/averageSpeed,full,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed,permuted,/data/trainType/averageSpeed,full,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed,short-distances,/data/trainType/averageSpeed,full,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed,missing-route,/data/trainType/averageSpeed,full,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed,missing-price,/data/trainType/averageSpeed,full,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed,missing-station,/data/trainType/averageSpeed,full,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed,normal,/data/trainType/averageSpeed,selective,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed,equal-values,/data/trainType/averageSpeed,selective,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed,permuted,/data/trainType/averageSpeed,selective,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed,short-distances,/data/trainType/averageSpeed,selective,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed,missing-route,/data/trainType/averageSpeed,selective,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed,missing-price,/data/trainType/averageSpeed,selective,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
+trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed,missing-station,/data/trainType/averageSpeed,selective,planning_rejected,,Application constructor bytecode absent: org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V
