@@ -1,0 +1,2462 @@
+{
+  "frozen_commit": "c3e6739ca92f870821ce264f8ae1eb32cb681477",
+  "scope": "Finite read-effect revision. Audit success is not full query coverage. New tests use old-entry/new-field holdout; original JARs. No performance results.",
+  "all_queries_answered": false,
+  "audit_checks_passed": true,
+  "previous22": {
+    "sockshop": {
+      "groups": {
+        "sockshop": {
+          "selected": 10,
+          "accepted": 8,
+          "rejected": 2,
+          "runtime_queries": 8,
+          "invalid_capture_queries": 0,
+          "requests": 48,
+          "target_instances": 24,
+          "known": 0,
+          "unknown": 24,
+          "N/A_requests": 24,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "answerability": 0.0,
+          "known_exact_rate": null,
+          "accepted_with_known_answer": 0,
+          "known_without_independent_oracle": 0,
+          "oracle_checked_targets": 24,
+          "all_oracle_tp": 0,
+          "all_oracle_fp": 0,
+          "all_oracle_fn_including_unknown": 6,
+          "selected_entries": 3,
+          "accepted_entries": 1,
+          "entries_with_known_answer": 0,
+          "all_target_exact_rate_known_required": 0.0
+        },
+        "trainticket": {
+          "selected": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "runtime_queries": 0,
+          "invalid_capture_queries": 0,
+          "requests": 0,
+          "target_instances": 0,
+          "known": 0,
+          "unknown": 0,
+          "N/A_requests": 0,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "answerability": null,
+          "known_exact_rate": null,
+          "accepted_with_known_answer": 0,
+          "known_without_independent_oracle": 0,
+          "oracle_checked_targets": 0,
+          "all_oracle_tp": 0,
+          "all_oracle_fp": 0,
+          "all_oracle_fn_including_unknown": 0,
+          "selected_entries": 0,
+          "accepted_entries": 0,
+          "entries_with_known_answer": 0,
+          "all_target_exact_rate_known_required": null
+        }
+      },
+      "queries": [
+        {
+          "id": "sockshop-orders-newOrder-card-id",
+          "application": "sockshop",
+          "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+          "role": "orders",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.toString()Ljava/lang/String;",
+              "java/util/Calendar.getInstance()Ljava/util/Calendar;",
+              "java/util/Calendar.getTime()Ljava/util/Date;",
+              "java/util/concurrent/Future.get(JLjava/util/concurrent/TimeUnit;)Ljava/lang/Object;",
+              "org/slf4j/Logger.debug(Ljava/lang/String;)V",
+              "org/slf4j/Logger.info(Ljava/lang/String;)V",
+              "org/springframework/hateoas/Link.getHref()Ljava/lang/String;",
+              "org/springframework/hateoas/Resource.getId()Lorg/springframework/hateoas/Link;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getPaymentUri()Ljava/net/URI;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getShippingUri()Ljava/net/URI;",
+              "works/weave/socks/orders/controllers/OrdersController.calculateTotal(Ljava/util/List;)F",
+              "works/weave/socks/orders/controllers/OrdersController.parseId(Ljava/lang/String;)Ljava/lang/String;",
+              "works/weave/socks/orders/repositories/CustomerOrderRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+              "works/weave/socks/orders/services/AsyncGetService.getDataList(Ljava/net/URI;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.getResource(Ljava/net/URI;Lorg/springframework/hateoas/mvc/TypeReferences$ResourceType;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.postResource(Ljava/net/URI;Ljava/lang/Object;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": false,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 6,
+          "known": 0,
+          "unknown": 6,
+          "N/A_requests": 0,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "sockshop-orders-newOrder-customer-addresses-each-postcode",
+          "application": "sockshop",
+          "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+          "role": "orders",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.toString()Ljava/lang/String;",
+              "java/util/Calendar.getInstance()Ljava/util/Calendar;",
+              "java/util/Calendar.getTime()Ljava/util/Date;",
+              "java/util/concurrent/Future.get(JLjava/util/concurrent/TimeUnit;)Ljava/lang/Object;",
+              "org/slf4j/Logger.debug(Ljava/lang/String;)V",
+              "org/slf4j/Logger.info(Ljava/lang/String;)V",
+              "org/springframework/hateoas/Link.getHref()Ljava/lang/String;",
+              "org/springframework/hateoas/Resource.getId()Lorg/springframework/hateoas/Link;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getPaymentUri()Ljava/net/URI;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getShippingUri()Ljava/net/URI;",
+              "works/weave/socks/orders/controllers/OrdersController.calculateTotal(Ljava/util/List;)F",
+              "works/weave/socks/orders/controllers/OrdersController.parseId(Ljava/lang/String;)Ljava/lang/String;",
+              "works/weave/socks/orders/repositories/CustomerOrderRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+              "works/weave/socks/orders/services/AsyncGetService.getDataList(Ljava/net/URI;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.getResource(Ljava/net/URI;Lorg/springframework/hateoas/mvc/TypeReferences$ResourceType;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.postResource(Ljava/net/URI;Ljava/lang/Object;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": false,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 0,
+          "known": 0,
+          "unknown": 0,
+          "N/A_requests": 6,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "sockshop-carts-addToCart-quantity",
+          "application": "sockshop",
+          "entry": "works/weave/socks/cart/controllers/ItemsController.addToCart(Ljava/lang/String;Lworks/weave/socks/cart/entities/Item;)Lworks/weave/socks/cart/entities/Item;",
+          "role": "carts",
+          "status": "rejected",
+          "reason": "Unsupported instruction in collection profile: 186"
+        },
+        {
+          "id": "sockshop-orders-newOrder-customer-cards-each-ccv",
+          "application": "sockshop",
+          "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+          "role": "orders",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.toString()Ljava/lang/String;",
+              "java/util/Calendar.getInstance()Ljava/util/Calendar;",
+              "java/util/Calendar.getTime()Ljava/util/Date;",
+              "java/util/concurrent/Future.get(JLjava/util/concurrent/TimeUnit;)Ljava/lang/Object;",
+              "org/slf4j/Logger.debug(Ljava/lang/String;)V",
+              "org/slf4j/Logger.info(Ljava/lang/String;)V",
+              "org/springframework/hateoas/Link.getHref()Ljava/lang/String;",
+              "org/springframework/hateoas/Resource.getId()Lorg/springframework/hateoas/Link;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getPaymentUri()Ljava/net/URI;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getShippingUri()Ljava/net/URI;",
+              "works/weave/socks/orders/controllers/OrdersController.calculateTotal(Ljava/util/List;)F",
+              "works/weave/socks/orders/controllers/OrdersController.parseId(Ljava/lang/String;)Ljava/lang/String;",
+              "works/weave/socks/orders/repositories/CustomerOrderRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+              "works/weave/socks/orders/services/AsyncGetService.getDataList(Ljava/net/URI;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.getResource(Ljava/net/URI;Lorg/springframework/hateoas/mvc/TypeReferences$ResourceType;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.postResource(Ljava/net/URI;Ljava/lang/Object;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": false,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 0,
+          "known": 0,
+          "unknown": 0,
+          "N/A_requests": 6,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "sockshop-orders-newOrder-customer-id",
+          "application": "sockshop",
+          "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+          "role": "orders",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.toString()Ljava/lang/String;",
+              "java/util/Calendar.getInstance()Ljava/util/Calendar;",
+              "java/util/Calendar.getTime()Ljava/util/Date;",
+              "java/util/concurrent/Future.get(JLjava/util/concurrent/TimeUnit;)Ljava/lang/Object;",
+              "org/slf4j/Logger.debug(Ljava/lang/String;)V",
+              "org/slf4j/Logger.info(Ljava/lang/String;)V",
+              "org/springframework/hateoas/Link.getHref()Ljava/lang/String;",
+              "org/springframework/hateoas/Resource.getId()Lorg/springframework/hateoas/Link;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getPaymentUri()Ljava/net/URI;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getShippingUri()Ljava/net/URI;",
+              "works/weave/socks/orders/controllers/OrdersController.calculateTotal(Ljava/util/List;)F",
+              "works/weave/socks/orders/controllers/OrdersController.parseId(Ljava/lang/String;)Ljava/lang/String;",
+              "works/weave/socks/orders/repositories/CustomerOrderRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+              "works/weave/socks/orders/services/AsyncGetService.getDataList(Ljava/net/URI;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.getResource(Ljava/net/URI;Lorg/springframework/hateoas/mvc/TypeReferences$ResourceType;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.postResource(Ljava/net/URI;Ljava/lang/Object;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": false,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 6,
+          "known": 0,
+          "unknown": 6,
+          "N/A_requests": 0,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "sockshop-orders-newOrder-address-id",
+          "application": "sockshop",
+          "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+          "role": "orders",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.toString()Ljava/lang/String;",
+              "java/util/Calendar.getInstance()Ljava/util/Calendar;",
+              "java/util/Calendar.getTime()Ljava/util/Date;",
+              "java/util/concurrent/Future.get(JLjava/util/concurrent/TimeUnit;)Ljava/lang/Object;",
+              "org/slf4j/Logger.debug(Ljava/lang/String;)V",
+              "org/slf4j/Logger.info(Ljava/lang/String;)V",
+              "org/springframework/hateoas/Link.getHref()Ljava/lang/String;",
+              "org/springframework/hateoas/Resource.getId()Lorg/springframework/hateoas/Link;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getPaymentUri()Ljava/net/URI;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getShippingUri()Ljava/net/URI;",
+              "works/weave/socks/orders/controllers/OrdersController.calculateTotal(Ljava/util/List;)F",
+              "works/weave/socks/orders/controllers/OrdersController.parseId(Ljava/lang/String;)Ljava/lang/String;",
+              "works/weave/socks/orders/repositories/CustomerOrderRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+              "works/weave/socks/orders/services/AsyncGetService.getDataList(Ljava/net/URI;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.getResource(Ljava/net/URI;Lorg/springframework/hateoas/mvc/TypeReferences$ResourceType;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.postResource(Ljava/net/URI;Ljava/lang/Object;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": false,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 6,
+          "known": 0,
+          "unknown": 6,
+          "N/A_requests": 0,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "sockshop-orders-newOrder-customer-addresses-each-street",
+          "application": "sockshop",
+          "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+          "role": "orders",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.toString()Ljava/lang/String;",
+              "java/util/Calendar.getInstance()Ljava/util/Calendar;",
+              "java/util/Calendar.getTime()Ljava/util/Date;",
+              "java/util/concurrent/Future.get(JLjava/util/concurrent/TimeUnit;)Ljava/lang/Object;",
+              "org/slf4j/Logger.debug(Ljava/lang/String;)V",
+              "org/slf4j/Logger.info(Ljava/lang/String;)V",
+              "org/springframework/hateoas/Link.getHref()Ljava/lang/String;",
+              "org/springframework/hateoas/Resource.getId()Lorg/springframework/hateoas/Link;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getPaymentUri()Ljava/net/URI;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getShippingUri()Ljava/net/URI;",
+              "works/weave/socks/orders/controllers/OrdersController.calculateTotal(Ljava/util/List;)F",
+              "works/weave/socks/orders/controllers/OrdersController.parseId(Ljava/lang/String;)Ljava/lang/String;",
+              "works/weave/socks/orders/repositories/CustomerOrderRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+              "works/weave/socks/orders/services/AsyncGetService.getDataList(Ljava/net/URI;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.getResource(Ljava/net/URI;Lorg/springframework/hateoas/mvc/TypeReferences$ResourceType;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.postResource(Ljava/net/URI;Ljava/lang/Object;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": false,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 0,
+          "known": 0,
+          "unknown": 0,
+          "N/A_requests": 6,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "sockshop-orders-newOrder-customer-addresses-each-id",
+          "application": "sockshop",
+          "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+          "role": "orders",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.toString()Ljava/lang/String;",
+              "java/util/Calendar.getInstance()Ljava/util/Calendar;",
+              "java/util/Calendar.getTime()Ljava/util/Date;",
+              "java/util/concurrent/Future.get(JLjava/util/concurrent/TimeUnit;)Ljava/lang/Object;",
+              "org/slf4j/Logger.debug(Ljava/lang/String;)V",
+              "org/slf4j/Logger.info(Ljava/lang/String;)V",
+              "org/springframework/hateoas/Link.getHref()Ljava/lang/String;",
+              "org/springframework/hateoas/Resource.getId()Lorg/springframework/hateoas/Link;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getPaymentUri()Ljava/net/URI;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getShippingUri()Ljava/net/URI;",
+              "works/weave/socks/orders/controllers/OrdersController.calculateTotal(Ljava/util/List;)F",
+              "works/weave/socks/orders/controllers/OrdersController.parseId(Ljava/lang/String;)Ljava/lang/String;",
+              "works/weave/socks/orders/repositories/CustomerOrderRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+              "works/weave/socks/orders/services/AsyncGetService.getDataList(Ljava/net/URI;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.getResource(Ljava/net/URI;Lorg/springframework/hateoas/mvc/TypeReferences$ResourceType;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.postResource(Ljava/net/URI;Ljava/lang/Object;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": false,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 0,
+          "known": 0,
+          "unknown": 0,
+          "N/A_requests": 6,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "sockshop-orders-newOrder-customer-username",
+          "application": "sockshop",
+          "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+          "role": "orders",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.toString()Ljava/lang/String;",
+              "java/util/Calendar.getInstance()Ljava/util/Calendar;",
+              "java/util/Calendar.getTime()Ljava/util/Date;",
+              "java/util/concurrent/Future.get(JLjava/util/concurrent/TimeUnit;)Ljava/lang/Object;",
+              "org/slf4j/Logger.debug(Ljava/lang/String;)V",
+              "org/slf4j/Logger.info(Ljava/lang/String;)V",
+              "org/springframework/hateoas/Link.getHref()Ljava/lang/String;",
+              "org/springframework/hateoas/Resource.getId()Lorg/springframework/hateoas/Link;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getPaymentUri()Ljava/net/URI;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getShippingUri()Ljava/net/URI;",
+              "works/weave/socks/orders/controllers/OrdersController.calculateTotal(Ljava/util/List;)F",
+              "works/weave/socks/orders/controllers/OrdersController.parseId(Ljava/lang/String;)Ljava/lang/String;",
+              "works/weave/socks/orders/repositories/CustomerOrderRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+              "works/weave/socks/orders/services/AsyncGetService.getDataList(Ljava/net/URI;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.getResource(Ljava/net/URI;Lorg/springframework/hateoas/mvc/TypeReferences$ResourceType;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.postResource(Ljava/net/URI;Ljava/lang/Object;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": false,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 6,
+          "known": 0,
+          "unknown": 6,
+          "N/A_requests": 0,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "sockshop-carts-get-itemId",
+          "application": "sockshop",
+          "entry": "works/weave/socks/cart/controllers/ItemsController.get(Ljava/lang/String;Ljava/lang/String;)Lworks/weave/socks/cart/entities/Item;",
+          "role": "carts",
+          "status": "rejected",
+          "reason": "Unsupported instruction in collection profile: 186"
+        }
+      ]
+    },
+    "trainticket": {
+      "groups": {
+        "sockshop": {
+          "selected": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "runtime_queries": 0,
+          "invalid_capture_queries": 0,
+          "requests": 0,
+          "target_instances": 0,
+          "known": 0,
+          "unknown": 0,
+          "N/A_requests": 0,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "answerability": null,
+          "known_exact_rate": null,
+          "accepted_with_known_answer": 0,
+          "known_without_independent_oracle": 0,
+          "oracle_checked_targets": 0,
+          "all_oracle_tp": 0,
+          "all_oracle_fp": 0,
+          "all_oracle_fn_including_unknown": 0,
+          "selected_entries": 0,
+          "accepted_entries": 0,
+          "entries_with_known_answer": 0,
+          "all_target_exact_rate_known_required": null
+        },
+        "trainticket": {
+          "selected": 12,
+          "accepted": 10,
+          "rejected": 2,
+          "runtime_queries": 10,
+          "invalid_capture_queries": 0,
+          "requests": 60,
+          "target_instances": 71,
+          "known": 71,
+          "unknown": 0,
+          "N/A_requests": 9,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 71,
+          "exact": 71,
+          "tp": 71,
+          "fp": 0,
+          "fn": 0,
+          "answerability": 1.0,
+          "known_exact_rate": 1.0,
+          "accepted_with_known_answer": 10,
+          "known_without_independent_oracle": 0,
+          "oracle_checked_targets": 71,
+          "all_oracle_tp": 71,
+          "all_oracle_fp": 0,
+          "all_oracle_fn_including_unknown": 0,
+          "selected_entries": 5,
+          "accepted_entries": 3,
+          "entries_with_known_answer": 3,
+          "all_target_exact_rate_known_required": 1.0
+        }
+      },
+      "queries": [
+        {
+          "id": "trainticket-route-getRouteById-data-distances-each",
+          "application": "trainticket",
+          "entry": "route/service/RouteServiceImpl.getRouteById(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+          "role": "route",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/Integer.valueOf(I)Ljava/lang/Integer;",
+              "org/slf4j/Logger.error(Ljava/lang/String;Ljava/lang/Object;)V"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": true,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 15,
+          "known": 15,
+          "unknown": 0,
+          "N/A_requests": 1,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 15,
+          "exact": 15,
+          "tp": 15,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "trainticket-route-getRouteById-data-id",
+          "application": "trainticket",
+          "entry": "route/service/RouteServiceImpl.getRouteById(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+          "role": "route",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/Integer.valueOf(I)Ljava/lang/Integer;",
+              "org/slf4j/Logger.error(Ljava/lang/String;Ljava/lang/Object;)V"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": true,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 5,
+          "known": 5,
+          "unknown": 0,
+          "N/A_requests": 1,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 5,
+          "exact": 5,
+          "tp": 5,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "trainticket-route-getRouteById-data-startStationId",
+          "application": "trainticket",
+          "entry": "route/service/RouteServiceImpl.getRouteById(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+          "role": "route",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/Integer.valueOf(I)Ljava/lang/Integer;",
+              "org/slf4j/Logger.error(Ljava/lang/String;Ljava/lang/Object;)V"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": true,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 5,
+          "known": 5,
+          "unknown": 0,
+          "N/A_requests": 1,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 5,
+          "exact": 5,
+          "tp": 5,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "trainticket-route-getRouteById-data-stations-each",
+          "application": "trainticket",
+          "entry": "route/service/RouteServiceImpl.getRouteById(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+          "role": "route",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/Integer.valueOf(I)Ljava/lang/Integer;",
+              "org/slf4j/Logger.error(Ljava/lang/String;Ljava/lang/Object;)V"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": true,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 15,
+          "known": 15,
+          "unknown": 0,
+          "N/A_requests": 1,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 15,
+          "exact": 15,
+          "tp": 15,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "trainticket-route-getRouteById-data-terminalStationId",
+          "application": "trainticket",
+          "entry": "route/service/RouteServiceImpl.getRouteById(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+          "role": "route",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/Integer.valueOf(I)Ljava/lang/Integer;",
+              "org/slf4j/Logger.error(Ljava/lang/String;Ljava/lang/Object;)V"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": true,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 5,
+          "known": 5,
+          "unknown": 0,
+          "N/A_requests": 1,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 5,
+          "exact": 5,
+          "tp": 5,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "trainticket-station-queryById-data",
+          "application": "trainticket",
+          "entry": "fdse/microservice/service/StationServiceImpl.queryById(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+          "role": "station",
+          "status": "accepted",
+          "profile": "field-copy",
+          "caveats": null,
+          "requests": 6,
+          "target_instances": 6,
+          "known": 6,
+          "unknown": 0,
+          "N/A_requests": 0,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 6,
+          "exact": 6,
+          "tp": 6,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "trainticket-station-queryByIdBatch-data-each",
+          "application": "trainticket",
+          "entry": "fdse/microservice/service/StationServiceImpl.queryByIdBatch(Ljava/util/List;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+          "role": "station",
+          "status": "rejected",
+          "reason": "Unsupported instruction in collection profile: 132"
+        },
+        {
+          "id": "trainticket-station-queryForIdBatch-data-each",
+          "application": "trainticket",
+          "entry": "fdse/microservice/service/StationServiceImpl.queryForIdBatch(Ljava/util/List;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+          "role": "station",
+          "status": "rejected",
+          "reason": "Unsupported instruction in collection profile: 132"
+        },
+        {
+          "id": "trainticket-train-retrieve-data-averageSpeed",
+          "application": "trainticket",
+          "entry": "train/service/TrainServiceImpl.retrieve(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ltrain/entity/TrainType;",
+          "role": "train",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "org/slf4j/Logger.error(Ljava/lang/String;Ljava/lang/Object;)V"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": true,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 5,
+          "known": 5,
+          "unknown": 0,
+          "N/A_requests": 1,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 5,
+          "exact": 5,
+          "tp": 5,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "trainticket-train-retrieve-data-confortClass",
+          "application": "trainticket",
+          "entry": "train/service/TrainServiceImpl.retrieve(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ltrain/entity/TrainType;",
+          "role": "train",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "org/slf4j/Logger.error(Ljava/lang/String;Ljava/lang/Object;)V"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": true,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 5,
+          "known": 5,
+          "unknown": 0,
+          "N/A_requests": 1,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 5,
+          "exact": 5,
+          "tp": 5,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "trainticket-train-retrieve-data-economyClass",
+          "application": "trainticket",
+          "entry": "train/service/TrainServiceImpl.retrieve(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ltrain/entity/TrainType;",
+          "role": "train",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "org/slf4j/Logger.error(Ljava/lang/String;Ljava/lang/Object;)V"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": true,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 5,
+          "known": 5,
+          "unknown": 0,
+          "N/A_requests": 1,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 5,
+          "exact": 5,
+          "tp": 5,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "trainticket-train-retrieve-data-id",
+          "application": "trainticket",
+          "entry": "train/service/TrainServiceImpl.retrieve(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ltrain/entity/TrainType;",
+          "role": "train",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "org/slf4j/Logger.error(Ljava/lang/String;Ljava/lang/Object;)V"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": true,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 5,
+          "known": 5,
+          "unknown": 0,
+          "N/A_requests": 1,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 5,
+          "exact": 5,
+          "tp": 5,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        }
+      ]
+    }
+  },
+  "cart_development": {
+    "full": {
+      "groups": {
+        "sockshop": {
+          "selected": 3,
+          "accepted": 3,
+          "rejected": 0,
+          "runtime_queries": 3,
+          "invalid_capture_queries": 0,
+          "requests": 18,
+          "target_instances": 18,
+          "known": 18,
+          "unknown": 0,
+          "N/A_requests": 2,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 18,
+          "exact": 18,
+          "tp": 18,
+          "fp": 0,
+          "fn": 0,
+          "answerability": 1.0,
+          "known_exact_rate": 1.0,
+          "accepted_with_known_answer": 3,
+          "known_without_independent_oracle": 0,
+          "oracle_checked_targets": 18,
+          "all_oracle_tp": 18,
+          "all_oracle_fp": 0,
+          "all_oracle_fn_including_unknown": 0,
+          "selected_entries": 2,
+          "accepted_entries": 2,
+          "entries_with_known_answer": 2,
+          "all_target_exact_rate_known_required": 1.0
+        },
+        "trainticket": {
+          "selected": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "runtime_queries": 0,
+          "invalid_capture_queries": 0,
+          "requests": 0,
+          "target_instances": 0,
+          "known": 0,
+          "unknown": 0,
+          "N/A_requests": 0,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "answerability": null,
+          "known_exact_rate": null,
+          "accepted_with_known_answer": 0,
+          "known_without_independent_oracle": 0,
+          "oracle_checked_targets": 0,
+          "all_oracle_tp": 0,
+          "all_oracle_fp": 0,
+          "all_oracle_fn_including_unknown": 0,
+          "selected_entries": 0,
+          "accepted_entries": 0,
+          "entries_with_known_answer": 0,
+          "all_target_exact_rate_known_required": null
+        }
+      },
+      "queries": [
+        {
+          "id": "sockshop-carts-get-customerId",
+          "application": "sockshop",
+          "entry": "works/weave/socks/cart/controllers/CartsController.get(Ljava/lang/String;)Lworks/weave/socks/cart/entities/Cart;",
+          "role": "carts",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/util/function/Supplier.get()Ljava/lang/Object;"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": true,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 6,
+          "known": 6,
+          "unknown": 0,
+          "N/A_requests": 0,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 6,
+          "exact": 6,
+          "tp": 6,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "sockshop-carts-getItems-each-quantity",
+          "application": "sockshop",
+          "entry": "works/weave/socks/cart/controllers/ItemsController.getItems(Ljava/lang/String;)Ljava/util/List;",
+          "role": "carts",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": true,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 6,
+          "known": 6,
+          "unknown": 0,
+          "N/A_requests": 1,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 6,
+          "exact": 6,
+          "tp": 6,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "sockshop-carts-getItems-each-unitPrice",
+          "application": "sockshop",
+          "entry": "works/weave/socks/cart/controllers/ItemsController.getItems(Ljava/lang/String;)Ljava/util/List;",
+          "role": "carts",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": true,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 6,
+          "known": 6,
+          "unknown": 0,
+          "N/A_requests": 1,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 6,
+          "exact": 6,
+          "tp": 6,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        }
+      ]
+    },
+    "selective": {
+      "groups": {
+        "sockshop": {
+          "selected": 3,
+          "accepted": 3,
+          "rejected": 0,
+          "runtime_queries": 3,
+          "invalid_capture_queries": 0,
+          "requests": 18,
+          "target_instances": 18,
+          "known": 18,
+          "unknown": 0,
+          "N/A_requests": 2,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 18,
+          "exact": 18,
+          "tp": 18,
+          "fp": 0,
+          "fn": 0,
+          "answerability": 1.0,
+          "known_exact_rate": 1.0,
+          "accepted_with_known_answer": 3,
+          "known_without_independent_oracle": 0,
+          "oracle_checked_targets": 18,
+          "all_oracle_tp": 18,
+          "all_oracle_fp": 0,
+          "all_oracle_fn_including_unknown": 0,
+          "selected_entries": 2,
+          "accepted_entries": 2,
+          "entries_with_known_answer": 2,
+          "all_target_exact_rate_known_required": 1.0
+        },
+        "trainticket": {
+          "selected": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "runtime_queries": 0,
+          "invalid_capture_queries": 0,
+          "requests": 0,
+          "target_instances": 0,
+          "known": 0,
+          "unknown": 0,
+          "N/A_requests": 0,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "answerability": null,
+          "known_exact_rate": null,
+          "accepted_with_known_answer": 0,
+          "known_without_independent_oracle": 0,
+          "oracle_checked_targets": 0,
+          "all_oracle_tp": 0,
+          "all_oracle_fp": 0,
+          "all_oracle_fn_including_unknown": 0,
+          "selected_entries": 0,
+          "accepted_entries": 0,
+          "entries_with_known_answer": 0,
+          "all_target_exact_rate_known_required": null
+        }
+      },
+      "queries": [
+        {
+          "id": "sockshop-carts-get-customerId",
+          "application": "sockshop",
+          "entry": "works/weave/socks/cart/controllers/CartsController.get(Ljava/lang/String;)Lworks/weave/socks/cart/entities/Cart;",
+          "role": "carts",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/util/function/Supplier.get()Ljava/lang/Object;"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": true,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 6,
+          "known": 6,
+          "unknown": 0,
+          "N/A_requests": 0,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 6,
+          "exact": 6,
+          "tp": 6,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "sockshop-carts-getItems-each-quantity",
+          "application": "sockshop",
+          "entry": "works/weave/socks/cart/controllers/ItemsController.getItems(Ljava/lang/String;)Ljava/util/List;",
+          "role": "carts",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": true,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 6,
+          "known": 6,
+          "unknown": 0,
+          "N/A_requests": 1,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 6,
+          "exact": 6,
+          "tp": 6,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "sockshop-carts-getItems-each-unitPrice",
+          "application": "sockshop",
+          "entry": "works/weave/socks/cart/controllers/ItemsController.getItems(Ljava/lang/String;)Ljava/util/List;",
+          "role": "carts",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": true,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 6,
+          "known": 6,
+          "unknown": 0,
+          "N/A_requests": 1,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 6,
+          "exact": 6,
+          "tp": 6,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        }
+      ]
+    }
+  },
+  "heldout": {
+    "sockshop": {
+      "groups": {
+        "sockshop": {
+          "selected": 10,
+          "accepted": 7,
+          "rejected": 3,
+          "runtime_queries": 7,
+          "invalid_capture_queries": 0,
+          "requests": 42,
+          "target_instances": 24,
+          "known": 6,
+          "unknown": 18,
+          "N/A_requests": 19,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 6,
+          "exact": 6,
+          "tp": 6,
+          "fp": 0,
+          "fn": 0,
+          "answerability": 0.25,
+          "known_exact_rate": 1.0,
+          "accepted_with_known_answer": 1,
+          "known_without_independent_oracle": 0,
+          "oracle_checked_targets": 24,
+          "all_oracle_tp": 6,
+          "all_oracle_fp": 0,
+          "all_oracle_fn_including_unknown": 18,
+          "selected_entries": 4,
+          "accepted_entries": 2,
+          "entries_with_known_answer": 1,
+          "all_target_exact_rate_known_required": 0.25
+        },
+        "trainticket": {
+          "selected": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "runtime_queries": 0,
+          "invalid_capture_queries": 0,
+          "requests": 0,
+          "target_instances": 0,
+          "known": 0,
+          "unknown": 0,
+          "N/A_requests": 0,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "answerability": null,
+          "known_exact_rate": null,
+          "accepted_with_known_answer": 0,
+          "known_without_independent_oracle": 0,
+          "oracle_checked_targets": 0,
+          "all_oracle_tp": 0,
+          "all_oracle_fp": 0,
+          "all_oracle_fn_including_unknown": 0,
+          "selected_entries": 0,
+          "accepted_entries": 0,
+          "entries_with_known_answer": 0,
+          "all_target_exact_rate_known_required": null
+        }
+      },
+      "queries": [
+        {
+          "id": "sockshop-carts-addToCart-itemId",
+          "application": "sockshop",
+          "entry": "works/weave/socks/cart/controllers/ItemsController.addToCart(Ljava/lang/String;Lworks/weave/socks/cart/entities/Item;)Lworks/weave/socks/cart/entities/Item;",
+          "role": "carts",
+          "status": "rejected",
+          "reason": "Unsupported instruction in collection profile: 186"
+        },
+        {
+          "id": "sockshop-carts-get-unitPrice",
+          "application": "sockshop",
+          "entry": "works/weave/socks/cart/controllers/ItemsController.get(Ljava/lang/String;Ljava/lang/String;)Lworks/weave/socks/cart/entities/Item;",
+          "role": "carts",
+          "status": "rejected",
+          "reason": "Unsupported instruction in collection profile: 186"
+        },
+        {
+          "id": "sockshop-carts-getItems-each-itemId",
+          "application": "sockshop",
+          "entry": "works/weave/socks/cart/controllers/ItemsController.getItems(Ljava/lang/String;)Ljava/util/List;",
+          "role": "carts",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": true,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 6,
+          "known": 6,
+          "unknown": 0,
+          "N/A_requests": 1,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 6,
+          "exact": 6,
+          "tp": 6,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "sockshop-orders-newOrder-card-longNum",
+          "application": "sockshop",
+          "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+          "role": "orders",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.toString()Ljava/lang/String;",
+              "java/util/Calendar.getInstance()Ljava/util/Calendar;",
+              "java/util/Calendar.getTime()Ljava/util/Date;",
+              "java/util/concurrent/Future.get(JLjava/util/concurrent/TimeUnit;)Ljava/lang/Object;",
+              "org/slf4j/Logger.debug(Ljava/lang/String;)V",
+              "org/slf4j/Logger.info(Ljava/lang/String;)V",
+              "org/springframework/hateoas/Link.getHref()Ljava/lang/String;",
+              "org/springframework/hateoas/Resource.getId()Lorg/springframework/hateoas/Link;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getPaymentUri()Ljava/net/URI;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getShippingUri()Ljava/net/URI;",
+              "works/weave/socks/orders/controllers/OrdersController.calculateTotal(Ljava/util/List;)F",
+              "works/weave/socks/orders/controllers/OrdersController.parseId(Ljava/lang/String;)Ljava/lang/String;",
+              "works/weave/socks/orders/repositories/CustomerOrderRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+              "works/weave/socks/orders/services/AsyncGetService.getDataList(Ljava/net/URI;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.getResource(Ljava/net/URI;Lorg/springframework/hateoas/mvc/TypeReferences$ResourceType;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.postResource(Ljava/net/URI;Ljava/lang/Object;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": false,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 6,
+          "known": 0,
+          "unknown": 6,
+          "N/A_requests": 0,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "sockshop-orders-newOrder-customer-addresses-each-number",
+          "application": "sockshop",
+          "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+          "role": "orders",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.toString()Ljava/lang/String;",
+              "java/util/Calendar.getInstance()Ljava/util/Calendar;",
+              "java/util/Calendar.getTime()Ljava/util/Date;",
+              "java/util/concurrent/Future.get(JLjava/util/concurrent/TimeUnit;)Ljava/lang/Object;",
+              "org/slf4j/Logger.debug(Ljava/lang/String;)V",
+              "org/slf4j/Logger.info(Ljava/lang/String;)V",
+              "org/springframework/hateoas/Link.getHref()Ljava/lang/String;",
+              "org/springframework/hateoas/Resource.getId()Lorg/springframework/hateoas/Link;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getPaymentUri()Ljava/net/URI;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getShippingUri()Ljava/net/URI;",
+              "works/weave/socks/orders/controllers/OrdersController.calculateTotal(Ljava/util/List;)F",
+              "works/weave/socks/orders/controllers/OrdersController.parseId(Ljava/lang/String;)Ljava/lang/String;",
+              "works/weave/socks/orders/repositories/CustomerOrderRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+              "works/weave/socks/orders/services/AsyncGetService.getDataList(Ljava/net/URI;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.getResource(Ljava/net/URI;Lorg/springframework/hateoas/mvc/TypeReferences$ResourceType;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.postResource(Ljava/net/URI;Ljava/lang/Object;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": false,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 0,
+          "known": 0,
+          "unknown": 0,
+          "N/A_requests": 6,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "sockshop-orders-newOrder-customer-cards-each-longNum",
+          "application": "sockshop",
+          "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+          "role": "orders",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.toString()Ljava/lang/String;",
+              "java/util/Calendar.getInstance()Ljava/util/Calendar;",
+              "java/util/Calendar.getTime()Ljava/util/Date;",
+              "java/util/concurrent/Future.get(JLjava/util/concurrent/TimeUnit;)Ljava/lang/Object;",
+              "org/slf4j/Logger.debug(Ljava/lang/String;)V",
+              "org/slf4j/Logger.info(Ljava/lang/String;)V",
+              "org/springframework/hateoas/Link.getHref()Ljava/lang/String;",
+              "org/springframework/hateoas/Resource.getId()Lorg/springframework/hateoas/Link;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getPaymentUri()Ljava/net/URI;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getShippingUri()Ljava/net/URI;",
+              "works/weave/socks/orders/controllers/OrdersController.calculateTotal(Ljava/util/List;)F",
+              "works/weave/socks/orders/controllers/OrdersController.parseId(Ljava/lang/String;)Ljava/lang/String;",
+              "works/weave/socks/orders/repositories/CustomerOrderRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+              "works/weave/socks/orders/services/AsyncGetService.getDataList(Ljava/net/URI;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.getResource(Ljava/net/URI;Lorg/springframework/hateoas/mvc/TypeReferences$ResourceType;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.postResource(Ljava/net/URI;Ljava/lang/Object;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": false,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 0,
+          "known": 0,
+          "unknown": 0,
+          "N/A_requests": 6,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "sockshop-orders-newOrder-customer-cards-each-expires",
+          "application": "sockshop",
+          "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+          "role": "orders",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.toString()Ljava/lang/String;",
+              "java/util/Calendar.getInstance()Ljava/util/Calendar;",
+              "java/util/Calendar.getTime()Ljava/util/Date;",
+              "java/util/concurrent/Future.get(JLjava/util/concurrent/TimeUnit;)Ljava/lang/Object;",
+              "org/slf4j/Logger.debug(Ljava/lang/String;)V",
+              "org/slf4j/Logger.info(Ljava/lang/String;)V",
+              "org/springframework/hateoas/Link.getHref()Ljava/lang/String;",
+              "org/springframework/hateoas/Resource.getId()Lorg/springframework/hateoas/Link;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getPaymentUri()Ljava/net/URI;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getShippingUri()Ljava/net/URI;",
+              "works/weave/socks/orders/controllers/OrdersController.calculateTotal(Ljava/util/List;)F",
+              "works/weave/socks/orders/controllers/OrdersController.parseId(Ljava/lang/String;)Ljava/lang/String;",
+              "works/weave/socks/orders/repositories/CustomerOrderRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+              "works/weave/socks/orders/services/AsyncGetService.getDataList(Ljava/net/URI;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.getResource(Ljava/net/URI;Lorg/springframework/hateoas/mvc/TypeReferences$ResourceType;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.postResource(Ljava/net/URI;Ljava/lang/Object;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": false,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 0,
+          "known": 0,
+          "unknown": 0,
+          "N/A_requests": 6,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "sockshop-orders-newOrder-address-postcode",
+          "application": "sockshop",
+          "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+          "role": "orders",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.toString()Ljava/lang/String;",
+              "java/util/Calendar.getInstance()Ljava/util/Calendar;",
+              "java/util/Calendar.getTime()Ljava/util/Date;",
+              "java/util/concurrent/Future.get(JLjava/util/concurrent/TimeUnit;)Ljava/lang/Object;",
+              "org/slf4j/Logger.debug(Ljava/lang/String;)V",
+              "org/slf4j/Logger.info(Ljava/lang/String;)V",
+              "org/springframework/hateoas/Link.getHref()Ljava/lang/String;",
+              "org/springframework/hateoas/Resource.getId()Lorg/springframework/hateoas/Link;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getPaymentUri()Ljava/net/URI;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getShippingUri()Ljava/net/URI;",
+              "works/weave/socks/orders/controllers/OrdersController.calculateTotal(Ljava/util/List;)F",
+              "works/weave/socks/orders/controllers/OrdersController.parseId(Ljava/lang/String;)Ljava/lang/String;",
+              "works/weave/socks/orders/repositories/CustomerOrderRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+              "works/weave/socks/orders/services/AsyncGetService.getDataList(Ljava/net/URI;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.getResource(Ljava/net/URI;Lorg/springframework/hateoas/mvc/TypeReferences$ResourceType;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.postResource(Ljava/net/URI;Ljava/lang/Object;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": false,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 6,
+          "known": 0,
+          "unknown": 6,
+          "N/A_requests": 0,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "sockshop-orders-newOrder-card-expires",
+          "application": "sockshop",
+          "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+          "role": "orders",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.toString()Ljava/lang/String;",
+              "java/util/Calendar.getInstance()Ljava/util/Calendar;",
+              "java/util/Calendar.getTime()Ljava/util/Date;",
+              "java/util/concurrent/Future.get(JLjava/util/concurrent/TimeUnit;)Ljava/lang/Object;",
+              "org/slf4j/Logger.debug(Ljava/lang/String;)V",
+              "org/slf4j/Logger.info(Ljava/lang/String;)V",
+              "org/springframework/hateoas/Link.getHref()Ljava/lang/String;",
+              "org/springframework/hateoas/Resource.getId()Lorg/springframework/hateoas/Link;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getPaymentUri()Ljava/net/URI;",
+              "works/weave/socks/orders/config/OrdersConfigurationProperties.getShippingUri()Ljava/net/URI;",
+              "works/weave/socks/orders/controllers/OrdersController.calculateTotal(Ljava/util/List;)F",
+              "works/weave/socks/orders/controllers/OrdersController.parseId(Ljava/lang/String;)Ljava/lang/String;",
+              "works/weave/socks/orders/repositories/CustomerOrderRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+              "works/weave/socks/orders/services/AsyncGetService.getDataList(Ljava/net/URI;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.getResource(Ljava/net/URI;Lorg/springframework/hateoas/mvc/TypeReferences$ResourceType;)Ljava/util/concurrent/Future;",
+              "works/weave/socks/orders/services/AsyncGetService.postResource(Ljava/net/URI;Ljava/lang/Object;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": false,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 6,
+          "known": 0,
+          "unknown": 6,
+          "N/A_requests": 0,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "sockshop-orders-newOrder-date",
+          "application": "sockshop",
+          "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+          "role": "orders",
+          "status": "rejected",
+          "reason": "Target type unsupported by response binding: Ljava/util/Date;"
+        }
+      ]
+    },
+    "trainticket": {
+      "groups": {
+        "sockshop": {
+          "selected": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "runtime_queries": 0,
+          "invalid_capture_queries": 0,
+          "requests": 0,
+          "target_instances": 0,
+          "known": 0,
+          "unknown": 0,
+          "N/A_requests": 0,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "answerability": null,
+          "known_exact_rate": null,
+          "accepted_with_known_answer": 0,
+          "known_without_independent_oracle": 0,
+          "oracle_checked_targets": 0,
+          "all_oracle_tp": 0,
+          "all_oracle_fp": 0,
+          "all_oracle_fn_including_unknown": 0,
+          "selected_entries": 0,
+          "accepted_entries": 0,
+          "entries_with_known_answer": 0,
+          "all_target_exact_rate_known_required": null
+        },
+        "trainticket": {
+          "selected": 10,
+          "accepted": 6,
+          "rejected": 4,
+          "runtime_queries": 6,
+          "invalid_capture_queries": 2,
+          "requests": 40,
+          "target_instances": 49,
+          "known": 35,
+          "unknown": 0,
+          "N/A_requests": 6,
+          "evidence_invalid": 14,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 35,
+          "exact": 35,
+          "tp": 35,
+          "fp": 0,
+          "fn": 0,
+          "answerability": 0.7142857142857143,
+          "known_exact_rate": 1.0,
+          "accepted_with_known_answer": 4,
+          "known_without_independent_oracle": 0,
+          "oracle_checked_targets": 49,
+          "all_oracle_tp": 35,
+          "all_oracle_fp": 0,
+          "all_oracle_fn_including_unknown": 14,
+          "selected_entries": 8,
+          "accepted_entries": 5,
+          "entries_with_known_answer": 4,
+          "all_target_exact_rate_known_required": 0.7142857142857143
+        }
+      },
+      "queries": [
+        {
+          "id": "trainticket-ticketinfo-queryForTravel-data-prices-economyClass",
+          "application": "trainticket",
+          "entry": "ticketinfo/service/TicketInfoServiceImpl.queryForTravel(Lticketinfo/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+          "role": "ticketinfo",
+          "status": "rejected",
+          "reason": "Unsupported instruction in collection profile: 189"
+        },
+        {
+          "id": "trainticket-basic-queryForTravel-data-trainType-id",
+          "application": "trainticket",
+          "entry": "fdse/microservice/service/BasicServiceImpl.queryForTravel(Lfdse/microservice/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+          "role": "basic",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "fdse/microservice/service/BasicServiceImpl.checkStationExists(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Z",
+              "fdse/microservice/service/BasicServiceImpl.getRouteByRouteId(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Lfdse/microservice/entity/Route;",
+              "fdse/microservice/service/BasicServiceImpl.queryForStationId(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+              "fdse/microservice/service/BasicServiceImpl.queryPriceConfigByRouteIdAndTrainType(Ljava/lang/String;Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Lfdse/microservice/entity/PriceConfig;",
+              "fdse/microservice/service/BasicServiceImpl.queryTrainType(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Lfdse/microservice/entity/TrainType;",
+              "java/lang/Integer.intValue()I",
+              "java/lang/Integer.valueOf(I)Ljava/lang/Integer;",
+              "java/lang/StringBuilder.append(D)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.append(I)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.toString()Ljava/lang/String;",
+              "java/util/HashMap.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
+              "org/slf4j/Logger.info(Ljava/lang/String;)V",
+              "org/slf4j/Logger.warn(Ljava/lang/String;Ljava/lang/Object;)V"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": false,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 8,
+          "target_instances": 7,
+          "known": 0,
+          "unknown": 0,
+          "N/A_requests": 1,
+          "evidence_invalid": 7,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": "Read-effect call evidence incomplete (including exceptional calls)"
+        },
+        {
+          "id": "trainticket-train-query-data-each-economyClass",
+          "application": "trainticket",
+          "entry": "train/service/TrainServiceImpl.query(Lorg/springframework/http/HttpHeaders;)Ljava/util/List;",
+          "role": "train",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": true,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 10,
+          "known": 10,
+          "unknown": 0,
+          "N/A_requests": 1,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 10,
+          "exact": 10,
+          "tp": 10,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "trainticket-price-findAllPriceConfig-data-each-id",
+          "application": "trainticket",
+          "entry": "price/service/PriceServiceImpl.findAllPriceConfig(Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+          "role": "price",
+          "status": "rejected",
+          "reason": "Target type unsupported by response binding: Ljava/util/UUID;"
+        },
+        {
+          "id": "trainticket-route-getAllRoutes-data-each-startStationId",
+          "application": "trainticket",
+          "entry": "route/service/RouteServiceImpl.getAllRoutes(Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+          "role": "route",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/Integer.valueOf(I)Ljava/lang/Integer;",
+              "org/slf4j/Logger.warn(Ljava/lang/String;Ljava/lang/Object;)V"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": true,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 10,
+          "known": 10,
+          "unknown": 0,
+          "N/A_requests": 1,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 10,
+          "exact": 10,
+          "tp": 10,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "trainticket-station-query-data-each-stayTime",
+          "application": "trainticket",
+          "entry": "fdse/microservice/service/StationServiceImpl.query(Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+          "role": "station",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/Integer.valueOf(I)Ljava/lang/Integer;",
+              "org/slf4j/Logger.warn(Ljava/lang/String;Ljava/lang/Object;)V"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": true,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 10,
+          "known": 10,
+          "unknown": 0,
+          "N/A_requests": 1,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 10,
+          "exact": 10,
+          "tp": 10,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "trainticket-price-findByRouteIdAndTrainType-data-trainType",
+          "application": "trainticket",
+          "entry": "price/service/PriceServiceImpl.findByRouteIdAndTrainType(Ljava/lang/String;Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+          "role": "price",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "java/lang/Integer.valueOf(I)Ljava/lang/Integer;",
+              "org/slf4j/Logger.info(Ljava/lang/String;)V",
+              "org/slf4j/Logger.info(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V",
+              "org/slf4j/Logger.warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": true,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 6,
+          "target_instances": 5,
+          "known": 5,
+          "unknown": 0,
+          "N/A_requests": 1,
+          "evidence_invalid": 0,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 5,
+          "exact": 5,
+          "tp": 5,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": null
+        },
+        {
+          "id": "trainticket-route-getRouteByStartAndTerminal-data-each-terminalStationId",
+          "application": "trainticket",
+          "entry": "route/service/RouteServiceImpl.getRouteByStartAndTerminal(Ljava/lang/String;Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+          "role": "route",
+          "status": "rejected",
+          "reason": "Loops/back edges are not admitted"
+        },
+        {
+          "id": "trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed",
+          "application": "trainticket",
+          "entry": "ticketinfo/service/TicketInfoServiceImpl.queryForTravel(Lticketinfo/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+          "role": "ticketinfo",
+          "status": "rejected",
+          "reason": "Unsupported instruction in collection profile: 189"
+        },
+        {
+          "id": "trainticket-basic-queryForTravel-data-trainType-averageSpeed",
+          "application": "trainticket",
+          "entry": "fdse/microservice/service/BasicServiceImpl.queryForTravel(Lfdse/microservice/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+          "role": "basic",
+          "status": "accepted",
+          "profile": "response-forward",
+          "caveats": {
+            "unresolved_necessary_calls": [
+              "fdse/microservice/service/BasicServiceImpl.checkStationExists(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Z",
+              "fdse/microservice/service/BasicServiceImpl.getRouteByRouteId(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Lfdse/microservice/entity/Route;",
+              "fdse/microservice/service/BasicServiceImpl.queryForStationId(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+              "fdse/microservice/service/BasicServiceImpl.queryPriceConfigByRouteIdAndTrainType(Ljava/lang/String;Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Lfdse/microservice/entity/PriceConfig;",
+              "fdse/microservice/service/BasicServiceImpl.queryTrainType(Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Lfdse/microservice/entity/TrainType;",
+              "java/lang/Integer.intValue()I",
+              "java/lang/Integer.valueOf(I)Ljava/lang/Integer;",
+              "java/lang/StringBuilder.append(D)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.append(I)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;",
+              "java/lang/StringBuilder.toString()Ljava/lang/String;",
+              "java/util/HashMap.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
+              "org/slf4j/Logger.info(Ljava/lang/String;)V",
+              "org/slf4j/Logger.warn(Ljava/lang/String;Ljava/lang/Object;)V"
+            ],
+            "runtime_conditions": [
+              "Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.",
+              "JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.",
+              "Empty Optional fallback, arbitrary stream pipelines, saves, async execution and reflective/native effects remain opaque."
+            ],
+            "root_effects_including_constructors_proved": false,
+            "meaning": "Accepted target binding; end-to-end answer remains conditional on required sources and call effects."
+          },
+          "requests": 8,
+          "target_instances": 7,
+          "known": 0,
+          "unknown": 0,
+          "N/A_requests": 1,
+          "evidence_invalid": 7,
+          "oracle_unavailable": 0,
+          "known_oracle_checked": 0,
+          "exact": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "invalid_reason": "Read-effect call evidence incomplete (including exceptional calls)"
+        }
+      ]
+    }
+  },
+  "historical_business": {
+    "sockshop": {
+      "queries": 198,
+      "exact": 198,
+      "unknown": 0,
+      "tp": 258,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "trainticket": {
+      "queries": 31,
+      "exact": 31,
+      "unknown": 0,
+      "tp": 30,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  },
+  "historical_price": {
+    "full": {
+      "requests": 20,
+      "completed_price_requests": 19,
+      "queries": 38,
+      "exact": 38,
+      "tp": 92,
+      "fp": 0,
+      "fn": 0,
+      "unknown": 0,
+      "target_unavailable_queries": [
+        {
+          "case": "missing-train",
+          "queries": 2,
+          "status": "N/A",
+          "reason": "Original upstream train HTTP 404 aborts Basic before target creation"
+        }
+      ],
+      "events": 5216,
+      "bytes": 1894772
+    },
+    "selective": {
+      "requests": 20,
+      "completed_price_requests": 19,
+      "queries": 38,
+      "exact": 38,
+      "tp": 92,
+      "fp": 0,
+      "fn": 0,
+      "unknown": 0,
+      "target_unavailable_queries": [
+        {
+          "case": "missing-train",
+          "queries": 2,
+          "status": "N/A",
+          "reason": "Original upstream train HTTP 404 aborts Basic before target creation"
+        }
+      ],
+      "events": 2496,
+      "bytes": 1286183
+    }
+  },
+  "checks": {
+    "frozen_core_unchanged": true,
+    "selection_seal_and_untested29_preserved": true,
+    "first0of20_unchanged": true,
+    "representative_cart_chain_full_selective_exact": true,
+    "semantics-final": true,
+    "legacy-semantics-final": true,
+    "collection-controls-final": true,
+    "original_exception_version_faults": true,
+    "real_cart_evidence_faults": true,
+    "independent_original_decoder": true,
+    "historical4planning": true,
+    "historical_real_business": true,
+    "historical_prices_full_selective": true,
+    "first_heldout_exact_selected_ids": true
+  },
+  "orders_source_breakpoints": {
+    "queries": [
+      {
+        "id": "sockshop-orders-newOrder-card-id",
+        "targets": 6,
+        "oracle_available": 6,
+        "known": 0,
+        "unknown": 6,
+        "representative_target": {
+          "owner": "o24",
+          "field": "works/weave/socks/orders/entities/Card.id",
+          "version": 0,
+          "path": "/card/id",
+          "observed": {
+            "object": null,
+            "value": null
+          }
+        },
+        "raw_decoded_fact": {
+          "seq": 71,
+          "message": "3577d93383e92432f6b0d451be56932d/f81176f0c89f8eb0",
+          "uri": "http://user/cards/6ad6c444538e2a00015a3280",
+          "path": "/id",
+          "owner": "o24",
+          "field": "works/weave/socks/orders/entities/Card.id",
+          "version": 0,
+          "raw_sha256": "f7046d527b7ddd3a6b8577d761b79aa0a0d2bd77d4e6ff3505230601f1e41838",
+          "document_complete": true
+        },
+        "expected_sources": [],
+        "expected_semantics": "Ignored wire id; decoded default null has empty data origin",
+        "first_tf_break": "No admitted HATEOAS decoded-field/default provenance provider; raw facts are not automatically promoted to origins.",
+        "later_unmodeled_calls": [
+          "java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
+          "root-effects-including-constructors-not-proved",
+          "works/weave/socks/orders/entities/CustomerOrder.toString()Ljava/lang/String;",
+          "works/weave/socks/orders/repositories/CustomerOrderRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+          "works/weave/socks/orders/services/AsyncGetService.postResource(Ljava/net/URI;Ljava/lang/Object;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;"
+        ],
+        "root_effects_verified": false
+      },
+      {
+        "id": "sockshop-orders-newOrder-customer-id",
+        "targets": 6,
+        "oracle_available": 6,
+        "known": 0,
+        "unknown": 6,
+        "representative_target": {
+          "owner": "o24",
+          "field": "works/weave/socks/orders/entities/Customer.id",
+          "version": 0,
+          "path": "/customer/id",
+          "observed": {
+            "object": null,
+            "value": null
+          }
+        },
+        "raw_decoded_fact": {
+          "seq": 73,
+          "message": "01e7d368484f65b753cf8b02973c8091/d4fa5660e3fa0d3f",
+          "uri": "http://user/customers/6ad6c4f66b97c90001f6c2fb",
+          "path": "/id",
+          "owner": "o24",
+          "field": "works/weave/socks/orders/entities/Customer.id",
+          "version": 0,
+          "raw_sha256": "df676c271d8005b9e65fda4af2e801be66900b84546151d1b0911e9dfbfa1c1a",
+          "document_complete": true
+        },
+        "expected_sources": [],
+        "expected_semantics": "Ignored wire id; decoded default null has empty data origin",
+        "first_tf_break": "No admitted HATEOAS decoded-field/default provenance provider; raw facts are not automatically promoted to origins.",
+        "later_unmodeled_calls": [
+          "java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
+          "root-effects-including-constructors-not-proved",
+          "works/weave/socks/orders/entities/CustomerOrder.toString()Ljava/lang/String;",
+          "works/weave/socks/orders/repositories/CustomerOrderRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+          "works/weave/socks/orders/services/AsyncGetService.postResource(Ljava/net/URI;Ljava/lang/Object;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;"
+        ],
+        "root_effects_verified": false
+      },
+      {
+        "id": "sockshop-orders-newOrder-address-id",
+        "targets": 6,
+        "oracle_available": 6,
+        "known": 0,
+        "unknown": 6,
+        "representative_target": {
+          "owner": "o22",
+          "field": "works/weave/socks/orders/entities/Address.id",
+          "version": 0,
+          "path": "/address/id",
+          "observed": {
+            "object": null,
+            "value": null
+          }
+        },
+        "raw_decoded_fact": {
+          "seq": 73,
+          "message": "a5dc950944d3e3b40bc6b9bd0364a19f/b4dafd34ac0e7ffb",
+          "uri": "http://user/addresses/6ad6c536f8eaee00019baf65",
+          "path": "/id",
+          "owner": "o22",
+          "field": "works/weave/socks/orders/entities/Address.id",
+          "version": 0,
+          "raw_sha256": "5021342933308ddaa0f8c3d3a03a7c54f3cd7fbf786539ae19202aae93f2dc45",
+          "document_complete": true
+        },
+        "expected_sources": [],
+        "expected_semantics": "Ignored wire id; decoded default null has empty data origin",
+        "first_tf_break": "No admitted HATEOAS decoded-field/default provenance provider; raw facts are not automatically promoted to origins.",
+        "later_unmodeled_calls": [
+          "java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
+          "root-effects-including-constructors-not-proved",
+          "works/weave/socks/orders/entities/CustomerOrder.toString()Ljava/lang/String;",
+          "works/weave/socks/orders/repositories/CustomerOrderRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+          "works/weave/socks/orders/services/AsyncGetService.postResource(Ljava/net/URI;Ljava/lang/Object;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;"
+        ],
+        "root_effects_verified": false
+      },
+      {
+        "id": "sockshop-orders-newOrder-customer-username",
+        "targets": 6,
+        "oracle_available": 6,
+        "known": 0,
+        "unknown": 6,
+        "representative_target": {
+          "owner": "o28",
+          "field": "works/weave/socks/orders/entities/Customer.username",
+          "version": 1,
+          "path": "/customer/username",
+          "observed": {
+            "object": "o32",
+            "value": "tf2_2e3123e53d9c"
+          }
+        },
+        "raw_decoded_fact": {
+          "seq": 73,
+          "message": "277fda7f08e055170dd3c12e9cac1e9d/c7d34fa6b692d7cf",
+          "uri": "http://user/customers/6ad6c5e868fb460001b13801",
+          "path": "/username",
+          "owner": "o28",
+          "field": "works/weave/socks/orders/entities/Customer.username",
+          "version": 1,
+          "raw_sha256": "7fda9787281a9000717cf6e138223138665d06fcaedb4f1eae3deb39d14a6a83",
+          "document_complete": true
+        },
+        "expected_sources": [
+          [
+            "orders",
+            "277fda7f08e055170dd3c12e9cac1e9d/c7d34fa6b692d7cf",
+            null,
+            73,
+            "o28",
+            "works/weave/socks/orders/entities/Customer.username",
+            1,
+            "/username"
+          ]
+        ],
+        "expected_semantics": "Original Customer.username scalar from this actual User RPC",
+        "first_tf_break": "No admitted HATEOAS decoded-field/default provenance provider; raw facts are not automatically promoted to origins.",
+        "later_unmodeled_calls": [
+          "java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
+          "root-effects-including-constructors-not-proved",
+          "works/weave/socks/orders/entities/CustomerOrder.toString()Ljava/lang/String;",
+          "works/weave/socks/orders/repositories/CustomerOrderRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+          "works/weave/socks/orders/services/AsyncGetService.postResource(Ljava/net/URI;Ljava/lang/Object;Lorg/springframework/core/ParameterizedTypeReference;)Ljava/util/concurrent/Future;"
+        ],
+        "root_effects_verified": false
+      }
+    ],
+    "uses_tf_to_decide_oracle": false,
+    "graph_diagnostics_only": "Predicted targets/opaque rows are inspected to diagnose breaks, not to compute expected sources."
+  },
+  "cart_create_guard": {
+    "all_passed": true,
+    "query": "sockshop-carts-get-customerId",
+    "supplementary_development_only": true,
+    "same_client_value": true,
+    "checks": [
+      {
+        "request": 0,
+        "message": "b702d8ddc1cb7c30c58dee7dba242a5e/0925405de219152b",
+        "client_customerId": "19ee85270dd8c9173dc33cb0",
+        "expected": [
+          [
+            "carts",
+            null,
+            null,
+            27,
+            "o7",
+            "@argument:0",
+            0,
+            null
+          ]
+        ],
+        "known": false,
+        "answer": {
+          "target": {
+            "path": "/customerId",
+            "owner": "o18",
+            "field": "works/weave/socks/cart/entities/Cart.customerId",
+            "version": 1,
+            "observed": {
+              "object": "o20",
+              "value": "19ee85270dd8c9173dc33cb0"
+            },
+            "descriptor": "Ljava/lang/String;",
+            "service": "carts",
+            "seq": 89,
+            "kind": "http-json",
+            "message": "b702d8ddc1cb7c30c58dee7dba242a5e/0925405de219152b",
+            "direction": "response",
+            "phase": "write",
+            "uri": "/carts/19ee85270dd8c9173dc33cb0",
+            "parent_message": null
+          },
+          "target_key": [
+            "carts",
+            89,
+            "/customerId"
+          ],
+          "known": false,
+          "sources": [],
+          "source_keys": []
+        }
+      },
+      {
+        "request": 1,
+        "message": "b702d8ddc1cb7c30c58dee7dba242a5e/9c8fd41a36bc98c2",
+        "client_customerId": "19ee85270dd8c9173dc33cb0",
+        "expected": [
+          [
+            "carts",
+            "b702d8ddc1cb7c30c58dee7dba242a5e/9c8fd41a36bc98c2",
+            "f2",
+            97,
+            "o27",
+            "works/weave/socks/cart/entities/Cart.customerId",
+            1,
+            "/0/customerId"
+          ]
+        ],
+        "known": true,
+        "answer": {
+          "target": {
+            "path": "/customerId",
+            "owner": "o27",
+            "field": "works/weave/socks/cart/entities/Cart.customerId",
+            "version": 1,
+            "observed": {
+              "object": "o29",
+              "value": "19ee85270dd8c9173dc33cb0"
+            },
+            "descriptor": "Ljava/lang/String;",
+            "service": "carts",
+            "seq": 112,
+            "kind": "http-json",
+            "message": "b702d8ddc1cb7c30c58dee7dba242a5e/9c8fd41a36bc98c2",
+            "direction": "response",
+            "phase": "write",
+            "uri": "/carts/19ee85270dd8c9173dc33cb0",
+            "parent_message": null
+          },
+          "target_key": [
+            "carts",
+            112,
+            "/customerId"
+          ],
+          "known": true,
+          "sources": [
+            {
+              "path": "/0/customerId",
+              "owner": "o27",
+              "field": "works/weave/socks/cart/entities/Cart.customerId",
+              "version": 1,
+              "observed": {
+                "object": "o29",
+                "value": "19ee85270dd8c9173dc33cb0"
+              },
+              "service": "carts",
+              "seq": 97,
+              "kind": "binding-source",
+              "root_frame": "f2",
+              "source_kind": "binding-source",
+              "message": "b702d8ddc1cb7c30c58dee7dba242a5e/9c8fd41a36bc98c2",
+              "callee": "works/weave/socks/cart/repositories/CartRepository.findByCustomerId(Ljava/lang/String;)Ljava/util/List;",
+              "argument": null
+            }
+          ],
+          "source_keys": [
+            [
+              "carts",
+              "binding-source",
+              97,
+              0
+            ]
+          ]
+        }
+      }
+    ],
+    "known": 1,
+    "unknown": 1,
+    "known_exact": 1,
+    "tp": 1,
+    "fn_including_unknown": 1,
+    "not_a_known_empty_origin": true
+  },
+  "retained_basic_call_pairing_limitation": {
+    "summary": [
+      {
+        "case": "normal",
+        "frame": "f1",
+        "calls": 153,
+        "unpaired": 0,
+        "root_effects_verified": false
+      },
+      {
+        "case": "equal-values",
+        "frame": "f2",
+        "calls": 152,
+        "unpaired": 0,
+        "root_effects_verified": false
+      },
+      {
+        "case": "permuted",
+        "frame": "f3",
+        "calls": 152,
+        "unpaired": 0,
+        "root_effects_verified": false
+      },
+      {
+        "case": "short-distances",
+        "frame": "f4",
+        "calls": 140,
+        "unpaired": 1,
+        "root_effects_verified": false
+      },
+      {
+        "case": "missing-route",
+        "frame": "f5",
+        "calls": 131,
+        "unpaired": 0,
+        "root_effects_verified": false
+      },
+      {
+        "case": "missing-price",
+        "frame": "f6",
+        "calls": 145,
+        "unpaired": 1,
+        "root_effects_verified": false
+      },
+      {
+        "case": "missing-station",
+        "frame": "f7",
+        "calls": 152,
+        "unpaired": 1,
+        "root_effects_verified": false
+      }
+    ],
+    "calls_without_normal_completion": [
+      {
+        "case": "short-distances",
+        "frame": "f4",
+        "callee": "java/util/List.get(I)Ljava/lang/Object;",
+        "mode": "existing",
+        "seq": 1412
+      },
+      {
+        "case": "missing-price",
+        "frame": "f6",
+        "callee": "fdse/microservice/entity/PriceConfig.getBasicPriceRate()D",
+        "mode": "existing",
+        "seq": 2069
+      },
+      {
+        "case": "missing-station",
+        "frame": "f7",
+        "callee": "java/util/List.get(I)Ljava/lang/Object;",
+        "mode": "existing",
+        "seq": 2426
+      },
+      {
+        "case": "missing-train",
+        "frame": "f8",
+        "callee": "fdse/microservice/service/BasicServiceImpl.queryPriceConfigByRouteIdAndTrainType(Ljava/lang/String;Ljava/lang/String;Lorg/springframework/http/HttpHeaders;)Lfdse/microservice/entity/PriceConfig;",
+        "mode": "opaque",
+        "seq": 2598
+      },
+      {
+        "case": "missing-train",
+        "frame": "f8",
+        "callee": "org/springframework/web/client/RestTemplate.exchange(Ljava/lang/String;Lorg/springframework/http/HttpMethod;Lorg/springframework/http/HttpEntity;Ljava/lang/Class;[Ljava/lang/Object;)Lorg/springframework/http/ResponseEntity;",
+        "mode": "opaque",
+        "seq": 2611
+      }
+    ],
+    "classification": "Missing completion witnesses on handled and aborted paths cause batch-level proof audit failure. This implementation limitation is retained in frozen first coverage; it is not relabeled unknown or a source mismatch.",
+    "core_changed": false
+  },
+  "backup": "artifacts/sockshop-model-backup-20261020/START-HERE.txt"
+}

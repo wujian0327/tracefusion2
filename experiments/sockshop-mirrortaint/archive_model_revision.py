@@ -7,7 +7,8 @@ from run_query_planner import JARS
 
 
 def archive(evidence,out):
-    roots=[evidence,ROOT/'artifacts/query-coverage-first-20261019/jars',ROOT/'artifacts/desktop-inputs/images-lock.json',
+    roots=[evidence,ROOT/'artifacts/query-coverage-first-20261019/jars',ROOT/'artifacts/query-coverage-first-20261019/pool.json',
+           ROOT/'artifacts/query-coverage-first-20261019/planning.json',ROOT/'artifacts/desktop-inputs/images-lock.json',
            ROOT/'artifacts/trainticket-cost-preparation-20261016/inputs',ROOT/'artifacts/real-path-expansion-preflight-20261015/images.json',*JARS]
     for name in ('legacy-inputs.json','price-inputs.json','base-inputs.json'):
         roots.extend(Path(v['jar']) for v in load(evidence/name).values())

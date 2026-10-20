@@ -1,10 +1,18 @@
 # TraceFusion 2
 
+2026-10-20完成有限读取模型修订，冻结核心为 `c3e6739`：已有Cart的三个开发目标
+full/selective各18/18来源匹配，封存新字段itemId另6/6匹配。原Orders查询的独立真值已补齐，
+24个目标仍unknown。新字段首次测试中Sock Shop为6已知/18unknown，Train Ticket为35已知/14证据无效；
+后者暴露Basic异常调用配对限制，原始失败保留，不能只引用已知答案的条件匹配率。
+见[完整结果及剩余问题](experiments/sockshop-mirrortaint/SOCKSHOP-MODEL-REVISION-20261020.md)和
+[有限模型算法说明](experiments/sockshop-mirrortaint/SOCKSHOP-MODEL-ALGORITHM-20261020.md)。
+本轮未测性能，旧成本表不适用于此候选配置。
+
 2026-10-19已完成有界响应目标绑定修订（冻结核心 `803b92f`）及独立封存测试：
 Train Ticket新入口接纳10/12查询，71/71实际目标来源完全匹配；Sock Shop旧入口新字段
 接纳8/10计划，但24个实际目标全部unknown，不能视作来源查询成功。
 见[完整修订与覆盖报告](experiments/sockshop-mirrortaint/RESPONSE-BINDING-REVISION-20261019.md)和
-[最新算法说明](experiments/sockshop-mirrortaint/RESPONSE-BINDING-ALGORITHM-20261019.md)。
+[该轮算法说明](experiments/sockshop-mirrortaint/RESPONSE-BINDING-ALGORITHM-20261019.md)。
 性能实验暂缓，旧成本表不直接适用于本修订版。
 
 2026-10-19冻结后的新查询覆盖首轮：从Sock Shop 37、Train Ticket 54个候选中各预选10个，

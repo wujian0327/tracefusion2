@@ -1,0 +1,73 @@
+{
+  "commit": "c3e6739ca92f870821ce264f8ae1eb32cb681477",
+  "at_utc": "2026-10-20T01:39:39.629778+00:00",
+  "sources": {
+    "experiments/sockshop-mirrortaint/QueryObservationAgent.java": "3f48ead5b09077c8ba8568da0037619c01636766e56f2d8d186e517fb1b99ff4",
+    "experiments/sockshop-mirrortaint/QueryBytecodeModel.java": "194f7710c0b77f69caa644209a037f5476595f5c91af9daabaddf70cae12546f",
+    "experiments/sockshop-mirrortaint/PlannedServiceAgent.java": "d5ddc94aa61effd5dbfe48f84a30f80a3d93b428e15dfcc4215812d2873f3ebb",
+    "experiments/sockshop-mirrortaint/CollectionServiceHooks.java": "c0ed62088996c049922e4b3a0e8eeaa57045a6ff0941de4ba4ce8b2767ba5ff0",
+    "experiments/sockshop-mirrortaint/ResponseBindingHooks.java": "3202de273ec47819a709ab320fe1a2381004037422ca5d1560068892ccce5cdd",
+    "experiments/sockshop-mirrortaint/ReadEffectHooks.java": "8d71ac4917e2b0c18bbdc26aea2001b91896daef37ac3ac18670681ccabb2cef",
+    "experiments/sockshop-mirrortaint/JdkContractProbe.java": "990766210b9879f0805b798b242e5d3fc0ca9825286cc9fda0fe9bcbc56eccf4",
+    "experiments/sockshop-mirrortaint/SourceEvidenceHooks.java": "b986525b391ccc68a327fdd07c18dfdf9f252459574800542a7b66461875a6e2",
+    "experiments/sockshop-mirrortaint/SpringTransportAgent.java": "9bbec838af10982dd99b5a2f80e8b1bf1b62ec9611e104dbb1a9c377936953a8",
+    "experiments/sockshop-mirrortaint/W3CTraceContext.java": "23ea705e55cc2a5f13aa01a982917d685915371f2e2b1f8f480ce8cdd0f5651f",
+    "experiments/sockshop-mirrortaint/experiment_environment.py": "91c2609c43a99e18d3aa9e4a1fb113ade860b8ec4fa86133a6823f35eb501e96",
+    "experiments/sockshop-mirrortaint/plan_distributed_fields.py": "69f87a010de48b0c4457813cc8f2e2c46ba4c0d1215d58964d41d79f4303bf0a",
+    "experiments/sockshop-mirrortaint/plan_service_observations.py": "b4b641a63bb5bf2f6a06e6ff8b83d8923aced0796b40db8aaeeb57718a255fe0",
+    "experiments/sockshop-mirrortaint/plan_collection_service.py": "b0af8f163934d70fafb1099a10207e8b0e408f89718444f2f88fbe7fe9b1f315",
+    "experiments/sockshop-mirrortaint/query_observation_planner.py": "1d7ba77430c902ca00259a7a4ad3bf3bb955fe91f8a885d5efc7f9500b56a30d",
+    "experiments/sockshop-mirrortaint/infer_planned_service.py": "1642a44de9ff16557b32c757b6cadabdd1d02aed5fb04326bd8f4472334276ff",
+    "experiments/sockshop-mirrortaint/infer_distributed_fields.py": "732a163eb07eed9b179568c74496825c26bf26ee3b2de73795c9e58bcaf102eb",
+    "experiments/sockshop-mirrortaint/transport_context.py": "e17f112abf65b3df196865f96c394c87d4031ba949de1c7aff5613eceb1c9cc3",
+    "experiments/sockshop-mirrortaint/run_distributed_paths.py": "05cc20245405d3952a7df780d919190022792b5eccf27a91cc05cb54afcec854",
+    "experiments/sockshop-mirrortaint/evaluate_distributed_paths.py": "ba3faf14ee024839644d3f0c229e69f997bafc45f7132a72d18c08d095deff88",
+    "experiments/sockshop-mirrortaint/audit_distributed_paths.py": "6226c32ecb8197c2066473d3e7a50bfbe993aef9192b30554f00b738138c753a",
+    "experiments/sockshop-mirrortaint/infer_collection_service.py": "2e3e47b0fbfb81e5ef207d7525cd8f38a02e2d3fc1a5c7bc742674b1467d5929",
+    "experiments/sockshop-mirrortaint/plan_response_binding.py": "2c9bd08c6f1a1d8886e88aa056182fca144431f4bb6acd530b0215fce90a9e0c",
+    "experiments/sockshop-mirrortaint/infer_response_binding.py": "90c8dd85058b48a4bac95e0a605ab9c8b19d18b09274ef662a2ba2cb33059e92",
+    "experiments/sockshop-mirrortaint/plan_read_effects.py": "84893393c12bc14296d65829b0391ba175ff9a3d20c798b0bddb445a9375be2b",
+    "experiments/sockshop-mirrortaint/read-forward-runtimes-20261020.json": "1fca4ceccb7c396f61dedc5da2bd1b166b65fff5e9d07f9f3b4da00731c9ee08",
+    "experiments/sockshop-mirrortaint/build_distributed_plans.py": "e0748c702373d4943019723bbd30911eb1ec3f944d413057f60f0d0c5c526cd5"
+  },
+  "heldout_sha256": "0308b2ca6901373719ca0490f0fb5de3aaf7fcf044d7307ee8f1621ab395a321",
+  "archive_sha256": "74042ae23f548c6125c0a3fd5cc50692da9a714fa5627c17da1c14c8a285fede",
+  "base_build_sha256": "1956f27084f58695d1c96ec170452026da9e8a546f76e1b17679ef7dcbaedb3b",
+  "agent_sha256": "d20acb944e225c4cf160860cf726b3d093c73f26ec9c265d05ddf44bfaa8340b",
+  "dependencies": {
+    "/home/wujian/tracefusion2/artifacts/java-collection-deps/asm-9.7.1.jar": "8cadd43ac5eb6d09de05faecca38b917a040bb9139c7edeb4cc81c740b713281",
+    "/home/wujian/tracefusion2/artifacts/java-collection-deps/asm-tree-9.7.1.jar": "9929881f59eb6b840e86d54570c77b59ce721d104e6dfd7a40978991c2d3b41f",
+    "/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-core-2.8.6.jar": "10a8d607dc66aadee9ef24e8b3d83f04b6c0e033926558cc64e408bcbda0ca9f",
+    "/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-databind-2.8.6.jar": "922413ca2ff5a8f1f86a2eaae8ff02219322ec6ff00d212e7973df8aac4bbaa3",
+    "/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-annotations-2.8.6.jar": "92d7580f361174bda3e015c66adafa326aeb9ef7f4a99a895486cef0dae773f8"
+  },
+  "business_jars": {
+    "orders": "8a2cb87b9bedf79c7ad407fcd72bc74c6c1241ef67ae967de59f1ec5f5873a2b",
+    "carts": "ab0d2da1937c219d649766dd3ba84945c4e2063ac9bff6839993f9dc3d8a548b",
+    "shipping": "5704afeeca3c34e10873b15b5aeaf25cbe8326772382631ff4e579d5fa358890",
+    "station": "0143034bae170d40dfad41c5ab44d30d0c3783dd4e4b3fbddfca26e0d07613f9",
+    "basic": "b1018c4efcb96aad39565f6992d2e19dbb3684dc95219068074dc903385151b6",
+    "ticketinfo": "c903bfcc0c7d51a2b16dc516004b70839652849a8331e70629c6d7bc798e1728",
+    "train": "61fa90fbf47542397655f1ee70b6f4a3ead0d4528cb665339ca43a56b04c6f08",
+    "route": "fd65028763bfd7b3c97fabd0f081453d7e78167696e692b3b5c7cd92c79e26f8",
+    "price": "dc6b002e0dd58a5371e192cf03ebce2adc638ce42c786dbc0911b9fb849d9f7a"
+  },
+  "base_inputs_sha256": "1ae5bcd0121335179ea89bc3397aeec2f888822a6d6913d7e9326c6623f33d71",
+  "runtime_pins_sha256": "1fca4ceccb7c396f61dedc5da2bd1b166b65fff5e9d07f9f3b4da00731c9ee08",
+  "images_lock_sha256": "66fb61cae74f692b20bf45cefab809625405741b7f11117578bd9f1e615ca223",
+  "development_audit_sha256": "a351234f1b60fa701ffbc0fac49def53dbf5167d5a6929e88432edc33d1bc3f7",
+  "experimental_sources": {
+    "experiments/sockshop-mirrortaint/run_sockshop_model_revision.py": "9631280d39fbca86e8123bf6915b55ecbc62c7ae54d83372721ffc37c5a386bf",
+    "experiments/sockshop-mirrortaint/run_sockshop_source_diagnostic.py": "afc4997ce570e95f2cd353f9cd418bd95e4b281d62abc3b16feed9d082af31fc",
+    "experiments/sockshop-mirrortaint/audit_sockshop_raw_sources.py": "9097d08f26619bc526954da7d63132d59a133d7819deb8da6137f9020631c7ca",
+    "experiments/sockshop-mirrortaint/HateoasOracleProbe.java": "0c2f77a6aad6720e786555d5738161765e437b4f30c85b0bb2c695f820a4099c",
+    "experiments/sockshop-mirrortaint/run_cart_full_regression.py": "847ac0736bac3d446672b6fd85a016fc2d331bc4ad0b821546da9f9f55548cc7"
+  },
+  "scope": "Frozen after original42 development knowledge, previous22 runtime regression, Cart full/selective, history and semantic/refusal checks; before first planning of next20 fields. No performance claim.",
+  "holdout_tier": "old-entry/new-field only; no unseen entry remains",
+  "early_id_view_disclosed": [
+    "sockshop-carts-addToCart-itemId",
+    "sockshop-carts-get-unitPrice"
+  ],
+  "new_heldout_planner_calls_so_far": 0
+}
