@@ -1,0 +1,172 @@
+{
+  "parent_commit": "d917fb792c0515935002a65a90e7461aa43e427c",
+  "parent_algorithm": "ade72a8d5c594cbd60be1c43041d01c1675c148e",
+  "scope": [
+    "Post-Object-initialization constructor bodies use ordinary application Frames and shared state",
+    "Bytecode-derived bounded delegation to narrow assignment constructors",
+    "Pinned logging factory effects, necessary sequential filter callbacks, scalar string equality",
+    "Evaluate original exposed 36 target instances without replacing rejections"
+  ],
+  "deferred": [
+    "Orders save/async",
+    "general recursive construction",
+    "performance",
+    "held-out queries"
+  ],
+  "acceptance": [
+    "Independent JVM constructor and exception controls: full before selective",
+    "Original Cart GET 15 targets and TicketInfo21 per-instance status",
+    "Cart6 restore, Station/Route60, legacy semantic and offline compatibility"
+  ],
+  "queries": [
+    {
+      "application": "sockshop",
+      "role": "carts",
+      "entry": "works/weave/socks/cart/controllers/ItemsController.get(Ljava/lang/String;Ljava/lang/String;)Lworks/weave/socks/cart/entities/Item;",
+      "http": "GET /carts/{customerId}/items/{itemId}",
+      "target": "works.weave.socks.cart.entities.Item.quantity",
+      "path": "/quantity",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-carts-get-quantity",
+      "rank": "0a88848002a04b6d5fff9f1047a08e03707401b62d6053d3d1b15bf746e33477",
+      "exposure_group": "development20"
+    },
+    {
+      "application": "trainticket",
+      "role": "ticketinfo",
+      "entry": "ticketinfo/service/TicketInfoServiceImpl.queryForTravel(Lticketinfo/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/ticketinfoservice/ticketinfo",
+      "target": "ticketinfo.entity.TrainType.id",
+      "path": "/data/trainType/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-ticketinfo-queryForTravel-data-trainType-id",
+      "rank": "257383313e730d4fba84ba028e419cf90372dd29c1c97646b4b1bbcb8129bb86",
+      "exposure_group": "development20"
+    },
+    {
+      "application": "sockshop",
+      "role": "carts",
+      "entry": "works/weave/socks/cart/controllers/ItemsController.get(Ljava/lang/String;Ljava/lang/String;)Lworks/weave/socks/cart/entities/Item;",
+      "http": "GET /carts/{customerId}/items/{itemId}",
+      "target": "works.weave.socks.cart.entities.Item.itemId",
+      "path": "/itemId",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-carts-get-itemId",
+      "rank": "c3bd2ba200ac7b5257aa67a0284ee812aac2bce2da66bff1cac3659600300469",
+      "exposure_group": "binding22"
+    },
+    {
+      "application": "sockshop",
+      "role": "carts",
+      "entry": "works/weave/socks/cart/controllers/ItemsController.get(Ljava/lang/String;Ljava/lang/String;)Lworks/weave/socks/cart/entities/Item;",
+      "http": "GET /carts/{customerId}/items/{itemId}",
+      "target": "works.weave.socks.cart.entities.Item.unitPrice",
+      "path": "/unitPrice",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-carts-get-unitPrice",
+      "rank": "deb907cd3acbbefbf25681a25e942283f8b6a21e741d72d323e334d5daae61c4",
+      "exposure_group": "model20"
+    },
+    {
+      "application": "trainticket",
+      "role": "ticketinfo",
+      "entry": "ticketinfo/service/TicketInfoServiceImpl.queryForTravel(Lticketinfo/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/ticketinfoservice/ticketinfo",
+      "target": "ticketinfo.entity.TravelResult.prices",
+      "path": "/data/prices/economyClass",
+      "shape_note": "declared Map price key from original bytecode",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-ticketinfo-queryForTravel-data-prices-economyClass",
+      "rank": "be5d008c0e85ee2c44baed800a73037034151b14bb0266b5a105a10924682697",
+      "exposure_group": "model20"
+    },
+    {
+      "application": "trainticket",
+      "role": "ticketinfo",
+      "entry": "ticketinfo/service/TicketInfoServiceImpl.queryForTravel(Lticketinfo/entity/Travel;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "http": "POST /api/v1/ticketinfoservice/ticketinfo",
+      "target": "ticketinfo.entity.TrainType.averageSpeed",
+      "path": "/data/trainType/averageSpeed",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed",
+      "rank": "e7a594edc9bd7692045f3c2b835d7e7b2e5e8b5d87a1abcea3beb09d4ea7de75",
+      "exposure_group": "model20"
+    }
+  ],
+  "remaining_gaps": 109,
+  "reserved_candidates": 29,
+  "seal_sha256": "87c40107282aaccb8e049fc5ffe37bb1e66deacfeabd0f015a08544bc1972fae",
+  "truth": "Original code, actual inputs and raw source-call/object/field/version/message facts; no TF propagation or baseline tags in oracle",
+  "first_results": "Keep development failures, freeze final core before final full/selective business acceptance; no new unseen-query claim"
+}
