@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "library": "original Spring web 4.3.25.RELEASE",
   "class_sha256": {
     "org/springframework/http/HttpEntity": "5ac0eba68668d5bc0543f39d7b901a705c911dd1631c6097d0a5b5ff2604581d",
@@ -16,13 +16,15 @@
     "org/springframework/http/converter/StringHttpMessageConverter": "fbf441f25fcc8d86118e7b25ce3ea1f25e8aa79faefc93333d0d190176c32e74",
     "org/springframework/http/converter/ResourceHttpMessageConverter": "fe3ae1781ea204e2da42a1c732fa65e9714d5e27256618932beebb298de78c6b",
     "org/springframework/http/converter/xml/SourceHttpMessageConverter": "1d46834ea22aab7c69dec711132b9b911abafccd54a8289bb35c0f14b2c1897d",
-    "org/springframework/http/converter/support/AllEncompassingFormHttpMessageConverter": "6962f3d9bc06c453ad20250328dcd397e2eae638d2ef57fb3dc83f6dbacd054d"
+    "org/springframework/http/converter/support/AllEncompassingFormHttpMessageConverter": "6962f3d9bc06c453ad20250328dcd397e2eae638d2ef57fb3dc83f6dbacd054d",
+    "org/springframework/http/converter/xml/Jaxb2RootElementHttpMessageConverter": "994b9b10acfc83aae41b28a3f91e7ae0159e510e21e107cb051dd97ba5e10986"
   },
   "conditions": [
     "Exact HttpEntity with null headers and body identity",
     "Exact default RestTemplate, empty interceptors, SimpleClientHttpRequestFactory, pinned response extractor and converter",
     "Returned ResponseEntity body is the exact actual RPC-decoded object; complete matching concrete message and field coordinates",
-    "Headers/save/async side effects are not declared read-only"
+    "Headers/save/async side effects are not declared read-only",
+    "Original Boot-configured JAXB converter is class-pinned; actual source is after JSON decode, never inferred from wire name equality."
   ],
   "converter_classes": [
     "org/springframework/http/converter/ByteArrayHttpMessageConverter",
@@ -30,6 +32,7 @@
     "org/springframework/http/converter/ResourceHttpMessageConverter",
     "org/springframework/http/converter/xml/SourceHttpMessageConverter",
     "org/springframework/http/converter/support/AllEncompassingFormHttpMessageConverter",
-    "org/springframework/http/converter/json/MappingJackson2HttpMessageConverter"
+    "org/springframework/http/converter/json/MappingJackson2HttpMessageConverter",
+    "org/springframework/http/converter/xml/Jaxb2RootElementHttpMessageConverter"
   ]
 }
