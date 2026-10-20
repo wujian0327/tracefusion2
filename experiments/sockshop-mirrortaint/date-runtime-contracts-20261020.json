@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "runtime_profiles": [
+    {
+      "java_runtime_version": "1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01",
+      "class_sha256": {
+        "java/util/Calendar": "de5d90542f1e18ef2103522940835bfb6c260b82c1a4ac2b6b7a48ea8a72b814",
+        "java/util/Calendar$Builder": "7227684b849406584767ffc9d72f72630e709f1fce8c40c3b01ea9174679a3a7",
+        "java/util/Date": "9195ac44b7b3b2da08672ac72ebd97944d6d37b73b8bd7e50a8df3c1fe582240",
+        "java/util/GregorianCalendar": "0ac50777d565e1f9b31fb23046d36de7e6063d60e3993df1702d004a4e681a8e",
+        "sun/util/locale/provider/CalendarProviderImpl": "ef90150809205debeb93251b8fe15b57a35397c7d0f8289c9f09c4369c00e205",
+        "sun/util/locale/provider/LocaleProviderAdapter": "11580abfe139f868d8f7e34769b52ae400c3a088675584bdad4d773e8c90ce94"
+      },
+      "scope": "host semantic controls, fixed Calendar provider"
+    },
+    {
+      "java_runtime_version": "1.8.0_111-internal-alpine-r0-b14",
+      "class_sha256": {
+        "java/util/Calendar": "aa9a8bf4822252f42e038ae8f5f744d9b6d5bee1f060418bc514234899c0521b",
+        "java/util/Calendar$Builder": "7227684b849406584767ffc9d72f72630e709f1fce8c40c3b01ea9174679a3a7",
+        "java/util/Date": "9195ac44b7b3b2da08672ac72ebd97944d6d37b73b8bd7e50a8df3c1fe582240",
+        "java/util/GregorianCalendar": "1cdbe887a9b202eb9d75b83d7819971576fc5daf058b3b4abf4e52259e672a77",
+        "sun/util/locale/provider/CalendarProviderImpl": "ef90150809205debeb93251b8fe15b57a35397c7d0f8289c9f09c4369c00e205",
+        "sun/util/locale/provider/LocaleProviderAdapter": "11580abfe139f868d8f7e34769b52ae400c3a088675584bdad4d773e8c90ce94"
+      },
+      "scope": "original Orders JDK including Calendar provider"
+    }
+  ],
+  "jackson_profiles": [
+    {
+      "class_sha256": {
+        "com/fasterxml/jackson/databind/ObjectMapper": "c9d931c46efbc313108215ad320a7fa1b1c25bd82af5f4ae781b46f4d1d99e59",
+        "com/fasterxml/jackson/databind/ser/std/DateSerializer": "5e0c39d05e1030172010c801d81d695858b6053b9129c4444d2a70714c58d53e",
+        "com/fasterxml/jackson/databind/ser/std/DateTimeSerializerBase": "9e7bb3e8aa3cb52718cc67ca10936337315fc3ece8682d24e12f1312f91f510b",
+        "com/fasterxml/jackson/databind/util/StdDateFormat": "418611dec2d800c7e886be4e78d5d42ad357eb2fa028be82b3288c01b2ecac48"
+      },
+      "scope": "host original Jackson2.8.6"
+    },
+    {
+      "class_sha256": {
+        "com/fasterxml/jackson/databind/ObjectMapper": "c9d931c46efbc313108215ad320a7fa1b1c25bd82af5f4ae781b46f4d1d99e59",
+        "com/fasterxml/jackson/databind/ser/std/DateSerializer": "5e0c39d05e1030172010c801d81d695858b6053b9129c4444d2a70714c58d53e",
+        "com/fasterxml/jackson/databind/ser/std/DateTimeSerializerBase": "9e7bb3e8aa3cb52718cc67ca10936337315fc3ece8682d24e12f1312f91f510b",
+        "com/fasterxml/jackson/databind/util/StdDateFormat": "418611dec2d800c7e886be4e78d5d42ad357eb2fa028be82b3288c01b2ecac48"
+      },
+      "scope": "BOOT-INF/lib/jackson-databind-2.8.6.jar"
+    }
+  ],
+  "scope": "Exact Date identity/read/copy/newDate(long), fresh default GregorianCalendar and default DateSerializer/StdDateFormat; Date mutations unmodeled; environment separate from declared field sources",
+  "read_runtime_profiles": [
+    {
+      "java_runtime_version": "1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01",
+      "class_sha256": {
+        "java/lang/AbstractStringBuilder": "ed068f98fc51426114bc17e0269e20ec369bb27735104314f656762a5091a8c7",
+        "java/lang/StringBuilder": "5512ee9b1b0d387172b5a195bb276208375e8c1caafc4e3b6aa59cf3e6674296",
+        "java/lang/invoke/LambdaMetafactory": "3a9cf971b5671d920296cba927fd2cbbc4fc7cb507b7896f949a89cd5a3481b9",
+        "java/util/ArrayList": "0976edaa24bd7790c9778c846ef4c4cdfe396242cb1e298cd190454083366199",
+        "java/util/Arrays$ArrayList": "831476e4ac20d9181d546a5779a449d0ad818e1c6567e366c1f109cab22f7ed9",
+        "java/util/Collection": "ca1ddb2f24e559e7b173c90fd6c4aba85a1c41acb207b55d60eb012a5835e37e",
+        "java/util/Collections$EmptyList": "4966d807da35072cf21d5a3db85878c194271ba7394e74105e69c3a127860dfc",
+        "java/util/Collections$SingletonList": "27bb2b22684ad6e791d73c2cac527da308cccd759465c6a43e1f6c93bb966565",
+        "java/util/Optional": "344c2b339959c507d08f6627a5f14f0970e9a7efcdb25311e4f4d7946ad14463",
+        "java/util/stream/ReferencePipeline": "74a4db28e91e555969bc9f5c7391768befcff2167c682056ac2f0b9b2c30bbcf",
+        "java/util/stream/ReferencePipeline$Head": "5a17bbea9d5c189762b6dff5112f2d887c47385bac3ce46505f0bf2ca16f915c",
+        "java/util/stream/StreamSupport": "fb78afbf101ab0c13772b2ae1aedad6ef9a0176ae20e4ab1bddbae62cd75d28c"
+      },
+      "scope": "Pinned host read-effect Date forwarding controls only"
+    }
+  ]
+}

@@ -38,7 +38,7 @@ def sources(graph,role):
 
 def audit_read_effects(rows,plan):
     """A missing/mispaired contract witness can never silently certify a call."""
-    stacks={};counts={};streams={};optional={};runtime=[];summaries={};call_ids=set();roots={};ends={};returned=set()
+    stacks={};counts={};streams={};optional={};runtime=[];summaries={};call_ids=set();roots={};ends={};returned=set();failed_roots=set()
     lifecycle=plan['read_forward_contracts'].get('version',1)>=2
     classes={r['class'] for r in rows if r['kind']=='class'}
     for r in rows:
@@ -56,6 +56,7 @@ def audit_read_effects(rows,plan):
             require(r['call_id'] not in call_ids,'Repeated read-effect call identity');call_ids.add(r['call_id'])
             stack.append(r);counts[(thread,r['frame'])]=counts.get((thread,r['frame']),0)+1
         elif k in ('binding-call-exit','binding-call-throw'):
+            if not r['valid']:failed_roots.add((thread,r['frame']))
             require(bool(stack),'Read-effect exit without entry');start=stack.pop()
             require(all(r.get(k)==start.get(k) for k in ('call_id','callee','receiver','receiver_type','mode','implementation','frame')),'Read-effect call pairing differs')
             if lifecycle:
@@ -86,7 +87,8 @@ def audit_read_effects(rows,plan):
                 require(optional.get(r['receiver'])==d['selected_object'],'Optional result lacks checked findFirst witness')
         elif k=='binding-call-summary':
             coord=(thread,r['frame']);require(coord not in summaries,'Duplicate read-effect root summary');summaries[coord]=r
-            require(r['root_effects_verified']==(plan['entry'] in plan['read_forward_contracts']['composed_methods']),'Root effect proof differs from frozen analysis')
+            verified=plan['entry'] in plan['read_forward_contracts']['composed_methods'] and not (plan.get('date_projection') and coord in failed_roots)
+            require(r['root_effects_verified']==verified,'Root effect proof differs from frozen analysis')
             require(r['calls']==counts.pop(coord,0),'Executed call witness count differs')
             require(r['unpaired']==0 and not stack,'Read-effect call evidence incomplete (including exceptional calls)')
     require(not any(stacks.values()) and not counts,'Missing read-effect completion/summary')
@@ -118,6 +120,9 @@ def bind_outputs(graph,role):
             if ret.get('message')!=event['message'] or ret['seq']>=event['seq']:continue
             for f in ret['fields']:
                 if config['root_prefix']+f['path']==node['path'] and (f['owner'],f['field'],f['version'])==(node['owner'],node['field'],node['version']):
+                    if 'date_epoch_ms' in f['observed']:
+                        from infer_execution_kernel import same_value
+                        same_value(f['observed'],node['observed'])
                     require(f['observed'].get('value')==node['observed'].get('value'),'Bound response value changed')
                     candidates.append((ret,f))
         if len(candidates)!=1:

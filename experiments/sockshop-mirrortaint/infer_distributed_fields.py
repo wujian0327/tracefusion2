@@ -17,7 +17,9 @@ import infer_response_binding as response_binding
 
 
 def coord(f):return (f['owner'],f['field'],f['version'])
-def equivalent(a,b):return a.get('value')==b.get('value')
+def equivalent(a,b):
+    if 'date_epoch_ms' in a or 'date_epoch_ms' in b:return all(a.get(k)==b.get(k) for k in ('date_epoch_ms','date_type'))
+    return a.get('value')==b.get('value')
 
 
 class Reconstruction:
@@ -33,6 +35,8 @@ class Reconstruction:
             require(rows[0]['plan_sha256']==hashlib.sha256((build/role/'plan.json').read_bytes()).hexdigest(),'Frozen plan differs')
             if any(r.get('transport_protocol')=='w3c-trace-context' for r in rows):validate_protocol(rows)
             self.rows[role]=rows;self.plans[role]=plan
+            from infer_date_projection import validate_date_serialization
+            validate_date_serialization(plan,rows)
             self.stats[role]={'events':len(rows),'json_events':sum(r['kind']=='http-json' for r in rows),'log_bytes':path.stat().st_size}
         self.json=[]
         for role,rows in self.rows.items():
@@ -171,11 +175,11 @@ class Reconstruction:
                 elif origin[0]=='field':leaves.append((role,'binding-source',origin[1],origin[2]))
                 elif origin[0]=='http':leaves.append((role,origin[1],origin[2]))
                 else:
-                    require(origin[0]=='argument','Unknown execution origin type');frame,index=origin[1:];key=(role,'argument',frame,index)
-                    if key not in self.nodes:
+                    require(origin[0]=='argument','Unknown execution origin type');frame,index=origin[1:];argument_key=(role,'argument',frame,index)
+                    if argument_key not in self.nodes:
                         root=next(r for r in self.rows[role] if r['kind']=='enter' and r['frame']==frame);arg=root['args'][index]
-                        self.add(key,dict(service=role,seq=root['seq'],kind='argument',root_frame=frame,message=next((r.get('message') for r in self.rows[role] if r['kind']=='binding-return' and r['frame']==frame),None),field='@argument:'+str(index),owner=arg.get('object'),version=0,observed=arg))
-                    leaves.append(key)
+                        self.add(argument_key,dict(service=role,seq=root['seq'],kind='argument',root_frame=frame,message=next((r.get('message') for r in self.rows[role] if r['kind']=='binding-return' and r['frame']==frame),None),field='@argument:'+str(index),owner=arg.get('object'),version=0,observed=arg))
+                    leaves.append(argument_key)
             require(all(k in self.nodes for k in leaves),'Execution source witness absent from graph')
             node=dict(answer,service=role,kind='bytecode-execution')
             if not answer['known']:node['unknown']='Necessary unmodeled dependency/effect in execution'

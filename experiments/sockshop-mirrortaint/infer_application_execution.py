@@ -8,6 +8,8 @@ from infer_execution_kernel import coordinate, same_value
 
 
 def infer_application(plan,rows):
+    from infer_date_projection import validate_date_runtime
+    validate_date_runtime(plan,rows)
     cfg=plan['execution_kernel'];runtime=[r for r in rows if r['kind']=='execution-runtime']
     require(len(runtime)==1 and any(all(runtime[0][k]==p[k] for k in ('java_runtime_version','class_sha256')) for p in cfg['runtime_profiles']),'Application runtime pin differs')
     pending=defaultdict(list);seen=set()
@@ -34,7 +36,7 @@ def infer_application(plan,rows):
             if row['kind'] in ('binding-source','binding-input'):
                 for index,f in enumerate(row['fields']):providers[coordinate(f)].append((row,index,f))
         state=State(Frame(root['frame']));pos=1;allocation_count=0;total_steps=0;branch_count=0
-        http_entities={};response_entities={};class_literals={}
+        http_entities={};response_entities={};class_literals={};date_values={};calendars={};environment_facts=[]
         fr=None;method=None;code=None;entry=None;field_seq={};poisoned_at={};frame_audits=[]
         nonlocal_owners={f['owner'] for rows_ in providers.values() for _,_,f in rows_}
         nonlocal_owners.update(v.get('object') for v in root['args'] if 'value' not in v and v.get('object'))
@@ -46,6 +48,8 @@ def infer_application(plan,rows):
             if v.allocation is not None:
                 require(observed.get('object') is not None,'Application allocation identity absent');old=state.allocations.setdefault(v.allocation,observed['object']);require(old==observed['object'],'Application allocation rebound')
             else:
+                if 'date_epoch_ms' in v.observed and v.observed.get('object') in poisoned_at:
+                    require(v.observed.get('object')==observed.get('object'),'Opaque Date reference identity differs');return
                 same_value(v.observed,observed)
                 if v.observed.get('object') is not None and observed.get('object') is not None:require(v.observed['object']==observed['object'],'Application reference argument/return identity differs')
         def origin(f,before):
@@ -55,9 +59,14 @@ def infer_application(plan,rows):
             row,index,source=candidates[0];same_value(source['observed'],f['observed']);return Value(f['observed'],frozenset({('http',row['seq'],source['path']) if row['kind']=='http-json' else ('field',row['seq'],index)}))
         def lookup(f,before):
             key=coordinate(f)
+            if 'date_epoch_ms' in f['observed']:
+                obj=f['observed'].get('object')
+                if obj in poisoned_at:return Value(f['observed'],unknown=True)
+                if obj in date_values:return date_values[obj].project(f['observed'])
             if key in state.fields and field_seq[key]>poisoned_at.get(f['owner'],-1):return state.fields[key]
             return origin(f,before)
         def write_field(w,v):
+            if 'date_epoch_ms' in w['observed'] and w['observed']['object'] in date_values:v=date_values[w['observed']['object']]
             bind(v,w['observed']);state.field_write(coordinate(w),v.project(w['observed']));field_seq[coordinate(w)]=w['seq']
         def poison(values,seq):
             affected=set()
@@ -110,7 +119,7 @@ def infer_application(plan,rows):
                     f={'owner':owner,'field':'@list:'+str(i),'version':epoch,'observed':item}
                     # Reference identity is usable without assigning the element
                     # itself a scalar origin. Subsequent field reads carry origins.
-                    values.append(origin(f,call['seq']) if 'value' in item else Value(item))
+                    values.append(origin(f,call['seq']) if 'value' in item or 'date_epoch_ms' in item else Value(item))
                 state.containers[owner]=Container(owner,values,epoch,False)
             c=state.containers[owner]
             require(c.epoch==call['collection_epoch'] and len(c.elements)==len(items),'Execution list version/length changed')
@@ -233,6 +242,12 @@ def infer_application(plan,rows):
                             for a,b in zip(args,event['args']):bind(a,b)
                             owner=identity(recv)
                             if key=='java/util/ArrayList.<init>()V':state.containers[owner]=Container(owner,[],0,True)
+                            elif effect.get('kind')=='date-constructor':
+                                fact=event.get('date_contract');require(fact and fact['kind']=='date-constructor' and fact['arity']==len(args) and fact['epoch_ms']==event['receiver']['date_epoch_ms'],'Date constructor evidence absent/differs')
+                                if args:
+                                    require(args[0].observed.get('value')==fact['epoch_ms'],'Date constructor millis differs');date_values[owner]=args[0].project(event['receiver'])
+                                else:
+                                    date_values[owner]=Value(event['receiver']);environment_facts.append({'kind':'clock','seq':event['seq'],'object':owner,'epoch_ms':fact['epoch_ms']})
                             elif effect.get('kind')=='http-entity-null-headers':
                                 fact=framework_fact(event,'http-entity-null-headers');bind(args[0],fact['body'])
                                 if fact['valid'] and args[1].observed.get('value','non-null') is None:http_entities[owner]=args[0]
@@ -329,6 +344,20 @@ def infer_application(plan,rows):
                             invocation=Call(str(call['seq']),fr.pc,recv,args,'normal')
                             if child_value is not None:
                                 bind(child_value,observed);v=child_value.project(observed)
+                            elif key=='java/util/Calendar.getInstance()Ljava/util/Calendar;' and plan.get('date_projection'):
+                                fact=ret.get('date_contract');require(fact and fact['kind']=='calendar-environment','Calendar creation evidence absent')
+                                if fact['valid']:
+                                    require(fact['provider_type']=='sun.util.locale.provider.CalendarProviderImpl','Calendar provider differs');calendars[observed['object']]=ret['seq'];v=Value(observed)
+                            elif key=='java/util/Calendar.getTime()Ljava/util/Date;' and plan.get('date_projection'):
+                                fact=ret.get('date_contract');require(fact and fact['kind']=='calendar-date','Calendar Date evidence absent')
+                                if fact['valid'] and identity(recv) in calendars and identity(recv) not in poisoned_at:
+                                    same_value(fact['date'],observed);v=Value(observed);date_values[observed['object']]=v;environment_facts.append({'kind':'calendar-clock','seq':ret['seq'],'calendar':identity(recv),'object':observed['object'],'epoch_ms':observed['date_epoch_ms']})
+                            elif key=='java/util/Date.getTime()J' and plan.get('date_projection'):
+                                fact=ret.get('date_contract');require(fact and fact['kind']=='date-get-time','Date getTime evidence absent');source=date_values.get(identity(recv),recv)
+                                if 'date_epoch_ms' in source.observed and identity(recv) not in poisoned_at:same_value(source.observed,fact['date'])
+                                else:require(identity(recv)==fact['date']['object'],'Date getTime object differs')
+                                require(fact['epoch_ms']==observed.get('value')==fact['date']['date_epoch_ms'],'Date getTime millis differs')
+                                v=Value(observed,source.origins,source.selectors,source.unknown or identity(recv) in poisoned_at)
                             elif key=='org/springframework/web/client/RestTemplate.exchange(Ljava/lang/String;Lorg/springframework/http/HttpMethod;Lorg/springframework/http/HttpEntity;Ljava/lang/Class;[Ljava/lang/Object;)Lorg/springframework/http/ResponseEntity;' and cfg.get('framework_contracts'):
                                 fact=framework_fact(ret,'rest-exchange');poison(([recv] if recv else [])+args,call['seq'])
                                 # This models transport return identity, not a purity
@@ -357,7 +386,8 @@ def infer_application(plan,rows):
                             elif key in plan['collection_getters']:
                                 f=call.get('getter');require(f and f['field']==plan['collection_getters'][key]['field'],'Execution getter evidence absent')
                                 same_value(f['observed'],observed)
-                                v=lookup(f,call['seq']) if 'value' in observed else Value(observed)
+                                v=lookup(f,call['seq']) if 'value' in observed or 'date_epoch_ms' in observed else Value(observed)
+                                if 'date_epoch_ms' in observed:heap_refs[f['owner']].add(observed['object'])
                             elif key in plan['collection_setters']:
                                 name=plan['collection_setters'][key]['field'];matching=[w for w in writes if w['owner']==identity(recv) and w['field']==name and call['seq']<w['seq']<ret['seq']]
                                 require(len(matching)==1,'Execution setter version missing');w=matching[0];bind(args[0],w['observed']);write_field(w,args[0]);v=Value(observed)
@@ -454,7 +484,7 @@ def infer_application(plan,rows):
             desc=descriptors(plan['collection_method']['desc'])[index]
             if desc in ('Z','B','C','S','I','J','F','D'):arg={k:v for k,v in arg.items() if k!='object'}
             value=Value(arg)
-            if 'value' in arg:value=Value(arg,frozenset({('argument',root['frame'],index)}))
+            if 'value' in arg or 'date_epoch_ms' in arg:value=Value(arg,frozenset({('argument',root['frame'],index)}))
             root_args.append(value)
         _,error=execute(root,root_args,Value({'object':root['receiver']}) if root.get('receiver') else None)
         require(pos==len(events),'Application unconsumed necessary evidence')
@@ -468,7 +498,8 @@ def infer_application(plan,rows):
                 c=state.containers[owner];index=int(name.split(':')[1]);require(version==c.epoch and 0<=index<len(c.elements),'Application returned container version differs');value=c.elements[index]
                 if c.escaped:value=Value(f['observed'],unknown=True)
             else:value=lookup(f,ret['seq'])
+            if 'date_epoch_ms' in f['observed'] and f['observed']['object'] in poisoned_at:value=Value(f['observed'],unknown=True)
             bind(value,f['observed'])
             results.append({'root_frame':root['frame'],'seq':ret['seq'],'path':f['path'],**f,'known':not value.unknown,'origins':[list(x) for x in sorted(value.origins,key=str)],'selectors':[list(x) for x in sorted(value.selectors,key=str)]})
-        audits.append({'frame':root['frame'],'completion':'normal','steps':total_steps,'frames':frame_audits,'answers':len(ret['fields']),'poisoned_objects':len(poisoned_at),'opaque_frames':opaque_frames})
+        audits.append({'frame':root['frame'],'completion':'normal','steps':total_steps,'frames':frame_audits,'answers':len(ret['fields']),'poisoned_objects':len(poisoned_at),'opaque_frames':opaque_frames,'environment_facts':environment_facts})
     return {'answers':results,'roots':audits,'evidence_policy':cfg['evidence_policy']}

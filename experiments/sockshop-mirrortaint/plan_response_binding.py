@@ -26,7 +26,9 @@ def plan_response(model, entry, target, response_path, source_calls=None, read_f
     require(entry in model['methods'],'Entry method absent: '+entry)
     target=any_target(model,target);owner,name=target.rsplit('.',1)
     row=next(f for f in model['classes'][owner]['fields'] if f['name']==name)
-    require(row['desc'] not in ('Ljava/util/Date;','Ljava/util/UUID;'),
+    temporal=row['desc']=='Ljava/util/Date;'
+    if temporal:read_forward_contracts=True
+    require(row['desc']!='Ljava/util/UUID;',
             'Target type unsupported by response binding: '+row['desc'])
     require(response_path.startswith('/') and '//' not in response_path,'Explicit nonempty response JSON path required')
     root=model['methods'][entry]
@@ -39,7 +41,13 @@ def plan_response(model, entry, target, response_path, source_calls=None, read_f
                     callee(i) in setters and setters[callee(i)]['field']==target]
     ctor_writers=[i for i in root['instructions'] if i['op']==183 and callee(i) in model['methods'] and
                   any(x['op']==181 and x['owner']+'.'+x['name']==target for x in model['methods'][callee(i)]['instructions'])]
-    if direct_writers:
+    if temporal:
+        kind='temporal-return-binding'
+        local={'algorithm':'temporal-response-binding-v1','profile':'response-forward','entry':entry,'target':target,
+               'frame_methods':[entry],'producer_method':None,'writer_method':None,'reduction':{},
+               'snapshot_fields':[target],'mapper_fields':[],'full_snapshot_fields':[],
+               'selected_read_sites':[],'model_sha256':digest(model),'contracts':[]}
+    elif direct_writers:
         kind='local-container' if row['desc']=='Ljava/util/Map;' else 'local-scalar'
         require(kind=='local-container' or scalar(row['desc']),'Local target type unsupported: '+row['desc'])
         local=plan_collection(model,entry,target,scalar_target=kind=='local-scalar')
@@ -93,7 +101,7 @@ def plan_response(model, entry, target, response_path, source_calls=None, read_f
             library.add(own+'.'+suffix)
     transparent.update(library)
     for ins in root['instructions']:
-        if ins['op']==183 and ins['name']=='<init>' and ins['owner']==owner:
+        if not temporal and ins['op']==183 and ins['name']=='<init>' and ins['owner']==owner:
             require(callee(ins) in transparent,'Unmodeled target constructor effects')
     needed={target}
     for rule in plan.get('copy_rules',[]):
@@ -126,4 +134,5 @@ def plan_response(model, entry, target, response_path, source_calls=None, read_f
             'runtime_conditions':plan['read_forward_contracts']['contracts'],
             'root_effects_including_constructors_proved':entry in plan['read_forward_contracts']['composed_methods'],
             'meaning':'Accepted target binding; end-to-end answer remains conditional on required sources and call effects.'}
-    return plan
+    from plan_date_projection import attach_date_projection
+    return attach_date_projection(plan,model)

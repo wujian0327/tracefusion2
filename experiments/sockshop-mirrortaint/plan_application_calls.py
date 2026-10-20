@@ -44,6 +44,7 @@ def augment_calls(plan,model,sources):
                 call=callee(ins)
                 if key in constructor_starts and ins['index']==constructor_starts[key]-1:continue
                 if call=='java/util/ArrayList.<init>()V':constructors[call]={}
+                elif call in ('java/util/Date.<init>()V','java/util/Date.<init>(J)V'):constructors[call]={'kind':'date-constructor'}
                 elif call=='org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V':
                     constructors[call]={'kind':'http-entity-null-headers'}
                 else:

@@ -95,4 +95,5 @@ def plan_execution(model, entry, target, response_path, source_calls=None, appli
     if application_calls:
         from plan_application_calls import augment_calls
         plan=augment_calls(plan,model,calls)
-    return plan
+    from plan_date_projection import attach_date_projection
+    return attach_date_projection(plan,model)

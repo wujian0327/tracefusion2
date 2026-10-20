@@ -96,6 +96,7 @@ public final class ReadEffectHooks {
     static void finish(Object result,String completion)throws Exception{
         if(!STACK.get().isEmpty()||COUNTS.get()[2]>0){COUNTS.get()[0]++;ResponseBindingHooks.mark("binding-opaque-result","unpaired-executed-call",result);}
         boolean rootVerified=((List)config().get("composed_methods")).contains(PlannedServiceAgent.plan.get("entry"));
+        if(TemporalDateHooks.config()!=null&&COUNTS.get()[0]>0)rootVerified=false;
         if(!rootVerified)ResponseBindingHooks.mark("binding-opaque-result","root-effects-including-constructors-not-proved",result);
         Map r=ResponseBindingHooks.row();r.put("completion",completion);r.put("calls",COUNTS.get()[1]);r.put("unpaired",STACK.get().size()+COUNTS.get()[2]);r.put("root_effects_verified",rootVerified);r.put("fields",ResponseBindingHooks.snapshot(result,false));ResponseBindingHooks.emit("binding-call-summary",r);STACK.get().clear();COUNTS.remove();STREAMS.get().clear();OPTIONALS.get().clear();
     }

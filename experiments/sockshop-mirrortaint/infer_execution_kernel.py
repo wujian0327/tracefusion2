@@ -14,6 +14,8 @@ def coordinate(f):return (f['owner'],f['field'],f['version'])
 
 
 def same_value(expected,actual):
+    if 'date_epoch_ms' in expected:
+        require(all(expected.get(k)==actual.get(k) for k in ('object','date_epoch_ms','date_type')),'Date identity/instant differs');return
     if 'value' in expected:require(expected['value']==actual.get('value'),'Execution scalar value differs')
     elif expected.get('object') is not None:require(expected['object']==actual.get('object'),'Execution object identity differs')
 
