@@ -1,0 +1,55 @@
+{
+  "parent_commit": "7dd27a91ba6c62282f67b73c52ffb012bcd34798",
+  "parent_algorithm": "19b11b6d4fd1d344550c307a0acabe4dbf7548cd",
+  "query": {
+    "application": "sockshop",
+    "role": "orders",
+    "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+    "http": "POST /orders",
+    "target": "works.weave.socks.orders.entities.CustomerOrder.date",
+    "path": "/date",
+    "shape_note": "scalar or built-in leaf",
+    "source_boundary": {
+      "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+      "selection_origins": "separate; not counted as data origins"
+    },
+    "manual_configuration": {
+      "entry": 1,
+      "target_field_or_map_path": 1,
+      "source_boundary": 1,
+      "profile_attempts": "same two frozen attempts for every query",
+      "new_library_summaries": 0,
+      "core_changes": 0
+    },
+    "id": "sockshop-orders-newOrder-date",
+    "rank": "cc028b916bb5c257b34eeab8968a7e2c10ac6763b2d3ed7c76c51d165deafb14",
+    "exposure_group": "model20"
+  },
+  "original_gap_instances": 6,
+  "expected_field_boundary_sources": "empty, with explicit environment/time marker; not constant and not all-source provenance",
+  "scope": [
+    "Exact java.util.Date field identity and millisecond projection",
+    "Pinned Date(long), Calendar.getInstance/getTime and default Jackson Date serialization",
+    "Read/copy and newly generated Date controls; unmodeled mutable effects remain unknown",
+    "Original Orders six exposed cases; disclose all subsequent save/async/effect blockers"
+  ],
+  "deferred": [
+    "Mongo save preservation contract",
+    "async task protocol",
+    "Date mutator propagation",
+    "performance",
+    "reserved29"
+  ],
+  "acceptance": [
+    "Same-value distinct Date instances and repeated calls",
+    "Environment time versus input Date and input milliseconds",
+    "Opaque and same-value mutation remains unknown or refused; missing evidence rejected",
+    "Freeze and preserve first failures before final full/selective business run",
+    "Original Cart15/6, loop60, TicketInfo21 and old213 compatibility with reuse only by exact plan and all Agent-class hashes"
+  ],
+  "previously_fixed": 96,
+  "remaining_gaps": 73,
+  "reserved_candidates": 29,
+  "reserved_protocol_sha256": "87c40107282aaccb8e049fc5ffe37bb1e66deacfeabd0f015a08544bc1972fae",
+  "truth": "Original bytecode and actual timestamp/object/call/field observations, independent ISO/epoch conversion; never TF propagation or MT tags."
+}
