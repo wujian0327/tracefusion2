@@ -69,6 +69,12 @@ def plan_execution(model, entry, target, response_path, source_calls=None, appli
     owner=target.rsplit('.',1)[0]
     require(any(p['field']==target for p in plan['json_schema'].get(owner,[])),'Target serialization unsupported')
     graph_schema={o:[{k:p[k] for k in ('field','property','descriptor')} for p in ps] for o,ps in plan['json_schema'].items()}
+    # Physical boundary snapshots include verified field accessors even when
+    # their names are not JavaBean serialization properties. Wire schema stays
+    # separate: this does not assert that these fields appear in JSON.
+    for prop in getters.values():
+        owner,name=prop['field'].rsplit('.',1);item={'field':prop['field'],'property':name,'descriptor':prop['descriptor']}
+        if item not in graph_schema.setdefault(owner,[]):graph_schema[owner].append(item)
     ret=method['desc'].split(')')[1];ret_owner=ret[1:-1] if ret.startswith('L') else ''
     wraps=response_path.startswith('/data/') and not any(p['property']=='data' for p in plan['json_schema'].get(ret_owner,[]))
     plan.update(collection_elements=True,response_graph_schema=graph_schema,

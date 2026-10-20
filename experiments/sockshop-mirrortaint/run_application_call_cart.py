@@ -2,13 +2,13 @@
 """Original Cart nested frames, explicitly retaining unmodeled Supplier/stream unknowns."""
 import argparse,copy,json,secrets
 from pathlib import Path
-from run_planned_service import ROOT,HERE,load,save
+from run_planned_service import ROOT,HERE,load,save,sha
 from plan_response_binding import plan_response
 import run_response_binding_revision as old
 import run_matched_cart_capabilities as cart
 
 
-def run(out,base):
+def run(out,base,runtime_profile=None):
     out.mkdir(parents=True,exist_ok=False);q=next(q for q in load(HERE/'capability-comparison-62-20261020.json')['queries'] if q['id']=='sockshop-carts-getItems-each-itemId')
     fixtures=[copy.deepcopy(c['fixture']) for c in load(ROOT/'artifacts/baseline-capability-20261020/sock-entries-calibrated07/sockshop-carts-get-customerId/capture/run.json')['cases']]
     prep=out/'setup';prep.mkdir();spec=old.spec_for('original',prep,base,1,'768m');spec['services']={k:v for k,v in spec['services'].items() if k in ('carts','carts-db')};spec.pop('networks',None);spec['services']['carts']['ports']=['127.0.0.1:19693:80'];save(prep/'compose.json',spec)
@@ -21,7 +21,10 @@ def run(out,base):
             f['fixture_read_items']=client.request('GET','http://127.0.0.1:19693/carts/'+uid+'/items',label='independent-setup-check')
         save(out/'frozen-inputs.json',fixtures);dep.compose('stop','-t','20','carts',timeout=40)
         for mode in ('full','selective'):
-            d=out/mode;d.mkdir();p=plan_response(load(base/'carts/model.json'),q['entry'],q['target'],q['path'],execution_kernel=True,application_calls=True);old.query_build(d/'build',base,q,p);cap=d/'capture';cap.mkdir()
+            d=out/mode;d.mkdir();p=plan_response(load(base/'carts/model.json'),q['entry'],q['target'],q['path'],execution_kernel=True,application_calls=True)
+            if runtime_profile:p['execution_kernel']['runtime_profiles'].append(load(runtime_profile))
+            save(d/'configuration-freeze.json',{'driver_sha256':sha(Path(__file__)),'runtime_profile':str(runtime_profile),'runtime_profile_sha256':sha(runtime_profile) if runtime_profile else None,'query':q,'plan':p})
+            old.query_build(d/'build',base,q,p);cap=d/'capture';cap.mkdir()
             active=copy.deepcopy(spec);active['services']['carts']['volumes']=[v for v in active['services']['carts'].get('volumes',[]) if ':/tf2/app.jar:' not in v];old.observed(active,'carts','carts',cap,d/'build');active['services']['carts']['entrypoint'][2]+=' --port=80';active['services']['carts']['environment']['JAVA_OPTS']=active['services']['carts']['environment']['JAVA_OPTS'].replace('-Dservice.mode=selective','-Dservice.mode='+mode)
             save(cap/'compose.json',active);dep.file=cap/'compose.json';dep.out=cap;dep.compose('up','-d','--no-deps','--force-recreate','--pull','never','carts',timeout=180);cart.ready(cap)
             cases=cart.requests(cap,fixtures,q,secrets.token_hex(16));dep.compose('stop','-t','20','carts',timeout=40);dep.diagnostics();save(cap/'run.json',{'status':'business-completed','roles':['carts'],'cases':cases,'mode':mode})
@@ -43,4 +46,4 @@ def run(out,base):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--out',required=True,type=Path);p.add_argument('--base-build',required=True,type=Path);a=p.parse_args();run(a.out.resolve(),a.base_build.resolve())
+    p=argparse.ArgumentParser();p.add_argument('--out',required=True,type=Path);p.add_argument('--base-build',required=True,type=Path);p.add_argument('--runtime-profile',type=Path);a=p.parse_args();run(a.out.resolve(),a.base_build.resolve(),a.runtime_profile.resolve() if a.runtime_profile else None)

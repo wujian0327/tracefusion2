@@ -20,6 +20,7 @@ def infer_application(plan,rows):
     require(not any(pending.values()),'Application capture incomplete calls')
     results=[];audits=[]
     all_enters={r['frame']:r for r in rows if r['kind']=='enter'}
+    require(len(all_enters)==sum(r['kind']=='enter' for r in rows),'Application invocation frame ID reused')
     for root in [r for r in rows if r['kind']=='enter' and r['method']==plan['entry']]:
         ends=[r for r in rows if r['kind'] in ('exit','abort') and r.get('frame')==root['frame']];require(len(ends)==1,'Application root completion differs');end=ends[0]
         family={root['frame']}
