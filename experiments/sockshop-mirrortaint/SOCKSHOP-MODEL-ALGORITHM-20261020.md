@@ -1,5 +1,7 @@
 # 有限读取效果检查与 HTTP 来源事实
 
+后续调用闭合修复与效果证明的完整前提见 [调用生命周期与核验条件](CALL-LIFECYCLE-ALGORITHM-20261020.md)。本文件对应 c3e6739 的模型范围；后续修复不覆盖或改写该版本首次实验结果。
+
 本轮是响应目标绑定后的有限修订，不是一般方法分析器。原复制、归约、集合计算 profile 保留；新效果检查通过统一配置 `read_forward_contracts: true` 启用，只作用于 `response-forward`。该开关对本轮所有查询统一启用，不按成功结果挑字段。`source_evidence: true` 记录原始 HTTP 读取事实。
 
 ## 组合读取不是 helper 白名单

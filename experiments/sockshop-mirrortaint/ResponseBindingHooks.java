@@ -40,6 +40,18 @@ public final class ResponseBindingHooks implements Opcodes {
             arguments(before,call,recv,types,slots);before.add(new MethodInsnNode(INVOKESTATIC,R,"before","(Ljava/lang/String;Ljava/lang/Object;[Ljava/lang/Object;)V",false));
             if(recv>=0)before.add(new VarInsnNode(ALOAD,recv));for(int j=0;j<types.length;j++)before.add(new VarInsnNode(types[j].getOpcode(ILOAD),slots[j]));
             int result=m.maxLocals;m.maxLocals+=Math.max(1,ret.getSize());
+            if(ReadEffectHooks.enabled()){
+                // Catch only the original invoke, including failures before the
+                // callee enters. The handler is inline inside the original
+                // protected ranges, so rethrow reaches the original catch/finally.
+                LabelNode start=new LabelNode(),end=new LabelNode(),handler=new LabelNode(),done=new LabelNode();
+                before.add(start);after.add(end);after.add(new JumpInsnNode(GOTO,done));after.add(handler);
+                int error=m.maxLocals++;after.add(new VarInsnNode(ASTORE,error));
+                arguments(after,call,recv,types,slots);after.add(new VarInsnNode(ALOAD,error));
+                after.add(new MethodInsnNode(INVOKESTATIC,R,"exceptional","(Ljava/lang/String;Ljava/lang/Object;[Ljava/lang/Object;Ljava/lang/Throwable;)V",false));
+                after.add(new VarInsnNode(ALOAD,error));after.add(new InsnNode(ATHROW));after.add(done);
+                m.tryCatchBlocks.add(0,new TryCatchBlockNode(start,end,handler,"java/lang/Throwable"));
+            }
             if(ret.getSort()!=Type.VOID)after.add(new VarInsnNode(ret.getOpcode(ISTORE),result));
             arguments(after,call,recv,types,slots);
             if(ret.getSort()==Type.VOID)after.add(new InsnNode(ACONST_NULL));else{after.add(new VarInsnNode(ret.getOpcode(ILOAD),result));PlannedServiceAgent.box(after,ret);}
@@ -90,6 +102,8 @@ public final class ResponseBindingHooks implements Opcodes {
         if(((List)binding().get("source_calls")).contains(call)){mark("binding-source",call,result);}
         else if(!admitted(call,recv))mark("binding-opaque-result",call,result);
     }catch(Throwable e){PlannedServiceAgent.Recorder.problem("binding-after:"+e);throw new IllegalStateException(e);}}}
+    public static void exceptional(String call,Object recv,Object[] args,Throwable error){synchronized(PlannedServiceAgent.Recorder.class){if(!active()||!ReadEffectHooks.enabled())return;try{ReadEffectHooks.exceptional(call,recv,args,error);}catch(Throwable e){PlannedServiceAgent.Recorder.problem("binding-exceptional:"+e);throw new IllegalStateException(e);}}}
+    static void abort()throws Exception{if(enabled()&&ReadEffectHooks.enabled())ReadEffectHooks.abort();}
     static void enter(Object[] args)throws Exception{if(!enabled())return;if(ReadEffectHooks.enabled())ReadEffectHooks.enter();for(int i=0;i<args.length;i++){if(!((List)binding().get("source_arguments")).contains(i))continue;Map r=row();r.put("argument",i);r.put("fields",sourceSnapshot(args[i]));emit("binding-input",r);}}
     static void exit(Object result)throws Exception{if(!enabled())return;if(ReadEffectHooks.enabled())ReadEffectHooks.exit(result);Map r=row();if(r.get("message")!=null)RETURN_MESSAGES.add((String)r.get("message"));r.put("result",PlannedServiceAgent.Recorder.value(result));r.put("fields",snapshot(result,true));emit("binding-return",r);}
     static Object member(Object object,String name)throws Exception{for(Class c=object.getClass();c!=null;c=c.getSuperclass())try{Field f=c.getDeclaredField(name);f.setAccessible(true);return f.get(object);}catch(NoSuchFieldException e){}throw new IllegalStateException("Serializer structure unsupported: "+name);}

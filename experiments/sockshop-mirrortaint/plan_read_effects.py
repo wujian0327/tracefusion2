@@ -36,7 +36,7 @@ def read_effects(model):
                 args=i.get('bootstrap_args',[])
                 if i.get('bootstrap')!='java/lang/invoke/LambdaMetafactory.metafactory' or not i['desc'].endswith(')Ljava/util/function/Supplier;') or len(args)!=3 or not isinstance(args[1],dict) or args[1].get('handle') not in model['methods']:ok=False
         if ok:result.append(key)
-    return {'version':1,'composed_methods':sorted(result),
+    return {'version':2,'call_lifecycle':'invoke enter -> normal return or exceptional rethrow; root abort requires a closed summary, unresolved calls invalidate evidence','composed_methods':sorted(result),
             'runtime_profiles':json.loads(Path(__file__).with_name('read-forward-runtimes-20261020.json').read_text())['profiles'],
             'contracts':['Exact checked application implementation, bounded acyclic read effects; all executed child calls checked separately.',
                          'JDK 8 exact ArrayList/Arrays/Collections list -> fresh sequential stream -> findFirst -> present Optional.orElseGet, checked by object identity.',

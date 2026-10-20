@@ -50,7 +50,8 @@ public final class ReadEffectHooks {
     static void fail(State s,Object result)throws Exception{COUNTS.get()[0]++;mark(s,result);}
     static void emit(String kind,State s,boolean valid)throws Exception{Map r=ResponseBindingHooks.row();r.put("call_id",s.id);r.put("callee",s.call);r.put("mode",s.mode);r.put("implementation",s.implementation);r.put("receiver",PlannedServiceAgent.Recorder.id(s.recv));r.put("receiver_type",s.recv==null?null:s.recv.getClass().getName());r.put("valid",valid);r.put("detail",s.detail);ResponseBindingHooks.emit(kind,r);}
     static void enter()throws Exception{
-        STACK.get().clear();COUNTS.set(new long[3]);STREAMS.get().clear();OPTIONALS.get().clear();
+        if(!STACK.get().isEmpty())throw new IllegalStateException("Read-effect root overlaps unfinished calls");
+        COUNTS.set(new long[3]);STREAMS.get().clear();OPTIONALS.get().clear();
         if(RUNTIME==null){Map hashes=JdkContractProbe.hashes();String version=System.getProperty("java.runtime.version");boolean valid=false;
             for(Object raw:(List)config().get("runtime_profiles")){Map profile=(Map)raw;if(version.equals(profile.get("java_runtime_version"))&&hashes.equals(profile.get("class_sha256")))valid=true;}
             if(!valid)throw new IllegalStateException("Unmodeled JDK read-effect runtime");
@@ -80,12 +81,22 @@ public final class ReadEffectHooks {
         List<Map> effectFields=new ArrayList<>(s.before);effectFields.addAll(ResponseBindingHooks.snapshot(result,false));s.detail.put("effect_fields",effectFields);
         if(((List)ResponseBindingHooks.binding().get("source_calls")).contains(call))ResponseBindingHooks.mark("binding-source",call,result);
         if(!valid)fail(s,result);
-        emit("binding-call-exit",s,valid);
+        s.detail.put("completion","normal");emit("binding-call-exit",s,valid);
+    }
+    static void exceptional(String call,Object recv,Object[] args,Throwable error)throws Exception{
+        if(STACK.get().isEmpty()||!STACK.get().peek().call.equals(call)||STACK.get().peek().recv!=recv)throw new IllegalStateException("Read-effect exceptional completion has no matching invocation");
+        State s=STACK.get().pop();s.detail.put("completion","exceptional");
+        s.detail.put("exception_object",PlannedServiceAgent.Recorder.id(error));s.detail.put("exception_type",error.getClass().getName());
+        s.detail.put("effect_fields",s.before);fail(s,null);emit("binding-call-throw",s,false);
     }
     static void exit(Object result)throws Exception{
+        finish(result,"normal");
+    }
+    static void abort()throws Exception{finish(null,"exceptional");}
+    static void finish(Object result,String completion)throws Exception{
         if(!STACK.get().isEmpty()||COUNTS.get()[2]>0){COUNTS.get()[0]++;ResponseBindingHooks.mark("binding-opaque-result","unpaired-executed-call",result);}
         boolean rootVerified=((List)config().get("composed_methods")).contains(PlannedServiceAgent.plan.get("entry"));
         if(!rootVerified)ResponseBindingHooks.mark("binding-opaque-result","root-effects-including-constructors-not-proved",result);
-        Map r=ResponseBindingHooks.row();r.put("calls",COUNTS.get()[1]);r.put("unpaired",STACK.get().size()+COUNTS.get()[2]);r.put("root_effects_verified",rootVerified);r.put("fields",ResponseBindingHooks.snapshot(result,false));ResponseBindingHooks.emit("binding-call-summary",r);STACK.get().clear();STREAMS.get().clear();OPTIONALS.get().clear();
+        Map r=ResponseBindingHooks.row();r.put("completion",completion);r.put("calls",COUNTS.get()[1]);r.put("unpaired",STACK.get().size()+COUNTS.get()[2]);r.put("root_effects_verified",rootVerified);r.put("fields",ResponseBindingHooks.snapshot(result,false));ResponseBindingHooks.emit("binding-call-summary",r);STACK.get().clear();COUNTS.remove();STREAMS.get().clear();OPTIONALS.get().clear();
     }
 }

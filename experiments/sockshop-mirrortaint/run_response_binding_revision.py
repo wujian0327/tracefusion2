@@ -158,7 +158,7 @@ def request_raw(client,method,url,body=None):
     return response,client.events[-1]['status']
 
 
-def capture_train(dest,build,q,seed):
+def capture_train(dest,build,q,seed,mixed_lifecycle=False):
     rng=random.Random(seed);role=q['role'];config=load(ROOT/'artifacts/trainticket-cost-preparation-20261016/inputs/inputs.json')
     roles=list(ROLES) if role=='basic' else [role]
     mongo=next(k for k,v in load(ROOT/'artifacts/desktop-inputs/images-lock.json').items() if 'trainticket/ts-station-mongo' in v['services'])
@@ -196,6 +196,12 @@ def capture_train(dest,build,q,seed):
             for r,collections in db.items():
                 rd=dest/('db-'+r);rd.mkdir();database(dep,r,list(collections.values())[0],rd)
             cases=load(temp/'cases.json')[:8]
+            if mixed_lifecycle:
+                normal=cases[0];mixed=[]
+                for index,c in enumerate(cases):
+                    mixed.extend([c,{**normal,'case':f'following-normal-{index}'}])
+                cases=mixed
+                save(dest/'mixed-lifecycle-protocol.json',{'sequence':[c['case'] for c in cases],'purpose':'Original eight templates, each followed by a normal request; development reliability regression, not new coverage.'})
         else:cases=[{'case':'group-'+str(i),'index':i} for i in range(6)]
         for c in cases:
             cd=dest/c['case'];cd.mkdir();cl=Client(cd);message=context(cl,trace)

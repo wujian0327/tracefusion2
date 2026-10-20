@@ -138,7 +138,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
             for(String o:f.locked)ACTIVE.get(o).remove(f.id);
             emit("exit",r);STACK.get().pop();
         }catch(Throwable e){problem("exit:"+e);throw new IllegalStateException(e);}}
-        public static synchronized void abort(){if(!STACK.get().isEmpty()){Frame f=STACK.get().peek();for(String o:f.locked)ACTIVE.get(o).remove(f.id);emit("abort",row());STACK.get().pop();}PENDING.remove();}
+        public static synchronized void abort(){try{if(!STACK.get().isEmpty()){Frame f=STACK.get().peek();if(f.method.equals(plan.get("entry")))ResponseBindingHooks.abort();for(String o:f.locked)ACTIVE.get(o).remove(f.id);emit("abort",row());STACK.get().pop();}PENDING.remove();}catch(Throwable e){problem("abort:"+e);throw new IllegalStateException(e);}}
         public static synchronized void field(Object o,String field,Object v,String site,boolean write,boolean log){fieldHooks++;String key=id(o)+":"+field;int version=VERSIONS.getOrDefault(key,0);if(write){VERSIONS.put(key,++version);if(ACTIVE.containsKey(id(o))&&!ACTIVE.get(id(o)).isEmpty()){problem("Source mutated within read-only reduction epoch");throw new IllegalStateException("Source mutation");}}
             if(!STACK.get().isEmpty()&&log){Map<String,Object> r=row();r.put("owner",id(o));r.put("field",field);r.put("version",version);r.put("observed",value(v));r.put("site",site);emit(write?"write":"read",r);}}
         public static synchronized void branch(String site,boolean taken){branches++;if(!STACK.get().isEmpty()){Map<String,Object> r=row();r.put("site",site);r.put("taken",taken);emit("branch",r);}}

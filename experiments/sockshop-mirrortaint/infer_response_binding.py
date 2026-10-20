@@ -19,7 +19,7 @@ def sources(graph,role):
                 scope=(role,row['frame'],(f['owner'],f['field'],f['version']))
                 graph.binding_blocked.setdefault(scope,[]).append(row['seq'])
             continue
-        if kind=='binding-call-exit' and not row['valid']:
+        if kind in ('binding-call-exit','binding-call-throw') and not row['valid']:
             for f in row['detail']['effect_fields']:
                 scope=(role,row['frame'],(f['owner'],f['field'],f['version']))
                 graph.binding_blocked.setdefault(scope,[]).append(row['seq'])
@@ -38,19 +38,32 @@ def sources(graph,role):
 
 def audit_read_effects(rows,plan):
     """A missing/mispaired contract witness can never silently certify a call."""
-    stacks={};counts={};streams={};optional={};runtime=[]
+    stacks={};counts={};streams={};optional={};runtime=[];summaries={};call_ids=set();roots={};ends={};returned=set()
+    lifecycle=plan['read_forward_contracts'].get('version',1)>=2
     classes={r['class'] for r in rows if r['kind']=='class'}
     for r in rows:
         k=r['kind'];thread=r['thread'];stack=stacks.setdefault(thread,[])
+        coord=(thread,r.get('frame'))
+        if k=='enter' and r['method']==plan['entry']:
+            require(coord not in roots,'Duplicate read-effect root identity');roots[coord]=r
+        if k in ('exit','abort'):ends.setdefault(coord,[]).append(r)
+        if k=='binding-return':returned.add(coord)
         if k=='binding-call-runtime':
             require(any(r['java_runtime_version']==p['java_runtime_version'] and r['class_sha256']==p['class_sha256'] for p in plan['read_forward_contracts']['runtime_profiles']),'Read-effect runtime pin differs')
             runtime.append(r)
         elif k=='binding-call-enter':
             require(r.get('call_id') and r.get('mode') in {'existing','composed','opaque','list-stream','stream-first','optional-present'},'Invalid read-effect call declaration')
+            require(r['call_id'] not in call_ids,'Repeated read-effect call identity');call_ids.add(r['call_id'])
             stack.append(r);counts[(thread,r['frame'])]=counts.get((thread,r['frame']),0)+1
-        elif k=='binding-call-exit':
+        elif k in ('binding-call-exit','binding-call-throw'):
             require(bool(stack),'Read-effect exit without entry');start=stack.pop()
             require(all(r.get(k)==start.get(k) for k in ('call_id','callee','receiver','receiver_type','mode','implementation','frame')),'Read-effect call pairing differs')
+            if lifecycle:
+                expected='exceptional' if k=='binding-call-throw' else 'normal'
+                require(r['detail'].get('completion')==expected,'Read-effect completion kind differs')
+            if k=='binding-call-throw':
+                require(lifecycle and not r['valid'] and r['detail'].get('exception_object') and r['detail'].get('exception_type'),'Invalid exceptional invocation witness')
+                continue
             if not r['valid']:continue
             mode=r['mode'];d=r['detail']
             if mode=='composed':
@@ -72,10 +85,18 @@ def audit_read_effects(rows,plan):
                 require(d['selected_object'] is not None and d['selected_object']==d['result_object']==start['detail']['selected_object'],'Optional selected identity differs')
                 require(optional.get(r['receiver'])==d['selected_object'],'Optional result lacks checked findFirst witness')
         elif k=='binding-call-summary':
+            coord=(thread,r['frame']);require(coord not in summaries,'Duplicate read-effect root summary');summaries[coord]=r
             require(r['root_effects_verified']==(plan['entry'] in plan['read_forward_contracts']['composed_methods']),'Root effect proof differs from frozen analysis')
-            require(r['calls']==counts.pop((thread,r['frame']),0),'Executed call witness count differs')
+            require(r['calls']==counts.pop(coord,0),'Executed call witness count differs')
             require(r['unpaired']==0 and not stack,'Read-effect call evidence incomplete (including exceptional calls)')
     require(not any(stacks.values()) and not counts,'Missing read-effect completion/summary')
+    if lifecycle:
+        require(summaries.keys()==roots.keys(),'Missing/extra read-effect root lifecycle')
+        for coord,summary in summaries.items():
+            completed=ends.get(coord,[])
+            require(len(completed)==1 and roots[coord]['seq']<summary['seq']<completed[0]['seq'],'Missing/ambiguous read-effect root completion')
+            require(summary.get('completion')==('normal' if completed[0]['kind']=='exit' else 'exceptional'),'Root completion kind differs')
+            require(coord not in returned or completed[0]['kind']=='exit','Aborted root supplied a return witness')
     if any(r['kind']=='binding-return' for r in rows):require(len(runtime)==1,'Missing/ambiguous read-effect runtime witness')
 
 
