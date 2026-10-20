@@ -1,0 +1,252 @@
+{
+  "all_passed": true,
+  "algorithm_commit": "bc69ebe2ce0e9355b8383879a6c34421ea66d01c",
+  "frozen_source_files": 268,
+  "original_jar_count": 9,
+  "new_kernel_original_queries": 4,
+  "totals": {
+    "pilot-frozen": {
+      "full": {
+        "requests": 24,
+        "targets": 60,
+        "known": 60,
+        "exact": 60,
+        "unknown": 0,
+        "tp": 60,
+        "fp": 0,
+        "fn": 0,
+        "N/A_requests": 4
+      },
+      "selective": {
+        "requests": 24,
+        "targets": 60,
+        "known": 60,
+        "exact": 60,
+        "unknown": 0,
+        "tp": 60,
+        "fp": 0,
+        "fn": 0,
+        "N/A_requests": 4
+      }
+    },
+    "guards-frozen": {
+      "full": {
+        "requests": 20,
+        "targets": 32,
+        "known": 32,
+        "exact": 32,
+        "unknown": 0,
+        "tp": 30,
+        "fp": 0,
+        "fn": 0,
+        "N/A_requests": 7
+      },
+      "selective": {
+        "requests": 20,
+        "targets": 32,
+        "known": 32,
+        "exact": 32,
+        "unknown": 0,
+        "tp": 30,
+        "fp": 0,
+        "fn": 0,
+        "N/A_requests": 7
+      }
+    }
+  },
+  "paired_inputs": [
+    {
+      "scope": "pilot-frozen",
+      "query": "trainticket-route-getRouteByStartAndTerminal-data-each-stations-each",
+      "same_full_selective_inputs": true,
+      "matched_prior_baseline_inputs": true,
+      "requests_per_mode": 6
+    },
+    {
+      "scope": "pilot-frozen",
+      "query": "trainticket-route-getRouteByStartAndTerminal-data-each-terminalStationId",
+      "same_full_selective_inputs": true,
+      "matched_prior_baseline_inputs": true,
+      "requests_per_mode": 6
+    },
+    {
+      "scope": "pilot-frozen",
+      "query": "trainticket-station-queryByIdBatch-data-each",
+      "same_full_selective_inputs": true,
+      "matched_prior_baseline_inputs": true,
+      "requests_per_mode": 6
+    },
+    {
+      "scope": "pilot-frozen",
+      "query": "trainticket-station-queryForIdBatch-data-each",
+      "same_full_selective_inputs": true,
+      "matched_prior_baseline_inputs": true,
+      "requests_per_mode": 6
+    },
+    {
+      "scope": "guards-frozen",
+      "query": "trainticket-route-getRouteByStartAndTerminal-data-each-stations-each",
+      "same_full_selective_inputs": true,
+      "matched_prior_baseline_inputs": false,
+      "requests_per_mode": 5
+    },
+    {
+      "scope": "guards-frozen",
+      "query": "trainticket-route-getRouteByStartAndTerminal-data-each-terminalStationId",
+      "same_full_selective_inputs": true,
+      "matched_prior_baseline_inputs": false,
+      "requests_per_mode": 5
+    },
+    {
+      "scope": "guards-frozen",
+      "query": "trainticket-station-queryByIdBatch-data-each",
+      "same_full_selective_inputs": true,
+      "matched_prior_baseline_inputs": false,
+      "requests_per_mode": 5
+    },
+    {
+      "scope": "guards-frozen",
+      "query": "trainticket-station-queryForIdBatch-data-each",
+      "same_full_selective_inputs": true,
+      "matched_prior_baseline_inputs": false,
+      "requests_per_mode": 5
+    }
+  ],
+  "real_capture_faults": {
+    "wrong-iterator-member": "rejected",
+    "wrong-output-version": "unknown",
+    "missing-completion": "rejected",
+    "missing-source-fields": "unknown",
+    "ambiguous-source-fields": "unknown"
+  },
+  "standalone_semantics": {
+    "all_passed": true,
+    "reports": {
+      "filter-full": {
+        "known": 7,
+        "unknown": 0,
+        "normal_roots": 6,
+        "aborted_roots": 1,
+        "independent_position_oracle": true
+      },
+      "filter-selective": {
+        "known": 7,
+        "unknown": 0,
+        "normal_roots": 6,
+        "aborted_roots": 1,
+        "independent_position_oracle": true
+      },
+      "counted-full": {
+        "known": 5,
+        "unknown": 0,
+        "normal_roots": 3,
+        "aborted_roots": 0,
+        "independent_position_oracle": true
+      },
+      "counted-selective": {
+        "known": 5,
+        "unknown": 0,
+        "normal_roots": 3,
+        "aborted_roots": 0,
+        "independent_position_oracle": true
+      },
+      "overwrite-full": {
+        "known": 1,
+        "unknown": 0,
+        "normal_roots": 1,
+        "aborted_roots": 0,
+        "independent_position_oracle": true
+      },
+      "overwrite-selective": {
+        "known": 1,
+        "unknown": 0,
+        "normal_roots": 1,
+        "aborted_roots": 0,
+        "independent_position_oracle": true
+      },
+      "unrelated-full": {
+        "known": 1,
+        "unknown": 0,
+        "normal_roots": 1,
+        "aborted_roots": 0,
+        "independent_position_oracle": true
+      },
+      "unrelated-selective": {
+        "known": 1,
+        "unknown": 0,
+        "normal_roots": 1,
+        "aborted_roots": 0,
+        "independent_position_oracle": true
+      },
+      "constant-overwrite-full": {
+        "known": 1,
+        "unknown": 0,
+        "normal_roots": 1,
+        "aborted_roots": 0,
+        "independent_position_oracle": true
+      },
+      "constant-overwrite-selective": {
+        "known": 1,
+        "unknown": 0,
+        "normal_roots": 1,
+        "aborted_roots": 0,
+        "independent_position_oracle": true
+      },
+      "opaque-full": {
+        "known": 0,
+        "unknown": 1,
+        "normal_roots": 1,
+        "aborted_roots": 0,
+        "independent_position_oracle": false
+      },
+      "opaque-selective": {
+        "known": 0,
+        "unknown": 1,
+        "normal_roots": 1,
+        "aborted_roots": 0,
+        "independent_position_oracle": false
+      }
+    },
+    "faults": {
+      "full-iterator-type": true,
+      "full-iterator-owner": true,
+      "full-list-post-state": true,
+      "full-missing-call-completion": true,
+      "full-branch": true,
+      "full-runtime-pin": true,
+      "full-missing-source": true,
+      "full-ambiguous-source": true,
+      "selective-iterator-type": true,
+      "selective-iterator-owner": true,
+      "selective-list-post-state": true,
+      "selective-missing-call-completion": true,
+      "selective-branch": true,
+      "selective-runtime-pin": true,
+      "selective-missing-source": true,
+      "selective-ambiguous-source": true
+    },
+    "scope": "Controlled JVM semantics; not original application coverage or performance"
+  },
+  "legacy_offline": {
+    "all_passed": true,
+    "source_sha256": "e4c7574eafe35f7ef68f38b78d360b15f15b5bc14dd72eaa4e6fa25272fb0d2a",
+    "states": {
+      "unknown": 88,
+      "known_correct": 213
+    },
+    "captures": 40,
+    "scope": "Reused original capture and independent truth, revised offline fast paths; no new runtime validation."
+  },
+  "old_431_report_unchanged": true,
+  "unexamined_candidates": 29,
+  "performance_measured": false,
+  "overall_382_of_431_acceptance_passed": false,
+  "whole_431_new_runtime_validation": false,
+  "limitations": [
+    "Only explicit execution_kernel opt-in queries use the new root interpreter.",
+    "Opaque general calls remain a conservative barrier; save/async/arrays/lambda/Date not implemented.",
+    "No new unseen-query coverage; all four families were previously exposed.",
+    "Selective retains all modeled root calls and relevant writes; no new cost-reduction claim.",
+    "Legacy213 correctness is an offline replay of original captures, complemented by new-Agent controlled semantics; not213 fresh deployments."
+  ]
+}

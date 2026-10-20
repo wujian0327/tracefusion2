@@ -1,5 +1,11 @@
 # TraceFusion 2
 
+2026-10-20完成[统一执行依赖内核的循环试点](experiments/sockshop-mirrortaint/EXECUTION-KERNEL-PILOT-20261020.md)，
+冻结核心 `bc69ebe`。原版Station/Route四个已暴露查询的60个循环反例，full/selective各60/60正确；
+额外过滤、重复读取及缺失项保护各32/32正确。旧213个正确答案在原捕获离线复算中保持正确。
+这不是全量431的新运行或未见查询验证；保存/异步等仍未实现，382/431整体验收尚未完成。
+新路径先保守多采，未测成本；29个未测候选继续封存。
+
 2026-10-20新增[62查询同任务能力对照](experiments/sockshop-mirrortaint/BASELINE-CAPABILITY-20261020.md)：
 冻结TF `2b3b929` 接纳47/62；含首次创建补充输入共431个业务目标，TF正确213、unknown88，
 拒绝查询对应130个目标。MirrorTaint＋披露适配器正确而TF未答的目标有169个；即使不把空标签
