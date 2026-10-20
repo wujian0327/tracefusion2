@@ -1,0 +1,152 @@
+{
+  "selected_families": 62,
+  "applications": {
+    "sockshop": 30,
+    "trainticket": 32
+  },
+  "distinct_entries": 18,
+  "tf_planning": {
+    "accepted": 47,
+    "refused": 15
+  },
+  "main": {
+    "targets": 429,
+    "tf_states": {
+      "unknown": 87,
+      "planning_refused": 130,
+      "known_correct": 212
+    },
+    "baseline_states": {
+      "known_correct": 366,
+      "unknown": 28,
+      "known_wrong": 35
+    },
+    "pairs": [
+      {
+        "tf": "known_correct",
+        "baseline": "known_correct",
+        "targets": 198
+      },
+      {
+        "tf": "known_correct",
+        "baseline": "known_wrong",
+        "targets": 14
+      },
+      {
+        "tf": "planning_refused",
+        "baseline": "known_correct",
+        "targets": 102
+      },
+      {
+        "tf": "planning_refused",
+        "baseline": "unknown",
+        "targets": 28
+      },
+      {
+        "tf": "unknown",
+        "baseline": "known_correct",
+        "targets": 66
+      },
+      {
+        "tf": "unknown",
+        "baseline": "known_wrong",
+        "targets": 21
+      }
+    ],
+    "baseline_correct": 366,
+    "tf_correct_on_baseline_correct": 198,
+    "capability_gaps": 168,
+    "retention": 0.5409836065573771,
+    "nonempty_certified_baseline_correct": 335,
+    "tf_correct_on_nonempty_baseline_correct": 191,
+    "nonempty_capability_gaps": 144,
+    "empty_native_output_targets": 52,
+    "relations_including_unanswered": {
+      "tf": {
+        "tp": 205,
+        "fp": 0,
+        "fn": 193
+      },
+      "baseline": {
+        "tp": 335,
+        "fp": 14,
+        "fn": 63
+      }
+    },
+    "acceptance_passed": false
+  },
+  "with_first_creation_challenge": {
+    "targets": 431,
+    "tf_states": {
+      "unknown": 88,
+      "planning_refused": 130,
+      "known_correct": 213
+    },
+    "baseline_states": {
+      "known_correct": 368,
+      "unknown": 28,
+      "known_wrong": 35
+    },
+    "pairs": [
+      {
+        "tf": "known_correct",
+        "baseline": "known_correct",
+        "targets": 199
+      },
+      {
+        "tf": "known_correct",
+        "baseline": "known_wrong",
+        "targets": 14
+      },
+      {
+        "tf": "planning_refused",
+        "baseline": "known_correct",
+        "targets": 102
+      },
+      {
+        "tf": "planning_refused",
+        "baseline": "unknown",
+        "targets": 28
+      },
+      {
+        "tf": "unknown",
+        "baseline": "known_correct",
+        "targets": 67
+      },
+      {
+        "tf": "unknown",
+        "baseline": "known_wrong",
+        "targets": 21
+      }
+    ],
+    "baseline_correct": 368,
+    "tf_correct_on_baseline_correct": 199,
+    "capability_gaps": 169,
+    "retention": 0.5407608695652174,
+    "nonempty_certified_baseline_correct": 337,
+    "tf_correct_on_nonempty_baseline_correct": 192,
+    "nonempty_capability_gaps": 145,
+    "empty_native_output_targets": 52,
+    "relations_including_unanswered": {
+      "tf": {
+        "tp": 206,
+        "fp": 0,
+        "fn": 194
+      },
+      "baseline": {
+        "tp": 337,
+        "fp": 14,
+        "fn": 63
+      }
+    },
+    "acceptance_passed": false
+  },
+  "N/A_query_requests": 85,
+  "input_audits": 47,
+  "tf_core_files_unchanged": 26,
+  "new_performance_measurements": false,
+  "remaining_candidates_untested": 29,
+  "baseline_kind": "Pinned MirrorTaint + disclosed compatibility, boundary-source, native-export and instance-binding adapters",
+  "empty_policy": "Main score grades the actual native source-ID set, including empty sets. Conservative sensitivity treats every empty native tag as unknown, never a certified empty dependency set. Both must be shown.",
+  "first_create_oracle_erratum": "Original first GET saves and then returns a second repository read. Historical arg0 expectation corrected from actual original bytecode/call evidence. Old raw files and counts preserved."
+}

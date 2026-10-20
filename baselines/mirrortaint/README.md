@@ -1,5 +1,10 @@
 # MirrorTaint＋披露适配器
 
+2026-10-20已新增[62查询同任务能力对照](../../experiments/sockshop-mirrortaint/BASELINE-CAPABILITY-20261020.md)。
+这是覆盖全部已测候选的实例来源评估，包含TF拒绝与unknown，不能只引用共同成功子集。
+含Cart创建补充输入时，已发现169个“该基线配置正确、TF未答”目标；保守排除空标签后仍有145个。
+本轮包含新的源标记、原生collector输出及实例绑定适配，不测成本；下文旧total成本配置保持历史口径。
+
 上游：[MirrorTaint/MirrorTaint](https://github.com/MirrorTaint/MirrorTaint)，固定提交
 `54fcbfc5bb3a0d7cd30309098355d999553a861b`，原始文件`mirrorTaint.jar`。
 公开构件不包含完整传播核心源码，因此直接获取作者JAR；不将本仓库适配器称为其源码。

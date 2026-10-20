@@ -1,0 +1,63 @@
+query,application,planning,requests,N/A_requests,targets,tf_correct,tf_unknown,baseline_correct,baseline_wrong,baseline_unknown,reason
+sockshop-orders-newOrder-customer-firstName,sockshop,accepted,6,0,6,0,6,6,0,0,
+sockshop-orders-newOrder-customer-lastName,sockshop,accepted,6,0,6,0,6,6,0,0,
+sockshop-orders-newOrder-customer-addresses-each-country,sockshop,accepted,6,6,0,0,0,0,0,0,
+sockshop-orders-newOrder-address-number,sockshop,accepted,6,0,6,0,6,6,0,0,
+sockshop-orders-newOrder-address-country,sockshop,accepted,6,0,6,0,6,6,0,0,
+sockshop-orders-newOrder-card-id,sockshop,accepted,6,0,6,0,6,6,0,0,
+sockshop-orders-newOrder-customer-addresses-each-postcode,sockshop,accepted,6,6,0,0,0,0,0,0,
+sockshop-orders-newOrder-customer-cards-each-ccv,sockshop,accepted,6,6,0,0,0,0,0,0,
+sockshop-orders-newOrder-customer-id,sockshop,accepted,6,0,6,0,6,6,0,0,
+sockshop-orders-newOrder-address-id,sockshop,accepted,6,0,6,0,6,6,0,0,
+sockshop-orders-newOrder-customer-addresses-each-street,sockshop,accepted,6,6,0,0,0,0,0,0,
+sockshop-orders-newOrder-customer-addresses-each-id,sockshop,accepted,6,6,0,0,0,0,0,0,
+sockshop-orders-newOrder-customer-username,sockshop,accepted,6,0,6,0,6,6,0,0,
+sockshop-orders-newOrder-card-longNum,sockshop,accepted,6,0,6,0,6,6,0,0,
+sockshop-orders-newOrder-customer-addresses-each-number,sockshop,accepted,6,6,0,0,0,0,0,0,
+sockshop-orders-newOrder-customer-cards-each-longNum,sockshop,accepted,6,6,0,0,0,0,0,0,
+sockshop-orders-newOrder-customer-cards-each-expires,sockshop,accepted,6,6,0,0,0,0,0,0,
+sockshop-orders-newOrder-address-postcode,sockshop,accepted,6,0,6,0,6,6,0,0,
+sockshop-orders-newOrder-card-expires,sockshop,accepted,6,0,6,0,6,6,0,0,
+sockshop-orders-newOrder-date,sockshop,refused,6,0,6,0,0,6,0,0,Target type unsupported by response binding: Ljava/util/Date;
+sockshop-carts-get-customerId,sockshop,accepted,6,0,6,6,0,6,0,0,
+sockshop-carts-get-quantity,sockshop,refused,6,1,5,0,0,5,0,0,Unsupported instruction in collection profile: 186
+sockshop-carts-get-itemId,sockshop,refused,6,1,5,0,0,5,0,0,Unsupported instruction in collection profile: 186
+sockshop-carts-get-unitPrice,sockshop,refused,6,1,5,0,0,5,0,0,Unsupported instruction in collection profile: 186
+sockshop-carts-getItems-each-quantity,sockshop,accepted,6,1,6,6,0,6,0,0,
+sockshop-carts-getItems-each-unitPrice,sockshop,accepted,6,1,6,6,0,6,0,0,
+sockshop-carts-getItems-each-itemId,sockshop,accepted,6,1,6,6,0,6,0,0,
+sockshop-carts-addToCart-unitPrice,sockshop,refused,6,0,6,0,0,0,0,6,Unsupported instruction in collection profile: 186
+sockshop-carts-addToCart-quantity,sockshop,refused,6,0,6,0,0,0,0,6,Unsupported instruction in collection profile: 186
+sockshop-carts-addToCart-itemId,sockshop,refused,6,0,6,0,0,0,0,6,Unsupported instruction in collection profile: 186
+trainticket-station-query-data-each-id,trainticket,accepted,6,1,10,10,0,10,0,0,
+trainticket-station-query-data-each-name,trainticket,accepted,6,1,10,10,0,10,0,0,
+trainticket-station-query-data-each-stayTime,trainticket,accepted,6,1,10,10,0,10,0,0,
+trainticket-basic-queryForTravel-data-status,trainticket,accepted,8,1,7,7,0,7,0,0,
+trainticket-basic-queryForTravel-data-trainType-economyClass,trainticket,accepted,8,1,7,0,7,0,7,0,
+trainticket-basic-queryForTravel-data-trainType-id,trainticket,accepted,8,1,7,0,7,0,7,0,
+trainticket-basic-queryForTravel-data-trainType-averageSpeed,trainticket,accepted,8,1,7,0,7,0,7,0,
+trainticket-ticketinfo-queryForTravel-data-trainType-id,trainticket,refused,8,1,7,0,0,7,0,0,Unsupported instruction in collection profile: 189
+trainticket-ticketinfo-queryForTravel-data-prices-economyClass,trainticket,refused,8,1,7,0,0,7,0,0,Unsupported instruction in collection profile: 189
+trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed,trainticket,refused,8,1,7,0,0,7,0,0,Unsupported instruction in collection profile: 189
+trainticket-train-query-data-each-confortClass,trainticket,accepted,6,1,10,10,0,10,0,0,
+trainticket-train-query-data-each-economyClass,trainticket,accepted,6,1,10,10,0,10,0,0,
+trainticket-route-getRouteByStartAndTerminal-data-each-stations-each,trainticket,refused,6,1,30,0,0,30,0,0,Loops/back edges are not admitted
+trainticket-route-getRouteByStartAndTerminal-data-each-terminalStationId,trainticket,refused,6,1,10,0,0,10,0,0,Loops/back edges are not admitted
+trainticket-route-getAllRoutes-data-each-distances-each,trainticket,accepted,6,1,30,30,0,20,10,0,
+trainticket-route-getAllRoutes-data-each-startStationId,trainticket,accepted,6,1,10,10,0,10,0,0,
+trainticket-price-findByRouteIdAndTrainType-data-firstClassPriceRate,trainticket,accepted,6,1,5,5,0,5,0,0,
+trainticket-price-findByRouteIdAndTrainType-data-trainType,trainticket,accepted,6,1,5,5,0,5,0,0,
+trainticket-price-findAllPriceConfig-data-each-trainType,trainticket,accepted,6,1,10,10,0,10,0,0,
+trainticket-price-findAllPriceConfig-data-each-id,trainticket,refused,6,1,10,0,0,0,0,10,Target type unsupported by response binding: Ljava/util/UUID;
+trainticket-route-getRouteById-data-distances-each,trainticket,accepted,6,1,15,15,0,11,4,0,
+trainticket-route-getRouteById-data-id,trainticket,accepted,6,1,5,5,0,5,0,0,
+trainticket-route-getRouteById-data-startStationId,trainticket,accepted,6,1,5,5,0,5,0,0,
+trainticket-route-getRouteById-data-stations-each,trainticket,accepted,6,1,15,15,0,15,0,0,
+trainticket-route-getRouteById-data-terminalStationId,trainticket,accepted,6,1,5,5,0,5,0,0,
+trainticket-station-queryById-data,trainticket,accepted,6,0,6,6,0,6,0,0,
+trainticket-station-queryByIdBatch-data-each,trainticket,refused,6,1,10,0,0,10,0,0,Unsupported instruction in collection profile: 132
+trainticket-station-queryForIdBatch-data-each,trainticket,refused,6,1,10,0,0,10,0,0,Unsupported instruction in collection profile: 132
+trainticket-train-retrieve-data-averageSpeed,trainticket,accepted,6,1,5,5,0,5,0,0,
+trainticket-train-retrieve-data-confortClass,trainticket,accepted,6,1,5,5,0,5,0,0,
+trainticket-train-retrieve-data-economyClass,trainticket,accepted,6,1,5,5,0,5,0,0,
+trainticket-train-retrieve-data-id,trainticket,accepted,6,1,5,5,0,5,0,0,
