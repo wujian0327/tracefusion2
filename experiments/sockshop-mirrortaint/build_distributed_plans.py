@@ -18,14 +18,14 @@ from plan_response_binding import plan_response
 
 def build(out,inputs):
     out.mkdir(parents=True,exist_ok=False);tools=out/'tools';tools.mkdir()
-    sources=[HERE/n for n in ('QueryObservationAgent.java','QueryBytecodeModel.java','PlannedServiceAgent.java','CollectionServiceHooks.java','ExecutionKernelHooks.java','ResponseBindingHooks.java','ReadEffectHooks.java','JdkContractProbe.java','SourceEvidenceHooks.java','SpringTransportAgent.java','W3CTraceContext.java')]
+    sources=[HERE/n for n in ('QueryObservationAgent.java','QueryBytecodeModel.java','PlannedServiceAgent.java','CollectionServiceHooks.java','ExecutionKernelHooks.java','FrameworkCallHooks.java','ResponseBindingHooks.java','ReadEffectHooks.java','JdkContractProbe.java','SourceEvidenceHooks.java','SpringTransportAgent.java','W3CTraceContext.java')]
     # JDK 8 has no --release option; its own platform is already Java 8.
     compiler_version,target=java8_target()
     cp=':'.join(map(str,JARS));command(['javac',*target,'-cp',cp,'-d',str(tools),*map(str,sources)],out/'compile.log')
     jar=out/'distributed-observer.jar'
     with ZipFile(jar,'w',ZIP_DEFLATED) as z:
         z.writestr('META-INF/MANIFEST.MF','Manifest-Version: 1.0\nPremain-Class: SpringTransportAgent\n\n')
-        for prefix in ('PlannedServiceAgent','CollectionServiceHooks','ExecutionKernelHooks','ResponseBindingHooks','ReadEffectHooks','JdkContractProbe','SourceEvidenceHooks','SpringTransportAgent','W3CTraceContext'):
+        for prefix in ('PlannedServiceAgent','CollectionServiceHooks','ExecutionKernelHooks','FrameworkCallHooks','ResponseBindingHooks','ReadEffectHooks','JdkContractProbe','SourceEvidenceHooks','SpringTransportAgent','W3CTraceContext'):
             for f in tools.glob(prefix+'*.class'):z.write(f,f.name)
         for dep in JARS:
             with ZipFile(dep) as dz:
@@ -70,7 +70,7 @@ def build(out,inputs):
         manifest['inputs'][role]={'query_config':config,'original_source':str(source),'original_jar_sha256':sha(source),'plan_sha256':sha(dest/'plan.json'),'model_sha256':sha(dest/'model.json'),'extra_classes':extra,'profile':p['profile'],'schema_classes':len(p['json_schema'])}
         print(role,p['profile'],len(p['json_schema']),'DTO schemas',flush=True)
     manifest['sources'][str(HERE/'infer_collection_service.py')]=sha(HERE/'infer_collection_service.py')
-    for name in ('plan_response_binding.py','infer_response_binding.py','plan_read_effects.py','read-forward-runtimes-20261020.json','plan_execution_kernel.py','infer_execution_kernel.py','execution_dependency_state.py','execution-kernel-runtimes-20261020.json','analysis_status.py','plan_application_calls.py','infer_application_execution.py','kernel-contract-runtimes-20261020.json','plan_constructor_effects.py','constructor-library-contracts-20261020.json'):
+    for name in ('plan_response_binding.py','infer_response_binding.py','plan_read_effects.py','read-forward-runtimes-20261020.json','plan_execution_kernel.py','infer_execution_kernel.py','execution_dependency_state.py','execution-kernel-runtimes-20261020.json','analysis_status.py','plan_application_calls.py','infer_application_execution.py','kernel-contract-runtimes-20261020.json','plan_constructor_effects.py','constructor-library-contracts-20261020.json','framework-wrapper-contracts-20261020.json'):
         manifest['sources'][str(HERE/name)]=sha(HERE/name)
     manifest['builder_sha256']=sha(Path(__file__));save(out/'build.json',manifest)
 

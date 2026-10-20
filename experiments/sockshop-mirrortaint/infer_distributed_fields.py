@@ -169,6 +169,7 @@ class Reconstruction:
             for origin in answer['origins']:
                 if len(origin)==2:seq,index=origin;leaves.append((role,'binding-source',seq,index))
                 elif origin[0]=='field':leaves.append((role,'binding-source',origin[1],origin[2]))
+                elif origin[0]=='http':leaves.append((role,origin[1],origin[2]))
                 else:
                     require(origin[0]=='argument','Unknown execution origin type');frame,index=origin[1:];key=(role,'argument',frame,index)
                     if key not in self.nodes:

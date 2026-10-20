@@ -20,6 +20,9 @@ public final class ExecutionKernelHooks implements Opcodes {
         boolean changed=false;
         for(int pc=0;pc<code.size();pc++){
             AbstractInsnNode n=code.get(pc);
+            if(contracts()&&n instanceof LdcInsnNode&&((LdcInsnNode)n).cst instanceof Type){
+                InsnList after=new InsnList();after.add(new InsnNode(DUP));after.add(new LdcInsnNode(pc));after.add(new MethodInsnNode(INVOKESTATIC,R,"classLiteral","(Ljava/lang/Class;I)V",false));method.instructions.insert(n,after);changed=true;continue;
+            }
             if(contracts()&&n instanceof InvokeDynamicInsnNode){
                 InvokeDynamicInsnNode call=(InvokeDynamicInsnNode)n;Type[] types=Type.getArgumentTypes(call.desc);int[] slots=new int[types.length];InsnList before=new InsnList(),after=new InsnList();
                 for(int j=types.length-1;j>=0;j--){slots[j]=method.maxLocals;method.maxLocals+=types[j].getSize();before.add(new VarInsnNode(types[j].getOpcode(ISTORE),slots[j]));}
@@ -51,10 +54,11 @@ public final class ExecutionKernelHooks implements Opcodes {
         for(String name:PINNED)hashes.put(name,JdkContractProbe.hash(name));if(contracts()||probeExtended)hashes.putAll(JdkContractProbe.hashes());r.put("class_sha256",hashes);return r;
     }
     static void enter()throws Exception{if(!runtimeEmitted){PlannedServiceAgent.Recorder.emit("execution-runtime",runtime());runtimeEmitted=true;}}
+    public static void classLiteral(Class type,int pc){synchronized(PlannedServiceAgent.Recorder.class){try{Map r=PlannedServiceAgent.Recorder.row();r.put("pc",pc);r.put("descriptor",Type.getDescriptor(type));r.put("observed",PlannedServiceAgent.Recorder.value(type));r.put("class_sha256",classHash(type));PlannedServiceAgent.Recorder.emit("execution-class-literal",r);}catch(Exception e){throw new IllegalStateException(e);}}}
     public static void constructed(int pc,Object receiver,Object[] args){synchronized(PlannedServiceAgent.Recorder.class){try{
         enter();
         Map<String,Object> r=PlannedServiceAgent.Recorder.row();r.put("pc",pc);r.put("receiver",PlannedServiceAgent.Recorder.value(receiver));r.put("receiver_type",receiver.getClass().getName());
-        List<Object> values=new ArrayList<>();for(Object a:args)values.add(PlannedServiceAgent.Recorder.value(a));r.put("args",values);PlannedServiceAgent.Recorder.emit("execution-constructed",r);
+        List<Object> values=new ArrayList<>();for(Object a:args)values.add(PlannedServiceAgent.Recorder.value(a));r.put("args",values);if(FrameworkCallHooks.config()!=null&&receiver.getClass().getName().equals("org.springframework.http.HttpEntity"))r.put("framework_contract",FrameworkCallHooks.entity(receiver,args));PlannedServiceAgent.Recorder.emit("execution-constructed",r);
     }catch(Throwable e){PlannedServiceAgent.Recorder.problem("execution-constructor:"+e);throw new IllegalStateException(e);}}}
     public static void constructorFailed(int pc,Throwable error){synchronized(PlannedServiceAgent.Recorder.class){Map r=PlannedServiceAgent.Recorder.row();r.put("pc",pc);r.put("exception",PlannedServiceAgent.Recorder.value(error));r.put("exception_type",error.getClass().getName());PlannedServiceAgent.Recorder.emit("execution-constructor-throw",r);}}
     public static void constructedAt(String method,int pc,Object receiver,Object[] args){constructed(pc,receiver,args);}

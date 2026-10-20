@@ -28,12 +28,13 @@ def infer_application(plan,rows):
         while changed:
             before=len(family);family.update(k for k,r in all_enters.items() if r.get('parent') in family);changed=len(family)!=before
         relevant=[r for r in rows if r.get('frame') in family and root['seq']<=r['seq']<=end['seq']]
-        methods=cfg['methods'];events=[r for r in relevant if r['kind'] in ('enter','exit','abort','collection-call-enter','collection-call-exit','collection-call-throw','execution-constructed','execution-constructor-throw','execution-lambda','execution-array','execution-array-throw','collection-catch','branch','read','write') and (r['kind'] not in ('read','write','branch') or r['site'].rsplit('@',1)[0] in methods)]
+        methods=cfg['methods'];events=[r for r in relevant if r['kind'] in ('enter','exit','abort','collection-call-enter','collection-call-exit','collection-call-throw','execution-constructed','execution-constructor-throw','execution-lambda','execution-class-literal','execution-array','execution-array-throw','collection-catch','branch','read','write') and (r['kind'] not in ('read','write','branch') or r['site'].rsplit('@',1)[0] in methods)]
         writes=[r for r in relevant if r['kind']=='write'];providers=defaultdict(list)
         for row in relevant:
             if row['kind'] in ('binding-source','binding-input'):
                 for index,f in enumerate(row['fields']):providers[coordinate(f)].append((row,index,f))
         state=State(Frame(root['frame']));pos=1;allocation_count=0;total_steps=0;branch_count=0
+        http_entities={};response_entities={};class_literals={}
         fr=None;method=None;code=None;entry=None;field_seq={};poisoned_at={};frame_audits=[]
         nonlocal_owners={f['owner'] for rows_ in providers.values() for _,_,f in rows_}
         nonlocal_owners.update(v.get('object') for v in root['args'] if 'value' not in v and v.get('object'))
@@ -49,8 +50,9 @@ def infer_application(plan,rows):
                 if v.observed.get('object') is not None and observed.get('object') is not None:require(v.observed['object']==observed['object'],'Application reference argument/return identity differs')
         def origin(f,before):
             candidates=[v for v in providers.get(coordinate(f),[]) if v[0]['seq']<before]
-            if len(candidates)!=1 or f['owner'] in poisoned_at:return Value(f['observed'],unknown=True)
-            row,index,source=candidates[0];same_value(source['observed'],f['observed']);return Value(f['observed'],frozenset({('field',row['seq'],index)}))
+            if len(candidates)!=1:return Value(f['observed'],unknown=True)
+            if f['owner'] in poisoned_at and not (candidates[0][0]['kind']=='http-json' and candidates[0][0]['seq']>poisoned_at[f['owner']]):return Value(f['observed'],unknown=True)
+            row,index,source=candidates[0];same_value(source['observed'],f['observed']);return Value(f['observed'],frozenset({('http',row['seq'],source['path']) if row['kind']=='http-json' else ('field',row['seq'],index)}))
         def lookup(f,before):
             key=coordinate(f)
             if key in state.fields and field_seq[key]>poisoned_at.get(f['owner'],-1):return state.fields[key]
@@ -118,6 +120,10 @@ def infer_application(plan,rows):
         def complete(call,ret):
             require(ret['seq']>call['seq'],'Execution completion order differs')
             return ret['result']
+        def framework_fact(event,kind):
+            fact=event.get('framework_contract')
+            require(fact and fact['kind']==kind and fact['class_sha256']==cfg['framework_contracts']['class_sha256'],'Framework witness kind/library differs')
+            return fact
         def execute(begin,args,receiver):
             nonlocal fr,method,code,entry,allocation_count,total_steps,branch_count,pos
             saved=(fr,method,code,entry)
@@ -137,6 +143,9 @@ def infer_application(plan,rows):
                     elif op==0:pass
                     elif op==1:fr.stack.append(Value({'value':None,'object':None}))
                     elif 2<=op<=8:fr.stack.append(Value({'value':op-3}))
+                    elif op==18 and ins.get('constant_type')=='Type':
+                        event=take('execution-class-literal');require(event['descriptor']==ins['constant'] and event['class_sha256']==cfg['class_literals'][ins['constant']],'Class literal descriptor/hash differs')
+                        require(event['observed'].get('object') is not None,'Class literal identity missing');class_literals[event['observed']['object']]=ins['constant'];fr.stack.append(Value(event['observed']))
                     elif op in (16,17,18):fr.stack.append(Value({'value':ins.get('operand',ins.get('constant'))}))
                     elif op==89:require(fr.stack,'Execution empty DUP');fr.stack.append(fr.stack[-1])
                     elif op==87:pop()
@@ -224,6 +233,10 @@ def infer_application(plan,rows):
                             for a,b in zip(args,event['args']):bind(a,b)
                             owner=identity(recv)
                             if key=='java/util/ArrayList.<init>()V':state.containers[owner]=Container(owner,[],0,True)
+                            elif effect.get('kind')=='http-entity-null-headers':
+                                fact=framework_fact(event,'http-entity-null-headers');bind(args[0],fact['body'])
+                                if fact['valid'] and args[1].observed.get('value','non-null') is None:http_entities[owner]=args[0]
+                                else:poison([recv]+args,event['seq'])
                             elif effect.get('kind')!='frame':
                                 fields=effect['fields'] if effect.get('kind')=='assignments' else {name:{'argument':index} for name,index in effect.items()}
                                 for name,expression in fields.items():
@@ -316,6 +329,29 @@ def infer_application(plan,rows):
                             invocation=Call(str(call['seq']),fr.pc,recv,args,'normal')
                             if child_value is not None:
                                 bind(child_value,observed);v=child_value.project(observed)
+                            elif key=='org/springframework/web/client/RestTemplate.exchange(Ljava/lang/String;Lorg/springframework/http/HttpMethod;Lorg/springframework/http/HttpEntity;Ljava/lang/Class;[Ljava/lang/Object;)Lorg/springframework/http/ResponseEntity;' and cfg.get('framework_contracts'):
+                                fact=framework_fact(ret,'rest-exchange');poison(([recv] if recv else [])+args,call['seq'])
+                                # This models transport return identity, not a purity
+                                # summary. Only fresh, actual decoder facts can recover.
+                                valid=fact['valid'] and identity(args[2]) in http_entities and identity(args[3]) in class_literals
+                                if valid:
+                                    bind(http_entities[identity(args[2])],fact['request_body']);require(fact['url']==args[0].observed.get('value'),'RPC URL differs')
+                                    require(class_literals[identity(args[3])]=='L'+fact['response_class'].replace('.','/')+';','RPC response Class differs')
+                                    reads=[r for r in relevant if r['kind']=='http-json' and r.get('phase')=='read' and r.get('direction')=='response' and call['seq']<r['seq']<ret['seq']]
+                                    require(len(reads)==1,'RPC decoded response absent/ambiguous');read=reads[0]
+                                    same_value(fact['body'],read['decoded_body']);require(fact['body_type']==read['decoded_type'] and fact['fields']==read['fields'],'RPC decoded body changed after read')
+                                    starts=[r for r in relevant if r['kind']=='http-rpc-enter' and r.get('message')==read['message'] and call['seq']<r['seq']<read['seq']]
+                                    ends=[r for r in relevant if r['kind']=='http-rpc-exit' and r.get('message')==read['message'] and read['seq']<r['seq']<ret['seq']]
+                                    require(len(starts)==len(ends)==1 and starts[0]['uri']==fact['url'] and starts[0]['method']==fact['method'] and read.get('parent_message') in {r.get('message') for r in relevant if r['kind'] in ('binding-input','binding-return') and r.get('frame')==root['frame'] and r.get('message') is not None},'RPC call/message binding differs')
+                                    require(fact['body'].get('object') not in nonlocal_owners,'RPC body aliases input/global boundary')
+                                    for index,f in enumerate(read['fields']):
+                                        providers[coordinate(f)].append((read,index,f));nonlocal_owners.add(f['owner'])
+                                    nonlocal_owners.add(fact['body'].get('object'));heap_refs[observed['object']].add(fact['body'].get('object'))
+                                    response_entities[observed['object']]=Value(fact['body']);v=Value(observed)
+                            elif key in ('org/springframework/http/ResponseEntity.getBody()Ljava/lang/Object;','org/springframework/http/HttpEntity.getBody()Ljava/lang/Object;') and cfg.get('framework_contracts'):
+                                fact=framework_fact(ret,'http-entity-body');same_value(fact['body'],observed);body=response_entities.get(identity(recv),http_entities.get(identity(recv)))
+                                if fact['valid'] and body is not None:bind(body,observed);v=body.project(observed)
+                                else:poison([recv,Value(observed)],ret['seq'])
                             elif key in plan['response_binding']['source_calls']:
                                 v=Value(observed)  # Source leaves must still match concrete boundary fields later.
                             elif key in plan['collection_getters']:

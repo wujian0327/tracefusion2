@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "library": "original Spring web 4.3.25.RELEASE",
+  "class_sha256": {
+    "org/springframework/http/HttpEntity": "5ac0eba68668d5bc0543f39d7b901a705c911dd1631c6097d0a5b5ff2604581d",
+    "org/springframework/http/ResponseEntity": "3f414c72da585b788378a84fe8ed918bc6956fb6b07cf8c863ff6dc81fcb933a",
+    "org/springframework/http/HttpHeaders": "48c26aba293c0889a6ad139db725178ea94ad4c64d0166904930476da3ca11ad",
+    "org/springframework/http/HttpMethod": "c4400a373b70b51979ea1c73ac36cbd4cf112829bcef5c17f8ed8cb938d1a26b",
+    "org/springframework/web/client/RestTemplate": "999646b6784847595a700698d8b9192d2e58504598e0d12ba243f6654fc86032",
+    "org/springframework/web/client/RestTemplate$ResponseEntityResponseExtractor": "5f6a93916348d4289963192d8308209d1870daf036596bc93709f2f7272a15f9",
+    "org/springframework/web/client/HttpMessageConverterExtractor": "138c6e5bf6bc82171b9d4ab4d8002f453b19218e7a87fd31dc458158ff263fa7",
+    "org/springframework/http/converter/json/MappingJackson2HttpMessageConverter": "6d7ed4b5dfb57af756ad3159b089518011b4fad0a9b30325b773c99c3aa16950",
+    "org/springframework/http/converter/json/AbstractJackson2HttpMessageConverter": "052391e7009730a5d08228d9e43507b32d4bfec2975c187deae7276375dababc",
+    "org/springframework/http/client/SimpleClientHttpRequestFactory": "53db6d43fb2e4fc4bfe192b130d9b6bc2027b1b4e68ec243d03aa6ce0dc5e616",
+    "org/springframework/http/converter/ByteArrayHttpMessageConverter": "b32fccd60d7576c0adbf9495da27bc50605ec80bbe63ab900ffe3483c87b8a63",
+    "org/springframework/http/converter/StringHttpMessageConverter": "fbf441f25fcc8d86118e7b25ce3ea1f25e8aa79faefc93333d0d190176c32e74",
+    "org/springframework/http/converter/ResourceHttpMessageConverter": "fe3ae1781ea204e2da42a1c732fa65e9714d5e27256618932beebb298de78c6b",
+    "org/springframework/http/converter/xml/SourceHttpMessageConverter": "1d46834ea22aab7c69dec711132b9b911abafccd54a8289bb35c0f14b2c1897d",
+    "org/springframework/http/converter/support/AllEncompassingFormHttpMessageConverter": "6962f3d9bc06c453ad20250328dcd397e2eae638d2ef57fb3dc83f6dbacd054d"
+  },
+  "conditions": [
+    "Exact HttpEntity with null headers and body identity",
+    "Exact default RestTemplate, empty interceptors, SimpleClientHttpRequestFactory, pinned response extractor and converter",
+    "Returned ResponseEntity body is the exact actual RPC-decoded object; complete matching concrete message and field coordinates",
+    "Headers/save/async side effects are not declared read-only"
+  ],
+  "converter_classes": [
+    "org/springframework/http/converter/ByteArrayHttpMessageConverter",
+    "org/springframework/http/converter/StringHttpMessageConverter",
+    "org/springframework/http/converter/ResourceHttpMessageConverter",
+    "org/springframework/http/converter/xml/SourceHttpMessageConverter",
+    "org/springframework/http/converter/support/AllEncompassingFormHttpMessageConverter",
+    "org/springframework/http/converter/json/MappingJackson2HttpMessageConverter"
+  ]
+}

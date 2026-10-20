@@ -71,7 +71,8 @@ public final class ResponseBindingHooks implements Opcodes {
     }
     static void leaf(Object owner,String field,Object value,String path,String anchor,List<Map> result,boolean target){
         List wanted=target?Collections.singletonList(binding().get("target")):(List)binding().get("source_fields");
-        if(!wanted.contains(anchor==null?field:anchor))return;
+        boolean dynamic=target&&Boolean.TRUE.equals(binding().get("runtime_container_path"))&&field.startsWith("@")&&path.equals(binding().get("path"));
+        if(!dynamic&&!wanted.contains(anchor==null?field:anchor))return;
         Map r=new LinkedHashMap();r.put("path",path);r.put("owner",PlannedServiceAgent.Recorder.id(owner));r.put("field",field);
         r.put("version",field.startsWith("@")?CollectionServiceHooks.epoch(owner):PlannedServiceAgent.Recorder.VERSIONS.getOrDefault(PlannedServiceAgent.Recorder.id(owner)+":"+field,0));
         r.put("observed",PlannedServiceAgent.Recorder.value(value));if(anchor!=null)r.put("schema_field",anchor);result.add(r);

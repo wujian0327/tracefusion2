@@ -33,7 +33,8 @@ def augment_calls(plan,model,sources):
         for ins in m['instructions']:
             require(not re.search(r'\[[ZBCSIJFD]|\[\[',ins.get('desc','')) and not (ins['op'] in (189,192) and ins.get('type','').startswith('[') and (ins['type'].startswith('[[') or not ins['type'].startswith('[L'))),'Primitive/multidimensional array effects unsupported')
             require(ins['op'] in supported,'Application opcode unsupported: '+str(ins['op']))
-            if ins['op']==18:require(ins.get('constant_type')!='Type','Class literal projection unsupported')
+            if ins['op']==18 and ins.get('constant_type')=='Type':
+                require(ins['constant'].startswith('L') and ins['constant'].endswith(';') and ins['constant'][1:-1] in model['classes'],'Class literal requires frozen concrete class')
             if ins['op']==189:require(not ins.get('type','').startswith('['),'Multidimensional array allocation unsupported')
             if ins['op']==186:
                 bs=ins.get('bootstrap_args',[]);require(ins.get('bootstrap')=='java/lang/invoke/LambdaMetafactory.metafactory' and len(bs)==3 and isinstance(bs[1],dict) and bs[1].get('tag') in (5,6,7),'Lambda bootstrap/handle unsupported')
@@ -43,6 +44,8 @@ def augment_calls(plan,model,sources):
                 call=callee(ins)
                 if key in constructor_starts and ins['index']==constructor_starts[key]-1:continue
                 if call=='java/util/ArrayList.<init>()V':constructors[call]={}
+                elif call=='org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V':
+                    constructors[call]={'kind':'http-entity-null-headers'}
                 else:
                     require(call in model['methods'],'Application constructor bytecode absent: '+call)
                     initializer=model['methods'].get(ins['owner']+'.<clinit>()V')
@@ -90,14 +93,19 @@ def augment_calls(plan,model,sources):
                 targets.setdefault(key+'@'+str(ins['index']),[]).append(candidate);visit(candidate)
         visiting.remove(key)
     visit(plan['entry'])
+    framework=any(v.get('kind')=='http-entity-null-headers' for v in constructors.values())
+    if framework:
+        plan['execution_kernel']['framework_contracts']=json.loads((Path(__file__).parent/'framework-wrapper-contracts-20261020.json').read_text())
+        plan['response_binding']['runtime_container_path']=True
     effects={key:{'field_reads':sorted({i['owner']+'.'+i['name'] for i in m['instructions'] if i['op']==180}),
                   'field_writes':sorted({i['owner']+'.'+i['name'] for i in m['instructions'] if i['op']==181}),
                   'call_sites':[key+'@'+str(i['index']) for i in m['instructions'] if i['op'] in (182,183,184,185)],
                   'exceptions':m['exception_handlers'],'meaning':'Candidate effects only; actual object/alias/write versions are interpreted, never assumed pure.'} for key,m in methods.items()}
-    plan['algorithm']='execution-dependency-v4-constructor-effects'
+    plan['algorithm']='execution-dependency-v5-http-wrapper' if framework else 'execution-dependency-v4-constructor-effects'
     plan['frame_methods']=sorted(methods);plan['binding_callsites']=sorted(key+'@'+str(i['index']) for key,m in methods.items() for i in m['instructions'] if i['op'] in (182,183,184,185) and (i['name']!='<init>' or constructors.get(callee(i),{}).get('kind')=='frame'))
     plan['selected_read_sites']=[key+'@'+str(i['index']) for key,m in methods.items() for i in m['instructions'] if i['op']==180]
-    plan['execution_kernel'].update(version=4,library_contracts=json.loads((Path(__file__).parent/'constructor-library-contracts-20261020.json').read_text()),constructor_starts=constructor_starts,methods=methods,public_contracts=True,lambda_sites=lambdas,
+    plan['execution_kernel'].update(version=5 if framework else 4,library_contracts=json.loads((Path(__file__).parent/'constructor-library-contracts-20261020.json').read_text()),constructor_starts=constructor_starts,methods=methods,public_contracts=True,lambda_sites=lambdas,
+        class_literals={i['constant']:model['classes'][i['constant'][1:-1]]['sha256'] for m in methods.values() for i in m['instructions'] if i['op']==18 and i.get('constant_type')=='Type'},
         runtime_profiles=json.loads((Path(__file__).parent/'kernel-contract-runtimes-20261020.json').read_text())['profiles'],call_targets=targets,opaque_methods=opaque,constructors=constructors,effects=effects,
         class_parents={o:{'super':c.get('super'),'interfaces':c.get('interfaces',[])} for o,c in model['classes'].items()},
         evidence_policy='All planned application frames/calls, necessary field writes/reads and actual branch/handler sequence in both modes; no cost claim.')
