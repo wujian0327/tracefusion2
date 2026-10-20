@@ -1,12 +1,23 @@
 # TraceFusion 2
 
-2026-10-20完成有限读取模型修订，冻结核心为 `c3e6739`：已有Cart的三个开发目标
+2026-10-20完成调用生命周期修复，冻结核心为 `2b3b929`。原版Basic严格同配置混合回归
+两批各15个实际目标均为unknown、证据无效0，另各1个N/A；必要不透明效果未被强行改成known。
+三类查询已完成45次独立成本部署：full/selective各自的Cart 1350/1350、Train返回绑定900/900、
+五服务票价1800/1800目标来源匹配，FP/FN/unknown为0。选择性观测分别减少事件40.22%/18.75%/52.92%，
+减少离线核心时间37.14%/16.93%/64.89%；三任务在线CPU和p95范围均跨1，不称稳定改善。
+新表按HTTP响应读完计时，并用30份相同证据独立复算VmHWM，保留旧启动口径ru_maxrss。
+见[修复、回归与结论边界](experiments/sockshop-mirrortaint/CALL-LIFECYCLE-REVISION-20261020.md)、
+[效果核验条件](experiments/sockshop-mirrortaint/CALL-LIFECYCLE-ALGORITHM-20261020.md)和
+[新成本完整报告](experiments/sockshop-mirrortaint/CALL-LIFECYCLE-COST-20261020.md)。
+Orders保存/异步、一般循环等支持范围不扩展；首次覆盖、失败与试运行均保留，推送交给用户。
+
+此前2026-10-20完成有限读取模型修订，冻结核心为 `c3e6739`：已有Cart的三个开发目标
 full/selective各18/18来源匹配，封存新字段itemId另6/6匹配。原Orders查询的独立真值已补齐，
 24个目标仍unknown。新字段首次测试中Sock Shop为6已知/18unknown，Train Ticket为35已知/14证据无效；
 后者暴露Basic异常调用配对限制，原始失败保留，不能只引用已知答案的条件匹配率。
 见[完整结果及剩余问题](experiments/sockshop-mirrortaint/SOCKSHOP-MODEL-REVISION-20261020.md)和
 [有限模型算法说明](experiments/sockshop-mirrortaint/SOCKSHOP-MODEL-ALGORITHM-20261020.md)。
-本轮未测性能，旧成本表不适用于此候选配置。
+该阶段未测性能，旧成本表不适用于该候选配置；后续2b3b929的新测量见上文。
 
 2026-10-19已完成有界响应目标绑定修订（冻结核心 `803b92f`）及独立封存测试：
 Train Ticket新入口接纳10/12查询，71/71实际目标来源完全匹配；Sock Shop旧入口新字段

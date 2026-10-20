@@ -22,6 +22,7 @@ def summarize(root):
             lines+=[f'{mode}：900请求（300预热、600测量），{q}/{q}目标实例来源完全匹配，TP{tp}/FP0/FN0/unknown0；其中预热{warm}、测量{steady}个目标。']
         lines+=['','| 指标 | 原版 | full | selective |','| --- | ---: | ---: | ---: |']
         for key,label,scale in metrics:
+            if key=='offline_child_peak_rss_bytes':label='同批证据离线复算VmHWM，MiB'
             vals=[]
             for mode in ('original','full','selective'):
                 v=summ[mode].get(key);vals.append('N/A' if v is None else f"{v['median']/scale:,.3f}" if key!='capture_events' else f"{v['median']:,.0f}")
@@ -40,8 +41,11 @@ def summarize(root):
         rs=[r for r in static['measurements'] if r['kind']==kind];med=lambda k:statistics.median(r[k] for r in rs)
         plan=statistics.median(sum(v['plan_analysis_seconds'] for v in r['phases'].values()) for r in rs)
         lines.append(f"| {kind} | {med('wall_seconds'):.4f} | {med('subprocess_wall_seconds'):.4f} | {med('cpu_seconds'):.4f} | {med('process_tree_sampled_peak_rss_bytes')/2**20:.2f} | {plan*1000:.3f} |")
-    lines+=['','离线阶段另存解码、图验证/还原、目标查询、答案导出、独立评分和证据导出时间。主表的子进程CPU/RSS包括评分和导出；不能称为算法核心的独立峰值。所有逐部署数字见cost-deployments.csv，配对比值及阶段见cost-audit.json。','',
+    lines+=['','离线阶段另存解码、图验证/还原、目标查询、答案导出、独立评分和证据导出时间。原子进程CPU及复算VmHWM均包括评分和导出；不能称为算法核心的独立峰值。所有逐部署数字见cost-deployments.csv，配对比值及阶段见cost-audit.json。','',
+            '本机控制实验确认ru_maxrss可继承fork父进程高水位；原始计数保存在metrics/offline文件及CSV的offline_launch_rusage_peak_rss_bytes列，不能用它代替exec后处理峰值。主表RSS来自全部30份来源配置捕获的独立复算，读取进程自身/proc/self/status的VmHWM；复算在在线实验全部结束后顺序进行，原始捕获和墙时/CPU计时未改写，来源评分逐份相同。测量协议和原始状态见offline-memory-replays/，审计见offline-memory-audit.json。','',
             '答案等待来自批处理：请求完成到整批采集关闭、再到答案导出。原始证据关闭时间是完整批次可用的上界；目标字段内部产生时间未单独计时，不能把请求完成当作精确目标生成时间，也不能把约一分钟窗口解释成工具固有流式延迟。','',
+            '整批采集与离线阶段处理全捕获文件，还包括固定的启动/就绪/输入准备记录；Cart准备后的6次一致性GET也产生根记录，但不混入正式计分目标。来源统计只针对明确列出的预热和测量请求，稳态事件/字节按捕获窗口单列。','',
+            'cost-cart为计时边界修正前的试运行，完整保留但排除于本表；正式Cart使用cost-cart-final。修正只影响实验驱动，算法核心未变。静态规划和正确性校准未受影响，直接复用。','',
             '## 审计与限制','',
             '调用配对修复、Basic unknown、效果核验条件及历史回归见仓库CALL-LIFECYCLE-REVISION-20261020.md。旧0/20、803b92f及c3e6739首次覆盖结果不改写。本轮不新增未见查询泛化证据；Orders保存/异步、一般循环等仍不支持。','',
             '运行命令和逐轮重要节点保存在logs/，机器环境在各cost-*/environment.json；镜像digest、资源限制、冻结输入、原始事件、独立真值和预测保存在各部署目录。完整工件需单独备份，Git仅保存代码及小型摘要。','']

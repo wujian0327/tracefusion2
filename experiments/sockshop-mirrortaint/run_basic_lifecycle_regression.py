@@ -21,6 +21,10 @@ def run(out,base):
     results=[]
     for q in selected:
         d=out/q['id'];d.mkdir();p=plan_response(load(base/'basic/model.json'),q['entry'],q['target'],q['path'],read_forward_contracts=True);p['source_evidence']=True
+        p['json_conversion_methods']=['edu/fudan/common/util/JsonUtils.conveterObject(Ljava/lang/Object;Ljava/lang/Class;)Ljava/lang/Object;']
+        previous=load(ROOT/'artifacts/sockshop-model-revision-20261020/heldout-first-trainticket'/q['id']/'plan.json')
+        assert {k:v for k,v in previous.items() if k!='read_forward_contracts'}=={k:v for k,v in p.items() if k!='read_forward_contracts'},'Regression differs beyond lifecycle protocol metadata'
+        save(d/'same-configuration.json',{'same_plan_except_read_effect_lifecycle_protocol':True,'original_conversion_declaration_retained':True})
         b=d/'build';old.query_build(b,base,q,p);cap=d/'capture';cap.mkdir()
         old.capture_train(cap,b,q,201020,mixed_lifecycle=True)
         r=old.evaluate(cap,b,q);assert r['evidence_invalid']==0 and r['oracle_unavailable']==0,r

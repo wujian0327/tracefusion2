@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Raw population/measurement audit and separate per-query deployment comparisons."""
-import argparse,csv,json,statistics
+import argparse,csv,json,statistics,subprocess,sys
 from pathlib import Path
 from run_planned_service import load,save,sha
 from run_bound_query_cost import query
@@ -13,12 +13,15 @@ def values(m):
     result={'p50_ms':m['online_latency_ms']['p50'],'p95_ms':m['online_latency_ms']['p95'],'p99_ms':m['online_latency_ms']['p99'],'throughput_rps':m['throughput_rps'],'error_rate':m['error_rate'],'online_cpu_percent':r['cpu_one_core_percent_mean'],'online_rss_mean_bytes':r['rss_bytes_mean'],'online_rss_peak_bytes':r['rss_bytes_peak'],'capture_events':sum(x['events'] for x in m['steady_capture'].values()),'capture_bytes':sum(x['bytes'] for x in m['steady_capture'].values()),'whole_capture_events':sum(x['events'] for x in m['total_capture'].values()),'whole_capture_bytes':sum(x['bytes'] for x in m['total_capture'].values()),'console_bytes':m['container_console_bytes']}
     deployment=m['resources']['deployment'];result.update(deployment_cpu_percent=deployment['cpu_one_core_percent_mean'],deployment_rss_mean_bytes=deployment['rss_bytes_mean'],deployment_rss_peak_bytes=deployment['rss_bytes_peak'])
     if off:
-        result.update(offline_core_seconds=off['core_seconds'],offline_child_wall_seconds=off['subprocess_wall_seconds'],offline_child_cpu_seconds=off['process_cpu_seconds'],offline_child_peak_rss_bytes=off['peak_rss_bytes'],answer_wait_p50_seconds=m['completion_to_batch_answers_seconds']['p50'],answer_wait_p95_seconds=m['completion_to_batch_answers_seconds']['p95'])
+        result.update(offline_core_seconds=off['core_seconds'],offline_child_wall_seconds=off['subprocess_wall_seconds'],offline_child_cpu_seconds=off['process_cpu_seconds'],offline_child_peak_rss_bytes=off.get('replay_vmhwm_bytes',off['peak_rss_bytes']),offline_launch_rusage_peak_rss_bytes=off['peak_rss_bytes'],answer_wait_p50_seconds=m['completion_to_batch_answers_seconds']['p50'],answer_wait_p95_seconds=m['completion_to_batch_answers_seconds']['p95'])
         for k,v in off['phases'].items():result['offline_'+k]=v
     return result
 
 
 def audit(root):
+    if not (root/'offline-memory-audit.json').exists():
+        subprocess.run([sys.executable,str(Path(__file__).with_name('measure_offline_memory.py')),'run','--root',str(root)],check=True)
+    memory=load(root/'offline-memory-audit.json');assert memory['all_passed'] and memory['replay_count']==30
     frozen=load(root/'algorithm-freeze.json')
     for f,h in frozen['core_sources'].items():assert sha(Path(__file__).resolve().parents[2]/f)==h,('Core changed',f)
     assert load(root/'bound-calibration-audit.json')['all_passed'] and load(root/'price-raw-toggle-audit.json')['all_passed']
@@ -63,6 +66,7 @@ def audit(root):
                     before=window['before'][role] if kind=='price' else window['before'];after=window['after'][role] if kind=='price' else window['after'];cohort=lines[before['events']:after['events']]
                     assert measure['events']==len(cohort) and measure['bytes']==sum(map(len,cohort))
                     assert all(json.loads(l)['kind']!='problem' for l in lines)
+            if mode!='original':m['offline']['replay_vmhwm_bytes']=memory['measurements'][kind+'/'+name]['vmhwm_bytes']
             raw=values(m);records.setdefault(mode,{})[name[:8]]=raw
             csvrows.append({'kind':kind,'trial':name,'mode':mode,**raw})
         assert all(s==specs[0] for s in specs),'Full/selective deployment difference'
