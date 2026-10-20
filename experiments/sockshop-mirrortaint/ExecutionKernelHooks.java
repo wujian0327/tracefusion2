@@ -8,8 +8,9 @@ public final class ExecutionKernelHooks implements Opcodes {
     static boolean runtimeEmitted;
     static final String[] PINNED={"java/util/ArrayList","java/util/ArrayList$Itr","java/util/Arrays$ArrayList","java/util/Iterator"};
     static boolean enabled(){return "execution-dependency".equals(PlannedServiceAgent.plan.get("profile"));}
+    static boolean method(String key){return enabled()&&(((Map)PlannedServiceAgent.plan.get("execution_kernel")).containsKey("methods")?((Map)((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("methods")).containsKey(key):key.equals(PlannedServiceAgent.plan.get("entry")));}
     static boolean instrument(MethodNode method,String key,List<AbstractInsnNode> code){
-        if(!enabled()||!key.equals(PlannedServiceAgent.plan.get("entry")))return false;
+        if(!method(key))return false;
         boolean changed=false;
         for(int pc=0;pc<code.size();pc++){
             AbstractInsnNode n=code.get(pc);if(!(n instanceof MethodInsnNode))continue;
@@ -20,9 +21,9 @@ public final class ExecutionKernelHooks implements Opcodes {
             for(int j=0;j<types.length;j++)before.add(new VarInsnNode(types[j].getOpcode(ILOAD),slots[j]));
             // Uninitialized receiver is never passed to a hook. JVM initializes
             // its local alias only after successful original invokespecial.
-            after.add(new LdcInsnNode(pc));after.add(new VarInsnNode(ALOAD,receiver));after.add(new LdcInsnNode(types.length));after.add(new TypeInsnNode(ANEWARRAY,"java/lang/Object"));
+            after.add(new LdcInsnNode(key));after.add(new LdcInsnNode(pc));after.add(new VarInsnNode(ALOAD,receiver));after.add(new LdcInsnNode(types.length));after.add(new TypeInsnNode(ANEWARRAY,"java/lang/Object"));
             for(int j=0;j<types.length;j++){after.add(new InsnNode(DUP));after.add(new LdcInsnNode(j));after.add(new VarInsnNode(types[j].getOpcode(ILOAD),slots[j]));PlannedServiceAgent.box(after,types[j]);after.add(new InsnNode(AASTORE));}
-            after.add(new MethodInsnNode(INVOKESTATIC,R,"constructed","(ILjava/lang/Object;[Ljava/lang/Object;)V",false));
+            after.add(new MethodInsnNode(INVOKESTATIC,R,"constructedAt","(Ljava/lang/String;ILjava/lang/Object;[Ljava/lang/Object;)V",false));
             method.instructions.insertBefore(n,before);method.instructions.insert(n,after);changed=true;
         }return changed;
     }
@@ -36,11 +37,12 @@ public final class ExecutionKernelHooks implements Opcodes {
         Map<String,Object> r=PlannedServiceAgent.Recorder.row();r.put("pc",pc);r.put("receiver",PlannedServiceAgent.Recorder.value(receiver));r.put("receiver_type",receiver.getClass().getName());
         List<Object> values=new ArrayList<>();for(Object a:args)values.add(PlannedServiceAgent.Recorder.value(a));r.put("args",values);PlannedServiceAgent.Recorder.emit("execution-constructed",r);
     }catch(Throwable e){PlannedServiceAgent.Recorder.problem("execution-constructor:"+e);throw new IllegalStateException(e);}}}
+    public static void constructedAt(String method,int pc,Object receiver,Object[] args){constructed(pc,receiver,args);}
     static void exceptional(String call,Throwable error){
         Deque<Map<String,Object>> pending=CollectionServiceHooks.CALLS.get();if(pending.isEmpty())return;
         Map<String,Object> top=pending.peek(),current=PlannedServiceAgent.Recorder.row();
         if(Objects.equals(top.get("frame"),current.get("frame"))&&Objects.equals(top.get("callee"),call)){
-            pending.pop();current.put("pc",top.get("pc"));current.put("exception",PlannedServiceAgent.Recorder.value(error));PlannedServiceAgent.Recorder.emit("collection-call-throw",current);
+            pending.pop();current.put("pc",top.get("pc"));current.put("call_id",top.get("call_id"));current.put("exception_type",error.getClass().getName());current.put("exception",PlannedServiceAgent.Recorder.value(error));PlannedServiceAgent.Recorder.emit("collection-call-throw",current);
         }
     }
     public static void main(String[] args)throws Exception{System.out.println(new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(runtime()));}

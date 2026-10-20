@@ -27,6 +27,7 @@ from flowdist_full_order import CachedDeployment
 from sockshop import Deployment,Client
 from host import prepare,submit
 from infer_distributed_fields import Reconstruction
+from analysis_status import AnalysisLimit
 
 HOME=ROOT/'artifacts/response-binding-revision-20261019'
 FIRST=ROOT/'artifacts/query-coverage-first-20261019'
@@ -363,12 +364,14 @@ def evaluate(dest,build,q):
     run=load(dest/'run.json');raw={}
     for role in run['roles']:
         p=dest/role/'events.jsonl';raw[role]=[json.loads(x) for x in p.read_text().splitlines()] if p.exists() else []
-    invalid=None;graph=None
+    invalid=None;limited=None;graph=None
     try:
         if run['status']!='business-completed' or run.get('cleanup_returncode'):raise ValueError('Incomplete business deployment')
         graph=Reconstruction(build,dest,run['roles'])
+    except AnalysisLimit as e:limited=str(e);(dest/'analysis-limit.txt').write_text(traceback.format_exc())
     except Exception as e:invalid=str(e);(dest/'reconstruction-error.txt').write_text(traceback.format_exc())
     result={'id':q['id'],'application':q['application'],'requests':len(run['cases']),'target_instances':0,'known':0,'unknown':0,'N/A_requests':0,'evidence_invalid':0,'oracle_unavailable':0,'known_oracle_checked':0,'exact':0,'tp':0,'fp':0,'fn':0,'invalid_reason':invalid,'predictions':[]}
+    result.update(analysis_limited=0,analysis_limit_reason=limited)
     for c in run['cases']:
         if q['role'] in COLLECTION and 200<=c['http_status']<300:
             data=c['response'].get('data') if isinstance(c['response'],dict) else c['response']
@@ -389,7 +392,8 @@ def evaluate(dest,build,q):
             result['target_instances']+=1;item={'case':c['case'],'message':c['message'],'path':path,'client_value':value};expected=None
             try:expected=oracle(q,c,path,raw);item['expected']=expected
             except ValueError as e:item['oracle_error']=str(e);result['oracle_unavailable']+=1
-            if invalid:result['evidence_invalid']+=1;item['status']='evidence-invalid'
+            if limited:result['analysis_limited']+=1;item['status']='analysis_limited'
+            elif invalid:result['evidence_invalid']+=1;item['status']='evidence-invalid'
             else:
                 try:
                     answer=graph.query(c['message'],path,q['role'],boundary=BOUNDARY);item['answer']=answer

@@ -4,6 +4,7 @@ v1 deliberately expands evidence. Only the documented original-bytecode and
 pinned library contracts produce known values. No application or query names.
 """
 from collections import defaultdict
+from analysis_status import AnalysisLimit
 from execution_dependency_state import Value, Frame, State, Container, Call, combine
 from plan_service_observations import callee
 from query_observation_planner import descriptors, require
@@ -18,6 +19,9 @@ def same_value(expected,actual):
 
 
 def infer_execution(plan,rows):
+    if plan['execution_kernel']['version']>=2:
+        from infer_application_execution import infer_application
+        return infer_application(plan,rows)
     cfg=plan['execution_kernel'];method=plan['collection_method'];code=method['instructions'];entry=plan['entry']
     runtime=[r for r in rows if r['kind']=='execution-runtime']
     require(len(runtime)==1,'Execution runtime proof absent/duplicated')
@@ -95,7 +99,8 @@ def infer_execution(plan,rows):
             require(ret['seq']>call['seq'],'Execution completion order differs')
             return ret['result']
         while True:
-            fr.steps+=1;require(fr.steps<=cfg['step_limit'],'Execution iteration bound exceeded')
+            fr.steps+=1
+            if fr.steps>cfg['step_limit']:raise AnalysisLimit('offline-execution','Execution iteration budget exceeded on complete capture')
             ins=code[fr.pc];op=ins['op'];pop=fr.pop
             if 21<=op<=25:
                 require(ins['var'] in fr.locals,'Execution uninitialized local');fr.stack.append(fr.locals[ins['var']])

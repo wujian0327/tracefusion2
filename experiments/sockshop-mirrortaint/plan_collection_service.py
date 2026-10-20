@@ -7,6 +7,7 @@ include every possibly aliasing operation; no field or application names occur
 in the rules. This plan is a separate opt-in profile, not a silent fallback.
 """
 from collections import deque
+from analysis_status import AnalysisLimit
 from plan_service_observations import callee, field
 from plan_distributed_fields import any_target, json_schema
 from query_observation_planner import descriptors, digest, require
@@ -27,7 +28,8 @@ def direct_accessors(model):
 def analyze(method, allow_loops=False):
     code = method['instructions']; handlers = method.get('exception_handlers', [])
     require(len(handlers) == method['try_catches'], 'Explicit exception table required; rebuild the bytecode model')
-    n = len(code); require(0 < n < 5000, 'Method size bound')
+    n = len(code); require(n > 0, 'Method bytecode absent')
+    if n >= 5000:raise AnalysisLimit('static-fixed-point','Method size budget exceeded; no partial plan emitted')
     args = {}; slot = 0 if method['access'] & 8 else 1
     if slot: args[0] = frozenset({-1})
     for i, d in enumerate(descriptors(method['desc'])):
@@ -49,7 +51,7 @@ def analyze(method, allow_loops=False):
 
     while queue:
         pc = queue.popleft(); steps += 1
-        require(steps <= n * n, 'Def-use convergence bound')
+        if steps > n * n:raise AnalysisLimit('static-fixed-point','Def-use convergence budget exceeded; no partial plan emitted')
         stack, locals_ = states[pc]; stack = list(stack); locals_ = dict(locals_)
         before = dict(locals_); ins = code[pc]; op = ins['op']; used = []
         def pop():

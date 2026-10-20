@@ -11,6 +11,7 @@ public final class CollectionServiceHooks implements Opcodes {
     static final Set<Object> READ_ONLY=Collections.newSetFromMap(new IdentityHashMap<Object,Boolean>());
     static final Map<Object,List<Object>> CONTENTS=new IdentityHashMap<>();
     static final Map<Object,Integer> EPOCHS=new IdentityHashMap<>();
+    static long callCounter;
     static Map<String,Object> plan(){return PlannedServiceAgent.plan;}
     static Map<String,Object> value(Object x){return PlannedServiceAgent.Recorder.value(x);}
     static String id(Object x){return PlannedServiceAgent.Recorder.id(x);}
@@ -19,7 +20,7 @@ public final class CollectionServiceHooks implements Opcodes {
     static boolean enabled(){return "collection-computation".equals(plan().get("profile"))||"bounded-scalar".equals(plan().get("profile"))||ExecutionKernelHooks.enabled();}
     static boolean mutate(MethodInsnNode c){return (c.owner.startsWith("java/util/")&&Arrays.asList("add","addAll","set","put","putAll","remove","removeAll","retainAll","clear","replace","replaceAll","sort","compute","computeIfAbsent","computeIfPresent","merge").contains(c.name));}
     static boolean instrument(MethodNode m,String key,List<AbstractInsnNode> code){
-        if(!enabled()&&!ResponseBindingHooks.enabled())return false;boolean root=key.equals(plan().get("entry")),changed=false;
+        if(!enabled()&&!ResponseBindingHooks.enabled())return false;boolean root=key.equals(plan().get("entry"))||ExecutionKernelHooks.method(key),changed=false;
         if(((List)plan().getOrDefault("json_conversion_methods",Collections.emptyList())).contains(key)){
             int token=m.maxLocals++;InsnList h=new InsnList();h.add(new VarInsnNode(ALOAD,0));h.add(new MethodInsnNode(INVOKESTATIC,R,"convertStart","(Ljava/lang/Object;)Ljava/lang/Object;",false));h.add(new VarInsnNode(ASTORE,token));m.instructions.insert(h);
             for(AbstractInsnNode n:code)if(n.getOpcode()==ARETURN){InsnList e=new InsnList();e.add(new InsnNode(DUP));e.add(new VarInsnNode(ALOAD,token));e.add(new MethodInsnNode(INVOKESTATIC,R,"convertEnd","(Ljava/lang/Object;Ljava/lang/Object;)V",false));m.instructions.insertBefore(n,e);}changed=true;
@@ -29,17 +30,17 @@ public final class CollectionServiceHooks implements Opcodes {
         for(int i=0;i<code.size();i++){
             AbstractInsnNode n=code.get(i);
             if(n instanceof MethodInsnNode){MethodInsnNode c=(MethodInsnNode)n;
-                boolean call=root&&!c.name.equals("<init>")&&(PlannedServiceAgent.full||selected.contains(i));
+                boolean call=root&&!c.name.equals("<init>")&&(PlannedServiceAgent.full||ExecutionKernelHooks.method(key)||selected.contains(i));
                 boolean guard=mutate(c)&&c.getOpcode()!=INVOKESTATIC;
                 if(!call&&!guard)continue;
                 Type[] ts=Type.getArgumentTypes(c.desc);int[] slots=new int[ts.length];InsnList a=new InsnList(),b=new InsnList();
                 for(int j=ts.length-1;j>=0;j--){slots[j]=m.maxLocals;m.maxLocals+=ts[j].getSize();a.add(new VarInsnNode(ts[j].getOpcode(ISTORE),slots[j]));}
                 int recv=-1;if(c.getOpcode()!=INVOKESTATIC){recv=m.maxLocals++;a.add(new VarInsnNode(ASTORE,recv));}
                 if(guard){a.add(new VarInsnNode(ALOAD,recv));a.add(new MethodInsnNode(INVOKESTATIC,R,"guardMutation","(Ljava/lang/Object;)V",false));}
-                if(call){a.add(new LdcInsnNode(i));a.add(recv<0?new InsnNode(ACONST_NULL):new VarInsnNode(ALOAD,recv));
+                if(call){a.add(new LdcInsnNode(key));a.add(new LdcInsnNode(i));a.add(recv<0?new InsnNode(ACONST_NULL):new VarInsnNode(ALOAD,recv));
                     a.add(new LdcInsnNode(ts.length));a.add(new TypeInsnNode(ANEWARRAY,"java/lang/Object"));
                     for(int j=0;j<ts.length;j++){a.add(new InsnNode(DUP));a.add(new LdcInsnNode(j));a.add(new VarInsnNode(ts[j].getOpcode(ILOAD),slots[j]));PlannedServiceAgent.box(a,ts[j]);a.add(new InsnNode(AASTORE));}
-                    a.add(new MethodInsnNode(INVOKESTATIC,R,"begin","(ILjava/lang/Object;[Ljava/lang/Object;)V",false));}
+                    a.add(new MethodInsnNode(INVOKESTATIC,R,"beginAt","(Ljava/lang/String;ILjava/lang/Object;[Ljava/lang/Object;)V",false));}
                 if(recv>=0)a.add(new VarInsnNode(ALOAD,recv));for(int j=0;j<ts.length;j++)a.add(new VarInsnNode(ts[j].getOpcode(ILOAD),slots[j]));
                 if(call){Type t=Type.getReturnType(c.desc);if(t.getSort()==Type.VOID)b.add(new InsnNode(ACONST_NULL));else{b.add(new InsnNode(t.getSize()==2?DUP2:DUP));PlannedServiceAgent.box(b,t);}
                     b.add(new MethodInsnNode(INVOKESTATIC,R,"end","(Ljava/lang/Object;)V",false));}
@@ -67,9 +68,10 @@ public final class CollectionServiceHooks implements Opcodes {
     }
     public static int epoch(Object o){synchronized(PlannedServiceAgent.Recorder.class){List<Object> now=contents(o),before=CONTENTS.get(o);int epoch=EPOCHS.getOrDefault(o,0);if(before!=null&&!before.equals(now)){if(READ_ONLY.contains(o))throw new IllegalStateException("Received collection changed outside guarded bytecode");epoch++;}CONTENTS.put(o,now);EPOCHS.put(o,epoch);return epoch;}}
     public static void received(Object o){synchronized(PlannedServiceAgent.Recorder.class){if(o instanceof List||o instanceof Map){epoch(o);READ_ONLY.add(o);}}}
-    public static void begin(int pc,Object receiver,Object[] args){synchronized(PlannedServiceAgent.Recorder.class){try{
+    public static void begin(int pc,Object receiver,Object[] args){beginAt((String)plan().get("entry"),pc,receiver,args);}
+    public static void beginAt(String key,int pc,Object receiver,Object[] args){synchronized(PlannedServiceAgent.Recorder.class){try{
         Map<String,Object> r=row();r.put("pc",pc);r.put("receiver",value(receiver));if(ExecutionKernelHooks.enabled())r.put("receiver_type",receiver==null?null:receiver.getClass().getName());List<Object> vs=new ArrayList<>();for(Object x:args)vs.add(value(x));r.put("args",vs);
-        Map method=(Map)plan().get("collection_method");Map ins=(Map)((List)method.get("instructions")).get(pc);String callee=ins.get("owner")+"."+ins.get("name")+ins.get("desc");r.put("callee",callee);
+        Map method=(Map)plan().get("collection_method");if(ExecutionKernelHooks.enabled()){Map cfg=(Map)plan().get("execution_kernel");if(cfg.containsKey("methods"))method=(Map)((Map)cfg.get("methods")).get(key);r.put("method",key);r.put("call_id",++callCounter);}Map ins=(Map)((List)method.get("instructions")).get(pc);String callee=ins.get("owner")+"."+ins.get("name")+ins.get("desc");r.put("callee",callee);
         Map getter=(Map)((Map)plan().get("collection_getters")).get(callee);
         if(receiver!=null&&(getter!=null||((Map)plan().get("collection_setters")).containsKey(callee))&&!receiver.getClass().getName().replace('.','/').equals(ins.get("owner")))throw new IllegalStateException("Unresolved accessor virtual dispatch");
         if(receiver instanceof List&&!Arrays.asList("java.util.ArrayList","java.util.Arrays$ArrayList").contains(receiver.getClass().getName()))throw new IllegalStateException("List implementation outside explicit summary");
@@ -79,7 +81,7 @@ public final class CollectionServiceHooks implements Opcodes {
         if(receiver instanceof List||receiver instanceof Map){r.put("collection_epoch",epoch(receiver));r.put("collection",contents(receiver));}
         r.put("_receiver_ref",receiver);CALLS.get().push(r);Map<String,Object> exported=new LinkedHashMap<>(r);exported.remove("_receiver_ref");emit("collection-call-enter",exported);
     }catch(Throwable e){PlannedServiceAgent.Recorder.problem("collection-begin:"+e);throw new IllegalStateException(e);}}}
-    public static void end(Object result){synchronized(PlannedServiceAgent.Recorder.class){try{Map<String,Object> start=CALLS.get().pop(),r=row();r.put("pc",start.get("pc"));r.put("result",value(result));Object receiver=start.get("_receiver_ref");if(receiver instanceof List||receiver instanceof Map){r.put("collection_epoch",epoch(receiver));if(ExecutionKernelHooks.enabled())r.put("collection_after",contents(receiver));}if(ExecutionKernelHooks.enabled())r.put("result_type",result==null?null:result.getClass().getName());emit("collection-call-exit",r);}catch(Throwable e){PlannedServiceAgent.Recorder.problem("collection-end:"+e);throw new IllegalStateException(e);}}}
+    public static void end(Object result){synchronized(PlannedServiceAgent.Recorder.class){try{Map<String,Object> start=CALLS.get().pop(),r=row();r.put("pc",start.get("pc"));r.put("result",value(result));Object receiver=start.get("_receiver_ref");if(receiver instanceof List||receiver instanceof Map){r.put("collection_epoch",epoch(receiver));if(ExecutionKernelHooks.enabled())r.put("collection_after",contents(receiver));}if(ExecutionKernelHooks.enabled()){r.put("call_id",start.get("call_id"));r.put("method",start.get("method"));r.put("result_type",result==null?null:result.getClass().getName());}emit("collection-call-exit",r);}catch(Throwable e){PlannedServiceAgent.Recorder.problem("collection-end:"+e);throw new IllegalStateException(e);}}}
     public static void caught(Throwable error,int pc){synchronized(PlannedServiceAgent.Recorder.class){Map<String,Object> r=row();r.put("pc",pc);r.put("exception",error.getClass().getName());r.put("observed",value(error));
         while(!CALLS.get().isEmpty()&&Objects.equals(CALLS.get().peek().get("frame"),r.get("frame"))){Map<String,Object> failed=CALLS.get().pop();r.put("failed_call_pc",failed.get("pc"));}
         emit("collection-catch",r);}}

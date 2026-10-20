@@ -53,7 +53,7 @@ def build(out,inputs):
         if config.get('entry'):
             entry=config['entry'];target=config['targets'][0]
             if config.get('response_path'):
-                local=plan_response(model,entry,target,config['response_path'],config.get('source_calls'),config.get('read_forward_contracts',False),config.get('execution_kernel',False))
+                local=plan_response(model,entry,target,config['response_path'],config.get('source_calls'),config.get('read_forward_contracts',False),config.get('execution_kernel',False),config.get('application_calls',False))
             elif config.get('profile')=='collection-computation':local=plan_collection(model,entry,target)
             else:
                 try:local=plan_service(model,entry,target)
@@ -70,7 +70,7 @@ def build(out,inputs):
         manifest['inputs'][role]={'query_config':config,'original_source':str(source),'original_jar_sha256':sha(source),'plan_sha256':sha(dest/'plan.json'),'model_sha256':sha(dest/'model.json'),'extra_classes':extra,'profile':p['profile'],'schema_classes':len(p['json_schema'])}
         print(role,p['profile'],len(p['json_schema']),'DTO schemas',flush=True)
     manifest['sources'][str(HERE/'infer_collection_service.py')]=sha(HERE/'infer_collection_service.py')
-    for name in ('plan_response_binding.py','infer_response_binding.py','plan_read_effects.py','read-forward-runtimes-20261020.json','plan_execution_kernel.py','infer_execution_kernel.py','execution_dependency_state.py','execution-kernel-runtimes-20261020.json'):
+    for name in ('plan_response_binding.py','infer_response_binding.py','plan_read_effects.py','read-forward-runtimes-20261020.json','plan_execution_kernel.py','infer_execution_kernel.py','execution_dependency_state.py','execution-kernel-runtimes-20261020.json','analysis_status.py','plan_application_calls.py','infer_application_execution.py'):
         manifest['sources'][str(HERE/name)]=sha(HERE/name)
     manifest['builder_sha256']=sha(Path(__file__));save(out/'build.json',manifest)
 

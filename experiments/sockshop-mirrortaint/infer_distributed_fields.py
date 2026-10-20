@@ -165,7 +165,16 @@ class Reconstruction:
         self.execution_outputs=getattr(self,'execution_outputs',{})
         for answer in result['answers']:
             key=(role,'execution-result',answer['seq'],answer['path'])
-            leaves=[(role,'binding-source',seq,index) for seq,index in answer['origins']]
+            leaves=[]
+            for origin in answer['origins']:
+                if len(origin)==2:seq,index=origin;leaves.append((role,'binding-source',seq,index))
+                elif origin[0]=='field':leaves.append((role,'binding-source',origin[1],origin[2]))
+                else:
+                    require(origin[0]=='argument','Unknown execution origin type');frame,index=origin[1:];key=(role,'argument',frame,index)
+                    if key not in self.nodes:
+                        root=next(r for r in self.rows[role] if r['kind']=='enter' and r['frame']==frame);arg=root['args'][index]
+                        self.add(key,dict(service=role,seq=root['seq'],kind='argument',root_frame=frame,message=next((r.get('message') for r in self.rows[role] if r['kind']=='binding-return' and r['frame']==frame),None),field='@argument:'+str(index),owner=arg.get('object'),version=0,observed=arg))
+                    leaves.append(key)
             require(all(k in self.nodes for k in leaves),'Execution source witness absent from graph')
             node=dict(answer,service=role,kind='bytecode-execution')
             if not answer['known']:node['unknown']='Necessary unmodeled dependency/effect in execution'
