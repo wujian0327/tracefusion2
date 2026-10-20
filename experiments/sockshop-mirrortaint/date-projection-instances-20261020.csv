@@ -1,0 +1,13 @@
+query,mode,case,path,status
+sockshop-orders-newOrder-date,full,group-0,/date,unknown
+sockshop-orders-newOrder-date,full,group-1,/date,unknown
+sockshop-orders-newOrder-date,full,group-2,/date,unknown
+sockshop-orders-newOrder-date,full,group-3,/date,unknown
+sockshop-orders-newOrder-date,full,group-4,/date,unknown
+sockshop-orders-newOrder-date,full,group-5,/date,unknown
+sockshop-orders-newOrder-date,selective,group-0,/date,unknown
+sockshop-orders-newOrder-date,selective,group-1,/date,unknown
+sockshop-orders-newOrder-date,selective,group-2,/date,unknown
+sockshop-orders-newOrder-date,selective,group-3,/date,unknown
+sockshop-orders-newOrder-date,selective,group-4,/date,unknown
+sockshop-orders-newOrder-date,selective,group-5,/date,unknown

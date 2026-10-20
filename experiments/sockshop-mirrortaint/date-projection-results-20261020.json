@@ -1,0 +1,230 @@
+{
+  "all_passed": true,
+  "algorithm_commit": "882497c339f833ccb6148ebec1f49fd97a1605c7",
+  "date_business": {
+    "full": {
+      "targets": 6,
+      "known": 0,
+      "unknown": 6,
+      "evidence_invalid": 0,
+      "oracle_unavailable": 0,
+      "N/A_requests": 0,
+      "answerability": 0,
+      "known_exact_rate": null,
+      "relationship_metrics": null,
+      "faults": {
+        "runtime": true,
+        "wire": true,
+        "serializer": true,
+        "same-epoch-other-object": true,
+        "root-proof": true
+      }
+    },
+    "selective": {
+      "targets": 6,
+      "known": 0,
+      "unknown": 6,
+      "evidence_invalid": 0,
+      "oracle_unavailable": 0,
+      "N/A_requests": 0,
+      "answerability": 0,
+      "known_exact_rate": null,
+      "relationship_metrics": null,
+      "faults": {
+        "runtime": true,
+        "wire": true,
+        "serializer": true,
+        "same-epoch-other-object": true,
+        "root-proof": true
+      }
+    }
+  },
+  "date_semantics": {
+    "semantics-frozen-full-iso": {
+      "targets": 32,
+      "known": 22,
+      "expected_unknown": 10,
+      "root_aborts": 2,
+      "faults": {
+        "runtime-hash": true,
+        "missing-runtime": true,
+        "date-input-object": true,
+        "date-input-epoch": true,
+        "missing-clock": true,
+        "calendar-provider": true,
+        "serialization-object": true,
+        "serialization-epoch": true,
+        "serialization-library": true,
+        "wire-value": true,
+        "missing-serialization": true
+      }
+    },
+    "semantics-frozen-full-timestamp": {
+      "targets": 32,
+      "known": 22,
+      "expected_unknown": 10,
+      "root_aborts": 2,
+      "faults": {
+        "runtime-hash": true,
+        "missing-runtime": true,
+        "date-input-object": true,
+        "date-input-epoch": true,
+        "missing-clock": true,
+        "calendar-provider": true,
+        "serialization-object": true,
+        "serialization-epoch": true,
+        "serialization-library": true,
+        "wire-value": true,
+        "missing-serialization": true
+      }
+    },
+    "semantics-frozen-selective-iso": {
+      "targets": 32,
+      "known": 22,
+      "expected_unknown": 10,
+      "root_aborts": 2,
+      "faults": {
+        "runtime-hash": true,
+        "missing-runtime": true,
+        "date-input-object": true,
+        "date-input-epoch": true,
+        "missing-clock": true,
+        "calendar-provider": true,
+        "serialization-object": true,
+        "serialization-epoch": true,
+        "serialization-library": true,
+        "wire-value": true,
+        "missing-serialization": true
+      }
+    },
+    "semantics-frozen-selective-timestamp": {
+      "targets": 32,
+      "known": 22,
+      "expected_unknown": 10,
+      "root_aborts": 2,
+      "faults": {
+        "runtime-hash": true,
+        "missing-runtime": true,
+        "date-input-object": true,
+        "date-input-epoch": true,
+        "missing-clock": true,
+        "calendar-provider": true,
+        "serialization-object": true,
+        "serialization-epoch": true,
+        "serialization-library": true,
+        "wire-value": true,
+        "missing-serialization": true
+      }
+    },
+    "arguments-frozen-full": {
+      "targets": 4,
+      "correct": 4,
+      "known_correct": 4,
+      "expected_unknown": 0
+    },
+    "arguments-frozen-selective": {
+      "targets": 4,
+      "correct": 4,
+      "known_correct": 4,
+      "expected_unknown": 0
+    },
+    "forward-frozen-full": {
+      "targets": 8,
+      "correct": 8,
+      "known_correct": 2,
+      "expected_unknown": 6
+    },
+    "forward-frozen-selective": {
+      "targets": 8,
+      "correct": 8,
+      "known_correct": 2,
+      "expected_unknown": 6
+    }
+  },
+  "loop60": {
+    "full": 60,
+    "selective": 60
+  },
+  "cart15": {
+    "full": 15,
+    "selective": 15
+  },
+  "ticketinfo21": {
+    "full": 21,
+    "selective": 21
+  },
+  "cart6_restore": [
+    {
+      "mode": "full",
+      "requests": 6,
+      "targets": 6,
+      "unknown": 0,
+      "known": 6,
+      "exact": 6,
+      "application_frames": 30,
+      "methods": [
+        "works/weave/socks/cart/action/FirstResultOrDefault.get()Ljava/lang/Object;",
+        "works/weave/socks/cart/cart/CartResource.value()Ljava/util/function/Supplier;",
+        "works/weave/socks/cart/configuration/BeanConfiguration$1.findByCustomerId(Ljava/lang/String;)Ljava/util/List;",
+        "works/weave/socks/cart/controllers/CartsController.get(Ljava/lang/String;)Lworks/weave/socks/cart/entities/Cart;",
+        "works/weave/socks/cart/controllers/ItemsController.getItems(Ljava/lang/String;)Ljava/util/List;"
+      ]
+    },
+    {
+      "mode": "selective",
+      "requests": 6,
+      "targets": 6,
+      "unknown": 0,
+      "known": 6,
+      "exact": 6,
+      "application_frames": 30,
+      "methods": [
+        "works/weave/socks/cart/action/FirstResultOrDefault.get()Ljava/lang/Object;",
+        "works/weave/socks/cart/cart/CartResource.value()Ljava/util/function/Supplier;",
+        "works/weave/socks/cart/configuration/BeanConfiguration$1.findByCustomerId(Ljava/lang/String;)Ljava/util/List;",
+        "works/weave/socks/cart/controllers/CartsController.get(Ljava/lang/String;)Lworks/weave/socks/cart/entities/Cart;",
+        "works/weave/socks/cart/controllers/ItemsController.getItems(Ljava/lang/String;)Ljava/util/List;"
+      ]
+    }
+  ],
+  "legacy_offline": {
+    "all_passed": true,
+    "source_sha256": "e4c7574eafe35f7ef68f38b78d360b15f15b5bc14dd72eaa4e6fa25272fb0d2a",
+    "states": {
+      "unknown": 88,
+      "known_correct": 213
+    },
+    "captures": 40,
+    "scope": "Reused original capture and independent truth, revised offline fast paths; no new runtime validation."
+  },
+  "legacy_controls": {
+    "constructor-frozen": {
+      "all_passed": true,
+      "scope": "Controlled JVM semantics; not real-application coverage or costs."
+    },
+    "contracts-frozen": {
+      "all_passed": true,
+      "scope": "Controlled JVM semantics; not real-application coverage or costs."
+    },
+    "application-frozen": {
+      "all_passed": true,
+      "scope": "Controlled JVM semantics; not real-application coverage or costs."
+    },
+    "binding-frozen": {
+      "all_passed": true,
+      "scope": "Standalone JVM controls with actual Jackson serialization and explicit W3C fixture contexts; not application HTTP runs or performance results."
+    },
+    "lifecycle-frozen": {
+      "all_passed": true,
+      "scope": "Independent small-program semantic controls, not application coverage"
+    }
+  },
+  "new_real_baseline_repairs": 0,
+  "cumulative_development_repairs": 96,
+  "remaining_baseline_gaps": 73,
+  "reserved_candidates": 29,
+  "whole_62_full_selective_acceptance": false,
+  "new_performance": false,
+  "date_boundary": "Empty field-source projection for original clock-generated date; not constant or a complete environmental provenance answer. Unknown targets are not correct empty answers.",
+  "input_identity": "New legal IDs per frozen suite; same actual inputs between modes; original six business structures and item values retained."
+}
