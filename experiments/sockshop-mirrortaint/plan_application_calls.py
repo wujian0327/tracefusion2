@@ -3,12 +3,14 @@ from plan_service_observations import callee
 from plan_collection_service import analyze
 from query_observation_planner import require
 from analysis_status import AnalysisLimit
+from pathlib import Path
+import json,re
 
 
 def augment_calls(plan,model,sources):
     from plan_execution_kernel import constructor_writes
-    methods={};targets={};opaque={};visiting=set();constructors=dict(plan['execution_kernel']['constructors'])
-    supported={0,1,2,3,4,5,6,7,8,16,17,18,87,89,96,100,104,132,167,178,180,181,182,183,184,185,187,191,192,198,199}|set(range(21,26))|set(range(54,59))|set(range(153,167))|set(range(172,178))
+    methods={};targets={};opaque={};visiting=set();lambdas={};constructors=dict(plan['execution_kernel']['constructors'])
+    supported={0,1,2,3,4,5,6,7,8,16,17,18,87,89,96,100,104,132,167,178,180,181,182,183,184,185,187,191,192,198,199,186,189,190,50,83}|set(range(21,26))|set(range(54,59))|set(range(153,167))|set(range(172,178))
     def subtype(child,parent,seen=None):
         if child==parent:return True
         seen=set() if seen is None else seen
@@ -26,9 +28,16 @@ def augment_calls(plan,model,sources):
         if m['access']&8 and m['owner']!=model['methods'][plan['entry']]['owner']:
             require(initializer is None or all(x['op'] in (0,177) for x in initializer['instructions']),'Foreign application static initialization unsupported')
         require(not m['access']&32,'Synchronized application methods unsupported')
+        require(not re.search(r'\[[ZBCSIJFD]|\[\[',m['desc']),'Primitive/multidimensional array parameters unsupported')
         for ins in m['instructions']:
+            require(not re.search(r'\[[ZBCSIJFD]|\[\[',ins.get('desc','')) and not (ins['op'] in (189,192) and ins.get('type','').startswith('[') and (ins['type'].startswith('[[') or not ins['type'].startswith('[L'))),'Primitive/multidimensional array effects unsupported')
             require(ins['op'] in supported,'Application opcode unsupported: '+str(ins['op']))
             if ins['op']==18:require(ins.get('constant_type')!='Type','Class literal projection unsupported')
+            if ins['op']==189:require(not ins.get('type','').startswith('['),'Multidimensional array allocation unsupported')
+            if ins['op']==186:
+                bs=ins.get('bootstrap_args',[]);require(ins.get('bootstrap')=='java/lang/invoke/LambdaMetafactory.metafactory' and len(bs)==3 and isinstance(bs[1],dict) and bs[1].get('tag') in (5,6,7),'Lambda bootstrap/handle unsupported')
+                require(ins['name'] in ('get','test') and ins['desc'].split(')')[1] in ('Ljava/util/function/Supplier;','Ljava/util/function/Predicate;'),'Lambda SAM unsupported')
+                require(bs[0] in ('()Ljava/lang/Object;','(Ljava/lang/Object;)Z'),'Lambda SAM adaptation unsupported')
             if ins['op']==183 and ins['name']=='<init>':
                 call=callee(ins)
                 if call=='java/util/ArrayList.<init>()V':constructors[call]={}
@@ -43,11 +52,29 @@ def augment_calls(plan,model,sources):
         if key in methods:return
         validate(key);visiting.add(key);m=model['methods'][key];methods[key]=m
         for ins in m['instructions']:
+            if ins['op']==186:
+                site=key+'@'+str(ins['index']);lambdas[site]=ins;implementation=ins['bootstrap_args'][1]['handle']
+                if implementation in model['methods'] and implementation not in visiting:
+                    try:validate(implementation)
+                    except AnalysisLimit:raise
+                    except ValueError as e:opaque[implementation]=str(e)
+                    else:
+                        checkpoint=(set(methods),set(targets),set(lambdas))
+                        try:visit(implementation)
+                        except AnalysisLimit:raise
+                        except ValueError as e:
+                            for table,keys in zip((methods,targets,lambdas),checkpoint):
+                                for added in set(table)-keys:table.pop(added)
+                            visiting.intersection_update(methods);opaque[implementation]=str(e)
+                else:opaque.setdefault(implementation,'Lambda recursive/missing bytecode remains opaque')
+                continue
             if ins['op'] not in (182,183,184,185) or ins['name']=='<init>':continue
             call=callee(ins)
             if call in sources or call in plan['collection_getters'] or call in plan['collection_setters']:continue
             options=candidates(ins)
             for candidate in options:
+                if candidate in visiting and candidate!=call:
+                    opaque.setdefault(candidate+' at '+key+'@'+str(ins['index']),'Potential recursive interface implementation remains opaque');continue
                 require(candidate not in visiting,'Recursive application call unsupported: '+candidate)
                 try:validate(candidate)
                 except AnalysisLimit:raise
@@ -59,10 +86,11 @@ def augment_calls(plan,model,sources):
                   'field_writes':sorted({i['owner']+'.'+i['name'] for i in m['instructions'] if i['op']==181}),
                   'call_sites':[key+'@'+str(i['index']) for i in m['instructions'] if i['op'] in (182,183,184,185)],
                   'exceptions':m['exception_handlers'],'meaning':'Candidate effects only; actual object/alias/write versions are interpreted, never assumed pure.'} for key,m in methods.items()}
-    plan['algorithm']='execution-dependency-v2-application-calls'
-    plan['frame_methods']=sorted(methods);plan['binding_callsites']=sorted(targets)
+    plan['algorithm']='execution-dependency-v3-shared-contracts'
+    plan['frame_methods']=sorted(methods);plan['binding_callsites']=sorted(key+'@'+str(i['index']) for key,m in methods.items() for i in m['instructions'] if i['op'] in (182,183,184,185) and i['name']!='<init>')
     plan['selected_read_sites']=[key+'@'+str(i['index']) for key,m in methods.items() for i in m['instructions'] if i['op']==180]
-    plan['execution_kernel'].update(version=2,methods=methods,call_targets=targets,opaque_methods=opaque,constructors=constructors,effects=effects,
+    plan['execution_kernel'].update(version=3,methods=methods,public_contracts=True,lambda_sites=lambdas,
+        runtime_profiles=json.loads((Path(__file__).parent/'kernel-contract-runtimes-20261020.json').read_text())['profiles'],call_targets=targets,opaque_methods=opaque,constructors=constructors,effects=effects,
         class_parents={o:{'super':c.get('super'),'interfaces':c.get('interfaces',[])} for o,c in model['classes'].items()},
         evidence_policy='All planned application frames/calls, necessary field writes/reads and actual branch/handler sequence in both modes; no cost claim.')
     plan['contracts']=[c for c in plan['contracts'] if not c.startswith('v1 has')]

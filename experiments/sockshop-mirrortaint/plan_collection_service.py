@@ -70,6 +70,12 @@ def analyze(method, allow_loops=False):
         elif op == 180: pop(); push()
         elif op == 181: pop(); pop()
         elif op == 192: v = pop(); stack.append(v)
+        elif allow_loops and op in (189,190): pop(); push()
+        elif allow_loops and op == 50: pop(); pop(); push()
+        elif allow_loops and op == 83: pop(); pop(); pop()
+        elif allow_loops and op == 186:
+            for _ in descriptors(ins['desc']): pop()
+            push()
         elif op in (96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111): pop(); pop(); push()
         elif 133 <= op <= 147: pop(); push()
         elif op in (182, 183, 184, 185):
@@ -93,7 +99,7 @@ def analyze(method, allow_loops=False):
         if op != 167 and not 172 <= op <= 177 and op != 191:
             enqueue(pc + 1, stack, locals_)
         # Model actual possible throwing instructions, not branches/constants.
-        if op in (180, 181, 178, 187, 192, 182, 183, 184, 185, 108, 109, 112, 113, 191):
+        if op in (180, 181, 178, 187, 192, 182, 183, 184, 185, 186, 189, 190, 50, 83, 108, 109, 112, 113, 191):
             for h in handlers:
                 if h['start'] <= pc < h['end']:
                     require(h['handler'] > pc, 'Backward exception handler unsupported')

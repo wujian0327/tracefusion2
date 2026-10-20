@@ -28,7 +28,7 @@ def infer_application(plan,rows):
         while changed:
             before=len(family);family.update(k for k,r in all_enters.items() if r.get('parent') in family);changed=len(family)!=before
         relevant=[r for r in rows if r.get('frame') in family and root['seq']<=r['seq']<=end['seq']]
-        methods=cfg['methods'];events=[r for r in relevant if r['kind'] in ('enter','exit','abort','collection-call-enter','collection-call-exit','collection-call-throw','execution-constructed','collection-catch','branch','read','write') and (r['kind'] not in ('read','write','branch') or r['site'].rsplit('@',1)[0] in methods)]
+        methods=cfg['methods'];events=[r for r in relevant if r['kind'] in ('enter','exit','abort','collection-call-enter','collection-call-exit','collection-call-throw','execution-constructed','execution-lambda','execution-array','execution-array-throw','collection-catch','branch','read','write') and (r['kind'] not in ('read','write','branch') or r['site'].rsplit('@',1)[0] in methods)]
         writes=[r for r in relevant if r['kind']=='write'];providers=defaultdict(list)
         for row in relevant:
             if row['kind'] in ('binding-source','binding-input'):
@@ -38,7 +38,7 @@ def infer_application(plan,rows):
         nonlocal_owners={f['owner'] for rows_ in providers.values() for _,_,f in rows_}
         nonlocal_owners.update(v.get('object') for v in root['args'] if 'value' not in v and v.get('object'))
         if root.get('receiver'):nonlocal_owners.add(root['receiver'])
-        heap_refs=defaultdict(set)
+        heap_refs=defaultdict(set);opaque_frames=[]
         def identity(v):return state.allocations.get(v.allocation) if v.allocation is not None else v.observed.get('object')
         def actual(v):return {'object':identity(v)} if v.allocation is not None else v.observed
         def bind(v,observed):
@@ -67,6 +67,11 @@ def infer_application(plan,rows):
                 todo.extend(heap_refs.get(owner,()))
                 for (o,_,_),v in state.fields.items():
                     if o==owner and identity(v) is not None and 'value' not in v.observed:todo.append(identity(v))
+                if owner in state.streams:todo.append(state.streams[owner][0])
+                if owner in state.optionals and state.optionals[owner] is not None:todo.append(identity(state.optionals[owner]))
+                if owner in state.lambdas:todo.extend(identity(v) for v in state.lambdas[owner][1] if 'value' not in v.observed)
+                if owner in state.arrays:
+                    todo.extend(identity(v) for v in state.arrays[owner]['elements'] if 'value' not in v.observed)
                 if owner in state.containers:
                     state.containers[owner].escaped=True
                     todo.extend(identity(v) for v in state.containers[owner].elements if 'value' not in v.observed)
@@ -84,6 +89,9 @@ def infer_application(plan,rows):
         def handle(error,typename):
             hierarchy={'java.lang.NullPointerException':{'java/lang/NullPointerException','java/lang/RuntimeException','java/lang/Exception','java/lang/Throwable'},'java.lang.IllegalArgumentException':{'java/lang/IllegalArgumentException','java/lang/RuntimeException','java/lang/Exception','java/lang/Throwable'}}
             protected=[h for h in method['exception_handlers'] if h['start']<=fr.pc<h['end']]
+            for exception in ('ArrayIndexOutOfBoundsException','ArrayStoreException','NegativeArraySizeException'):
+                hierarchy['java.lang.'+exception]={'java/lang/'+exception,'java/lang/RuntimeException','java/lang/Exception','java/lang/Throwable'}
+            hierarchy['java.lang.ArrayIndexOutOfBoundsException'].add('java/lang/IndexOutOfBoundsException')
             if protected and typename not in hierarchy and all(h['type'] is not None for h in protected):raise AnalysisLimit('exception-dispatch','Exception hierarchy unsupported: '+str(typename))
             eligible=[h for h in protected if h['type'] is None or h['type'] in hierarchy.get(typename,set())]
             if not eligible:return False
@@ -91,7 +99,7 @@ def infer_application(plan,rows):
             fr.stack=[Value(caught['observed'],unknown=True)];fr.pc=caught['pc'];return True
         def container(call):
             owner=call['receiver']['object'];items=call.get('collection');require(items is not None,'Execution collection content absent')
-            require(call.get('receiver_type') in ('java.util.ArrayList','java.util.Arrays$ArrayList'),'Execution list implementation unsupported')
+            require(call.get('receiver_type') in ('java.util.ArrayList','java.util.Arrays$ArrayList','java.util.Collections$SingletonList','java.util.Collections$EmptyList'),'Execution list implementation unsupported')
             if owner not in state.containers:
                 epoch=call['collection_epoch'];values=[]
                 for i,item in enumerate(items):
@@ -109,7 +117,7 @@ def infer_application(plan,rows):
             require(ret['seq']>call['seq'],'Execution completion order differs')
             return ret['result']
         def execute(begin,args,receiver):
-            nonlocal fr,method,code,entry,allocation_count,total_steps,branch_count
+            nonlocal fr,method,code,entry,allocation_count,total_steps,branch_count,pos
             saved=(fr,method,code,entry)
             entry=begin['method'];method=methods[entry];code=method['instructions'];fr=Frame(begin['frame']);slot=0
             if not method['access']&8:fr.locals[0]=receiver;slot=1
@@ -134,6 +142,44 @@ def infer_application(plan,rows):
                         previous=fr.locals[ins['var']];require('value' in previous.observed,'Execution IINC lacks value')
                         n=(int(previous.observed['value'])+ins['increment']+2**31)%2**32-2**31
                         fr.locals[ins['var']]=previous.project({'value':n})
+                    elif op==186:
+                        captured=[pop() for _ in descriptors(ins['desc'])][::-1];event=take('execution-lambda');require(event['instruction']==ins and event['site']==entry+'@'+str(fr.pc),'Lambda bootstrap/implementation evidence differs')
+                        require(len(captured)==len(event['captures']),'Lambda capture arity differs')
+                        for value,observed in zip(captured,event['captures']):bind(value,observed)
+                        observed=event['lambda'];owner=observed.get('object');require(owner is not None and '$$Lambda$' in event['lambda_type'],'Lambda actual instance absent')
+                        fact=(ins,captured)
+                        if owner in state.lambdas:require(state.lambdas[owner]==fact,'Lambda instance rebound to different captures')
+                        state.lambdas[owner]=fact;fr.stack.append(Value(observed))
+                    elif op in (189,190,50,83):
+                        if op==189:count=pop();array=None;index=count.observed.get('value');value=None
+                        elif op==190:array=pop();index=-1;value=None
+                        elif op==50:index_value=pop();index=index_value.observed.get('value');array=pop();value=None
+                        else:value=pop();index=pop().observed.get('value');array=pop()
+                        require(isinstance(index,int),'Array index/length absent')
+                        failed=pos<len(events) and events[pos]['kind']=='execution-array-throw';event=take('execution-array-throw' if failed else 'execution-array')
+                        require(event['operation']=={189:'new',190:'length',50:'load',83:'store'}[op] and event['index']==index,'Array operation/index differs')
+                        if array is not None:bind(array,event['array'])
+                        owner=event['array'].get('object');a=state.arrays.get(owner)
+                        if op!=189 and owner is not None:
+                            if a is None:
+                                a={'elements':[Value(v,unknown=True) for v in event['elements']],'version':event['version'],'versions':event['element_versions']};state.arrays[owner]=a
+                            require(a['version']==event['version'] and a['versions']==event['element_versions'] and len(a['elements'])==len(event['elements']),'Array version/size differs')
+                            for v,o in zip(a['elements'],event['elements']):bind(v,o)
+                        if failed:
+                            typename=event['exception_type'];expected=('java.lang.NegativeArraySizeException' if op==189 and index<0 else 'java.lang.NullPointerException' if owner is None else 'java.lang.ArrayIndexOutOfBoundsException' if op in (50,83) and not 0<=index<len(a['elements']) else 'java.lang.ArrayStoreException' if op==83 and event.get('store_compatible') is False else None)
+                            require(typename==expected,'Array exceptional semantics differ')
+                            if handle(event['exception'],typename):continue
+                            take('abort');return None,event['exception']
+                        if op==189:
+                            require(index>=0 and owner is not None and owner not in state.arrays and len(event['elements'])==index and event['version']==0 and event['element_versions']==[0]*index,'Array allocation evidence differs')
+                            expected_component=ins['type'].replace('/','.');require(event['component']==expected_component,'Array runtime component differs')
+                            require(all(v.get('value','not-null') is None for v in event['elements']),'Array default elements not null')
+                            state.arrays[owner]={'elements':[Value(v) for v in event['elements']],'version':0,'versions':[0]*index};fr.stack.append(Value(event['array']))
+                        elif op==190:require(event['result']==len(a['elements']),'Array length differs');fr.stack.append(Value({'value':event['result']}))
+                        elif op==50:
+                            require(0<=index<len(a['elements']),'Array index outside contents');v=a['elements'][index];bind(v,event['result']);fr.stack.append(Value(event['result'],v.origins,v.selectors|index_value.origins|index_value.selectors,v.unknown or owner in poisoned_at,v.allocation))
+                        else:
+                            require(0<=index<len(a['elements']) and event.get('store_compatible') is True and event['after_version']==a['version']+1,'Array write type/version differs');bind(value,event['value']);a['elements'][index]=value;a['versions'][index]+=1;a['version']=event['after_version'];require(a['versions']==event['after_element_versions'],'Array element write version differs')
                     elif op==187:
                         allocation_count+=1;fr.stack.append(Value(allocation=allocation_count))
                     elif op==178:fr.stack.append(Value(unknown=True))
@@ -185,11 +231,35 @@ def infer_application(plan,rows):
                                     candidate=actual_owner+suffix
                                     if candidate in permitted:expected_impl=candidate;break
                                     actual_owner=cfg['class_parents'].get(actual_owner,{}).get('super')
+                            callback=None
+                            if key=='java/util/function/Supplier.get()Ljava/lang/Object;' and identity(recv) in state.lambdas:callback=state.lambdas[identity(recv)]
+                            elif key in ('java/util/Optional.orElseGet(Ljava/util/function/Supplier;)Ljava/lang/Object;','java/util/Optional.orElseThrow(Ljava/util/function/Supplier;)Ljava/lang/Object;') and identity(recv) in state.optionals and state.optionals[identity(recv)] is None:
+                                callback=state.lambdas.get(identity(args[0]))
+                            child_args=args;child_recv=recv
+                            if callback:
+                                declaration,captured=callback;handle_spec=declaration['bootstrap_args'][1];implementation=handle_spec['handle']
+                                if implementation in methods:
+                                    expected_impl=implementation;permitted=[implementation]
+                                    bound=list(captured)+(args if key.startswith('java/util/function/Supplier.') else [])
+                                    child_recv=None if handle_spec['tag']==6 else bound.pop(0);child_args=bound
+                            if pos<len(events) and events[pos]['kind']=='enter' and expected_impl is None:
+                                # An opaque callback may itself enter instrumented bodies.
+                                # Validate their closed extent, then conservatively poison
+                                # all reachable/nonlocal state; never infer from that subtree.
+                                finish=next((j for j in range(pos,len(events)) if events[j]['kind'] in ('collection-call-exit','collection-call-throw') and events[j].get('frame')==fr.invocation and events[j].get('call_id')==call['call_id']),None)
+                                require(finish is not None,'Opaque invocation completion absent');subtree=events[pos:finish];children={r['frame']:r for r in subtree if r['kind']=='enter'}
+                                require(all(r.get('parent')==fr.invocation or r.get('parent') in children for r in children.values()),'Opaque callback parent extent differs')
+                                require(all(sum(r['kind'] in ('exit','abort') and r.get('frame')==f for r in subtree)==1 for f in children),'Opaque callback not closed')
+                                require(all(r.get('frame') in children for r in subtree),'Opaque callback contains unrelated parent evidence')
+                                completion={f:next(r for r in subtree if r['kind'] in ('exit','abort') and r.get('frame')==f) for f in children}
+                                require(all(r['seq']<completion[f]['seq'] and (r.get('parent')==fr.invocation or children[r['parent']]['seq']<r['seq']<completion[f]['seq']<completion[r['parent']]['seq']) for f,r in children.items()),'Opaque callback nested lifetime differs')
+                                opaque_frames.extend({'frame':f,'method':r['method'],'parent_call_id':call['call_id']} for f,r in children.items());pos=finish
                             if pos<len(events) and events[pos]['kind']=='enter':
                                 begin=take('enter',check_frame=False)
                                 require(begin['parent']==fr.invocation and begin.get('callsite')==entry+'@'+str(fr.pc),'Application parent/callsite differs')
                                 require(begin['method'] in permitted and begin['method']==expected_impl,'Unplanned actual application implementation')
-                                if ins['op'] in (183,184):require(begin['method']==key,'Static/special application implementation differs')
+                                if callback:require(begin['method']==expected_impl,'Lambda actual implementation differs')
+                                elif ins['op'] in (183,184):require(begin['method']==key,'Static/special application implementation differs')
                                 else:
                                     actual_owner=call['receiver_type'].replace('.','/');suffix='.'+ins['name']+ins['desc'];resolved=None
                                     while actual_owner:
@@ -197,8 +267,8 @@ def infer_application(plan,rows):
                                         if candidate in methods:resolved=candidate;break
                                         actual_owner=cfg['class_parents'].get(actual_owner,{}).get('super')
                                     require(resolved==begin['method'],'Actual virtual dispatch differs from frozen hierarchy')
-                                if recv is not None:require(begin['receiver']==identity(recv),'Application receiver binding differs')
-                                child_value,child_error=execute(begin,args,recv)
+                                if child_recv is not None:require(begin['receiver']==identity(child_recv),'Application receiver binding differs')
+                                child_value,child_error=execute(begin,child_args,child_recv)
                             elif expected_impl and not (recv is not None and identity(recv) is None and recv.observed.get('value') is None):
                                 raise ValueError('Planned application frame evidence absent')
                             exceptional=pos<len(events) and events[pos]['kind']=='collection-call-throw'
@@ -222,6 +292,23 @@ def infer_application(plan,rows):
                             elif key in plan['collection_setters']:
                                 name=plan['collection_setters'][key]['field'];matching=[w for w in writes if w['owner']==identity(recv) and w['field']==name and call['seq']<w['seq']<ret['seq']]
                                 require(len(matching)==1,'Execution setter version missing');w=matching[0];bind(args[0],w['observed']);write_field(w,args[0]);v=Value(observed)
+                            elif key in ('java/util/Collection.stream()Ljava/util/stream/Stream;','java/util/List.stream()Ljava/util/stream/Stream;'):
+                                fact=ret.get('contract');require(fact and fact['kind']=='list-stream' and fact['valid'] and ret['result_type']=='java.util.stream.ReferencePipeline$Head','Sequential stream contract absent/invalid');c=container(call)
+                                require(fact['source']==c.owner and fact['epoch']==c.epoch and fact['elements']==call['collection'],'Stream source identity/stage differs')
+                                require(observed['object'] not in state.streams,'Stream instance reused');state.streams[observed['object']]=(c.owner,c.epoch);v=Value(observed)
+                            elif key=='java/util/stream/Stream.findFirst()Ljava/util/Optional;' and identity(recv) in state.streams:
+                                fact=ret.get('contract');require(fact and fact['kind']=='stream-first' and fact['valid'] and ret['result_type']=='java.util.Optional','findFirst contract absent/invalid');owner,epoch=state.streams.pop(identity(recv));c=state.containers[owner]
+                                require(owner==fact['source'] and epoch==fact['epoch']==c.epoch and fact['present']==bool(c.elements),'findFirst source stage differs')
+                                selected=c.elements[0] if c.elements else None
+                                if selected is not None and (owner in poisoned_at or c.escaped):selected=Value(selected.observed,selected.origins,selected.selectors,True,selected.allocation)
+                                if selected:bind(selected,fact['selected'])
+                                else:require(fact['selected'].get('value','not-null') is None,'Empty Optional selected object differs')
+                                state.optionals[observed['object']]=selected;v=Value(observed)
+                            elif key in ('java/util/Optional.orElseGet(Ljava/util/function/Supplier;)Ljava/lang/Object;','java/util/Optional.orElseThrow(Ljava/util/function/Supplier;)Ljava/lang/Object;') and identity(recv) in state.optionals:
+                                fact=ret.get('contract');require(fact and fact['valid'] and fact['kind']=='optional-result' and call['receiver_type']=='java.util.Optional','Optional contract absent/invalid');selected=state.optionals[identity(recv)]
+                                require(fact['present']==(selected is not None),'Optional presence differs')
+                                if selected is not None:bind(selected,observed);bind(selected,fact['selected']);v=selected.project(observed)
+                                else:poison(([recv] if recv else [])+args,ret['seq'])
                             elif ins['owner'] in ('java/util/List','java/util/ArrayList'):
                                 c=container(call);name=ins['name']
                                 if name in ('size','isEmpty'):
@@ -246,6 +333,8 @@ def infer_application(plan,rows):
                                 elif ins['name']=='next':
                                     require(index<len(c.elements),'Execution iterator outside contents');v=c.elements[index].project(observed);bind(c.elements[index],observed);state.iterators[identity(recv)][1]+=1
                                 else:raise ValueError('Execution iterator method unsupported')
+                            elif key=='java/lang/Object.getClass()Ljava/lang/Class;':
+                                fact=ret.get('contract');require(fact and fact['kind']=='object-class' and fact['valid'] and fact['receiver_type']==call['receiver_type'] and ret['result_type']=='java.lang.Class','Object.getClass runtime identity differs');v=Value(observed)
                             elif key=='java/lang/Integer.valueOf(I)Ljava/lang/Integer;':v=args[0].project(observed);same_value(args[0].observed,observed)
                             elif ins['owner']=='org/slf4j/Logger' and ins['name'] in ('info','warn','error','debug') and all('value' in a.observed for a in args):v=Value(observed)
                             else:
@@ -297,5 +386,5 @@ def infer_application(plan,rows):
             else:value=lookup(f,ret['seq'])
             bind(value,f['observed'])
             results.append({'root_frame':root['frame'],'seq':ret['seq'],'path':f['path'],**f,'known':not value.unknown,'origins':[list(x) for x in sorted(value.origins,key=str)],'selectors':[list(x) for x in sorted(value.selectors,key=str)]})
-        audits.append({'frame':root['frame'],'completion':'normal','steps':total_steps,'frames':frame_audits,'answers':len(ret['fields']),'poisoned_objects':len(poisoned_at)})
+        audits.append({'frame':root['frame'],'completion':'normal','steps':total_steps,'frames':frame_audits,'answers':len(ret['fields']),'poisoned_objects':len(poisoned_at),'opaque_frames':opaque_frames})
     return {'answers':results,'roots':audits,'evidence_policy':cfg['evidence_policy']}

@@ -56,6 +56,10 @@ class State:
     allocations: dict = field(default_factory=dict)
     calls: list = field(default_factory=list)
     poisoned: set = field(default_factory=set)
+    streams: dict = field(default_factory=dict)
+    optionals: dict = field(default_factory=dict)
+    lambdas: dict = field(default_factory=dict)
+    arrays: dict = field(default_factory=dict)
 
     def field_write(self, coordinate, value):
         require(coordinate not in self.fields, 'Duplicate actual field version')

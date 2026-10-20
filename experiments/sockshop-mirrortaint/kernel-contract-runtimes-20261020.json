@@ -1,0 +1,62 @@
+{
+  "profiles": [
+    {
+      "java_runtime_version": "1.8.0_111-internal-alpine-r0-b14",
+      "class_sha256": {
+        "java/lang/AbstractStringBuilder": "ed068f98fc51426114bc17e0269e20ec369bb27735104314f656762a5091a8c7",
+        "java/lang/StringBuilder": "8a633c327af08a908fe652e7e33ab8688c7f04716440c063abaf4d0b46207da2",
+        "java/lang/invoke/LambdaMetafactory": "3a9cf971b5671d920296cba927fd2cbbc4fc7cb507b7896f949a89cd5a3481b9",
+        "java/util/ArrayList": "44d389d8bc103dd9e778117a2cbf839ca10a3de41b3f5018b97687e824372664",
+        "java/util/Arrays$ArrayList": "831476e4ac20d9181d546a5779a449d0ad818e1c6567e366c1f109cab22f7ed9",
+        "java/util/Collection": "ca1ddb2f24e559e7b173c90fd6c4aba85a1c41acb207b55d60eb012a5835e37e",
+        "java/util/Collections$EmptyList": "f57c68d98e4f457d2239ce29e2df9dc2fee5e6c233225a741880a9e4720c2c24",
+        "java/util/Collections$SingletonList": "945cc9e6088847dcafb29888c7c7c94fc533ec5017659558f4b28ee80c73da1c",
+        "java/util/Optional": "344c2b339959c507d08f6627a5f14f0970e9a7efcdb25311e4f4d7946ad14463",
+        "java/util/stream/ReferencePipeline": "47ca2288fbde84141bdd7ed17545d12160c2aa3f007b7b71619ed299bcc5513b",
+        "java/util/stream/ReferencePipeline$Head": "a27510ffb223a0649930c92dd059451a11f02bd585813e17c62babb1988713c6",
+        "java/util/stream/StreamSupport": "fb78afbf101ab0c13772b2ae1aedad6ef9a0176ae20e4ab1bddbae62cd75d28c",
+        "java/util/ArrayList$Itr": "22e7fb39e29d3d8f9536343bab79af9dc805d11343bf1731ee799076351d6e2e",
+        "java/util/Iterator": "1d247755bf0b54925b0255147d83997ebdac379aa63ee44505e054ad663d8434"
+      }
+    },
+    {
+      "java_runtime_version": "1.8.0_111-8u111-b14-2~bpo8+1-b14",
+      "class_sha256": {
+        "java/lang/AbstractStringBuilder": "ed068f98fc51426114bc17e0269e20ec369bb27735104314f656762a5091a8c7",
+        "java/lang/StringBuilder": "8a633c327af08a908fe652e7e33ab8688c7f04716440c063abaf4d0b46207da2",
+        "java/lang/invoke/LambdaMetafactory": "3a9cf971b5671d920296cba927fd2cbbc4fc7cb507b7896f949a89cd5a3481b9",
+        "java/util/ArrayList": "44d389d8bc103dd9e778117a2cbf839ca10a3de41b3f5018b97687e824372664",
+        "java/util/Arrays$ArrayList": "831476e4ac20d9181d546a5779a449d0ad818e1c6567e366c1f109cab22f7ed9",
+        "java/util/Collection": "ca1ddb2f24e559e7b173c90fd6c4aba85a1c41acb207b55d60eb012a5835e37e",
+        "java/util/Collections$EmptyList": "f57c68d98e4f457d2239ce29e2df9dc2fee5e6c233225a741880a9e4720c2c24",
+        "java/util/Collections$SingletonList": "945cc9e6088847dcafb29888c7c7c94fc533ec5017659558f4b28ee80c73da1c",
+        "java/util/Optional": "344c2b339959c507d08f6627a5f14f0970e9a7efcdb25311e4f4d7946ad14463",
+        "java/util/stream/ReferencePipeline": "47ca2288fbde84141bdd7ed17545d12160c2aa3f007b7b71619ed299bcc5513b",
+        "java/util/stream/ReferencePipeline$Head": "a27510ffb223a0649930c92dd059451a11f02bd585813e17c62babb1988713c6",
+        "java/util/stream/StreamSupport": "fb78afbf101ab0c13772b2ae1aedad6ef9a0176ae20e4ab1bddbae62cd75d28c",
+        "java/util/ArrayList$Itr": "22e7fb39e29d3d8f9536343bab79af9dc805d11343bf1731ee799076351d6e2e",
+        "java/util/Iterator": "1d247755bf0b54925b0255147d83997ebdac379aa63ee44505e054ad663d8434"
+      }
+    },
+    {
+      "java_runtime_version": "1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01",
+      "class_sha256": {
+        "java/lang/AbstractStringBuilder": "ed068f98fc51426114bc17e0269e20ec369bb27735104314f656762a5091a8c7",
+        "java/lang/StringBuilder": "5512ee9b1b0d387172b5a195bb276208375e8c1caafc4e3b6aa59cf3e6674296",
+        "java/lang/invoke/LambdaMetafactory": "3a9cf971b5671d920296cba927fd2cbbc4fc7cb507b7896f949a89cd5a3481b9",
+        "java/util/ArrayList": "0976edaa24bd7790c9778c846ef4c4cdfe396242cb1e298cd190454083366199",
+        "java/util/Arrays$ArrayList": "831476e4ac20d9181d546a5779a449d0ad818e1c6567e366c1f109cab22f7ed9",
+        "java/util/Collection": "ca1ddb2f24e559e7b173c90fd6c4aba85a1c41acb207b55d60eb012a5835e37e",
+        "java/util/Collections$EmptyList": "4966d807da35072cf21d5a3db85878c194271ba7394e74105e69c3a127860dfc",
+        "java/util/Collections$SingletonList": "27bb2b22684ad6e791d73c2cac527da308cccd759465c6a43e1f6c93bb966565",
+        "java/util/Optional": "344c2b339959c507d08f6627a5f14f0970e9a7efcdb25311e4f4d7946ad14463",
+        "java/util/stream/ReferencePipeline": "74a4db28e91e555969bc9f5c7391768befcff2167c682056ac2f0b9b2c30bbcf",
+        "java/util/stream/ReferencePipeline$Head": "5a17bbea9d5c189762b6dff5112f2d887c47385bac3ce46505f0bf2ca16f915c",
+        "java/util/stream/StreamSupport": "fb78afbf101ab0c13772b2ae1aedad6ef9a0176ae20e4ab1bddbae62cd75d28c",
+        "java/util/ArrayList$Itr": "bd506b236bae483df9bbba161be4da3d997ded523d003d644009282116eb76c5",
+        "java/util/Iterator": "1d247755bf0b54925b0255147d83997ebdac379aa63ee44505e054ad663d8434"
+      }
+    }
+  ],
+  "scope": "Union of existing pinned read-forward contracts and kernel classes, exact runtime version."
+}
