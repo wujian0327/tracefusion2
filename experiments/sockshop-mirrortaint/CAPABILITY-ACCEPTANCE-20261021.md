@@ -98,4 +98,6 @@ python3 experiments/sockshop-mirrortaint/audit_frozen_capability_acceptance.py \
 
 审计输出 `provenance_union_passed` 表示上述来源联合核验；`unqualified_end_to_end_acceptance` 仍为 false，保留首轮业务失败。复核只写新派生目录，不覆盖原始证据。[汇总快照](capability-acceptance-results-20261021.json)、[逐查询表](capability-acceptance-queries-20261021.csv)及[逐实例配对表](capability-acceptance-instances-20261021.csv)随 Git 保存；完整工件和 Docker 镜像需单独备份。推送交给用户。
 
+本机完整归档入口为 `artifacts/date-effects-capability-backup-20261021/START-HERE.txt`；逐路径内容与 Git bundle 独立验证。这是同盘副本，不是异机冗余，不含 Docker 镜像层。迁移需另备镜像，并在新目录重新构建。
+
 下一项优先处理观测配置的早期请求截止时间干扰，进一步核对元数据初始化与调用效果核验的在线代价；然后才恢复当前冻结语义下的成本比较和选择性收缩。39 unknown 与 UUID 拒绝继续如实保留。
