@@ -1,0 +1,12 @@
+{
+  "algorithm": "2cefacdc577b4bf1b8635201efcacf58c221ab85",
+  "scope": "Preserve the complete first capture and separately verify provenance for an original Orders configuration whose first capture aborted on the original Future deadline.",
+  "eligibility": "Only primary deployment failures reporting 'Unable to create order due to timeout from one of the services.' No re-running to replace unknown, rejected, invalid, oracle-unavailable or incorrect source answers.",
+  "selection_time": "Enumerate every eligible configuration after the isolated Orders phase has ended, then save the complete repeat list before any repeat starts.",
+  "repeats": 2,
+  "conditions": "Same frozen Agent/core/plan/mode, original six business requests and source public/entity/item values, new independent Docker project and volumes, no extra warmup, no changed business timeout or JVM resource limits.",
+  "success_rule": "Both repeats must independently complete all six original requests and pass independent source scoring. Use repeat 1 as the provenance receipt; repeat 2 is mandatory corroboration. Never select the better repeat or a subset of inputs.",
+  "reporting": "Report primary business failures and unexecuted reference instances separately from repeated provenance coverage. A failed first request and the rest of an aborted batch are not business N/A. Do not claim 100% first-attempt availability or unqualified end-to-end success from repeated source coverage.",
+  "denominator": "Keep the original 431 logical target instances. Repeats add no new target instances to the denominator.",
+  "first_failure_known_before_protocol": "full Orders address.postcode: first group-0 HTTP500 Future timeout, five remaining groups not issued; all raw files retained. Later primary failures, if any, follow the same predeclared rule."
+}
