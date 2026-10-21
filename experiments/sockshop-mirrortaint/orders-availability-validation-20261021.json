@@ -1,0 +1,31 @@
+{
+  "task": "Fixed independent availability acceptance for two previously affected Orders queries",
+  "repetitions": 3,
+  "configurations_per_round": 4,
+  "queries": [
+    "sockshop-orders-newOrder-customer-lastName",
+    "sockshop-orders-newOrder-address-postcode"
+  ],
+  "modes": [
+    "full",
+    "selective"
+  ],
+  "requests_per_configuration": 6,
+  "total_intended_requests": 72,
+  "inputs": "Exact original six baseline requests and source fixtures; one- and two-item, empty, zero-price, and repeated-value cases",
+  "new_process_and_orders_database_per_configuration": true,
+  "new_project_input_volumes_each_round": true,
+  "diagnostics": false,
+  "business_warmup": false,
+  "deadline_seconds": 5,
+  "orders_cpu": 1,
+  "orders_memory": "768m",
+  "heap": "32m/256m",
+  "success_criteria": [
+    "Every one of 72 intended requests completes with its original HTTP201 response business fields",
+    "Every target has independently matched instance sources, no unknown or evidence-invalid",
+    "Same 53 source hashes, Agent classes, plans, original 9 JARs; no outcome-based replacement",
+    "Missing footer/interior event must still be rejected"
+  ],
+  "scope_limit": "This is targeted availability validation, not a new 62-query capability result, cost comparison or a proof of zero timeout probability. Old primary failures and earlier diagnostic/prototype results remain unchanged."
+}

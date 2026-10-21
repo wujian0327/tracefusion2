@@ -1,0 +1,26 @@
+{
+  "purpose": "Locate original Orders Future.get timeout with required provenance checks intact; no performance claim",
+  "previous_algorithm": "2cefacdc577b4bf1b8635201efcacf58c221ab85",
+  "fixed_constraints": {
+    "orders_cpu": 1,
+    "orders_memory": "768m",
+    "heap": "32m/256m",
+    "business_future_timeout_seconds": 5,
+    "original_jars": true,
+    "warmup": false
+  },
+  "diagnosis": {
+    "optional_agent_timestamps": true,
+    "optional_thread_stack_sidecar": true,
+    "requests": "Same six original baseline inputs for address.postcode and customer.lastName, both modes; preserve all failures"
+  },
+  "fix_validation": "Freeze after development; fixed fresh deployments, no successful-repeat replacement. Preserve source-evidence/call/codec/decoder proof checks. New full 62-query source-union acceptance required for an unconditional new-version claim.",
+  "heldout_29": "Do not plan or execute",
+  "stages": [
+    "diagnostic captures",
+    "generic fix justified by actual evidence",
+    "semantic protections",
+    "frozen independent availability validation",
+    "report all requests and failures"
+  ]
+}
