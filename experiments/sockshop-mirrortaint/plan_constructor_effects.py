@@ -8,6 +8,9 @@ def assignment_effects(model,key,active=None):
     from plan_execution_kernel import constructor_writes
     active=set() if active is None else active
     require(key not in active,'Recursive constructor delegation');m=model['methods'][key]
+    for ins in m['instructions']:
+        if ins['op']==183 and ins['name']=='<init>':break
+        require(ins['op']!=181,'Pre-initialization field assignment lacks initialized-receiver write evidence')
     try:return {f:{'argument':i} for f,i in constructor_writes(m).items()}
     except ValueError:pass
     active=active|{key};stack=[];fields={};args={};slot=1

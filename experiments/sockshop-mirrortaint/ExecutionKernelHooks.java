@@ -13,6 +13,9 @@ public final class ExecutionKernelHooks implements Opcodes {
     static final Map<Object,List> STREAMS=new IdentityHashMap<>();
     static final Map<Object,Integer> ARRAY_VERSIONS=new IdentityHashMap<>();
     static final Map<Object,int[]> ARRAY_SLOTS=new IdentityHashMap<>();
+    static final ThreadLocal<Deque<Map>> CONSTRUCTORS=ThreadLocal.withInitial(ArrayDeque::new);
+    static long constructorCounter;
+    static boolean extended(){return enabled()&&Boolean.TRUE.equals(((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("constructor_lifecycle"));}
     static Map instruction(String key,int pc){return (Map)((List)((Map)((Map)((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("methods")).get(key)).get("instructions")).get(pc);}
     static void args(InsnList h,Type[] types,int[] slots){h.add(new LdcInsnNode(types.length));h.add(new TypeInsnNode(ANEWARRAY,"java/lang/Object"));for(int j=0;j<types.length;j++){h.add(new InsnNode(DUP));h.add(new LdcInsnNode(j));h.add(new VarInsnNode(types[j].getOpcode(ILOAD),slots[j]));PlannedServiceAgent.box(h,types[j]);h.add(new InsnNode(AASTORE));}}
     static boolean instrument(MethodNode method,String key,List<AbstractInsnNode> code){
@@ -27,6 +30,9 @@ public final class ExecutionKernelHooks implements Opcodes {
         boolean changed=birth;
         for(int pc=0;pc<code.size();pc++){
             AbstractInsnNode n=code.get(pc);
+            if(extended()&&n instanceof FieldInsnNode&&n.getOpcode()==GETSTATIC){
+                Type t=Type.getType(((FieldInsnNode)n).desc);InsnList h=new InsnList();h.add(new InsnNode(t.getSize()==2?DUP2:DUP));PlannedServiceAgent.box(h,t);h.add(new LdcInsnNode(key));h.add(new LdcInsnNode(pc));h.add(new MethodInsnNode(INVOKESTATIC,R,"staticRead","(Ljava/lang/Object;Ljava/lang/String;I)V",false));method.instructions.insert(n,h);changed=true;continue;
+            }
             if(contracts()&&n instanceof LdcInsnNode&&((LdcInsnNode)n).cst instanceof Type){
                 InsnList after=new InsnList();after.add(new InsnNode(DUP));after.add(new LdcInsnNode(pc));after.add(new MethodInsnNode(INVOKESTATIC,R,"classLiteral","(Ljava/lang/Class;I)V",false));method.instructions.insert(n,after);changed=true;continue;
             }
@@ -46,6 +52,7 @@ public final class ExecutionKernelHooks implements Opcodes {
             Type[] types=Type.getArgumentTypes(call.desc);int[] slots=new int[types.length];InsnList before=new InsnList(),after=new InsnList();
             for(int j=types.length-1;j>=0;j--){slots[j]=method.maxLocals;method.maxLocals+=types[j].getSize();before.add(new VarInsnNode(types[j].getOpcode(ISTORE),slots[j]));}
             int receiver=method.maxLocals++;before.add(new VarInsnNode(ASTORE,receiver));before.add(new VarInsnNode(ALOAD,receiver));
+            if(extended()){before.add(new LdcInsnNode(key));before.add(new LdcInsnNode(pc));args(before,types,slots);before.add(new MethodInsnNode(INVOKESTATIC,R,"constructorBegin","(Ljava/lang/String;I[Ljava/lang/Object;)V",false));}
             for(int j=0;j<types.length;j++)before.add(new VarInsnNode(types[j].getOpcode(ILOAD),slots[j]));
             // Uninitialized receiver is never passed to a hook. JVM initializes
             // its local alias only after successful original invokespecial.
@@ -65,9 +72,14 @@ public final class ExecutionKernelHooks implements Opcodes {
     public static void constructed(int pc,Object receiver,Object[] args){synchronized(PlannedServiceAgent.Recorder.class){try{
         enter();
         Map<String,Object> r=PlannedServiceAgent.Recorder.row();r.put("pc",pc);r.put("receiver",PlannedServiceAgent.Recorder.value(receiver));r.put("receiver_type",receiver.getClass().getName());
-        List<Object> values=new ArrayList<>();for(Object a:args)values.add(PlannedServiceAgent.Recorder.value(a));r.put("args",values);TemporalDateHooks.constructed(receiver,args,r);if(FrameworkCallHooks.config()!=null&&receiver.getClass().getName().equals("org.springframework.http.HttpEntity"))r.put("framework_contract",FrameworkCallHooks.entity(receiver,args));PlannedServiceAgent.Recorder.emit("execution-constructed",r);
+        List<Object> values=new ArrayList<>();for(Object a:args)values.add(PlannedServiceAgent.Recorder.value(a));r.put("args",values);if(extended())constructorComplete(r,pc);TemporalDateHooks.constructed(receiver,args,r);if(FrameworkCallHooks.config()!=null&&receiver.getClass().getName().equals("org.springframework.http.HttpEntity"))r.put("framework_contract",FrameworkCallHooks.entity(receiver,args));PlannedServiceAgent.Recorder.emit("execution-constructed",r);
     }catch(Throwable e){PlannedServiceAgent.Recorder.problem("execution-constructor:"+e);throw new IllegalStateException(e);}}}
-    public static void constructorFailed(int pc,Throwable error){synchronized(PlannedServiceAgent.Recorder.class){Map r=PlannedServiceAgent.Recorder.row();r.put("pc",pc);r.put("exception",PlannedServiceAgent.Recorder.value(error));r.put("exception_type",error.getClass().getName());PlannedServiceAgent.Recorder.emit("execution-constructor-throw",r);}}
+    public static void constructorFailed(int pc,Throwable error){synchronized(PlannedServiceAgent.Recorder.class){Map r=PlannedServiceAgent.Recorder.row();r.put("pc",pc);if(extended())constructorComplete(r,pc);r.put("exception",PlannedServiceAgent.Recorder.value(error));r.put("exception_type",error.getClass().getName());PlannedServiceAgent.Recorder.emit("execution-constructor-throw",r);}}
+    public static void constructorBegin(String method,int pc,Object[] args){synchronized(PlannedServiceAgent.Recorder.class){Map r=PlannedServiceAgent.Recorder.row();r.put("method",method);r.put("pc",pc);r.put("constructor_id",++constructorCounter);Map ins=instruction(method,pc);r.put("callee",ins.get("owner")+"."+ins.get("name")+ins.get("desc"));List values=new ArrayList();for(Object a:args)values.add(PlannedServiceAgent.Recorder.value(a));r.put("args",values);CONSTRUCTORS.get().push(r);PlannedServiceAgent.Recorder.emit("execution-constructor-enter",new LinkedHashMap(r));}}
+    static void constructorComplete(Map row,int pc){Deque<Map> pending=CONSTRUCTORS.get();if(pending.isEmpty())throw new IllegalStateException("Constructor completion without start");Map start=pending.pop();if(!Objects.equals(start.get("frame"),row.get("frame"))||!Objects.equals(start.get("pc"),pc))throw new IllegalStateException("Constructor caller/pc differs");row.put("constructor_id",start.get("constructor_id"));}
+    public static void staticRead(Object value,String method,int pc){synchronized(PlannedServiceAgent.Recorder.class){Map r=PlannedServiceAgent.Recorder.row(),ins=instruction(method,pc);r.put("pc",pc);r.put("field",ins.get("owner")+"."+ins.get("name"));r.put("descriptor",ins.get("desc"));r.put("observed",PlannedServiceAgent.Recorder.value(value));PlannedServiceAgent.Recorder.emit("execution-static-read",r);}}
+    static void scalarBegin(Map row){if(!extended())return;Object recv=row.get("_receiver_ref");if(recv!=null&&recv.getClass()==StringBuilder.class){row.put("builder_before",((StringBuilder)recv).toString());}}
+    static void scalarEnd(Map start,Object result,Map row)throws Exception{if(!extended()||!start.containsKey("builder_before"))return;Object recv=start.get("_receiver_ref");Map f=new LinkedHashMap();f.put("kind","string-builder");f.put("before",start.get("builder_before"));f.put("after",((StringBuilder)recv).toString());f.put("receiver",PlannedServiceAgent.Recorder.id(recv));f.put("returns_receiver",recv==result);Map hashes=new TreeMap();for(String c:new String[]{"java/lang/StringBuilder","java/lang/AbstractStringBuilder"})hashes.put(c,JdkContractProbe.hash(c));f.put("class_sha256",hashes);row.put("scalar_contract",f);}
     public static void constructedAt(String method,int pc,Object receiver,Object[] args){constructed(pc,receiver,args);}
     static void exceptional(String call,Throwable error){
         Deque<Map<String,Object>> pending=CollectionServiceHooks.CALLS.get();if(pending.isEmpty())return;

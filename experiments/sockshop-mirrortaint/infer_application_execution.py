@@ -1,4 +1,4 @@
-"""v2 nonrecursive bytecode calls over shared heap/container state and actual frames."""
+"""Bounded bytecode calls over shared heap/container state and concrete effects."""
 from collections import defaultdict
 from execution_dependency_state import Value, Frame, State, Container, Call, combine
 from query_observation_planner import require, descriptors
@@ -20,6 +20,14 @@ def infer_application(plan,rows):
         elif kind in ('collection-call-exit','collection-call-throw'):require(pending[frame] and pending[frame].pop()==row.get('call_id'),'Application call-ID completion differs')
         elif kind in ('exit','abort'):require(not pending[frame],'Application frame has unfinished calls')
     require(not any(pending.values()),'Application capture incomplete calls')
+    constructor_pending=defaultdict(list);constructor_ids=set()
+    if cfg.get('constructor_lifecycle'):
+        for row in rows:
+            if row['kind']=='execution-constructor-enter':
+                cid=row['constructor_id'];require(cid not in constructor_ids,'Constructor ID repeated');constructor_ids.add(cid);constructor_pending[row['thread']].append(row)
+            elif row['kind'] in ('execution-constructed','execution-constructor-throw'):
+                stack=constructor_pending[row['thread']];require(stack,'Constructor completion without entry');start=stack.pop();require(all(start[k]==row[k] for k in ('constructor_id','frame','pc')),'Constructor completion identity/caller differs')
+        require(not any(constructor_pending.values()),'Constructor lifecycle incomplete')
     results=[];audits=[]
     all_enters={r['frame']:r for r in rows if r['kind']=='enter'}
     require(len(all_enters)==sum(r['kind']=='enter' for r in rows),'Application invocation frame ID reused')
@@ -41,13 +49,13 @@ def infer_application(plan,rows):
             require(invocation and invocation['method']==row['constructor'] and invocation['receiver']==row['object'] and invocation['seq']<row['seq'],'Object birth constructor frame/receiver differs')
             require(row['object'] not in births,'Object birth identity repeated')
             births[row['object']]=row['seq']
-        methods=cfg['methods'];events=[r for r in relevant if r['kind'] in ('enter','exit','abort','collection-call-enter','collection-call-exit','collection-call-throw','execution-constructed','execution-constructor-throw','execution-lambda','execution-class-literal','execution-array','execution-array-throw','collection-catch','branch','read','write') and (r['kind'] not in ('read','write','branch') or r['site'].rsplit('@',1)[0] in methods)]
+        methods=cfg['methods'];events=[r for r in relevant if r['kind'] in ('enter','exit','abort','collection-call-enter','collection-call-exit','collection-call-throw','execution-constructor-enter','execution-constructed','execution-constructor-throw','execution-static-read','execution-lambda','execution-class-literal','execution-array','execution-array-throw','collection-catch','branch','read','write') and (r['kind'] not in ('read','write','branch') or r['site'].rsplit('@',1)[0] in methods)]
         writes=[r for r in relevant if r['kind']=='write'];providers=defaultdict(list)
         for row in relevant:
             if row['kind'] in ('binding-source','binding-input'):
                 for index,f in enumerate(row['fields']):providers[coordinate(f)].append((row,index,f))
         state=State(Frame(root['frame']));pos=1;allocation_count=0;total_steps=0;branch_count=0
-        http_entities={};response_entities={};class_literals={};date_values={};calendars={};environment_facts=[]
+        http_entities={};response_entities={};class_literals={};date_values={};calendars={};environment_facts=[];builders={};opaque_calls=[]
         fr=None;method=None;code=None;entry=None;field_seq={};poisoned_at={};frame_audits=[]
         nonlocal_owners={f['owner'] for rows_ in providers.values() for _,_,f in rows_}
         nonlocal_owners.update(v.get('object') for v in root['args'] if 'value' not in v and v.get('object'))
@@ -63,6 +71,9 @@ def infer_application(plan,rows):
                     require(v.observed.get('object')==observed.get('object'),'Opaque Date reference identity differs');return
                 same_value(v.observed,observed)
                 if v.observed.get('object') is not None and observed.get('object') is not None:require(v.observed['object']==observed['object'],'Application reference argument/return identity differs')
+        def bind_argument(v,observed,desc):
+            if desc=='C' and isinstance(observed.get('value'),str) and len(observed['value'])==1 and isinstance(v.observed.get('value'),int):observed={**observed,'value':ord(observed['value'])}
+            bind(v,observed)
         def origin(f,before):
             candidates=[v for v in providers.get(coordinate(f),[]) if v[0]['seq']<before]
             if len(candidates)!=1:return Value(f['observed'],unknown=True)
@@ -148,6 +159,15 @@ def infer_application(plan,rows):
             fact=event.get('framework_contract')
             require(fact and fact['kind']==kind and fact['class_sha256']==cfg['framework_contracts']['class_sha256'],'Framework witness kind/library differs')
             return fact
+        def opaque_extent(finish):
+            nonlocal pos
+            require(finish is not None,'Opaque invocation completion absent');subtree=events[pos:finish];children={r['frame']:r for r in subtree if r['kind']=='enter'}
+            require(all(r.get('parent')==fr.invocation or r.get('parent') in children for r in children.values()),'Opaque callback parent extent differs')
+            require(all(sum(r['kind'] in ('exit','abort') and r.get('frame')==f for r in subtree)==1 for f in children),'Opaque callback not closed')
+            require(all(r.get('frame') in children for r in subtree),'Opaque callback contains unrelated parent evidence')
+            completion={f:next(r for r in subtree if r['kind'] in ('exit','abort') and r.get('frame')==f) for f in children}
+            require(all(r['seq']<completion[f]['seq'] and (r.get('parent')==fr.invocation or children[r['parent']]['seq']<r['seq']<completion[f]['seq']<completion[r['parent']]['seq']) for f,r in children.items()),'Opaque callback nested lifetime differs')
+            opaque_frames.extend({'frame':f,'method':r['method']} for f,r in children.items());pos=finish
         def execute(begin,args,receiver):
             nonlocal fr,method,code,entry,allocation_count,total_steps,branch_count,pos,depth
             if depth>=cfg.get('call_depth_limit',64):raise AnalysisLimit('call-depth','Application invocation depth budget exhausted')
@@ -157,7 +177,7 @@ def infer_application(plan,rows):
             if not method['access']&8:fr.locals[0]=receiver;slot=1
             require(len(args)==len(begin['args']),'Application argument count differs')
             for index,desc in enumerate(descriptors(method['desc'])):
-                bind(args[index],begin['args'][index]);fr.locals[slot]=args[index];slot+=2 if desc in ('J','D') else 1
+                bind_argument(args[index],begin['args'][index],desc);fr.locals[slot]=args[index];slot+=2 if desc in ('J','D') else 1
             try:
                 while True:
                     fr.steps+=1; total_steps+=1
@@ -169,6 +189,7 @@ def infer_application(plan,rows):
                     elif op==0:pass
                     elif op==1:fr.stack.append(Value({'value':None,'object':None}))
                     elif 2<=op<=8:fr.stack.append(Value({'value':op-3}))
+                    elif 9<=op<=15:fr.stack.append(Value({'value':op-9 if op<11 else float(op-11 if op<14 else op-14)}))
                     elif op==18 and ins.get('constant_type')=='Type':
                         event=take('execution-class-literal');require(event['descriptor']==ins['constant'] and event['class_sha256']==cfg['class_literals'][ins['constant']],'Class literal descriptor/hash differs')
                         require(event['observed'].get('object') is not None,'Class literal identity missing');class_literals[event['observed']['object']]=ins['constant'];fr.stack.append(Value(event['observed']))
@@ -219,7 +240,15 @@ def infer_application(plan,rows):
                             require(0<=index<len(a['elements']) and event.get('store_compatible') is True and event['after_version']==a['version']+1,'Array write type/version differs');bind(value,event['value']);a['elements'][index]=value;a['versions'][index]+=1;a['version']=event['after_version'];require(a['versions']==event['after_element_versions'],'Array element write version differs')
                     elif op==187:
                         allocation_count+=1;fr.stack.append(Value(allocation=allocation_count))
-                    elif op==178:fr.stack.append(Value(unknown=True))
+                    elif op==178:
+                        if cfg.get('static_field_evidence'):
+                            if pos<len(events) and events[pos]['kind']=='enter':
+                                finish=next((j for j in range(pos,len(events)) if events[j]['kind']=='execution-static-read' and events[j].get('frame')==fr.invocation and events[j].get('pc')==fr.pc),None);opaque_extent(finish)
+                            fact=take('execution-static-read');require(fact['field']==ins['owner']+'.'+ins['name'] and fact['descriptor']==ins['desc'],'Static field evidence differs')
+                            if ins['owner']!=method['owner']:poison([],fact['seq'])
+                            if fact['observed'].get('object'):nonlocal_owners.add(fact['observed']['object'])
+                            fr.stack.append(Value(fact['observed'],unknown=True))
+                        else:fr.stack.append(Value(unknown=True))
                     elif op==180:
                         receiver=pop()
                         if identity(receiver) is None and receiver.observed.get('value') is None:
@@ -243,22 +272,34 @@ def infer_application(plan,rows):
                         args=[pop() for _ in descriptors(ins['desc'])][::-1];recv=None if op==184 else pop();key=callee(ins)
                         if ins['name']=='<init>':
                             effect=cfg['constructors'].get(key);require(effect is not None,'Execution constructor effects absent')
+                            ctor_start=None
+                            if cfg.get('constructor_lifecycle'):
+                                ctor_start=take('execution-constructor-enter');require(ctor_start['callee']==key and ctor_start['method']==entry and len(args)==len(ctor_start['args']),'Constructor begin callee/arity differs')
+                                for desc,a,b in zip(descriptors(ins['desc']),args,ctor_start['args']):bind_argument(a,b,desc)
                             child_error=None
                             if effect.get('kind')=='frame':
                                 begin=take('enter',check_frame=False);require(begin['method']==key and begin['parent']==fr.invocation and begin['callsite']==entry+'@'+str(fr.pc),'Constructor Frame binding differs')
                                 bind(recv,{'object':begin['receiver']});_,child_error=execute(begin,args,recv)
+                            elif effect.get('kind')=='opaque' and pos<len(events) and events[pos]['kind']=='enter':
+                                finish=next((j for j in range(pos,len(events)) if events[j]['kind'] in ('execution-constructed','execution-constructor-throw') and events[j].get('constructor_id')==ctor_start['constructor_id']),None);opaque_extent(finish)
                             if pos<len(events) and events[pos]['kind']=='execution-constructor-throw':
                                 failure=take('execution-constructor-throw')
+                                if ctor_start:require(failure['constructor_id']==ctor_start['constructor_id'],'Constructor throw ID differs')
                                 if child_error:require(child_error.get('object')==failure['exception']['object'],'Constructor exception identity differs')
+                                elif effect.get('kind')=='opaque':poison(args,failure['seq']);opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':failure['seq'],'completion':'exceptional-constructor'})
                                 else:raise ValueError('Shortcut constructor unexpectedly threw; required effects not explained')
                                 if handle(failure['exception'],failure['exception_type']):continue
                                 take('abort');return None,failure['exception']
                             require(child_error is None,'Aborted constructor has successful completion');event=take('execution-constructed');bind(recv,event['receiver'])
+                            if ctor_start:require(event['constructor_id']==ctor_start['constructor_id'],'Constructor completion ID differs')
                             require(event['receiver_type']==ins['owner'].replace('/','.'),'Execution constructor type differs')
                             require(len(args)==len(event['args']),'Execution constructor arity differs')
-                            for a,b in zip(args,event['args']):bind(a,b)
+                            for desc,a,b in zip(descriptors(ins['desc']),args,event['args']):bind_argument(a,b,desc)
                             owner=identity(recv)
                             if key=='java/util/ArrayList.<init>()V':state.containers[owner]=Container(owner,[],0,True)
+                            elif effect.get('kind')=='string-builder':builders[owner]=('',Value({'value':''}))
+                            elif effect.get('kind')=='opaque':
+                                poison([recv]+args,event['seq']);opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':event['seq'],'completion':'normal-constructor'})
                             elif effect.get('kind')=='date-constructor':
                                 fact=event.get('date_contract');require(fact and fact['kind']=='date-constructor' and fact['arity']==len(args) and fact['epoch_ms']==event['receiver']['date_epoch_ms'],'Date constructor evidence absent/differs')
                                 if args:
@@ -279,7 +320,9 @@ def infer_application(plan,rows):
                             call=take('collection-call-enter');require(call['callee']==key,'Execution invoked method differs')
                             if recv is not None:bind(recv,call['receiver'])
                             require(len(args)==len(call['args']),'Execution call arity differs')
-                            for a,b in zip(args,call['args']):bind(a,b)
+                            for desc,a,b in zip(descriptors(ins['desc']),args,call['args']):bind_argument(a,b,desc)
+                            builder_initial=builders.get(identity(recv)) if recv is not None else None
+                            builder_was_poisoned=identity(recv) in poisoned_at if recv is not None else False
                             child_value=None;child_error=None;filter_selection=None;filter_executed=False;filter_selectors=frozenset()
                             stream=state.streams.get(identity(recv)) if recv is not None else None
                             if key=='java/util/stream/Stream.findFirst()Ljava/util/Optional;' and stream and len(stream)==3:
@@ -313,6 +356,13 @@ def infer_application(plan,rows):
                             elif key in ('java/util/Optional.orElseGet(Ljava/util/function/Supplier;)Ljava/lang/Object;','java/util/Optional.orElseThrow(Ljava/util/function/Supplier;)Ljava/lang/Object;') and identity(recv) in state.optionals and state.optionals[identity(recv)] is None:
                                 callback=state.lambdas.get(identity(args[0]))
                             child_args=args;child_recv=recv
+                            render_callback=False
+                            if key=='java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;' and cfg.get('scalar_builders') and args and 'value' not in args[0].observed:
+                                permitted=cfg['call_targets'].get(entry+'@'+str(fr.pc)+':render',[]);actual_owner=call.get('argument_types',[None])[0];actual_owner=actual_owner.replace('.','/') if actual_owner else None
+                                while actual_owner:
+                                    candidate=actual_owner+'.toString()Ljava/lang/String;'
+                                    if candidate in permitted:expected_impl=candidate;render_callback=True;child_args=[];child_recv=args[0];break
+                                    actual_owner=cfg['class_parents'].get(actual_owner,{}).get('super')
                             if callback:
                                 declaration,captured=callback;handle_spec=declaration['bootstrap_args'][1];implementation=handle_spec['handle']
                                 if implementation in methods:
@@ -325,18 +375,13 @@ def infer_application(plan,rows):
                                 # Validate their closed extent, then conservatively poison
                                 # all reachable/nonlocal state; never infer from that subtree.
                                 finish=next((j for j in range(pos,len(events)) if events[j]['kind'] in ('collection-call-exit','collection-call-throw') and events[j].get('frame')==fr.invocation and events[j].get('call_id')==call['call_id']),None)
-                                require(finish is not None,'Opaque invocation completion absent');subtree=events[pos:finish];children={r['frame']:r for r in subtree if r['kind']=='enter'}
-                                require(all(r.get('parent')==fr.invocation or r.get('parent') in children for r in children.values()),'Opaque callback parent extent differs')
-                                require(all(sum(r['kind'] in ('exit','abort') and r.get('frame')==f for r in subtree)==1 for f in children),'Opaque callback not closed')
-                                require(all(r.get('frame') in children for r in subtree),'Opaque callback contains unrelated parent evidence')
-                                completion={f:next(r for r in subtree if r['kind'] in ('exit','abort') and r.get('frame')==f) for f in children}
-                                require(all(r['seq']<completion[f]['seq'] and (r.get('parent')==fr.invocation or children[r['parent']]['seq']<r['seq']<completion[f]['seq']<completion[r['parent']]['seq']) for f,r in children.items()),'Opaque callback nested lifetime differs')
-                                opaque_frames.extend({'frame':f,'method':r['method'],'parent_call_id':call['call_id']} for f,r in children.items());pos=finish
+                                opaque_extent(finish)
                             if pos<len(events) and events[pos]['kind']=='enter':
                                 begin=take('enter',check_frame=False)
                                 require(begin['parent']==fr.invocation and begin.get('callsite')==entry+'@'+str(fr.pc),'Application parent/callsite differs')
                                 require(begin['method'] in permitted and begin['method']==expected_impl,'Unplanned actual application implementation')
                                 if callback:require(begin['method']==expected_impl,'Lambda actual implementation differs')
+                                elif render_callback:require(begin['method']==expected_impl,'Rendering actual implementation differs')
                                 elif ins['op'] in (183,184):require(begin['method']==key,'Static/special application implementation differs')
                                 else:
                                     actual_owner=call['receiver_type'].replace('.','/');suffix='.'+ins['name']+ins['desc'];resolved=None
@@ -359,7 +404,27 @@ def infer_application(plan,rows):
                             require(child_error is None,'Exceptional child has normal caller completion')
                             ret=take('collection-call-exit');require(ret['call_id']==call['call_id'],'Application completion instance differs');observed=complete(call,ret);v=Value(observed,unknown=True)
                             invocation=Call(str(call['seq']),fr.pc,recv,args,'normal')
-                            if child_value is not None:
+                            if cfg.get('scalar_builders') and ins['owner']=='java/lang/StringBuilder' and identity(recv) in builders and (key=='java/lang/StringBuilder.toString()Ljava/lang/String;' or ins['name']=='append' and ins['desc'] in tuple('('+d+')Ljava/lang/StringBuilder;' for d in ('Ljava/lang/String;','Ljava/lang/Object;','C','I','J','F','D','Z'))):
+                                fact=ret.get('scalar_contract');require(fact and fact['kind']=='string-builder' and fact['receiver']==identity(recv) and call['receiver_type']=='java.lang.StringBuilder','StringBuilder witness absent/identity differs')
+                                require(all(runtime[0]['class_sha256'].get(k)==v for k,v in fact['class_sha256'].items()) and set(fact['class_sha256'])=={'java/lang/StringBuilder','java/lang/AbstractStringBuilder'},'StringBuilder runtime hash differs')
+                                if not builder_was_poisoned:require(builder_initial[0]==fact['before'],'StringBuilder prior contents differ')
+                                text,content=builders[identity(recv)];tainted=identity(recv) in poisoned_at
+                                if tainted:content=Value({'value':text},unknown=True)
+                                if ins['name']=='toString':
+                                    require(fact['after']==fact['before']==observed.get('value') and not fact['returns_receiver'],'StringBuilder string result differs')
+                                    if not tainted:require(text==fact['after'],'StringBuilder modeled result differs')
+                                    v=content.project(observed)
+                                else:
+                                    require(fact['returns_receiver'] and observed.get('object')==identity(recv),'StringBuilder append receiver differs')
+                                    operand=args[0];desc=descriptors(ins['desc'])[0]
+                                    if desc=='Ljava/lang/Object;' and render_callback:
+                                        require(child_value is not None and isinstance(child_value.observed.get('value'),str),'Rendering did not return String');operand=child_value
+                                        if not tainted:require(fact['after']==text+operand.observed['value'],'Rendering append result differs')
+                                    elif desc=='Ljava/lang/Object;' and not (operand.observed.get('value','non-null') is None or call.get('argument_types',[None])[0]=='java.lang.String'):
+                                        poison([recv]+args,ret['seq']);operand=Value(operand.observed,unknown=True);tainted=True;opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':ret['seq'],'completion':'opaque-render'})
+                                    if not tainted:require(fact['after'].startswith(text),'StringBuilder append changed prefix')
+                                    content=combine({'value':fact['after']},[content,operand]);content=Value(content.observed,content.origins,content.selectors,content.unknown or tainted);builders[identity(recv)]=(fact['after'],content);v=Value(observed)
+                            elif child_value is not None:
                                 bind(child_value,observed);v=child_value.project(observed)
                             elif key=='java/util/Calendar.getInstance()Ljava/util/Calendar;' and plan.get('date_projection'):
                                 fact=ret.get('date_contract');require(fact and fact['kind']=='calendar-environment','Calendar creation evidence absent')
@@ -469,7 +534,7 @@ def infer_application(plan,rows):
                             elif key=='java/lang/Integer.valueOf(I)Ljava/lang/Integer;':v=args[0].project(observed);same_value(args[0].observed,observed)
                             elif ins['owner']=='org/slf4j/Logger' and ins['name'] in ('info','warn','error','debug') and all('value' in a.observed for a in args):v=Value(observed)
                             else:
-                                poison(([recv] if recv else [])+args,ret['seq'])
+                                poison(([recv] if recv else [])+args,ret['seq']);opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':ret['seq'],'completion':'normal-call'})
                             invocation.result=v;state.calls.append(invocation)
                             result_desc=ins['desc'].split(')')[1]
                             if result_desc in ('Z','B','C','S','I','J','F','D'):v=v.project({k:x for k,x in v.observed.items() if k!='object'})
@@ -519,5 +584,5 @@ def infer_application(plan,rows):
             if 'date_epoch_ms' in f['observed'] and f['observed']['object'] in poisoned_at:value=Value(f['observed'],unknown=True)
             bind(value,f['observed'])
             results.append({'root_frame':root['frame'],'seq':ret['seq'],'path':f['path'],**f,'known':not value.unknown,'origins':[list(x) for x in sorted(value.origins,key=str)],'selectors':[list(x) for x in sorted(value.selectors,key=str)]})
-        audits.append({'frame':root['frame'],'completion':'normal','steps':total_steps,'frames':frame_audits,'answers':len(ret['fields']),'poisoned_objects':len(poisoned_at),'opaque_frames':opaque_frames,'environment_facts':environment_facts})
+        audits.append({'frame':root['frame'],'completion':'normal','steps':total_steps,'frames':frame_audits,'answers':len(ret['fields']),'poisoned_objects':len(poisoned_at),'opaque_frames':opaque_frames,'opaque_calls':opaque_calls,'environment_facts':environment_facts})
     return {'answers':results,'roots':audits,'evidence_policy':cfg['evidence_policy']}

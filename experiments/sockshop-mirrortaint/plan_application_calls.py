@@ -44,16 +44,22 @@ def augment_calls(plan,model,sources):
                 call=callee(ins)
                 if key in constructor_starts and ins['index']==constructor_starts[key]-1:continue
                 if call=='java/util/ArrayList.<init>()V':constructors[call]={}
+                elif call=='java/lang/StringBuilder.<init>()V':constructors[call]={'kind':'string-builder'}
                 elif call in ('java/util/Date.<init>()V','java/util/Date.<init>(J)V'):constructors[call]={'kind':'date-constructor'}
                 elif call=='org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V':
                     constructors[call]={'kind':'http-entity-null-headers'}
                 else:
-                    require(call in model['methods'],'Application constructor bytecode absent: '+call)
-                    initializer=model['methods'].get(ins['owner']+'.<clinit>()V')
-                    require(initializer is None or all(x['op'] in (0,177) for x in initializer['instructions']),'Application allocation initializer unsupported')
-                    try:constructors[call]={'kind':'assignments','fields':assignment_effects(model,call)}
-                    except ValueError:
-                        constructor_starts[call]=constructor_start(model['methods'][call]);constructors[call]={'kind':'frame','start_pc':constructor_starts[call]}
+                    try:
+                        require(call in model['methods'],'Application constructor bytecode absent: '+call)
+                        initializer=model['methods'].get(ins['owner']+'.<clinit>()V')
+                        require(initializer is None or all(x['op'] in (0,177) for x in initializer['instructions']),'Application allocation initializer unsupported')
+                        try:constructors[call]={'kind':'assignments','fields':assignment_effects(model,call)}
+                        except ValueError as assignment_error:
+                            try:constructor_starts[call]=constructor_start(model['methods'][call])
+                            except ValueError as frame_error:raise ValueError(str(assignment_error)+'; '+str(frame_error)) from frame_error
+                            constructors[call]={'kind':'frame','start_pc':constructor_starts[call]}
+                    except ValueError as error:
+                        constructors[call]={'kind':'opaque','reason':str(error)};opaque[call]=str(error)
         analyze(m,allow_loops=True)
     def visit(key):
         if key in methods:return
@@ -81,6 +87,13 @@ def augment_calls(plan,model,sources):
                 continue
             if ins['op'] not in (182,183,184,185):continue
             call=callee(ins)
+            if call=='java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;':
+                synthetic={'op':182,'owner':'java/lang/Object','name':'toString','desc':'()Ljava/lang/String;'}
+                for candidate in candidates(synthetic):
+                    try:validate(candidate)
+                    except AnalysisLimit:raise
+                    except ValueError as error:opaque[candidate]=str(error);continue
+                    targets.setdefault(key+'@'+str(ins['index'])+':render',[]).append(candidate);visit(candidate)
             if call in sources or call in plan['collection_getters'] or call in plan['collection_setters']:continue
             options=candidates(ins)
             for candidate in options:
@@ -105,10 +118,10 @@ def augment_calls(plan,model,sources):
                   'field_writes':sorted({i['owner']+'.'+i['name'] for i in m['instructions'] if i['op']==181}),
                   'call_sites':[key+'@'+str(i['index']) for i in m['instructions'] if i['op'] in (182,183,184,185)],
                   'exceptions':m['exception_handlers'],'meaning':'Candidate effects only; actual object/alias/write versions are interpreted, never assumed pure.'} for key,m in methods.items()}
-    plan['algorithm']='execution-dependency-v6-bounded-calls-object-lifetimes'
+    plan['algorithm']='execution-dependency-v7-conservative-constructor-effects'
     plan['frame_methods']=sorted(methods);plan['binding_callsites']=sorted(key+'@'+str(i['index']) for key,m in methods.items() for i in m['instructions'] if i['op'] in (182,183,184,185) and (i['name']!='<init>' or constructors.get(callee(i),{}).get('kind')=='frame'))
     plan['selected_read_sites']=[key+'@'+str(i['index']) for key,m in methods.items() for i in m['instructions'] if i['op']==180]
-    plan['execution_kernel'].update(call_depth_limit=64,object_birth_sites=births,version=6,library_contracts=json.loads((Path(__file__).parent/'constructor-library-contracts-20261020.json').read_text()),constructor_starts=constructor_starts,methods=methods,public_contracts=True,lambda_sites=lambdas,
+    plan['execution_kernel'].update(constructor_lifecycle=True,scalar_builders=True,static_field_evidence=True,call_depth_limit=64,object_birth_sites=births,version=7,library_contracts=json.loads((Path(__file__).parent/'constructor-library-contracts-20261020.json').read_text()),constructor_starts=constructor_starts,methods=methods,public_contracts=True,lambda_sites=lambdas,
         class_literals={i['constant']:model['classes'][i['constant'][1:-1]]['sha256'] for m in methods.values() for i in m['instructions'] if i['op']==18 and i.get('constant_type')=='Type'},
         runtime_profiles=json.loads((Path(__file__).parent/'kernel-contract-runtimes-20261020.json').read_text())['profiles'],call_targets=targets,opaque_methods=opaque,constructors=constructors,effects=effects,
         class_parents={o:{'super':c.get('super'),'interfaces':c.get('interfaces',[])} for o,c in model['classes'].items()},
