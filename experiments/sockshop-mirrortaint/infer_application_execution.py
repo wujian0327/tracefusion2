@@ -30,6 +30,17 @@ def infer_application(plan,rows):
         while changed:
             before=len(family);family.update(k for k,r in all_enters.items() if r.get('parent') in family);changed=len(family)!=before
         relevant=[r for r in rows if r.get('frame') in family and root['seq']<=r['seq']<=end['seq']]
+        if any(r['kind']=='enter' and r['method']==plan['entry'] and r['frame']!=root['frame'] for r in relevant):
+            raise AnalysisLimit('entry-reentry','Nested query-entry invocation is not a separately supported root boundary')
+        births={}
+        for row in relevant:
+            if row['kind']!='execution-object-birth':continue
+            site=cfg.get('object_birth_sites',{}).get(row['constructor'])
+            require(site and site['class_sha256']==row['class_sha256'],'Object birth constructor/hash differs')
+            invocation=all_enters.get(row.get('frame'))
+            require(invocation and invocation['method']==row['constructor'] and invocation['receiver']==row['object'] and invocation['seq']<row['seq'],'Object birth constructor frame/receiver differs')
+            require(row['object'] not in births,'Object birth identity repeated')
+            births[row['object']]=row['seq']
         methods=cfg['methods'];events=[r for r in relevant if r['kind'] in ('enter','exit','abort','collection-call-enter','collection-call-exit','collection-call-throw','execution-constructed','execution-constructor-throw','execution-lambda','execution-class-literal','execution-array','execution-array-throw','collection-catch','branch','read','write') and (r['kind'] not in ('read','write','branch') or r['site'].rsplit('@',1)[0] in methods)]
         writes=[r for r in relevant if r['kind']=='write'];providers=defaultdict(list)
         for row in relevant:
@@ -41,7 +52,7 @@ def infer_application(plan,rows):
         nonlocal_owners={f['owner'] for rows_ in providers.values() for _,_,f in rows_}
         nonlocal_owners.update(v.get('object') for v in root['args'] if 'value' not in v and v.get('object'))
         if root.get('receiver'):nonlocal_owners.add(root['receiver'])
-        heap_refs=defaultdict(set);opaque_frames=[]
+        heap_refs=defaultdict(set);opaque_frames=[];depth=0
         def identity(v):return state.allocations.get(v.allocation) if v.allocation is not None else v.observed.get('object')
         def actual(v):return {'object':identity(v)} if v.allocation is not None else v.observed
         def bind(v,observed):
@@ -74,6 +85,10 @@ def infer_application(plan,rows):
             while todo:
                 owner=todo.pop()
                 if owner is None or owner in affected:continue
+                # Metadata for future boundary fields is pre-indexed, but an
+                # earlier effect cannot reach a reference not yet initialized.
+                # Without this JVM allocation witness, retain the old barrier.
+                if births.get(owner,-1)>seq:continue
                 affected.add(owner)
                 todo.extend(heap_refs.get(owner,()))
                 for (o,_,_),v in state.fields.items():
@@ -134,7 +149,9 @@ def infer_application(plan,rows):
             require(fact and fact['kind']==kind and fact['class_sha256']==cfg['framework_contracts']['class_sha256'],'Framework witness kind/library differs')
             return fact
         def execute(begin,args,receiver):
-            nonlocal fr,method,code,entry,allocation_count,total_steps,branch_count,pos
+            nonlocal fr,method,code,entry,allocation_count,total_steps,branch_count,pos,depth
+            if depth>=cfg.get('call_depth_limit',64):raise AnalysisLimit('call-depth','Application invocation depth budget exhausted')
+            depth+=1
             saved=(fr,method,code,entry)
             entry=begin['method'];method=methods[entry];code=method['instructions'];fr=Frame(begin['frame']);fr.pc=cfg.get('constructor_starts',{}).get(entry,0);slot=0
             if not method['access']&8:fr.locals[0]=receiver;slot=1
@@ -478,6 +495,7 @@ def infer_application(plan,rows):
                     fr.pc+=1
             finally:
                 frame_audits.append({'frame':fr.invocation,'method':entry,'steps':fr.steps})
+                depth-=1
                 fr,method,code,entry=saved
         root_args=[]
         for index,arg in enumerate(root['args']):

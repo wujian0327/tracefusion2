@@ -16,8 +16,15 @@ public final class ExecutionKernelHooks implements Opcodes {
     static Map instruction(String key,int pc){return (Map)((List)((Map)((Map)((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("methods")).get(key)).get("instructions")).get(pc);}
     static void args(InsnList h,Type[] types,int[] slots){h.add(new LdcInsnNode(types.length));h.add(new TypeInsnNode(ANEWARRAY,"java/lang/Object"));for(int j=0;j<types.length;j++){h.add(new InsnNode(DUP));h.add(new LdcInsnNode(j));h.add(new VarInsnNode(types[j].getOpcode(ILOAD),slots[j]));PlannedServiceAgent.box(h,types[j]);h.add(new InsnNode(AASTORE));}}
     static boolean instrument(MethodNode method,String key,List<AbstractInsnNode> code){
-        if(!method(key))return false;
-        boolean changed=false;
+        boolean birth=false;
+        if(enabled()){
+            Map sites=(Map)((Map)PlannedServiceAgent.plan.get("execution_kernel")).getOrDefault("object_birth_sites",Collections.emptyMap());
+            if(sites.containsKey(key)){
+                int pc=((Number)((Map)sites.get(key)).get("pc")).intValue();InsnList h=new InsnList();h.add(new VarInsnNode(ALOAD,0));h.add(new LdcInsnNode(key));h.add(new MethodInsnNode(INVOKESTATIC,R,"objectBirth","(Ljava/lang/Object;Ljava/lang/String;)V",false));method.instructions.insert(code.get(pc),h);birth=true;
+            }
+        }
+        if(!method(key))return birth;
+        boolean changed=birth;
         for(int pc=0;pc<code.size();pc++){
             AbstractInsnNode n=code.get(pc);
             if(contracts()&&n instanceof LdcInsnNode&&((LdcInsnNode)n).cst instanceof Type){
@@ -99,6 +106,7 @@ public final class ExecutionKernelHooks implements Opcodes {
         if(!fact.isEmpty())row.put("contract",fact);
     }
     static boolean containsIdentity(List list,Object wanted){for(Object item:list)if(item==wanted)return true;return false;}
+    public static void objectBirth(Object object,String constructor){synchronized(PlannedServiceAgent.Recorder.class){Map sites=(Map)((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("object_birth_sites");Map site=(Map)sites.get(constructor);Map r=PlannedServiceAgent.Recorder.row();r.put("constructor",constructor);r.put("object",PlannedServiceAgent.Recorder.id(object));r.put("class_sha256",site.get("class_sha256"));PlannedServiceAgent.Recorder.emit("execution-object-birth",r);}}
     static final Map<Class,String> LIBRARY_HASHES=new IdentityHashMap<>();
     static String classHash(Class type)throws Exception{if(LIBRARY_HASHES.containsKey(type))return LIBRARY_HASHES.get(type);java.security.MessageDigest digest=java.security.MessageDigest.getInstance("SHA-256");try(java.io.InputStream in=type.getResourceAsStream("/"+type.getName().replace('.','/')+".class")){if(in==null)throw new IllegalStateException("Library bytes absent");byte[] buffer=new byte[8192];int n;while((n=in.read(buffer))!=-1)digest.update(buffer,0,n);}StringBuilder text=new StringBuilder();for(byte b:digest.digest())text.append(String.format("%02x",b&255));String value=text.toString();LIBRARY_HASHES.put(type,value);return value;}
     static void callbackSite(Map row){if(!enabled()||CollectionServiceHooks.CALLS.get().isEmpty())return;Map top=CollectionServiceHooks.CALLS.get().peek();List source=STREAMS.get(top.get("_receiver_ref"));if(source!=null&&source.size()==4&&"java/util/stream/Stream.findFirst()Ljava/util/Optional;".equals(top.get("callee"))&&Objects.equals(top.get("frame"),row.get("parent"))){row.put("callsite",top.get("method")+"@"+top.get("pc"));row.put("callback_call_id",top.get("call_id"));}}

@@ -56,13 +56,12 @@ def augment_calls(plan,model,sources):
                         constructor_starts[call]=constructor_start(model['methods'][call]);constructors[call]={'kind':'frame','start_pc':constructor_starts[call]}
         analyze(m,allow_loops=True)
     def visit(key):
-        require(key not in visiting,'Recursive application call unsupported: '+key)
         if key in methods:return
         validate(key);visiting.add(key);m=model['methods'][key];methods[key]=m
         for ins in m['instructions']:
             if ins['op']==186:
                 site=key+'@'+str(ins['index']);lambdas[site]=ins;implementation=ins['bootstrap_args'][1]['handle']
-                if implementation in model['methods'] and implementation not in visiting:
+                if implementation in model['methods']:
                     try:validate(implementation)
                     except AnalysisLimit:raise
                     except ValueError as e:opaque[implementation]=str(e)
@@ -74,7 +73,7 @@ def augment_calls(plan,model,sources):
                             for table,keys in zip((methods,targets,lambdas),checkpoint):
                                 for added in set(table)-keys:table.pop(added)
                             visiting.intersection_update(methods);opaque[implementation]=str(e)
-                else:opaque.setdefault(implementation,'Lambda recursive/missing bytecode remains opaque')
+                else:opaque.setdefault(implementation,'Lambda implementation bytecode missing')
                 continue
             if ins['op']==183 and ins['name']=='<init>':
                 call=callee(ins)
@@ -85,15 +84,19 @@ def augment_calls(plan,model,sources):
             if call in sources or call in plan['collection_getters'] or call in plan['collection_setters']:continue
             options=candidates(ins)
             for candidate in options:
-                if candidate in visiting and candidate!=call:
-                    opaque.setdefault(candidate+' at '+key+'@'+str(ins['index']),'Potential recursive interface implementation remains opaque');continue
-                require(candidate not in visiting,'Recursive application call unsupported: '+candidate)
                 try:validate(candidate)
                 except AnalysisLimit:raise
                 except ValueError as e:opaque[candidate]=str(e);continue
                 targets.setdefault(key+'@'+str(ins['index']),[]).append(candidate);visit(candidate)
         visiting.remove(key)
     visit(plan['entry'])
+    # A direct, empty Object initialization precedes any opportunity for this
+    # reference to escape. Observe this point even for framework-created DTOs.
+    births={}
+    for key,m in methods.items():
+        c=m['instructions']
+        if m['name']=='<init>' and len(c)>1 and c[0]['op']==25 and c[0].get('var')==0 and c[1]['op']==183 and callee(c[1])=='java/lang/Object.<init>()V':
+            births[key]={'pc':1,'class_sha256':model['classes'][m['owner']]['sha256']}
     framework=any(v.get('kind')=='http-entity-null-headers' for v in constructors.values())
     if framework:
         plan['execution_kernel']['framework_contracts']=json.loads((Path(__file__).parent/'framework-wrapper-contracts-20261020.json').read_text())
@@ -102,16 +105,16 @@ def augment_calls(plan,model,sources):
                   'field_writes':sorted({i['owner']+'.'+i['name'] for i in m['instructions'] if i['op']==181}),
                   'call_sites':[key+'@'+str(i['index']) for i in m['instructions'] if i['op'] in (182,183,184,185)],
                   'exceptions':m['exception_handlers'],'meaning':'Candidate effects only; actual object/alias/write versions are interpreted, never assumed pure.'} for key,m in methods.items()}
-    plan['algorithm']='execution-dependency-v5-http-wrapper' if framework else 'execution-dependency-v4-constructor-effects'
+    plan['algorithm']='execution-dependency-v6-bounded-calls-object-lifetimes'
     plan['frame_methods']=sorted(methods);plan['binding_callsites']=sorted(key+'@'+str(i['index']) for key,m in methods.items() for i in m['instructions'] if i['op'] in (182,183,184,185) and (i['name']!='<init>' or constructors.get(callee(i),{}).get('kind')=='frame'))
     plan['selected_read_sites']=[key+'@'+str(i['index']) for key,m in methods.items() for i in m['instructions'] if i['op']==180]
-    plan['execution_kernel'].update(version=5 if framework else 4,library_contracts=json.loads((Path(__file__).parent/'constructor-library-contracts-20261020.json').read_text()),constructor_starts=constructor_starts,methods=methods,public_contracts=True,lambda_sites=lambdas,
+    plan['execution_kernel'].update(call_depth_limit=64,object_birth_sites=births,version=6,library_contracts=json.loads((Path(__file__).parent/'constructor-library-contracts-20261020.json').read_text()),constructor_starts=constructor_starts,methods=methods,public_contracts=True,lambda_sites=lambdas,
         class_literals={i['constant']:model['classes'][i['constant'][1:-1]]['sha256'] for m in methods.values() for i in m['instructions'] if i['op']==18 and i.get('constant_type')=='Type'},
         runtime_profiles=json.loads((Path(__file__).parent/'kernel-contract-runtimes-20261020.json').read_text())['profiles'],call_targets=targets,opaque_methods=opaque,constructors=constructors,effects=effects,
         class_parents={o:{'super':c.get('super'),'interfaces':c.get('interfaces',[])} for o,c in model['classes'].items()},
         evidence_policy='All planned application frames/calls, necessary field writes/reads and actual branch/handler sequence in both modes; no cost claim.')
     plan['contracts']=[c for c in plan['contracts'] if not c.startswith('v1 has')]
-    plan['contracts']+=['Nonrecursive application bodies are interpreted with shared heap/container state and distinct invocation frames.',
+    plan['contracts']+=['Finite application call graph including cycles; actual distinct invocation frames are depth/step bounded, with analysis_limited on exhaustion.',
         'Static read/write sets are candidates, not purity claims; opaque calls poison possibly reachable nonlocal/escaped state.',
         'Offline/static budget exhaustion is analysis_limited, never business N/A or automatically evidence_invalid.']
     return plan
