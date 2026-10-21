@@ -451,6 +451,7 @@ def infer_application(plan,rows,worker_request=None):
                                     for member,impl in choices:
                                         if 'value' in member['observed']:continue
                                         begin=take('enter',check_frame=False);require(begin['method']==impl and begin['receiver']==member['observed']['object'] and begin['parent']==fr.invocation and begin['callsite']==entry+'@'+str(fr.pc),'List render callback object/order differs')
+                                        if cfg.get('callback_lifecycle_version',0)>=2:require(begin.get('callback_call_id')==call['call_id'],'List render callback invocation differs')
                                         _,render_error=execute(begin,[],Value(member['observed']));require(render_error is None,'List render callback unexpectedly exceptional')
                                     require(not (pos<len(events) and events[pos]['kind']=='enter'),'List render extra callback')
                             resource_render=False
@@ -478,6 +479,7 @@ def infer_application(plan,rows,worker_request=None):
                             if pos<len(events) and events[pos]['kind']=='enter':
                                 begin=take('enter',check_frame=False)
                                 require(begin['parent']==fr.invocation and begin.get('callsite')==entry+'@'+str(fr.pc),'Application parent/callsite differs')
+                                if cfg.get('callback_lifecycle_version',0)>=2:require(begin.get('callback_call_id')==call['call_id'],'Application callback invocation differs')
                                 require(begin['method'] in permitted and begin['method']==expected_impl,'Unplanned actual application implementation')
                                 if callback:require(begin['method']==expected_impl,'Lambda actual implementation differs')
                                 elif render_callback or resource_render:require(begin['method']==expected_impl,'Rendering actual implementation differs')

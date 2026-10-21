@@ -126,7 +126,19 @@ public final class ExecutionKernelHooks implements Opcodes {
     public static void objectBirth(Object object,String constructor){synchronized(PlannedServiceAgent.Recorder.class){Map sites=(Map)((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("object_birth_sites");Map site=(Map)sites.get(constructor);Map r=PlannedServiceAgent.Recorder.row();r.put("constructor",constructor);r.put("object",PlannedServiceAgent.Recorder.id(object));r.put("class_sha256",site.get("class_sha256"));PlannedServiceAgent.Recorder.emit("execution-object-birth",r);}}
     static final Map<Class,String> LIBRARY_HASHES=new IdentityHashMap<>();
     static String classHash(Class type)throws Exception{if(LIBRARY_HASHES.containsKey(type))return LIBRARY_HASHES.get(type);java.security.MessageDigest digest=java.security.MessageDigest.getInstance("SHA-256");try(java.io.InputStream in=type.getResourceAsStream("/"+type.getName().replace('.','/')+".class")){if(in==null)throw new IllegalStateException("Library bytes absent");byte[] buffer=new byte[8192];int n;while((n=in.read(buffer))!=-1)digest.update(buffer,0,n);}StringBuilder text=new StringBuilder();for(byte b:digest.digest())text.append(String.format("%02x",b&255));String value=text.toString();LIBRARY_HASHES.put(type,value);return value;}
-    static void callbackSite(Map row){if(!enabled()||CollectionServiceHooks.CALLS.get().isEmpty())return;Map top=CollectionServiceHooks.CALLS.get().peek();List source=STREAMS.get(top.get("_receiver_ref"));if(source!=null&&source.size()==4&&"java/util/stream/Stream.findFirst()Ljava/util/Optional;".equals(top.get("callee"))&&Objects.equals(top.get("frame"),row.get("parent"))){row.put("callsite",top.get("method")+"@"+top.get("pc"));row.put("callback_call_id",top.get("call_id"));}}
+    static void callbackSite(Map row){
+        if(!enabled())return;
+        // A library may invoke several application callbacks within one call.
+        // PENDING is consumed by the first callback and can subsequently contain
+        // a site from inside that callback. Bind to the still-open caller instead.
+        if(row.get("parent")==null){row.put("callsite",null);return;}
+        if(CollectionServiceHooks.CALLS.get().isEmpty())return;
+        Map top=CollectionServiceHooks.CALLS.get().peek();
+        if(Objects.equals(top.get("frame"),row.get("parent"))){
+            row.put("callsite",top.get("method")+"@"+top.get("pc"));
+            row.put("callback_call_id",top.get("call_id"));
+        }
+    }
     static Map arrayRow(String operation,Object[] array,int index,int pc){Map r=PlannedServiceAgent.Recorder.row();r.put("pc",pc);r.put("operation",operation);r.put("array",PlannedServiceAgent.Recorder.value(array));r.put("index",index);r.put("version",ARRAY_VERSIONS.getOrDefault(array,0));if(array!=null){List values=new ArrayList();for(Object x:array)values.add(PlannedServiceAgent.Recorder.value(x));r.put("elements",values);r.put("component",array.getClass().getComponentType().getName());int[] versions=ARRAY_SLOTS.get(array);if(versions==null){versions=new int[array.length];ARRAY_SLOTS.put(array,versions);}List slots=new ArrayList();for(int v:versions)slots.add(v);r.put("element_versions",slots);}return r;}
     public static Object arrayBefore(String operation,Object[] array,int index,Object value,int pc){synchronized(PlannedServiceAgent.Recorder.class){Map r=arrayRow(operation,array,index,pc);r.put("value",PlannedServiceAgent.Recorder.value(value));if(operation.equals("store")&&array!=null)r.put("store_compatible",value==null||array.getClass().getComponentType().isInstance(value));return r;}}
     public static void arrayAfter(Object token,Object[] array,Object result,Throwable error){synchronized(PlannedServiceAgent.Recorder.class){Map r=(Map)token;String operation=(String)r.get("operation");
