@@ -13,6 +13,10 @@ def attach_async_dependencies(plan):
     plan['async_dependencies'] = {'version': 1, 'mutable_argument_heap_inheritance': False,
                                 'export': 'immutable scalar or private task allocation with scalar fields',
                                 'nested_tasks': False}
+    cfg['request_entity_contracts'] = json.loads((Path(__file__).parent/'request-entity-contracts-20261021.json').read_text())
+    model_births = cfg.get('decoder_birth_sites', {})
+    cfg['decoder_birth_sites'] = model_births
+    cfg['save_effect_contracts'] = json.loads((Path(__file__).parent/'save-effect-contracts-20261021.json').read_text())
     if RESULT_CTOR in cfg['constructors']:
         cfg['constructors'][RESULT_CTOR] = {'kind': 'async-result'}
     return plan

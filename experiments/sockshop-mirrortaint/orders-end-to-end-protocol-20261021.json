@@ -11,8 +11,8 @@
       "role": "orders",
       "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
       "http": "POST /orders",
-      "target": "works.weave.socks.orders.entities.CustomerOrder.date",
-      "path": "/date",
+      "target": "works.weave.socks.orders.entities.Customer.firstName",
+      "path": "/customer/firstName",
       "shape_note": "scalar or built-in leaf",
       "source_boundary": {
         "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
@@ -26,9 +26,153 @@
         "new_library_summaries": 0,
         "core_changes": 0
       },
-      "id": "sockshop-orders-newOrder-date",
-      "rank": "cc028b916bb5c257b34eeab8968a7e2c10ac6763b2d3ed7c76c51d165deafb14",
-      "exposure_group": "model20"
+      "id": "sockshop-orders-newOrder-customer-firstName",
+      "rank": "10b6fa73162421925e95dc7edd4b9a559b213b7016ada28c61a2a2e2064a59bf",
+      "exposure_group": "development20"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Customer.lastName",
+      "path": "/customer/lastName",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-customer-lastName",
+      "rank": "2466fc11e7faa977d18870eed28d61912f66a93a44fcebc4f04b88c047f28039",
+      "exposure_group": "development20"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Address.number",
+      "path": "/address/number",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-address-number",
+      "rank": "08c172e9aeb73096edf785ea1ab2561e0fbd019504cc2b9f941847c74a3f7163",
+      "exposure_group": "development20"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Address.country",
+      "path": "/address/country",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-address-country",
+      "rank": "0c0db82df60fcd89f4100c7cdffa4300052031c86650daf0571625f25f0bf8e7",
+      "exposure_group": "development20"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Card.id",
+      "path": "/card/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-card-id",
+      "rank": "526ec1acb66eb8a330ef0c393ac94ab37af19b44e0f5200d6071bb1a2cd98525",
+      "exposure_group": "binding22"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Customer.id",
+      "path": "/customer/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-customer-id",
+      "rank": "4d4c3c02bcadba2ffac083c2b127a1ad56cd46d53e58ed02529fc11c3c23d569",
+      "exposure_group": "binding22"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Address.id",
+      "path": "/address/id",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-address-id",
+      "rank": "7c683a5136ea5f04a3d2765b8e1eeb0d7dfa17be5a8f6b32c5f4689dd328b71e",
+      "exposure_group": "binding22"
     },
     {
       "application": "sockshop",
@@ -53,6 +197,102 @@
       "id": "sockshop-orders-newOrder-customer-username",
       "rank": "36161ec9f89215a5f49d0c30e6586570bd33ef2d9dc57415f24ceff05ddc0b81",
       "exposure_group": "binding22"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Card.longNum",
+      "path": "/card/longNum",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-card-longNum",
+      "rank": "351f655a58bd64aa779de9854b4fe14cc641e4e90373f1dfced2cb94b409932c",
+      "exposure_group": "model20"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Address.postcode",
+      "path": "/address/postcode",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-address-postcode",
+      "rank": "41f70c69ebf7c066b53c10a045eaf5f7cfa4ba0d95a582cb6ee43bd77d322fec",
+      "exposure_group": "model20"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Card.expires",
+      "path": "/card/expires",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-card-expires",
+      "rank": "ef2217018183e731b44e10aa141dca70630d281991d4e616beaaf200d22f6fcc",
+      "exposure_group": "model20"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.CustomerOrder.date",
+      "path": "/date",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-date",
+      "rank": "cc028b916bb5c257b34eeab8968a7e2c10ac6763b2d3ed7c76c51d165deafb14",
+      "exposure_group": "model20"
     }
   ],
   "acceptance": [
@@ -67,5 +307,11 @@
     "repaired": 97,
     "remaining": 72,
     "only_new_correct_original_instances_reduce_remaining": true
+  },
+  "followup_selection": {
+    "phase": "All are previously exposed development queries; selected before final algorithm freeze and acceptance capture, not unseen generalization",
+    "selection": "All 12 non-wildcard Orders queries in the original 62-query protocol, including Date. No failures replaced. Eight wildcard families in that protocol had no target elements under original fixtures; not used as successful source-instance evidence.",
+    "same_core_and_flags": true,
+    "no_replacement_after_failure": true
   }
 }

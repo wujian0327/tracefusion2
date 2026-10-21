@@ -14,6 +14,19 @@ def infer_application(plan,rows,worker_request=None):
     async_audit=validate_async_protocol(plan,rows)
     cfg=plan['execution_kernel'];runtime=[r for r in rows if r['kind']=='execution-runtime']
     require(len(runtime)==1 and any(all(runtime[0][k]==p[k] for k in ('java_runtime_version','class_sha256')) for p in cfg['runtime_profiles']),'Application runtime pin differs')
+    if cfg.get('request_entity_contracts'):
+        starts={r.get('call_id'):r for r in rows if r['kind']=='collection-call-enter'}
+        for event in rows:
+            if event['kind']!='collection-call-exit':continue
+            call=starts.get(event.get('call_id'),{}).get('callee','')
+            modeled=(call.startswith('org/springframework/http/RequestEntity$') and any('.'+n+'(' in call for n in ('accept','contentType','build','body'))) or call in (
+                'org/springframework/http/RequestEntity.get(Ljava/net/URI;)Lorg/springframework/http/RequestEntity$HeadersBuilder;',
+                'org/springframework/http/RequestEntity.post(Ljava/net/URI;)Lorg/springframework/http/RequestEntity$BodyBuilder;',
+                'org/springframework/web/client/RestTemplate.exchange(Lorg/springframework/http/RequestEntity;Lorg/springframework/core/ParameterizedTypeReference;)Lorg/springframework/http/ResponseEntity;',
+                'org/springframework/http/ResponseEntity.getBody()Ljava/lang/Object;',
+                'org/springframework/http/HttpEntity.getBody()Ljava/lang/Object;',
+                'org/springframework/hateoas/Resource.getContent()Ljava/lang/Object;')
+            if modeled:require('request_entity_contract' in event,'Required RequestEntity witness absent')
     pending=defaultdict(list);seen=set()
     for row in rows:
         kind=row['kind'];frame=row.get('frame')
@@ -59,13 +72,13 @@ def infer_application(plan,rows,worker_request=None):
             if row['kind'] in ('binding-source','binding-input'):
                 for index,f in enumerate(row['fields']):providers[coordinate(f)].append((row,index,f))
         state=State(Frame(root['frame']));pos=1;allocation_count=0;total_steps=0;branch_count=0
-        http_entities={};response_entities={};class_literals={};date_values={};calendars={};environment_facts=[];builders={};opaque_calls=[];async_results={};future_states={};async_transfers=[]
+        request_builders={};request_entities={};resources={};decoded_types={};decoded_fields={};decoded_seq={};http_entities={};response_entities={};class_literals={};date_values={};calendars={};environment_facts=[];builders={};opaque_calls=[];async_results={};future_states={};async_transfers=[]
         fr=None;method=None;code=None;entry=None;field_seq={};poisoned_at={};frame_audits=[]
         execution_budget=worker_request['budget'] if worker_request else {'steps':0}
         nonlocal_owners={f['owner'] for rows_ in providers.values() for _,_,f in rows_}
         nonlocal_owners.update(v.get('object') for v in root['args'] if 'value' not in v and v.get('object'))
         if root.get('receiver'):nonlocal_owners.add(root['receiver'])
-        heap_refs=defaultdict(set);opaque_frames=[];depth=0
+        heap_refs=defaultdict(set);opaque_frames=[];unproved_statics=[];depth=0;transport_effects=[]
         task_by_call={t['parent_call_id']:t for t in async_audit.get('tasks',[])} if plan.get('async_dependencies') else {}
         def identity(v):return state.allocations.get(v.allocation) if v.allocation is not None else v.observed.get('object')
         def actual(v):return {'object':identity(v)} if v.allocation is not None else v.observed
@@ -96,6 +109,17 @@ def infer_application(plan,rows,worker_request=None):
         def write_field(w,v):
             if 'date_epoch_ms' in w['observed'] and w['observed']['object'] in date_values:v=date_values[w['observed']['object']]
             bind(v,w['observed']);state.field_write(coordinate(w),v.project(w['observed']));field_seq[coordinate(w)]=w['seq']
+            if w['owner'] in nonlocal_owners or w['owner'] in state.poisoned:escape(v)
+        def escape(value):
+            todo=[identity(value)] if 'value' not in value.observed else [];seen=set()
+            while todo:
+                owner=todo.pop()
+                if owner is None or owner in seen:continue
+                seen.add(owner);nonlocal_owners.add(owner);todo.extend(heap_refs.get(owner,()))
+                for (o,_,_),v in state.fields.items():
+                    if o==owner and 'value' not in v.observed:todo.append(identity(v))
+                if owner in state.arrays:todo.extend(identity(v) for v in state.arrays[owner]['elements'] if 'value' not in v.observed)
+                if owner in state.containers:todo.extend(identity(v) for v in state.containers[owner].elements if 'value' not in v.observed)
         def poison(values,seq):
             affected=set()
             todo=list(nonlocal_owners|state.poisoned)+[identity(v) for v in values if v is not None and 'value' not in v.observed]
@@ -168,6 +192,11 @@ def infer_application(plan,rows,worker_request=None):
             fact=event.get('framework_contract')
             require(fact and fact['kind']==kind and fact['class_sha256']==cfg['framework_contracts']['class_sha256'],'Framework witness kind/library differs')
             return fact
+        def request_fact(event,kind):
+            fact=event.get('request_entity_contract')
+            require(fact and fact['kind']==kind and fact['class_sha256']==cfg['request_entity_contracts']['class_sha256'],'RequestEntity witness kind/library differs')
+            require(any(p['java_runtime_version']==runtime[0]['java_runtime_version'] and p['class_sha256']==fact['jdk_sha256'] for p in cfg['request_entity_contracts']['jdk_profiles']),'RequestEntity JDK profile differs')
+            return fact
         def opaque_extent(finish):
             nonlocal pos
             require(finish is not None,'Opaque invocation completion absent');subtree=events[pos:finish];children={r['frame']:r for r in subtree if r['kind']=='enter'}
@@ -188,7 +217,12 @@ def infer_application(plan,rows,worker_request=None):
                 for key,item in export['fields'].items():
                     require(key not in state.fields,'Async imported field version already exists')
                     state.field_write(key,item);field_seq[key]=export['field_seq'][key]
-                    nonlocal_owners.add(key[0])
+                    # Proven private task allocations remain private after join.
+                    # Passing/publishing them to an opaque effect still poisons
+                    # their reachable graph through the normal barrier.
+                for wrapper,content in export.get('resources',{}).items():
+                    require(wrapper not in resources,'Async resource identity reused');resources[wrapper]=content;heap_refs[wrapper].add(identity(content))
+                decoded_types.update(export.get('decoded_types',{}))
                 record['joined']=seq
             bind(value,observed)
             if observed.get('object') in poisoned_at:value=Value(observed,unknown=True)
@@ -264,6 +298,7 @@ def infer_application(plan,rows,worker_request=None):
                             require(0<=index<len(a['elements']),'Array index outside contents');v=a['elements'][index];bind(v,event['result']);fr.stack.append(Value(event['result'],v.origins,v.selectors|index_value.origins|index_value.selectors,v.unknown or owner in poisoned_at,v.allocation))
                         else:
                             require(0<=index<len(a['elements']) and event.get('store_compatible') is True and event['after_version']==a['version']+1,'Array write type/version differs');bind(value,event['value']);a['elements'][index]=value;a['versions'][index]+=1;a['version']=event['after_version'];require(a['versions']==event['after_element_versions'],'Array element write version differs')
+                            if owner in nonlocal_owners or owner in state.poisoned or not any(r['kind']=='execution-array' and r['operation']=='new' and r['array'].get('object')==owner for r in relevant):escape(value)
                     elif op==187:
                         allocation_count+=1;fr.stack.append(Value(allocation=allocation_count))
                     elif op==178:
@@ -271,7 +306,11 @@ def infer_application(plan,rows,worker_request=None):
                             if pos<len(events) and events[pos]['kind']=='enter':
                                 finish=next((j for j in range(pos,len(events)) if events[j]['kind']=='execution-static-read' and events[j].get('frame')==fr.invocation and events[j].get('pc')==fr.pc),None);opaque_extent(finish)
                             fact=take('execution-static-read');require(fact['field']==ins['owner']+'.'+ins['name'] and fact['descriptor']==ins['desc'],'Static field evidence differs')
-                            if ins['owner']!=method['owner']:poison([],fact['seq'])
+                            if ins['owner']!=method['owner']:
+                                contracts=cfg.get('request_entity_contracts',{});pinned=contracts.get('class_sha256',{}).get(ins['owner']) if ins['owner'] in ('org/springframework/hateoas/MediaTypes','org/springframework/http/MediaType','org/springframework/http/HttpMethod') else None
+                                if ins['owner']=='java/util/concurrent/TimeUnit':pinned=next((p['class_sha256'][ins['owner']] for p in contracts.get('jdk_profiles',[]) if p['java_runtime_version']==runtime[0]['java_runtime_version']),None)
+                                if pinned:require(fact.get('declaring_class_sha256')==pinned,'Static library owner differs')
+                                else:poison([],fact['seq']);unproved_statics.append(fact['seq'])
                             if fact['observed'].get('object'):nonlocal_owners.add(fact['observed']['object'])
                             fr.stack.append(Value(fact['observed'],unknown=True))
                         else:fr.stack.append(Value(unknown=True))
@@ -398,6 +437,29 @@ def infer_application(plan,rows,worker_request=None):
                                     candidate=actual_owner+'.toString()Ljava/lang/String;'
                                     if candidate in permitted:expected_impl=candidate;render_callback=True;child_args=[];child_recv=args[0];break
                                     actual_owner=cfg['class_parents'].get(actual_owner,{}).get('super')
+                            list_render=False;render_finish=next((r for r in events[pos:] if r['kind']=='collection-call-exit' and r.get('call_id')==call['call_id']),None)
+                            render_proof=render_finish.get('request_render',{}) if render_finish else {}
+                            if key=='java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;' and render_proof.get('kind')=='list-render' and render_proof.get('valid'):
+                                require(render_proof['class_sha256']==cfg['request_entity_contracts']['class_sha256'] and any(p['java_runtime_version']==runtime[0]['java_runtime_version'] and p['class_sha256']==render_proof['jdk_sha256'] for p in cfg['request_entity_contracts']['jdk_profiles']),'List render framework/runtime differs')
+                                bind(args[0],render_proof['object']);require(call.get('argument_types',[None])[0].replace('.','/')==render_proof['class'],'List render argument type differs');require(runtime[0]['class_sha256'].get(render_proof['class'])==render_proof['list_class_sha256'],'List render implementation differs')
+                                permitted_render=cfg['call_targets'].get(entry+'@'+str(fr.pc)+':render',[])
+                                choices=[(member,member['type'].replace('.','/')+'.toString()Ljava/lang/String;' if member['type'] else None) for member in render_proof['elements']]
+                                if all('value' in member['observed'] or impl in permitted_render for member,impl in choices):
+                                    list_render=True
+                                    for member,impl in choices:
+                                        if 'value' in member['observed']:continue
+                                        begin=take('enter',check_frame=False);require(begin['method']==impl and begin['receiver']==member['observed']['object'] and begin['parent']==fr.invocation and begin['callsite']==entry+'@'+str(fr.pc),'List render callback object/order differs')
+                                        _,render_error=execute(begin,[],Value(member['observed']));require(render_error is None,'List render callback unexpectedly exceptional')
+                                    require(not (pos<len(events) and events[pos]['kind']=='enter'),'List render extra callback')
+                            resource_render=False
+                            if key=='org/springframework/hateoas/Resource.toString()Ljava/lang/String;' and identity(recv) in resources:
+                                content=resources[identity(recv)];implementation=decoded_types.get(identity(content),'')+'.toString()Ljava/lang/String;'
+                                permitted=cfg['call_targets'].get(entry+'@'+str(fr.pc)+':render',[])
+                                if implementation in permitted:expected_impl=implementation;resource_render=True;child_args=[];child_recv=content
+                            if key=='org/springframework/http/RequestEntity.toString()Ljava/lang/String;' and identity(recv) in request_entities and render_proof.get('kind')=='request-render':
+                                content=request_entities[identity(recv)]['body'];implementation=(render_proof.get('content_type') or '').replace('.','/')+'.toString()Ljava/lang/String;'
+                                permitted=cfg['call_targets'].get(entry+'@'+str(fr.pc)+':render',[])
+                                if implementation in permitted:expected_impl=implementation;resource_render=True;child_args=[];child_recv=content
                             if callback:
                                 declaration,captured=callback;handle_spec=declaration['bootstrap_args'][1];implementation=handle_spec['handle']
                                 if implementation in methods:
@@ -416,7 +478,7 @@ def infer_application(plan,rows,worker_request=None):
                                 require(begin['parent']==fr.invocation and begin.get('callsite')==entry+'@'+str(fr.pc),'Application parent/callsite differs')
                                 require(begin['method'] in permitted and begin['method']==expected_impl,'Unplanned actual application implementation')
                                 if callback:require(begin['method']==expected_impl,'Lambda actual implementation differs')
-                                elif render_callback:require(begin['method']==expected_impl,'Rendering actual implementation differs')
+                                elif render_callback or resource_render:require(begin['method']==expected_impl,'Rendering actual implementation differs')
                                 elif ins['op'] in (183,184):require(begin['method']==key,'Static/special application implementation differs')
                                 else:
                                     actual_owner=call['receiver_type'].replace('.','/');suffix='.'+ins['name']+ins['desc'];resolved=None
@@ -440,7 +502,6 @@ def infer_application(plan,rows,worker_request=None):
                             ret=take('collection-call-exit');require(ret['call_id']==call['call_id'],'Application completion instance differs');observed=complete(call,ret);v=Value(observed,unknown=True)
                             invocation=Call(str(call['seq']),fr.pc,recv,args,'normal')
                             if async_submission:
-                                poison(([recv] if recv else [])+args,call['seq'])
                                 captured=[];borrowed=[]
                                 for index,arg in enumerate(args):
                                     kind=call.get('argument_types',[None]*len(args))[index]
@@ -448,6 +509,11 @@ def infer_application(plan,rows,worker_request=None):
                                     borrowed.append(not immutable)
                                     captured.append(Value(actual(arg),arg.origins,arg.selectors,arg.unknown) if immutable else Value(actual(arg),unknown=True))
                                 future_states[observed['object']]={'task':async_submission,'args':captured,'borrowed':borrowed,'receiver':Value({'object':all_enters[async_submission['worker_frame']]['receiver']},unknown=True) if async_submission.get('worker_frame') else None}
+                                record=future_states[observed['object']]
+                                if async_submission['status']=='worker_completed' and not worker_request:
+                                    record['export']=infer_application(plan,rows,{'frame':async_submission['worker_frame'],'args':captured,'receiver':record['receiver'],'borrowed':borrowed,'budget':execution_budget})['worker_export']
+                                if not (record.get('export',{}).get('status')=='verified-decoder-result' and record['export'].get('private_input_preserving')):poison(([recv] if recv else [])+args,call['seq'])
+                                else:poison([recv] if recv else [],call['seq'])
                                 v=Value(observed)
                             elif ret.get('async_future',{}).get('operation')=='get' and identity(recv) in future_states:
                                 v=receive_future(future_states[identity(recv)],observed,ret['seq'])
@@ -467,12 +533,110 @@ def infer_application(plan,rows,worker_request=None):
                                     if desc=='Ljava/lang/Object;' and render_callback:
                                         require(child_value is not None and isinstance(child_value.observed.get('value'),str),'Rendering did not return String');operand=child_value
                                         if not tainted:require(fact['after']==text+operand.observed['value'],'Rendering append result differs')
+                                    elif desc=='Ljava/lang/Object;' and list_render:
+                                        operand=Value({'value':fact['after'][len(fact['before']):]},unknown=True)
+                                    elif desc=='Ljava/lang/Object;' and ret.get('request_render',{}).get('kind')=='empty-list-render':
+                                        render=ret['request_render'];bind(operand,render['object']);require(runtime[0]['class_sha256'].get(render['class'])==render['class_sha256'],'Empty list render runtime differs');require(fact['after']==fact['before']+'[]','Empty list render result differs');operand=Value({'value':'[]'})
                                     elif desc=='Ljava/lang/Object;' and not (operand.observed.get('value','non-null') is None or call.get('argument_types',[None])[0]=='java.lang.String'):
                                         poison([recv]+args,ret['seq']);operand=Value(operand.observed,unknown=True);tainted=True;opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':ret['seq'],'completion':'opaque-render'})
                                     if not tainted:require(fact['after'].startswith(text),'StringBuilder append changed prefix')
                                     content=combine({'value':fact['after']},[content,operand]);content=Value(content.observed,content.origins,content.selectors,content.unknown or tainted);builders[identity(recv)]=(fact['after'],content);v=Value(observed)
+                            elif resource_render:
+                                render=ret.get('request_render');require(render and render['class_sha256']==cfg['request_entity_contracts']['class_sha256'] and render['valid'],'Resource render closure witness absent/differs');bind(child_recv,render['content']);require(child_value is not None,'Resource render missing content callback');v=Value(observed,unknown=True)
                             elif child_value is not None:
+
                                 bind(child_value,observed);v=child_value.project(observed)
+                            elif ret.get('request_entity_contract') and cfg.get('request_entity_contracts'):
+                                fact=ret['request_entity_contract'];kind=fact['kind'];request_fact(ret,kind)
+                                expected={
+                                    'org/springframework/http/RequestEntity.get(Ljava/net/URI;)Lorg/springframework/http/RequestEntity$HeadersBuilder;':'request-builder',
+                                    'org/springframework/http/RequestEntity.post(Ljava/net/URI;)Lorg/springframework/http/RequestEntity$BodyBuilder;':'request-builder',
+                                    'org/springframework/web/client/RestTemplate.exchange(Lorg/springframework/http/RequestEntity;Lorg/springframework/core/ParameterizedTypeReference;)Lorg/springframework/http/ResponseEntity;':'request-exchange',
+                                    'org/springframework/http/ResponseEntity.getBody()Ljava/lang/Object;':'entity-body',
+                                    'org/springframework/http/HttpEntity.getBody()Ljava/lang/Object;':'entity-body',
+                                    'org/springframework/hateoas/Resource.getContent()Ljava/lang/Object;':'resource-content',
+                                    'org/springframework/hateoas/Resource.getId()Lorg/springframework/hateoas/Link;':'resource-link',
+                                    'org/springframework/hateoas/Link.getHref()Ljava/lang/String;':'link-href',
+                                    'org/springframework/http/RequestEntity.toString()Ljava/lang/String;':'request-empty-render',
+                                }.get(key)
+                                if ins['owner'] in ('org/springframework/http/RequestEntity$HeadersBuilder','org/springframework/http/RequestEntity$BodyBuilder'):
+                                    if ins['name']=='accept' and ins['desc'].startswith('([Lorg/springframework/http/MediaType;)'):expected='request-header'
+                                    elif ins['name']=='contentType' and ins['desc'].startswith('(Lorg/springframework/http/MediaType;)'):expected='request-header'
+                                    elif ins['name']=='build' and ins['desc']=='()Lorg/springframework/http/RequestEntity;':expected='request-built'
+                                    elif ins['name']=='body' and ins['desc']=='(Ljava/lang/Object;)Lorg/springframework/http/RequestEntity;':expected='request-built'
+                                require(expected==kind,'RequestEntity witness attached to a different operation')
+                                if not fact['valid']:
+                                    poison(([recv] if recv else [])+args,ret['seq']);opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':ret['seq'],'completion':'unsupported-request-contract'})
+                                elif kind=='request-builder':
+                                    require(observed.get('object') not in request_builders,'Request builder identity reused')
+                                    request_builders[observed['object']]={'uri':fact['uri'],'method':fact['method'],'headers':0};v=Value(observed)
+                                elif kind=='request-header':
+                                    require(identity(recv) in request_builders and identity(recv)==observed.get('object'),'Request header builder differs')
+                                    if ins['name']=='accept':
+                                        array=state.arrays.get(identity(args[0]));require(array is not None and len(array['elements'])==len(fact['values']),'Request media array absent')
+                                        for value,item in zip(array['elements'],fact['values']):bind(value,item)
+                                    else:bind(args[0],fact['values'][0])
+                                    request_builders[identity(recv)]['headers']+=1;v=recv.project(observed)
+                                elif kind=='request-built':
+                                    b=request_builders.get(identity(recv));require(b is not None and b['uri']==fact['uri'] and b['method']==fact['method'],'Request terminal builder method/URI differs')
+                                    body=args[0] if args else Value({'value':None,'object':None});bind(body,fact['body'])
+                                    request_entities[observed['object']]={**b,'body':body,'headers':fact['headers']};v=Value(observed)
+                                elif kind=='request-empty-render':
+                                    request=request_entities.get(identity(recv));require(request and request['uri']==fact['request']['uri'] and fact['request']['body'].get('value','not-null') is None,'Request render identity/body differs');v=Value(observed)
+                                elif kind in ('resource-link','link-href'):
+                                    bind(Value(observed),fact['link'] if kind=='resource-link' else fact['href']);v=Value(observed,unknown=True)
+                                elif kind=='request-exchange':
+                                    request=request_entities.get(identity(args[0]));require(request is not None and request['uri']==fact['uri'] and request['method']==fact['method'] and request['headers']==fact['headers'],'Exchange not bound to actual request')
+                                    bind(request['body'],fact['body']);poison(([recv] if recv else [])+args,call['seq'])
+                                    reads=[r for r in relevant if r['kind']=='http-json' and r.get('phase')=='read' and r.get('direction')=='response' and call['seq']<r['seq']<ret['seq']]
+                                    require(len(reads)==1,'Request exchange decoder read missing/ambiguous');read=reads[0]
+                                    same_value(fact['response_body'],read['decoded_body']);require(fact['response_type']==read['decoded_type'],'Exchange decoded response type differs')
+                                    starts=[r for r in relevant if r['kind']=='http-rpc-enter' and r.get('message')==read['message'] and call['seq']<r['seq']<read['seq']]
+                                    finishes=[r for r in relevant if r['kind']=='http-rpc-exit' and r.get('message')==read['message'] and read['seq']<r['seq']<ret['seq']]
+                                    parent_frame=root['frame']
+                                    if worker_request:
+                                        task=next(t for t in async_audit['tasks'] if t.get('worker_frame')==root['frame']);parent_frame=task['caller_frame']
+                                    messages={r.get('message') for r in rows if r['kind'] in ('binding-input','binding-return') and r.get('frame')==parent_frame and r.get('message')}
+                                    require(len(starts)==len(finishes)==1 and starts[0]['uri']==fact['uri'] and starts[0]['method']==fact['method'] and read.get('parent_message') in messages,'Request exchange message/call context differs')
+                                    decoder=read.get('resource_decoder')
+                                    if fact['response_type']=='org.springframework.hateoas.Resource' or fact['response_type'].replace('.','/') in plan.get('json_schema',{}):require(decoder is not None,'Required typed decoder witness absent')
+                                    if decoder:
+                                        require(decoder['kind']=='resource-decoded' and decoder['class_sha256']==cfg['request_entity_contracts']['class_sha256'],'Resource decoder library witness differs')
+                                        bind(Value(fact['response_body']),decoder['wrapper'])
+                                        if decoder['valid']:
+                                            content=decoder['content'];owner=content.get('object')
+                                            births_=[r for r in relevant if r['kind']=='execution-decoder-birth' and r['object']==owner and call['seq']<r['seq']<read['seq']]
+                                            require(len(births_)==1,'Decoded content fresh allocation absent/ambiguous');birth=births_[0];site=cfg['decoder_birth_sites'].get(birth['constructor']);require(site and site['class_sha256']==birth['class_sha256'],'Decoded content constructor pin differs')
+                                            require(owner not in nonlocal_owners and owner not in decoded_seq,'Decoded content aliases an existing boundary')
+                                            
+                                            if decoder['wrapper_kind']=='resource':resources[fact['response_body']['object']]=Value(content)
+                                            decoded_types[owner]=decoder['content_type'].replace('.','/');decoded_seq[owner]=read['seq']
+                                            for index,f in enumerate(read['fields']):
+                                                require(f['owner']==owner and f['path'][1:] in decoder['properties'],'Decoder property owner/name differs')
+                                                providers[coordinate(f)].append((read,index,f));decoded_fields[coordinate(f)]=origin(f,ret['seq']);field_seq[coordinate(f)]=read['seq'];state.field_write(coordinate(f),decoded_fields[coordinate(f)])
+                                            for f in decoder['fields']:
+                                                if f['path'][1:] not in decoder['ignored']:continue
+                                                require(f['owner']==owner,'Ignored decoder field owner differs')
+                                                if f['version']==0 and f['observed'].get('value','not-null') is None and f['field'] not in site.get('written_fields',[]):
+                                                    decoded_fields[coordinate(f)]=Value(f['observed']);state.field_write(coordinate(f),decoded_fields[coordinate(f)]);field_seq[coordinate(f)]=read['seq']
+                                            heap_refs[fact['response_body']['object']].add(owner)
+                                    outgoing=[r for r in relevant if r['kind']=='http-json' and r.get('phase')=='write' and r.get('direction')=='request' and call['seq']<r['seq']<read['seq']]
+                                    proof=not outgoing and request['body'].observed.get('value','not-null') is None
+                                    if outgoing:
+                                        proof=len(outgoing)==1 and outgoing[0].get('request_serialization',{}).get('valid',False)
+                                        if proof:
+                                            sf=outgoing[0]['request_serialization'];require(sf['class_sha256']==cfg['request_entity_contracts']['class_sha256'],'Request serializer library differs')
+                                    transport_effects.append(proof)
+                                    response_entities[observed['object']]=Value(fact['response_body']);v=Value(observed)
+                                elif kind=='entity-body':
+                                    body=response_entities.get(identity(recv));bind(Value(observed),fact['body'])
+                                    if body is not None:bind(body,observed);v=body.project(observed)
+                                    else:poison([recv,Value(observed)],ret['seq'])
+                                elif kind=='resource-content':
+                                    content=resources.get(identity(recv));bind(Value(observed),fact['content'])
+                                    if content is not None:bind(content,observed);v=content.project(observed)
+                                    else:poison([recv],ret['seq'])
+                                else:raise ValueError('Unsupported request witness kind: '+kind)
                             elif key=='java/util/Calendar.getInstance()Ljava/util/Calendar;' and plan.get('date_projection'):
                                 fact=ret.get('date_contract');require(fact and fact['kind']=='calendar-environment','Calendar creation evidence absent')
                                 if fact['valid']:
@@ -510,6 +674,28 @@ def infer_application(plan,rows,worker_request=None):
                                 fact=framework_fact(ret,'http-entity-body');same_value(fact['body'],observed);body=response_entities.get(identity(recv),http_entities.get(identity(recv)))
                                 if fact['valid'] and body is not None:bind(body,observed);v=body.project(observed)
                                 else:poison([recv,Value(observed)],ret['seq'])
+                            elif key.endswith('.save(Ljava/lang/Object;)Ljava/lang/Object;') and cfg.get('save_effect_contracts') and not cfg['save_effect_contracts'].get('observation_only',True):
+                                proofs=[r for r in relevant if r['kind']=='mongo-save-effect' and r.get('call_id')==call['call_id'] and call['seq']<r['seq']<ret['seq']]
+                                require(len(proofs)==1,'Save effect completion missing/ambiguous');proof=proofs[0]
+                                require(proof['class_sha256']==cfg['save_effect_contracts']['class_sha256'] and proof['completion']=='normal' and proof['frame']==fr.invocation,'Save library/lifecycle differs');bind(args[0],proof['entity']);bind(args[0],proof['result']);bind(args[0],observed)
+                                if proof['valid']:
+                                    require(proof.get('preconditions') and proof.get('listeners_verified') and proof.get('callback_invocations')==0 and proof['events']>=3 and proof['registry']==proof['default_registry'] and proof['converters']==proof['default_converters'],'Save preservation conditions contradict runtime')
+                                    before={coordinate(f):f for f in proof['before']};after={coordinate(f):f for f in proof['after']};identifier=proof.get('id_write')
+                                    for k,f in before.items():
+                                        if identifier and k[0]==identifier['owner'] and k[1]==identifier['field']:continue
+                                        require(k in after and after[k]==f,'Unmodeled save field effect')
+                                    if identifier:
+                                        require(identifier['owner']==identity(args[0]) and identifier['field']==proof['id_field'] and coordinate(identifier) not in before,'Save ID write object/field/version differs')
+                                        ws=[w for w in writes if w['seq']==identifier['seq']];require(len(ws)==1 and all(ws[0][k]==identifier[k] for k in ('owner','field','version','observed')),'Native save ID write evidence absent/differs');write_field(identifier,Value(identifier['observed'],unknown=True))
+                                    # The finite contract confines domain DTOs, not all
+                                    # database/global effects. Existing shared state and
+                                    # mutable Date operands remain conservative.
+                                    poison([recv] if recv else [],ret['seq'])
+                                    for f in proof['before']:
+                                        if 'date_epoch_ms' in f['observed']:poison([Value(f['observed'])],ret['seq'])
+                                    v=args[0].project(observed)
+                                else:
+                                    poison(([recv] if recv else [])+args,ret['seq']);opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':ret['seq'],'completion':'unsupported-save-effects','reason':proof.get('reason')})
                             elif key in plan['response_binding']['source_calls']:
                                 v=Value(observed)  # Source leaves must still match concrete boundary fields later.
                             elif key in plan['collection_getters']:
@@ -567,6 +753,8 @@ def infer_application(plan,rows,worker_request=None):
                                 elif ins['name']=='next':
                                     require(index<len(c.elements),'Execution iterator outside contents');v=c.elements[index].project(observed);bind(c.elements[index],observed);state.iterators[identity(recv)][1]+=1
                                 else:raise ValueError('Execution iterator method unsupported')
+                            elif key=='org/springframework/hateoas/Resource.toString()Ljava/lang/String;' and cfg.get('request_entity_contracts') and ret.get('request_render',{}).get('plain_object'):
+                                render=ret['request_render'];require(render['class_sha256']==cfg['request_entity_contracts']['class_sha256'] and render['valid'],'Resource render contract differs');v=Value(observed,unknown=True)
                             elif key=='org/slf4j/LoggerFactory.getLogger(Ljava/lang/Class;)Lorg/slf4j/Logger;':
                                 fact=ret.get('contract');require(fact and fact['kind']=='logger-factory','Logging factory witness absent')
                                 if fact.get('valid'):
@@ -642,7 +830,19 @@ def infer_application(plan,rows,worker_request=None):
             if private and fields and all('value' in v.observed and 'date_epoch_ms' not in v.observed for v in fields.values()):exports=fields
             elif 'value' not in payload.observed or 'date_epoch_ms' in payload.observed:payload=Value(payload.observed,unknown=True)
             if opaque_calls or outward:payload=Value(payload.observed,unknown=True);exports={}
-            return {'worker_export':{'value':payload,'fields':exports,'field_seq':{k:field_seq[k] for k in exports},'status':'private-result' if exports else 'scalar-result' if not payload.unknown else 'unsupported-or-opaque-result','frames':frame_audits,'opaque_calls':opaque_calls}}
+            exported_resources={};external_writes=outward
+            verified_decoder=False
+            if owner in resources or owner in decoded_seq:
+                content=resources.get(owner,Value(payload.observed));content_owner=identity(content);birth_seq=decoded_seq.get(content_owner)
+                later_opaque=any(c['seq']>=birth_seq for c in opaque_calls) if birth_seq else True
+                # A closed, freshly allocated decoder projection is a distinct
+                # ownership path. Earlier opaque request setup cannot touch it.
+                external_writes=any(k[0] not in local|set(decoded_seq) for k in state.fields) or any(r['kind']=='execution-array' and r['operation']=='store' and r['array']['object'] not in local_arrays for r in relevant)
+                if birth_seq and content_owner not in poisoned_at and not later_opaque and not external_writes:
+                    exports={k:materialize(v) for k,v in state.fields.items() if k[0]==content_owner and k in decoded_fields}
+                    if owner in resources:exported_resources[owner]=materialize(content)
+                    payload=Value(payload.observed);verified_decoder=True
+            return {'worker_export':{'value':payload,'fields':exports,'field_seq':{k:field_seq[k] for k in exports},'resources':exported_resources,'decoded_types':{identity(v):decoded_types[identity(v)] for v in exported_resources.values()},'private_input_preserving':not opaque_calls and not unproved_statics and not external_writes and all(transport_effects),'status':'verified-decoder-result' if verified_decoder else 'private-result' if exports else 'scalar-result' if not payload.unknown else 'unsupported-or-opaque-result','frames':frame_audits,'opaque_calls':opaque_calls}}
         if end['kind']=='abort':
             require(error is not None,'Application root abort disagrees with replay');audits.append({'frame':root['frame'],'completion':'aborted','steps':total_steps,'frames':frame_audits,'answers':0});continue
         require(error is None,'Application normal root has unhandled exception')

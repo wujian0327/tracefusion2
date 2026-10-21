@@ -109,9 +109,9 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
         static final ThreadLocal<Deque<Frame>> STACK=new ThreadLocal<Deque<Frame>>(){protected Deque<Frame> initialValue(){return new ArrayDeque<>();}};
         static final ThreadLocal<String> PENDING=new ThreadLocal<>();static final Map<String,Set<String>> ACTIVE=new HashMap<>();
         static class Frame{String id,method;List<String> locked=new ArrayList<>();List<Object> inputs;}
-        static String id(Object o){if(o==null)return null;String s=IDS.get(o);if(s==null){if(IDS.size()>100000)throw new IllegalStateException("Object bound");s="o"+(IDS.size()+1);IDS.put(o,s);}return s;}
+        static synchronized String id(Object o){if(o==null)return null;String s=IDS.get(o);if(s==null){if(IDS.size()>100000)throw new IllegalStateException("Object bound");s="o"+(IDS.size()+1);IDS.put(o,s);}return s;}
         static Map<String,Object> row(){Map<String,Object> r=new LinkedHashMap<>();r.put("frame",STACK.get().isEmpty()?null:STACK.get().peek().id);return r;}
-        static Map<String,Object> value(Object o){Map<String,Object> r=new LinkedHashMap<>();r.put("object",id(o));if(TemporalDateHooks.date(o))return TemporalDateHooks.observe((java.util.Date)o);if(o instanceof Character&&ExecutionKernelHooks.extended())r.put("value",(int)((Character)o).charValue());else if(o==null||o instanceof Number||o instanceof String||o instanceof Boolean)r.put("value",o);return r;}
+        static synchronized Map<String,Object> value(Object o){Map<String,Object> r=new LinkedHashMap<>();r.put("object",id(o));if(TemporalDateHooks.date(o))return TemporalDateHooks.observe((java.util.Date)o);if(o instanceof Character&&ExecutionKernelHooks.extended())r.put("value",(int)((Character)o).charValue());else if(o==null||o instanceof Number||o instanceof String||o instanceof Boolean)r.put("value",o);return r;}
         static String hash(byte[] data)throws Exception{StringBuilder s=new StringBuilder();for(byte b:MessageDigest.getInstance("SHA-256").digest(data))s.append(String.format("%02x",b&255));return s.toString();}
         public static synchronized void start()throws Exception{output=Files.newBufferedWriter(Paths.get(System.getProperty("service.events")),StandardOpenOption.CREATE_NEW);Map<String,Object> r=row();r.put("mode",mode);r.put("plan_sha256",hash(Files.readAllBytes(Paths.get(System.getProperty("service.plan")))));emit("start",r);Runtime.getRuntime().addShutdownHook(new Thread(()->{synchronized(Recorder.class){Map<String,Object> m=row();m.put("field_hook_calls",fieldHooks);m.put("branch_hook_calls",branches);emit("metrics",m);}}));}
         public static synchronized void callsite(String site){if(!STACK.get().isEmpty())PENDING.set(site);}
@@ -147,6 +147,16 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
         public static synchronized void sumEnd(double d){Map<String,Object> r=row();r.put("value",d);emit("sum-exit",r);}
         public static synchronized void transformed(String owner){CHECKED_CLASSES.add(owner);Map<String,Object> r=row();r.put("class",owner);emit("class",r);}
         public static synchronized void problem(String message){Map<String,Object> r=row();r.put("message",message);emit("problem",r);System.err.println("QUERY_SERVICE: "+message);}
-        static void emit(String kind,Map<String,Object> r){try{if(++seq>1000000)throw new IllegalStateException("Event bound");r.put("seq",seq);r.put("kind",kind);r.put("thread",Thread.currentThread().getId());output.write(JSON.writeValueAsString(r));output.newLine();output.flush();}catch(Exception e){throw new IllegalStateException(e);}}
+        static void safeEvent(Object value,IdentityHashMap<Object,Boolean> seen,int depth){
+            if(value==null||value instanceof String||value instanceof Boolean)return;
+            String type=value.getClass().getName();if(Arrays.asList("java.lang.Byte","java.lang.Short","java.lang.Integer","java.lang.Long","java.lang.Float","java.lang.Double","java.math.BigDecimal","java.math.BigInteger").contains(type))return;
+            if(depth>40||seen.put(value,true)!=null)throw new IllegalArgumentException("Cyclic/deep event metadata");
+            try{
+                if(value instanceof Map&&type.startsWith("java.util.")){for(Object raw:((Map)value).entrySet()){Map.Entry entry=(Map.Entry)raw;if(!(entry.getKey() instanceof String))throw new IllegalArgumentException("Event key is not String");safeEvent(entry.getValue(),seen,depth+1);}return;}
+                if(value instanceof Collection&&type.startsWith("java.util.")){for(Object item:(Collection)value)safeEvent(item,seen,depth+1);return;}
+                throw new IllegalArgumentException("Live object in event metadata: "+type);
+            }finally{seen.remove(value);}
+        }
+        static synchronized void emit(String kind,Map<String,Object> r){try{safeEvent(r,new IdentityHashMap<Object,Boolean>(),0);if(++seq>1000000)throw new IllegalStateException("Event bound");r.put("seq",seq);r.put("kind",kind);r.put("thread",Thread.currentThread().getId());output.write(JSON.writeValueAsString(r));output.newLine();output.flush();}catch(Exception e){throw new IllegalStateException(e);}}
     }
 }

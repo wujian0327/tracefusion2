@@ -87,7 +87,7 @@ def augment_calls(plan,model,sources):
                 continue
             if ins['op'] not in (182,183,184,185):continue
             call=callee(ins)
-            if call=='java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;':
+            if call in ('java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;','org/springframework/hateoas/Resource.toString()Ljava/lang/String;','org/springframework/http/RequestEntity.toString()Ljava/lang/String;'):
                 synthetic={'op':182,'owner':'java/lang/Object','name':'toString','desc':'()Ljava/lang/String;'}
                 for candidate in candidates(synthetic):
                     try:validate(candidate)
@@ -110,6 +110,12 @@ def augment_calls(plan,model,sources):
         c=m['instructions']
         if m['name']=='<init>' and len(c)>1 and c[0]['op']==25 and c[0].get('var')==0 and c[1]['op']==183 and callee(c[1])=='java/lang/Object.<init>()V':
             births[key]={'pc':1,'class_sha256':model['classes'][m['owner']]['sha256']}
+    decoder_births={}
+    for owner in plan.get('json_schema',{}):
+        key=owner+'.<init>()V';m=model['methods'].get(key);c=m['instructions'] if m else []
+        if len(c)>1 and c[0]['op']==25 and c[0].get('var')==0 and c[1]['op']==183 and callee(c[1])=='java/lang/Object.<init>()V' and all(i['op'] in {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,25,89,181,183,187,177} and (i['op']!=25 or i['var']==0) and (i['op']!=181 or i['owner']==owner) and (i['op']!=183 or callee(i) in ('java/lang/Object.<init>()V','java/util/ArrayList.<init>()V')) and (i['op']!=187 or i['type']=='java/util/ArrayList') for i in c) and owner+'.<clinit>()V' not in model['methods']:
+            decoder_births[key]={'pc':1,'class_sha256':model['classes'][owner]['sha256'],'written_fields':sorted({i['owner']+'.'+i['name'] for i in c if i['op']==181})}
+    plan['execution_kernel']['decoder_birth_sites']=decoder_births
     framework=any(v.get('kind')=='http-entity-null-headers' for v in constructors.values())
     if framework:
         plan['execution_kernel']['framework_contracts']=json.loads((Path(__file__).parent/'framework-wrapper-contracts-20261020.json').read_text())

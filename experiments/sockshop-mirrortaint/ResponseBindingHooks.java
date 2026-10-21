@@ -96,7 +96,17 @@ public final class ResponseBindingHooks implements Opcodes {
         }finally{seen.remove(o);}
     }
     static List<Map> sourceSnapshot(Object value)throws Exception{boolean old=sourceCapture;sourceCapture=true;try{return snapshot(value,false);}finally{sourceCapture=old;}}
-    static void mark(String kind,String call,Object value)throws Exception{List<Map> fields=kind.equals("binding-source")?sourceSnapshot(value):snapshot(value,false);if(fields.isEmpty())return;Map r=row();r.put("callee",call);r.put("fields",fields);emit(kind,r);}
+    static void mark(String kind,String call,Object value)throws Exception{
+        List<Map> fields;try{fields=kind.equals("binding-source")?sourceSnapshot(value):snapshot(value,false);}
+        catch(IllegalStateException unsupported){
+            if(!ExecutionKernelHooks.enabled()||!kind.startsWith("binding-opaque")||!"Unmodeled binding Map type".equals(unsupported.getMessage()))throw unsupported;
+            // Diagnostic snapshots cannot turn an unsupported callback value
+            // into a new business exception. The execution kernel still treats
+            // the original invocation and reachable effects as opaque.
+            Map r=row();r.put("callee",call);r.put("fields",Collections.emptyList());r.put("opaque_identity",PlannedServiceAgent.Recorder.value(value));r.put("snapshot_unsupported",unsupported.getMessage());emit(kind,r);return;
+        }
+        if(fields.isEmpty())return;Map r=row();r.put("callee",call);r.put("fields",fields);emit(kind,r);
+    }
     public static void before(String call,Object recv,Object[] args){synchronized(PlannedServiceAgent.Recorder.class){if(!active())return;try{if(ReadEffectHooks.enabled()){ReadEffectHooks.before(call,recv,args);return;}if(admitted(call,recv))return;mark("binding-opaque-touch",call,recv);for(Object a:args)mark("binding-opaque-touch",call,a);}catch(Throwable e){PlannedServiceAgent.Recorder.problem("binding-before:"+e);throw new IllegalStateException(e);}}}
     public static void after(String call,Object recv,Object[] args,Object result){synchronized(PlannedServiceAgent.Recorder.class){if(!active())return;try{
         TemporalDateHooks.bindingCall(call,recv,args,result);
@@ -104,7 +114,7 @@ public final class ResponseBindingHooks implements Opcodes {
         if(((List)binding().get("source_calls")).contains(call)){mark("binding-source",call,result);}
         else if(!admitted(call,recv))mark("binding-opaque-result",call,result);
     }catch(Throwable e){PlannedServiceAgent.Recorder.problem("binding-after:"+e);throw new IllegalStateException(e);}}}
-    public static void exceptional(String call,Object recv,Object[] args,Throwable error){synchronized(PlannedServiceAgent.Recorder.class){if(!active())return;try{if(ExecutionKernelHooks.enabled())ExecutionKernelHooks.exceptional(call,error);else if(ReadEffectHooks.enabled())ReadEffectHooks.exceptional(call,recv,args,error);}catch(Throwable e){PlannedServiceAgent.Recorder.problem("binding-exceptional:"+e);throw new IllegalStateException(e);}}}
+    public static void exceptional(String call,Object recv,Object[] args,Throwable error){synchronized(PlannedServiceAgent.Recorder.class){if(!active())return;try{if(ExecutionKernelHooks.enabled()){SaveEffectHooks.exceptional(call,error);ExecutionKernelHooks.exceptional(call,error);}else if(ReadEffectHooks.enabled())ReadEffectHooks.exceptional(call,recv,args,error);}catch(Throwable e){PlannedServiceAgent.Recorder.problem("binding-exceptional:"+e);throw new IllegalStateException(e);}}}
     static void abort()throws Exception{if(enabled()&&ReadEffectHooks.enabled())ReadEffectHooks.abort();}
     static void enter(Object[] args)throws Exception{if(!enabled())return;TemporalDateHooks.enter();if(ExecutionKernelHooks.enabled())ExecutionKernelHooks.enter();if(ReadEffectHooks.enabled())ReadEffectHooks.enter();for(int i=0;i<args.length;i++){if(!((List)binding().get("source_arguments")).contains(i))continue;Map r=row();r.put("argument",i);r.put("fields",sourceSnapshot(args[i]));emit("binding-input",r);}}
     static void exit(Object result)throws Exception{if(!enabled())return;if(ReadEffectHooks.enabled())ReadEffectHooks.exit(result);Map r=row();if(r.get("message")!=null)RETURN_MESSAGES.add((String)r.get("message"));r.put("result",PlannedServiceAgent.Recorder.value(result));r.put("fields",snapshot(result,true));emit("binding-return",r);}

@@ -1,0 +1,94 @@
+{
+  "version": 1,
+  "library": "Original Spring 4.3.6.RELEASE / Spring HATEOAS 0.20.0",
+  "class_sha256": {
+    "org/springframework/hateoas/Resource": "35917e028c262c46d1bbeb80cdba2e3bee26f90e3807a7b58d7211e50f78a4eb",
+    "org/springframework/hateoas/ResourceSupport": "6a5c68b9be4557e0d81c1d34aab461eb8a9530f995cb8a5599f17e7243d33e68",
+    "org/springframework/core/ParameterizedTypeReference": "92df33ec3c272d3e686d40197e4469c0f8abbcda73ab1c37d46dbff958a637e4",
+    "org/springframework/http/HttpEntity": "5ac0eba68668d5bc0543f39d7b901a705c911dd1631c6097d0a5b5ff2604581d",
+    "org/springframework/http/MediaType": "029b5a5311817309cb719d0b19ca99f206deb6993149de2784a5ae355278596b",
+    "org/springframework/web/client/RestTemplate$ResponseEntityResponseExtractor": "d02b83b473f34e48dbddb9e8f4d3fcb519c407e7a74a378d51e8be20d5fa29c6",
+    "org/springframework/http/HttpHeaders": "6a3225500278812a943913e8699d711027c43b6cb5d7c2a8faf06b76340b654a",
+    "org/springframework/http/converter/json/MappingJackson2HttpMessageConverter": "2db497b611dd9522c226b49341b4d4b9146b096de069b24153d1fa8c25ba44df",
+    "org/springframework/http/converter/xml/Jaxb2RootElementHttpMessageConverter": "d02a5db97f6c17b681d15422ddb8913eed6011fb6e30b9aa361f97a8d3ad45a1",
+    "org/springframework/http/converter/json/AbstractJackson2HttpMessageConverter": "048aa63fc737c2ac8f66ecab9c19fb043909c834aba531d9ddf3502976717754",
+    "org/springframework/web/client/RestTemplate": "1738b3544d9df8f8be2cbdc16d3af3156e906f36d6e16a169010e5e365b1d8e1",
+    "org/springframework/web/client/HttpMessageConverterExtractor": "6f8fd9f3974de26f9e20ac2b4a6a0a2ebd79caaa19f517f97324fcd6648d9ee0",
+    "org/springframework/http/converter/ByteArrayHttpMessageConverter": "b32fccd60d7576c0adbf9495da27bc50605ec80bbe63ab900ffe3483c87b8a63",
+    "org/springframework/http/converter/xml/SourceHttpMessageConverter": "1d46834ea22aab7c69dec711132b9b911abafccd54a8289bb35c0f14b2c1897d",
+    "org/springframework/http/RequestEntity$DefaultBodyBuilder": "1a2493bd5c986426fac1cfa08f4d35964262261af0cb33a4bf55623667cad15a",
+    "org/springframework/http/converter/support/AllEncompassingFormHttpMessageConverter": "921ec591e19acc5394e6b8108629f67f1d28a4616d341f26a75728f3321c4c21",
+    "org/springframework/http/ResponseEntity": "bc7a8e0603c87c57a7164133f799e4fe6fdef3aabe8518dbb76e1c369f4b3d59",
+    "org/springframework/http/client/SimpleClientHttpRequestFactory": "1a7b45c4c8cf4d32d6adbf3b30dd001fea1d6443b04f4bc05c8a77ab9a0769a6",
+    "org/springframework/http/converter/StringHttpMessageConverter": "3c98c81d5a65ff3affe157dc20cb27d970716531a11c2abd89a2920ec1535113",
+    "org/springframework/http/RequestEntity": "fd53053bd34324391b2e2b6982ef24ea4e23010bf86993fc998f77770f4f59f4",
+    "org/springframework/http/converter/ResourceHttpMessageConverter": "82c52b30b0c180eca3c036591d52ef970567d4b43b919802bc75cbf39227fe48",
+    "org/springframework/hateoas/Link": "d3961c377da5f458b9f6b8644dc71f33d3d0c4d255a745faea4c40c232804a06",
+    "org/springframework/hateoas/mvc/TypeConstrainedMappingJackson2HttpMessageConverter": "c7a1338dd2a82e60da7a325aad2e6b874cd20d6772b6aada50494bb4f8c95ddf",
+    "com/fasterxml/jackson/databind/ObjectMapper": "c9d931c46efbc313108215ad320a7fa1b1c25bd82af5f4ae781b46f4d1d99e59",
+    "com/fasterxml/jackson/databind/deser/BeanDeserializer": "73ae7961269e361a25ad6a2749039fa684f0fae56c17cec1b34004060fab2d2e",
+    "com/fasterxml/jackson/databind/deser/BeanDeserializerBase": "ad949a6815880234b749254cc2ac0393790ad7548d19566fcaff520bceeb6a39",
+    "com/fasterxml/jackson/databind/deser/impl/MethodProperty": "b2939cc86895e11980f32940436311a1c1dcac7198c6beab454a8b88f963aa31",
+    "com/fasterxml/jackson/databind/deser/std/StdValueInstantiator": "62da90902659a5295cfc8ec8273e65cba9d863877ae4eee81c7b36b6a440af55",
+    "com/fasterxml/jackson/databind/deser/impl/UnwrappedPropertyHandler": "514bd6feb9e01d3408edae9a38d248558b3a95ef0c0d9f4ea48119b18703ed74",
+    "org/springframework/hateoas/MediaTypes": "e2811c2edc700e767892f57cab7bbd6d95f0850d53b9b60c7f6010b3b5f336e1",
+    "org/springframework/web/client/DefaultResponseErrorHandler": "e7304caf1cd1df4687cafbc713f6a9ca59ab8afafdbbd241e4269592bdf3a498",
+    "org/springframework/hateoas/mvc/TypeReferences$SyntheticParameterizedType": "e2ea41e3d9744833eb6eec864e7480f4401febf8cb0cee92655501c376eb91f2",
+    "org/springframework/hateoas/mvc/TypeReferences$PagedResourcesType": "e3e01e3a4a3ab149e9b8407e1c6140f1b17a18eb60367ce53bef64db53efca82",
+    "org/springframework/hateoas/mvc/TypeReferences$ResourceType": "b19cb88ea83b252d214f04a4a91e827a47ff69b7c1f883769816f0eea5be8342",
+    "org/springframework/hateoas/mvc/TypeReferences$SyntheticParameterizedTypeReference": "7eae41d56ea74be330c2c3a071a737b259e73a438054b8cab704fd8c0e1f04e8",
+    "org/springframework/hateoas/mvc/TypeReferences$ResourcesType": "413f81810a8b4a131fc735b154bf3309596a8c3290e4ea260defdb9a8e57f6b5",
+    "org/springframework/http/client/support/InterceptingHttpAccessor": "8c1b3b4f67111844993a2f123611269d8eb7ee8206c0889df7bde90ec7c8c448",
+    "org/springframework/http/client/support/HttpAccessor": "454da2b64e2e369357af62ab3911ef97a0a0f78dac6862acd58ffb7e7dcbac6a",
+    "org/springframework/http/client/InterceptingClientHttpRequestFactory": "e8a1f9c5325cf3d96b7dbdca83fa2f43de66720f0377ec765db920ca3f1ae302",
+    "org/springframework/http/client/AbstractClientHttpRequestFactoryWrapper": "31c1e4f9fe03d04579c2dae02e50181061b42449996f9f801cf0d9e459a2fff6",
+    "org/springframework/http/client/InterceptingClientHttpRequest": "059167397b61bf0b02de94fc287a3d50c94eb3c555dc5c945a97187431ba34ef",
+    "org/springframework/web/client/RestTemplate$HttpEntityRequestCallback": "02e39886cf2aa43e4952376fd615fcbcbc417dae4b7234352ff545c4eb06d4bf",
+    "org/springframework/web/client/RestTemplate$AcceptHeaderRequestCallback": "5c4b67d974376beb33fa1d0b36be90a495307b518607738f986b2973e535721f",
+    "org/springframework/cloud/sleuth/instrument/web/client/TraceRestTemplateInterceptor": "78deb3221b14f5240c942682ff5b4dc5d59475db6c435117c72859af22ab1779"
+  },
+  "converter_classes": [
+    "org/springframework/http/converter/ByteArrayHttpMessageConverter",
+    "org/springframework/http/converter/StringHttpMessageConverter",
+    "org/springframework/http/converter/ResourceHttpMessageConverter",
+    "org/springframework/http/converter/xml/SourceHttpMessageConverter",
+    "org/springframework/http/converter/support/AllEncompassingFormHttpMessageConverter",
+    "org/springframework/http/converter/json/MappingJackson2HttpMessageConverter",
+    "org/springframework/http/converter/xml/Jaxb2RootElementHttpMessageConverter",
+    "org/springframework/hateoas/mvc/TypeConstrainedMappingJackson2HttpMessageConverter"
+  ],
+  "conditions": [
+    "Exact RequestEntity local builder identity, accept/content-type arguments and terminal method/URI/body",
+    "Exact frozen RestTemplate implementation and converter classes; actual call-contained HTTP message and typed decoder identity",
+    "Resource content comes from observed decoder projection; snapshots alone never create source",
+    "No custom mapper mixins/deserializers or unmodeled container graph; failure remains unknown"
+  ],
+  "jdk_profiles": [
+    {
+      "java_runtime_version": "1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01",
+      "class_sha256": {
+        "java/net/URI": "9b936477ca803de6536ddef00f72d98a8ac2f2f798381ea74aaf19742a63a9bd",
+        "java/util/AbstractCollection": "814fda78b15f5f151e909988e17aae905f42d75722ff7baad1273af63e09a3c0",
+        "java/util/Formatter": "f514b6ffb4daa16ac044a56808a5e7d88d890b9dad2e31e66abd48268ce6b158",
+        "java/util/TimeZone": "a05ba07f053de82d9d67e4ecc8e089ab4fab7a1ab0b91023a355b6245e298efc",
+        "java/util/concurrent/TimeUnit": "d165d6757ce0bddd5f8dba5df6ca9d52a46b01c38fe425ed966ef3a14692ef86",
+        "java/util/regex/Matcher": "109bd157fac849beebbef1c57cc838f7d574052251df5b423eef11af404ae798",
+        "java/util/regex/Pattern": "0a2c1e30e2b4fd4b5a4a76f0763d8e36965b270c52a2ce7751b9ce8b449b3c15"
+      }
+    },
+    {
+      "java_runtime_version": "1.8.0_111-internal-alpine-r0-b14",
+      "class_sha256": {
+        "java/net/URI": "18fcc0bc2f9244dc0f42e71c52043131c28c65357eeb7c433e1b9fdd9371e76c",
+        "java/util/AbstractCollection": "814fda78b15f5f151e909988e17aae905f42d75722ff7baad1273af63e09a3c0",
+        "java/util/Formatter": "02c1465659974d4ad5c4de3f538fd862dc9fd419977ba2315b729347c727f8a2",
+        "java/util/TimeZone": "a05ba07f053de82d9d67e4ecc8e089ab4fab7a1ab0b91023a355b6245e298efc",
+        "java/util/concurrent/TimeUnit": "d165d6757ce0bddd5f8dba5df6ca9d52a46b01c38fe425ed966ef3a14692ef86",
+        "java/util/regex/Matcher": "109bd157fac849beebbef1c57cc838f7d574052251df5b423eef11af404ae798",
+        "java/util/regex/Pattern": "80d1b6fad8a0e7e30320156a631a2031321e39d54185771ff08a3db08bf1f15e"
+      }
+    }
+  ],
+  "network_policy": "Frozen RestTemplate passes URI/headers/encoded bytes to transport callbacks, not the private DTO. Transport/global effects remain opaque and poison externally reachable state. Only original getter/serializer-checked private operands may be preserved; this is not a read-only network contract.",
+  "transport_scope": "Only exact SimpleClientHttpRequestFactory or its fixed Intercepting wrapper, optional fixed Sleuth TraceRestTemplateInterceptor, and DefaultResponseErrorHandler. Other components remain unsupported. Even these transport/global effects are not treated as read-only."
+}
