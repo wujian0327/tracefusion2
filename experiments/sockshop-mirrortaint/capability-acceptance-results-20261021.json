@@ -1,0 +1,210 @@
+{
+  "algorithm_commit": "2cefacdc577b4bf1b8635201efcacf58c221ab85",
+  "queries": 62,
+  "entries": 18,
+  "query_configurations_scored": 124,
+  "complete_query_configurations": true,
+  "modes": {
+    "full": {
+      "expected_targets": 431,
+      "actual_targets": 431,
+      "states": {
+        "unknown": 39,
+        "known_correct": 382,
+        "planning_rejected": 10
+      },
+      "known_answer_exact_rate": 1.0,
+      "answerability": 0.8863109048723898,
+      "baseline_correct_preserved": 368,
+      "baseline_correct_required": 368,
+      "baseline_nonempty_correct_preserved": 337,
+      "baseline_nonempty_correct_required": 337,
+      "old_tf_correct_preserved": 213,
+      "old_tf_correct_required": 213,
+      "union_preserved": 382,
+      "union_required": 382,
+      "union_losses": [],
+      "missing_targets": [],
+      "tp": 351,
+      "fp": 0,
+      "fn_including_unknown": 49,
+      "all_passed": true
+    },
+    "selective": {
+      "expected_targets": 431,
+      "actual_targets": 431,
+      "states": {
+        "unknown": 39,
+        "known_correct": 382,
+        "planning_rejected": 10
+      },
+      "known_answer_exact_rate": 1.0,
+      "answerability": 0.8863109048723898,
+      "baseline_correct_preserved": 368,
+      "baseline_correct_required": 368,
+      "baseline_nonempty_correct_preserved": 337,
+      "baseline_nonempty_correct_required": 337,
+      "old_tf_correct_preserved": 213,
+      "old_tf_correct_required": 213,
+      "union_preserved": 382,
+      "union_required": 382,
+      "union_losses": [],
+      "missing_targets": [],
+      "tp": 351,
+      "fp": 0,
+      "fn_including_unknown": 49,
+      "all_passed": true
+    }
+  },
+  "full_selective_state_agreement": 431,
+  "paired_target_instances": 431,
+  "date_controls_passed": true,
+  "planning_accepted": 61,
+  "planning_rejected": 1,
+  "received_mutation_controls_passed": true,
+  "legacy_collection_controls_passed": true,
+  "heldout_candidates_unexamined": 29,
+  "no_new_performance": true,
+  "all_passed": false,
+  "first_attempt_pairing": {
+    "both_correct": 371,
+    "full_correct_selective_not_correct": 5,
+    "selective_correct_full_not_correct": 6,
+    "both_not_correct": 49
+  },
+  "provenance_union_passed": true,
+  "primary_partial_wrong_answers": [],
+  "first_attempt": {
+    "full": {
+      "reference_target_states": {
+        "known_correct": 376,
+        "business_error": 1,
+        "not_executed_after_batch_failure": 5,
+        "unknown": 39,
+        "planning_rejected": 10
+      },
+      "affected_reference_instances": [
+        {
+          "key": [
+            "sockshop-orders-newOrder-address-postcode",
+            "group-0",
+            "/address/postcode"
+          ],
+          "state": "business_error"
+        },
+        {
+          "key": [
+            "sockshop-orders-newOrder-address-postcode",
+            "group-1",
+            "/address/postcode"
+          ],
+          "state": "not_executed_after_batch_failure"
+        },
+        {
+          "key": [
+            "sockshop-orders-newOrder-address-postcode",
+            "group-2",
+            "/address/postcode"
+          ],
+          "state": "not_executed_after_batch_failure"
+        },
+        {
+          "key": [
+            "sockshop-orders-newOrder-address-postcode",
+            "group-3",
+            "/address/postcode"
+          ],
+          "state": "not_executed_after_batch_failure"
+        },
+        {
+          "key": [
+            "sockshop-orders-newOrder-address-postcode",
+            "group-4",
+            "/address/postcode"
+          ],
+          "state": "not_executed_after_batch_failure"
+        },
+        {
+          "key": [
+            "sockshop-orders-newOrder-address-postcode",
+            "group-5",
+            "/address/postcode"
+          ],
+          "state": "not_executed_after_batch_failure"
+        }
+      ],
+      "failed_configurations": 1,
+      "first_attempt_business_all_passed": false
+    },
+    "selective": {
+      "reference_target_states": {
+        "known_correct": 377,
+        "business_error": 1,
+        "not_executed_after_batch_failure": 4,
+        "unknown": 39,
+        "planning_rejected": 10
+      },
+      "affected_reference_instances": [
+        {
+          "key": [
+            "sockshop-orders-newOrder-customer-lastName",
+            "group-1",
+            "/customer/lastName"
+          ],
+          "state": "business_error"
+        },
+        {
+          "key": [
+            "sockshop-orders-newOrder-customer-lastName",
+            "group-2",
+            "/customer/lastName"
+          ],
+          "state": "not_executed_after_batch_failure"
+        },
+        {
+          "key": [
+            "sockshop-orders-newOrder-customer-lastName",
+            "group-3",
+            "/customer/lastName"
+          ],
+          "state": "not_executed_after_batch_failure"
+        },
+        {
+          "key": [
+            "sockshop-orders-newOrder-customer-lastName",
+            "group-4",
+            "/customer/lastName"
+          ],
+          "state": "not_executed_after_batch_failure"
+        },
+        {
+          "key": [
+            "sockshop-orders-newOrder-customer-lastName",
+            "group-5",
+            "/customer/lastName"
+          ],
+          "state": "not_executed_after_batch_failure"
+        }
+      ],
+      "failed_configurations": 1,
+      "first_attempt_business_all_passed": false
+    }
+  },
+  "primary_business_failures": [
+    {
+      "query": "sockshop-orders-newOrder-address-postcode",
+      "mode": "full",
+      "failure": "{'case': 'group-0', 'business_passed': False, 'expected_target': True, 'start_monotonic_ns': 511803468556552, 'error': \"HTTP status 500: {'timestamp': 1792571012107, 'status': 500, 'error': 'Internal Server Error', 'exception': 'java.lang.IllegalStateException', 'message': 'Unable to create order due to timeout from one of the services.', 'path': '/orders'}\", 'end_monotonic_ns': 511809661365584}",
+      "directory": "/home/wujian/tracefusion2/artifacts/date-effects-capability-20261021/final-capability/all62-orders-serial/full-sockshop-orders-newOrder-address-postcode"
+    },
+    {
+      "query": "sockshop-orders-newOrder-customer-lastName",
+      "mode": "selective",
+      "failure": "{'case': 'group-1', 'business_passed': False, 'expected_target': True, 'start_monotonic_ns': 512039019360774, 'error': \"HTTP status 500: {'timestamp': 1792571250064, 'status': 500, 'error': 'Internal Server Error', 'exception': 'java.lang.IllegalStateException', 'message': 'Unable to create order due to timeout from one of the services.', 'path': '/orders'}\", 'end_monotonic_ns': 512047616537911}",
+      "directory": "/home/wujian/tracefusion2/artifacts/date-effects-capability-20261021/final-capability/all62-orders-serial/selective-sockshop-orders-newOrder-customer-lastName"
+    }
+  ],
+  "first_attempt_business_all_passed": false,
+  "unqualified_end_to_end_acceptance": false,
+  "business_repeat_protocol_sha256": "7c14958935189446d5c17ac1004ee81125ef145a55d1d11d462780daa601f8a3"
+}

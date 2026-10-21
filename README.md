@@ -1,5 +1,12 @@
 # TraceFusion 2
 
+2026-10-21完成[62查询统一来源核验](experiments/sockshop-mirrortaint/CAPABILITY-ACCEPTANCE-20261021.md)，核心冻结 `2cefacd`。
+全部62查询预先规划：61接纳、1个UUID类型拒绝。含固定两次独立复验，full/selective各 **382正确 / 39 unknown / 10拒绝 / 0错误确定答案**，固定范围来源率88.63%。
+已核验MirrorTaint正确的368个和旧TF正确的213个目标，联合382个；这是同一新Agent的实际捕获核验。
+**首次端到端验收仍未全过**：full原始376正确、selective377正确，另各有1次Future超时及5/4个未执行目标。复验不覆盖首轮失败，不能宣称100%业务可用性。
+新Date与有限编码器效果、统一策略和接收集合处理见[机制](experiments/sockshop-mirrortaint/DATE-EFFECTS-ALGORITHM-20261021.md)；完整逐实例、首轮配对及复验表见报告。
+29候选仍封存，未跑新成本；下一步优先定位早期请求截止时间干扰，旧成本不套用于新核心。
+
 2026-10-21完成[原版 Orders 有限端到端来源链修订](experiments/sockshop-mirrortaint/ORDERS-END-TO-END-REVISION-20261021.md)，核心冻结 `3cf6320`。
 12个开发查询，full/selective各72目标：**66个已知来源完全匹配、6个Date unknown，错误/证据无效均0；可回答率91.67%**。
 新增修复主口径66个基线领先反例，开发台账累计163/169、剩余6；**不是新版431目标整体正确率**。
@@ -69,7 +76,7 @@ Cart真实嵌套Frame已核验，但新通用路径仍各6个unknown，旧read-f
 2026-10-20新增[62查询同任务能力对照](experiments/sockshop-mirrortaint/BASELINE-CAPABILITY-20261020.md)：
 冻结TF `2b3b929` 接纳47/62；含首次创建补充输入共431个业务目标，TF正确213、unknown88，
 拒绝查询对应130个目标。MirrorTaint＋披露适配器正确而TF未答的目标有169个；即使不把空标签
-当作已知空来源，仍有145个非空来源反例。**当前尚未通过基线能力保持验收，成本优势只限原共同任务。**
+当作已知空来源，仍有145个非空来源反例。**该冻结版尚未通过基线能力保持验收，成本优势只限原共同任务。**
 本轮没有修改TF核心或新增成本测量；剩余29候选未测。旧Cart首访参数来源解释已勘误，见新报告。
 
 2026-10-20完成调用生命周期修复，冻结核心为 `2b3b929`。原版Basic严格同配置混合回归

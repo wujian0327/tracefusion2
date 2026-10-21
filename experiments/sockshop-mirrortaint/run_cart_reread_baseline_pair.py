@@ -9,7 +9,7 @@ import run_response_binding_revision as old
 
 def run(out,base):
     out.mkdir(parents=True,exist_ok=False);q=next(q for q in load(HERE/'capability-comparison-62-20261020.json')['queries'] if q['id']=='sockshop-carts-get-customerId');results=[]
-    uid='tf2-cart-reread'; sequence=[0,0]
+    uid='56e8f576709b70d0ace01fb0'; sequence=[0,0]
     save(out/'protocol-before-runtime.json',{'query':q,'customerId':uid,'requests':sequence,'expected':'Every target matches its actual second read on creation, first read on repeats; save remains opaque','source_boundary':'Repository returns: first request uses SECOND read; second request uses FIRST. No source from output snapshot or initial argument.'})
     for mode in ('full','selective'):
         dest=out/mode;dest.mkdir();p=plan_response(load(base/'carts/model.json'),q['entry'],q['target'],q['path'],execution_kernel=True,application_calls=True);old.query_build(dest/'build',base,q,p);cap=dest/'capture';cap.mkdir()
@@ -23,7 +23,7 @@ def run(out,base):
             else:raise ValueError('Original Cart readiness failed')
             seen=set()
             for index,customer in enumerate(sequence):
-                uid='56e8f576709b70d0ace01fb0';created=customer not in seen;seen.add(customer)
+                created=customer not in seen;seen.add(customer)
                 d=cap/('request-'+str(index));d.mkdir();cl=old.Client(d);message=old.context(cl,secrets.token_hex(16));response=cl.request('GET','http://127.0.0.1:19681/carts/'+uid,label='target-query');assert response['customerId']==uid;run['cases'].append({'index':index,'created':created,'customerId':uid,'message':message,'response':response})
             dep.compose('stop','-t','20','carts',timeout=40);run['status']='business-completed'
         finally:old.cleanup(dep,run,cap)
