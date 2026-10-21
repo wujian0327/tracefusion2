@@ -1,5 +1,11 @@
 # TraceFusion 2
 
+2026-10-21完成[Spring异步任务与Future实例配对](experiments/sockshop-mirrortaint/ASYNC-PROTOCOL-REVISION-20261021.md)，
+冻结 `cb693c1`。原版Orders四配置的144任务、264次get配对通过，但24个来源目标仍全部unknown；本阶段只核验事实，不注册来源。
+混合Spring控制各15任务、14项扰动通过；新Agent循环各60/60、TicketInfo各21/21、Cart创建/重读各2/2保持。
+**新增基线差距修复0，累计97、剩余72**；没有新成本或62查询整体正确率，29候选仍封存。机制及明确边界见[说明](experiments/sockshop-mirrortaint/ASYNC-PROTOCOL-ALGORITHM-20261021.md)。
+MirrorTaint论文的100%是特定指标；本仓库431同任务对照为368正确、35错误、28无法回答，不能称普遍100%。
+
 2026-10-21完成[Orders统一入口与构造器效果修订](experiments/sockshop-mirrortaint/ORDERS-FOUNDATION-REVISION-20261021.md)，
 最终冻结 `0956200`。新增保守构造器生命周期、静态读取和本地字符串/应用渲染依赖；修复初始化前字段及可变参数状态分类问题，见[机制](experiments/sockshop-mirrortaint/ORDERS-FOUNDATION-ALGORITHM-20261021.md)。
 原版Orders的Date、username两查询进入统一内核，但full/selective每查询各6个目标仍全部unknown，真值可用、证据有效；**新增基线差距修复0，累计97、剩余72**。
