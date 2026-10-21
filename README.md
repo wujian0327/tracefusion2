@@ -1,5 +1,11 @@
 # TraceFusion 2
 
+2026-10-21完成[Orders统一入口与构造器效果修订](experiments/sockshop-mirrortaint/ORDERS-FOUNDATION-REVISION-20261021.md)，
+最终冻结 `0956200`。新增保守构造器生命周期、静态读取和本地字符串/应用渲染依赖；修复初始化前字段及可变参数状态分类问题，见[机制](experiments/sockshop-mirrortaint/ORDERS-FOUNDATION-ALGORITHM-20261021.md)。
+原版Orders的Date、username两查询进入统一内核，但full/selective每查询各6个目标仍全部unknown，真值可用、证据有效；**新增基线差距修复0，累计97、剩余72**。
+Cart各2/2、15/15及6/6，循环各60/60、TicketInfo各21/21保持；旧213成功仅原捕获离线兼容复算。
+最终离线修订复用经计划/Agent类哈希核对的初始冻结捕获。29候选未启封，没有新成本或62查询统一验收结论。
+
 2026-10-21完成[Cart首次创建与再次读取来源修订](experiments/sockshop-mirrortaint/CART-REREAD-REVISION-20261021.md)，
 核心冻结 `014f18d`。原对照同客户ID的首次创建/重复GET，full/selective各2/2来源匹配；混合客户保护各7/7。
 保存仍是不透明效果，首次目标来源为实际第二次仓储读取；新增有界helper调用图与构造器创建证据，见[机制](experiments/sockshop-mirrortaint/CART-REREAD-ALGORITHM-20261021.md)。

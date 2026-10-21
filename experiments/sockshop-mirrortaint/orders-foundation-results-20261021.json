@@ -1,0 +1,371 @@
+{
+  "all_passed": true,
+  "algorithm_commit": "0956200b622c6ed8cba97b2762fd31e222a8584b",
+  "capture_commit": "6d783c6a5b86d6f594d9e210793b04f68d5168e5",
+  "orders": {
+    "full-sockshop-orders-newOrder-customer-username": {
+      "targets": 6,
+      "known_exact": 0,
+      "unknown": 6,
+      "wrong": 0,
+      "evidence_invalid": 0,
+      "oracle_unavailable": 0,
+      "answerability": 0.0,
+      "known_exact_rate": null,
+      "tp": 0,
+      "fp": 0,
+      "fn_including_unknown_positive": 6
+    },
+    "full-sockshop-orders-newOrder-date": {
+      "targets": 6,
+      "known_exact": 0,
+      "unknown": 6,
+      "wrong": 0,
+      "evidence_invalid": 0,
+      "oracle_unavailable": 0,
+      "answerability": 0.0,
+      "known_exact_rate": null,
+      "tp": 0,
+      "fp": 0,
+      "fn_including_unknown_positive": 0
+    },
+    "selective-sockshop-orders-newOrder-customer-username": {
+      "targets": 6,
+      "known_exact": 0,
+      "unknown": 6,
+      "wrong": 0,
+      "evidence_invalid": 0,
+      "oracle_unavailable": 0,
+      "answerability": 0.0,
+      "known_exact_rate": null,
+      "tp": 0,
+      "fp": 0,
+      "fn_including_unknown_positive": 6
+    },
+    "selective-sockshop-orders-newOrder-date": {
+      "targets": 6,
+      "known_exact": 0,
+      "unknown": 6,
+      "wrong": 0,
+      "evidence_invalid": 0,
+      "oracle_unavailable": 0,
+      "answerability": 0.0,
+      "known_exact_rate": null,
+      "tp": 0,
+      "fp": 0,
+      "fn_including_unknown_positive": 0
+    }
+  },
+  "cart_original_pair": {
+    "full": 2,
+    "selective": 2
+  },
+  "cart15": {
+    "full": 15,
+    "selective": 15
+  },
+  "cart6_restore": {
+    "full": 6,
+    "selective": 6
+  },
+  "loop60": {
+    "full": 60,
+    "selective": 60
+  },
+  "ticketinfo21": {
+    "full": 21,
+    "selective": 21
+  },
+  "controls": {
+    "semantics-development-07": {
+      "full": {
+        "targets": 30,
+        "known_exact": 18,
+        "expected_unknown": 12,
+        "aborted": 2,
+        "faults": {
+          "missing-constructor-begin": true,
+          "wrong-constructor-id": true,
+          "wrong-constructor-argument": true,
+          "missing-constructor-throw": true,
+          "wrong-static-field": true,
+          "builder-runtime-hash": true,
+          "wrong-builder-return": true,
+          "missing-render-frame": true,
+          "wrong-render-argument": true
+        }
+      },
+      "selective": {
+        "targets": 30,
+        "known_exact": 18,
+        "expected_unknown": 12,
+        "aborted": 2,
+        "faults": {
+          "missing-constructor-begin": true,
+          "wrong-constructor-id": true,
+          "wrong-constructor-argument": true,
+          "missing-constructor-throw": true,
+          "wrong-static-field": true,
+          "builder-runtime-hash": true,
+          "wrong-builder-return": true,
+          "missing-render-frame": true,
+          "wrong-render-argument": true
+        }
+      }
+    },
+    "reread-development": {
+      "full": {
+        "targets": 16,
+        "known_exact": 8,
+        "expected_unknown": 8,
+        "faults": {
+          "missing-birth": "unknown",
+          "wrong-birth-owner": "refused",
+          "wrong-birth-hash": "refused",
+          "duplicate-birth": "refused",
+          "wrong-cycle-argument": "refused",
+          "missing-cycle-return": "refused"
+        },
+        "depth_status": "analysis_limited"
+      },
+      "selective": {
+        "targets": 16,
+        "known_exact": 8,
+        "expected_unknown": 8,
+        "faults": {
+          "missing-birth": "unknown",
+          "wrong-birth-owner": "refused",
+          "wrong-birth-hash": "refused",
+          "duplicate-birth": "refused",
+          "wrong-cycle-argument": "refused",
+          "missing-cycle-return": "refused"
+        },
+        "depth_status": "analysis_limited"
+      }
+    },
+    "date-development": {
+      "full-iso": {
+        "targets": 32,
+        "known": 22,
+        "expected_unknown": 10,
+        "root_aborts": 2,
+        "faults": {
+          "runtime-hash": true,
+          "missing-runtime": true,
+          "date-input-object": true,
+          "date-input-epoch": true,
+          "missing-clock": true,
+          "calendar-provider": true,
+          "serialization-object": true,
+          "serialization-epoch": true,
+          "serialization-library": true,
+          "wire-value": true,
+          "missing-serialization": true
+        }
+      },
+      "full-timestamp": {
+        "targets": 32,
+        "known": 22,
+        "expected_unknown": 10,
+        "root_aborts": 2,
+        "faults": {
+          "runtime-hash": true,
+          "missing-runtime": true,
+          "date-input-object": true,
+          "date-input-epoch": true,
+          "missing-clock": true,
+          "calendar-provider": true,
+          "serialization-object": true,
+          "serialization-epoch": true,
+          "serialization-library": true,
+          "wire-value": true,
+          "missing-serialization": true
+        }
+      },
+      "selective-iso": {
+        "targets": 32,
+        "known": 22,
+        "expected_unknown": 10,
+        "root_aborts": 2,
+        "faults": {
+          "runtime-hash": true,
+          "missing-runtime": true,
+          "date-input-object": true,
+          "date-input-epoch": true,
+          "missing-clock": true,
+          "calendar-provider": true,
+          "serialization-object": true,
+          "serialization-epoch": true,
+          "serialization-library": true,
+          "wire-value": true,
+          "missing-serialization": true
+        }
+      },
+      "selective-timestamp": {
+        "targets": 32,
+        "known": 22,
+        "expected_unknown": 10,
+        "root_aborts": 2,
+        "faults": {
+          "runtime-hash": true,
+          "missing-runtime": true,
+          "date-input-object": true,
+          "date-input-epoch": true,
+          "missing-clock": true,
+          "calendar-provider": true,
+          "serialization-object": true,
+          "serialization-epoch": true,
+          "serialization-library": true,
+          "wire-value": true,
+          "missing-serialization": true
+        }
+      }
+    },
+    "opaque-date-final": {
+      "full": {
+        "targets": 10,
+        "known_exact": 4,
+        "expected_unknown": 6,
+        "aborted": 2
+      },
+      "selective": {
+        "targets": 10,
+        "known_exact": 4,
+        "expected_unknown": 6,
+        "aborted": 2
+      }
+    },
+    "application-frozen": {
+      "full": {
+        "targets": 34,
+        "known": 26,
+        "expected_unknown": 8,
+        "aborted": 2,
+        "budget_status": "analysis_limited",
+        "faults": {
+          "missing-child": true,
+          "wrong-parent": true,
+          "duplicate-call-id": true,
+          "missing-constructor-write": true,
+          "same-value-wrong-argument": true,
+          "wrong-exception": true
+        }
+      },
+      "selective": {
+        "targets": 34,
+        "known": 26,
+        "expected_unknown": 8,
+        "aborted": 2,
+        "budget_status": "analysis_limited",
+        "faults": {
+          "missing-child": true,
+          "wrong-parent": true,
+          "duplicate-call-id": true,
+          "missing-constructor-write": true,
+          "same-value-wrong-argument": true,
+          "wrong-exception": true
+        }
+      }
+    },
+    "constructor-frozen": {
+      "full": {
+        "targets": 24,
+        "known": 20,
+        "expected_unknown": 4,
+        "aborted": 2,
+        "budget_status": "analysis_limited",
+        "faults": {
+          "missing-constructor-frame": true,
+          "wrong-constructor-parent": true,
+          "wrong-constructor-receiver": true,
+          "missing-constructor-write": true,
+          "missing-constructor-completion": true,
+          "wrong-constructor-exception": true,
+          "wrong-constructor-argument": true,
+          "missing-filter-callback": true,
+          "wrong-filter-member": true,
+          "wrong-filter-predicate": true,
+          "wrong-filter-result": true,
+          "filter-runtime-hash": true
+        }
+      },
+      "selective": {
+        "targets": 24,
+        "known": 20,
+        "expected_unknown": 4,
+        "aborted": 2,
+        "budget_status": "analysis_limited",
+        "faults": {
+          "missing-constructor-frame": true,
+          "wrong-constructor-parent": true,
+          "wrong-constructor-receiver": true,
+          "missing-constructor-write": true,
+          "missing-constructor-completion": true,
+          "wrong-constructor-exception": true,
+          "wrong-constructor-argument": true,
+          "missing-filter-callback": true,
+          "wrong-filter-member": true,
+          "wrong-filter-predicate": true,
+          "wrong-filter-result": true,
+          "filter-runtime-hash": true
+        }
+      }
+    }
+  },
+  "collection_controls": {
+    "full": {
+      "queries": 10,
+      "exact": 10,
+      "events": 281,
+      "bytes": 54440,
+      "tamper_rejected": true
+    },
+    "selective": {
+      "queries": 10,
+      "exact": 10,
+      "events": 204,
+      "bytes": 39901,
+      "tamper_rejected": true
+    }
+  },
+  "control_reuse": {
+    "semantics-development-07": {
+      "plan_equal": true,
+      "all_agent_classes_equal": true,
+      "scope": "Existing development control capture replayed under final frozen offline code; no new deployment",
+      "plan_sha256": "0d97a1a62b1dd2dd0f9ee0222679ee145c20bead9e85366ca523eb1b4776efb3",
+      "results_sha256": "3b1c88d9a8fe0940ac373295e5bfd6021b786a96aa2d6be7d725b61dc4108df3"
+    },
+    "reread-development": {
+      "plan_equal": true,
+      "all_agent_classes_equal": true,
+      "scope": "Existing development control capture replayed under final frozen offline code; no new deployment",
+      "plan_sha256": "cf0405c85917b802ff7847ee5e9f2984e2c54fb912fdcedb307c8b933c4d2844",
+      "results_sha256": "c3b8df829525f2f75b075390cb3dd010a0562f0c222ed642a22dca687ab33c65"
+    },
+    "date-development": {
+      "plan_equal": true,
+      "all_agent_classes_equal": true,
+      "scope": "Existing development control capture replayed under final frozen offline code; no new deployment",
+      "plan_sha256": "24d3245ee6f5ad3eb8dc6887cdccf6714d133a3cb4fb9e50774c26b5dc77ae31",
+      "results_sha256": "e9f83ccc682c8c6614569e056e58558594c439377ce89728a3d6fc259d4fe4b4"
+    }
+  },
+  "legacy_offline": {
+    "all_passed": true,
+    "source_sha256": "e4c7574eafe35f7ef68f38b78d360b15f15b5bc14dd72eaa4e6fa25272fb0d2a",
+    "states": {
+      "unknown": 88,
+      "known_correct": 213
+    },
+    "captures": 40,
+    "scope": "Reused original capture and independent truth, revised offline fast paths; no new runtime validation."
+  },
+  "new_real_baseline_repairs": 0,
+  "cumulative_development_repairs": 97,
+  "remaining_baseline_gaps": 72,
+  "reserved_candidates": 29,
+  "whole_62_full_selective_acceptance": false,
+  "new_performance": false,
+  "evaluator_sha256": "30a1ea0e41ebb0bc2801301e5556c387785cd07fdf6de96a0299472157fd437e"
+}
