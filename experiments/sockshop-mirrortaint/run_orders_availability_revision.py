@@ -28,16 +28,18 @@ def prepare(root):
     for file in (PREVIOUS/'frozen-plans').glob('*.json'):(plans/file.name).write_bytes(file.read_bytes())
     for role,row in old['inputs'].items():assert sha(root/'frozen-base'/role/'original.jar')==row['original_jar_sha256']
 
-def run(root,out,diagnostic=False,repetitions=1):
+def run(root,out,diagnostic=False,repetitions=1,gc_diagnostic=False,quota_aware_jvm=False):
     driver.HOME=root;driver.check();driver.QUERIES=[q for q in driver.QUERIES if q['id'] in QUERIES]
     original=driver.mode_config
-    if diagnostic:
+    if diagnostic or gc_diagnostic or quota_aware_jvm:
         def configured(spec,name,role,cap,build,mode):
             original(spec,name,role,cap,build,mode)
-            spec['services'][name]['environment']['JAVA_OPTS']+=' -Dservice.diagnostic.timing=true'
+            if diagnostic:spec['services'][name]['environment']['JAVA_OPTS']+=' -Dservice.diagnostic.timing=true'
+            if gc_diagnostic:spec['services'][name]['environment']['JAVA_OPTS']+=' -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCApplicationStoppedTime -Xloggc:/tf2/capture/gc.log'
+            if quota_aware_jvm:spec['services'][name]['environment']['JAVA_OPTS']+=' -XX:ParallelGCThreads=1 -XX:CICompilerCount=2'
         driver.mode_config=configured
     out.mkdir(parents=True,exist_ok=False)
-    save(out/'protocol-before-deployments.json',{'queries':list(QUERIES),'repetitions':repetitions,'modes':['full','selective'],'diagnostic':diagnostic,'warmup':False,'deadline_seconds':5,'preserve_every_first_attempt':True,'sources':load(root/'algorithm-freeze.json')['sources'],'driver_sha256':sha(Path(__file__))})
+    save(out/'protocol-before-deployments.json',{'queries':list(QUERIES),'repetitions':repetitions,'modes':['full','selective'],'diagnostic':diagnostic,'gc_logging':gc_diagnostic,'quota_aware_jvm':quota_aware_jvm,'warmup':False,'deadline_seconds':5,'preserve_every_first_attempt':True,'sources':load(root/'algorithm-freeze.json')['sources'],'driver_sha256':sha(Path(__file__))})
     (out/'driver-at-launch.py').write_bytes(Path(__file__).read_bytes())
     results=[]
     for index in range(1,repetitions+1):
@@ -45,6 +47,6 @@ def run(root,out,diagnostic=False,repetitions=1):
     return results
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--prepare',action='store_true');p.add_argument('--out',type=Path);p.add_argument('--diagnostic',action='store_true');p.add_argument('--repetitions',type=int,default=1);a=p.parse_args();root=a.root.resolve()
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--prepare',action='store_true');p.add_argument('--out',type=Path);p.add_argument('--diagnostic',action='store_true');p.add_argument('--gc-diagnostic',action='store_true');p.add_argument('--quota-aware-jvm',action='store_true');p.add_argument('--repetitions',type=int,default=1);a=p.parse_args();root=a.root.resolve()
     if a.prepare:prepare(root)
-    if a.out:run(root,a.out.resolve(),a.diagnostic,a.repetitions)
+    if a.out:run(root,a.out.resolve(),a.diagnostic,a.repetitions,a.gc_diagnostic,a.quota_aware_jvm)
