@@ -48,6 +48,7 @@ public final class SaveEffectHooks {
     }
     public static Object begin(Object repository,Object entity){
         if(config()==null)return null;synchronized(PlannedServiceAgent.Recorder.class){Map r=PlannedServiceAgent.Recorder.row();r.put("entity",PlannedServiceAgent.Recorder.value(entity));r.put("listeners",new ArrayList());r.put("events",0);r.put("callback_invocations",0);r.put("listeners_verified",true);r.put("valid",false);r.put("_entity_ref",entity);Map caller=CollectionServiceHooks.CALLS.get().peek();if(caller!=null)r.put("call_id",caller.get("call_id"));
+        if(TemporalDateHooks.effects()!=null){r.put("date_codecs",new ArrayList());r.put("date_codec_calls",0);}
         try{
             r.put("class_sha256",hashes());Object ops=field(repository,"mongoOperations"),converter=call(ops,"getConverter");r.put("operations",ops.getClass().getName());r.put("converter",converter.getClass().getName());r.put("publisher",field(ops,"eventPublisher").getClass().getName());
             boolean valid=exact(repository,"org.springframework.data.mongodb.repository.support.SimpleMongoRepository")&&exact(ops,"org.springframework.data.mongodb.core.MongoTemplate")&&exact(converter,"org.springframework.data.mongodb.core.convert.MappingMongoConverter")&&publisher(field(ops,"eventPublisher"))&&exact(call(converter,"getTypeMapper"),"org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper");
@@ -76,6 +77,16 @@ public final class SaveEffectHooks {
         r.put("listeners_verified",verified);r.put("events",((Number)r.get("events")).intValue()+1);}
     }
     public static void handler(){if(config()==null||ACTIVE.get().isEmpty())return;synchronized(PlannedServiceAgent.Recorder.class){Map r=ACTIVE.get().peek();r.put("callback_invocations",((Number)r.get("callback_invocations")).intValue()+1);}}
+    public static void codec(Object compound){
+        if(TemporalDateHooks.effects()==null||ACTIVE.get().isEmpty())return;
+        synchronized(PlannedServiceAgent.Recorder.class){Map r=ACTIVE.get().peek();r.put("date_codec_calls",((Number)r.get("date_codec_calls")).intValue()+1);List calls=(List)r.get("date_codecs");if(calls==null){calls=new ArrayList();r.put("date_codecs",calls);}Map proof=new LinkedHashMap();proof.put("valid",false);
+        try{
+            ClassLoader l=compound.getClass().getClassLoader();Map pins=(Map)TemporalDateHooks.effects().get("codec_class_sha256"),hashes=new TreeMap();for(Object k:pins.keySet())hashes.put(k,ExecutionKernelHooks.classHash(Class.forName(((String)k).replace('/','.'),false,l)));proof.put("class_sha256",hashes);
+            Object encoder=call(compound,"getEncoder");proof.put("encoder",encoder.getClass().getName());boolean valid=exact(compound,"com.mongodb.CompoundDBObjectCodec")&&exact(encoder,"com.mongodb.DBObjectCodec");
+            if(valid){Object registry=field(encoder,"codecRegistry");Object defaults=Class.forName("com.mongodb.MongoClient",false,l).getMethod("getDefaultCodecRegistry").invoke(null);boolean hooks=(Boolean)Class.forName("org.bson.BSON",false,l).getMethod("hasEncodeHooks").invoke(null);proof.put("default_registry",registry==defaults);proof.put("encoding_hooks",hooks);proof.put("id_generator",field(encoder,"idGenerator").getClass().getName());Object dateCodec=call(registry,"get",Date.class);proof.put("date_codec",dateCodec.getClass().getName());valid=registry==defaults&&!hooks&&exact(dateCodec,"org.bson.codecs.DateCodec")&&exact(field(encoder,"idGenerator"),"org.bson.codecs.ObjectIdGenerator");}
+            proof.put("valid",valid&&hashes.equals(pins));
+        }catch(Throwable unsupported){proof.put("reason",unsupported.getClass().getName()+":"+unsupported.getMessage());}calls.add(proof);}
+    }
     public static void exceptional(String call,Throwable error){
         if(config()==null||ACTIVE.get().isEmpty()||!call.endsWith(".save(Ljava/lang/Object;)Ljava/lang/Object;"))return;
         synchronized(PlannedServiceAgent.Recorder.class){Map r=ACTIVE.get().peek();Map caller=CollectionServiceHooks.CALLS.get().peek();if(caller==null||!Objects.equals(r.get("call_id"),caller.get("call_id")))return;ACTIVE.get().pop();r.remove("_entity_ref");r.remove("_id_field_ref");r.put("completion","exceptional");r.put("valid",false);r.put("error",PlannedServiceAgent.Recorder.value(error));PlannedServiceAgent.Recorder.emit("mongo-save-effect",r);}

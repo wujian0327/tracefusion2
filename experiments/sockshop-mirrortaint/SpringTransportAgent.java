@@ -11,6 +11,9 @@ public final class SpringTransportAgent implements ClassFileTransformer,Opcodes 
     static final String R="SpringTransportAgent$Transport";
     public static void premain(String args,Instrumentation i)throws Exception{PlannedServiceAgent.premain(args,i);Transport.start();i.addTransformer(new SpringTransportAgent());}
     public byte[] transform(final ClassLoader loader,String owner,Class<?> prior,ProtectionDomain domain,byte[] bytes){
+        if(TemporalDateHooks.effects()!=null&&owner.equals("com/mongodb/CompoundDBObjectCodec")){
+            try{Map pins=(Map)TemporalDateHooks.effects().get("codec_class_sha256");if(!PlannedServiceAgent.Recorder.hash(bytes).equals(pins.get(owner)))throw new IllegalStateException("Date encoder hash differs");ClassNode c=new ClassNode(ASM9);new ClassReader(bytes).accept(c,ClassReader.EXPAND_FRAMES);for(MethodNode m:c.methods)if(m.name.equals("encode")&&m.desc.contains("Lcom/mongodb/DBObject;")){InsnList h=new InsnList();h.add(new VarInsnNode(ALOAD,0));h.add(new MethodInsnNode(INVOKESTATIC,"SaveEffectHooks","codec","(Ljava/lang/Object;)V",false));m.instructions.insert(h);}ClassWriter w=new ClassWriter(ClassWriter.COMPUTE_MAXS);c.accept(w);return w.toByteArray();}catch(Throwable e){PlannedServiceAgent.Recorder.problem("date-codec-transform:"+e);return null;}
+        }
         if(SaveEffectHooks.config()!=null&&(owner.equals("org/springframework/data/mongodb/repository/support/SimpleMongoRepository")||owner.equals("org/springframework/context/event/SimpleApplicationEventMulticaster")||owner.equals("org/springframework/context/event/ApplicationListenerMethodAdapter"))){
             try{
                 Map pins=(Map)SaveEffectHooks.config().get("class_sha256");if(!PlannedServiceAgent.Recorder.hash(bytes).equals(pins.get(owner)))throw new IllegalStateException("Save framework hash differs");

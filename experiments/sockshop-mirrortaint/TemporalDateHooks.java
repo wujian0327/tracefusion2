@@ -13,8 +13,18 @@ public final class TemporalDateHooks {
     static void constructed(Object receiver,Object[] args,Map event)throws Exception{
         if(!date(receiver))return;Map f=new LinkedHashMap();f.put("kind","date-constructor");f.put("epoch_ms",((Date)receiver).getTime());f.put("arity",args.length);event.put("date_contract",f);
     }
+    static Map effects(){return PlannedServiceAgent.plan==null?null:(Map)PlannedServiceAgent.plan.get("date_effects");}
+    static void begin(Map start){
+        if(effects()==null)return;String key=(String)start.get("callee");Object candidate=null;
+        if(key.equals("java/util/Date.toString()Ljava/lang/String;"))candidate=start.get("_receiver_ref");
+        if(key.equals("java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;")){Object[] args=(Object[])start.get("_args_ref");if(args.length==1)candidate=args[0];}
+        if(candidate!=null&&candidate.getClass()==Date.class){start.put("_date_effect_ref",candidate);start.put("_date_effect_before",observe((Date)candidate));start.put("_date_effect_zone",TimeZone.getDefault().getClass().getName());}
+    }
     static void end(Map start,Object result,Map row)throws Exception{
         if(config()==null)return;String key=(String)start.get("callee");Object receiver=start.get("_receiver_ref");Map f=new LinkedHashMap();
+        if(start.containsKey("_date_effect_ref")){
+            Object value=start.get("_date_effect_ref");Map proof=new LinkedHashMap();proof.put("kind","date-render");proof.put("before",start.get("_date_effect_before"));proof.put("after",observe((Date)value));Map rt=new LinkedHashMap();rt.put("java_runtime_version",System.getProperty("java.runtime.version"));rt.put("class_sha256",JdkContractProbe.selected(new String[]{"java/util/Date","java/util/TimeZone","sun/util/calendar/ZoneInfo","sun/util/calendar/BaseCalendar","sun/util/calendar/BaseCalendar$Date","sun/util/calendar/CalendarSystem","sun/util/calendar/Gregorian","sun/util/calendar/CalendarUtils"}));proof.put("render_runtime",rt);proof.put("zone",start.get("_date_effect_zone"));proof.put("valid","sun.util.calendar.ZoneInfo".equals(start.get("_date_effect_zone"))&&"sun.util.calendar.ZoneInfo".equals(TimeZone.getDefault().getClass().getName()));row.put("date_effect",proof);
+        }
         if(key.equals("java/util/Date.getTime()J")&&date(receiver)){f.put("kind","date-get-time");f.put("date",observe((Date)receiver));f.put("epoch_ms",result);}
         else if(key.equals("java/util/Calendar.getInstance()Ljava/util/Calendar;")){f.put("kind","calendar-environment");Class adapter=Class.forName("sun.util.locale.provider.LocaleProviderAdapter");Object selected=adapter.getMethod("getAdapter",Class.class,Locale.class).invoke(null,Class.forName("sun.util.spi.CalendarProvider"),Locale.getDefault(Locale.Category.FORMAT));Object provider=adapter.getMethod("getCalendarProvider").invoke(selected);f.put("provider_type",provider==null?null:provider.getClass().getName());f.put("valid",result!=null&&result.getClass()==GregorianCalendar.class&&provider!=null&&provider.getClass().getName().equals("sun.util.locale.provider.CalendarProviderImpl"));f.put("calendar",PlannedServiceAgent.Recorder.value(result));}
         else if(key.equals("java/util/Calendar.getTime()Ljava/util/Date;")){f.put("kind","calendar-date");f.put("valid",receiver!=null&&receiver.getClass()==GregorianCalendar.class&&date(result));if(date(result))f.put("date",observe((Date)result));}

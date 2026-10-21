@@ -78,6 +78,8 @@ def build(out,inputs):
     manifest['sources'][str(HERE/'infer_collection_service.py')]=sha(HERE/'infer_collection_service.py')
     for name in ('plan_response_binding.py','infer_response_binding.py','plan_read_effects.py','read-forward-runtimes-20261020.json','plan_execution_kernel.py','infer_execution_kernel.py','execution_dependency_state.py','execution-kernel-runtimes-20261020.json','analysis_status.py','plan_application_calls.py','infer_application_execution.py','kernel-contract-runtimes-20261020.json','plan_constructor_effects.py','constructor-library-contracts-20261020.json','framework-wrapper-contracts-20261020.json','plan_date_projection.py','date-runtime-contracts-20261020.json','infer_date_projection.py','async-task-contracts-20261021.json','infer_async_protocol.py','plan_async_dependencies.py','request-entity-contracts-20261021.json','save-effect-contracts-20261021.json'):
         manifest['sources'][str(HERE/name)]=sha(HERE/name)
+    manifest['sources'][str(HERE/'date-effects-contracts-20261021.json')]=sha(HERE/'date-effects-contracts-20261021.json')
+    manifest['sources'][str(HERE/'plan_capability_policy.py')]=sha(HERE/'plan_capability_policy.py')
     manifest['builder_sha256']=sha(Path(__file__));save(out/'build.json',manifest)
 
 

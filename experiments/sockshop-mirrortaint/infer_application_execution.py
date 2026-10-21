@@ -199,6 +199,12 @@ def infer_application(plan,rows,worker_request=None):
             require(fact and fact['kind']==kind and fact['class_sha256']==cfg['request_entity_contracts']['class_sha256'],'RequestEntity witness kind/library differs')
             require(any(p['java_runtime_version']==runtime[0]['java_runtime_version'] and p['class_sha256']==fact['jdk_sha256'] for p in cfg['request_entity_contracts']['jdk_profiles']),'RequestEntity JDK profile differs')
             return fact
+        def date_render(event,observed):
+            fact=event.get('date_effect');require(fact and fact['kind']=='date-render','Date render evidence absent')
+            require(fact['before']==observed and fact['before']==fact['after'],'Date render identity/semantic time changed')
+            require(fact['render_runtime'] in plan['date_effects']['render_runtime_profiles'],'Date render runtime differs')
+            if fact['valid']:require(fact['zone']=='sun.util.calendar.ZoneInfo','Unsupported render timezone claimed valid')
+            return fact['valid']
         def opaque_extent(finish):
             nonlocal pos
             require(finish is not None,'Opaque invocation completion absent');subtree=events[pos:finish];children={r['frame']:r for r in subtree if r['kind']=='enter'}
@@ -537,6 +543,9 @@ def infer_application(plan,rows,worker_request=None):
                                     if desc=='Ljava/lang/Object;' and render_callback:
                                         require(child_value is not None and isinstance(child_value.observed.get('value'),str),'Rendering did not return String');operand=child_value
                                         if not tainted:require(fact['after']==text+operand.observed['value'],'Rendering append result differs')
+                                    elif desc=='Ljava/lang/Object;' and plan.get('date_effects') and call.get('argument_types',[None])[0]=='java.util.Date':
+                                        if not date_render(ret,call['args'][0]):poison([recv]+args,ret['seq']);tainted=True
+                                        operand=Value({'value':fact['after'][len(fact['before']):]},unknown=True)
                                     elif desc=='Ljava/lang/Object;' and list_render:
                                         operand=Value({'value':fact['after'][len(fact['before']):]},unknown=True)
                                     elif desc=='Ljava/lang/Object;' and ret.get('request_render',{}).get('kind')=='empty-list-render':
@@ -649,6 +658,9 @@ def infer_application(plan,rows,worker_request=None):
                                     if content is not None:bind(content,observed);v=content.project(observed)
                                     else:poison([recv],ret['seq'])
                                 else:raise ValueError('Unsupported request witness kind: '+kind)
+                            elif key=='java/util/Date.toString()Ljava/lang/String;' and plan.get('date_effects'):
+                                if not date_render(ret,call['receiver']):poison([recv],ret['seq'])
+                                v=Value(observed,unknown=True)
                             elif key=='java/util/Calendar.getInstance()Ljava/util/Calendar;' and plan.get('date_projection'):
                                 fact=ret.get('date_contract');require(fact and fact['kind']=='calendar-environment','Calendar creation evidence absent')
                                 if fact['valid']:
@@ -703,8 +715,15 @@ def infer_application(plan,rows,worker_request=None):
                                     # database/global effects. Existing shared state and
                                     # mutable Date operands remain conservative.
                                     poison([recv] if recv else [],ret['seq'])
+                                    dates_safe=False
+                                    if plan.get('date_effects'):
+                                        codecs=proof.get('date_codecs');require(isinstance(codecs,list) and len(codecs)==proof.get('date_codec_calls'),'Date codec observation count differs')
+                                        dates_safe=bool(codecs) and all(c['valid'] for c in codecs)
+                                        for c in codecs:
+                                            require(c.get('class_sha256')==plan['date_effects']['codec_class_sha256'],'Date codec class hashes differ')
+                                            if c['valid']:require(c['encoder']=='com.mongodb.DBObjectCodec' and c['date_codec']=='org.bson.codecs.DateCodec' and c['default_registry'] and not c['encoding_hooks'] and c['id_generator']=='org.bson.codecs.ObjectIdGenerator','Default Date encoder conditions contradict runtime')
                                     for f in proof['before']:
-                                        if 'date_epoch_ms' in f['observed']:poison([Value(f['observed'])],ret['seq'])
+                                        if 'date_epoch_ms' in f['observed'] and not dates_safe:poison([Value(f['observed'])],ret['seq'])
                                     v=args[0].project(observed)
                                 else:
                                     poison(([recv] if recv else [])+args,ret['seq']);opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':ret['seq'],'completion':'unsupported-save-effects','reason':proof.get('reason')})

@@ -24,9 +24,10 @@ def evaluate(d,q):
         a=g.query(t['message'],t['path'],'orders',boundary=old.BOUNDARY);want={tuple(v) for v in t['expected']};actual={__import__('normalize_orders_origins').source_coordinate('orders',s,rows) for s in a['sources']};status=('correct' if actual==want else 'wrong') if a['known'] else 'unknown';pred.append({**t,'status':status,'answer':a})
     result={'targets':len(pred),'known_exact':sum(p['status']=='correct' for p in pred),'unknown':sum(p['status']=='unknown' for p in pred),'wrong':sum(p['status']=='wrong' for p in pred),'evidence_invalid':0,'oracle_unavailable':0,'N/A_requests':0,'predictions':pred};save(d/'evaluation.json',result);save(d/'execution-audit.json',g.local_queries['orders']);assert not result['wrong'];return {k:v for k,v in result.items() if k!='predictions'}
 
-def run(out,base,development=False):
+def run(out,base,development=False,date_only=False):
     out.mkdir(parents=True,exist_ok=False);qs=load(HERE/'orders-end-to-end-protocol-20261021.json')['queries'];setup=out/'setup';setup.mkdir();spec=old.spec_for('original',setup,base,1,'768m');spec.pop('networks',None);save(setup/'compose.json',spec);dep=old.CachedDeployment(argparse.Namespace(project='tf2-async-dependencies-'+secrets.token_hex(5),ready_timeout=240),setup,setup/'compose.json');state={'status':'failed','project':dep.args.project};progress=[]
     if development:qs=[q for q in qs if q['path']=='/customer/username']
+    if date_only:qs=[q for q in qs if q['path']=='/date']
     templates=TEMPLATES[:1] if development else TEMPLATES
     modes=('full',) if development else ('full','selective')
     try:
@@ -43,4 +44,4 @@ def run(out,base,development=False):
         dep.diagnostics();result=dep.compose('down','--volumes','--remove-orphans',timeout=120,check=False);state['cleanup_returncode']=result.returncode;save(out/'cleanup.json',state)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--base-build',type=Path,required=True);p.add_argument('--development',action='store_true');a=p.parse_args();run(a.out.resolve(),a.base_build.resolve(),a.development)
+    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--base-build',type=Path,required=True);p.add_argument('--development',action='store_true');p.add_argument('--date-only',action='store_true');a=p.parse_args();run(a.out.resolve(),a.base_build.resolve(),a.development,a.date_only)

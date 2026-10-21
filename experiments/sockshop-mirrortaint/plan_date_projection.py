@@ -13,4 +13,6 @@ def attach_date_projection(plan,model):
         if plan.get('read_forward_contracts'):
             plan['read_forward_contracts']['runtime_profiles']+=plan['date_projection'].get('read_runtime_profiles',[])
         plan['contracts'].append('Exact Date identity plus observed epoch; modeled read/copy/newDate(long), fresh default Calendar time is environment-derived. Unexplained mutation/save/async never establishes preservation.')
+    if needed:
+        plan['date_effects']=json.loads(Path(__file__).with_name('date-effects-contracts-20261021.json').read_text())
     return plan
