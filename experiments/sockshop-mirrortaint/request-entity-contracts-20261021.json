@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "library": "Original Spring 4.3.6.RELEASE / Spring HATEOAS 0.20.0",
   "class_sha256": {
     "org/springframework/hateoas/Resource": "35917e028c262c46d1bbeb80cdba2e3bee26f90e3807a7b58d7211e50f78a4eb",
@@ -45,7 +45,22 @@
     "org/springframework/http/client/InterceptingClientHttpRequest": "059167397b61bf0b02de94fc287a3d50c94eb3c555dc5c945a97187431ba34ef",
     "org/springframework/web/client/RestTemplate$HttpEntityRequestCallback": "02e39886cf2aa43e4952376fd615fcbcbc417dae4b7234352ff545c4eb06d4bf",
     "org/springframework/web/client/RestTemplate$AcceptHeaderRequestCallback": "5c4b67d974376beb33fa1d0b36be90a495307b518607738f986b2973e535721f",
-    "org/springframework/cloud/sleuth/instrument/web/client/TraceRestTemplateInterceptor": "78deb3221b14f5240c942682ff5b4dc5d59475db6c435117c72859af22ab1779"
+    "org/springframework/cloud/sleuth/instrument/web/client/TraceRestTemplateInterceptor": "78deb3221b14f5240c942682ff5b4dc5d59475db6c435117c72859af22ab1779",
+    "com/fasterxml/jackson/databind/deser/std/CollectionDeserializer": "e53c164f907edbcda15189c0603322bd7be7fcbdcac4ff13908f239686c7e744",
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$1": "763d11ef27f21bdb235822ffeb7ab3d23c45391cf2b3b6e7079635523a6ca87b",
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$BigDecimalDeserializer": "18507b4bb52fd3b952173318e2e1960a42caa58bc9a7e4de5922f2a455c018a2",
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$BigIntegerDeserializer": "78efebf6f0f93b6e3d7734b876d0d33f9b95d626c8fd5a702601916ab9c93266",
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$BooleanDeserializer": "c927ef690ea8942c38af8554a175f62e7623b784fa8ebdc5eb0b426cca5e40e5",
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$ByteDeserializer": "b025f3bdb0c445dd7e96a828bde480153c53c71b5de5d6d9f73d7f9be6159ab6",
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$CharacterDeserializer": "d2b8d1ef2b6594ba483092bec1dd44df80786dff8345b9f633b54150cfb781dc",
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$DoubleDeserializer": "03fd63e23a7e3935973dddc29788a45626f1ec8f5cbcedbff797fdbbeee69f64",
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$FloatDeserializer": "9bfc1334411ef6755130fa2c16e76f14a7935045c5817374451ae15825578bb2",
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$IntegerDeserializer": "1d769667789ad4fb1d3aefba8c72e3d0607b0ec8d0bcb71d860dff595369b5d2",
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$LongDeserializer": "02f384960ded50b74c0e0b08da7936a021503dbdab90f0820b99463ae75fa4ea",
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$NumberDeserializer": "fe943efcbba5527461165bf5f7073c33562cd4c6fea1c5ac037a8c2f22981c1c",
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$PrimitiveOrWrapperDeserializer": "1ae89721d7290da2e129ff31efabbbffdda017d55b2466c4f4e7c12cfff831c8",
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$ShortDeserializer": "29b7b6ec6cb71c872a1d1b07daf7756952d26f0923163cee4aa65e0930e97bec",
+    "com/fasterxml/jackson/databind/deser/std/StringDeserializer": "af2b5abf1b34a3ef431e2a98a9abc7fec707366d1cfa15debf393249c96b5d84"
   },
   "converter_classes": [
     "org/springframework/http/converter/ByteArrayHttpMessageConverter",
@@ -90,5 +105,6 @@
     }
   ],
   "network_policy": "Frozen RestTemplate passes URI/headers/encoded bytes to transport callbacks, not the private DTO. Transport/global effects remain opaque and poison externally reachable state. Only original getter/serializer-checked private operands may be preserved; this is not a read-only network contract.",
-  "transport_scope": "Only exact SimpleClientHttpRequestFactory or its fixed Intercepting wrapper, optional fixed Sleuth TraceRestTemplateInterceptor, and DefaultResponseErrorHandler. Other components remain unsupported. Even these transport/global effects are not treated as read-only."
+  "transport_scope": "Only exact SimpleClientHttpRequestFactory or its fixed Intercepting wrapper, optional fixed Sleuth TraceRestTemplateInterceptor, and DefaultResponseErrorHandler. Other components remain unsupported. Even these transport/global effects are not treated as read-only.",
+  "decoder_roles": "Only actual post-constructor setter writes create message-field origins. Unwritten zero-initialized null fields have empty data origins. Repeated target-property writes and custom property decoders remain unsupported."
 }

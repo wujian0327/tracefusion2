@@ -12,7 +12,9 @@ def infer_application(plan,rows,worker_request=None):
     validate_date_runtime(plan,rows)
     from infer_async_protocol import validate_async_protocol
     async_audit=validate_async_protocol(plan,rows)
-    cfg=plan['execution_kernel'];runtime=[r for r in rows if r['kind']=='execution-runtime']
+    cfg=plan['execution_kernel']
+    if cfg.get('request_entity_contracts') and cfg['request_entity_contracts'].get('version')!=2:raise AnalysisLimit('typed-decoder-version','Old candidate decoder evidence requires its frozen interpreter; source/default write roles are missing')
+    runtime=[r for r in rows if r['kind']=='execution-runtime']
     require(len(runtime)==1 and any(all(runtime[0][k]==p[k] for k in ('java_runtime_version','class_sha256')) for p in cfg['runtime_profiles']),'Application runtime pin differs')
     if cfg.get('request_entity_contracts'):
         starts={r.get('call_id'):r for r in rows if r['kind']=='collection-call-enter'}
@@ -611,11 +613,19 @@ def infer_application(plan,rows,worker_request=None):
 
                                             if decoder['wrapper_kind']=='resource':resources[fact['response_body']['object']]=Value(content)
                                             decoded_types[owner]=decoder['content_type'].replace('.','/');decoded_seq[owner]=read['seq']
+                                            roles={}
+                                            for f in decoder['fields']:
+                                                base=site['field_write_counts'].get(f['field'],0);name=f['path'][1:]
+                                                if name in decoder['ignored']:require(f['version']==base,'Ignored property was written');roles[name]='default'
+                                                elif name in decoder['properties']:
+                                                    require(f['version'] in (base,base+1),'Duplicate/unmodeled decoder field writes');roles[name]='source' if f['version']==base+1 else 'default'
+                                            require(set(decoder['source_properties'])=={n for n,r in roles.items() if r=='source'} and set(decoder['default_properties'])=={n for n,r in roles.items() if r=='default'},'Decoder source/default roles differ from actual writes')
+                                            require(read['fields']==[f for f in decoder['fields'] if roles.get(f['path'][1:])=='source'],'Decoder projection not actual input writes')
                                             for index,f in enumerate(read['fields']):
-                                                require(f['owner']==owner and f['path'][1:] in decoder['properties'],'Decoder property owner/name differs')
+                                                require(f['owner']==owner and f['path'][1:] in decoder['source_properties'],'Decoder property owner/name differs')
                                                 providers[coordinate(f)].append((read,index,f));decoded_fields[coordinate(f)]=origin(f,ret['seq']);field_seq[coordinate(f)]=read['seq'];state.field_write(coordinate(f),decoded_fields[coordinate(f)])
                                             for f in decoder['fields']:
-                                                if f['path'][1:] not in decoder['ignored']:continue
+                                                if f['path'][1:] not in decoder['default_properties']:continue
                                                 require(f['owner']==owner,'Ignored decoder field owner differs')
                                                 if f['version']==0 and f['observed'].get('value','not-null') is None and f['field'] not in site.get('written_fields',[]):
                                                     decoded_fields[coordinate(f)]=Value(f['observed']);state.field_write(coordinate(f),decoded_fields[coordinate(f)]);field_seq[coordinate(f)]=read['seq']

@@ -96,6 +96,19 @@ public final class RequestEntityHooks {
         boolean valid=mapper.getClass()==ObjectMapper.class&&defaultFactories(m)&&m.getPropertyNamingStrategy()==null&&m.getSerializationConfig().getActiveView()==null&&m.getSerializationConfig().getFilterProvider()==null;
         try{valid=valid&&serializationGraph(body,m,new IdentityHashMap<Object,Boolean>(),0);}catch(Exception unsupported){valid=false;f.put("reason",unsupported.getClass().getName()+":"+unsupported.getMessage());}f.put("valid",valid);return f;
     }
+    static boolean propertyDecoder(SettableBeanProperty property,Map prop,Object owner)throws Exception{
+        if(prop==null)return false;Object d=property.getValueDeserializer();String type=d.getClass().getName();String desc=(String)prop.get("descriptor");
+        if(desc.equals("Ljava/lang/String;"))return type.equals("com.fasterxml.jackson.databind.deser.std.StringDeserializer");
+        Map<String,String> scalar=new HashMap<String,String>();scalar.put("Z","Boolean");scalar.put("B","Byte");scalar.put("S","Short");scalar.put("C","Character");scalar.put("I","Integer");scalar.put("J","Long");scalar.put("F","Float");scalar.put("D","Double");
+        if(scalar.containsKey(desc))return type.equals("com.fasterxml.jackson.databind.deser.std.NumberDeserializers$"+scalar.get(desc)+"Deserializer");
+        if(desc.equals("Ljava/util/List;")||desc.equals("Ljava/util/Collection;")){
+            if(!type.equals("com.fasterxml.jackson.databind.deser.std.CollectionDeserializer")||ResponseBindingHooks.member(d,"_delegateDeserializer")!=null)return false;
+            Object vi=ResponseBindingHooks.member(d,"_valueInstantiator");if(!vi.getClass().getName().equals("com.fasterxml.jackson.databind.deser.std.StdValueInstantiator"))return false;
+            com.fasterxml.jackson.databind.deser.ValueInstantiator value=(com.fasterxml.jackson.databind.deser.ValueInstantiator)vi;
+            if(value.getDefaultCreator()==null||value.getDefaultCreator().getDeclaringClass()!=ArrayList.class||value.getDefaultCreator().getParameterCount()!=0)return false;
+            String field=(String)prop.get("field");Object actual=ResponseBindingHooks.member(owner,field.substring(field.lastIndexOf('.')+1));return actual==null||actual.getClass()==ArrayList.class&&((List)actual).isEmpty();
+        }return false;
+    }
     static void decoded(Object body,Object mapper,Object actualType,Map row)throws Exception{
         if(config()==null||body==null||!exact(body,"org.springframework.hateoas.Resource")&&!SpringTransportAgent.Transport.schema.containsKey(body.getClass().getName().replace('.','/')))return;
         Map f=fact("resource-decoded");boolean resource=exact(body,"org.springframework.hateoas.Resource");Object content=resource?get(body,"getContent"):body;ObjectMapper m=(ObjectMapper)mapper;
@@ -112,12 +125,17 @@ public final class RequestEntityHooks {
         valid=valid&&((JavaType)actualType).getRawClass()==body.getClass()&&(!resource||((JavaType)actualType).containedType(0)!=null&&((JavaType)actualType).containedType(0).getRawClass()==content.getClass())&&m.findMixInClassFor(body.getClass())==null;
         List names=new ArrayList();if(d!=null&&d.getClass()==BeanDeserializer.class){
             com.fasterxml.jackson.databind.deser.ValueInstantiator vi=((BeanDeserializer)d).getValueInstantiator();
-            valid=valid&&vi.getClass().getName().equals("com.fasterxml.jackson.databind.deser.std.StdValueInstantiator")&&vi.getDefaultCreator()!=null&&vi.getDefaultCreator().getDeclaringClass()==content.getClass()&&vi.getDefaultCreator().getParameterCount()==0&&((BeanDeserializer)d).getObjectIdReader()==null&&ResponseBindingHooks.member(d,"_injectables")==null&&ResponseBindingHooks.member(d,"_anySetter")==null;Iterator<SettableBeanProperty> ps=((BeanDeserializer)d).properties();while(ps.hasNext()){SettableBeanProperty p=ps.next();java.lang.reflect.Member member=p.getMember()==null?null:p.getMember().getMember();
+            valid=valid&&vi.getClass().getName().equals("com.fasterxml.jackson.databind.deser.std.StdValueInstantiator")&&vi.getDefaultCreator()!=null&&vi.getDefaultCreator().getDeclaringClass()==content.getClass()&&vi.getDefaultCreator().getMember() instanceof Constructor&&vi.getDefaultCreator().getParameterCount()==0&&((BeanDeserializer)d).getObjectIdReader()==null&&ResponseBindingHooks.member(d,"_injectables")==null&&ResponseBindingHooks.member(d,"_anySetter")==null;Iterator<SettableBeanProperty> ps=((BeanDeserializer)d).properties();while(ps.hasNext()){SettableBeanProperty p=ps.next();java.lang.reflect.Member member=p.getMember()==null?null:p.getMember().getMember();
             String name=p.getName();if(ignored.contains(name))continue;Map prop=null;List<Map> props=(List)SpringTransportAgent.Transport.schema.get(content.getClass().getName().replace('.','/'));if(props!=null)for(Map x:props)if(name.equals(x.get("property")))prop=x;
-            if(p.getInjectableValueId()!=null||p.hasValueTypeDeserializer()||prop==null||!(member instanceof Method)||prop.get("getter")==null||!p.getClass().getName().equals("com.fasterxml.jackson.databind.deser.impl.MethodProperty"))valid=false;
+            if(!propertyDecoder(p,prop,content)||p.getInjectableValueId()!=null||p.hasValueTypeDeserializer()||prop==null||!(member instanceof Method)||prop.get("getter")==null||!p.getClass().getName().equals("com.fasterxml.jackson.databind.deser.impl.MethodProperty"))valid=false;
             // The exact setter is verified by the bytecode-derived planner.
             if(member instanceof Method){String key=member.getDeclaringClass().getName().replace('.','/')+"."+member.getName()+org.objectweb.asm.Type.getMethodDescriptor((Method)member);Map setters=(Map)PlannedServiceAgent.plan.get("collection_setters");Map setter=(Map)setters.get(key);if(setter==null||prop==null||!Objects.equals(setter.get("field"),prop.get("field")))valid=false;names.add(name);}
         }}else valid=false;
-        f.put("valid",valid);f.put("wrapper_kind",resource?"resource":"plain-bean");f.put("wrapper",PlannedServiceAgent.Recorder.value(body));f.put("content",PlannedServiceAgent.Recorder.value(content));f.put("content_type",content==null?null:content.getClass().getName());f.put("properties",names);f.put("ignored",ignored);f.put("fields",SpringTransportAgent.Transport.snapshot(content));row.put("resource_decoder",f);
+        List fields=SpringTransportAgent.Transport.snapshot(content),sources=new ArrayList(),defaults=new ArrayList();Map site=(Map)((Map)((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("decoder_birth_sites")).get(content.getClass().getName().replace('.','/')+".<init>()V");Map counts=(Map)site.get("field_write_counts");
+        for(Object raw:fields){Map observed=(Map)raw;String path=(String)observed.get("path");String name=path.substring(1);int base=counts.containsKey(observed.get("field"))?((Number)counts.get(observed.get("field"))).intValue():0;int version=((Number)observed.get("version")).intValue();
+            if(ignored.contains(name)){if(version!=base)valid=false;defaults.add(name);}
+            else if(names.contains(name)){if(version==base+1)sources.add(name);else if(version==base)defaults.add(name);else valid=false;}
+        }
+        f.put("valid",valid);f.put("wrapper_kind",resource?"resource":"plain-bean");f.put("wrapper",PlannedServiceAgent.Recorder.value(body));f.put("content",PlannedServiceAgent.Recorder.value(content));f.put("content_type",content.getClass().getName());f.put("properties",names);f.put("ignored",ignored);f.put("source_properties",sources);f.put("default_properties",defaults);f.put("fields",fields);row.put("resource_decoder",f);
     }
 }

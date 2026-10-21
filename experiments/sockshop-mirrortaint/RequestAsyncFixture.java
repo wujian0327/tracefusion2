@@ -29,9 +29,9 @@ public class RequestAsyncFixture {
     public static void opaqueGlobal(){System.nanoTime();}
     public static void main(String[] args)throws Exception{
         ExecutorService pool=Executors.newFixedThreadPool(2);Worker altered=new Worker();for(org.springframework.http.converter.HttpMessageConverter converter:altered.rest.getMessageConverters())if(converter.getClass()==org.springframework.http.converter.json.MappingJackson2HttpMessageConverter.class)((org.springframework.http.converter.json.MappingJackson2HttpMessageConverter)converter).getObjectMapper().setPropertyNamingStrategy(com.fasterxml.jackson.databind.PropertyNamingStrategy.SNAKE_CASE);ProxyFactory badFactory=new ProxyFactory(altered);badFactory.setProxyTargetClass(true);badFactory.addAdvice(new AsyncExecutionInterceptor(pool));Worker bad=(Worker)badFactory.getProxy();ProxyFactory factory=new ProxyFactory(new Worker());factory.setProxyTargetClass(true);factory.addAdvice(new AsyncExecutionInterceptor(pool));Worker worker=(Worker)factory.getProxy();worker.slot=new Object[1];bad.slot=new Object[1];List cases=new ArrayList();
-        try{for(int n=0;n<18;n++){
+        try{for(int n=0;n<24;n++){
             String span=String.format("%016x",n+1);SpringTransportAgent.Transport.ASYNC.set(W3CTraceContext.server("00-11111111111111111111111111111111-"+span+"-01",null));
-            int mode=n%9;Out out=root(mode==5?bad:worker,new URI(args[0]+"/first"),new URI(args[0]+"/second"),new ParameterizedTypeReference<Resource<Item>>(){},mode);SpringTransportAgent.Transport.writeEnd(SpringTransportAgent.Transport.writeStart(out,null),out);
+            int mode=n%12;Out out=root(mode==5?bad:worker,new URI(args[0]+"/first"),new URI(args[0]+(mode==9?"/missing":mode==10?"/null":mode==11?"/duplicate":"/second")),new ParameterizedTypeReference<Resource<Item>>(){},mode);SpringTransportAgent.Transport.writeEnd(SpringTransportAgent.Transport.writeStart(out,null),out);
             Map c=new LinkedHashMap();c.put("message","11111111111111111111111111111111/"+span);c.put("text",out.getText());c.put("mode",mode);cases.add(c);
         }}finally{pool.shutdown();pool.awaitTermination(5,TimeUnit.SECONDS);}System.out.println(new ObjectMapper().writeValueAsString(cases));
     }
