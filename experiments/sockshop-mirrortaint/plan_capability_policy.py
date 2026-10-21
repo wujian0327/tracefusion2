@@ -15,6 +15,7 @@ def choose(model,query):
         for m in kernel['execution_kernel']['methods'].values():
             for i in m['instructions']:
                 if i['op'] in (50,83,132,186,189):shape.append('array-loop-or-lambda')
+                if i['op'] in (182,183,184,185) and i.get('owner','').startswith('org/springframework/http/RequestEntity'):shape.append('request-entity-effects')
                 if i['op'] in (182,183,184,185) and (i.get('desc','').endswith('Ljava/util/concurrent/Future;') or i.get('name')=='save' and i.get('desc')=='(Ljava/lang/Object;)Ljava/lang/Object;'):shape.append('task-or-save-effects')
                 if 'target' in i and i['target']<=i['index']:shape.append('control-flow-backedge')
     if legacy and legacy['profile']!='response-forward':plan=legacy;reason='Existing specialized scalar/copy proof has priority'
@@ -22,7 +23,7 @@ def choose(model,query):
     elif legacy:plan=legacy;reason='Existing finite return-forward contract'
     elif kernel:plan=kernel;reason='Execution fallback with supported semantics'
     else:raise ValueError('No supported static plan: '+str(failures))
-    if plan['profile']=='execution-dependency':plan=attach_async_dependencies(plan)
+    if plan['profile']=='execution-dependency' and set(shape)&{'task-or-save-effects','request-entity-effects'}:plan=attach_async_dependencies(plan)
     if CONVERSION in model['methods']:
         plan['json_conversion_methods']=[CONVERSION];plan['json_conversion_contract']='Existing pinned default Jackson relative-path conversion contract; not a business formula.'
     plan['source_evidence']=True
