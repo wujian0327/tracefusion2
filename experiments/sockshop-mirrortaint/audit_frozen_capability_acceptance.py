@@ -1,18 +1,24 @@
 #!/usr/bin/env python3
 """Re-score fresh captures into the original 431 target-instance acceptance set."""
-import argparse,collections,csv,json
+import argparse,collections,csv,json,shutil,subprocess
 from pathlib import Path
 from run_planned_service import ROOT,HERE,load,save,sha
 from audit_application_call_revision import class_hashes
 import run_frozen_capability_acceptance as driver
 import run_response_binding_revision as old
 
-def audit(root,out,partial=False):
+def audit(root,out,partial=False,pair_root=None,reuse=None):
     out.mkdir(parents=True,exist_ok=False);driver.check();freeze=load(root/'algorithm-freeze.json');base=Path(freeze['base_build']);agent=class_hashes(base/'distributed-observer.jar');oldrows=load(ROOT/'artifacts/baseline-capability-20261020/audit-final-v3/instances.json');before={(r['query'],r['case'],r['path']):r for r in oldrows};assert len(before)==431
     assert sha(HERE/'build_distributed_plans.py')==freeze['builder_sha256']
     assert sha(HERE/'capability-acceptance-protocol-20261021.json')==freeze['acceptance_protocol_sha256']
     assert sha(HERE/'date-effects-protocol-20261021.json')==freeze['protocol_sha256']
     assert sha(root/'frozen-plans/planning.json')==freeze['planning_sha256']
+    reused_hashes=load(reuse/'raw-hashes.json')if reuse else None
+    if reuse:
+        assert load(reuse/'audit.json')['all_passed']
+        for name in ('run_frozen_capability_acceptance.py','run_response_binding_revision.py','run_execution_kernel_pilot.py','run_sockshop_model_revision.py','normalize_orders_origins.py','audit_baseline_capabilities.py'):
+            source=HERE/name;original=subprocess.check_output(['git','show',freeze['experiment_commit']+':'+str(source.relative_to(ROOT))],cwd=ROOT);import hashlib
+            assert sha(source)==hashlib.sha256(original).hexdigest(),name
     for planned in load(root/'frozen-plans/planning.json'):
         if planned['status']=='accepted':assert sha(root/'frozen-plans'/(planned['query']['id']+'.json'))==planned['plan_sha256']
     queries=driver.QUERIES;by_query={q['id']:q for q in queries};records=[];families=[];receipts={};builds=[]
@@ -45,7 +51,18 @@ def audit(root,out,partial=False):
         for role,h in freeze['original_jars'].items():assert sha(build/role/'original.jar')==h
         assert load(d/'input-audit.json')['checks'];rec=out/('rescore-'+mode+'-'+qid);rec.mkdir();(rec/'build').symlink_to(build,target_is_directory=True);(rec/'capture').symlink_to(d/'capture',target_is_directory=True)
         repeat=repeat_meta.get((mode,qid));basis='first-fixed-repeat-with-second-corroboration'if repeat else'primary'
-        result=driver.evaluate(rec,q);families.append({'mode':mode,'entry':q['entry'],'application':q['application'],**result,'capture':str(d/'capture'),'capture_basis':basis,'primary_failure':repeat['primary']if repeat else None});ev=load(rec/'evaluation.json');rows=ev['predictions']
+        cached=reuse/('rescore-'+mode+'-'+qid)if reuse else None
+        if cached and cached.exists():
+            inputs=(d/'capture'/q['role']/'events.jsonl',d/'capture/run.json',d/'input-audit.json',build/q['role']/'plan.json')
+            for path in inputs:assert reused_hashes[str(path.relative_to(ROOT))]==sha(path),path
+            derived={}
+            for name in ('evaluation.json','independent-truth.json','execution-audit.json'):
+                path=cached/name
+                if path.exists():shutil.copyfile(path,rec/name);derived[name]=sha(path)
+            save(rec/'reuse.json',{'source_audit':str(reuse),'source_audit_sha256':sha(reuse/'audit.json'),'derived_sha256':derived,'raw_inputs_agent_plans_jars_sources_and_scoring_code_unchanged':True,'new_deployment_or_new_independent_rescore':False})
+            result={key:value for key,value in load(rec/'evaluation.json').items()if key!='predictions'}
+        else:result=driver.evaluate(rec,q)
+        families.append({'mode':mode,'entry':q['entry'],'application':q['application'],**result,'capture':str(d/'capture'),'capture_basis':basis,'primary_failure':repeat['primary']if repeat else None});ev=load(rec/'evaluation.json');rows=ev['predictions']
         for r in rows:records.append({**r,'mode':mode,'application':q['application'],'capture':str(d/'capture')})
         for p in (d/'capture'/q['role']/'events.jsonl',d/'capture/run.json',d/'input-audit.json',build/q['role']/'plan.json'):receipts[str(p.relative_to(ROOT))]=sha(p)
         builds.append(str(build))
@@ -66,7 +83,7 @@ def audit(root,out,partial=False):
                     assert value==before[key]['client_value'];targets+=1
                     records.append({'mode':mode,'query':q['id'],'application':q['application'],'case':case['case'],'path':path,'client_value':value,'state':'planning_rejected','rejection':rejection['rejection'],'runtime_for_rejected_query':False,'business_target_receipt':str(cap),'tp':0,'fp':0,'fn':before[key]['source_set_size'],'relation_count_basis':'Independent original reference oracle cardinality; no new source-coordinate answer is claimed'})
             families.append({'mode':mode,'query':q['id'],'entry':q['entry'],'application':q['application'],'requests':len(run['cases']),'targets':targets,'states':{'planning_rejected':targets},'N/A_requests':na,'runtime_for_rejected_query':False,'business_target_receipt':str(cap),'rejection':rejection['rejection']})
-    pair=root/'cart-create-pair'
+    pair=pair_root or root/'cart-create-pair'
     if (pair/'results.json').exists():
         assert load(pair/'results.json')['all_passed']
         metadata=pair/('protocol-correction.json'if(pair/'protocol-correction.json').exists()else'launch-metadata.json');correction=load(metadata);assert correction['actual_customerId']=='56e8f576709b70d0ace01fb0'

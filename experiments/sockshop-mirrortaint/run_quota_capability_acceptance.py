@@ -7,17 +7,23 @@ import run_frozen_capability_acceptance as driver
 
 PARENT=ROOT/'artifacts/orders-availability-20261021'
 FLAGS=' -XX:ParallelGCThreads=1 -XX:CICompilerCount=2'
+def qualified_options(options):
+    # The legacy pair uses spec_for's cost preset (64m/G1), whereas the common
+    # observed() helper uses 32m/default GC. Normalize every observed service to
+    # the declared acceptance preset; this does not alter native backends.
+    tokens=[t for t in options.split()if not t.startswith(('-Xms','-Xmx','-XX:ParallelGCThreads=','-XX:CICompilerCount='))and t!='-XX:+UseG1GC']
+    return '-Xms32m -Xmx256m '+' '.join(tokens)+FLAGS
 
 def install(root):
     driver.HOME=root
     observed=driver.old.observed;spec_for=driver.old.spec_for
     def configure(spec,name,role,cap,build):
-        observed(spec,name,role,cap,build);spec['services'][name]['environment']['JAVA_OPTS']+=FLAGS
+        observed(spec,name,role,cap,build);spec['services'][name]['environment']['JAVA_OPTS']=qualified_options(spec['services'][name]['environment']['JAVA_OPTS'])
     def specs(*args,**kwargs):
         result=spec_for(*args,**kwargs)
         for config in result['services'].values():
             env=config.get('environment',{});opts=env.get('JAVA_OPTS','')
-            if '-javaagent:'in opts and '-XX:ParallelGCThreads='not in opts:env['JAVA_OPTS']+=FLAGS
+            if '-javaagent:'in opts:env['JAVA_OPTS']=qualified_options(opts)
         return result
     driver.old.observed=configure;driver.old.spec_for=specs
     driver.check()
@@ -34,14 +40,14 @@ def prepare(root):
         (root/target).symlink_to(source,target_is_directory=True)
     save(root/'protocol-before-business.json',load(HERE/'quota-capability-protocol-20261021.json'))
 
-def worker(root,name):
+def worker(root,name,pair_destination=None):
     install(root);base=root/'frozen-base'
     if name=='orders':driver.orders(root/'all62-orders-serial',base)
     elif name=='cart':driver.carts(root/'all62-cart',base)
     elif name=='pair':
         import run_cart_reread_baseline_pair as pair
-        query=next(q for q in driver.QUERIES if q['id']=='sockshop-carts-get-customerId');pair.plan_response=lambda *args,**kwargs:copy.deepcopy(driver.plan(query));pair.run(root/'cart-create-pair',base)
-        save(root/'cart-create-pair/launch-metadata.json',{'actual_customerId':'56e8f576709b70d0ace01fb0','driver_at_launch_sha256':sha(root/'drivers/cart-pair-library-driver-at-launch.py'),'original_declared_input_already_correct':True})
+        destination=pair_destination or root/'cart-create-pair';query=next(q for q in driver.QUERIES if q['id']=='sockshop-carts-get-customerId');pair.plan_response=lambda *args,**kwargs:copy.deepcopy(driver.plan(query));pair.run(destination,base)
+        save(destination/'launch-metadata.json',{'actual_customerId':'56e8f576709b70d0ace01fb0','driver_at_launch_sha256':sha(root/'drivers/cart-pair-library-driver-at-launch.py'),'original_declared_input_already_correct':True})
     else:
         roles,port={'reads':('station,train,price','18820'),'route':('route','18920'),'travel':('basic,ticketinfo','19020')}[name];os.environ.update(TF2_CAPABILITY_ROLES=roles,TF2_CAPABILITY_PORT=port);driver.train(root/('all62-'+name),base)
 
@@ -62,7 +68,7 @@ def run(root):
             log.close()
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--prepare',action='store_true');p.add_argument('--worker',choices=('orders','reads','route','travel','cart','pair'));a=p.parse_args();root=a.root.resolve()
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--prepare',action='store_true');p.add_argument('--worker',choices=('orders','reads','route','travel','cart','pair'));p.add_argument('--pair-destination',type=Path);a=p.parse_args();root=a.root.resolve()
     if a.prepare:prepare(root)
-    elif a.worker:worker(root,a.worker)
+    elif a.worker:worker(root,a.worker,a.pair_destination.resolve()if a.pair_destination else None)
     else:run(root)

@@ -1,0 +1,216 @@
+{
+  "algorithm_commit": "f73fa5f255ef2bb50e437d0f1f18fba6b54dcb98",
+  "queries": 62,
+  "entries": 18,
+  "query_configurations_scored": 124,
+  "complete_query_configurations": true,
+  "modes": {
+    "full": {
+      "expected_targets": 431,
+      "actual_targets": 431,
+      "states": {
+        "unknown": 39,
+        "known_correct": 382,
+        "planning_rejected": 10
+      },
+      "known_answer_exact_rate": 1.0,
+      "answerability": 0.8863109048723898,
+      "baseline_correct_preserved": 368,
+      "baseline_correct_required": 368,
+      "baseline_nonempty_correct_preserved": 337,
+      "baseline_nonempty_correct_required": 337,
+      "old_tf_correct_preserved": 213,
+      "old_tf_correct_required": 213,
+      "union_preserved": 382,
+      "union_required": 382,
+      "union_losses": [],
+      "missing_targets": [],
+      "tp": 351,
+      "fp": 0,
+      "fn_including_unknown": 49,
+      "all_passed": true
+    },
+    "selective": {
+      "expected_targets": 431,
+      "actual_targets": 431,
+      "states": {
+        "unknown": 39,
+        "known_correct": 382,
+        "planning_rejected": 10
+      },
+      "known_answer_exact_rate": 1.0,
+      "answerability": 0.8863109048723898,
+      "baseline_correct_preserved": 368,
+      "baseline_correct_required": 368,
+      "baseline_nonempty_correct_preserved": 337,
+      "baseline_nonempty_correct_required": 337,
+      "old_tf_correct_preserved": 213,
+      "old_tf_correct_required": 213,
+      "union_preserved": 382,
+      "union_required": 382,
+      "union_losses": [],
+      "missing_targets": [],
+      "tp": 351,
+      "fp": 0,
+      "fn_including_unknown": 49,
+      "all_passed": true
+    }
+  },
+  "full_selective_state_agreement": 431,
+  "paired_target_instances": 431,
+  "date_controls_passed": true,
+  "planning_accepted": 61,
+  "planning_rejected": 1,
+  "received_mutation_controls_passed": true,
+  "legacy_collection_controls_passed": true,
+  "heldout_candidates_unexamined": 29,
+  "no_new_performance": true,
+  "all_passed": true,
+  "first_attempt_pairing": {
+    "both_correct": 382,
+    "both_not_correct": 49
+  },
+  "provenance_union_passed": true,
+  "primary_partial_wrong_answers": [],
+  "first_attempt": {
+    "full": {
+      "reference_target_states": {
+        "known_correct": 382,
+        "unknown": 39,
+        "planning_rejected": 10
+      },
+      "affected_reference_instances": [],
+      "failed_configurations": 0,
+      "first_attempt_business_all_passed": true
+    },
+    "selective": {
+      "reference_target_states": {
+        "known_correct": 382,
+        "unknown": 39,
+        "planning_rejected": 10
+      },
+      "affected_reference_instances": [],
+      "failed_configurations": 0,
+      "first_attempt_business_all_passed": true
+    }
+  },
+  "first_attempt_business_all_passed": true,
+  "unqualified_end_to_end_acceptance": true,
+  "business_repeat_protocol_sha256": "7c14958935189446d5c17ac1004ee81125ef145a55d1d11d462780daa601f8a3",
+  "runtime_configuration": "All observed target JVMs:1CPU,768MiB,heap32m/256m,ParallelGCThreads1,CICompilerCount2; original unobserved backends unchanged",
+  "runtime_policy_verified": true,
+  "actual_observed_deployments": 124,
+  "experiment_protocol_sha256": "4be725c0e78ebce6e41c1d605217e62c9ecd9b640dd18f8e77cb31ed068711ea",
+  "original_configuration_acceptance_passed": false,
+  "original_configuration_evidence": "/home/wujian/tracefusion2/artifacts/orders-availability-20261021/audit-frozen-final/audit.json",
+  "original_configuration_evidence_sha256": "3a2887291958422e92e11a1e27c1e64b84523e0b66771eb34f313183848a80a6",
+  "targeted_configuration_evidence_sha256": "0c1d405a7a892922ab0c7b655afd12d7729014bf40c68546bb148106ae7a3208",
+  "sole_timeout_root_cause_proven": false,
+  "new_unseen_query_evidence": false,
+  "pair_configuration_correction": {
+    "reason": "First full raw/source audit passes, runtime audit detects legacy pair preset Xms64m/UseG1GC instead of declared Xms32m/default GC",
+    "original_pair": "/home/wujian/tracefusion2/artifacts/orders-availability-20261021/quota-all62/cart-create-pair",
+    "original_receipts": [
+      {
+        "mode": "full",
+        "compose_sha256": "552cdc78d51c3892b71184b8a5afdca2b96b2bf738acc5c33d24682d8132322e",
+        "raw_sha256": "5987d57b0ac725a687f9c03bb7cf522b9de8ad308804a016d3865c24b77e8603",
+        "options": "-Xms64m -Xmx256m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom -Dspring.zipkin.enabled=false -javaagent:/tf2/observer.jar -Dservice.plan=/tf2/plan.json -Dservice.events=/tf2/capture/events.jsonl -Dservice.mode=full -XX:ParallelGCThreads=1 -XX:CICompilerCount=2",
+        "known_exact": 2
+      },
+      {
+        "mode": "selective",
+        "compose_sha256": "175c2377f5e338c45ef05afd82d551c2eb0de81f46d8da60c8b46a06d770a2f4",
+        "raw_sha256": "77a5105119d6a4040fef73471c0668d832b72cb78dde1f868bd01c99d9a09089",
+        "options": "-Xms64m -Xmx256m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom -Dspring.zipkin.enabled=false -javaagent:/tf2/observer.jar -Dservice.plan=/tf2/plan.json -Dservice.events=/tf2/capture/events.jsonl -Dservice.mode=selective -XX:ParallelGCThreads=1 -XX:CICompilerCount=2",
+        "known_exact": 2
+      }
+    ],
+    "new_pair_directory": "/home/wujian/tracefusion2/artifacts/orders-availability-20261021/quota-all62/cart-create-pair-config-corrected",
+    "core_and_nine_jars_and_plans_unchanged": true,
+    "same_customerId": "56e8f576709b70d0ace01fb0",
+    "new_flags": "Xms32m Xmx256m, default GC, ParallelGCThreads1 CICompilerCount2",
+    "selection_basis": "Configuration compliance only; original source answers already2/2 each. No failed source/business answer replaced. Preserve all original files.",
+    "remaining_122": "Reuse exact raw captures; validate agent/plan/JAR/source/compose hashes before reusing their raw-rescore output",
+    "driver_sha256": "fec477b68d45fa528ff30a587d4181d626c0c785c0a52c70a06a84d5a22769a7"
+  },
+  "first_configuration_audit_passed": false,
+  "pair_corrected_capture": "/home/wujian/tracefusion2/artifacts/orders-availability-20261021/quota-all62/cart-create-pair-config-corrected",
+  "main_122_evaluations_reused_with_hash_checks": true,
+  "qualified_observed_deployments": 124,
+  "actual_total_observed_deployments_including_invalid_configuration": 126,
+  "original_parameters_72": {
+    "business_states": {
+      "completed": 67,
+      "business_error": 2,
+      "unexecuted": 3
+    },
+    "target_states": {
+      "known_correct": 67,
+      "business_error": 2,
+      "unexecuted": 3
+    },
+    "modes": {
+      "full": {
+        "requests": {
+          "completed": 31,
+          "business_error": 2,
+          "unexecuted": 3
+        },
+        "targets": {
+          "known_correct": 31,
+          "business_error": 2,
+          "unexecuted": 3
+        },
+        "tp": 31,
+        "fp": 0,
+        "fn": 0
+      },
+      "selective": {
+        "requests": {
+          "completed": 36
+        },
+        "targets": {
+          "known_correct": 36
+        },
+        "tp": 36,
+        "fp": 0,
+        "fn": 0
+      }
+    },
+    "all_targeted_checks_passed": false
+  },
+  "limited_threads_72": {
+    "business_states": {
+      "completed": 72
+    },
+    "target_states": {
+      "known_correct": 72
+    },
+    "modes": {
+      "full": {
+        "requests": {
+          "completed": 36
+        },
+        "targets": {
+          "known_correct": 36
+        },
+        "tp": 36,
+        "fp": 0,
+        "fn": 0
+      },
+      "selective": {
+        "requests": {
+          "completed": 36
+        },
+        "targets": {
+          "known_correct": 36
+        },
+        "tp": 36,
+        "fp": 0,
+        "fn": 0
+      }
+    },
+    "all_targeted_checks_passed": true
+  }
+}

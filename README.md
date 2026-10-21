@@ -1,5 +1,13 @@
 # TraceFusion 2
 
+2026-10-21完成[采集修订、JVM线程对照及全量复验](experiments/sockshop-mirrortaint/ORDERS-AVAILABILITY-20261021.md)，核心冻结 `f73fa5f`。
+原JVM默认线程下72请求仍有2次超时、3个未执行；GC/JIT线程限制为1/2、CPU/内存/堆/5秒期限保持后，固定72请求全部完成且来源正确。
+同一冻结Agent重新部署全部62查询，full/selective各 **382正确 / 39 unknown / 10拒绝 / 0错误确定答案**；首次业务验收通过，未替换失败。
+新条件下逐项保留MirrorTaint正确368/368、旧TF正确213/213；整体正确回答率仍为88.63%，不是所有目标100%。
+124个符合条件的部署均审计；另保留并披露Cart补充两组初次参数错误及修正重跑。29候选仍封存，无新性能结论；旧失败和成本继续按版本单列。
+
+以下保留历史版本快照。
+
 2026-10-21完成[62查询统一来源核验](experiments/sockshop-mirrortaint/CAPABILITY-ACCEPTANCE-20261021.md)，核心冻结 `2cefacd`。
 全部62查询预先规划：61接纳、1个UUID类型拒绝。含固定两次独立复验，full/selective各 **382正确 / 39 unknown / 10拒绝 / 0错误确定答案**，固定范围来源率88.63%。
 已核验MirrorTaint正确的368个和旧TF正确的213个目标，联合382个；这是同一新Agent的实际捕获核验。
