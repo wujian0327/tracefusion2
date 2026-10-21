@@ -1,5 +1,12 @@
 # TraceFusion 2
 
+2026-10-21完成[原版 Orders 有限端到端来源链修订](experiments/sockshop-mirrortaint/ORDERS-END-TO-END-REVISION-20261021.md)，核心冻结 `3cf6320`。
+12个开发查询，full/selective各72目标：**66个已知来源完全匹配、6个Date unknown，错误/证据无效均0；可回答率91.67%**。
+新增修复主口径66个基线领先反例，开发台账累计163/169、剩余6；**不是新版431目标整体正确率**。
+新Agent循环60/60、TicketInfo21/21、Cart15/15、6/6及2/2回归保持；旧213仍仅原捕获离线兼容。
+公共HTTP/实际解码写入、私有任务结果和有限保存效果组合见[机制](experiments/sockshop-mirrortaint/ORDERS-END-TO-END-ALGORITHM-20261021.md)。
+原默认null误归因、重复键接纳及首冻结6目标调用配对失败均保留；29候选未启封，无新成本或62查询统一验收结论。
+
 2026-10-21完成[有限工作Frame与Future依赖传递](experiments/sockshop-mirrortaint/ASYNC-DEPENDENCY-REVISION-20261021.md)，
 最终核心 `6a2e1ca`。控制各30目标：18个已知来源匹配、12个预期unknown；含同值任务、字符串转换、覆盖后重复get及共享数组发布保护。
 原版Orders已执行工作Frame，但RequestEntity/参数化RestTemplate/解码和保存效果仍阻断，四配置24目标仍全部unknown。

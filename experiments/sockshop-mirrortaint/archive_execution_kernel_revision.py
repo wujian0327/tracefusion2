@@ -10,7 +10,7 @@ from run_planned_service import ROOT,load,save,sha
 from run_query_planner import JARS
 
 
-def archive(root,out):
+def archive(root,out,extra=()):
     assert not out.is_relative_to(root);out.mkdir(parents=True,exist_ok=False)
     selected=[root,ROOT/'artifacts/baseline-capability-20261020',
         ROOT/'artifacts/call-lifecycle-revision-20261020/base-build',
@@ -18,7 +18,7 @@ def archive(root,out):
         ROOT/'artifacts/query-coverage-first-20261019/pool.json',
         ROOT/'artifacts/desktop-inputs/images-lock.json',
         ROOT/'artifacts/trainticket-cost-preparation-20261016/inputs/inputs.json',
-        ROOT/'artifacts/real-path-expansion-preflight-20261015/images.json',*JARS]
+        ROOT/'artifacts/real-path-expansion-preflight-20261015/images.json',*JARS,*extra]
     inputs=load(ROOT/'artifacts/trainticket-cost-preparation-20261016/inputs/inputs.json');selected += [Path(v['jar']) for v in inputs.values()]
     files={}
     for path in selected:
