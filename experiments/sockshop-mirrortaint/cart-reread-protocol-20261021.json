@@ -1,0 +1,53 @@
+{
+  "parent_commit": "7e5894cfca662c17dc318fdc9ea737631896e13e",
+  "parent_algorithm": "882497c339f833ccb6148ebec1f49fd97a1605c7",
+  "query": {
+    "application": "sockshop",
+    "role": "carts",
+    "entry": "works/weave/socks/cart/controllers/CartsController.get(Ljava/lang/String;)Lworks/weave/socks/cart/entities/Cart;",
+    "http": "GET /carts/{customerId}",
+    "target": "works.weave.socks.cart.entities.Cart.customerId",
+    "path": "/customerId",
+    "shape_note": "scalar or built-in leaf",
+    "source_boundary": {
+      "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+      "selection_origins": "separate; not counted as data origins"
+    },
+    "manual_configuration": {
+      "entry": 1,
+      "target_field_or_map_path": 1,
+      "source_boundary": 1,
+      "profile_attempts": "same two frozen attempts for every query",
+      "new_library_summaries": 0,
+      "core_changes": 0
+    },
+    "id": "sockshop-carts-get-customerId",
+    "rank": "b12d8176b33babb461d27a475afff3c779bf4bdbd86530ff5ad9248775470268",
+    "exposure_group": "development20"
+  },
+  "scope": [
+    "Bounded cyclic application call graph using distinct dynamic frames and depth/step budgets",
+    "Constructor-prefix object birth witnesses; prior opaque effects cannot modify objects not yet allocated",
+    "Save stays opaque; returned saved object does not gain preservation semantics",
+    "Fresh repository reread may establish declared boundary origins only with witnessed post-effect allocation and concrete read coordinates"
+  ],
+  "deferred": [
+    "General Mongo save preservation",
+    "Orders async",
+    "performance",
+    "reserved29"
+  ],
+  "truth": "First creation GET returns SECOND repository read; repeat GET returns FIRST read. Never use equal customerId values or TF graph to choose the read.",
+  "original_gap_instances": 1,
+  "previously_fixed": 96,
+  "remaining_gaps": 73,
+  "acceptance": [
+    "full then selective; absent, repeat and mixed customers",
+    "Saved object and old aliases remain unknown after unmodeled effect",
+    "Missing/duplicate/wrong birth and callback/read evidence rejected or unknown; no fabricated known answer",
+    "Cart15/6, loop60, TicketInfo21 and application/constructor controls retained",
+    "Separate first failures, freeze, fresh business captures and audit"
+  ],
+  "reserved_candidates": 29,
+  "reserved_protocol_sha256": "87c40107282aaccb8e049fc5ffe37bb1e66deacfeabd0f015a08544bc1972fae"
+}
