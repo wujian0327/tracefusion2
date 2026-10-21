@@ -294,12 +294,16 @@ def infer_application(plan,rows):
                             if ctor_start:require(event['constructor_id']==ctor_start['constructor_id'],'Constructor completion ID differs')
                             require(event['receiver_type']==ins['owner'].replace('/','.'),'Execution constructor type differs')
                             require(len(args)==len(event['args']),'Execution constructor arity differs')
+                            # Mutable arguments may legitimately change inside an
+                            # opaque constructor. Invalidate before checking its
+                            # post-state; retain reference identity checks.
+                            if effect.get('kind')=='opaque':poison([recv]+args,event['seq'])
                             for desc,a,b in zip(descriptors(ins['desc']),args,event['args']):bind_argument(a,b,desc)
                             owner=identity(recv)
                             if key=='java/util/ArrayList.<init>()V':state.containers[owner]=Container(owner,[],0,True)
                             elif effect.get('kind')=='string-builder':builders[owner]=('',Value({'value':''}))
                             elif effect.get('kind')=='opaque':
-                                poison([recv]+args,event['seq']);opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':event['seq'],'completion':'normal-constructor'})
+                                opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':event['seq'],'completion':'normal-constructor'})
                             elif effect.get('kind')=='date-constructor':
                                 fact=event.get('date_contract');require(fact and fact['kind']=='date-constructor' and fact['arity']==len(args) and fact['epoch_ms']==event['receiver']['date_epoch_ms'],'Date constructor evidence absent/differs')
                                 if args:
