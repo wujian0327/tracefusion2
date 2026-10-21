@@ -1,5 +1,11 @@
 # TraceFusion 2
 
+2026-10-21完成[有限工作Frame与Future依赖传递](experiments/sockshop-mirrortaint/ASYNC-DEPENDENCY-REVISION-20261021.md)，
+最终核心 `6a2e1ca`。控制各30目标：18个已知来源匹配、12个预期unknown；含同值任务、字符串转换、覆盖后重复get及共享数组发布保护。
+原版Orders已执行工作Frame，但RequestEntity/参数化RestTemplate/解码和保存效果仍阻断，四配置24目标仍全部unknown。
+**新增真实基线差距修复0，累计97、剩余72**。新Agent循环各60/60、TicketInfo各21/21、Cart各2/2保持；旧213仅原捕获离线复算。
+初始35055fb业务捕获经计划/全部Agent类哈希核对后由最终离线版复算，失败与双冻结保留；29候选未启封，无新成本或62查询整体正确率。见[机制](experiments/sockshop-mirrortaint/ASYNC-DEPENDENCY-ALGORITHM-20261021.md)。
+
 2026-10-21完成[Spring异步任务与Future实例配对](experiments/sockshop-mirrortaint/ASYNC-PROTOCOL-REVISION-20261021.md)，
 冻结 `cb693c1`。原版Orders四配置的144任务、264次get配对通过，但24个来源目标仍全部unknown；本阶段只核验事实，不注册来源。
 混合Spring控制各15任务、14项扰动通过；新Agent循环各60/60、TicketInfo各21/21、Cart创建/重读各2/2保持。
