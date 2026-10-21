@@ -67,7 +67,7 @@ public final class CollectionServiceHooks implements Opcodes {
         return out;
     }
     public static int epoch(Object o){synchronized(PlannedServiceAgent.Recorder.class){List<Object> now=contents(o),before=CONTENTS.get(o);int epoch=EPOCHS.getOrDefault(o,0);if(before!=null&&!before.equals(now)){if(READ_ONLY.contains(o))throw new IllegalStateException("Received collection changed outside guarded bytecode");epoch++;}CONTENTS.put(o,now);EPOCHS.put(o,epoch);return epoch;}}
-    public static void received(Object o){synchronized(PlannedServiceAgent.Recorder.class){if(o instanceof List||o instanceof Map){epoch(o);READ_ONLY.add(o);}}}
+    public static void received(Object o){synchronized(PlannedServiceAgent.Recorder.class){if(o instanceof List||o instanceof Map){epoch(o);if(!ExecutionKernelHooks.enabled())READ_ONLY.add(o);}}}
     public static void begin(int pc,Object receiver,Object[] args){beginAt((String)plan().get("entry"),pc,receiver,args);}
     public static void beginAt(String key,int pc,Object receiver,Object[] args){synchronized(PlannedServiceAgent.Recorder.class){try{
         Map<String,Object> r=row();r.put("pc",pc);r.put("receiver",value(receiver));if(ExecutionKernelHooks.enabled())r.put("receiver_type",receiver==null?null:receiver.getClass().getName());List<Object> vs=new ArrayList<>();for(Object x:args)vs.add(value(x));r.put("args",vs);

@@ -1,0 +1,14 @@
+{
+  "scope": "One final core, Agent and pre-execution routing policy on all original 62 exposed query families; 29 unseen candidates remain sealed.",
+  "queries_sha256": "9dc8cb653cd4479ed1bc969a364b139948c86b3a437e9858f2432be3edc803ae",
+  "heldout_sha256": "87c40107282aaccb8e049fc5ffe37bb1e66deacfeabd0f015a08544bc1972fae",
+  "acceptance": {"original_targets":431,"baseline_correct_targets_to_preserve":368,"old_tf_correct_targets_to_preserve":213,"union_targets_to_preserve":382,"new_wrong_definite_answers_allowed":0},
+  "inputs": "Original baseline saved business requests, source public entity fields and database documents. Restore Cart item IDs. New invocation/object/version coordinates are independently checked. Environmental clock and generated non-query result IDs may differ; explicitly audit them.",
+  "strategy": "Freeze all plans and rejection reasons before runtime; no answer-based fallback or per-field success whitelist. Full/selective same plan, global switches and required evidence.",
+  "rejected_queries": "Do not force execution. Retain planning rejection and use a fresh same-entry business capture under the frozen core to enumerate actual original-input target instances. No origin answer is asserted for rejected targets; distinguish this receipt from executing the rejected query plan.",
+  "source_oracle": "Reviewed original business projections and raw current message, call, object, field and version facts; not TF dependency replay or MirrorTaint predictions.",
+  "received_mutations": "Execution profile does not impose legacy read-only enforcement on incoming application collections. Unproved ownership effects keep affected state unknown; exact append member/content-version evidence remains checked. Legacy read-only contracts remain enforced.",
+  "unsupported_uuid": "UUID JSON projection is not modeled. Both planning paths must reject a UUID target instead of accepting a plan whose target snapshot is absent.",
+  "failure_policy": "Preserve initial HATEOAS activation failure, parallel Orders timeout, legacy read-only interference, UUID admission failure and scoring-coordinate correction separately. New algorithm changes require another freeze; scoring-only corrections may re-evaluate unchanged raw evidence.",
+  "performance": "No new cost claim. Run Orders in isolation from other application startup workers to avoid cold-start interference with its original Future deadline."
+}

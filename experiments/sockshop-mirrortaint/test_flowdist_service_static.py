@@ -1,3 +1,4 @@
+from experiment_environment import java8_target
 """Inventory must preserve overloads, constructors and erased descriptors."""
 from pathlib import Path
 import subprocess
@@ -26,7 +27,7 @@ public class Example<T> {
  public int convert(int value) { return value; }
  public void arrays(String[][] value) {}
 }''')
-            subprocess.run(['javac','--release','8','-d',str(classes),str(source)],check=True,capture_output=True)
+            subprocess.run(['javac',*java8_target()[1],'-d',str(classes),str(source)],check=True,capture_output=True)
             self.assertEqual(inventory(classes,root),[
                 '<fixture.Example: int convert(int)>',
                 '<fixture.Example: java.lang.Object convert(java.lang.Object)>',

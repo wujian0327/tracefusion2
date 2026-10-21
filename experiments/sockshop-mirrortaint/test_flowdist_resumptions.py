@@ -1,3 +1,4 @@
+from experiment_environment import java8_target
 from pathlib import Path
 import subprocess
 import tempfile
@@ -10,7 +11,7 @@ class ResumptionProbeTests(unittest.TestCase):
         cls.temp=tempfile.TemporaryDirectory(prefix='flowdist-resumption-check-');root=Path(cls.temp.name)
         tool=root/'tool';tool.mkdir();app=root/'app';app.mkdir();monitor=root/'OTMonitor.java';fixture=root/'Fixture.java'
         asm=[Path('artifacts/java-collection-deps')/(name+'-9.7.1.jar') for name in ('asm','asm-tree')]
-        subprocess.run(['javac','--release','8','-cp',':'.join(map(str,asm)),'-d',str(tool),
+        subprocess.run(['javac',*java8_target()[1],'-cp',':'.join(map(str,asm)),'-d',str(tool),
             str(Path(__file__).with_name('FlowDistResumeCalls.java'))],capture_output=True,check=True)
         monitor.write_text('''package disttaint;
 public class OTMonitor {
@@ -38,7 +39,7 @@ public class Fixture {
   System.out.println("UNMONITORED_RESUMED="+resumedUnmonitored);
  }
 }''')
-        subprocess.run(['javac','--release','8','-d',str(app),str(monitor),str(fixture)],capture_output=True,check=True)
+        subprocess.run(['javac',*java8_target()[1],'-d',str(app),str(monitor),str(fixture)],capture_output=True,check=True)
         modified=root/'Fixture.modified.class'
         patched=subprocess.run(['java','-cp',':'.join(map(str,[tool,*asm])),'FlowDistResumeCalls',
             str(app/'Fixture.class'),str(modified)],capture_output=True,text=True,check=True)

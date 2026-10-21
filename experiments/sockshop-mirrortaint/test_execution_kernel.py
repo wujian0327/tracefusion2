@@ -16,10 +16,11 @@ class ExecutionKernelTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'Unsupported instruction|Loops/back edges'):analyze(method)
 
     def test_constructor_with_hidden_write_or_call_not_summarized(self):
-        method={'desc':'(Ljava/lang/String;)V','instructions':[{'op':25,'var':0},{'op':183,'owner':'java/lang/Object','name':'<init>','desc':'()V'},
+        method={'owner':'Box','name':'<init>','desc':'(Ljava/lang/String;)V','instructions':[{'op':25,'var':0},{'op':183,'owner':'java/lang/Object','name':'<init>','desc':'()V'},
             {'op':25,'var':0},{'op':25,'var':1},{'op':181,'owner':'Box','name':'text','desc':'Ljava/lang/String;'},{'op':177}]}
         self.assertEqual(constructor_writes(method),{'Box.text':0})
         method['instructions'].insert(-1,{'op':184,'owner':'External','name':'effect','desc':'()V'})
+        for index,instruction in enumerate(method['instructions']):instruction['index']=index
         with self.assertRaisesRegex(ValueError,'constructor effects'):constructor_writes(method)
 
     def test_actual_field_versions_keep_overwrites_separate(self):

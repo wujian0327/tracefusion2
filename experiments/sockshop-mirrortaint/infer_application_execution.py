@@ -772,7 +772,19 @@ def infer_application(plan,rows,worker_request=None):
                                 elif name=='iterator':
                                     require(ret.get('result_type')=='java.util.ArrayList$Itr','Execution iterator implementation unsupported');state.iterators[observed['object']]=[c.owner,0,c.epoch];v=Value(observed)
                                 elif name=='add':
-                                    require(c.local and not c.escaped and not args[0].allocation==recv.allocation,'Execution append to nonlocal/escaped/self list');require(observed.get('value') is True,'Execution append failed');c.elements.append(args[0]);c.epoch=ret['collection_epoch'];v=Value(observed)
+                                    require(observed.get('value') is True,'Execution append failed')
+                                    require(ret.get('collection_after')==call.get('collection',[])+call['args'],'Execution append physical member delta differs')
+                                    require(ret['collection_epoch']==call['collection_epoch']+1,'Execution append content version differs')
+                                    if c.local and not c.escaped and not args[0].allocation==recv.allocation:
+                                        c.elements.append(args[0]);v=Value(observed)
+                                    else:
+                                        # The application may mutate received state. An
+                                        # unproved ownership effect is conservative unknown,
+                                        # not a collector exception changing the business.
+                                        after=ret.get('collection_after');require(after is not None,'Opaque list mutation post-state absent')
+                                        poison([recv]+args,ret['seq']);c.elements=[Value(x,unknown=True) for x in after];c.escaped=True;v=Value(observed,unknown=True)
+                                        opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':ret['seq'],'completion':'unproved-list-ownership'})
+                                    c.epoch=ret['collection_epoch']
                                 else:raise ValueError('Execution list method unsupported: '+key)
                                 after=ret.get('collection_after');require(after is not None and len(after)==len(c.elements),'Execution list post-state absent/differs')
                                 for value,item in zip(c.elements,after):same_value(actual(value),item)

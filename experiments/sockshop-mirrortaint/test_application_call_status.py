@@ -20,11 +20,18 @@ class ApplicationStatusTests(unittest.TestCase):
                 self.assertEqual(result['evidence_invalid'],int(expected=='evidence_invalid'))
                 self.assertEqual(result['analysis_limited'],int(expected=='analysis_limited'))
 
-    def test_recursion_is_an_explicit_planning_boundary(self):
+    def test_recursive_graph_is_retained_with_finite_execution_budgets(self):
         key='Recursive.root(LItem;)LItem;'
         model={'classes':{'Recursive':{'access':1,'super':'java/lang/Object','interfaces':[],'fields':[],'sha256':'root'},'Item':{'access':1,'super':'java/lang/Object','interfaces':[],'fields':[{'name':'text','desc':'Ljava/lang/String;','access':1}],'sha256':'item'}},
             'methods':{key:{'owner':'Recursive','name':'root','access':8,'desc':'(LItem;)LItem;','try_catches':0,'exception_handlers':[],'instructions':[{'index':0,'op':25,'var':0},{'index':1,'op':184,'owner':'Recursive','name':'root','desc':'(LItem;)LItem;'},{'index':2,'op':176}]}}}
-        with self.assertRaisesRegex(ValueError,'Recursive application call'):
+        plan=plan_response(model,key,'Item.text','/text',execution_kernel=True,application_calls=True)
+        cfg=plan['execution_kernel']
+        self.assertIn(key,cfg['call_targets'][key+'@1'])
+        self.assertEqual(set(cfg['methods']),{key})
+        self.assertGreater(cfg['step_limit'],0)
+        self.assertGreater(cfg['call_depth_limit'],0)
+        model['classes']['Item']['fields'][0]['desc']='Ljava/util/UUID;'
+        with self.assertRaisesRegex(ValueError,'Target type unsupported'):
             plan_response(model,key,'Item.text','/text',execution_kernel=True,application_calls=True)
 
 
