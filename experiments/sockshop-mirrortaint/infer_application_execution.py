@@ -635,7 +635,8 @@ def infer_application(plan,rows,worker_request=None):
                 unwrap=next(r for r in rows if r['kind']=='async-worker-unwrapped' and r.get('task_id')==root.get('async_task_id'))
                 payload=Value(unwrap['result'],unknown=True)
             payload=materialize(payload);owner=payload.observed.get('object');local=set(state.allocations.values());exports={}
-            outward=any(k[0] not in local for k in state.fields)
+            local_arrays={r['array']['object'] for r in relevant if r['kind']=='execution-array' and r['operation']=='new'}
+            outward=any(k[0] not in local for k in state.fields) or any(r['kind']=='execution-array' and r['operation']=='store' and r['array']['object'] not in local_arrays for r in relevant)
             private=owner in local and owner not in poisoned_at and not outward and not opaque_calls
             fields={k:materialize(v) for k,v in state.fields.items() if k[0]==owner}
             if private and fields and all('value' in v.observed and 'date_epoch_ms' not in v.observed for v in fields.values()):exports=fields

@@ -21,7 +21,7 @@ def run(out,libs):
     with ZipFile(jar,'w') as z:
         for f in classes.glob('*.class'):z.write(f,'BOOT-INF/classes/'+f.name)
     b=out/'build';build(b,{'fixture':{'jar':str(jar),'entry':'AsyncDependencyFixture.root(LAsyncDependencyFixture$Worker;Ljava/lang/String;Ljava/lang/String;LAsyncDependencyFixture$Out;I)LAsyncDependencyFixture$Out;','targets':['AsyncDependencyFixture$Out.text'],'response_path':'/text','execution_kernel':True,'application_calls':True,'async_dependencies':True}})
-    plan=load(b/'fixture/plan.json');expected={0:[1],1:[1],2:[],3:[2],4:None,5:None,6:None,7:None,8:[],9:None,10:[1],11:[],12:[1],13:[2]};reports={}
+    plan=load(b/'fixture/plan.json');expected={0:[1],1:[1],2:[],3:[2],4:None,5:None,6:None,7:None,8:[],9:None,10:[1],11:[],12:[1],13:[2],14:None};reports={}
     for mode in ('full','selective'):
         cap=out/mode;(cap/'fixture').mkdir(parents=True)
         command(['java','-javaagent:'+str(b/'distributed-observer.jar'),'-Dservice.plan='+str(b/'fixture/plan.json'),'-Dservice.mode='+mode,'-Dservice.events='+str(cap/'fixture/events.jsonl'),'-cp',str(classes)+':'+runtime_cp,'AsyncDependencyFixture'],cap/'stdout.log')
