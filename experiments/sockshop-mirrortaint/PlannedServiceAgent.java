@@ -103,6 +103,19 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
     static void arguments(InsnList h,MethodNode m){Type[] ts=Type.getArgumentTypes(m.desc);h.add(new LdcInsnNode(ts.length));h.add(new TypeInsnNode(ANEWARRAY,"java/lang/Object"));int slot=(m.access&ACC_STATIC)!=0?0:1;for(int i=0;i<ts.length;i++){h.add(new InsnNode(DUP));h.add(new LdcInsnNode(i));h.add(new VarInsnNode(ts[i].getOpcode(ILOAD),slot));box(h,ts[i]);h.add(new InsnNode(AASTORE));slot+=ts[i].getSize();}}
     static void box(InsnList h,Type t){String[] ws={null,"Boolean","Character","Byte","Short","Integer","Float","Long","Double"};if(t.getSort()>=1&&t.getSort()<=8){String o="java/lang/"+ws[t.getSort()];h.add(new MethodInsnNode(INVOKESTATIC,o,"valueOf","("+t.getDescriptor()+")L"+o+";",false));}}
     public static final class Recorder {
+        // Optional diagnosis only. No event or source validation depends on it.
+        static final class Diagnostic {
+            static final boolean enabled=Boolean.getBoolean("service.diagnostic.timing");
+            static volatile boolean active;
+            static final java.lang.management.ThreadMXBean threads=enabled?java.lang.management.ManagementFactory.getThreadMXBean():null;
+            static void start(){if(!enabled)return;Thread sampler=new Thread(()->{
+                try(BufferedWriter file=Files.newBufferedWriter(Paths.get(System.getProperty("service.events")+".diagnostic.jsonl"),StandardOpenOption.CREATE_NEW)){
+                    int count=0;while(count<2000){Thread.sleep(250);if(!active)continue;Map<String,Object> sample=new LinkedHashMap<>();sample.put("monotonic_ns",System.nanoTime());List<Object> rows=new ArrayList<>();
+                        for(java.lang.management.ThreadInfo info:threads.dumpAllThreads(true,true)){if(info==null)continue;Map<String,Object> row=new LinkedHashMap<>();row.put("id",info.getThreadId());row.put("name",info.getThreadName());row.put("state",info.getThreadState().name());row.put("lock",info.getLockName());row.put("lock_owner",info.getLockOwnerId());row.put("cpu_ns",threads.getThreadCpuTime(info.getThreadId()));List<String> stack=new ArrayList<>();for(StackTraceElement frame:info.getStackTrace())stack.add(frame.toString());row.put("stack",stack);rows.add(row);}sample.put("threads",rows);file.write(JSON.writeValueAsString(sample));file.newLine();file.flush();count++;
+                    }
+                }catch(Exception failure){System.err.println("Optional agent diagnosis stopped: "+failure.getClass().getName());}
+            },"tf2-diagnostic-sampler");sampler.setDaemon(true);sampler.start();}
+        }
         static final ObjectMapper JSON=new ObjectMapper();static BufferedWriter output;static long seq,framesCounter,fieldHooks,branches;
         static final IdentityHashMap<Object,String> IDS=new IdentityHashMap<>();static final Map<String,Integer> VERSIONS=new HashMap<>();
         static final Set<String> CHECKED_CLASSES=new HashSet<>();
@@ -157,6 +170,12 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
                 throw new IllegalArgumentException("Live object in event metadata: "+type);
             }finally{seen.remove(value);}
         }
-        static synchronized void emit(String kind,Map<String,Object> r){try{safeEvent(r,new IdentityHashMap<Object,Boolean>(),0);if(++seq>1000000)throw new IllegalStateException("Event bound");r.put("seq",seq);r.put("kind",kind);r.put("thread",Thread.currentThread().getId());output.write(JSON.writeValueAsString(r));output.newLine();output.flush();}catch(Exception e){throw new IllegalStateException(e);}}
+        static synchronized void emit(String kind,Map<String,Object> r){try{if(Diagnostic.enabled){r.put("diagnostic_monotonic_ns",System.nanoTime());r.put("diagnostic_thread_cpu_ns",Diagnostic.threads.getCurrentThreadCpuTime());if(kind.equals("start"))Diagnostic.start();if(kind.equals("enter"))Diagnostic.active=true;}safeEvent(r,new IdentityHashMap<Object,Boolean>(),0);if(++seq>1000000)throw new IllegalStateException("Event bound");r.put("seq",seq);r.put("kind",kind);r.put("thread",Thread.currentThread().getId());output.write(JSON.writeValueAsString(r));output.newLine();
+            // BufferedWriter is bounded (8 KiB chars); the encoder is bounded
+            // too. Keep every event in order, but avoid a flush/syscall per
+            // instruction while all instrumented workers share this monitor.
+            // Offline acceptance still requires a complete metrics footer.
+            if(kind.equals("start")||kind.equals("metrics")||kind.equals("problem")||kind.equals("abort"))output.flush();
+        }catch(Exception e){throw new IllegalStateException(e);}}
     }
 }

@@ -12,8 +12,11 @@ public final class RequestEntityHooks {
     static final Map<ClassLoader,Map> HASH_CACHE=new WeakHashMap<ClassLoader,Map>();
     static Map JDK_CACHE;
     static Map hashes()throws Exception{
-        ClassLoader loader=Thread.currentThread().getContextClassLoader();Map existing=HASH_CACHE.get(loader);if(existing!=null)return existing;Map result=new TreeMap();
-        for(Object key:((Map)config().get("class_sha256")).keySet()){String n=(String)key;result.put(n,ExecutionKernelHooks.classHash(Class.forName(n.replace('/','.'),false,loader)));}return result;
+        ClassLoader loader=Thread.currentThread().getContextClassLoader();synchronized(HASH_CACHE){Map existing=HASH_CACHE.get(loader);if(existing!=null)return existing;}Map result=new TreeMap();
+        // Loading classes can enter transformer/recorder code. Never hold the
+        // cache monitor across resolution, byte reads or other agent locks.
+        for(Object key:((Map)config().get("class_sha256")).keySet()){String n=(String)key;result.put(n,ExecutionKernelHooks.classHash(Class.forName(n.replace('/','.'),false,loader)));}Map frozen=Collections.unmodifiableMap(result);
+        synchronized(HASH_CACHE){Map existing=HASH_CACHE.get(loader);if(existing!=null){if(!existing.equals(frozen))throw new IllegalStateException("Contract class resources changed");return existing;}HASH_CACHE.put(loader,frozen);}return frozen;
     }
     static boolean exact(Object o,String name){return o!=null&&o.getClass().getName().equals(name);}
     static Map fact(String kind)throws Exception{Map f=new LinkedHashMap();f.put("kind",kind);f.put("class_sha256",hashes());f.put("jdk_sha256",jdk());return f;}
