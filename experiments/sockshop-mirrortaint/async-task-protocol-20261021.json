@@ -1,0 +1,75 @@
+{
+  "parent_commit": "cf1d438180fcd000e62b10814fc485b4eb82d857",
+  "parent_algorithm": "0956200b622c6ed8cba97b2762fd31e222a8584b",
+  "scope": [
+    "Pinned Spring 4.3.6 Future submission and worker unwrapping observations",
+    "Concrete task, callback, worker frame, inner/outer future and get identity pairing",
+    "Observation-only protocol: no source propagation, save summary or async purity assumption"
+  ],
+  "queries": [
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.CustomerOrder.date",
+      "path": "/date",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-date",
+      "rank": "cc028b916bb5c257b34eeab8968a7e2c10ac6763b2d3ed7c76c51d165deafb14",
+      "exposure_group": "model20"
+    },
+    {
+      "application": "sockshop",
+      "role": "orders",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "http": "POST /orders",
+      "target": "works.weave.socks.orders.entities.Customer.username",
+      "path": "/customer/username",
+      "shape_note": "scalar or built-in leaf",
+      "source_boundary": {
+        "scope": "entry arguments, concrete entity field/element reads after repository return, and actual downstream RPC response reads; database histories excluded",
+        "selection_origins": "separate; not counted as data origins"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_field_or_map_path": 1,
+        "source_boundary": 1,
+        "profile_attempts": "same two frozen attempts for every query",
+        "new_library_summaries": 0,
+        "core_changes": 0
+      },
+      "id": "sockshop-orders-newOrder-customer-username",
+      "rank": "36161ec9f89215a5f49d0c30e6586570bd33ef2d9dc57415f24ceff05ddc0b81",
+      "exposure_group": "binding22"
+    }
+  ],
+  "acceptance": [
+    "Mixed normal/exception/timeout/cancel/rejected submit, same-value distinct tasks and repeated get controls",
+    "Fresh original Orders full/selective captures and independent existing oracle",
+    "Necessary event/hash/identity mutation rejected; previous profiles unchanged by default"
+  ],
+  "heldout": {
+    "path": "experiments/sockshop-mirrortaint/execution-kernel-protocol-20261020.json",
+    "sha256": "87c40107282aaccb8e049fc5ffe37bb1e66deacfeabd0f015a08544bc1972fae",
+    "unexamined_candidates": 29
+  },
+  "no_performance": true,
+  "gap_ledger": {
+    "repaired": 97,
+    "remaining": 72,
+    "no_credit_for_protocol_only": true
+  }
+}
