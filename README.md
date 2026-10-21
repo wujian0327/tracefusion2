@@ -1,5 +1,11 @@
 # TraceFusion 2
 
+2026-10-21完成[Cart首次创建与再次读取来源修订](experiments/sockshop-mirrortaint/CART-REREAD-REVISION-20261021.md)，
+核心冻结 `014f18d`。原对照同客户ID的首次创建/重复GET，full/selective各2/2来源匹配；混合客户保护各7/7。
+保存仍是不透明效果，首次目标来源为实际第二次仓储读取；新增有界helper调用图与构造器创建证据，见[机制](experiments/sockshop-mirrortaint/CART-REREAD-ALGORITHM-20261021.md)。
+本轮新增修复1个，开发台账累计97、剩余72；新Agent回归Cart各15/15及6/6、循环各60/60、TicketInfo各21/21。
+拒绝保护及旧213答案离线兼容复算通过。未做性能或62查询统一版本验收，29候选继续封存，Orders保存/异步仍未支持。
+
 2026-10-20完成[Date有限语义与真实阻断核验](experiments/sockshop-mirrortaint/DATE-PROJECTION-REVISION-20261020.md)，
 冻结 `882497c`。Date读取/复制/生成及默认ISO或数字投影控制通过；原版Orders Date查询full/selective仍各6个unknown，
 具体阻断是格式化与保存等必要效果，不能把同时间当作来源保持。本轮新增真实差距修复0，累计96、剩余73。

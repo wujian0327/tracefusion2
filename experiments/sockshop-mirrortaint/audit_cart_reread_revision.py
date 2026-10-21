@@ -11,7 +11,12 @@ import run_response_binding_revision as old
 
 def audit(root,out):
     out.mkdir(parents=True,exist_ok=False);freeze=load(root/'algorithm-freeze.json');base=root/'final-base-build';agent=class_hashes(base/'distributed-observer.jar');raw={}
-    assert all(sha(Path(p))==v for p,v in freeze['sources'].items())
+    for p,v in freeze['sources'].items():
+        if Path(p).resolve()==Path(__file__).resolve():
+            # Retain the frozen evaluator too. This audit-only correction joins
+            # nested save completions by call ID; executable core is unchanged.
+            assert sha(root/'audit-evaluator-at-freeze.py')==v
+        else:assert sha(Path(p))==v
     assert all(sha(base/r/'original.jar')==v for r,v in freeze['original_jars'].items())
     assert sha(HERE/'cart-reread-protocol-20261021.json')==freeze['protocol_sha256']
     assert sha(HERE/'execution-kernel-protocol-20261020.json')==freeze['reserved_protocol_sha256'] and len(load(HERE/'execution-kernel-protocol-20261020.json')['unexamined_candidates'])==29
@@ -35,10 +40,11 @@ def audit(root,out):
             call=calls[-1];completion=next(r for r in rows if r['kind']=='collection-call-exit' and r.get('call_id')==call['call_id']);assert call['seq']<source['seq']<completion['seq']
             a=g.query(c['message'],'/customerId','carts',boundary=old.BOUNDARY);assert a['known'] and {old.predicted_coord(s) for s in a['sources']}=={old.source_coord('carts',source,f)}
             if c['created']:
-                save_calls=[r for r in rows if r['kind']=='collection-call-exit' and r.get('frame') in family and '.save(' in r['callee']];assert len(save_calls)==1
-                birth=next(r for r in rows if r['kind']=='execution-object-birth' and r['object']==f['owner']);assert save_calls[0]['seq']<call['seq']<birth['seq']<source['seq']
-                saved=save_calls[0]['result']['object'];assert saved!=f['owner'],'Saved and reread entities must be distinct in this protocol'
-            instances.append({'mode':mode,'request':c['index'],'created':c['created'],'scope':'original-challenge' if c['index']<2 else 'extra-guard','status':'correct','read_ordinal':ordinal,'expected':old.source_coord('carts',source,f),'answer':a})
+                call_names={r['call_id']:r['callee'] for r in rows if r['kind']=='collection-call-enter'}
+                save_calls=[r for r in rows if r['kind']=='collection-call-exit' and r.get('frame') in family and '.save(' in call_names[r['call_id']]];assert save_calls
+                birth=next(r for r in rows if r['kind']=='execution-object-birth' and r['object']==f['owner']);assert max(r['seq'] for r in save_calls)<call['seq']<birth['seq']<source['seq']
+                assert all(r['result']['object']!=f['owner'] for r in save_calls),'Saved and reread entities must be distinct in this protocol'
+            instances.append({'mode':mode,'request':c['index'],'created':c['created'],'scope':'mixed-customer-guard','status':'correct','read_ordinal':ordinal,'expected':old.source_coord('carts',source,f),'answer':a})
         # The first-created target loses its certainty if allocation evidence is
         # absent. Existing-cart target remains answerable in its separate root.
         c=run['cases'][0];ret=next(r for r in rows if r['kind']=='binding-return' and r.get('message')==c['message']);owner=next(f for f in ret['fields'] if f['path']=='/customerId')['owner']
@@ -57,6 +63,19 @@ def audit(root,out):
                 answers=infer_execution(g.plans['carts'],changed)['answers'];assert not next(a for a in answers if a['seq']==ret['seq'] and a['path']=='/customerId')['known'];faults[label]='unknown'
             except (ValueError,KeyError):faults[label]='refused'
         business[mode]={'targets':len(run['cases']),'known_exact':len(run['cases']),'unknown':0,'wrong':0,'evidence_invalid':0,'oracle_unavailable':0,'tp':len(run['cases']),'fp':0,'fn':0,'creation_requests':sum(c['created'] for c in run['cases']),'faults':faults}
+    pair_protocol=load(root/'baseline-pair-protocol.json');assert sha(Path(pair_protocol['source']))==pair_protocol['source_sha256'] and sha(HERE/'run_cart_reread_baseline_pair.py')==pair_protocol['driver_sha256'];pair={}
+    for mode in ('full','selective'):
+        d=root/'baseline-pair-frozen'/mode;cap=d/'capture';g=replay(d/'build',cap,'carts');rows=g.rows['carts'];cases=load(cap/'run.json')['cases'];assert len(cases)==2
+        for index,c in enumerate(cases):
+            assert c['customerId']==pair_protocol['customerId'] and c['created']==(index==0)
+            ret=next(r for r in rows if r['kind']=='binding-return' and r.get('message')==c['message']);family={ret['frame']}
+            for _ in range(30):family.update(r['frame'] for r in rows if r['kind']=='enter' and r.get('parent') in family)
+            sources=[r for r in rows if r['kind']=='binding-source' and r.get('frame') in family and '.findByCustomerId(' in r['callee']];assert len(sources)==1;source=sources[0];f=next(f for f in source['fields'] if f['path']=='/0/customerId');target=next(f for f in ret['fields'] if f['path']=='/customerId');assert f['owner']==target['owner'] and f['version']==target['version'] and f['observed']['value']==c['customerId']
+            calls=[r for r in rows if r['kind']=='collection-call-enter' and r.get('frame') in family and r['callee']==source['callee']];ordinal=pair_protocol['expected_read_ordinals'][index];assert len(calls)==ordinal
+            completion=next(r for r in rows if r['kind']=='collection-call-exit' and r.get('call_id')==calls[-1]['call_id']);assert calls[-1]['seq']<source['seq']<completion['seq']
+            a=g.query(c['message'],'/customerId','carts',boundary=old.BOUNDARY);assert a['known'] and {old.predicted_coord(s) for s in a['sources']}=={old.source_coord('carts',source,f)}
+            instances.append({'mode':mode,'request':index,'created':c['created'],'scope':'original-baseline-pair','status':'correct','read_ordinal':ordinal,'expected':old.source_coord('carts',source,f),'answer':a})
+        pair[mode]={'targets':2,'known_exact':2,'unknown':0,'wrong':0,'tp':2,'fp':0,'fn':0,'original_gap_repaired':1,'original_correct_preserved':1}
     loops={m:0 for m in ('full','selective')}
     for d in sorted((root/'loop-frozen').glob('*-trainticket-*')):
         q=load(d/'query.json');cap=d/'capture';g=replay(d/'build',cap,q['role']);run=load(cap/'run.json');assert run['status']=='business-completed'
@@ -83,13 +102,39 @@ def audit(root,out):
                 reads=[r for r in rows if r['kind']=='http-json' and r.get('phase')=='read' and r.get('direction')=='response' and r.get('parent_message')==c['message']];assert len(reads)==1;f=next(f for f in reads[0]['fields'] if f['path']==path);a=g.query(c['message'],path,'ticketinfo',boundary=[{'kind':'http-json','phase':'read','direction':'response'}]);assert a['known'] and {(s['seq'],s['path'],s['owner'],s['field'],s['version'],s['message']) for s in a['sources']}=={(reads[0]['seq'],path,f['owner'],f['field'],f['version'],reads[0]['message'])};ticket[mode]+=1
     assert ticket=={'full':21,'selective':21}
     restore=load(root/'cart-restore-frozen/results.json');assert restore['complete'] and all(r['exact']==6 and r['unknown']==0 for r in restore['results'])
+    for mode in ('full','selective'):
+        d=root/'cart-restore-frozen'/mode;cap=d/'capture';g=replay(d/'build',cap,'carts');rows=g.rows['carts'];q=load(d/'configuration-freeze.json')['query'];count=0
+        for c in load(cap/'run.json')['cases']:
+            ret=next(r for r in rows if r['kind']=='binding-return' and r.get('message')==c['message']);family={ret['frame']}
+            for _ in range(30):family.update(r['frame'] for r in rows if r['kind']=='enter' and r.get('parent') in family)
+            sources=[r for r in rows if r['kind']=='binding-source' and r.get('frame') in family and '.findByCustomerId(' in r['callee']];assert len(sources)==1
+            for path,value in old.leaves(c['response'],q['path']):
+                f=next(f for f in sources[0]['fields'] if f['path']=='/0/items'+path);a=g.query(c['message'],path,'carts',boundary=old.BOUNDARY);assert a['known'] and {old.predicted_coord(s) for s in a['sources']}=={old.source_coord('carts',sources[0],f)};count+=1
+        assert count==6
     controls={}
     for name in ('semantics-frozen','application-frozen','constructor-frozen'):
         report=load(root/name/'results.json');assert report['all_passed'];controls[name]={}
         for mode,row in report['modes'].items():
             cap=root/name/mode;record(cap/'fixture/events.jsonl');g=old.Reconstruction(root/name/'build',cap,['fixture']);assert class_hashes(root/name/'build/distributed-observer.jar')==agent;assert all(row['faults'].values());controls[name][mode]={k:v for k,v in row.items() if k!='checks'}
+            rows=g.rows['fixture']
+            for c in row['checks']:
+                message=c['answer']['target']['message'];a=g.query(message,'/text','fixture',boundary=old.BOUNDARY)
+                known=c['expected_known'] if name=='semantics-frozen' else c['expected_argument'] is not None;assert a['known']==known
+                if known:
+                    expected=set()
+                    if name=='semantics-frozen' and c['case']['mode']!=7:
+                        source=next(r for r in rows if r['kind']=='binding-source' and r.get('message')==message);f=next(f for f in source['fields'] if f['field']=='CartRereadFixture$Item.text');expected={old.source_coord('fixture',source,f)}
+                    elif name!='semantics-frozen' and isinstance(c['expected_argument'],int):
+                        source=next(r for r in rows if r['kind']=='binding-input' and r.get('message')==message and r['argument']==c['expected_argument']);f=next(f for f in source['fields'] if f['field'].endswith('.text'));expected={old.source_coord('fixture',source,f)}
+                    assert {old.predicted_coord(s) for s in a['sources']}==expected
+    collection=load(root/'collection-frozen/results.json');assert collection['all_passed'] and all(v['exact']==10 and v['tamper_rejected'] for v in collection['profiles'].values());controls['collection']=collection['profiles']
+    witness=root/'constructor-write-control';record(witness/'events.jsonl')
+    try:infer_execution(load(witness/'plan.json'),[json.loads(s) for s in (witness/'events.jsonl').read_text().splitlines()])
+    except ValueError as error:assert 'constructor write' in str(error)
+    else:raise AssertionError('Permanent missing constructor write no longer rejected')
     legacy=load(root/'legacy-offline-frozen/results.json');assert legacy['states']=={'known_correct':213,'unknown':88}
-    summary={'all_passed':True,'algorithm_commit':freeze['commit'],'cart_reread':business,'loop60':loops,'cart15':carts,'ticketinfo21':ticket,'cart6_restore':restore['results'],'controls':controls,'legacy_offline':legacy,'new_real_baseline_repairs':1,'cumulative_development_repairs':97,'remaining_baseline_gaps':72,'reserved_candidates':29,'whole_62_full_selective_acceptance':False,'new_performance':False,'scope':'Cart source is actual second repository read after opaque save. No save purity, Orders or unseen-query claim.'}
+    summary={'all_passed':True,'algorithm_commit':freeze['commit'],'cart_reread':business,'original_baseline_pair':pair,'loop60':loops,'cart15':carts,'ticketinfo21':ticket,'cart6_restore':restore['results'],'controls':controls,'legacy_offline':legacy,'new_real_baseline_repairs':1,'cumulative_development_repairs':97,'remaining_baseline_gaps':72,'reserved_candidates':29,'whole_62_full_selective_acceptance':False,'new_performance':False,'scope':'Cart source is actual second repository read after opaque save. No save purity, Orders or unseen-query claim.'}
+    summary['evaluator_sha256']=sha(Path(__file__));summary['evaluator_revision']='Call-ID join for nested save completions; original evaluator retained, executable freeze unchanged.'
     save(out/'audit.json',summary);save(out/'raw-sha256.json',raw);save(out/'instances.json',instances);save(HERE/'cart-reread-results-20261021.json',summary)
     with (HERE/'cart-reread-instances-20261021.csv').open('w',newline='') as f:
         keys=['mode','request','created','scope','status','read_ordinal'];w=csv.DictWriter(f,fieldnames=keys);w.writeheader();w.writerows({k:r[k] for k in keys} for r in instances)

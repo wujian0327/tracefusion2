@@ -1,0 +1,263 @@
+{
+  "all_passed": true,
+  "algorithm_commit": "014f18da49a8636810f653662d3edfb86de5f2ee",
+  "cart_reread": {
+    "full": {
+      "targets": 7,
+      "known_exact": 7,
+      "unknown": 0,
+      "wrong": 0,
+      "evidence_invalid": 0,
+      "oracle_unavailable": 0,
+      "tp": 7,
+      "fp": 0,
+      "fn": 0,
+      "creation_requests": 3,
+      "faults": {
+        "missing-birth": "unknown",
+        "wrong-birth-owner": "refused",
+        "wrong-birth-frame": "unknown",
+        "wrong-birth-hash": "refused",
+        "duplicate-birth": "refused",
+        "missing-reread-source": "unknown",
+        "ambiguous-reread-source": "unknown"
+      }
+    },
+    "selective": {
+      "targets": 7,
+      "known_exact": 7,
+      "unknown": 0,
+      "wrong": 0,
+      "evidence_invalid": 0,
+      "oracle_unavailable": 0,
+      "tp": 7,
+      "fp": 0,
+      "fn": 0,
+      "creation_requests": 3,
+      "faults": {
+        "missing-birth": "unknown",
+        "wrong-birth-owner": "refused",
+        "wrong-birth-frame": "unknown",
+        "wrong-birth-hash": "refused",
+        "duplicate-birth": "refused",
+        "missing-reread-source": "unknown",
+        "ambiguous-reread-source": "unknown"
+      }
+    }
+  },
+  "original_baseline_pair": {
+    "full": {
+      "targets": 2,
+      "known_exact": 2,
+      "unknown": 0,
+      "wrong": 0,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "original_gap_repaired": 1,
+      "original_correct_preserved": 1
+    },
+    "selective": {
+      "targets": 2,
+      "known_exact": 2,
+      "unknown": 0,
+      "wrong": 0,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "original_gap_repaired": 1,
+      "original_correct_preserved": 1
+    }
+  },
+  "loop60": {
+    "full": 60,
+    "selective": 60
+  },
+  "cart15": {
+    "full": 15,
+    "selective": 15
+  },
+  "ticketinfo21": {
+    "full": 21,
+    "selective": 21
+  },
+  "cart6_restore": [
+    {
+      "mode": "full",
+      "requests": 6,
+      "targets": 6,
+      "unknown": 0,
+      "known": 6,
+      "exact": 6,
+      "application_frames": 36,
+      "methods": [
+        "works/weave/socks/cart/action/FirstResultOrDefault.get()Ljava/lang/Object;",
+        "works/weave/socks/cart/cart/CartResource.value()Ljava/util/function/Supplier;",
+        "works/weave/socks/cart/configuration/BeanConfiguration$1.findByCustomerId(Ljava/lang/String;)Ljava/util/List;",
+        "works/weave/socks/cart/controllers/CartsController.get(Ljava/lang/String;)Lworks/weave/socks/cart/entities/Cart;",
+        "works/weave/socks/cart/controllers/ItemsController.getItems(Ljava/lang/String;)Ljava/util/List;",
+        "works/weave/socks/cart/entities/Cart.<init>(Ljava/lang/String;)V"
+      ]
+    },
+    {
+      "mode": "selective",
+      "requests": 6,
+      "targets": 6,
+      "unknown": 0,
+      "known": 6,
+      "exact": 6,
+      "application_frames": 36,
+      "methods": [
+        "works/weave/socks/cart/action/FirstResultOrDefault.get()Ljava/lang/Object;",
+        "works/weave/socks/cart/cart/CartResource.value()Ljava/util/function/Supplier;",
+        "works/weave/socks/cart/configuration/BeanConfiguration$1.findByCustomerId(Ljava/lang/String;)Ljava/util/List;",
+        "works/weave/socks/cart/controllers/CartsController.get(Ljava/lang/String;)Lworks/weave/socks/cart/entities/Cart;",
+        "works/weave/socks/cart/controllers/ItemsController.getItems(Ljava/lang/String;)Ljava/util/List;",
+        "works/weave/socks/cart/entities/Cart.<init>(Ljava/lang/String;)V"
+      ]
+    }
+  ],
+  "controls": {
+    "semantics-frozen": {
+      "full": {
+        "targets": 16,
+        "known_exact": 8,
+        "expected_unknown": 8,
+        "faults": {
+          "missing-birth": "unknown",
+          "wrong-birth-owner": "refused",
+          "wrong-birth-hash": "refused",
+          "duplicate-birth": "refused",
+          "wrong-cycle-argument": "refused",
+          "missing-cycle-return": "refused"
+        },
+        "depth_status": "analysis_limited"
+      },
+      "selective": {
+        "targets": 16,
+        "known_exact": 8,
+        "expected_unknown": 8,
+        "faults": {
+          "missing-birth": "unknown",
+          "wrong-birth-owner": "refused",
+          "wrong-birth-hash": "refused",
+          "duplicate-birth": "refused",
+          "wrong-cycle-argument": "refused",
+          "missing-cycle-return": "refused"
+        },
+        "depth_status": "analysis_limited"
+      }
+    },
+    "application-frozen": {
+      "full": {
+        "targets": 34,
+        "known": 26,
+        "expected_unknown": 8,
+        "aborted": 2,
+        "budget_status": "analysis_limited",
+        "faults": {
+          "missing-child": true,
+          "wrong-parent": true,
+          "duplicate-call-id": true,
+          "missing-constructor-write": true,
+          "same-value-wrong-argument": true,
+          "wrong-exception": true
+        }
+      },
+      "selective": {
+        "targets": 34,
+        "known": 26,
+        "expected_unknown": 8,
+        "aborted": 2,
+        "budget_status": "analysis_limited",
+        "faults": {
+          "missing-child": true,
+          "wrong-parent": true,
+          "duplicate-call-id": true,
+          "missing-constructor-write": true,
+          "same-value-wrong-argument": true,
+          "wrong-exception": true
+        }
+      }
+    },
+    "constructor-frozen": {
+      "full": {
+        "targets": 24,
+        "known": 20,
+        "expected_unknown": 4,
+        "aborted": 2,
+        "budget_status": "analysis_limited",
+        "faults": {
+          "missing-constructor-frame": true,
+          "wrong-constructor-parent": true,
+          "wrong-constructor-receiver": true,
+          "missing-constructor-write": true,
+          "missing-constructor-completion": true,
+          "wrong-constructor-exception": true,
+          "wrong-constructor-argument": true,
+          "missing-filter-callback": true,
+          "wrong-filter-member": true,
+          "wrong-filter-predicate": true,
+          "wrong-filter-result": true,
+          "filter-runtime-hash": true
+        }
+      },
+      "selective": {
+        "targets": 24,
+        "known": 20,
+        "expected_unknown": 4,
+        "aborted": 2,
+        "budget_status": "analysis_limited",
+        "faults": {
+          "missing-constructor-frame": true,
+          "wrong-constructor-parent": true,
+          "wrong-constructor-receiver": true,
+          "missing-constructor-write": true,
+          "missing-constructor-completion": true,
+          "wrong-constructor-exception": true,
+          "wrong-constructor-argument": true,
+          "missing-filter-callback": true,
+          "wrong-filter-member": true,
+          "wrong-filter-predicate": true,
+          "wrong-filter-result": true,
+          "filter-runtime-hash": true
+        }
+      }
+    },
+    "collection": {
+      "full": {
+        "queries": 10,
+        "exact": 10,
+        "events": 281,
+        "bytes": 54440,
+        "tamper_rejected": true
+      },
+      "selective": {
+        "queries": 10,
+        "exact": 10,
+        "events": 204,
+        "bytes": 39901,
+        "tamper_rejected": true
+      }
+    }
+  },
+  "legacy_offline": {
+    "all_passed": true,
+    "source_sha256": "e4c7574eafe35f7ef68f38b78d360b15f15b5bc14dd72eaa4e6fa25272fb0d2a",
+    "states": {
+      "unknown": 88,
+      "known_correct": 213
+    },
+    "captures": 40,
+    "scope": "Reused original capture and independent truth, revised offline fast paths; no new runtime validation."
+  },
+  "new_real_baseline_repairs": 1,
+  "cumulative_development_repairs": 97,
+  "remaining_baseline_gaps": 72,
+  "reserved_candidates": 29,
+  "whole_62_full_selective_acceptance": false,
+  "new_performance": false,
+  "scope": "Cart source is actual second repository read after opaque save. No save purity, Orders or unseen-query claim.",
+  "evaluator_sha256": "7ca23a3aee1b2727f585f4a629866ca76a2e7b70e17cab999283c20153a7aedb",
+  "evaluator_revision": "Call-ID join for nested save completions; original evaluator retained, executable freeze unchanged."
+}
