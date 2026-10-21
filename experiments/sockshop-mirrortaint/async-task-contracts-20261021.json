@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "observation_only": true,
+  "spring_version": "4.3.6.RELEASE",
+  "class_sha256": {
+    "org/springframework/scheduling/annotation/AsyncResult": "7a22d11377e8cafe34d6ac1d2d9178855db2cdd6d85ed5b7ff74dc2997f8ed20",
+    "org/springframework/aop/interceptor/AsyncExecutionAspectSupport": "b2b25d0b15e077a3c780e2ab3009404a5c8770ce8a2cae685a2d7dd8f3aa587d",
+    "org/springframework/aop/interceptor/AsyncExecutionInterceptor$1": "0ccf03dbef39345f34c7893706249be72f77afdb42826dd2f135ff3431624c7d",
+    "org/springframework/aop/interceptor/AsyncExecutionInterceptor": "a04c26b6416962377d469e3ed8ba98840edb2958a23c79bcc2009512746d70a6"
+  },
+  "runtime_profiles": [
+    {
+      "java_runtime_version": "1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01",
+      "class_sha256": {
+        "java/util/concurrent/CancellationException": "0b821423546515036a06ea10d6b3196f248656ae72ccb1e5c0a7bd7693289bbc",
+        "java/util/concurrent/ExecutionException": "ede0d933bc4c936f5a0b7d2f3be520dffe067328a5d9bd7fe21d4f8f66d11c88",
+        "java/util/concurrent/FutureTask": "6fd81b179ac65e4ed60df46e31fbed779a9a52d37aafdd1ee8785057ddbc2469"
+      }
+    },
+    {
+      "java_runtime_version": "1.8.0_111-internal-alpine-r0-b14",
+      "class_sha256": {
+        "java/util/concurrent/CancellationException": "0b821423546515036a06ea10d6b3196f248656ae72ccb1e5c0a7bd7693289bbc",
+        "java/util/concurrent/ExecutionException": "ede0d933bc4c936f5a0b7d2f3be520dffe067328a5d9bd7fe21d4f8f66d11c88",
+        "java/util/concurrent/FutureTask": "724621ec73107dd70b148dd196893f6e472472cb97908b2651b4b75e2f49b7eb"
+      }
+    }
+  ]
+}

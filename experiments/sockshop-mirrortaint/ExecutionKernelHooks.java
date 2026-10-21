@@ -85,7 +85,7 @@ public final class ExecutionKernelHooks implements Opcodes {
         Deque<Map<String,Object>> pending=CollectionServiceHooks.CALLS.get();if(pending.isEmpty())return;
         Map<String,Object> top=pending.peek(),current=PlannedServiceAgent.Recorder.row();
         if(Objects.equals(top.get("frame"),current.get("frame"))&&Objects.equals(top.get("callee"),call)){
-            pending.pop();current.put("pc",top.get("pc"));current.put("call_id",top.get("call_id"));current.put("exception_type",error.getClass().getName());current.put("exception",PlannedServiceAgent.Recorder.value(error));PlannedServiceAgent.Recorder.emit("collection-call-throw",current);
+            pending.pop();current.put("pc",top.get("pc"));current.put("call_id",top.get("call_id"));current.put("exception_type",error.getClass().getName());current.put("exception",PlannedServiceAgent.Recorder.value(error));AsyncTaskHooks.completed(top,null,error,current);PlannedServiceAgent.Recorder.emit("collection-call-throw",current);
         }
     }
     static boolean probeExtended;

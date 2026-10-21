@@ -11,8 +11,12 @@ public final class SpringTransportAgent implements ClassFileTransformer,Opcodes 
     static final String R="SpringTransportAgent$Transport";
     public static void premain(String args,Instrumentation i)throws Exception{PlannedServiceAgent.premain(args,i);Transport.start();i.addTransformer(new SpringTransportAgent());}
     public byte[] transform(final ClassLoader loader,String owner,Class<?> prior,ProtectionDomain domain,byte[] bytes){
-        if(!Arrays.asList("org/springframework/web/client/RestTemplate","org/springframework/http/client/support/HttpAccessor","org/springframework/http/converter/json/AbstractJackson2HttpMessageConverter","org/springframework/aop/interceptor/AsyncExecutionAspectSupport").contains(owner))return null;
-        try{ClassNode c=new ClassNode(ASM9);new ClassReader(bytes).accept(c,ClassReader.EXPAND_FRAMES);boolean changed=false;
+        if(!Arrays.asList("org/springframework/web/client/RestTemplate","org/springframework/http/client/support/HttpAccessor","org/springframework/http/converter/json/AbstractJackson2HttpMessageConverter","org/springframework/aop/interceptor/AsyncExecutionAspectSupport","org/springframework/aop/interceptor/AsyncExecutionInterceptor$1","org/springframework/aop/interceptor/AsyncExecutionInterceptor","org/springframework/scheduling/annotation/AsyncResult").contains(owner))return null;
+        try{boolean protocol=AsyncTaskHooks.enabled();
+            if(protocol&&((Map)AsyncTaskHooks.config().get("class_sha256")).containsKey(owner))AsyncTaskHooks.framework(owner,bytes);
+            boolean worker=owner.equals("org/springframework/aop/interceptor/AsyncExecutionInterceptor$1");
+            if(owner.equals("org/springframework/aop/interceptor/AsyncExecutionInterceptor")||owner.equals("org/springframework/scheduling/annotation/AsyncResult")||(worker&&!protocol))return null;
+            ClassNode c=new ClassNode(ASM9);new ClassReader(bytes).accept(c,ClassReader.EXPAND_FRAMES);boolean changed=false;
             boolean typedWrite=false;for(MethodNode m:c.methods)if(m.name.equals("writeInternal")&&m.desc.startsWith("(Ljava/lang/Object;Ljava/lang/reflect/Type;"))typedWrite=true;
             for(MethodNode m:c.methods){
                 boolean rpc=owner.endsWith("/RestTemplate")&&m.name.equals("doExecute")&&m.desc.startsWith("(Ljava/net/URI;Lorg/springframework/http/HttpMethod;");
@@ -20,19 +24,26 @@ public final class SpringTransportAgent implements ClassFileTransformer,Opcodes 
                 boolean request=owner.endsWith("/HttpAccessor")&&m.name.equals("createRequest");
                 boolean read=owner.endsWith("/AbstractJackson2HttpMessageConverter")&&m.name.equals("readJavaType");
                 boolean write=owner.endsWith("/AbstractJackson2HttpMessageConverter")&&m.name.equals("writeInternal")&&(typedWrite?m.desc.startsWith("(Ljava/lang/Object;Ljava/lang/reflect/Type;"):m.desc.startsWith("(Ljava/lang/Object;Lorg/springframework/http/HttpOutputMessage;"));
-                if(!(rpc||request||read||write||async)||(m.access&(ACC_ABSTRACT|ACC_NATIVE))!=0)continue;
+                boolean workerCall=worker&&m.name.equals("call")&&m.desc.equals("()Ljava/lang/Object;");
+                if(!(rpc||request||read||write||async||workerCall)||(m.access&(ACC_ABSTRACT|ACC_NATIVE))!=0)continue;
                 AbstractInsnNode[] original=m.instructions.toArray();LabelNode start=new LabelNode(),end=new LabelNode(),handler=new LabelNode();
-                if(async){InsnList h=new InsnList();h.add(new VarInsnNode(ALOAD,1));h.add(new MethodInsnNode(INVOKESTATIC,R,"wrap","(Ljava/util/concurrent/Callable;)Ljava/util/concurrent/Callable;",false));h.add(new VarInsnNode(ASTORE,1));m.instructions.insert(h);}
+                if(async){InsnList h=new InsnList();h.add(new VarInsnNode(ALOAD,1));h.add(new MethodInsnNode(INVOKESTATIC,R,"wrap","(Ljava/util/concurrent/Callable;)Ljava/util/concurrent/Callable;",false));h.add(new VarInsnNode(ASTORE,1));if(protocol)h.add(start);m.instructions.insert(h);}
                 if(read){InsnList h=new InsnList();h.add(new VarInsnNode(ALOAD,2));h.add(new MethodInsnNode(INVOKESTATIC,"SourceEvidenceHooks","input","(Ljava/lang/Object;)Ljava/lang/Object;",false));h.add(new TypeInsnNode(CHECKCAST,"org/springframework/http/HttpInputMessage"));h.add(new VarInsnNode(ASTORE,2));h.add(start);m.instructions.insert(h);}
                 if(rpc){InsnList h=new InsnList();h.add(new VarInsnNode(ALOAD,1));h.add(new VarInsnNode(ALOAD,2));h.add(new MethodInsnNode(INVOKESTATIC,R,"rpcEnter","(Ljava/lang/Object;Ljava/lang/Object;)V",false));h.add(start);m.instructions.insert(h);}
                 int token=-1;
                 if(write){token=m.maxLocals++;InsnList h=new InsnList();h.add(new VarInsnNode(ALOAD,1));h.add(new VarInsnNode(ALOAD,typedWrite?3:2));h.add(new VarInsnNode(ALOAD,0));h.add(new MethodInsnNode(INVOKEVIRTUAL,owner,"getObjectMapper","()Lcom/fasterxml/jackson/databind/ObjectMapper;",false));h.add(new MethodInsnNode(INVOKESTATIC,R,"writeStartWithMapper","(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",false));h.add(new VarInsnNode(ASTORE,token));h.add(start);m.instructions.insert(h);}
+                if(workerCall)for(AbstractInsnNode n:original)if(n instanceof MethodInsnNode){MethodInsnNode call=(MethodInsnNode)n;
+                    String hook=call.owner.equals("org/aopalliance/intercept/MethodInvocation")&&call.name.equals("proceed")?"inner":call.owner.equals("java/util/concurrent/Future")&&call.name.equals("get")?"unwrapped":null;
+                    if(hook!=null){InsnList h=new InsnList();h.add(new InsnNode(DUP));h.add(new MethodInsnNode(INVOKESTATIC,"AsyncTaskHooks",hook,"(Ljava/lang/Object;)V",false));m.instructions.insert(n,h);}
+                }
                 for(AbstractInsnNode n:original)if(n.getOpcode()>=IRETURN&&n.getOpcode()<=RETURN){InsnList h=new InsnList();
+                    if(async&&protocol){h.add(new InsnNode(DUP));h.add(new VarInsnNode(ALOAD,1));h.add(new InsnNode(SWAP));h.add(new MethodInsnNode(INVOKESTATIC,"AsyncTaskHooks","submitted","(Ljava/util/concurrent/Callable;Ljava/lang/Object;)V",false));}
                     if(request){h.add(new InsnNode(DUP));h.add(new MethodInsnNode(INVOKESTATIC,R,"request","(Ljava/lang/Object;)V",false));}
                     if(read){h.add(new InsnNode(DUP));h.add(new VarInsnNode(ALOAD,2));h.add(new VarInsnNode(ALOAD,0));h.add(new MethodInsnNode(INVOKEVIRTUAL,owner,"getObjectMapper","()Lcom/fasterxml/jackson/databind/ObjectMapper;",false));h.add(new MethodInsnNode(INVOKESTATIC,"SourceEvidenceHooks","read","(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V",false));h.add(new InsnNode(DUP));h.add(new VarInsnNode(ALOAD,2));h.add(new MethodInsnNode(INVOKESTATIC,R,"read","(Ljava/lang/Object;Ljava/lang/Object;)V",false));}
                     if(write){h.add(new VarInsnNode(ALOAD,token));h.add(new VarInsnNode(ALOAD,1));h.add(new MethodInsnNode(INVOKESTATIC,R,"writeEnd","(Ljava/lang/Object;Ljava/lang/Object;)V",false));}
                     if(rpc)h.add(new MethodInsnNode(INVOKESTATIC,R,"rpcExit","()V",false));m.instructions.insertBefore(n,h);
                 }
+                if(async&&protocol){m.instructions.add(end);m.instructions.add(handler);int error=m.maxLocals++;m.instructions.add(new VarInsnNode(ASTORE,error));m.instructions.add(new VarInsnNode(ALOAD,1));m.instructions.add(new VarInsnNode(ALOAD,error));m.instructions.add(new MethodInsnNode(INVOKESTATIC,"AsyncTaskHooks","rejected","(Ljava/util/concurrent/Callable;Ljava/lang/Throwable;)V",false));m.instructions.add(new VarInsnNode(ALOAD,error));m.instructions.add(new InsnNode(ATHROW));m.tryCatchBlocks.add(new TryCatchBlockNode(start,end,handler,"java/lang/Throwable"));}
                 if(rpc||write||read){m.instructions.add(end);m.instructions.add(handler);int error=m.maxLocals++;m.instructions.add(new VarInsnNode(ASTORE,error));if(rpc)m.instructions.add(new MethodInsnNode(INVOKESTATIC,R,"rpcAbort","()V",false));else if(read){m.instructions.add(new VarInsnNode(ALOAD,2));m.instructions.add(new MethodInsnNode(INVOKESTATIC,"SourceEvidenceHooks","abort","(Ljava/lang/Object;)V",false));}else{m.instructions.add(new VarInsnNode(ALOAD,token));m.instructions.add(new MethodInsnNode(INVOKESTATIC,R,"writeAbort","(Ljava/lang/Object;)V",false));}m.instructions.add(new VarInsnNode(ALOAD,error));m.instructions.add(new InsnNode(ATHROW));m.tryCatchBlocks.add(new TryCatchBlockNode(start,end,handler,"java/lang/Throwable"));}changed=true;
             }
             if(!changed)throw new IllegalStateException("No supported framework methods: "+owner);
@@ -63,7 +74,7 @@ public final class SpringTransportAgent implements ClassFileTransformer,Opcodes 
         static Map<String,Object> context()throws Exception{Map<String,Object> r=new LinkedHashMap<>();if(!RPC.get().isEmpty()){r.putAll(RPC.get().peek());r.put("direction","request");}else{W3CTraceContext c=incomingContext();if(c==null)return r;r.putAll(c.fields());r.put("uri",serverUri());r.put("direction","response");}return r;}
         static void emit(String kind,Map<String,Object> r){synchronized(PlannedServiceAgent.Recorder.class){r.put("frame",PlannedServiceAgent.Recorder.row().get("frame"));PlannedServiceAgent.Recorder.emit(kind,r);}}
         public static Callable<Object> wrap(final Callable<?> work){
-            try{final W3CTraceContext captured=current();return new Callable<Object>(){public Object call()throws Exception{W3CTraceContext previous=ASYNC.get();try{if(captured==null)ASYNC.remove();else ASYNC.set(captured);return work.call();}finally{if(previous==null)ASYNC.remove();else ASYNC.set(previous);}}};}
+            try{final W3CTraceContext captured=current();Callable<Object> contextual=new Callable<Object>(){public Object call()throws Exception{W3CTraceContext previous=ASYNC.get();try{if(captured==null)ASYNC.remove();else ASYNC.set(captured);return work.call();}finally{if(previous==null)ASYNC.remove();else ASYNC.set(previous);}}};return AsyncTaskHooks.enabled()?AsyncTaskHooks.wrap(work,contextual):contextual;}
             catch(Exception e){PlannedServiceAgent.Recorder.problem("http-async-context:"+e);return (Callable)work;}
         }
         public static void rpcEnter(Object uri,Object method){

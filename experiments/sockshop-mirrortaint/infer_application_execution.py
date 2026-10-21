@@ -10,6 +10,8 @@ from infer_execution_kernel import coordinate, same_value
 def infer_application(plan,rows):
     from infer_date_projection import validate_date_runtime
     validate_date_runtime(plan,rows)
+    from infer_async_protocol import validate_async_protocol
+    async_audit=validate_async_protocol(plan,rows)
     cfg=plan['execution_kernel'];runtime=[r for r in rows if r['kind']=='execution-runtime']
     require(len(runtime)==1 and any(all(runtime[0][k]==p[k] for k in ('java_runtime_version','class_sha256')) for p in cfg['runtime_profiles']),'Application runtime pin differs')
     pending=defaultdict(list);seen=set()
@@ -589,4 +591,4 @@ def infer_application(plan,rows):
             bind(value,f['observed'])
             results.append({'root_frame':root['frame'],'seq':ret['seq'],'path':f['path'],**f,'known':not value.unknown,'origins':[list(x) for x in sorted(value.origins,key=str)],'selectors':[list(x) for x in sorted(value.selectors,key=str)]})
         audits.append({'frame':root['frame'],'completion':'normal','steps':total_steps,'frames':frame_audits,'answers':len(ret['fields']),'poisoned_objects':len(poisoned_at),'opaque_frames':opaque_frames,'opaque_calls':opaque_calls,'environment_facts':environment_facts})
-    return {'answers':results,'roots':audits,'evidence_policy':cfg['evidence_policy']}
+    return {'answers':results,'roots':audits,'evidence_policy':cfg['evidence_policy'],'async_protocol':async_audit}
