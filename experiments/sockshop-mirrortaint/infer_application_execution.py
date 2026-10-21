@@ -608,7 +608,7 @@ def infer_application(plan,rows,worker_request=None):
                                             births_=[r for r in relevant if r['kind']=='execution-decoder-birth' and r['object']==owner and call['seq']<r['seq']<read['seq']]
                                             require(len(births_)==1,'Decoded content fresh allocation absent/ambiguous');birth=births_[0];site=cfg['decoder_birth_sites'].get(birth['constructor']);require(site and site['class_sha256']==birth['class_sha256'],'Decoded content constructor pin differs')
                                             require(owner not in nonlocal_owners and owner not in decoded_seq,'Decoded content aliases an existing boundary')
-                                            
+
                                             if decoder['wrapper_kind']=='resource':resources[fact['response_body']['object']]=Value(content)
                                             decoded_types[owner]=decoder['content_type'].replace('.','/');decoded_seq[owner]=read['seq']
                                             for index,f in enumerate(read['fields']):
