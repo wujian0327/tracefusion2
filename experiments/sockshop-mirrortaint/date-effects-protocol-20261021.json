@@ -1,0 +1,14 @@
+{
+  "parent_algorithm": "3cf6320ef160242cafc27d114782d036daaa9469",
+  "scope": [
+    "exact pinned java.util.Date render/semantic state, default synchronous Mongo encoder preserves Date millis under actual no-callback/default codec checks",
+    "normal and same-time identity/date mutation/opaque/custom callback controls",
+    "freeze before new original Orders Date execution and full 62-query capability acceptance"
+  ],
+  "source_boundary": "Unchanged original field-source task; clock fact is environment, never a constant or inferred from expected empty answer",
+  "no_performance": true,
+  "heldout_unexamined": 29,
+  "heldout_sha256": "87c40107282aaccb8e049fc5ffe37bb1e66deacfeabd0f015a08544bc1972fae",
+  "first_failures": "Retain every frozen/runtime failure and separate fixes/replays",
+  "routing": "Freeze one predeclared profile policy before all 62; never choose a runtime-successful profile after seeing answer"
+}
