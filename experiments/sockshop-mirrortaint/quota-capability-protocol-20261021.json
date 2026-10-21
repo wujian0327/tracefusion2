@@ -1,0 +1,21 @@
+{
+  "purpose": "One new frozen core, fresh original-JAR execution of all 62 development query families; strict first-attempt source union and business acceptance",
+  "algorithm_commit": "f73fa5f255ef2bb50e437d0f1f18fba6b54dcb98",
+  "precondition": "Fixed three-round,72-request quota-JVM targeted acceptance passes; no full run if it fails",
+  "query_pool": "Same predeclared capability-comparison-62-20261020.json,431 reference target instances,18 entries;29 remaining candidates stay sealed",
+  "plans": "Reuse all61 accepted plans and1 explicit UUID rejection byte-for-byte, not pick a profile from runtime answers",
+  "inputs": "Same original six inputs per query (Basic/TicketInfo eight) plus original Cart create/repeat pair; restore actual declared source data. Original business JARs unchanged",
+  "jvm": "Every observed target JVM:1CPU,768MiB,-Xms32m,-Xmx256m,-XX:ParallelGCThreads=1,-XX:CICompilerCount=2. Same flags full/selective; native backends remain as before. No added warmup, no extended deadline; original Orders Future5sec retained. GC/thread diagnostics OFF.",
+  "observation": "Same source_evidence and required call,decoder,save,date,identity/version and serialization proofs as frozen core",
+  "deployment": "Orders40 configurations serial; remaining disjoint workers may run concurrently on separate ports/volumes; no performance conclusion",
+  "oracle": "Existing independent original-bytecode,raw-message/database/call/object/field/version truth, not TF graph or MirrorTaint predictions",
+  "acceptance": [
+    "All368 baseline-correct and all213 previously TF-correct targets preserved, i.e.382 distinct required instances",
+    "No incorrect known source answer",
+    "Every planned original input executed successfully according to its expected business status; expected negative/N/A stays separate",
+    "Both modes use the same frozen53 source files,actual Agent bytecode and nine JARs"
+  ],
+  "failures": "Keep every first failure and any unexecuted reference targets; no successful repeats substituted. Preserve original2ce and f73 original-JVM failures. This is a new runtime configuration, not a rewrite.",
+  "cost": "Do not reuse old cost tables; no new performance experiment",
+  "heldout_29": "No planning or execution"
+}

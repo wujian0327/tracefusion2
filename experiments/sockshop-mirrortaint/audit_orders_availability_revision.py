@@ -28,19 +28,26 @@ def diagnostic_summary(directory):
     return observations
 
 
-def audit(root,out):
-    out.mkdir(parents=True,exist_ok=False);base=root/'buffered-core';freeze=load(base/'algorithm-freeze.json');protocol=load(root/'validation-protocol-before-freeze.json');before=load(root/'frozen-validation/protocol-before-deployments.json')
+def audit(root,out,validation='frozen-validation'):
+    limited=validation=='quota-jvm-validation';protocol_file='quota-jvm-validation-protocol-before-run.json'if limited else 'validation-protocol-before-freeze.json'
+    out.mkdir(parents=True,exist_ok=False);base=root/'buffered-core';freeze=load(base/'algorithm-freeze.json');protocol=load(root/protocol_file);before=load(root/validation/'protocol-before-deployments.json')
     assert protocol['repetitions']==before['repetitions']==3 and not before['diagnostic'];assert freeze['validation_protocol_sha256']==sha(HERE/'orders-availability-validation-20261021.json')
+    assert bool(before.get('quota_aware_jvm',False))==limited
+    if limited:assert sha(root/protocol_file)==sha(HERE/'orders-quota-jvm-validation-20261021.json') and before['gc_logging']
     assert all(sha(Path(p))==digest==sha(base/'source-snapshot'/Path(p).relative_to(ROOT)) for p,digest in freeze['sources'].items())
     assert sha(HERE/'execution-kernel-protocol-20261020.json')=='87c40107282aaccb8e049fc5ffe37bb1e66deacfeabd0f015a08544bc1972fae'
     configurations=[];requests=[];targets=[];refusals=[]
     query_map={q['id']:q for q in driver.QUERIES};expected={(mode,q)for mode in protocol['modes']for q in protocol['queries']}
     for index in range(1,4):
-        round_root=root/'frozen-validation'/('round-'+str(index));manifest=load(round_root/'results.json');assert manifest['complete'];assert {(r['mode'],r['query'])for r in manifest['results']}==expected
+        round_root=root/validation/('round-'+str(index));manifest=load(round_root/'results.json');assert manifest['complete'];assert {(r['mode'],r['query'])for r in manifest['results']}==expected
         for result in manifest['results']:
             q=query_map[result['query']];mode=result['mode'];name=mode+'-'+q['id'];directory=round_root/name;cap=directory/'capture';plan=load(directory/'build/orders/plan.json');spec=load(cap/'compose.json')['services']['orders'];driver.old.verify_build(directory/'build')
             assert sha(directory/'build/distributed-observer.jar')==sha(base/'frozen-base/distributed-observer.jar');assert sha(directory/'build/orders/plan.json')==sha(base/'frozen-plans'/(q['id']+'.json'))
             assert spec['cpus']==1 and spec['mem_limit']=='768m';opts=spec['environment']['JAVA_OPTS'];assert '-Xms32m -Xmx256m' in opts and 'service.diagnostic'not in opts;assert plan['source_evidence']
+            if limited:
+                assert '-XX:ParallelGCThreads=1' in opts and '-XX:CICompilerCount=2' in opts
+                header=(cap/'orders/gc.log').read_text().splitlines()[2];assert '-XX:ParallelGCThreads=1' in header and '-XX:CICompilerCount=2' in header
+            else:assert '-XX:ParallelGCThreads='not in opts and '-XX:CICompilerCount='not in opts
             raw=cap/'orders/events.jsonl';rows=[json.loads(s)for s in raw.read_text().splitlines()];assert not any('diagnostic_monotonic_ns'in r for r in rows);assert not raw.with_name(raw.name+'.diagnostic.jsonl').exists()
             timed=[r for r in rows if r['kind']=='collection-call-enter' and r.get('callee','').startswith('java/util/concurrent/Future.get(J')];assert timed and all(r['args'][0]['value']==5 for r in timed)
             successful=0
@@ -74,6 +81,7 @@ def audit(root,out):
     controls={name:load(root/'semantic-controls'/name/'results.json')for name in ('application','request-async','async-dependencies','received-mutations','date')}
     assert all(result['all_passed']for result in controls.values())
     summary={'algorithm_commit':freeze['algorithm_commit'],'scope':'Two previously affected Orders query families; targeted availability only','all_targeted_checks_passed':passed,'intended_requests':72,'business_states':dict(business),'target_states':dict(counts),'modes':{m:{'requests':dict(Counter(r['state']for r in requests if r['mode']==m)),'targets':dict(Counter(t['state']for t in targets if t['mode']==m)),'tp':sum(t.get('tp',0)for t in targets if t['mode']==m),'fp':sum(t.get('fp',0)for t in targets if t['mode']==m),'fn':sum(t.get('fn',0)for t in targets if t['mode']==m)}for m in ('full','selective')},'configurations':configurations,'stream_fault_rejections':len(refusals),'metadata_and_buffer_controls':load(root/'metadata-buffer-controls/stdout.json'),'unit_tests':76,'unit_result':load(root/'semantic-controls/unit-result.json'),'semantic_suite_paths':{name:str(root/'semantic-controls'/name/'results.json')for name in controls},'diagnostic_before_cache':diagnostic_summary(root/'diagnostic-first'),'diagnostic_cache_prototype':diagnostic_summary(root/'diagnostic-cached'),'original_timeout_artifacts_preserved':True,'sole_timeout_root_cause_proven':False,'new_62_query_acceptance':False,'new_cost_result':False,'heldout_29_untouched':True}
+    summary.update(validation_configuration=validation,limited_gc_jit_threads=limited,validation_protocol_sha256=sha(root/protocol_file),original_parameter_failure_replaced=False)
     save(out/'audit.json',summary);save(out/'targets.json',targets);save(out/'stream-faults.json',refusals)
     for name,records in [('requests',requests),('configurations',[{k:v for k,v in c.items()if k!='score'}for c in configurations])]:
         with (out/(name+'.csv')).open('w')as stream:
@@ -81,4 +89,4 @@ def audit(root,out):
     return summary
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--out',type=Path,required=True);a=p.parse_args();r=audit(a.root.resolve(),a.out.resolve());print(json.dumps({k:v for k,v in r.items()if k in ('algorithm_commit','all_targeted_checks_passed','business_states','target_states','modes','stream_fault_rejections')},indent=2))
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--out',type=Path,required=True);p.add_argument('--validation',choices=('frozen-validation','quota-jvm-validation'),default='frozen-validation');a=p.parse_args();r=audit(a.root.resolve(),a.out.resolve(),a.validation);print(json.dumps({k:v for k,v in r.items()if k in ('algorithm_commit','all_targeted_checks_passed','business_states','target_states','modes','stream_fault_rejections')},indent=2))

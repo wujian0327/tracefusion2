@@ -69,9 +69,10 @@ def audit(root,out,partial=False):
     pair=root/'cart-create-pair'
     if (pair/'results.json').exists():
         assert load(pair/'results.json')['all_passed']
-        correction=load(pair/'protocol-correction.json');assert correction['actual_customerId']=='56e8f576709b70d0ace01fb0'
+        metadata=pair/('protocol-correction.json'if(pair/'protocol-correction.json').exists()else'launch-metadata.json');correction=load(metadata);assert correction['actual_customerId']=='56e8f576709b70d0ace01fb0'
         assert sha(root/'drivers/cart-pair-library-driver-at-launch.py')==correction['driver_at_launch_sha256']
-        receipts[str((pair/'protocol-correction.json').relative_to(ROOT))]=sha(pair/'protocol-correction.json')
+        if metadata.name=='launch-metadata.json':assert correction['original_declared_input_already_correct'] and correction['driver_at_launch_sha256']==freeze['pair_driver_sha256']
+        receipts[str(metadata.relative_to(ROOT))]=sha(metadata)
         for mode in ('full','selective'):
             d=pair/mode;assert class_hashes(d/'build/distributed-observer.jar')==agent;assert sha(d/'build/carts/plan.json')==sha(root/'frozen-plans/sockshop-carts-get-customerId.json')
             g=old.Reconstruction(d/'build',d/'capture',['carts']);rs=g.rows['carts']
