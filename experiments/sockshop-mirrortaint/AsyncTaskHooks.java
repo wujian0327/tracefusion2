@@ -37,6 +37,12 @@ public final class AsyncTaskHooks {
     public static void inner(Object result){Task t=ACTIVE.get();if(t==null)return;synchronized(PlannedServiceAgent.Recorder.class){Map r=row(t);r.put("inner",value(result));r.put("inner_class",result==null?null:result.getClass().getName());emit("async-worker-inner",r);}}
     public static void unwrapped(Object result){Task t=ACTIVE.get();if(t==null)return;synchronized(PlannedServiceAgent.Recorder.class){Map r=row(t);r.put("result",value(result));emit("async-worker-unwrapped",r);}}
     static void frame(Map r){Task t=ACTIVE.get();if(t!=null)r.put("async_task_id",t.id);}
+    static void constructed(Object receiver,Object[] args,Map row)throws Exception{
+        if(PlannedServiceAgent.plan.get("async_dependencies")==null||!receiver.getClass().getName().equals("org.springframework.scheduling.annotation.AsyncResult"))return;
+        Object payload=field(receiver.getClass(),"value").get(receiver),error=field(receiver.getClass(),"executionException").get(receiver);
+        if(args.length!=1||payload!=args[0]||error!=null)throw new IllegalStateException("AsyncResult constructor witness differs");
+        Map r=new LinkedHashMap();r.put("payload",value(payload));r.put("exception",value(error));r.put("class_sha256",((Map)config().get("class_sha256")).get("org/springframework/scheduling/annotation/AsyncResult"));row.put("async_result",r);
+    }
     static void completed(Map start,Object result,Throwable error,Map r){
         if(!enabled()||!(start.get("_receiver_ref") instanceof Future))return;String c=(String)start.get("callee");boolean get=c.contains(".get("),cancel=c.contains(".cancel(");if(!get&&!cancel)return;
         Task task=FUTURES.get(start.get("_receiver_ref"));Map a=new LinkedHashMap();a.put("task_id",task==null?null:task.id);a.put("future",value(start.get("_receiver_ref")));a.put("operation",get?"get":"cancel");a.put("completion",error==null?"normal":"exceptional");

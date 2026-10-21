@@ -7,7 +7,7 @@ from analysis_status import AnalysisLimit
 from infer_execution_kernel import coordinate, same_value
 
 
-def infer_application(plan,rows):
+def infer_application(plan,rows,worker_request=None):
     from infer_date_projection import validate_date_runtime
     validate_date_runtime(plan,rows)
     from infer_async_protocol import validate_async_protocol
@@ -33,7 +33,9 @@ def infer_application(plan,rows):
     results=[];audits=[]
     all_enters={r['frame']:r for r in rows if r['kind']=='enter'}
     require(len(all_enters)==sum(r['kind']=='enter' for r in rows),'Application invocation frame ID reused')
-    for root in [r for r in rows if r['kind']=='enter' and r['method']==plan['entry']]:
+    roots=[r for r in rows if r['kind']=='enter' and (r['frame']==worker_request['frame'] if worker_request else r['method']==plan['entry'])]
+    if worker_request:require(len(roots)==1,'Worker replay frame missing/ambiguous')
+    for root in roots:
         ends=[r for r in rows if r['kind'] in ('exit','abort') and r.get('frame')==root['frame']];require(len(ends)==1,'Application root completion differs');end=ends[0]
         family={root['frame']}
         changed=True
@@ -57,12 +59,14 @@ def infer_application(plan,rows):
             if row['kind'] in ('binding-source','binding-input'):
                 for index,f in enumerate(row['fields']):providers[coordinate(f)].append((row,index,f))
         state=State(Frame(root['frame']));pos=1;allocation_count=0;total_steps=0;branch_count=0
-        http_entities={};response_entities={};class_literals={};date_values={};calendars={};environment_facts=[];builders={};opaque_calls=[]
+        http_entities={};response_entities={};class_literals={};date_values={};calendars={};environment_facts=[];builders={};opaque_calls=[];async_results={};future_states={};async_transfers=[]
         fr=None;method=None;code=None;entry=None;field_seq={};poisoned_at={};frame_audits=[]
+        execution_budget=worker_request['budget'] if worker_request else {'steps':0}
         nonlocal_owners={f['owner'] for rows_ in providers.values() for _,_,f in rows_}
         nonlocal_owners.update(v.get('object') for v in root['args'] if 'value' not in v and v.get('object'))
         if root.get('receiver'):nonlocal_owners.add(root['receiver'])
         heap_refs=defaultdict(set);opaque_frames=[];depth=0
+        task_by_call={t['parent_call_id']:t for t in async_audit.get('tasks',[])} if plan.get('async_dependencies') else {}
         def identity(v):return state.allocations.get(v.allocation) if v.allocation is not None else v.observed.get('object')
         def actual(v):return {'object':identity(v)} if v.allocation is not None else v.observed
         def bind(v,observed):
@@ -129,6 +133,9 @@ def infer_application(plan,rows):
             return event
         def handle(error,typename):
             hierarchy={'java.lang.NullPointerException':{'java/lang/NullPointerException','java/lang/RuntimeException','java/lang/Exception','java/lang/Throwable'},'java.lang.IllegalArgumentException':{'java/lang/IllegalArgumentException','java/lang/RuntimeException','java/lang/Exception','java/lang/Throwable'}}
+            for name in ('ExecutionException','TimeoutException','CancellationException'):
+                hierarchy['java.util.concurrent.'+name]={'java/util/concurrent/'+name,'java/lang/Exception','java/lang/Throwable'}
+                if name=='CancellationException':hierarchy['java.util.concurrent.'+name].add('java/lang/RuntimeException')
             protected=[h for h in method['exception_handlers'] if h['start']<=fr.pc<h['end']]
             for exception in ('ArrayIndexOutOfBoundsException','ArrayStoreException','NegativeArraySizeException'):
                 hierarchy['java.lang.'+exception]={'java/lang/'+exception,'java/lang/RuntimeException','java/lang/Exception','java/lang/Throwable'}
@@ -170,6 +177,23 @@ def infer_application(plan,rows):
             completion={f:next(r for r in subtree if r['kind'] in ('exit','abort') and r.get('frame')==f) for f in children}
             require(all(r['seq']<completion[f]['seq'] and (r.get('parent')==fr.invocation or children[r['parent']]['seq']<r['seq']<completion[f]['seq']<completion[r['parent']]['seq']) for f,r in children.items()),'Opaque callback nested lifetime differs')
             opaque_frames.extend({'frame':f,'method':r['method']} for f,r in children.items());pos=finish
+        def receive_future(record,observed,seq):
+            task=record['task']
+            if worker_request or task['status']!='worker_completed':
+                return Value(observed,unknown=True)
+            if 'export' not in record:
+                record['export']=infer_application(plan,rows,{'frame':task['worker_frame'],'args':record['args'],'receiver':record['receiver'],'borrowed':record['borrowed'],'budget':execution_budget})['worker_export']
+            export=record['export'];value=export['value']
+            if not record.get('joined'):
+                for key,item in export['fields'].items():
+                    require(key not in state.fields,'Async imported field version already exists')
+                    state.field_write(key,item);field_seq[key]=export['field_seq'][key]
+                    nonlocal_owners.add(key[0])
+                record['joined']=seq
+            bind(value,observed)
+            if observed.get('object') in poisoned_at:value=Value(observed,unknown=True)
+            async_transfers.append({'task_id':task['task_id'],'get_seq':seq,'worker_frame':task['worker_frame'],'worker_status':export['status'],'imported_fields':len(export['fields']),'known_return_value':not value.unknown})
+            return value.project(observed)
         def execute(begin,args,receiver):
             nonlocal fr,method,code,entry,allocation_count,total_steps,branch_count,pos,depth
             if depth>=cfg.get('call_depth_limit',64):raise AnalysisLimit('call-depth','Application invocation depth budget exhausted')
@@ -182,8 +206,8 @@ def infer_application(plan,rows):
                 bind_argument(args[index],begin['args'][index],desc);fr.locals[slot]=args[index];slot+=2 if desc in ('J','D') else 1
             try:
                 while True:
-                    fr.steps+=1; total_steps+=1
-                    if total_steps>cfg['step_limit']:raise AnalysisLimit('offline-execution','Application execution budget exceeded on complete evidence')
+                    fr.steps+=1; total_steps+=1;execution_budget['steps']+=1
+                    if execution_budget['steps']>cfg['step_limit']:raise AnalysisLimit('offline-execution','Application execution budget exceeded on complete evidence')
                     ins=code[fr.pc];op=ins['op'];pop=fr.pop
                     if 21<=op<=25:
                         require(ins['var'] in fr.locals,'Execution uninitialized local');fr.stack.append(fr.locals[ins['var']])
@@ -306,6 +330,9 @@ def infer_application(plan,rows):
                             elif effect.get('kind')=='string-builder':builders[owner]=('',Value({'value':''}))
                             elif effect.get('kind')=='opaque':
                                 opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':event['seq'],'completion':'normal-constructor'})
+                            elif effect.get('kind')=='async-result':
+                                fact=event.get('async_result');require(fact and len(args)==1 and fact['class_sha256']==plan['async_protocol']['class_sha256']['org/springframework/scheduling/annotation/AsyncResult'] and fact['exception'].get('value','not-null') is None,'AsyncResult constructor witness missing/different')
+                                bind(args[0],fact['payload']);async_results[owner]=args[0]
                             elif effect.get('kind')=='date-constructor':
                                 fact=event.get('date_contract');require(fact and fact['kind']=='date-constructor' and fact['arity']==len(args) and fact['epoch_ms']==event['receiver']['date_epoch_ms'],'Date constructor evidence absent/differs')
                                 if args:
@@ -357,6 +384,8 @@ def infer_application(plan,rows):
                                     candidate=actual_owner+suffix
                                     if candidate in permitted:expected_impl=candidate;break
                                     actual_owner=cfg['class_parents'].get(actual_owner,{}).get('super')
+                            async_submission=task_by_call.get(call['call_id'])
+                            if async_submission:expected_impl=None
                             callback=None
                             if key=='java/util/function/Supplier.get()Ljava/lang/Object;' and identity(recv) in state.lambdas:callback=state.lambdas[identity(recv)]
                             elif key in ('java/util/Optional.orElseGet(Ljava/util/function/Supplier;)Ljava/lang/Object;','java/util/Optional.orElseThrow(Ljava/util/function/Supplier;)Ljava/lang/Object;') and identity(recv) in state.optionals and state.optionals[identity(recv)] is None:
@@ -410,7 +439,19 @@ def infer_application(plan,rows):
                             require(child_error is None,'Exceptional child has normal caller completion')
                             ret=take('collection-call-exit');require(ret['call_id']==call['call_id'],'Application completion instance differs');observed=complete(call,ret);v=Value(observed,unknown=True)
                             invocation=Call(str(call['seq']),fr.pc,recv,args,'normal')
-                            if cfg.get('scalar_builders') and ins['owner']=='java/lang/StringBuilder' and identity(recv) in builders and (key=='java/lang/StringBuilder.toString()Ljava/lang/String;' or ins['name']=='append' and ins['desc'] in tuple('('+d+')Ljava/lang/StringBuilder;' for d in ('Ljava/lang/String;','Ljava/lang/Object;','C','I','J','F','D','Z'))):
+                            if async_submission:
+                                poison(([recv] if recv else [])+args,call['seq'])
+                                captured=[];borrowed=[]
+                                for index,arg in enumerate(args):
+                                    kind=call.get('argument_types',[None]*len(args))[index]
+                                    immutable=kind in ('java.lang.String','java.lang.Boolean','java.lang.Byte','java.lang.Short','java.lang.Character','java.lang.Integer','java.lang.Long','java.lang.Float','java.lang.Double') or arg.observed.get('value','not-null') is None
+                                    borrowed.append(not immutable)
+                                    captured.append(Value(actual(arg),arg.origins,arg.selectors,arg.unknown) if immutable else Value(actual(arg),unknown=True))
+                                future_states[observed['object']]={'task':async_submission,'args':captured,'borrowed':borrowed,'receiver':Value({'object':all_enters[async_submission['worker_frame']]['receiver']},unknown=True) if async_submission.get('worker_frame') else None}
+                                v=Value(observed)
+                            elif ret.get('async_future',{}).get('operation')=='get' and identity(recv) in future_states:
+                                v=receive_future(future_states[identity(recv)],observed,ret['seq'])
+                            elif cfg.get('scalar_builders') and ins['owner']=='java/lang/StringBuilder' and identity(recv) in builders and (key=='java/lang/StringBuilder.toString()Ljava/lang/String;' or ins['name']=='append' and ins['desc'] in tuple('('+d+')Ljava/lang/StringBuilder;' for d in ('Ljava/lang/String;','Ljava/lang/Object;','C','I','J','F','D','Z'))):
                                 fact=ret.get('scalar_contract');require(fact and fact['kind']=='string-builder' and fact['receiver']==identity(recv) and call['receiver_type']=='java.lang.StringBuilder','StringBuilder witness absent/identity differs')
                                 require(all(runtime[0]['class_sha256'].get(k)==v for k,v in fact['class_sha256'].items()) and set(fact['class_sha256'])=={'java/lang/StringBuilder','java/lang/AbstractStringBuilder'},'StringBuilder runtime hash differs')
                                 if not builder_was_poisoned:require(builder_initial[0]==fact['before'],'StringBuilder prior contents differ')
@@ -570,13 +611,37 @@ def infer_application(plan,rows):
                 fr,method,code,entry=saved
         root_args=[]
         for index,arg in enumerate(root['args']):
+            if worker_request:
+                inherited=worker_request['args'][index]
+                if worker_request['borrowed'][index]:
+                    require(inherited.observed.get('object')==arg.get('object'),'Borrowed worker argument identity differs')
+                    inherited=Value(arg,unknown=True)
+                    if arg.get('object'):
+                        poisoned_at[arg['object']]=root['seq']-1;state.poisoned.add(arg['object'])
+                root_args.append(inherited);continue
             desc=descriptors(plan['collection_method']['desc'])[index]
             if desc in ('Z','B','C','S','I','J','F','D'):arg={k:v for k,v in arg.items() if k!='object'}
             value=Value(arg)
             if 'value' in arg or 'date_epoch_ms' in arg:value=Value(arg,frozenset({('argument',root['frame'],index)}))
             root_args.append(value)
-        _,error=execute(root,root_args,Value({'object':root['receiver']}) if root.get('receiver') else None)
+        returned,error=execute(root,root_args,worker_request['receiver'] if worker_request else Value({'object':root['receiver']}) if root.get('receiver') else None)
         require(pos==len(events),'Application unconsumed necessary evidence')
+        if worker_request:
+            def materialize(v):return Value(actual(v),v.origins,v.selectors,v.unknown)
+            if error is not None:
+                return {'worker_export':{'value':None,'error':error,'fields':{},'field_seq':{},'status':'exceptional'}}
+            payload=async_results.get(identity(returned))
+            if payload is None:
+                unwrap=next(r for r in rows if r['kind']=='async-worker-unwrapped' and r.get('task_id')==root.get('async_task_id'))
+                payload=Value(unwrap['result'],unknown=True)
+            payload=materialize(payload);owner=payload.observed.get('object');local=set(state.allocations.values());exports={}
+            outward=any(k[0] not in local for k in state.fields)
+            private=owner in local and owner not in poisoned_at and not outward and not opaque_calls
+            fields={k:materialize(v) for k,v in state.fields.items() if k[0]==owner}
+            if private and fields and all('value' in v.observed and 'date_epoch_ms' not in v.observed for v in fields.values()):exports=fields
+            elif 'value' not in payload.observed or 'date_epoch_ms' in payload.observed:payload=Value(payload.observed,unknown=True)
+            if opaque_calls or outward:payload=Value(payload.observed,unknown=True);exports={}
+            return {'worker_export':{'value':payload,'fields':exports,'field_seq':{k:field_seq[k] for k in exports},'status':'private-result' if exports else 'scalar-result' if not payload.unknown else 'unsupported-or-opaque-result','frames':frame_audits,'opaque_calls':opaque_calls}}
         if end['kind']=='abort':
             require(error is not None,'Application root abort disagrees with replay');audits.append({'frame':root['frame'],'completion':'aborted','steps':total_steps,'frames':frame_audits,'answers':0});continue
         require(error is None,'Application normal root has unhandled exception')
@@ -590,5 +655,5 @@ def infer_application(plan,rows):
             if 'date_epoch_ms' in f['observed'] and f['observed']['object'] in poisoned_at:value=Value(f['observed'],unknown=True)
             bind(value,f['observed'])
             results.append({'root_frame':root['frame'],'seq':ret['seq'],'path':f['path'],**f,'known':not value.unknown,'origins':[list(x) for x in sorted(value.origins,key=str)],'selectors':[list(x) for x in sorted(value.selectors,key=str)]})
-        audits.append({'frame':root['frame'],'completion':'normal','steps':total_steps,'frames':frame_audits,'answers':len(ret['fields']),'poisoned_objects':len(poisoned_at),'opaque_frames':opaque_frames,'opaque_calls':opaque_calls,'environment_facts':environment_facts})
+        audits.append({'frame':root['frame'],'completion':'normal','steps':total_steps,'frames':frame_audits,'answers':len(ret['fields']),'poisoned_objects':len(poisoned_at),'opaque_frames':opaque_frames,'opaque_calls':opaque_calls,'environment_facts':environment_facts,'async_transfers':async_transfers,'steps_including_tasks':execution_budget['steps']})
     return {'answers':results,'roots':audits,'evidence_policy':cfg['evidence_policy'],'async_protocol':async_audit}

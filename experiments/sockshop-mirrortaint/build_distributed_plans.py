@@ -63,6 +63,9 @@ def build(out,inputs):
         p=attach_date_projection(p,model)
         if config.get('source_evidence'):p['source_evidence']=True
         if config.get('async_evidence'):p['async_protocol']=load(HERE/'async-task-contracts-20261021.json')
+        if config.get('async_dependencies'):
+            from plan_async_dependencies import attach_async_dependencies
+            p=attach_async_dependencies(p)
         if any(c.get('profile')=='collection-computation' for c in inputs.values()):p['collection_elements']=True
         if config.get('json_conversion_methods'):
             for key in config['json_conversion_methods']:
@@ -73,7 +76,7 @@ def build(out,inputs):
         manifest['inputs'][role]={'query_config':config,'original_source':str(source),'original_jar_sha256':sha(source),'plan_sha256':sha(dest/'plan.json'),'model_sha256':sha(dest/'model.json'),'extra_classes':extra,'profile':p['profile'],'schema_classes':len(p['json_schema'])}
         print(role,p['profile'],len(p['json_schema']),'DTO schemas',flush=True)
     manifest['sources'][str(HERE/'infer_collection_service.py')]=sha(HERE/'infer_collection_service.py')
-    for name in ('plan_response_binding.py','infer_response_binding.py','plan_read_effects.py','read-forward-runtimes-20261020.json','plan_execution_kernel.py','infer_execution_kernel.py','execution_dependency_state.py','execution-kernel-runtimes-20261020.json','analysis_status.py','plan_application_calls.py','infer_application_execution.py','kernel-contract-runtimes-20261020.json','plan_constructor_effects.py','constructor-library-contracts-20261020.json','framework-wrapper-contracts-20261020.json','plan_date_projection.py','date-runtime-contracts-20261020.json','infer_date_projection.py','async-task-contracts-20261021.json','infer_async_protocol.py'):
+    for name in ('plan_response_binding.py','infer_response_binding.py','plan_read_effects.py','read-forward-runtimes-20261020.json','plan_execution_kernel.py','infer_execution_kernel.py','execution_dependency_state.py','execution-kernel-runtimes-20261020.json','analysis_status.py','plan_application_calls.py','infer_application_execution.py','kernel-contract-runtimes-20261020.json','plan_constructor_effects.py','constructor-library-contracts-20261020.json','framework-wrapper-contracts-20261020.json','plan_date_projection.py','date-runtime-contracts-20261020.json','infer_date_projection.py','async-task-contracts-20261021.json','infer_async_protocol.py','plan_async_dependencies.py'):
         manifest['sources'][str(HERE/name)]=sha(HERE/name)
     manifest['builder_sha256']=sha(Path(__file__));save(out/'build.json',manifest)
 
