@@ -1,5 +1,10 @@
 # TraceFusion 2
 
+2026-10-22完成[公共转换契约、UUID与62查询全量复验](experiments/sockshop-mirrortaint/LIBRARY-GAP-REVISION-20261022.md)，核心冻结 `223ea07`。
+同一新Agent实际运行126个业务JVM配置；full/selective各 **428正确 / 3unknown / 0错误确定答案**，固定431目标正确回答率 **99.30%**；两模式逐目标状态一致，首轮业务全部完成。
+MirrorTaint原正确368/368、旧TF正确213/213逐项保留；剩余3个为Cart新建商品的有限保存/容器效果缺口。
+原版业务JAR哈希未变，但发现Agent携带Jackson覆盖业务包内版本，已固定实际加载与原包两套哈希；本结果不代表原版运行时完全等价。29候选继续封存，无新性能结论，旧结果与首次开发错误保留。
+
 2026-10-22完成[构造字段投影与Runnable修订](experiments/sockshop-mirrortaint/REMAINING-SEMANTICS-REVISION-20261022.md)，核心冻结 `b8c432e`。
 20次新部署：Cart加购full/selective各 **15正确 / 3unknown**，新增恢复15个原unknown目标；Station/Route各60/60保持，Basic仍各21unknown。
 原49个剩余目标中仍有34个：Cart新建3、Basic21、UUID拒绝10。旧382个已知答案仅作旧捕获的新离线复算通过；**未重新部署全部62查询，不宣称新版397/431正式结果**。

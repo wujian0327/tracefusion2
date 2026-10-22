@@ -1,0 +1,436 @@
+{
+  "algorithm_commit": "223ea075baf9846c5ff3f42a07431c44946b720a",
+  "queries": 62,
+  "entries": 18,
+  "query_configurations_scored": 124,
+  "complete_query_configurations": true,
+  "modes": {
+    "full": {
+      "expected_targets": 431,
+      "actual_targets": 431,
+      "states": {
+        "known_correct": 428,
+        "unknown": 3
+      },
+      "known_answer_exact_rate": 1.0,
+      "answerability": 0.9930394431554525,
+      "baseline_correct_preserved": 368,
+      "baseline_correct_required": 368,
+      "baseline_nonempty_correct_preserved": 337,
+      "baseline_nonempty_correct_required": 337,
+      "old_tf_correct_preserved": 213,
+      "old_tf_correct_required": 213,
+      "union_preserved": 382,
+      "union_required": 382,
+      "union_losses": [],
+      "missing_targets": [],
+      "tp": 397,
+      "fp": 0,
+      "fn_including_unknown": 3,
+      "all_passed": true
+    },
+    "selective": {
+      "expected_targets": 431,
+      "actual_targets": 431,
+      "states": {
+        "known_correct": 428,
+        "unknown": 3
+      },
+      "known_answer_exact_rate": 1.0,
+      "answerability": 0.9930394431554525,
+      "baseline_correct_preserved": 368,
+      "baseline_correct_required": 368,
+      "baseline_nonempty_correct_preserved": 337,
+      "baseline_nonempty_correct_required": 337,
+      "old_tf_correct_preserved": 213,
+      "old_tf_correct_required": 213,
+      "union_preserved": 382,
+      "union_required": 382,
+      "union_losses": [],
+      "missing_targets": [],
+      "tp": 397,
+      "fp": 0,
+      "fn_including_unknown": 3,
+      "all_passed": true
+    }
+  },
+  "full_selective_state_agreement": 431,
+  "paired_target_instances": 431,
+  "date_controls_passed": true,
+  "planning_accepted": 62,
+  "planning_rejected": 0,
+  "received_mutation_controls_passed": true,
+  "legacy_collection_controls_passed": true,
+  "heldout_candidates_unexamined": 29,
+  "no_new_performance": true,
+  "all_passed": true,
+  "first_attempt_pairing": {
+    "both_correct": 428,
+    "both_not_correct": 3
+  },
+  "provenance_union_passed": true,
+  "primary_partial_wrong_answers": [],
+  "first_attempt": {
+    "full": {
+      "reference_target_states": {
+        "known_correct": 428,
+        "unknown": 3
+      },
+      "affected_reference_instances": [],
+      "failed_configurations": 0,
+      "first_attempt_business_all_passed": true
+    },
+    "selective": {
+      "reference_target_states": {
+        "known_correct": 428,
+        "unknown": 3
+      },
+      "affected_reference_instances": [],
+      "failed_configurations": 0,
+      "first_attempt_business_all_passed": true
+    }
+  },
+  "primary_business_failures": [],
+  "first_attempt_business_all_passed": true,
+  "unqualified_end_to_end_acceptance": true,
+  "business_repeat_protocol_sha256": "7c14958935189446d5c17ac1004ee81125ef145a55d1d11d462780daa601f8a3",
+  "observed_target_JVM_configurations": 126,
+  "runtime_policy_verified": true,
+  "controls": {
+    "kernel": {
+      "all_passed": true,
+      "results_sha256": "b547f018690afa43368662eb2913f2c06960e808773863b328e3c3390e9512b8",
+      "modes": {
+        "full": {
+          "targets": 58,
+          "known": 50,
+          "expected_unknown": 8,
+          "aborted": 2,
+          "budget_status": "analysis_limited",
+          "faults": {
+            "missing-child": true,
+            "wrong-parent": true,
+            "duplicate-call-id": true,
+            "missing-constructor-write": true,
+            "same-value-wrong-argument": true,
+            "wrong-exception": true,
+            "lambda-capture": true,
+            "lambda-handle": true,
+            "array-position": true,
+            "array-version": true,
+            "missing-contract": true,
+            "stream-source": true,
+            "array-slot-version": true,
+            "array-owner": true,
+            "missing-array-store": true,
+            "optional-presence": true,
+            "missing-projection": true,
+            "projection-owner": true,
+            "projection-version": true,
+            "projection-dispatch": true
+          }
+        },
+        "selective": {
+          "targets": 58,
+          "known": 50,
+          "expected_unknown": 8,
+          "aborted": 2,
+          "budget_status": "analysis_limited",
+          "faults": {
+            "missing-child": true,
+            "wrong-parent": true,
+            "duplicate-call-id": true,
+            "missing-constructor-write": true,
+            "same-value-wrong-argument": true,
+            "wrong-exception": true,
+            "lambda-capture": true,
+            "lambda-handle": true,
+            "array-position": true,
+            "array-version": true,
+            "missing-contract": true,
+            "stream-source": true,
+            "array-slot-version": true,
+            "array-owner": true,
+            "missing-array-store": true,
+            "optional-presence": true,
+            "missing-projection": true,
+            "projection-owner": true,
+            "projection-version": true,
+            "projection-dispatch": true
+          }
+        }
+      }
+    },
+    "application": {
+      "all_passed": true,
+      "results_sha256": "22cc4fd48e8435ade70246806c8d6c71e80d2271514a05e946aaec437de1f49e",
+      "modes": {
+        "full": {
+          "targets": 34,
+          "known": 26,
+          "expected_unknown": 8,
+          "aborted": 2,
+          "budget_status": "analysis_limited",
+          "faults": {
+            "missing-child": true,
+            "wrong-parent": true,
+            "duplicate-call-id": true,
+            "missing-constructor-write": true,
+            "same-value-wrong-argument": true,
+            "wrong-exception": true
+          }
+        },
+        "selective": {
+          "targets": 34,
+          "known": 26,
+          "expected_unknown": 8,
+          "aborted": 2,
+          "budget_status": "analysis_limited",
+          "faults": {
+            "missing-child": true,
+            "wrong-parent": true,
+            "duplicate-call-id": true,
+            "missing-constructor-write": true,
+            "same-value-wrong-argument": true,
+            "wrong-exception": true
+          }
+        }
+      }
+    },
+    "conversion": {
+      "all_passed": true,
+      "results_sha256": "ba02c500c99346de3dc9e209cb28980d53febf28578c70d71aed934c3fba28c2",
+      "modes": {
+        "full": {
+          "targets": 16,
+          "known_exact": 12,
+          "expected_unknown": 4,
+          "faults": {
+            "missing-conversion": true,
+            "call-instance": true,
+            "source-object": true,
+            "output-object": true,
+            "field-version": true,
+            "source-pointer": true,
+            "wrong-class-hash": true,
+            "missing-birth": true
+          }
+        },
+        "selective": {
+          "targets": 16,
+          "known_exact": 12,
+          "expected_unknown": 4,
+          "faults": {
+            "missing-conversion": true,
+            "call-instance": true,
+            "source-object": true,
+            "output-object": true,
+            "field-version": true,
+            "source-pointer": true,
+            "wrong-class-hash": true,
+            "missing-birth": true
+          }
+        }
+      }
+    },
+    "uuid": {
+      "all_passed": true,
+      "results_sha256": "5d3ed44f218ab0fa405ad88a062476c8189b6178942fc0c573006291096640a1",
+      "modes": {
+        "full": {
+          "targets": 18,
+          "known_exact": 14,
+          "expected_unknown": 4,
+          "custom_serializer_refused": 2,
+          "faults": {
+            "missing-runtime": true,
+            "runtime-hash": true,
+            "missing-wire": true,
+            "serializer-hash": true,
+            "wire-object": true,
+            "malformed-value": true
+          }
+        },
+        "selective": {
+          "targets": 18,
+          "known_exact": 14,
+          "expected_unknown": 4,
+          "custom_serializer_refused": 2,
+          "faults": {
+            "missing-runtime": true,
+            "runtime-hash": true,
+            "missing-wire": true,
+            "serializer-hash": true,
+            "wire-object": true,
+            "malformed-value": true
+          }
+        }
+      }
+    },
+    "date": {
+      "all_passed": true,
+      "results_sha256": "cdbc000f31eed4ccca11599c8cc6b954646d13865ea4fd9c5bcd1bdc6e0d135c",
+      "modes": {
+        "full": {
+          "targets": 28,
+          "known_exact": 16,
+          "expected_unknown": 12,
+          "faults": {
+            "missing-render": true,
+            "render-runtime": true,
+            "same-time-wrong-object": true,
+            "render-epoch": true,
+            "render-zone": true,
+            "missing-codec": true,
+            "codec-class": true,
+            "custom-registry": true,
+            "encoding-hook": true,
+            "codec-count": true
+          }
+        },
+        "selective": {
+          "targets": 28,
+          "known_exact": 16,
+          "expected_unknown": 12,
+          "faults": {
+            "missing-render": true,
+            "render-runtime": true,
+            "same-time-wrong-object": true,
+            "render-epoch": true,
+            "render-zone": true,
+            "missing-codec": true,
+            "codec-class": true,
+            "custom-registry": true,
+            "encoding-hook": true,
+            "codec-count": true
+          }
+        }
+      }
+    },
+    "received": {
+      "all_passed": true,
+      "results_sha256": "b4c69e06f50b1b28e002c345b4f00e6176d1267cf861304b465ba3c464215c61",
+      "modes": {
+        "full": {
+          "targets": 6,
+          "known_exact": 2,
+          "expected_unknown": 4,
+          "business_mutations_completed": 4,
+          "faults": {
+            "missing-post-state": true,
+            "wrong-post-version": true,
+            "wrong-post-member": true
+          }
+        },
+        "selective": {
+          "targets": 6,
+          "known_exact": 2,
+          "expected_unknown": 4,
+          "business_mutations_completed": 4,
+          "faults": {
+            "missing-post-state": true,
+            "wrong-post-version": true,
+            "wrong-post-member": true
+          }
+        }
+      }
+    },
+    "legacy": {
+      "all_passed": true,
+      "results_sha256": "7ca33c7f8d3aac37e6a20cc9f4e04db505cbce5c613d938b0bc083ca7676e49e",
+      "modes": {
+        "full": {
+          "queries": 10,
+          "exact": 10,
+          "events": 281,
+          "bytes": 54440,
+          "tamper_rejected": true
+        },
+        "selective": {
+          "queries": 10,
+          "exact": 10,
+          "events": 204,
+          "bytes": 39901,
+          "tamper_rejected": true
+        }
+      }
+    }
+  },
+  "runtime_library_caveat": "Actual parent-loaded Agent Jackson definitions differ from original application bundled classes; both hashes disclosed; not a native-runtime or new cost comparison",
+  "runtime_library_differences": {
+    "com/fasterxml/jackson/databind/deser/std/StringDeserializer": {
+      "actual_observed": "af2b5abf1b34a3ef431e2a98a9abc7fec707366d1cfa15debf393249c96b5d84",
+      "original_business_bundled": "5a6df456fcda45dd7c1f52d0382c33eb224cf987be76b3de32a80567f82b5ea3"
+    },
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$FloatDeserializer": {
+      "actual_observed": "9bfc1334411ef6755130fa2c16e76f14a7935045c5817374451ae15825578bb2",
+      "original_business_bundled": "9c6f88bef6a50e9a9520fb09d8878f9f9d8f784a89969b169158a5fc926b00a8"
+    },
+    "com/fasterxml/jackson/databind/deser/impl/MethodProperty": {
+      "actual_observed": "b2939cc86895e11980f32940436311a1c1dcac7198c6beab454a8b88f963aa31",
+      "original_business_bundled": "be8bcf38425929b7702c80edae309c19d1c9297fc47e40aac53eb6b1225a8936"
+    },
+    "com/fasterxml/jackson/databind/deser/BeanDeserializerBase": {
+      "actual_observed": "ad949a6815880234b749254cc2ac0393790ad7548d19566fcaff520bceeb6a39",
+      "original_business_bundled": "33d73bb837abe651f0d7621ccb8c260117097aa6d1431ef327bd7b0fae0a9164"
+    },
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$IntegerDeserializer": {
+      "actual_observed": "1d769667789ad4fb1d3aefba8c72e3d0607b0ec8d0bcb71d860dff595369b5d2",
+      "original_business_bundled": "cddb240f8553608d662f8d03e284b23cec59b858c567ecb7a25de3abc0eee93f"
+    },
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$DoubleDeserializer": {
+      "actual_observed": "03fd63e23a7e3935973dddc29788a45626f1ec8f5cbcedbff797fdbbeee69f64",
+      "original_business_bundled": "ed246e4298f45bdfdba708469b7cdf2f907a1fa08c58a4e1652eb1bcad4d3aed"
+    },
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$LongDeserializer": {
+      "actual_observed": "02f384960ded50b74c0e0b08da7936a021503dbdab90f0820b99463ae75fa4ea",
+      "original_business_bundled": "d2440df21cafce0b588313e2363f094e63e346a3502026fefd3355065e0fcd21"
+    },
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$NumberDeserializer": {
+      "actual_observed": "fe943efcbba5527461165bf5f7073c33562cd4c6fea1c5ac037a8c2f22981c1c",
+      "original_business_bundled": "d2736f2e6fc4a129ee0457621b250af4183292b82a105404f3c49f2d2e3547e4"
+    },
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$BigDecimalDeserializer": {
+      "actual_observed": "18507b4bb52fd3b952173318e2e1960a42caa58bc9a7e4de5922f2a455c018a2",
+      "original_business_bundled": "117b15607281c4f555e7c9496a0edeeb8ae35e9bed4491e587c0ad224cf99a95"
+    },
+    "com/fasterxml/jackson/databind/deser/std/StdValueInstantiator": {
+      "actual_observed": "62da90902659a5295cfc8ec8273e65cba9d863877ae4eee81c7b36b6a440af55",
+      "original_business_bundled": "d4bc678f09e6b7cfdb9a5c80886506035af2a5a761ca1e8a4708b29217a5b637"
+    },
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$BigIntegerDeserializer": {
+      "actual_observed": "78efebf6f0f93b6e3d7734b876d0d33f9b95d626c8fd5a702601916ab9c93266",
+      "original_business_bundled": "928076717f75fe5f573d9632616e2c61f12cf0dab7242d4af0a9eb3853862506"
+    },
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$1": {
+      "actual_observed": "763d11ef27f21bdb235822ffeb7ab3d23c45391cf2b3b6e7079635523a6ca87b",
+      "original_business_bundled": "c2961a999251b59c16cb6c1c64aa070d7f5060a4a4c08a2fa8ee34ddb436601e"
+    },
+    "com/fasterxml/jackson/databind/deser/BeanDeserializer": {
+      "actual_observed": "73ae7961269e361a25ad6a2749039fa684f0fae56c17cec1b34004060fab2d2e",
+      "original_business_bundled": "300df441da0ff12400d5a0e382f3a4b3ac1014585d6e781750ce4ac4d7a4afcf"
+    },
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$CharacterDeserializer": {
+      "actual_observed": "d2b8d1ef2b6594ba483092bec1dd44df80786dff8345b9f633b54150cfb781dc",
+      "original_business_bundled": "2ac471351d0e7c19c95a3bad9e7d08f4efe50e98bd7dfbb51ceb5e63efe0ce00"
+    },
+    "com/fasterxml/jackson/databind/ObjectMapper": {
+      "actual_observed": "c9d931c46efbc313108215ad320a7fa1b1c25bd82af5f4ae781b46f4d1d99e59",
+      "original_business_bundled": "1a33365556ca88668006a549208e136c5c20c965b7cdc8406a106ac8f5bae7f3"
+    }
+  },
+  "source_coordinate_revision": "HTTP field graph retains actual raw frame; TicketInfo oracle no longer deliberately drops it",
+  "unresolved_evidence_sha256": "40b7b2ab4e1a36880371952d897bded57521a7591e2d1b76ed1b4c33d8f0b327",
+  "oracle_sources_sha256": {
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/run_frozen_capability_acceptance.py": "a494777e5577ca8b34fe9ef6519587fd4eeba9933d18d7fccd98d152b33d40f1",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/run_response_binding_revision.py": "8dd0d91ed01338cf6d00d729b863d36b6bb82bc80e85cd3ae3ca5aef0133149b",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/run_execution_kernel_pilot.py": "b2cea02421d5a9bcf74829a4f049bc4415a9ac68d834bc0809b87ac2a47ab862",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/run_sockshop_model_revision.py": "9631280d39fbca86e8123bf6915b55ecbc62c7ae54d83372721ffc37c5a386bf",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/normalize_orders_origins.py": "06cfc9d97cbf478c34068e1bba46445befc843db2faa6f08ae582545177592f8"
+  },
+  "new_unseen_queries": false,
+  "new_performance_claim": false,
+  "protocol_sha256": "1ca007b336b617b37f4bfed3a1438d692ad109211bd2d30c185dd358bb88fbf2",
+  "full_audit_sha256": "a90eb8a7a224aa4a64a90fe222feec9e02d8d7d74b2b11dc24ba3bce08811d21",
+  "snapshot_note": "Compact copy; full controls and raw proofs remain in artifact audit-final-first"
+}

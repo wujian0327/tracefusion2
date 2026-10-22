@@ -13,6 +13,7 @@ def prepare(root):
     build_candidate(root);f=load(root/'algorithm-freeze.json');prior=load(quota.PARENT/'quota-all62/algorithm-freeze.json');commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
     for key in ('acceptance_protocol_sha256','protocol_sha256'):f[key]=prior[key]
     f.update(commit=commit,algorithm_commit=commit,experiment_commit=commit,builder_sha256=sha(HERE/'build_distributed_plans.py'),planning_sha256=sha(root/'frozen-plans/planning.json'),runtime_policy=prior['runtime_policy'],source_coordinate_revision='HTTP field graph retains actual raw frame; TicketInfo oracle no longer deliberately drops it',original_runtime_library_caveat='Actual parent-loaded Agent Jackson definitions differ from original application bundled classes; both hashes disclosed; not a native-runtime or new cost comparison')
+    f['pair_driver_sha256']=sha(HERE/'run_cart_reread_baseline_pair.py')
     f['oracle_sources']={str(HERE/n):sha(HERE/n)for n in ['run_frozen_capability_acceptance.py','run_response_binding_revision.py','run_execution_kernel_pilot.py','run_sockshop_model_revision.py','normalize_orders_origins.py']};save(root/'algorithm-freeze.json',f)
     (root/'drivers').mkdir();(root/'logs').mkdir()
     for n in ['run_library_gap_acceptance.py','run_quota_capability_acceptance.py','run_frozen_capability_acceptance.py','run_cart_reread_baseline_pair.py']:(root/'drivers'/('cart-pair-library-driver-at-launch.py'if n=='run_cart_reread_baseline_pair.py'else n)).write_bytes((HERE/n).read_bytes())
