@@ -47,8 +47,11 @@ public final class BusinessJackson {
             Object internal=PlannedServiceAgent.Recorder.class.getDeclaredField("JSON").get(null);
             if(!internal.getClass().getName().equals("tracefusion.internal.jackson.databind.ObjectMapper"))throw new IllegalStateException("Agent JSON dependency not isolated");
             Map r=PlannedServiceAgent.Recorder.row();r.put("business_class",definition.getName());r.put("mapper_class",mapper.getClass().getName());r.put("business_class_sha256",ExecutionKernelHooks.classHash(definition));
-            r.put("business_loader",String.valueOf(definition.getClassLoader()));r.put("business_code_source",String.valueOf(definition.getProtectionDomain().getCodeSource()));
-            r.put("business_version",String.valueOf(call(mapper,"version")));r.put("agent_class",internal.getClass().getName());r.put("agent_class_sha256",ExecutionKernelHooks.classHash(internal.getClass()));
+            ClassLoader loader=definition.getClassLoader();r.put("business_loader",loader==null?"bootstrap":loader.getClass().getName()+"@"+Integer.toHexString(System.identityHashCode(loader)));
+            java.security.CodeSource source=definition.getProtectionDomain().getCodeSource();java.net.URL location=source!=null&&source.getClass()==java.security.CodeSource.class?source.getLocation():null;
+            r.put("business_code_source",location==null?null:location.getProtocol()+":"+location.getPath());
+            // Metadata observation must not dispatch user ObjectMapper overrides.
+            r.put("business_version",definition.getPackage().getImplementationVersion());r.put("agent_class",internal.getClass().getName());r.put("agent_class_sha256",ExecutionKernelHooks.classHash(internal.getClass()));
             PlannedServiceAgent.Recorder.emit("jackson-isolation",r);OBSERVED.add(definition);}
     }
 }

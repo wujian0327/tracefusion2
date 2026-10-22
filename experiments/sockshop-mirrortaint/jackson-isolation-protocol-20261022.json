@@ -11,5 +11,6 @@
   "isolation_proof": "No com/fasterxml/jackson class entries or symbolic types in Agent; actual mapper class resource hashes equal original embedded libraries in every observed deployment",
   "heldout29": "sealed; no planning or execution",
   "costs": "No new performance claims; old428/431 retained as previous configuration",
-  "push": "user only"
+  "push": "user only",
+  "observer_purity": "No mapper.version or classloader.toString dispatch for metadata; subclass override counter guard; preserve78a1707 first counterexample and8 interrupted configurations"
 }
