@@ -22,13 +22,29 @@ def assignment_effects(model,key,active=None):
         elif 2<=op<=8:stack.append({'constant':op-3})
         elif op in (9,10,11,12,13,14,15):stack.append({'constant':op-9 if op<11 else float(op-11 if op<14 else op-14)})
         elif op in (16,17,18):require(ins.get('constant_type')!='Type','Class literal constructor effect unsupported');stack.append({'constant':ins.get('operand',ins.get('constant'))})
+        elif op==180 or op in (182,185):
+            # Initialized argument reads before this(...) are safe to summarize
+            # only with exact dispatch, scalar projections and runtime versions.
+            if op==180:field=ins['owner']+'.'+ins['name'];desc=ins['desc'];owner=ins['owner']
+            else:
+                from plan_collection_service import direct_accessors
+                getters,_=direct_accessors(model);getter=getters.get(callee(ins))
+                require(getter is not None,'Constructor call is not an exact field accessor')
+                field=getter['field'];desc=getter['descriptor'];owner=ins['owner']
+            recv=stack.pop()
+            require(set(recv)=={'argument'} and desc in ('Z','B','C','S','I','J','F','D','Ljava/lang/String;'),'Constructor projection requires a scalar argument field')
+            stack.append({'argument':recv['argument'],'field':field,'descriptor':desc,'runtime_class':owner})
         elif op==183 and ins['name']=='<init>':
             values=[stack.pop() for _ in descriptors(ins['desc'])][::-1];recv=stack.pop();require(recv=={'self':True},'Delegation receiver differs')
             call=callee(ins)
             if call=='java/lang/Object.<init>()V':continue
             require(ins['owner']==m['owner'] and call in model['methods'],'Only same-class constructor delegation shortcut')
             for name,value in assignment_effects(model,call,active).items():
-                require(name not in fields,'Repeated delegated constructor field assignment');fields[name]=values[value['argument']] if 'argument' in value else value
+                require(name not in fields,'Repeated delegated constructor field assignment')
+                if 'field' in value:
+                    bound=values[value['argument']];require(set(bound)=={'argument'},'Nested constructor projections unsupported')
+                    fields[name]={**value,'argument':bound['argument']}
+                else:fields[name]=values[value['argument']] if 'argument' in value else value
         elif op==181:
             value,recv=stack.pop(),stack.pop();name=ins['owner']+'.'+ins['name'];require(recv=={'self':True} and name not in fields,'Constructor assignment target/version differs');fields[name]=value
         elif op==177:require(not stack,'Constructor shortcut stack differs')

@@ -38,7 +38,7 @@ def plan_execution(model, entry, target, response_path, source_calls=None, appli
     require(application_calls or not method['exception_handlers'],'Execution v1 root exception handlers not yet modeled')
     supported={0,1,2,3,4,5,6,7,8,16,17,18,87,89,96,100,104,132,167,176,178,180,181,182,183,184,185,187,192,198,199}|set(range(21,26))|set(range(54,59))|set(range(153,167))
     if application_calls:supported|={172,173,174,175,177,191,186,189,190,50,83}
-    if application_calls:supported.update(range(9,16))
+    if application_calls:supported.update({107,135}|set(range(9,16)))
     for ins in method['instructions']:require(ins['op'] in supported,'Execution instruction unsupported: '+str(ins['op']))
     graph,operands,states,steps=analyze(method,allow_loops=True)
     require(response_path.startswith('/'),'Explicit response path required')

@@ -13,6 +13,7 @@ def infer_application(plan,rows,worker_request=None):
     from infer_async_protocol import validate_async_protocol
     async_audit=validate_async_protocol(plan,rows)
     cfg=plan['execution_kernel']
+    primitive_fields={i['owner']+'.'+i['name'] for m in cfg.get('methods',{}).values() for i in m['instructions'] if i['op'] in (180,181) and i['desc'] in ('Z','B','C','S','I','J','F','D')}
     if cfg.get('request_entity_contracts') and cfg['request_entity_contracts'].get('version')!=2:raise AnalysisLimit('typed-decoder-version','Old candidate decoder evidence requires its frozen interpreter; source/default write roles are missing')
     runtime=[r for r in rows if r['kind']=='execution-runtime']
     require(len(runtime)==1 and any(all(runtime[0][k]==p[k] for k in ('java_runtime_version','class_sha256')) for p in cfg['runtime_profiles']),'Application runtime pin differs')
@@ -110,7 +111,11 @@ def infer_application(plan,rows,worker_request=None):
             return origin(f,before)
         def write_field(w,v):
             if 'date_epoch_ms' in w['observed'] and w['observed']['object'] in date_values:v=date_values[w['observed']['object']]
-            bind(v,w['observed']);state.field_write(coordinate(w),v.project(w['observed']));field_seq[coordinate(w)]=w['seq']
+            bind(v,w['observed'])
+            # Reflection/Recorder boxes primitive fields independently at every
+            # observation. Those wrapper identities are not JVM field identity.
+            observed={k:x for k,x in w['observed'].items() if k!='object'} if w['field'] in primitive_fields else w['observed']
+            state.field_write(coordinate(w),v.project(observed));field_seq[coordinate(w)]=w['seq']
             if w['owner'] in nonlocal_owners or w['owner'] in state.poisoned:escape(v)
         def escape(value):
             todo=[identity(value)] if 'value' not in value.observed else [];seen=set()
@@ -165,6 +170,7 @@ def infer_application(plan,rows,worker_request=None):
             protected=[h for h in method['exception_handlers'] if h['start']<=fr.pc<h['end']]
             for exception in ('ArrayIndexOutOfBoundsException','ArrayStoreException','NegativeArraySizeException'):
                 hierarchy['java.lang.'+exception]={'java/lang/'+exception,'java/lang/RuntimeException','java/lang/Exception','java/lang/Throwable'}
+            hierarchy['java.lang.IndexOutOfBoundsException']={'java/lang/IndexOutOfBoundsException','java/lang/RuntimeException','java/lang/Exception','java/lang/Throwable'}
             hierarchy['java.lang.ArrayIndexOutOfBoundsException'].add('java/lang/IndexOutOfBoundsException')
             if protected and typename not in hierarchy and all(h['type'] is not None for h in protected):raise AnalysisLimit('exception-dispatch','Exception hierarchy unsupported: '+str(typename))
             eligible=[h for h in protected if h['type'] is None or h['type'] in hierarchy.get(typename,set())]
@@ -341,6 +347,17 @@ def infer_application(plan,rows,worker_request=None):
                         b,a=pop(),pop();require('value' in a.observed and 'value' in b.observed,'Execution integer operands absent')
                         x,y=a.observed['value'],b.observed['value'];n=x+y if op==96 else x-y if op==100 else x*y
                         fr.stack.append(combine({'value':(n+2**31)%2**32-2**31},[a,b]))
+                    elif op==135:
+                        value=pop();n=value.observed.get('value')
+                        require(type(n) is int and -2**31<=n<2**31,'I2D requires an actual JVM int')
+                        fr.stack.append(value.project({'value':float(n)}))
+                    elif op==107:
+                        import math
+                        b,a=pop(),pop();x,y=a.observed.get('value'),b.observed.get('value')
+                        require(type(x) in (int,float) and type(y) in (int,float),'DMUL operands absent')
+                        n=float(x)*float(y)
+                        if not math.isfinite(n):raise AnalysisLimit('numeric-domain','Nonfinite double result unsupported')
+                        fr.stack.append(combine({'value':n},[a,b]))
                     elif op in (182,183,184,185):
                         args=[pop() for _ in descriptors(ins['desc'])][::-1];recv=None if op==184 else pop();key=callee(ins)
                         if ins['name']=='<init>':
@@ -353,6 +370,17 @@ def infer_application(plan,rows,worker_request=None):
                             if effect.get('kind')=='frame':
                                 begin=take('enter',check_frame=False);require(begin['method']==key and begin['parent']==fr.invocation and begin['callsite']==entry+'@'+str(fr.pc),'Constructor Frame binding differs')
                                 bind(recv,{'object':begin['receiver']});_,child_error=execute(begin,args,recv)
+                            elif effect.get('input_projections'):
+                                # A pure accessor may also be instrumented as a
+                                # lambda target elsewhere. Consume its real Frame
+                                # rather than silently skipping nested evidence.
+                                while pos<len(events) and events[pos]['kind']=='enter':
+                                    begin=take('enter',check_frame=False,check_pc=False)
+                                    getter=plan['collection_getters'].get(begin['method'])
+                                    allowed=[e for e in effect['fields'].values() if 'field' in e and getter and e['field']==getter['field'] and identity(args[e['argument']])==begin['receiver']]
+                                    require(allowed and begin['parent']==fr.invocation and not begin['args'],'Constructor projection accessor Frame differs')
+                                    _,child_error=execute(begin,[],args[allowed[0]['argument']])
+                                    if child_error is not None:break
                             elif effect.get('kind')=='opaque' and pos<len(events) and events[pos]['kind']=='enter':
                                 finish=next((j for j in range(pos,len(events)) if events[j]['kind'] in ('execution-constructed','execution-constructor-throw') and events[j].get('constructor_id')==ctor_start['constructor_id']),None);opaque_extent(finish)
                             if pos<len(events) and events[pos]['kind']=='execution-constructor-throw':
@@ -393,7 +421,16 @@ def infer_application(plan,rows,worker_request=None):
                             elif effect.get('kind')!='frame':
                                 fields=effect['fields'] if effect.get('kind')=='assignments' else {name:{'argument':index} for name,index in effect.items()}
                                 for name,expression in fields.items():
-                                    value=args[expression['argument']] if 'argument' in expression else Value({'value':expression['constant']})
+                                    if 'field' in expression:
+                                        proofs=ctor_start.get('input_projections',[]) if ctor_start else []
+                                        matches=[p for p in proofs if p['argument']==expression['argument'] and p['field']==expression['field']]
+                                        require(len(matches)==1,'Constructor input projection missing/ambiguous');proof=matches[0]
+                                        require(proof['runtime_class']==expression['runtime_class'],'Constructor accessor dispatch differs')
+                                        require(proof['class_sha256']==plan['class_sha256'][expression['runtime_class']],'Constructor input class hash differs')
+                                        require(proof['owner']==identity(args[expression['argument']]),'Constructor projection input object differs')
+                                        require(event.get('input_projections')==proofs,'Constructor input field version changed')
+                                        value=lookup(proof,ctor_start['seq'])
+                                    else:value=args[expression['argument']] if 'argument' in expression else Value({'value':expression['constant']})
                                     matching=[w for w in writes if w['owner']==owner and w['field']==name and w['seq']<event['seq']]
                                     require(len(matching)==1,'Execution constructor write missing/ambiguous');w=matching[0];bind(value,w['observed']);write_field(w,value)
                         else:
@@ -434,7 +471,7 @@ def infer_application(plan,rows,worker_request=None):
                             async_submission=task_by_call.get(call['call_id'])
                             if async_submission:expected_impl=None
                             callback=None
-                            if key=='java/util/function/Supplier.get()Ljava/lang/Object;' and identity(recv) in state.lambdas:callback=state.lambdas[identity(recv)]
+                            if key in ('java/util/function/Supplier.get()Ljava/lang/Object;','java/lang/Runnable.run()V') and identity(recv) in state.lambdas:callback=state.lambdas[identity(recv)]
                             elif key in ('java/util/Optional.orElseGet(Ljava/util/function/Supplier;)Ljava/lang/Object;','java/util/Optional.orElseThrow(Ljava/util/function/Supplier;)Ljava/lang/Object;') and identity(recv) in state.optionals and state.optionals[identity(recv)] is None:
                                 callback=state.lambdas.get(identity(args[0]))
                             child_args=args;child_recv=recv
@@ -471,9 +508,10 @@ def infer_application(plan,rows,worker_request=None):
                                 if implementation in permitted:expected_impl=implementation;resource_render=True;child_args=[];child_recv=content
                             if callback:
                                 declaration,captured=callback;handle_spec=declaration['bootstrap_args'][1];implementation=handle_spec['handle']
+                                require(declaration['name']==('run' if key=='java/lang/Runnable.run()V' else 'get'),'Lambda invocation SAM differs from declaration')
                                 if implementation in methods:
                                     expected_impl=implementation;permitted=[implementation]
-                                    bound=list(captured)+(args if key.startswith('java/util/function/Supplier.') else [])
+                                    bound=list(captured)+(args if key.startswith(('java/util/function/Supplier.','java/lang/Runnable.')) else [])
                                     child_recv=None if handle_spec['tag']==6 else bound.pop(0);child_args=bound
                             if filter_executed:require(not (pos<len(events) and events[pos]['kind']=='enter'),'Filter has unexpected additional callback')
                             if pos<len(events) and events[pos]['kind']=='enter' and expected_impl is None:
@@ -505,7 +543,12 @@ def infer_application(plan,rows,worker_request=None):
                             if exceptional:
                                 failure=take('collection-call-throw');require(failure['call_id']==call['call_id'],'Application throw instance differs')
                                 if child_error and child_error.get('object') is not None:require(child_error['object']==failure['exception']['object'],'Application rethrown object differs')
-                                if child_error is None and not (recv is not None and identity(recv) is None and recv.observed.get('value') is None):poison(([recv] if recv else [])+args,failure['seq'])
+                                read_only_bounds=False
+                                if key in ('java/util/List.get(I)Ljava/lang/Object;','java/util/ArrayList.get(I)Ljava/lang/Object;') and recv is not None and call.get('receiver_type') in ('java.util.ArrayList','java.util.Arrays$ArrayList') and failure['exception_type'] in ('java.lang.IndexOutOfBoundsException','java.lang.ArrayIndexOutOfBoundsException'):
+                                    c=container(call);index=args[0].observed.get('value')
+                                    require(type(index) is int and not 0<=index<len(c.elements),'List bounds failure contradicts actual index/members')
+                                    read_only_bounds=True  # Pinned get performs no writes or user callbacks.
+                                if child_error is None and not read_only_bounds and not (recv is not None and identity(recv) is None and recv.observed.get('value') is None):poison(([recv] if recv else [])+args,failure['seq'])
                                 if handle(failure['exception'],failure['exception_type']):continue
                                 take('abort');return None,failure['exception']
                             require(child_error is None,'Exceptional child has normal caller completion')
@@ -755,6 +798,9 @@ def infer_application(plan,rows,worker_request=None):
                                 if selected:bind(selected,fact['selected'])
                                 else:require(fact['selected'].get('value','not-null') is None,'Empty Optional selected object differs')
                                 state.optionals[observed['object']]=selected;v=Value(observed)
+                            elif key=='java/util/Optional.isPresent()Z' and identity(recv) in state.optionals:
+                                fact=ret.get('contract');require(fact and fact['valid'] and fact['kind']=='optional-presence' and call['receiver_type']=='java.util.Optional','Optional presence witness absent/invalid')
+                                require(fact['present']==(state.optionals[identity(recv)] is not None) and observed.get('value')==fact['present'],'Optional presence contradicts actual member');v=Value(observed)
                             elif key in ('java/util/Optional.orElseGet(Ljava/util/function/Supplier;)Ljava/lang/Object;','java/util/Optional.orElseThrow(Ljava/util/function/Supplier;)Ljava/lang/Object;') and identity(recv) in state.optionals:
                                 fact=ret.get('contract');require(fact and fact['valid'] and fact['kind']=='optional-result' and call['receiver_type']=='java.util.Optional','Optional contract absent/invalid');selected=state.optionals[identity(recv)]
                                 require(fact['present']==(selected is not None),'Optional presence differs')

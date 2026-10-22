@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class KernelContractFixture {
     public static class Item {
         public String text; public Item(String text){this.text=text;}
+        public Item(Item source,int unused){this(source.getText());}
         public String getText(){return text;} public void setText(String text){this.text=text;}
         public Supplier<String> supplier(){return ()->text;}
     }
@@ -38,12 +39,19 @@ public class KernelContractFixture {
         if(mode==20){Supplier<String> f=left::getText;return new Item(f.get());}
         if(mode==21)return new Item(right.supplier().get());
         if(mode==22){Item local=copy(left);Supplier<Item> f=()->{int[] unsupported=new int[1];return local;};f.get();return local;}
+        if(mode==23)return new Item(right,0);
+        if(mode==24){Item local=new Item(left.text);Runnable change=()->local.setText(right.text);change.run();return local;}
+        if(mode==25){Item local=new Item(left.text);Runnable unused=()->local.setText(right.text);return local;}
+        if(mode==26){try{Runnable fail=()->copy(null);fail.run();}catch(NullPointerException expected){return copy(right);}}
+        if(mode==27){List<Item> xs=new ArrayList<>();xs.add(right);if(xs.stream().findFirst().isPresent())return copy(right);return copy(left);}
+        if(mode==28){Item local=copy(left);Runnable f=()->opaque(local);f.run();return local;}
+        if(mode==29){try{List<Item> xs=new ArrayList<>();return xs.get(0);}catch(IndexOutOfBoundsException expected){return copy(right);}}
         String[] xs=new String[2];if(xs.length==2)return copy(right);return copy(left);
     }
     public static void main(String[] args)throws Exception{
         Item left=new Item("SAME"),right=new Item("SAME");ObjectMapper json=new ObjectMapper();List<Map> cases=new ArrayList<>();
-        for(int i=0;i<46;i++){
-            int mode=i%23;W3CTraceContext c=W3CTraceContext.server("00-33333333333333333333333333333333-"+String.format("%016x",i+1)+"-01","fixture=contracts");SpringTransportAgent.Transport.ASYNC.set(c);
+        for(int i=0;i<60;i++){
+            int mode=i%30;W3CTraceContext c=W3CTraceContext.server("00-33333333333333333333333333333333-"+String.format("%016x",i+1)+"-01","fixture=contracts");SpringTransportAgent.Transport.ASYNC.set(c);
             Map row=new LinkedHashMap();row.put("mode",mode);row.put("message",c.fields().get("message"));
             try{Item result=root(left,right,mode);ResponseBindingHooks.verifySerialization(result,json);row.put("response",json.readValue(json.writeValueAsString(result),Map.class));row.put("status","normal");Map wire=c.fields();wire.put("uri","fixture:contracts");wire.put("direction","response");wire.put("phase","write");wire.put("fields",SpringTransportAgent.Transport.snapshot(result));synchronized(PlannedServiceAgent.Recorder.class){PlannedServiceAgent.Recorder.emit("http-json",wire);}}
             catch(ArrayIndexOutOfBoundsException expected){row.put("status","aborted");}cases.add(row);SpringTransportAgent.Transport.ASYNC.remove();

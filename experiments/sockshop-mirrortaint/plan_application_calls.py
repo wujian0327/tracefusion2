@@ -12,6 +12,7 @@ def augment_calls(plan,model,sources):
     from plan_execution_kernel import constructor_writes
     methods={};targets={};opaque={};visiting=set();lambdas={};constructor_starts={};constructors=dict(plan['execution_kernel']['constructors'])
     supported={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,87,89,96,100,104,132,167,178,180,181,182,183,184,185,187,191,192,198,199,186,189,190,50,83}|set(range(21,26))|set(range(54,59))|set(range(153,167))|set(range(172,178))
+    supported|={107,135}  # Finite double multiply and exact JVM int-to-double.
     def subtype(child,parent,seen=None):
         if child==parent:return True
         seen=set() if seen is None else seen
@@ -38,8 +39,10 @@ def augment_calls(plan,model,sources):
             if ins['op']==189:require(not ins.get('type','').startswith('['),'Multidimensional array allocation unsupported')
             if ins['op']==186:
                 bs=ins.get('bootstrap_args',[]);require(ins.get('bootstrap')=='java/lang/invoke/LambdaMetafactory.metafactory' and len(bs)==3 and isinstance(bs[1],dict) and bs[1].get('tag') in (5,6,7),'Lambda bootstrap/handle unsupported')
-                require(ins['name'] in ('get','test') and ins['desc'].split(')')[1] in ('Ljava/util/function/Supplier;','Ljava/util/function/Predicate;'),'Lambda SAM unsupported')
-                require(bs[0] in ('()Ljava/lang/Object;','(Ljava/lang/Object;)Z'),'Lambda SAM adaptation unsupported')
+                sam={'get':('Ljava/util/function/Supplier;','()Ljava/lang/Object;'),
+                     'test':('Ljava/util/function/Predicate;','(Ljava/lang/Object;)Z'),
+                     'run':('Ljava/lang/Runnable;','()V')}
+                require(ins['name'] in sam and (ins['desc'].split(')')[1],bs[0])==sam[ins['name']],'Lambda SAM unsupported')
             if ins['op']==183 and ins['name']=='<init>':
                 call=callee(ins)
                 if key in constructor_starts and ins['index']==constructor_starts[key]-1:continue
@@ -53,7 +56,10 @@ def augment_calls(plan,model,sources):
                         require(call in model['methods'],'Application constructor bytecode absent: '+call)
                         initializer=model['methods'].get(ins['owner']+'.<clinit>()V')
                         require(initializer is None or all(x['op'] in (0,177) for x in initializer['instructions']),'Application allocation initializer unsupported')
-                        try:constructors[call]={'kind':'assignments','fields':assignment_effects(model,call)}
+                        try:
+                            fields=assignment_effects(model,call)
+                            constructors[call]={'kind':'assignments','fields':fields}
+                            if any('field' in value for value in fields.values()):constructors[call]['input_projections']=True
                         except ValueError as assignment_error:
                             try:constructor_starts[call]=constructor_start(model['methods'][call])
                             except ValueError as frame_error:raise ValueError(str(assignment_error)+'; '+str(frame_error)) from frame_error

@@ -25,6 +25,7 @@ def run(out):
     # Literal expected parameter field for each original fixture mode. None is
     # intentionally unknown; empty tuple is the constant fallback, not unknown.
     expected={0:(),1:1,2:1,3:1,4:1,5:1,6:1,7:1,8:0,9:1,10:1,11:0,12:None,13:0,15:1,16:1,17:(),18:None,19:1,20:0,21:1,22:None}
+    expected.update({23:1,24:1,25:0,26:1,27:1,28:None,29:1})
     for mode in ('full','selective'):
         cap=out/mode;(cap/'fixture').mkdir(parents=True)
         command(['java','-javaagent:'+str(b/'distributed-observer.jar'),'-Dservice.plan='+str(b/'fixture/plan.json'),'-Dservice.mode='+mode,'-Dservice.events='+str(cap/'fixture/events.jsonl'),'-cp',str(classes)+':'+':'.join(map(str,JARS)),'KernelContractFixture'],cap/'stdout.json')
@@ -48,7 +49,7 @@ def run(out):
         except AnalysisLimit as error:assert failure_status(error)=='analysis_limited'
         else:raise AssertionError('Budget silently truncated')
         faults={}
-        for label in ('missing-child','wrong-parent','duplicate-call-id','missing-constructor-write','same-value-wrong-argument','wrong-exception','lambda-capture','lambda-handle','array-position','array-version','missing-contract','stream-source','array-slot-version','array-owner','missing-array-store','optional-presence'):
+        for label in ('missing-child','wrong-parent','duplicate-call-id','missing-constructor-write','same-value-wrong-argument','wrong-exception','lambda-capture','lambda-handle','array-position','array-version','missing-contract','stream-source','array-slot-version','array-owner','missing-array-store','optional-presence','missing-projection','projection-owner','projection-version','projection-dispatch'):
             altered=copy.deepcopy(rows)
             if label=='missing-child':altered.remove(next(r for r in altered if r['kind']=='enter' and r.get('parent') is not None and r['method']!=plan['entry']))
             elif label=='wrong-parent':next(r for r in altered if r['kind']=='enter' and r.get('parent') is not None and r['method']!=plan['entry'])['parent']='wrong-frame'
@@ -67,6 +68,12 @@ def run(out):
             elif label=='missing-array-store':altered.remove(next(r for r in altered if r['kind']=='execution-array' and r['operation']=='store'))
             elif label=='optional-presence':
                 fact=next(r for r in altered if r['kind']=='collection-call-exit' and r.get('contract',{}).get('kind')=='optional-result')['contract'];fact['present']=not fact['present']
+            elif label.startswith('projection-') or label=='missing-projection':
+                proof=next(r for r in altered if r['kind']=='execution-constructor-enter' and r.get('input_projections'))
+                if label=='missing-projection':proof.pop('input_projections')
+                elif label=='projection-owner':proof['input_projections'][0]['owner']='same-value-wrong-object'
+                elif label=='projection-version':proof['input_projections'][0]['version']+=1
+                else:proof['input_projections'][0]['runtime_class']='unmodeled/Subclass'
             elif label=='stream-source':next(r for r in altered if r['kind']=='collection-call-exit' and r.get('contract',{}).get('kind')=='list-stream')['contract']['source']='wrong-list'
 
             try:infer_execution(plan,altered)
