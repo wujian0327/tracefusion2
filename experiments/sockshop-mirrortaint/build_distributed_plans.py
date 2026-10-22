@@ -14,11 +14,13 @@ from plan_service_observations import plan_service
 from plan_distributed_fields import augment,copy_plan
 from plan_collection_service import plan_collection
 from plan_response_binding import plan_response
+from isolate_agent_jackson import agent_class, symbolic_types, OLD
 
 
 def build(out,inputs):
     out.mkdir(parents=True,exist_ok=False);tools=out/'tools';tools.mkdir()
     sources=[HERE/n for n in ('QueryObservationAgent.java','QueryBytecodeModel.java','PlannedServiceAgent.java','CollectionServiceHooks.java','ConversionContractHooks.java','ExecutionKernelHooks.java','AsyncTaskHooks.java','FrameworkCallHooks.java','RequestEntityHooks.java','SaveEffectHooks.java','TemporalDateHooks.java','UuidProjectionHooks.java','ResponseBindingHooks.java','ReadEffectHooks.java','JdkContractProbe.java','SourceEvidenceHooks.java','SpringTransportAgent.java','W3CTraceContext.java')]
+    sources.append(HERE/'BusinessJackson.java')
     # JDK 8 has no --release option; its own platform is already Java 8.
     compiler_version,target=java8_target()
     cp=':'.join(map(str,JARS));command(['javac',*target,'-cp',cp,'-d',str(tools),*map(str,sources)],out/'compile.log')
@@ -26,11 +28,19 @@ def build(out,inputs):
     with ZipFile(jar,'w',ZIP_DEFLATED) as z:
         z.writestr('META-INF/MANIFEST.MF','Manifest-Version: 1.0\nPremain-Class: SpringTransportAgent\n\n')
         for prefix in ('PlannedServiceAgent','CollectionServiceHooks','ConversionContractHooks','ExecutionKernelHooks','AsyncTaskHooks','FrameworkCallHooks','RequestEntityHooks','SaveEffectHooks','TemporalDateHooks','UuidProjectionHooks','ResponseBindingHooks','ReadEffectHooks','JdkContractProbe','SourceEvidenceHooks','SpringTransportAgent','W3CTraceContext'):
-            for f in tools.glob(prefix+'*.class'):z.write(f,f.name)
+            for f in tools.glob(prefix+'*.class'):
+                name,data=agent_class(f.name,f.read_bytes());z.writestr(name,data)
+        for f in tools.glob('BusinessJackson*.class'):z.writestr(f.name,f.read_bytes())
         for dep in JARS:
             with ZipFile(dep) as dz:
                 for n in dz.namelist():
-                    if n.endswith('.class') and n.startswith(('org/objectweb/asm/','com/fasterxml/jackson/')):z.writestr(n,dz.read(n))
+                    if n.endswith('.class') and n.startswith(('org/objectweb/asm/','com/fasterxml/jackson/')):
+                        name,data=agent_class(n,dz.read(n));z.writestr(name,data)
+    with ZipFile(jar) as z:
+        for name in z.namelist():
+            assert not name.startswith('com/fasterxml/jackson/'),name
+            if name.endswith('.class'):
+                assert not any(OLD in t for t in symbolic_types(z.read(name))),('Unisolated Jackson type linkage',name)
     manifest={'compiler_version':compiler_version,'compiler_target':target,'transport_protocol':'w3c-trace-context','agent_sha256':sha(jar),'inputs':{},'sources':{str(p):sha(p) for p in sources+[HERE/n for n in ('experiment_environment.py','plan_distributed_fields.py','plan_service_observations.py','plan_collection_service.py','query_observation_planner.py','infer_planned_service.py','infer_distributed_fields.py','transport_context.py','run_distributed_paths.py','evaluate_distributed_paths.py','audit_distributed_paths.py')]},'dependencies':{str(p):sha(p) for p in JARS}}
     for role,config in inputs.items():
         source=Path(config['jar']).resolve()
@@ -83,6 +93,8 @@ def build(out,inputs):
     manifest['sources'][str(HERE/'library-value-runtimes-20261022.json')]=sha(HERE/'library-value-runtimes-20261022.json')
     manifest['sources'][str(HERE/'plain-conversion-contracts-20261022.json')]=sha(HERE/'plain-conversion-contracts-20261022.json')
     for name in ('plan_uuid_projection.py','infer_uuid_projection.py','uuid-projection-contracts-20261022.json'):manifest['sources'][str(HERE/name)]=sha(HERE/name)
+    manifest['sources'][str(HERE/'isolate_agent_jackson.py')]=sha(HERE/'isolate_agent_jackson.py')
+    manifest['jackson_isolation']='Internal JSON relocated to tracefusion.internal.jackson; business inspection has no Jackson type linkage'
     manifest['builder_sha256']=sha(Path(__file__));save(out/'build.json',manifest)
 
 

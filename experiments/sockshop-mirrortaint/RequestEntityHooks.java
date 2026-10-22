@@ -1,8 +1,5 @@
 import java.util.*;
 import java.lang.reflect.*;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.deser.BeanDeserializer;
-import com.fasterxml.jackson.databind.deser.SettableBeanProperty;
 
 /** Exact Spring request/decoded graph facts. No source sets or business formulas. */
 public final class RequestEntityHooks {
@@ -68,73 +65,74 @@ public final class RequestEntityHooks {
         }
         if(f!=null)row.put("request_entity_contract",f);
     }
-    static boolean defaultFactories(ObjectMapper mapper)throws Exception{
-        if(!mapper.getSerializationConfig().getAnnotationIntrospector().getClass().getName().equals("com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector")||!mapper.getDeserializationConfig().getAnnotationIntrospector().getClass().getName().equals("com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector"))return false;
-        Object serializer=mapper.getSerializerFactory();Object deserializer=ResponseBindingHooks.member(mapper.getDeserializationContext(),"_factory");
+    static boolean defaultFactories(Object mapper)throws Exception{
+        BusinessJackson.mapper(mapper);
+        if(!BusinessJackson.call(BusinessJackson.call(mapper,"getSerializationConfig"),"getAnnotationIntrospector").getClass().getName().equals("com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector")||!BusinessJackson.call(BusinessJackson.call(mapper,"getDeserializationConfig"),"getAnnotationIntrospector").getClass().getName().equals("com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector"))return false;
+        Object serializer=BusinessJackson.call(mapper,"getSerializerFactory");Object deserializer=ResponseBindingHooks.member(BusinessJackson.call(mapper,"getDeserializationContext"),"_factory");
         if(!serializer.getClass().getName().equals("com.fasterxml.jackson.databind.ser.BeanSerializerFactory")||!deserializer.getClass().getName().equals("com.fasterxml.jackson.databind.deser.BeanDeserializerFactory"))return false;
         Object sc=ResponseBindingHooks.member(serializer,"_factoryConfig"),dc=ResponseBindingHooks.member(deserializer,"_factoryConfig");
         for(String name:new String[]{"_additionalSerializers","_additionalKeySerializers","_modifiers"})if(java.lang.reflect.Array.getLength(ResponseBindingHooks.member(sc,name))!=0)return false;
         for(String name:new String[]{"_additionalDeserializers","_modifiers","_abstractTypeResolvers","_valueInstantiators"})if(java.lang.reflect.Array.getLength(ResponseBindingHooks.member(dc,name))!=0)return false;return true;
     }
-    static boolean serializationGraph(Object object,ObjectMapper mapper,IdentityHashMap<Object,Boolean> seen,int depth)throws Exception{
+    static boolean serializationGraph(Object object,Object mapper,IdentityHashMap<Object,Boolean> seen,int depth)throws Exception{
         if(object==null)return true;if(depth>12||seen.size()>10000)return false;
         String name=object.getClass().getName();
-        com.fasterxml.jackson.databind.JsonSerializer serializer=mapper.getSerializerProviderInstance().findValueSerializer(object.getClass());ResponseBindingHooks.serializer(serializer,object);
+        Object serializer=BusinessJackson.call(BusinessJackson.call(mapper,"getSerializerProviderInstance"),"findValueSerializer",object.getClass());ResponseBindingHooks.serializer(serializer,object);
         if(object instanceof String||object instanceof Boolean||TemporalDateHooks.date(object))return true;
         if(object instanceof Number)return Arrays.asList("java.lang.Byte","java.lang.Short","java.lang.Integer","java.lang.Long","java.lang.Float","java.lang.Double").contains(name);
         if(seen.put(object,true)!=null)return false;
         if(object instanceof Map&&ConversionContractHooks.enabled()){
-            if(object.getClass()!=HashMap.class&&object.getClass()!=LinkedHashMap.class||!serializer.getClass().getName().equals("com.fasterxml.jackson.databind.ser.std.MapSerializer")||mapper.findMixInClassFor(object.getClass())!=null)return false;
+            if(object.getClass()!=HashMap.class&&object.getClass()!=LinkedHashMap.class||!serializer.getClass().getName().equals("com.fasterxml.jackson.databind.ser.std.MapSerializer")||BusinessJackson.call(mapper,"findMixInClassFor",object.getClass())!=null)return false;
             for(Object key:((Map)object).keySet())if(!(key instanceof String)||!serializationGraph(((Map)object).get(key),mapper,seen,depth+1))return false;return true;
         }
         if(object instanceof List){if(!ReadEffectHooks.list(object))return false;for(Object value:(List)object)if(!serializationGraph(value,mapper,seen,depth+1))return false;return true;}
-        if(mapper.findMixInClassFor(object.getClass())!=null||serializer.getClass()!=com.fasterxml.jackson.databind.ser.BeanSerializer.class||ResponseBindingHooks.member(serializer,"_anyGetterWriter")!=null||ResponseBindingHooks.member(serializer,"_propertyFilterId")!=null)return false;
+        if(BusinessJackson.call(mapper,"findMixInClassFor",object.getClass())!=null||!BusinessJackson.exact(serializer,"ser.BeanSerializer")||ResponseBindingHooks.member(serializer,"_anyGetterWriter")!=null||ResponseBindingHooks.member(serializer,"_propertyFilterId")!=null)return false;
         List<Map> props=(List)SpringTransportAgent.Transport.schema.get(name.replace('.','/'));if(props==null)return false;
-        Iterator<com.fasterxml.jackson.databind.ser.PropertyWriter> writers=serializer.properties();while(writers.hasNext()){
-            com.fasterxml.jackson.databind.ser.PropertyWriter w=writers.next();if(w.getClass()!=com.fasterxml.jackson.databind.ser.BeanPropertyWriter.class)return false;com.fasterxml.jackson.databind.ser.BeanPropertyWriter writer=(com.fasterxml.jackson.databind.ser.BeanPropertyWriter)w;Map prop=null;for(Map v:props)if(v.get("property").equals(writer.getName()))prop=v;
-            if(prop==null||writer.getTypeSerializer()!=null)return false;java.lang.reflect.Member member=writer.getMember().getMember();
+        Iterator writers=(Iterator)BusinessJackson.call(serializer,"properties");while(writers.hasNext()){
+            Object writer=writers.next();if(!BusinessJackson.exact(writer,"ser.BeanPropertyWriter"))return false;Map prop=null;for(Map v:props)if(v.get("property").equals(BusinessJackson.call(writer,"getName")))prop=v;
+            if(prop==null||BusinessJackson.call(writer,"getTypeSerializer")!=null)return false;java.lang.reflect.Member member=(java.lang.reflect.Member)BusinessJackson.call(BusinessJackson.call(writer,"getMember"),"getMember");
             if(member instanceof Method){String getter=(String)prop.get("getter");if(getter==null||!getter.equals(member.getDeclaringClass().getName().replace('.','/')+"."+member.getName()+org.objectweb.asm.Type.getMethodDescriptor((Method)member)))return false;}
             else if(!(member instanceof Field)||!member.getName().equals(((String)prop.get("field")).substring(((String)prop.get("field")).lastIndexOf('.')+1)))return false;
             Object value=ResponseBindingHooks.member(object,((String)prop.get("field")).substring(((String)prop.get("field")).lastIndexOf('.')+1));if(!serializationGraph(value,mapper,seen,depth+1))return false;
         }return true;
     }
     static Map serialization(Object body,Object mapper)throws Exception{
-        if(config()==null)return null;Map f=fact("default-serialization-read-effects");ObjectMapper m=(ObjectMapper)mapper;
-        boolean valid=mapper.getClass()==ObjectMapper.class&&defaultFactories(m)&&m.getPropertyNamingStrategy()==null&&m.getSerializationConfig().getActiveView()==null&&m.getSerializationConfig().getFilterProvider()==null;
+        if(config()==null)return null;Map f=fact("default-serialization-read-effects");Object m=mapper;
+        boolean valid=BusinessJackson.exact(mapper,"ObjectMapper")&&defaultFactories(m)&&BusinessJackson.call(m,"getPropertyNamingStrategy")==null&&BusinessJackson.call(BusinessJackson.call(m,"getSerializationConfig"),"getActiveView")==null&&BusinessJackson.call(BusinessJackson.call(m,"getSerializationConfig"),"getFilterProvider")==null;
         try{valid=valid&&serializationGraph(body,m,new IdentityHashMap<Object,Boolean>(),0);}catch(Exception unsupported){valid=false;f.put("reason",unsupported.getClass().getName()+":"+unsupported.getMessage());}f.put("valid",valid);return f;
     }
-    static boolean propertyDecoder(SettableBeanProperty property,Map prop,Object owner)throws Exception{
-        if(prop==null)return false;Object d=property.getValueDeserializer();String type=d.getClass().getName();String desc=(String)prop.get("descriptor");
+    static boolean propertyDecoder(Object property,Map prop,Object owner)throws Exception{
+        if(prop==null)return false;Object d=BusinessJackson.call(property,"getValueDeserializer");String type=d.getClass().getName();String desc=(String)prop.get("descriptor");
         if(desc.equals("Ljava/lang/String;"))return type.equals("com.fasterxml.jackson.databind.deser.std.StringDeserializer");
         Map<String,String> scalar=new HashMap<String,String>();scalar.put("Z","Boolean");scalar.put("B","Byte");scalar.put("S","Short");scalar.put("C","Character");scalar.put("I","Integer");scalar.put("J","Long");scalar.put("F","Float");scalar.put("D","Double");
         if(scalar.containsKey(desc))return type.equals("com.fasterxml.jackson.databind.deser.std.NumberDeserializers$"+scalar.get(desc)+"Deserializer");
         if(desc.equals("Ljava/util/List;")||desc.equals("Ljava/util/Collection;")){
             if(!type.equals("com.fasterxml.jackson.databind.deser.std.CollectionDeserializer")||ResponseBindingHooks.member(d,"_delegateDeserializer")!=null)return false;
             Object vi=ResponseBindingHooks.member(d,"_valueInstantiator");if(!vi.getClass().getName().equals("com.fasterxml.jackson.databind.deser.std.StdValueInstantiator"))return false;
-            com.fasterxml.jackson.databind.deser.ValueInstantiator value=(com.fasterxml.jackson.databind.deser.ValueInstantiator)vi;
-            if(value.getDefaultCreator()==null||value.getDefaultCreator().getDeclaringClass()!=ArrayList.class||value.getDefaultCreator().getParameterCount()!=0)return false;
+            Object value=vi;
+            if(BusinessJackson.call(value,"getDefaultCreator")==null||BusinessJackson.call(BusinessJackson.call(value,"getDefaultCreator"),"getDeclaringClass")!=ArrayList.class||!Integer.valueOf(0).equals(BusinessJackson.call(BusinessJackson.call(value,"getDefaultCreator"),"getParameterCount")))return false;
             String field=(String)prop.get("field");Object actual=ResponseBindingHooks.member(owner,field.substring(field.lastIndexOf('.')+1));return actual==null||actual.getClass()==ArrayList.class&&((List)actual).isEmpty();
         }return false;
     }
     static void decoded(Object body,Object mapper,Object actualType,Map row)throws Exception{
         if(config()==null||body==null||!exact(body,"org.springframework.hateoas.Resource")&&!SpringTransportAgent.Transport.schema.containsKey(body.getClass().getName().replace('.','/')))return;
-        Map f=fact("resource-decoded");boolean resource=exact(body,"org.springframework.hateoas.Resource");Object content=resource?get(body,"getContent"):body;ObjectMapper m=(ObjectMapper)mapper;
-        boolean valid=mapper.getClass()==ObjectMapper.class&&defaultFactories(m)&&content!=null&&((Map)((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("decoder_birth_sites")).containsKey(content.getClass().getName().replace('.','/')+".<init>()V")&&m.findMixInClassFor(content.getClass())==null&&m.getPropertyNamingStrategy()==null&&m.getDeserializationConfig().getProblemHandlers()==null&&m.getInjectableValues()==null;
+        Map f=fact("resource-decoded");boolean resource=exact(body,"org.springframework.hateoas.Resource");Object content=resource?get(body,"getContent"):body;Object m=mapper;
+        boolean valid=BusinessJackson.exact(mapper,"ObjectMapper")&&defaultFactories(m)&&content!=null&&((Map)((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("decoder_birth_sites")).containsKey(content.getClass().getName().replace('.','/')+".<init>()V")&&BusinessJackson.call(m,"findMixInClassFor",content.getClass())==null&&BusinessJackson.call(m,"getPropertyNamingStrategy")==null&&BusinessJackson.call(BusinessJackson.call(m,"getDeserializationConfig"),"getProblemHandlers")==null&&BusinessJackson.call(m,"getInjectableValues")==null;
         // Resolve the actual decoder, without executing a constructor/setter or
         // re-reading input. Only default bean properties with frozen setters.
         if(!valid){f.put("valid",false);f.put("reason","Unsupported default decoder/configuration or constructor");f.put("wrapper_kind",resource?"resource":"plain-bean");f.put("wrapper",PlannedServiceAgent.Recorder.value(body));f.put("content",PlannedServiceAgent.Recorder.value(content));f.put("content_type",content==null?null:content.getClass().getName());f.put("properties",Collections.emptyList());f.put("ignored",Collections.emptyList());f.put("fields",SpringTransportAgent.Transport.snapshot(content));row.put("resource_decoder",f);return;}
-        com.fasterxml.jackson.databind.deser.DefaultDeserializationContext ctxt=(com.fasterxml.jackson.databind.deser.DefaultDeserializationContext)m.getDeserializationContext();
-        ctxt=ctxt.createInstance(m.getDeserializationConfig(),null,m.getInjectableValues());
-        JsonDeserializer root=ctxt.findRootValueDeserializer((JavaType)actualType);
+        Object ctxt=BusinessJackson.call(m,"getDeserializationContext");
+        ctxt=BusinessJackson.call(ctxt,"createInstance",BusinessJackson.call(m,"getDeserializationConfig"),null,BusinessJackson.call(m,"getInjectableValues"));
+        Object root=BusinessJackson.call(ctxt,"findRootValueDeserializer",actualType);
         Set ignored=new HashSet();
-        if(root.getClass()==BeanDeserializer.class){Object names=ResponseBindingHooks.member(root,"_ignorableProps");if(names instanceof Set)ignored.addAll((Set)names);}else valid=false;
-        JsonDeserializer d=content==null?null:ctxt.findRootValueDeserializer(m.constructType(content.getClass()));
-        valid=valid&&((JavaType)actualType).getRawClass()==body.getClass()&&(!resource||((JavaType)actualType).containedType(0)!=null&&((JavaType)actualType).containedType(0).getRawClass()==content.getClass())&&m.findMixInClassFor(body.getClass())==null;
-        List names=new ArrayList();if(d!=null&&d.getClass()==BeanDeserializer.class){
-            com.fasterxml.jackson.databind.deser.ValueInstantiator vi=((BeanDeserializer)d).getValueInstantiator();
-            valid=valid&&vi.getClass().getName().equals("com.fasterxml.jackson.databind.deser.std.StdValueInstantiator")&&vi.getDefaultCreator()!=null&&vi.getDefaultCreator().getDeclaringClass()==content.getClass()&&vi.getDefaultCreator().getMember() instanceof Constructor&&vi.getDefaultCreator().getParameterCount()==0&&((BeanDeserializer)d).getObjectIdReader()==null&&ResponseBindingHooks.member(d,"_injectables")==null&&ResponseBindingHooks.member(d,"_anySetter")==null;Iterator<SettableBeanProperty> ps=((BeanDeserializer)d).properties();while(ps.hasNext()){SettableBeanProperty p=ps.next();java.lang.reflect.Member member=p.getMember()==null?null:p.getMember().getMember();
-            String name=p.getName();if(ignored.contains(name))continue;Map prop=null;List<Map> props=(List)SpringTransportAgent.Transport.schema.get(content.getClass().getName().replace('.','/'));if(props!=null)for(Map x:props)if(name.equals(x.get("property")))prop=x;
-            if(!propertyDecoder(p,prop,content)||p.getInjectableValueId()!=null||p.hasValueTypeDeserializer()||prop==null||!(member instanceof Method)||prop.get("getter")==null||!p.getClass().getName().equals("com.fasterxml.jackson.databind.deser.impl.MethodProperty"))valid=false;
+        if(BusinessJackson.exact(root,"deser.BeanDeserializer")){Object names=ResponseBindingHooks.member(root,"_ignorableProps");if(names instanceof Set)ignored.addAll((Set)names);}else valid=false;
+        Object d=content==null?null:BusinessJackson.call(ctxt,"findRootValueDeserializer",BusinessJackson.call(m,"constructType",content.getClass()));
+        valid=valid&&BusinessJackson.call(actualType,"getRawClass")==body.getClass()&&(!resource||BusinessJackson.call(actualType,"containedType",0)!=null&&BusinessJackson.call(BusinessJackson.call(actualType,"containedType",0),"getRawClass")==content.getClass())&&BusinessJackson.call(m,"findMixInClassFor",body.getClass())==null;
+        List names=new ArrayList();if(d!=null&&BusinessJackson.exact(d,"deser.BeanDeserializer")){
+            Object vi=BusinessJackson.call(d,"getValueInstantiator");
+            valid=valid&&vi.getClass().getName().equals("com.fasterxml.jackson.databind.deser.std.StdValueInstantiator")&&BusinessJackson.call(vi,"getDefaultCreator")!=null&&BusinessJackson.call(BusinessJackson.call(vi,"getDefaultCreator"),"getDeclaringClass")==content.getClass()&&BusinessJackson.call(BusinessJackson.call(vi,"getDefaultCreator"),"getMember") instanceof Constructor&&Integer.valueOf(0).equals(BusinessJackson.call(BusinessJackson.call(vi,"getDefaultCreator"),"getParameterCount"))&&BusinessJackson.call(d,"getObjectIdReader")==null&&ResponseBindingHooks.member(d,"_injectables")==null&&ResponseBindingHooks.member(d,"_anySetter")==null;Iterator ps=(Iterator)BusinessJackson.call(d,"properties");while(ps.hasNext()){Object p=ps.next();java.lang.reflect.Member member=BusinessJackson.call(p,"getMember")==null?null:(java.lang.reflect.Member)BusinessJackson.call(BusinessJackson.call(p,"getMember"),"getMember");
+            String name=(String)BusinessJackson.call(p,"getName");if(ignored.contains(name))continue;Map prop=null;List<Map> props=(List)SpringTransportAgent.Transport.schema.get(content.getClass().getName().replace('.','/'));if(props!=null)for(Map x:props)if(name.equals(x.get("property")))prop=x;
+            if(!propertyDecoder(p,prop,content)||BusinessJackson.call(p,"getInjectableValueId")!=null||BusinessJackson.yes(BusinessJackson.call(p,"hasValueTypeDeserializer"))||prop==null||!(member instanceof Method)||prop.get("getter")==null||!p.getClass().getName().equals("com.fasterxml.jackson.databind.deser.impl.MethodProperty"))valid=false;
             // The exact setter is verified by the bytecode-derived planner.
             if(member instanceof Method){String key=member.getDeclaringClass().getName().replace('.','/')+"."+member.getName()+org.objectweb.asm.Type.getMethodDescriptor((Method)member);Map setters=(Map)PlannedServiceAgent.plan.get("collection_setters");Map setter=(Map)setters.get(key);if(setter==null||prop==null||!Objects.equals(setter.get("field"),prop.get("field")))valid=false;names.add(name);}
         }}else valid=false;

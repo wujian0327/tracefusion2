@@ -7,8 +7,8 @@ def validate_uuid_projection(plan,rows):
     if not config:return
     runtime=[r for r in rows if r['kind']=='uuid-runtime'];require(len(runtime)==1,'UUID runtime missing/ambiguous')
     require(any(all(runtime[0].get(k)==p[k]for k in ('java_runtime_version','class_sha256'))for p in config['profiles']),'UUID JDK definition differs')
-    wires=[r for r in rows if r['kind']=='uuid-wire'];pin=config['serializer_class_sha256']['com/fasterxml/jackson/databind/ser/std/UUIDSerializer']
-    for r in wires:require(r['serializer_class_sha256']==pin,'UUID serializer definition differs')
+    wires=[r for r in rows if r['kind']=='uuid-wire'];pins=[p['com/fasterxml/jackson/databind/ser/std/UUIDSerializer'] for p in [config['serializer_class_sha256'],*config.get('serializer_class_sha256_profiles',[])]]
+    for r in wires:require(r['serializer_class_sha256'] in pins,'UUID serializer definition differs')
     def scan(value):
         if isinstance(value,dict):
             if value.get('uuid_type'):

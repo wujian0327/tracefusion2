@@ -23,5 +23,11 @@
   "serializer_class_sha256": {
     "com/fasterxml/jackson/databind/ser/std/UUIDSerializer": "9ac8b738532955c220bdc9d055d3da7b48ba7aa618018a81361500e5bb1d84b5"
   },
-  "scope": "Exact immutable UUID object and default textual UUIDSerializer; not UUID construction or arbitrary conversions"
+  "scope": "Exact immutable UUID object and default textual UUIDSerializer; not UUID construction or arbitrary conversions",
+  "serializer_class_sha256_profiles": [
+    {
+      "com/fasterxml/jackson/databind/ser/std/UUIDSerializer": "9ac8b738532955c220bdc9d055d3da7b48ba7aa618018a81361500e5bb1d84b5"
+    }
+  ],
+  "isolation": "Application default UUID serializer remains in its original Jackson package and loader"
 }

@@ -1,5 +1,4 @@
 import java.util.*;
-import com.fasterxml.jackson.databind.*;
 
 /** Exact Date facts and pinned default serialization; no provenance computation. */
 public final class TemporalDateHooks {
@@ -34,15 +33,15 @@ public final class TemporalDateHooks {
         if(config()==null||ExecutionKernelHooks.enabled()||!(key.startsWith("java/util/Date.")||key.startsWith("java/util/Calendar.")))return;
         Map start=new LinkedHashMap();start.put("callee",key);start.put("_receiver_ref",receiver);start.put("_args_ref",args);Map row=ResponseBindingHooks.row();end(start,result,row);row.put("callee",key);row.put("receiver",PlannedServiceAgent.Recorder.value(receiver));row.put("result",PlannedServiceAgent.Recorder.value(result));PlannedServiceAgent.Recorder.emit("date-call",row);
     }
-    static void serializer(JsonSerializer s)throws Exception{
+    static void serializer(Object s)throws Exception{
         if(!s.getClass().getName().equals("com.fasterxml.jackson.databind.ser.std.DateSerializer")||ResponseBindingHooks.member(s,"_customFormat")!=null||ResponseBindingHooks.member(s,"_useTimestamp")!=null)throw new IllegalStateException("Custom Date serializer/format unsupported");
     }
-    static void serialization(Date value,ObjectMapper mapper)throws Exception{
-        JsonSerializer ser=mapper.getSerializerProviderInstance().findValueSerializer(Date.class);serializer(ser);
-        if(!mapper.getDateFormat().getClass().getName().equals("com.fasterxml.jackson.databind.util.StdDateFormat"))throw new IllegalStateException("Custom DateFormat unsupported");
-        Map hashes=new TreeMap();for(Class c:new Class[]{mapper.getClass(),ser.getClass(),ser.getClass().getSuperclass(),mapper.getDateFormat().getClass()})hashes.put(c.getName().replace('.','/'),ExecutionKernelHooks.classHash(c));
-        Object wire=mapper.convertValue(value,Object.class);if(!(wire instanceof String||wire instanceof Long||wire instanceof Integer))throw new IllegalStateException("Date wire type unsupported");
-        Map row=ResponseBindingHooks.row();row.put("date",observe(value));row.put("wire_value",wire);row.put("timestamp",mapper.isEnabled(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS));row.put("class_sha256",hashes);PlannedServiceAgent.Recorder.emit("date-serialization",row);WIRE.put(value,new Object[]{value.getTime(),wire});
+    static void serialization(Date value,Object mapper)throws Exception{
+        Object ser=BusinessJackson.call(BusinessJackson.call(mapper,"getSerializerProviderInstance"),"findValueSerializer",Date.class);serializer(ser);
+        if(!BusinessJackson.call(mapper,"getDateFormat").getClass().getName().equals("com.fasterxml.jackson.databind.util.StdDateFormat"))throw new IllegalStateException("Custom DateFormat unsupported");
+        Map hashes=new TreeMap();for(Class c:new Class[]{mapper.getClass(),ser.getClass(),ser.getClass().getSuperclass(),BusinessJackson.call(mapper,"getDateFormat").getClass()})hashes.put(c.getName().replace('.','/'),ExecutionKernelHooks.classHash(c));
+        Object wire=BusinessJackson.call(mapper,"convertValue",value,Object.class);if(!(wire instanceof String||wire instanceof Long||wire instanceof Integer))throw new IllegalStateException("Date wire type unsupported");
+        Map row=ResponseBindingHooks.row();row.put("date",observe(value));row.put("wire_value",wire);row.put("timestamp",BusinessJackson.call(mapper,"isEnabled",BusinessJackson.enumValue(mapper,"SerializationFeature","WRITE_DATES_AS_TIMESTAMPS")));row.put("class_sha256",hashes);PlannedServiceAgent.Recorder.emit("date-serialization",row);WIRE.put(value,new Object[]{value.getTime(),wire});
     }
     static void wire(Object value,Map field){if(date(value)&&WIRE.containsKey(value)){Object[] proof=WIRE.get(value);if(!proof[0].equals(((Date)value).getTime()))throw new IllegalStateException("Date changed between serialization checks");field.put("wire_value",proof[1]);}}
 }

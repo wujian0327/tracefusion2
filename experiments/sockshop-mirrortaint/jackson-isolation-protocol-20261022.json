@@ -1,0 +1,15 @@
+{
+  "previous_core": "223ea075baf9846c5ff3f42a07431c44946b720a",
+  "scope": "Agent Jackson isolation only; original business JARs, source boundaries and semantics unchanged",
+  "private_namespace": "tracefusion.internal.jackson",
+  "business_bridge": "Reflection through the actual application mapper; no symbolic Jackson linkage in inspectors",
+  "library_profiles": "Explicit original Jackson2.8.6 and2.8.11.3 hashes; whole profile matches, no per-class mixing",
+  "controls": "Bare-classpath private JSON, two independent original native loaders, conversion and UUID on both original versions, kernel/application/Date/received/legacy guards",
+  "development_business": "Original Basic, UUID and Orders representative regressions; preserve failures",
+  "final_acceptance": "Freeze one core, redeploy original62 queries full/selective and supplemental pair; independent431-target scoring, preserve first failures, no replacement receipts",
+  "runtime": "Observed1CPU/768MiB heap32/256m GC1 CI2, original5second Future deadline",
+  "isolation_proof": "No com/fasterxml/jackson class entries or symbolic types in Agent; actual mapper class resource hashes equal original embedded libraries in every observed deployment",
+  "heldout29": "sealed; no planning or execution",
+  "costs": "No new performance claims; old428/431 retained as previous configuration",
+  "push": "user only"
+}

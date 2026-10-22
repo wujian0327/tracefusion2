@@ -10,9 +10,9 @@ from run_planned_service import ROOT,HERE,save,load,sha
 from infer_distributed_fields import Reconstruction
 from infer_execution_kernel import infer_execution
 
-def run(out):
+def run(out,native_jackson=False):
     out.mkdir(parents=True,exist_ok=False);classes=out/'classes';classes.mkdir();base=ROOT/'artifacts/library-gap-revision-20261022/development-04/frozen-base'
-    libraries=sorted((ROOT/'artifacts/library-gap-revision-20261022/control-libs').glob('*.jar'));cp=':'.join(map(str,[base/'tools',base/'basic/app',*JARS,*libraries]))
+    libraries=sorted((ROOT/'artifacts/library-gap-revision-20261022/control-libs').glob('*.jar'));cp=':'.join(map(str,[base/'tools',base/'basic/app',*(libraries if native_jackson else JARS),*(JARS if native_jackson else libraries)]))
     command(['javac',*java8_target()[1],'-cp',cp,'-d',str(classes),str(HERE/'LibraryConversionFixture.java')],out/'compile.log')
     summary=Path('edu/fudan/common/util/JsonUtils.class');(classes/summary).parent.mkdir(parents=True);shutil.copyfile(base/'basic/app'/summary,classes/summary)
     jar=out/'fixture.jar'
@@ -21,7 +21,7 @@ def run(out):
     b=out/'build';build(b,{'fixture':{'jar':str(jar),'entry':'LibraryConversionFixture.root(LLibraryConversionFixture$Input;LLibraryConversionFixture$Input;I)LLibraryConversionFixture$Box;','targets':['LibraryConversionFixture$Box.text'],'response_path':'/text','execution_kernel':True,'application_calls':True}})
     plan=load(b/'fixture/plan.json');reports={};want={0:0,1:1,2:1,3:(),4:None,5:(),6:0,7:None}
     for mode in ('full','selective'):
-        cap=out/mode;(cap/'fixture').mkdir(parents=True);command(['java','-javaagent:'+str(b/'distributed-observer.jar'),'-Dservice.plan='+str(b/'fixture/plan.json'),'-Dservice.mode='+mode,'-Dservice.events='+str(cap/'fixture/events.jsonl'),'-cp',str(classes)+':'+':'.join(map(str,[*JARS,*libraries])),'LibraryConversionFixture'],cap/'stdout.json')
+        cap=out/mode;(cap/'fixture').mkdir(parents=True);command(['java','-javaagent:'+str(b/'distributed-observer.jar'),'-Dservice.plan='+str(b/'fixture/plan.json'),'-Dservice.mode='+mode,'-Dservice.events='+str(cap/'fixture/events.jsonl'),'-cp',str(classes)+':'+':'.join(map(str,([*libraries,*JARS] if native_jackson else [*JARS,*libraries]))),'LibraryConversionFixture'],cap/'stdout.json')
         cases=json.loads((cap/'stdout.json').read_text().splitlines()[-1]);rows=[json.loads(s)for s in (cap/'fixture/events.jsonl').open()];graph=Reconstruction(b,cap,['fixture']);checks=[]
         for c in cases:
             a=graph.query(c['message'],'/text','fixture',boundary=[{'kind':'binding-source'},{'kind':'argument'}]);expected=want[c['mode']];assert a['known']==(expected is not None),(mode,c,a)
@@ -49,4 +49,4 @@ def run(out):
         save(out/'results.json',{'all_passed':True,'modes':reports,'original_JsonUtils_class_sha256':sha(classes/summary)});print(mode,{k:v for k,v in reports[mode].items()if k!='checks'},flush=True)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--out',required=True,type=Path);a=p.parse_args();run(a.out.resolve())
+    p=argparse.ArgumentParser();p.add_argument('--out',required=True,type=Path);p.add_argument('--native-jackson',action='store_true');a=p.parse_args();run(a.out.resolve(),a.native_jackson)

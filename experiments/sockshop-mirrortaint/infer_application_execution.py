@@ -17,6 +17,9 @@ def infer_application(plan,rows,worker_request=None):
     if cfg.get('request_entity_contracts') and cfg['request_entity_contracts'].get('version')!=2:raise AnalysisLimit('typed-decoder-version','Old candidate decoder evidence requires its frozen interpreter; source/default write roles are missing')
     runtime=[r for r in rows if r['kind']=='execution-runtime']
     require(len(runtime)==1 and any(all(runtime[0][k]==p[k] for k in ('java_runtime_version','class_sha256')) for p in cfg['runtime_profiles']),'Application runtime pin differs')
+    def request_hashes(actual):
+        contract=cfg['request_entity_contracts']
+        return actual in [contract['class_sha256'], *contract.get('class_sha256_profiles',[])]
     if cfg.get('request_entity_contracts'):
         starts={r.get('call_id'):r for r in rows if r['kind']=='collection-call-enter'}
         for event in rows:
@@ -206,7 +209,7 @@ def infer_application(plan,rows,worker_request=None):
             require(fact['java_runtime_version']==runtime[0]['java_runtime_version'],'Library value runtime differs from root')
         def request_fact(event,kind):
             fact=event.get('request_entity_contract')
-            require(fact and fact['kind']==kind and fact['class_sha256']==cfg['request_entity_contracts']['class_sha256'],'RequestEntity witness kind/library differs')
+            require(fact and fact['kind']==kind and request_hashes(fact['class_sha256']),'RequestEntity witness kind/library differs')
             require(any(p['java_runtime_version']==runtime[0]['java_runtime_version'] and p['class_sha256']==fact['jdk_sha256'] for p in cfg['request_entity_contracts']['jdk_profiles']),'RequestEntity JDK profile differs')
             return fact
         def date_render(event,observed):
@@ -494,7 +497,7 @@ def infer_application(plan,rows,worker_request=None):
                             list_render=False;render_finish=next((r for r in events[pos:] if r['kind']=='collection-call-exit' and r.get('call_id')==call['call_id']),None)
                             render_proof=render_finish.get('request_render',{}) if render_finish else {}
                             if key=='java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;' and render_proof.get('kind')=='list-render' and render_proof.get('valid'):
-                                require(render_proof['class_sha256']==cfg['request_entity_contracts']['class_sha256'] and any(p['java_runtime_version']==runtime[0]['java_runtime_version'] and p['class_sha256']==render_proof['jdk_sha256'] for p in cfg['request_entity_contracts']['jdk_profiles']),'List render framework/runtime differs')
+                                require(request_hashes(render_proof['class_sha256']) and any(p['java_runtime_version']==runtime[0]['java_runtime_version'] and p['class_sha256']==render_proof['jdk_sha256'] for p in cfg['request_entity_contracts']['jdk_profiles']),'List render framework/runtime differs')
                                 bind(args[0],render_proof['object']);require(call.get('argument_types',[None])[0].replace('.','/')==render_proof['class'],'List render argument type differs');require(runtime[0]['class_sha256'].get(render_proof['class'])==render_proof['list_class_sha256'],'List render implementation differs')
                                 permitted_render=cfg['call_targets'].get(entry+'@'+str(fr.pc)+':render',[])
                                 choices=[(member,member['type'].replace('.','/')+'.toString()Ljava/lang/String;' if member['type'] else None) for member in render_proof['elements']]
@@ -607,14 +610,14 @@ def infer_application(plan,rows,worker_request=None):
                                     if not tainted:require(fact['after'].startswith(text),'StringBuilder append changed prefix')
                                     content=combine({'value':fact['after']},[content,operand]);content=Value(content.observed,content.origins,content.selectors,content.unknown or tainted);builders[identity(recv)]=(fact['after'],content);v=Value(observed)
                             elif resource_render:
-                                render=ret.get('request_render');require(render and render['class_sha256']==cfg['request_entity_contracts']['class_sha256'] and render['valid'],'Resource render closure witness absent/differs');bind(child_recv,render['content']);require(child_value is not None,'Resource render missing content callback');v=Value(observed,unknown=True)
+                                render=ret.get('request_render');require(render and request_hashes(render['class_sha256']) and render['valid'],'Resource render closure witness absent/differs');bind(child_recv,render['content']);require(child_value is not None,'Resource render missing content callback');v=Value(observed,unknown=True)
                             elif child_value is not None:
 
                                 bind(child_value,observed);v=child_value.project(observed)
                             elif key in cfg.get('conversion_contracts',{}).get('methods',[]):
                                 conversions=[r for r in relevant if r['kind']=='json-conversion' and r.get('conversion_contract',{}).get('call_id')==call['call_id'] and call['seq']<r['seq']<ret['seq']]
                                 require(len(conversions)==1,'Conversion invocation evidence absent/ambiguous');conversion=conversions[0];proof=conversion['conversion_contract']
-                                require(proof['method']==key and proof['summary_class_sha256']==cfg['conversion_contracts']['summary_class_sha256'] and proof['class_sha256']==cfg['request_entity_contracts']['class_sha256'],'Conversion library/callee differs');library_values(proof.get('library_values'));bind(args[0],proof['source']);bind(Value(observed),proof['target'])
+                                require(proof['method']==key and proof['summary_class_sha256']==cfg['conversion_contracts']['summary_class_sha256'] and request_hashes(proof['class_sha256']),'Conversion library/callee differs');library_values(proof.get('library_values'));bind(args[0],proof['source']);bind(Value(observed),proof['target'])
                                 require(proof['target_class'].replace('.','/')==class_literals.get(identity(args[1]),'')[1:-1],'Conversion target Class differs')
                                 if proof['valid']:
                                     require(proof['serialization_valid'] and proof['read_class_matches'] and proof['source_after']==conversion['input'],'Conversion readonly/input proof contradicts events')
@@ -694,7 +697,7 @@ def infer_application(plan,rows,worker_request=None):
                                     decoder=read.get('resource_decoder')
                                     if fact['response_type']=='org.springframework.hateoas.Resource' or fact['response_type'].replace('.','/') in plan.get('json_schema',{}):require(decoder is not None,'Required typed decoder witness absent')
                                     if decoder:
-                                        require(decoder['kind']=='resource-decoded' and decoder['class_sha256']==cfg['request_entity_contracts']['class_sha256'],'Resource decoder library witness differs')
+                                        require(decoder['kind']=='resource-decoded' and request_hashes(decoder['class_sha256']),'Resource decoder library witness differs')
                                         bind(Value(fact['response_body']),decoder['wrapper'])
                                         if decoder['valid']:
                                             content=decoder['content'];owner=content.get('object')
@@ -726,7 +729,7 @@ def infer_application(plan,rows,worker_request=None):
                                     if outgoing:
                                         proof=len(outgoing)==1 and outgoing[0].get('request_serialization',{}).get('valid',False)
                                         if proof:
-                                            sf=outgoing[0]['request_serialization'];require(sf['class_sha256']==cfg['request_entity_contracts']['class_sha256'],'Request serializer library differs')
+                                            sf=outgoing[0]['request_serialization'];require(request_hashes(sf['class_sha256']),'Request serializer library differs')
                                     transport_effects.append(proof)
                                     response_entities[observed['object']]=Value(fact['response_body']);v=Value(observed)
                                 elif kind=='entity-body':
@@ -880,7 +883,7 @@ def infer_application(plan,rows,worker_request=None):
                                     require(index<len(c.elements),'Execution iterator outside contents');v=c.elements[index].project(observed);bind(c.elements[index],observed);state.iterators[identity(recv)][1]+=1
                                 else:raise ValueError('Execution iterator method unsupported')
                             elif key=='org/springframework/hateoas/Resource.toString()Ljava/lang/String;' and cfg.get('request_entity_contracts') and ret.get('request_render',{}).get('plain_object'):
-                                render=ret['request_render'];require(render['class_sha256']==cfg['request_entity_contracts']['class_sha256'] and render['valid'],'Resource render contract differs');v=Value(observed,unknown=True)
+                                render=ret['request_render'];require(request_hashes(render['class_sha256']) and render['valid'],'Resource render contract differs');v=Value(observed,unknown=True)
                             elif key=='org/slf4j/LoggerFactory.getLogger(Ljava/lang/Class;)Lorg/slf4j/Logger;':
                                 fact=ret.get('contract');require(fact and fact['kind']=='logger-factory','Logging factory witness absent')
                                 if fact.get('valid'):

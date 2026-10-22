@@ -2,8 +2,6 @@ import java.lang.reflect.Field;
 import java.util.*;
 import org.objectweb.asm.*;
 import org.objectweb.asm.tree.*;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.ser.*;
 
 /** Root-to-wire identity witnesses and explicitly admitted pre-output sources. */
 public final class ResponseBindingHooks implements Opcodes {
@@ -119,7 +117,7 @@ public final class ResponseBindingHooks implements Opcodes {
     static void enter(Object[] args)throws Exception{if(!enabled())return;TemporalDateHooks.enter();UuidProjectionHooks.enter();if(ExecutionKernelHooks.enabled())ExecutionKernelHooks.enter();if(ReadEffectHooks.enabled())ReadEffectHooks.enter();for(int i=0;i<args.length;i++){if(!((List)binding().get("source_arguments")).contains(i))continue;Map r=row();r.put("argument",i);r.put("fields",sourceSnapshot(args[i]));emit("binding-input",r);}}
     static void exit(Object result)throws Exception{if(!enabled())return;if(ReadEffectHooks.enabled())ReadEffectHooks.exit(result);Map r=row();if(r.get("message")!=null)RETURN_MESSAGES.add((String)r.get("message"));r.put("result",PlannedServiceAgent.Recorder.value(result));r.put("fields",snapshot(result,true));emit("binding-return",r);}
     static Object member(Object object,String name)throws Exception{for(Class c=object.getClass();c!=null;c=c.getSuperclass())try{Field f=c.getDeclaredField(name);f.setAccessible(true);return f.get(object);}catch(NoSuchFieldException e){}throw new IllegalStateException("Serializer structure unsupported: "+name);}
-    static void serializer(JsonSerializer serializer,Object value)throws Exception{
+    static void serializer(Object serializer,Object value)throws Exception{
         if(serializer==null)return;String name=serializer.getClass().getName();
         Set<String> allowed=new HashSet<>(Arrays.asList("com.fasterxml.jackson.databind.ser.BeanSerializer",
           "com.fasterxml.jackson.databind.ser.std.StringSerializer","com.fasterxml.jackson.databind.ser.std.BooleanSerializer",
@@ -130,10 +128,10 @@ public final class ResponseBindingHooks implements Opcodes {
           "com.fasterxml.jackson.databind.ser.impl.StringCollectionSerializer","com.fasterxml.jackson.databind.ser.std.CollectionSerializer"));
         if(TemporalDateHooks.config()!=null&&name.equals("com.fasterxml.jackson.databind.ser.std.DateSerializer")){TemporalDateHooks.serializer(serializer);return;}
         if(UuidProjectionHooks.config()!=null&&name.equals("com.fasterxml.jackson.databind.ser.std.UUIDSerializer")){UuidProjectionHooks.serializer(serializer);return;}
-        if(!allowed.contains(name)||serializer.usesObjectId())throw new IllegalStateException("Unmodeled serializer: "+name);
+        if(!allowed.contains(name)||BusinessJackson.yes(BusinessJackson.call(serializer,"usesObjectId")))throw new IllegalStateException("Unmodeled serializer: "+name);
         if(name.endsWith("MapSerializer")){
             Object key=member(serializer,"_keySerializer");if(key!=null&&!key.getClass().getName().equals("com.fasterxml.jackson.databind.ser.std.StdKeySerializers$StringKeySerializer"))throw new IllegalStateException("Custom map-key serializer");
-            Object content=member(serializer,"_valueSerializer");if(content!=null)serializer((JsonSerializer)content,null);
+            Object content=member(serializer,"_valueSerializer");if(content!=null)serializer(content,null);
         }
     }
     public static void verifySerialization(Object body,Object mapper)throws Exception{
@@ -142,32 +140,32 @@ public final class ResponseBindingHooks implements Opcodes {
         String[] target=((String)binding().get("path")).split("/");boolean applicable=false;
         for(Object raw:SpringTransportAgent.Transport.snapshot(body)){String[] actual=((String)((Map)raw).get("path")).split("/");if(actual.length!=target.length)continue;boolean equal=true;for(int i=0;i<actual.length;i++)if(!target[i].equals(actual[i])&&!(target[i].equals("*")&&actual[i].matches("[0-9]+")))equal=false;if(equal)applicable=true;}
         if(!applicable)return;
-        if(mapper.getClass()!=ObjectMapper.class)throw new IllegalStateException("Unmodeled ObjectMapper subclass");
-        ObjectMapper actual=(ObjectMapper)mapper;
-        if(actual.getPropertyNamingStrategy()!=null||actual.getSerializationConfig().getActiveView()!=null||actual.getSerializationConfig().getFilterProvider()!=null)throw new IllegalStateException("Dynamic serialization configuration unsupported");
+        BusinessJackson.mapper(mapper);
+        Object actual=mapper;
+        if(BusinessJackson.call(actual,"getPropertyNamingStrategy")!=null||BusinessJackson.call(BusinessJackson.call(actual,"getSerializationConfig"),"getActiveView")!=null||BusinessJackson.call(BusinessJackson.call(actual,"getSerializationConfig"),"getFilterProvider")!=null)throw new IllegalStateException("Dynamic serialization configuration unsupported");
         checkPath(body,actual,((String)binding().get("path")).substring(1).split("/"),0);
     }
-    static void checkPath(Object value,ObjectMapper mapper,String[] path,int index)throws Exception{
-        if(value!=null&&UuidProjectionHooks.config()!=null&&mapper.findMixInClassFor(value.getClass())!=null)throw new IllegalStateException("UUID path mix-in unsupported");
-        if(value==null)return;serializer(mapper.getSerializerProviderInstance().findValueSerializer(value.getClass()),value);
+    static void checkPath(Object value,Object mapper,String[] path,int index)throws Exception{
+        if(value!=null&&UuidProjectionHooks.config()!=null&&BusinessJackson.call(mapper,"findMixInClassFor",value.getClass())!=null)throw new IllegalStateException("UUID path mix-in unsupported");
+        if(value==null)return;serializer(BusinessJackson.call(BusinessJackson.call(mapper,"getSerializerProviderInstance"),"findValueSerializer",value.getClass()),value);
         if(index==path.length){if(UuidProjectionHooks.uuid(value))UuidProjectionHooks.serialization((java.util.UUID)value,mapper);if(TemporalDateHooks.date(value))TemporalDateHooks.serialization((java.util.Date)value,mapper);return;}String part=path[index].replace("~1","/").replace("~0","~");
         if(value instanceof List){if(part.equals("*")){for(Object x:(List)value)checkPath(x,mapper,path,index+1);}else{int at=Integer.parseInt(part);if(at<((List)value).size())checkPath(((List)value).get(at),mapper,path,index+1);}return;}
-        if(value instanceof Map){JsonSerializer key=mapper.getSerializerProviderInstance().findKeySerializer(mapper.constructType(String.class),null);if(!key.getClass().getName().equals("com.fasterxml.jackson.databind.ser.std.StdKeySerializers$StringKeySerializer"))throw new IllegalStateException("Custom map-key serializer");if(((Map)value).containsKey(part))checkPath(((Map)value).get(part),mapper,path,index+1);return;}
-        if(mapper.findMixInClassFor(value.getClass())!=null)throw new IllegalStateException("Serialization mix-in unsupported");
-        JsonSerializer ser=mapper.getSerializerProviderInstance().findValueSerializer(value.getClass());
-        if(ser.getClass()!=BeanSerializer.class||member(ser,"_propertyFilterId")!=null||member(ser,"_anyGetterWriter")!=null)throw new IllegalStateException("Unmodeled bean serializer effects");
+        if(value instanceof Map){Object key=BusinessJackson.call(BusinessJackson.call(mapper,"getSerializerProviderInstance"),"findKeySerializer",BusinessJackson.call(mapper,"constructType",String.class),null);if(!key.getClass().getName().equals("com.fasterxml.jackson.databind.ser.std.StdKeySerializers$StringKeySerializer"))throw new IllegalStateException("Custom map-key serializer");if(((Map)value).containsKey(part))checkPath(((Map)value).get(part),mapper,path,index+1);return;}
+        if(BusinessJackson.call(mapper,"findMixInClassFor",value.getClass())!=null)throw new IllegalStateException("Serialization mix-in unsupported");
+        Object ser=BusinessJackson.call(BusinessJackson.call(mapper,"getSerializerProviderInstance"),"findValueSerializer",value.getClass());
+        if(!BusinessJackson.exact(ser,"ser.BeanSerializer")||member(ser,"_propertyFilterId")!=null||member(ser,"_anyGetterWriter")!=null)throw new IllegalStateException("Unmodeled bean serializer effects");
         List<Map<String,Object>> props=SpringTransportAgent.Transport.schema.get(value.getClass().getName().replace('.','/'));Map prop=null;
         if(props!=null)for(Map p:props)if(part.equals(p.get("property")))prop=p;
         if(prop==null)throw new IllegalStateException("Unverified serialized property: "+part);
-        Iterator<PropertyWriter> writers=ser.properties();List<BeanPropertyWriter> matched=new ArrayList<>();
-        while(writers.hasNext()){PropertyWriter writer=writers.next();if(writer.getName().equals(part)){if(writer.getClass()!=BeanPropertyWriter.class)throw new IllegalStateException("Custom property writer");matched.add((BeanPropertyWriter)writer);}}
-        if(matched.size()!=1)throw new IllegalStateException("Serialized property absent or ambiguous");BeanPropertyWriter writer=matched.get(0);
-        String field=(String)prop.get("field");String name=field.substring(field.lastIndexOf('.')+1);java.lang.reflect.Member used=writer.getMember().getMember();String getter=(String)prop.get("getter");
+        Iterator writers=(Iterator)BusinessJackson.call(ser,"properties");List<Object> matched=new ArrayList<>();
+        while(writers.hasNext()){Object writer=writers.next();if(BusinessJackson.call(writer,"getName").equals(part)){if(!BusinessJackson.exact(writer,"ser.BeanPropertyWriter"))throw new IllegalStateException("Custom property writer");matched.add(writer);}}
+        if(matched.size()!=1)throw new IllegalStateException("Serialized property absent or ambiguous");Object writer=matched.get(0);
+        String field=(String)prop.get("field");String name=field.substring(field.lastIndexOf('.')+1);java.lang.reflect.Member used=(java.lang.reflect.Member)BusinessJackson.call(BusinessJackson.call(writer,"getMember"),"getMember");String getter=(String)prop.get("getter");
         if(used instanceof java.lang.reflect.Method){if(getter==null||!getter.contains("."+used.getName()+"("))throw new IllegalStateException("Serializer getter differs from frozen direct getter");}
         else if(!(used instanceof Field)||!used.getName().equals(name))throw new IllegalStateException("Serializer field differs");
         Field f=value.getClass().getDeclaredField(name);f.setAccessible(true);Object child=f.get(value);
-        if(writer.getTypeSerializer()!=null||member(writer,"_suppressableValue")!=null||writer.willSuppressNulls()&&child==null)throw new IllegalStateException("Polymorphic or suppressing property serialization unsupported");
-        serializer(writer.getSerializer(),null);Object nullSer=member(writer,"_nullSerializer");if(nullSer!=null)serializer((JsonSerializer)nullSer,null);
+        if(BusinessJackson.call(writer,"getTypeSerializer")!=null||member(writer,"_suppressableValue")!=null||BusinessJackson.yes(BusinessJackson.call(writer,"willSuppressNulls"))&&child==null)throw new IllegalStateException("Polymorphic or suppressing property serialization unsupported");
+        serializer(BusinessJackson.call(writer,"getSerializer"),null);Object nullSer=member(writer,"_nullSerializer");if(nullSer!=null)serializer(nullSer,null);
         checkPath(child,mapper,path,index+1);
     }
 }

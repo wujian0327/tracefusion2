@@ -9,15 +9,15 @@ from run_planned_service import ROOT,HERE,save,load
 from infer_distributed_fields import Reconstruction
 from infer_uuid_projection import validate_uuid_projection
 
-def run(out):
-    out.mkdir(parents=True,exist_ok=False);classes=out/'classes';classes.mkdir();tools=ROOT/'artifacts/library-gap-revision-20261022/development-06/frozen-base/tools';cp=':'.join(map(str,[tools,*JARS]));command(['javac',*java8_target()[1],'-cp',cp,'-d',str(classes),str(HERE/'UuidProjectionFixture.java')],out/'compile.log')
+def run(out,native_jackson=False):
+    libraries=sorted((ROOT/'artifacts/library-gap-revision-20261022/control-libs').glob('jackson-*.jar')) if native_jackson else [];runtime_libraries=[*libraries,*JARS];out.mkdir(parents=True,exist_ok=False);classes=out/'classes';classes.mkdir();tools=ROOT/'artifacts/library-gap-revision-20261022/development-06/frozen-base/tools';cp=':'.join(map(str,[tools,*runtime_libraries]));command(['javac',*java8_target()[1],'-cp',cp,'-d',str(classes),str(HERE/'UuidProjectionFixture.java')],out/'compile.log')
     jar=out/'fixture.jar'
     with ZipFile(jar,'w')as z:
         for f in classes.glob('*.class'):z.write(f,'BOOT-INF/classes/'+f.name)
     b=out/'build';build(b,{'fixture':{'jar':str(jar),'entry':'UuidProjectionFixture.root(LUuidProjectionFixture$Box;LUuidProjectionFixture$Box;I)LUuidProjectionFixture$Box;','targets':['UuidProjectionFixture$Box.id'],'response_path':'/id','execution_kernel':True,'application_calls':True}})
     expected={0:0,1:1,2:1,3:1,4:(),5:None,6:None,7:1,8:1};reports={};plan=load(b/'fixture/plan.json')
     for mode in ('full','selective'):
-        cap=out/mode;(cap/'fixture').mkdir(parents=True);command(['java','-javaagent:'+str(b/'distributed-observer.jar'),'-Dservice.plan='+str(b/'fixture/plan.json'),'-Dservice.mode='+mode,'-Dservice.events='+str(cap/'fixture/events.jsonl'),'-cp',str(classes)+':'+':'.join(map(str,JARS)),'UuidProjectionFixture'],cap/'stdout.json');rows=[json.loads(s)for s in (cap/'fixture/events.jsonl').open()];cases=json.loads((cap/'stdout.json').read_text().splitlines()[-1]);graph=Reconstruction(b,cap,['fixture']);checks=[]
+        cap=out/mode;(cap/'fixture').mkdir(parents=True);command(['java','-javaagent:'+str(b/'distributed-observer.jar'),'-Dservice.plan='+str(b/'fixture/plan.json'),'-Dservice.mode='+mode,'-Dservice.events='+str(cap/'fixture/events.jsonl'),'-cp',str(classes)+':'+':'.join(map(str,runtime_libraries)),'UuidProjectionFixture'],cap/'stdout.json');rows=[json.loads(s)for s in (cap/'fixture/events.jsonl').open()];cases=json.loads((cap/'stdout.json').read_text().splitlines()[-1]);graph=Reconstruction(b,cap,['fixture']);checks=[]
         for c in cases:
             if c['status']!='normal':continue
             answer=graph.query(c['message'],'/id','fixture',boundary=[{'kind':'binding-source'},{'kind':'argument'}]);want=expected[c['mode']];assert answer['known']==(want is not None),(mode,c,answer)
@@ -42,4 +42,4 @@ def run(out):
         reports[mode]={'targets':len(checks),'known_exact':sum(c['known']for c in checks),'expected_unknown':sum(not c['known']for c in checks),'custom_serializer_refused':sum(c['status']=='serialization-refused'for c in cases),'faults':faults};save(out/'results.json',{'all_passed':True,'modes':reports});print(mode,reports[mode],flush=True)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--out',required=True,type=Path);a=p.parse_args();run(a.out.resolve())
+    p=argparse.ArgumentParser();p.add_argument('--out',required=True,type=Path);p.add_argument('--native-jackson',action='store_true');a=p.parse_args();run(a.out.resolve(),a.native_jackson)
