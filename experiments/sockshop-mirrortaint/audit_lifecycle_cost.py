@@ -18,13 +18,14 @@ def values(m):
     return result
 
 
-def audit(root):
+def audit(root, calibration_files=None):
     if not (root/'offline-memory-audit.json').exists():
         subprocess.run([sys.executable,str(Path(__file__).with_name('measure_offline_memory.py')),'run','--root',str(root)],check=True)
     memory=load(root/'offline-memory-audit.json');assert memory['all_passed'] and memory['replay_count']==30
     frozen=load(root/'algorithm-freeze.json')
     for f,h in frozen['core_sources'].items():assert sha(Path(__file__).resolve().parents[2]/f)==h,('Core changed',f)
-    assert load(root/'bound-calibration-audit.json')['all_passed'] and load(root/'price-raw-toggle-audit.json')['all_passed']
+    for gate in (calibration_files or ('bound-calibration-audit.json', 'price-raw-toggle-audit.json')):
+        assert load(root/gate)['all_passed'], gate
     results={};projects=set();csvrows=[]
     mapping=load(root/'formal-run-map.json') if (root/'formal-run-map.json').exists() else {k:'cost-'+k for k in ('cart','train','price')}
     for kind in ('cart','train','price'):

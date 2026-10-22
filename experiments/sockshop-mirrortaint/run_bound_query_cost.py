@@ -120,6 +120,14 @@ def phase(kind,dest,endpoint,ts,label,seconds,rate,concurrency):
 
 def offline(trial,build,kind):
     dest=trial/'capture';q=query(kind);role=q['role'];cases=load(dest/'run.json')['cases'];phases={};started=time.monotonic_ns()
+    # The execution kernel observes the repository in a nested application
+    # Frame. Use the already reviewed capability oracle's raw call ancestry,
+    # rather than the historical root-only read-forward oracle. Neither oracle
+    # reads the inference graph or uses answers to choose the source call.
+    oracle=model.oracle
+    if load(build/role/'plan.json')['profile']=='execution-dependency':
+        from run_frozen_capability_acceptance import independent
+        oracle=independent
     t=time.perf_counter();rows=[json.loads(l) for l in (dest/role/'events.jsonl').read_text().splitlines()];phases['decode_json_seconds']=time.perf_counter()-t
     t=time.perf_counter();g=Reconstruction(build,dest,[role],decoded_rows={role:rows});phases['validate_graph_reconstruct_seconds']=time.perf_counter()-t
     t=time.perf_counter();answers=[]
@@ -132,7 +140,7 @@ def offline(trial,build,kind):
     t=time.perf_counter();save(trial/'answers.json',answers);phases['answer_export_seconds']=time.perf_counter()-t;ready=time.monotonic_ns()
     t=time.perf_counter();bycase={c['case']:c for c in cases};scored=[]
     for a in answers:
-        c=bycase[a['case']];expected=set(model.oracle(q,c,a['path'],{role:rows}));answer=a['answer'];actual={old.predicted_coord(s) for s in answer['sources']}
+        c=bycase[a['case']];expected=set(oracle(q,c,a['path'],{role:rows}));answer=a['answer'];actual={old.predicted_coord(s) for s in answer['sources']}
         scored.append({'case':c['case'],'phase':c['case'].split('-')[0],'path':a['path'],'known':answer['known'],'exact':answer['known'] and expected==actual,'tp':len(expected&actual),'fp':len(actual-expected),'fn':len(expected-actual),'expected':sorted(expected,key=str),'actual':sorted(actual,key=str)})
     phases['oracle_score_seconds']=time.perf_counter()-t
     def total(rs):return {'queries':len(rs),'exact':sum(r['exact'] for r in rs),'unknown':sum(not r['known'] for r in rs),**{k:sum(r[k] for r in rs) for k in ('tp','fp','fn')}}
