@@ -1,5 +1,7 @@
 # TraceFusion 2 方法与实验进展
 
+> 本页保留该阶段的原版本与口径。最新算法、能力和性能请看[截至2026-10-22完整进展](PROGRESS-20261022.md)及[隔离版三任务成本](ISOLATED-COST-20261022.md)。
+
 2026-10-19补充：已完成[响应目标绑定修订与封存测试](RESPONSE-BINDING-REVISION-20261019.md)，
 最新算法详见[有界响应绑定说明](RESPONSE-BINDING-ALGORITHM-20261019.md)。冻结核心803b92f在Train Ticket
 新入口接纳10/12查询、71/71实际目标来源完全匹配；Sock Shop旧入口新字段虽接纳8/10计划，

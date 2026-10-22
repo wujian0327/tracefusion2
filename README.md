@@ -1,5 +1,14 @@
 # TraceFusion 2
 
+2026-10-22完成[隔离版正式性能与全部进展汇总](experiments/sockshop-mirrortaint/PROGRESS-20261022.md)，算法冻结仍为 `76d2050`。
+Cart、Train返回绑定、五服务票价三任务各五轮，原版/full/selective共 **45次独立部署全部通过**；
+full/selective各1350/1350、900/900、1800/1800目标正确，70个被观测JVM原版Jackson核验、30份离线VmHWM复算及15次规划测量通过。
+selective相对原版p95开销分别 **+37.82%、+18.90%、+22.49%**；CPU分别 **+103.43%、+27.57%、+46.39%**（五轮配对中位数）。
+selective/full字节分别−0.61%、−7.83%、−27.56%，离线核心分别+4.17%、−15.67%、−60.01%；Cart新内核尚无明显少采收益，三个任务selective/full的在线CPU与p95比值范围均跨1。
+完整绝对值、范围、图和边界见[新版三任务成本](experiments/sockshop-mirrortaint/ISOLATED-COST-20261022.md)。
+当前开发集仍为各428/431正确、3unknown、0错误答案，历史基线368正确实例全部保留；29候选继续封存。
+本轮包含原始HTTP审计字节成本；旧外部成本不移用于新版。完整工件另行备份，push由用户完成。
+
 2026-10-22完成[Jackson依赖隔离与原版运行时回归](experiments/sockshop-mirrortaint/JACKSON-ISOLATION-20261022.md)，最终核心冻结 `76d2050`。
 Agent内部JSON迁入私有包，业务检查使用实际原库；126个新观测配置的Mapper哈希均与原业务包一致，Shipping另核验原2.8.1。
 全部62查询重新部署，full/selective各 **428正确 / 3unknown / 0错误确定答案**（431目标，**99.30%**）；基线原正确368/368、旧TF正确213/213保留，历史跨服务198/198及31/31也重新通过。

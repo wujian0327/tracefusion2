@@ -3,6 +3,7 @@
 import argparse
 import json
 from pathlib import Path
+import random
 from run_planned_service import load, save, sha
 from run_isolated_cost import check, JVM
 from audit_jackson_isolation import mapper_hash
@@ -25,6 +26,16 @@ def audit(root):
                     assert not any(OLD in t for t in symbolic_types(z.read(n)))
         cfg = load(root/('cost-'+kind)/'config.json')
         assert cfg['jvm'] == JVM
+        home=root/('cost-'+kind)
+        assert sha(home/'templates.json')==cfg['templates_sha256']
+        assert sha(b/'build.json')==cfg['build_sha256']
+        for source,digest in cfg['source_sha256'].items():
+            assert sha(Path(source))==digest,source
+        expected_order=[];rng=random.Random(cfg['seed'])
+        for i in range(cfg['rounds']):
+            modes=['original','full','selective'];rng.shuffle(modes)
+            expected_order.extend([f'round-{i+1:02d}-{j+1:02d}-{m}',m] for j,m in enumerate(modes))
+        assert expected_order==cfg['order']
         for name, mode in cfg['order']:
             d = root/('cost-'+kind)/name
             cap = d/('trainticket' if kind == 'price' else 'capture')
@@ -47,8 +58,14 @@ def audit(root):
                 receipts.append({'kind':kind,'trial':name,'role':role,'native':native,'proofs':proofs,'events_sha256':sha(cap/role/'events.jsonl')})
     assert len(receipts) == 70
     save(root/'native-cost-audit.json', {'all_passed':True,'observed_jvms_verified':len(receipts),'agent_classes':len(classes),'receipts':receipts,'all_JVM_options_equal':True,'raw_HTTP_audit_cost_included':True})
+    # Also check every price source/target owner, field and version against its
+    # actual serialized raw field, and derive expected operands from DB facts.
+    from audit_train_cost import audit as price_audit
+    price_audit(root/'cost-price')
     from audit_lifecycle_cost import audit as cost_audit
-    cost_audit(root, ('calibration-audit.json','native-cost-audit.json'))
+    from audit_cost_request_records import audit as request_audit
+    request_audit(root)
+    cost_audit(root, ('calibration-audit.json','native-cost-audit.json'),load(root/'request-record-audit.json')['measurements'])
 
 
 if __name__ == '__main__':
