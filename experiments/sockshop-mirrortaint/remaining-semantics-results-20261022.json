@@ -1,0 +1,74 @@
+{
+  "all_passed": true,
+  "algorithm_commit": "b8c432e0739117a7ea816cd0854bed3d33838306",
+  "fresh_groups": {
+    "cart": {
+      "modes": {
+        "full": {
+          "known_correct": 15,
+          "unknown": 3
+        },
+        "selective": {
+          "known_correct": 15,
+          "unknown": 3
+        }
+      },
+      "deployments": 6,
+      "queries": 3
+    },
+    "basic": {
+      "modes": {
+        "full": {
+          "unknown": 21
+        },
+        "selective": {
+          "unknown": 21
+        }
+      },
+      "deployments": 6,
+      "queries": 3
+    },
+    "station": {
+      "modes": {
+        "full": {
+          "known_correct": 20
+        },
+        "selective": {
+          "known_correct": 20
+        }
+      },
+      "deployments": 4,
+      "queries": 2
+    },
+    "route": {
+      "modes": {
+        "full": {
+          "known_correct": 40
+        },
+        "selective": {
+          "known_correct": 40
+        }
+      },
+      "deployments": 4,
+      "queries": 2
+    }
+  },
+  "newly_correct_development_instances_per_mode": 15,
+  "remaining_original_counterexamples": {
+    "Cart_create_unknown": 3,
+    "Basic_unknown": 21,
+    "UUID_planning_rejected": 10
+  },
+  "new_full431_deployment_completed": false,
+  "historical_offline_only": {
+    "full": {
+      "known_correct": 382
+    },
+    "selective": {
+      "known_correct": 382
+    }
+  },
+  "heldout_29": "not planned/executed",
+  "costs": "not measured",
+  "audit_sha256": "ad7a6a361b52bd8d49a9486aa8440a0188781d7cbf8df451eee20cfb3bc925c0"
+}

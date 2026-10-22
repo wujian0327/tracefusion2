@@ -1,5 +1,10 @@
 # TraceFusion 2
 
+2026-10-22完成[构造字段投影与Runnable修订](experiments/sockshop-mirrortaint/REMAINING-SEMANTICS-REVISION-20261022.md)，核心冻结 `b8c432e`。
+20次新部署：Cart加购full/selective各 **15正确 / 3unknown**，新增恢复15个原unknown目标；Station/Route各60/60保持，Basic仍各21unknown。
+原49个剩余目标中仍有34个：Cart新建3、Basic21、UUID拒绝10。旧382个已知答案仅作旧捕获的新离线复算通过；**未重新部署全部62查询，不宣称新版397/431正式结果**。
+29候选继续封存，没有新性能实验；旧冻结结果与开发失败保留。
+
 2026-10-21完成[采集修订、JVM线程对照及全量复验](experiments/sockshop-mirrortaint/ORDERS-AVAILABILITY-20261021.md)，核心冻结 `f73fa5f`。
 原JVM默认线程下72请求仍有2次超时、3个未执行；GC/JIT线程限制为1/2、CPU/内存/堆/5秒期限保持后，固定72请求全部完成且来源正确。
 同一冻结Agent重新部署全部62查询，full/selective各 **382正确 / 39 unknown / 10拒绝 / 0错误确定答案**；首次业务验收通过，未替换失败。
