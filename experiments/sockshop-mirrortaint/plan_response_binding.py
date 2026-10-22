@@ -26,10 +26,8 @@ def plan_response(model, entry, target, response_path, source_calls=None, read_f
     require(entry in model['methods'],'Entry method absent: '+entry)
     target=any_target(model,target);owner,name=target.rsplit('.',1)
     row=next(f for f in model['classes'][owner]['fields'] if f['name']==name)
-    temporal=row['desc']=='Ljava/util/Date;'
+    temporal=row['desc'] in ('Ljava/util/Date;','Ljava/util/UUID;')
     if temporal:read_forward_contracts=True
-    require(row['desc']!='Ljava/util/UUID;',
-            'Target type unsupported by response binding: '+row['desc'])
     require(response_path.startswith('/') and '//' not in response_path,'Explicit nonempty response JSON path required')
     root=model['methods'][entry]
     # Validate every root instruction, including effects/exception edges. Nothing
@@ -135,4 +133,5 @@ def plan_response(model, entry, target, response_path, source_calls=None, read_f
             'root_effects_including_constructors_proved':entry in plan['read_forward_contracts']['composed_methods'],
             'meaning':'Accepted target binding; end-to-end answer remains conditional on required sources and call effects.'}
     from plan_date_projection import attach_date_projection
-    return attach_date_projection(plan,model)
+    from plan_uuid_projection import attach_uuid_projection
+    return attach_uuid_projection(attach_date_projection(plan,model),model)

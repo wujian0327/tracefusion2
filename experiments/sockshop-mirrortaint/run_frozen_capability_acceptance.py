@@ -88,7 +88,7 @@ def independent(q,c,path,rows):
         return model.oracle(q,c,path,rows)
     if role=='ticketinfo':
         reads=[r for r in rs if r['kind']=='http-json' and r.get('phase')=='read' and r.get('direction')=='response' and r.get('parent_message')==c['message']];assert len(reads)==1
-        f=next(f for f in reads[0]['fields'] if f['path']==path);coordinate=list(old.source_coord(role,reads[0],f));coordinate[2]=None;return [tuple(coordinate)]
+        f=next(f for f in reads[0]['fields'] if f['path']==path);return [old.source_coord(role,reads[0],f)]
     if role in ('station','route') and any(s in q['http'] for s in ('namelist','idlist','{start}')):return loops.independent(q,c,path,rs)
     if role!='carts':return old.oracle(q,c,path,rows)
     root=next(r for r in rs if r['kind']=='binding-return' and r.get('message')==c['message']);frames=family(rs,root)

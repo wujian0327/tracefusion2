@@ -37,6 +37,8 @@ class Reconstruction:
             self.rows[role]=rows;self.plans[role]=plan
             from infer_date_projection import validate_date_serialization
             validate_date_serialization(plan,rows)
+            from infer_uuid_projection import validate_uuid_projection
+            validate_uuid_projection(plan,rows)
             self.stats[role]={'events':len(rows),'json_events':sum(r['kind']=='http-json' for r in rows),'log_bytes':path.stat().st_size}
         self.json=[]
         for role,rows in self.rows.items():
@@ -55,7 +57,7 @@ class Reconstruction:
                         leaf=f['field'].split(':',1)[1].replace('~','~0').replace('/','~1')
                         require(f['path'].endswith('/'+leaf),'Collection key/index pointer mismatch')
                     else:require(f['path'].endswith('/'+suffix),'JSON pointer/property mismatch')
-                    key=(role,r['seq'],f['path']);node=dict(f,service=role,seq=r['seq'],kind='http-json',message=r['message'],direction=r['direction'],phase=r['phase'],uri=r.get('uri'),parent_message=r.get('parent_message'))
+                    key=(role,r['seq'],f['path']);node=dict(f,service=role,seq=r['seq'],kind='http-json',root_frame=r.get('frame'),message=r['message'],direction=r['direction'],phase=r['phase'],uri=r.get('uri'),parent_message=r.get('parent_message'))
                     self.add(key,node);self.json.append((key,r))
                     if r['phase']=='read':self.providers[(role,coord(f))].append(key)
         self.bridge()

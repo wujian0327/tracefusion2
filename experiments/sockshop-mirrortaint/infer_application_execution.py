@@ -75,7 +75,7 @@ def infer_application(plan,rows,worker_request=None):
             if row['kind'] in ('binding-source','binding-input'):
                 for index,f in enumerate(row['fields']):providers[coordinate(f)].append((row,index,f))
         state=State(Frame(root['frame']));pos=1;allocation_count=0;total_steps=0;branch_count=0
-        request_builders={};request_entities={};resources={};decoded_types={};decoded_fields={};decoded_seq={};http_entities={};response_entities={};class_literals={};date_values={};calendars={};environment_facts=[];builders={};opaque_calls=[];async_results={};future_states={};async_transfers=[]
+        request_builders={};request_entities={};resources={};decoded_types={};decoded_fields={};decoded_seq={};http_entities={};response_entities={};class_literals={};date_values={};calendars={};environment_facts=[];builders={};opaque_calls=[];async_results={};future_states={};async_transfers=[];maps={}
         fr=None;method=None;code=None;entry=None;field_seq={};poisoned_at={};frame_audits=[]
         execution_budget=worker_request['budget'] if worker_request else {'steps':0}
         nonlocal_owners={f['owner'] for rows_ in providers.values() for _,_,f in rows_}
@@ -103,6 +103,7 @@ def infer_application(plan,rows,worker_request=None):
             row,index,source=candidates[0];same_value(source['observed'],f['observed']);return Value(f['observed'],frozenset({('http',row['seq'],source['path']) if row['kind']=='http-json' else ('field',row['seq'],index)}))
         def lookup(f,before):
             key=coordinate(f)
+            if f['observed'].get('uuid_type') and f['observed'].get('object')in poisoned_at:return Value(f['observed'],unknown=True)
             if 'date_epoch_ms' in f['observed']:
                 obj=f['observed'].get('object')
                 if obj in poisoned_at:return Value(f['observed'],unknown=True)
@@ -200,6 +201,9 @@ def infer_application(plan,rows,worker_request=None):
             fact=event.get('framework_contract')
             require(fact and fact['kind']==kind and fact['class_sha256']==cfg['framework_contracts']['class_sha256'],'Framework witness kind/library differs')
             return fact
+        def library_values(fact):
+            require(fact and fact in cfg.get('library_values',{}).get('profiles',[]),'Library value runtime missing/different')
+            require(fact['java_runtime_version']==runtime[0]['java_runtime_version'],'Library value runtime differs from root')
         def request_fact(event,kind):
             fact=event.get('request_entity_contract')
             require(fact and fact['kind']==kind and fact['class_sha256']==cfg['request_entity_contracts']['class_sha256'],'RequestEntity witness kind/library differs')
@@ -418,6 +422,11 @@ def infer_application(plan,rows,worker_request=None):
                                 fact=framework_fact(event,'http-entity-null-headers');bind(args[0],fact['body'])
                                 if fact['valid'] and args[1].observed.get('value','non-null') is None:http_entities[owner]=args[0]
                                 else:poison([recv]+args,event['seq'])
+                            elif effect.get('kind')=='http-entity-headers-effects':
+                                fact=framework_fact(event,'http-entity-headers-effects');poison(args,event['seq'])
+                                if fact['valid'] and fact['body'].get('value','non-null') is None:http_entities[owner]=Value(fact['body'])
+                            elif effect.get('kind')=='local-map':
+                                library_values(event.get('library_values'));require(event.get('collection')==[],'New HashMap not empty');maps[owner]={'epoch':0,'values':{},'local':True}
                             elif effect.get('kind')!='frame':
                                 fields=effect['fields'] if effect.get('kind')=='assignments' else {name:{'argument':index} for name,index in effect.items()}
                                 for name,expression in fields.items():
@@ -602,6 +611,34 @@ def infer_application(plan,rows,worker_request=None):
                             elif child_value is not None:
 
                                 bind(child_value,observed);v=child_value.project(observed)
+                            elif key in cfg.get('conversion_contracts',{}).get('methods',[]):
+                                conversions=[r for r in relevant if r['kind']=='json-conversion' and r.get('conversion_contract',{}).get('call_id')==call['call_id'] and call['seq']<r['seq']<ret['seq']]
+                                require(len(conversions)==1,'Conversion invocation evidence absent/ambiguous');conversion=conversions[0];proof=conversion['conversion_contract']
+                                require(proof['method']==key and proof['summary_class_sha256']==cfg['conversion_contracts']['summary_class_sha256'] and proof['class_sha256']==cfg['request_entity_contracts']['class_sha256'],'Conversion library/callee differs');library_values(proof.get('library_values'));bind(args[0],proof['source']);bind(Value(observed),proof['target'])
+                                require(proof['target_class'].replace('.','/')==class_literals.get(identity(args[1]),'')[1:-1],'Conversion target Class differs')
+                                if proof['valid']:
+                                    require(proof['serialization_valid'] and proof['read_class_matches'] and proof['source_after']==conversion['input'],'Conversion readonly/input proof contradicts events')
+                                    decoder=proof['decoder'];owner=observed.get('object');require(decoder['valid'] and decoder['wrapper_kind']=='plain-bean' and decoder['content']==proof['target'],'Conversion decoder target differs')
+                                    sites=cfg['decoder_birth_sites'];site=sites.get(decoder['content_type'].replace('.','/')+'.<init>()V');require(site,'Conversion constructor unsupported')
+                                    born=[r for r in relevant if r['kind']=='execution-decoder-birth' and r['object']==owner and call['seq']<r['seq']<conversion['seq']]
+                                    require(len(born)==1 and born[0]['class_sha256']==site['class_sha256'],'Conversion allocation missing/ambiguous');births[owner]=born[0]['seq']
+                                    require(owner!=identity(args[0]) and owner not in nonlocal_owners,'Conversion output aliases existing input/boundary')
+                                    inputs={f['path']:f for f in conversion['input']};require(len(inputs)==len(conversion['input']),'Duplicate conversion input pointer')
+                                    fields={coordinate(f):f for f in decoder['fields']};require(len(fields)==len(decoder['fields']),'Duplicate decoded field')
+                                    for f in conversion['output']:
+                                        require(coordinate(f) in fields and fields[coordinate(f)]==f,'Conversion field/decoder projection differs');name=f['path'][1:]
+                                        base=site.get('field_write_counts',{}).get(f['field'],0)
+                                        if name in decoder['source_properties']:
+                                            require(f['owner']==owner and f['version']==base+1 and f['path'] in inputs,'Conversion assigned field evidence differs')
+                                            source=inputs[f['path']];require(source['owner']==identity(args[0]),'Conversion input is not a flat root Map field');same_value(source['observed'],f['observed'])
+                                            if source['owner'] in maps and source['owner'] not in poisoned_at:
+                                                mapping=maps[source['owner']];require(source['version']==mapping['epoch'] and source['field'].startswith('@map:'),'Conversion Map stage/field differs');value=mapping['values'].get(source['field'][5:],Value(source['observed'],unknown=True));bind(value,source['observed'])
+                                            else:value=lookup(source,call['seq'])
+                                        elif name in decoder['default_properties'] and f['version']==0 and f['observed'].get('value','non-null') is None:value=Value(f['observed'])
+                                        else:value=Value(f['observed'],unknown=True)
+                                        state.field_write(coordinate(f),value.project(f['observed']));field_seq[coordinate(f)]=conversion['seq']
+                                    v=Value(observed)
+                                else:poison(args,ret['seq']);opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':ret['seq'],'completion':'unsupported-conversion-contract','reason':proof.get('reason')})
                             elif ret.get('request_entity_contract') and cfg.get('request_entity_contracts'):
                                 fact=ret['request_entity_contract'];kind=fact['kind'];request_fact(ret,kind)
                                 expected={
@@ -798,7 +835,7 @@ def infer_application(plan,rows,worker_request=None):
                                 if selected:bind(selected,fact['selected'])
                                 else:require(fact['selected'].get('value','not-null') is None,'Empty Optional selected object differs')
                                 state.optionals[observed['object']]=selected;v=Value(observed)
-                            elif key=='java/util/Optional.isPresent()Z' and identity(recv) in state.optionals:
+                            elif key=='java/util/Optional.isPresent()Z' and cfg.get('library_values') and identity(recv) in state.optionals:
                                 fact=ret.get('contract');require(fact and fact['valid'] and fact['kind']=='optional-presence' and call['receiver_type']=='java.util.Optional','Optional presence witness absent/invalid')
                                 require(fact['present']==(state.optionals[identity(recv)] is not None) and observed.get('value')==fact['present'],'Optional presence contradicts actual member');v=Value(observed)
                             elif key in ('java/util/Optional.orElseGet(Ljava/util/function/Supplier;)Ljava/lang/Object;','java/util/Optional.orElseThrow(Ljava/util/function/Supplier;)Ljava/lang/Object;') and identity(recv) in state.optionals:
@@ -855,6 +892,17 @@ def infer_application(plan,rows,worker_request=None):
                                 require(observed.get('value')==(recv.observed['value']==args[0].observed['value']),'String equality contradicts operands');v=combine(observed,[recv,args[0]])
                             elif key=='java/lang/Object.getClass()Ljava/lang/Class;':
                                 fact=ret.get('contract');require(fact and fact['kind']=='object-class' and fact['valid'] and fact['receiver_type']==call['receiver_type'] and ret['result_type']=='java.lang.Class','Object.getClass runtime identity differs');v=Value(observed)
+                            elif key=='java/lang/Integer.intValue()I' and cfg.get('library_values'):
+                                library_values(ret.get('library_values'));require(call['receiver_type']=='java.lang.Integer','Unboxing implementation differs');same_value(recv.observed,observed);v=recv.project(observed)
+                            elif ins['owner'] in ('java/util/Map','java/util/HashMap') and ins['name'] in ('get','put') and cfg.get('library_values') and identity(recv) in maps and identity(recv) not in poisoned_at and identity(recv) not in nonlocal_owners:
+                                library_values(ret.get('library_values'));require(call['receiver_type']=='java.util.HashMap' and type(args[0].observed.get('value'))is str,'Map contract requires exact HashMap/String key');owner=identity(recv);key_value=args[0].observed['value']
+                                require(owner in maps and maps[owner]['local'] and owner not in poisoned_at,'Map ownership not proved');mapping=maps[owner];before=call.get('collection');require(before is not None and call['collection_epoch']==mapping['epoch'],'Map content stage differs')
+                                require({x['key']:x['observed']for x in before}=={k:actual(x)for k,x in mapping['values'].items()},'Map pre-state differs')
+                                previous=mapping['values'].get(key_value,Value({'object':None,'value':None}));bind(previous,observed)
+                                if ins['name']=='put':
+                                    mapping['values'][key_value]=args[1].project(call['args'][1])
+                                    if 'value'not in args[1].observed and identity(args[1])is not None:heap_refs[owner].add(identity(args[1]))
+                                require({x['key']:x['observed']for x in ret['collection_after']}=={k:actual(x)for k,x in mapping['values'].items()},'Map post-state differs');mapping['epoch']=ret['collection_epoch'];v=previous.project(observed)
                             elif key=='java/lang/Integer.valueOf(I)Ljava/lang/Integer;':v=args[0].project(observed);same_value(args[0].observed,observed)
                             elif ins['owner']=='org/slf4j/Logger' and ins['name'] in ('info','warn','error','debug') and all('value' in a.observed for a in args):v=Value(observed)
                             else:

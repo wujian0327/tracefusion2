@@ -83,6 +83,10 @@ public final class RequestEntityHooks {
         if(object instanceof String||object instanceof Boolean||TemporalDateHooks.date(object))return true;
         if(object instanceof Number)return Arrays.asList("java.lang.Byte","java.lang.Short","java.lang.Integer","java.lang.Long","java.lang.Float","java.lang.Double").contains(name);
         if(seen.put(object,true)!=null)return false;
+        if(object instanceof Map&&ConversionContractHooks.enabled()){
+            if(object.getClass()!=HashMap.class&&object.getClass()!=LinkedHashMap.class||!serializer.getClass().getName().equals("com.fasterxml.jackson.databind.ser.std.MapSerializer")||mapper.findMixInClassFor(object.getClass())!=null)return false;
+            for(Object key:((Map)object).keySet())if(!(key instanceof String)||!serializationGraph(((Map)object).get(key),mapper,seen,depth+1))return false;return true;
+        }
         if(object instanceof List){if(!ReadEffectHooks.list(object))return false;for(Object value:(List)object)if(!serializationGraph(value,mapper,seen,depth+1))return false;return true;}
         if(mapper.findMixInClassFor(object.getClass())!=null||serializer.getClass()!=com.fasterxml.jackson.databind.ser.BeanSerializer.class||ResponseBindingHooks.member(serializer,"_anyGetterWriter")!=null||ResponseBindingHooks.member(serializer,"_propertyFilterId")!=null)return false;
         List<Map> props=(List)SpringTransportAgent.Transport.schema.get(name.replace('.','/'));if(props==null)return false;

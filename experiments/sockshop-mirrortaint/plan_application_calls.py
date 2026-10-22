@@ -51,6 +51,8 @@ def augment_calls(plan,model,sources):
                 elif call in ('java/util/Date.<init>()V','java/util/Date.<init>(J)V'):constructors[call]={'kind':'date-constructor'}
                 elif call=='org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V':
                     constructors[call]={'kind':'http-entity-null-headers'}
+                elif call=='org/springframework/http/HttpEntity.<init>(Lorg/springframework/util/MultiValueMap;)V':constructors[call]={'kind':'http-entity-headers-effects'}
+                elif call=='java/util/HashMap.<init>()V':constructors[call]={'kind':'local-map'}
                 else:
                     try:
                         require(call in model['methods'],'Application constructor bytecode absent: '+call)
@@ -122,7 +124,7 @@ def augment_calls(plan,model,sources):
         if len(c)>1 and c[0]['op']==25 and c[0].get('var')==0 and c[1]['op']==183 and callee(c[1])=='java/lang/Object.<init>()V' and all(i['op'] in {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,25,89,181,183,187,177} and (i['op']!=25 or i['var']==0) and (i['op']!=181 or i['owner']==owner) and (i['op']!=183 or callee(i) in ('java/lang/Object.<init>()V','java/util/ArrayList.<init>()V')) and (i['op']!=187 or i['type']=='java/util/ArrayList') for i in c) and owner+'.<clinit>()V' not in model['methods']:
             decoder_births[key]={'pc':1,'class_sha256':model['classes'][owner]['sha256'],'written_fields':sorted({i['owner']+'.'+i['name'] for i in c if i['op']==181}),'field_write_counts':{f:sum(i['op']==181 and i['owner']+'.'+i['name']==f for i in c) for f in sorted({i['owner']+'.'+i['name'] for i in c if i['op']==181})}}
     plan['execution_kernel']['decoder_birth_sites']=decoder_births
-    framework=any(v.get('kind')=='http-entity-null-headers' for v in constructors.values())
+    framework=any(v.get('kind') in ('http-entity-null-headers','http-entity-headers-effects') for v in constructors.values())
     if framework:
         plan['execution_kernel']['framework_contracts']=json.loads((Path(__file__).parent/'framework-wrapper-contracts-20261020.json').read_text())
         plan['response_binding']['runtime_container_path']=True
@@ -130,10 +132,10 @@ def augment_calls(plan,model,sources):
                   'field_writes':sorted({i['owner']+'.'+i['name'] for i in m['instructions'] if i['op']==181}),
                   'call_sites':[key+'@'+str(i['index']) for i in m['instructions'] if i['op'] in (182,183,184,185)],
                   'exceptions':m['exception_handlers'],'meaning':'Candidate effects only; actual object/alias/write versions are interpreted, never assumed pure.'} for key,m in methods.items()}
-    plan['algorithm']='execution-dependency-v7-conservative-constructor-effects'
+    plan['algorithm']='execution-dependency-v8-finite-library-conversions'
     plan['frame_methods']=sorted(methods);plan['binding_callsites']=sorted(key+'@'+str(i['index']) for key,m in methods.items() for i in m['instructions'] if i['op'] in (182,183,184,185) and (i['name']!='<init>' or constructors.get(callee(i),{}).get('kind')=='frame'))
     plan['selected_read_sites']=[key+'@'+str(i['index']) for key,m in methods.items() for i in m['instructions'] if i['op']==180]
-    plan['execution_kernel'].update(callback_lifecycle_version=2,constructor_lifecycle=True,scalar_builders=True,static_field_evidence=True,call_depth_limit=64,object_birth_sites=births,version=7,library_contracts=json.loads((Path(__file__).parent/'constructor-library-contracts-20261020.json').read_text()),constructor_starts=constructor_starts,methods=methods,public_contracts=True,lambda_sites=lambdas,
+    plan['execution_kernel'].update(callback_lifecycle_version=2,constructor_lifecycle=True,scalar_builders=True,static_field_evidence=True,call_depth_limit=64,object_birth_sites=births,version=8,library_contracts=json.loads((Path(__file__).parent/'constructor-library-contracts-20261020.json').read_text()),constructor_starts=constructor_starts,methods=methods,public_contracts=True,lambda_sites=lambdas,
         class_literals={i['constant']:model['classes'][i['constant'][1:-1]]['sha256'] for m in methods.values() for i in m['instructions'] if i['op']==18 and i.get('constant_type')=='Type'},
         runtime_profiles=json.loads((Path(__file__).parent/'kernel-contract-runtimes-20261020.json').read_text())['profiles'],call_targets=targets,opaque_methods=opaque,constructors=constructors,effects=effects,
         class_parents={o:{'super':c.get('super'),'interfaces':c.get('interfaces',[])} for o,c in model['classes'].items()},
@@ -142,4 +144,12 @@ def augment_calls(plan,model,sources):
     plan['contracts']+=['Finite application call graph including cycles; actual distinct invocation frames are depth/step bounded, with analysis_limited on exhaustion.',
         'Static read/write sets are candidates, not purity claims; opaque calls poison possibly reachable nonlocal/escaped state.',
         'Offline/static budget exhaustion is analysis_limited, never business N/A or automatically evidence_invalid.']
+    plan['execution_kernel']['library_values']=json.loads((Path(__file__).parent/'library-value-runtimes-20261022.json').read_text())
+    conversion='edu/fudan/common/util/JsonUtils.conveterObject(Ljava/lang/Object;Ljava/lang/Class;)Ljava/lang/Object;'
+    if conversion in model['methods']:
+        contract=json.loads(Path(__file__).with_name('plain-conversion-contracts-20261022.json').read_text())
+        if all(model['classes'].get(o,{}).get('sha256')==h for o,h in contract['summary_class_sha256'].items()):
+            plan['json_conversion_methods']=[conversion]
+            plan['execution_kernel']['conversion_contracts']={'version':1,'methods':[conversion],'summary_class_sha256':contract['summary_class_sha256']}
+            plan['execution_kernel']['request_entity_contracts']=contract
     return plan

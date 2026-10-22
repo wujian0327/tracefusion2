@@ -1,0 +1,31 @@
+{
+  "profiles": [
+    {
+      "java_runtime_version": "1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01",
+      "class_sha256": {
+        "java/lang/Integer": "97897193740c91288469746a51b27be9d07ee57842eb4200e1f9ebc35c011ff6",
+        "java/util/HashMap": "1c051649321f843d1ac7dcff1075bf4fa93e132ee95c969bfb41dbc33376f8f9",
+        "java/util/LinkedHashMap": "44ac2191f4720ca8ed13fbbaa7eb9201e4d0ee0110df525fb0305b3ef1844953",
+        "java/util/UUID": "a4fa1d2c7aec35f587a69d1e025c4327f7e7baf96585f13679a0f9f7667aad75"
+      }
+    },
+    {
+      "java_runtime_version": "1.8.0_111-8u111-b14-2~bpo8+1-b14",
+      "class_sha256": {
+        "java/lang/Integer": "97897193740c91288469746a51b27be9d07ee57842eb4200e1f9ebc35c011ff6",
+        "java/util/HashMap": "dc4c43e17596db337175968d3ea1a84e970b67bacd46b2571b2af5e431bc7407",
+        "java/util/LinkedHashMap": "44ac2191f4720ca8ed13fbbaa7eb9201e4d0ee0110df525fb0305b3ef1844953",
+        "java/util/UUID": "a4fa1d2c7aec35f587a69d1e025c4327f7e7baf96585f13679a0f9f7667aad75"
+      }
+    },
+    {
+      "java_runtime_version": "1.8.0_111-internal-alpine-r0-b14",
+      "class_sha256": {
+        "java/lang/Integer": "97897193740c91288469746a51b27be9d07ee57842eb4200e1f9ebc35c011ff6",
+        "java/util/HashMap": "dc4c43e17596db337175968d3ea1a84e970b67bacd46b2571b2af5e431bc7407",
+        "java/util/LinkedHashMap": "44ac2191f4720ca8ed13fbbaa7eb9201e4d0ee0110df525fb0305b3ef1844953",
+        "java/util/UUID": "a4fa1d2c7aec35f587a69d1e025c4327f7e7baf96585f13679a0f9f7667aad75"
+      }
+    }
+  ]
+}

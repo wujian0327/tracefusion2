@@ -72,11 +72,12 @@ public final class ExecutionKernelHooks implements Opcodes {
         for(String name:PINNED)hashes.put(name,JdkContractProbe.hash(name));if(contracts()||probeExtended)hashes.putAll(JdkContractProbe.hashes());r.put("class_sha256",hashes);return r;
     }
     static void enter()throws Exception{if(!runtimeEmitted){PlannedServiceAgent.Recorder.emit("execution-runtime",runtime());runtimeEmitted=true;}}
+    static Map libraryValues()throws Exception{Map result=new LinkedHashMap();result.put("java_runtime_version",System.getProperty("java.runtime.version"));result.put("class_sha256",JdkContractProbe.selected(new String[]{"java/util/HashMap","java/util/LinkedHashMap","java/lang/Integer","java/util/UUID"}));return result;}
     public static void classLiteral(Class type,int pc){synchronized(PlannedServiceAgent.Recorder.class){try{Map r=PlannedServiceAgent.Recorder.row();r.put("pc",pc);r.put("descriptor",Type.getDescriptor(type));r.put("observed",PlannedServiceAgent.Recorder.value(type));r.put("class_sha256",classHash(type));PlannedServiceAgent.Recorder.emit("execution-class-literal",r);}catch(Exception e){throw new IllegalStateException(e);}}}
     public static void constructed(int pc,Object receiver,Object[] args){synchronized(PlannedServiceAgent.Recorder.class){try{
         enter();
         Map<String,Object> r=PlannedServiceAgent.Recorder.row();r.put("pc",pc);r.put("receiver",PlannedServiceAgent.Recorder.value(receiver));r.put("receiver_type",receiver.getClass().getName());
-        List<Object> values=new ArrayList<>();for(Object a:args)values.add(PlannedServiceAgent.Recorder.value(a));r.put("args",values);if(extended())constructorComplete(r,pc);TemporalDateHooks.constructed(receiver,args,r);AsyncTaskHooks.constructed(receiver,args,r);if(FrameworkCallHooks.config()!=null&&receiver.getClass().getName().equals("org.springframework.http.HttpEntity"))r.put("framework_contract",FrameworkCallHooks.entity(receiver,args));PlannedServiceAgent.Recorder.emit("execution-constructed",r);
+        List<Object> values=new ArrayList<>();for(Object a:args)values.add(PlannedServiceAgent.Recorder.value(a));r.put("args",values);if(extended())constructorComplete(r,pc);TemporalDateHooks.constructed(receiver,args,r);AsyncTaskHooks.constructed(receiver,args,r);if(FrameworkCallHooks.config()!=null&&receiver.getClass().getName().equals("org.springframework.http.HttpEntity"))r.put("framework_contract",FrameworkCallHooks.entity(receiver,args));if(receiver.getClass()==HashMap.class&&args.length==0){r.put("library_values",libraryValues());r.put("collection",CollectionServiceHooks.contents(receiver));}PlannedServiceAgent.Recorder.emit("execution-constructed",r);
     }catch(Throwable e){PlannedServiceAgent.Recorder.problem("execution-constructor:"+e);throw new IllegalStateException(e);}}}
     public static void constructorFailed(int pc,Throwable error){synchronized(PlannedServiceAgent.Recorder.class){Map r=PlannedServiceAgent.Recorder.row();r.put("pc",pc);if(extended())constructorComplete(r,pc);r.put("exception",PlannedServiceAgent.Recorder.value(error));r.put("exception_type",error.getClass().getName());PlannedServiceAgent.Recorder.emit("execution-constructor-throw",r);}}
     static List constructorProjections(String callee,Object[] args){try{
@@ -106,7 +107,9 @@ public final class ExecutionKernelHooks implements Opcodes {
     public static void lambda(Object lambda,String key,int pc,Object[] captured){synchronized(PlannedServiceAgent.Recorder.class){
         Map r=PlannedServiceAgent.Recorder.row();r.put("pc",pc);r.put("site",key+"@"+pc);r.put("lambda",PlannedServiceAgent.Recorder.value(lambda));r.put("lambda_type",lambda.getClass().getName());r.put("instruction",instruction(key,pc));List vs=new ArrayList();for(Object a:captured)vs.add(PlannedServiceAgent.Recorder.value(a));r.put("captures",vs);PlannedServiceAgent.Recorder.emit("execution-lambda",r);
     }}
-    static void libraryEnd(Map start,Object result,Map row){if(!contracts())return;
+    static void libraryEnd(Map start,Object result,Map row)throws Exception{if(!contracts())return;
+        String valueCall=(String)start.get("callee");
+        if(((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("library_values")!=null&&(valueCall.equals("java/lang/Integer.intValue()I")||valueCall.startsWith("java/util/HashMap.")||valueCall.startsWith("java/util/Map.")))row.put("library_values",libraryValues());
         String call=(String)start.get("callee");Object recv=start.get("_receiver_ref");Map fact=new LinkedHashMap();
         if(call.equals("java/util/Collection.stream()Ljava/util/stream/Stream;")||call.equals("java/util/List.stream()Ljava/util/stream/Stream;")){
             if(!ReadEffectHooks.list(recv))return;

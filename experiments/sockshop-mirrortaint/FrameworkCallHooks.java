@@ -13,6 +13,7 @@ public final class FrameworkCallHooks {
     }
     static Map entity(Object receiver,Object[] args)throws Exception{
         Map f=new LinkedHashMap();f.put("kind","http-entity-null-headers");f.put("class_sha256",hashes());
+        if(args.length==1){f.put("kind","http-entity-headers-effects");f.put("valid",receiver.getClass().getName().equals("org.springframework.http.HttpEntity")&&invoke(receiver,"getBody")==null);f.put("body",PlannedServiceAgent.Recorder.value(invoke(receiver,"getBody")));return f;}
         boolean valid=receiver.getClass().getName().equals("org.springframework.http.HttpEntity")&&args.length==2&&args[1]==null&&invoke(receiver,"getBody")==args[0]&&((Map)invoke(receiver,"getHeaders")).isEmpty();
         f.put("valid",valid);f.put("body",PlannedServiceAgent.Recorder.value(invoke(receiver,"getBody")));return f;
     }

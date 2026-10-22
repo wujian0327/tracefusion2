@@ -1,0 +1,24 @@
+{
+  "previous_commit": "c6a956739460d2dd8d97da7ba48b926a6a51708b",
+  "scope": "Complete finite Basic conversion/wrapper/container contracts, then Cart save/ownership and UUID if verified; retain unsupported outcomes",
+  "baseline_remaining": {
+    "Basic": 21,
+    "Cart_create": 3,
+    "UUID_rejected": 10
+  },
+  "protocol": "Original 62 exposed development queries and original input/oracle; freeze each core snapshot before captures; preserve all failures. Full then selective. No 29 heldout queries or new cost experiment.",
+  "source_boundary": "unchanged actual entry/repository return/RPC decoded fields; not target snapshots",
+  "runtime": "1CPU/768MiB heap32/256 GC1 CI2; original JARs",
+  "exposed_queries": 62,
+  "reference_target_instances": 431,
+  "planning_scope": "all original exposed queries, no replacements",
+  "source_coordinate_revision": "HTTP origins preserve actual raw frame; TicketInfo oracle projects raw frame instead of deliberately omitting it",
+  "runtime_libraries": "Agent-parent Jackson differs from business bundled definitions; actual and bundled hashes pinned/disclosed; no native-runtime equivalence or new performance claim",
+  "controls": "conversion, UUID, kernel, application, Date, received mutations and legacy; full/selective",
+  "full_run": "freeze a single commit; fresh Orders serial first, then independent workers; preserve first failures; no successful receipt substitution",
+  "development_expectation_only": {
+    "known_correct": 428,
+    "unknown_Cart_create": 3
+  },
+  "heldout_29": "sealed"
+}

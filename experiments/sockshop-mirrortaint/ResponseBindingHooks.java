@@ -116,7 +116,7 @@ public final class ResponseBindingHooks implements Opcodes {
     }catch(Throwable e){PlannedServiceAgent.Recorder.problem("binding-after:"+e);throw new IllegalStateException(e);}}}
     public static void exceptional(String call,Object recv,Object[] args,Throwable error){synchronized(PlannedServiceAgent.Recorder.class){if(!active())return;try{if(ExecutionKernelHooks.enabled()){SaveEffectHooks.exceptional(call,error);ExecutionKernelHooks.exceptional(call,error);}else if(ReadEffectHooks.enabled())ReadEffectHooks.exceptional(call,recv,args,error);}catch(Throwable e){PlannedServiceAgent.Recorder.problem("binding-exceptional:"+e);throw new IllegalStateException(e);}}}
     static void abort()throws Exception{if(enabled()&&ReadEffectHooks.enabled())ReadEffectHooks.abort();}
-    static void enter(Object[] args)throws Exception{if(!enabled())return;TemporalDateHooks.enter();if(ExecutionKernelHooks.enabled())ExecutionKernelHooks.enter();if(ReadEffectHooks.enabled())ReadEffectHooks.enter();for(int i=0;i<args.length;i++){if(!((List)binding().get("source_arguments")).contains(i))continue;Map r=row();r.put("argument",i);r.put("fields",sourceSnapshot(args[i]));emit("binding-input",r);}}
+    static void enter(Object[] args)throws Exception{if(!enabled())return;TemporalDateHooks.enter();UuidProjectionHooks.enter();if(ExecutionKernelHooks.enabled())ExecutionKernelHooks.enter();if(ReadEffectHooks.enabled())ReadEffectHooks.enter();for(int i=0;i<args.length;i++){if(!((List)binding().get("source_arguments")).contains(i))continue;Map r=row();r.put("argument",i);r.put("fields",sourceSnapshot(args[i]));emit("binding-input",r);}}
     static void exit(Object result)throws Exception{if(!enabled())return;if(ReadEffectHooks.enabled())ReadEffectHooks.exit(result);Map r=row();if(r.get("message")!=null)RETURN_MESSAGES.add((String)r.get("message"));r.put("result",PlannedServiceAgent.Recorder.value(result));r.put("fields",snapshot(result,true));emit("binding-return",r);}
     static Object member(Object object,String name)throws Exception{for(Class c=object.getClass();c!=null;c=c.getSuperclass())try{Field f=c.getDeclaredField(name);f.setAccessible(true);return f.get(object);}catch(NoSuchFieldException e){}throw new IllegalStateException("Serializer structure unsupported: "+name);}
     static void serializer(JsonSerializer serializer,Object value)throws Exception{
@@ -129,6 +129,7 @@ public final class ResponseBindingHooks implements Opcodes {
           "com.fasterxml.jackson.databind.ser.impl.IndexedListSerializer","com.fasterxml.jackson.databind.ser.impl.IndexedStringListSerializer",
           "com.fasterxml.jackson.databind.ser.impl.StringCollectionSerializer","com.fasterxml.jackson.databind.ser.std.CollectionSerializer"));
         if(TemporalDateHooks.config()!=null&&name.equals("com.fasterxml.jackson.databind.ser.std.DateSerializer")){TemporalDateHooks.serializer(serializer);return;}
+        if(UuidProjectionHooks.config()!=null&&name.equals("com.fasterxml.jackson.databind.ser.std.UUIDSerializer")){UuidProjectionHooks.serializer(serializer);return;}
         if(!allowed.contains(name)||serializer.usesObjectId())throw new IllegalStateException("Unmodeled serializer: "+name);
         if(name.endsWith("MapSerializer")){
             Object key=member(serializer,"_keySerializer");if(key!=null&&!key.getClass().getName().equals("com.fasterxml.jackson.databind.ser.std.StdKeySerializers$StringKeySerializer"))throw new IllegalStateException("Custom map-key serializer");
@@ -147,8 +148,9 @@ public final class ResponseBindingHooks implements Opcodes {
         checkPath(body,actual,((String)binding().get("path")).substring(1).split("/"),0);
     }
     static void checkPath(Object value,ObjectMapper mapper,String[] path,int index)throws Exception{
+        if(value!=null&&UuidProjectionHooks.config()!=null&&mapper.findMixInClassFor(value.getClass())!=null)throw new IllegalStateException("UUID path mix-in unsupported");
         if(value==null)return;serializer(mapper.getSerializerProviderInstance().findValueSerializer(value.getClass()),value);
-        if(index==path.length){if(TemporalDateHooks.date(value))TemporalDateHooks.serialization((java.util.Date)value,mapper);return;}String part=path[index].replace("~1","/").replace("~0","~");
+        if(index==path.length){if(UuidProjectionHooks.uuid(value))UuidProjectionHooks.serialization((java.util.UUID)value,mapper);if(TemporalDateHooks.date(value))TemporalDateHooks.serialization((java.util.Date)value,mapper);return;}String part=path[index].replace("~1","/").replace("~0","~");
         if(value instanceof List){if(part.equals("*")){for(Object x:(List)value)checkPath(x,mapper,path,index+1);}else{int at=Integer.parseInt(part);if(at<((List)value).size())checkPath(((List)value).get(at),mapper,path,index+1);}return;}
         if(value instanceof Map){JsonSerializer key=mapper.getSerializerProviderInstance().findKeySerializer(mapper.constructType(String.class),null);if(!key.getClass().getName().equals("com.fasterxml.jackson.databind.ser.std.StdKeySerializers$StringKeySerializer"))throw new IllegalStateException("Custom map-key serializer");if(((Map)value).containsKey(part))checkPath(((Map)value).get(part),mapper,path,index+1);return;}
         if(mapper.findMixInClassFor(value.getClass())!=null)throw new IllegalStateException("Serialization mix-in unsupported");

@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "profiles": [
+    {
+      "java_runtime_version": "1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01",
+      "class_sha256": {
+        "java/util/UUID": "a4fa1d2c7aec35f587a69d1e025c4327f7e7baf96585f13679a0f9f7667aad75"
+      }
+    },
+    {
+      "java_runtime_version": "1.8.0_111-8u111-b14-2~bpo8+1-b14",
+      "class_sha256": {
+        "java/util/UUID": "a4fa1d2c7aec35f587a69d1e025c4327f7e7baf96585f13679a0f9f7667aad75"
+      }
+    },
+    {
+      "java_runtime_version": "1.8.0_111-internal-alpine-r0-b14",
+      "class_sha256": {
+        "java/util/UUID": "a4fa1d2c7aec35f587a69d1e025c4327f7e7baf96585f13679a0f9f7667aad75"
+      }
+    }
+  ],
+  "serializer_class_sha256": {
+    "com/fasterxml/jackson/databind/ser/std/UUIDSerializer": "9ac8b738532955c220bdc9d055d3da7b48ba7aa618018a81361500e5bb1d84b5"
+  },
+  "scope": "Exact immutable UUID object and default textual UUIDSerializer; not UUID construction or arbitrary conversions"
+}

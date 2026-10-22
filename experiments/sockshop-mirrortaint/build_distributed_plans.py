@@ -18,14 +18,14 @@ from plan_response_binding import plan_response
 
 def build(out,inputs):
     out.mkdir(parents=True,exist_ok=False);tools=out/'tools';tools.mkdir()
-    sources=[HERE/n for n in ('QueryObservationAgent.java','QueryBytecodeModel.java','PlannedServiceAgent.java','CollectionServiceHooks.java','ExecutionKernelHooks.java','AsyncTaskHooks.java','FrameworkCallHooks.java','RequestEntityHooks.java','SaveEffectHooks.java','TemporalDateHooks.java','ResponseBindingHooks.java','ReadEffectHooks.java','JdkContractProbe.java','SourceEvidenceHooks.java','SpringTransportAgent.java','W3CTraceContext.java')]
+    sources=[HERE/n for n in ('QueryObservationAgent.java','QueryBytecodeModel.java','PlannedServiceAgent.java','CollectionServiceHooks.java','ConversionContractHooks.java','ExecutionKernelHooks.java','AsyncTaskHooks.java','FrameworkCallHooks.java','RequestEntityHooks.java','SaveEffectHooks.java','TemporalDateHooks.java','UuidProjectionHooks.java','ResponseBindingHooks.java','ReadEffectHooks.java','JdkContractProbe.java','SourceEvidenceHooks.java','SpringTransportAgent.java','W3CTraceContext.java')]
     # JDK 8 has no --release option; its own platform is already Java 8.
     compiler_version,target=java8_target()
     cp=':'.join(map(str,JARS));command(['javac',*target,'-cp',cp,'-d',str(tools),*map(str,sources)],out/'compile.log')
     jar=out/'distributed-observer.jar'
     with ZipFile(jar,'w',ZIP_DEFLATED) as z:
         z.writestr('META-INF/MANIFEST.MF','Manifest-Version: 1.0\nPremain-Class: SpringTransportAgent\n\n')
-        for prefix in ('PlannedServiceAgent','CollectionServiceHooks','ExecutionKernelHooks','AsyncTaskHooks','FrameworkCallHooks','RequestEntityHooks','SaveEffectHooks','TemporalDateHooks','ResponseBindingHooks','ReadEffectHooks','JdkContractProbe','SourceEvidenceHooks','SpringTransportAgent','W3CTraceContext'):
+        for prefix in ('PlannedServiceAgent','CollectionServiceHooks','ConversionContractHooks','ExecutionKernelHooks','AsyncTaskHooks','FrameworkCallHooks','RequestEntityHooks','SaveEffectHooks','TemporalDateHooks','UuidProjectionHooks','ResponseBindingHooks','ReadEffectHooks','JdkContractProbe','SourceEvidenceHooks','SpringTransportAgent','W3CTraceContext'):
             for f in tools.glob(prefix+'*.class'):z.write(f,f.name)
         for dep in JARS:
             with ZipFile(dep) as dz:
@@ -80,6 +80,9 @@ def build(out,inputs):
         manifest['sources'][str(HERE/name)]=sha(HERE/name)
     manifest['sources'][str(HERE/'date-effects-contracts-20261021.json')]=sha(HERE/'date-effects-contracts-20261021.json')
     manifest['sources'][str(HERE/'plan_capability_policy.py')]=sha(HERE/'plan_capability_policy.py')
+    manifest['sources'][str(HERE/'library-value-runtimes-20261022.json')]=sha(HERE/'library-value-runtimes-20261022.json')
+    manifest['sources'][str(HERE/'plain-conversion-contracts-20261022.json')]=sha(HERE/'plain-conversion-contracts-20261022.json')
+    for name in ('plan_uuid_projection.py','infer_uuid_projection.py','uuid-projection-contracts-20261022.json'):manifest['sources'][str(HERE/name)]=sha(HERE/name)
     manifest['builder_sha256']=sha(Path(__file__));save(out/'build.json',manifest)
 
 

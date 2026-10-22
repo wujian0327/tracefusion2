@@ -31,8 +31,10 @@ class ApplicationStatusTests(unittest.TestCase):
         self.assertGreater(cfg['step_limit'],0)
         self.assertGreater(cfg['call_depth_limit'],0)
         model['classes']['Item']['fields'][0]['desc']='Ljava/util/UUID;'
-        with self.assertRaisesRegex(ValueError,'Target type unsupported'):
-            plan_response(model,key,'Item.text','/text',execution_kernel=True,application_calls=True)
+        uuid_plan=plan_response(model,key,'Item.text','/text',execution_kernel=True,application_calls=True)
+        self.assertIn('uuid_projection',uuid_plan)
+        self.assertTrue(uuid_plan['uuid_projection']['profiles'])
+        self.assertEqual(set(uuid_plan['execution_kernel']['methods']),{key})
 
 
 if __name__=='__main__':unittest.main()

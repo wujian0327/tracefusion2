@@ -22,8 +22,17 @@ public final class CollectionServiceHooks implements Opcodes {
     static boolean instrument(MethodNode m,String key,List<AbstractInsnNode> code){
         if(!enabled()&&!ResponseBindingHooks.enabled())return false;boolean root=key.equals(plan().get("entry"))||ExecutionKernelHooks.method(key),changed=false;
         if(((List)plan().getOrDefault("json_conversion_methods",Collections.emptyList())).contains(key)){
-            int token=m.maxLocals++;InsnList h=new InsnList();h.add(new VarInsnNode(ALOAD,0));h.add(new MethodInsnNode(INVOKESTATIC,R,"convertStart","(Ljava/lang/Object;)Ljava/lang/Object;",false));h.add(new VarInsnNode(ASTORE,token));m.instructions.insert(h);
+            int token=m.maxLocals++;InsnList h=new InsnList();h.add(new VarInsnNode(ALOAD,0));h.add(new VarInsnNode(ALOAD,1));h.add(new LdcInsnNode(key));h.add(new MethodInsnNode(INVOKESTATIC,R,"convertStart","(Ljava/lang/Object;Ljava/lang/Class;Ljava/lang/String;)Ljava/lang/Object;",false));h.add(new VarInsnNode(ASTORE,token));LabelNode start=new LabelNode(),end=new LabelNode(),handler=new LabelNode();h.add(start);m.instructions.insert(h);
             for(AbstractInsnNode n:code)if(n.getOpcode()==ARETURN){InsnList e=new InsnList();e.add(new InsnNode(DUP));e.add(new VarInsnNode(ALOAD,token));e.add(new MethodInsnNode(INVOKESTATIC,R,"convertEnd","(Ljava/lang/Object;Ljava/lang/Object;)V",false));m.instructions.insertBefore(n,e);}changed=true;
+            m.instructions.add(end);m.instructions.add(handler);int error=m.maxLocals++;m.instructions.add(new VarInsnNode(ASTORE,error));m.instructions.add(new VarInsnNode(ALOAD,token));m.instructions.add(new MethodInsnNode(INVOKESTATIC,"ConversionContractHooks","abort","(Ljava/lang/Object;)V",false));m.instructions.add(new VarInsnNode(ALOAD,error));m.instructions.add(new InsnNode(ATHROW));m.tryCatchBlocks.add(new TryCatchBlockNode(start,end,handler,"java/lang/Throwable"));
+        }
+        if(ConversionContractHooks.enabled()&&key.startsWith("edu/fudan/common/util/JsonUtils."))for(AbstractInsnNode n:code){
+            if(!(n instanceof MethodInsnNode))continue;MethodInsnNode c=(MethodInsnNode)n;
+            if(!c.owner.equals("com/fasterxml/jackson/databind/ObjectMapper"))continue;
+            InsnList h=new InsnList();
+            if(c.name.equals("writeValueAsString")&&c.desc.equals("(Ljava/lang/Object;)Ljava/lang/String;")){int input=m.maxLocals++;h.add(new VarInsnNode(ASTORE,input));h.add(new InsnNode(DUP));h.add(new InsnNode(ACONST_NULL));h.add(new InsnNode(ICONST_1));h.add(new MethodInsnNode(INVOKESTATIC,"ConversionContractHooks","mapper","(Ljava/lang/Object;Ljava/lang/Class;Z)V",false));h.add(new VarInsnNode(ALOAD,input));}
+            else if(c.name.equals("readValue")&&c.desc.equals("(Ljava/lang/String;Ljava/lang/Class;)Ljava/lang/Object;")){int cls=m.maxLocals++,input=m.maxLocals++;h.add(new VarInsnNode(ASTORE,cls));h.add(new VarInsnNode(ASTORE,input));h.add(new InsnNode(DUP));h.add(new VarInsnNode(ALOAD,cls));h.add(new InsnNode(ICONST_0));h.add(new MethodInsnNode(INVOKESTATIC,"ConversionContractHooks","mapper","(Ljava/lang/Object;Ljava/lang/Class;Z)V",false));h.add(new VarInsnNode(ALOAD,input));h.add(new VarInsnNode(ALOAD,cls));}
+            if(h.size()>0){m.instructions.insertBefore(n,h);changed=true;}
         }
         if(!enabled())return changed;
         List selected=(List)plan().get("collection_selected_calls");
@@ -59,8 +68,8 @@ public final class CollectionServiceHooks implements Opcodes {
         }return changed;
     }
     public static void guardMutation(Object o){synchronized(PlannedServiceAgent.Recorder.class){if(READ_ONLY.contains(o)){PlannedServiceAgent.Recorder.problem("Mutation of a received collection");throw new IllegalStateException("Received collection is read-only");}}}
-    public static Object convertStart(Object source){synchronized(PlannedServiceAgent.Recorder.class){try{return SpringTransportAgent.Transport.conversionSnapshot(source);}catch(Exception e){throw new IllegalStateException(e);}}}
-    public static void convertEnd(Object target,Object token){synchronized(PlannedServiceAgent.Recorder.class){try{Map<String,Object> r=row();r.put("input",token);r.put("output",SpringTransportAgent.Transport.conversionSnapshot(target));SpringTransportAgent.Transport.received(target,new IdentityHashMap<>());emit("json-conversion",r);}catch(Exception e){PlannedServiceAgent.Recorder.problem("conversion:"+e);throw new IllegalStateException(e);}}}
+    public static Object convertStart(Object source,Class target,String method){synchronized(PlannedServiceAgent.Recorder.class){try{return ConversionContractHooks.start(source,target,method);}catch(Exception e){throw new IllegalStateException(e);}}}
+    public static void convertEnd(Object target,Object token){synchronized(PlannedServiceAgent.Recorder.class){try{Map<String,Object> r=row();ConversionContractHooks.finish(target,token,r);SpringTransportAgent.Transport.received(target,new IdentityHashMap<>());emit("json-conversion",r);}catch(Exception e){PlannedServiceAgent.Recorder.problem("conversion:"+e);throw new IllegalStateException(e);}}}
     static List<Object> contents(Object o){List<Object> out=new ArrayList<>();
         if(o instanceof List){for(Object x:(List)o){if(out.size()>=10000)throw new IllegalStateException("List bound");out.add(value(x));}}
         else if(o instanceof Map){for(Object key:((Map)o).keySet()){if(!(key instanceof String))throw new IllegalStateException("Only String map keys admitted");if(out.size()>=10000)throw new IllegalStateException("Map bound");Map<String,Object> r=new LinkedHashMap<>();r.put("key",key);r.put("observed",value(((Map)o).get(key)));out.add(r);}out.sort((a,b)->((String)((Map)a).get("key")).compareTo((String)((Map)b).get("key")));}
