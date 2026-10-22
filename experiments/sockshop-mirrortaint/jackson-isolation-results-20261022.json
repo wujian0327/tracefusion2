@@ -1,0 +1,204 @@
+{
+  "algorithm_commit": "76d2050de6634c52db6583832aefa1e6892454c9",
+  "queries": 62,
+  "entries": 18,
+  "query_configurations_scored": 124,
+  "complete_query_configurations": true,
+  "modes": {
+    "full": {
+      "expected_targets": 431,
+      "actual_targets": 431,
+      "states": {
+        "known_correct": 428,
+        "unknown": 3
+      },
+      "known_answer_exact_rate": 1.0,
+      "answerability": 0.9930394431554525,
+      "baseline_correct_preserved": 368,
+      "baseline_correct_required": 368,
+      "baseline_nonempty_correct_preserved": 337,
+      "baseline_nonempty_correct_required": 337,
+      "old_tf_correct_preserved": 213,
+      "old_tf_correct_required": 213,
+      "union_preserved": 382,
+      "union_required": 382,
+      "union_losses": [],
+      "missing_targets": [],
+      "tp": 397,
+      "fp": 0,
+      "fn_including_unknown": 3,
+      "all_passed": true
+    },
+    "selective": {
+      "expected_targets": 431,
+      "actual_targets": 431,
+      "states": {
+        "known_correct": 428,
+        "unknown": 3
+      },
+      "known_answer_exact_rate": 1.0,
+      "answerability": 0.9930394431554525,
+      "baseline_correct_preserved": 368,
+      "baseline_correct_required": 368,
+      "baseline_nonempty_correct_preserved": 337,
+      "baseline_nonempty_correct_required": 337,
+      "old_tf_correct_preserved": 213,
+      "old_tf_correct_required": 213,
+      "union_preserved": 382,
+      "union_required": 382,
+      "union_losses": [],
+      "missing_targets": [],
+      "tp": 397,
+      "fp": 0,
+      "fn_including_unknown": 3,
+      "all_passed": true
+    }
+  },
+  "full_selective_state_agreement": 431,
+  "paired_target_instances": 431,
+  "date_controls_passed": true,
+  "planning_accepted": 62,
+  "planning_rejected": 0,
+  "received_mutation_controls_passed": true,
+  "legacy_collection_controls_passed": true,
+  "heldout_candidates_unexamined": 29,
+  "no_new_performance": true,
+  "all_passed": true,
+  "first_attempt_pairing": {
+    "both_correct": 428,
+    "both_not_correct": 3
+  },
+  "provenance_union_passed": true,
+  "primary_partial_wrong_answers": [],
+  "first_attempt": {
+    "full": {
+      "reference_target_states": {
+        "known_correct": 428,
+        "unknown": 3
+      },
+      "affected_reference_instances": [],
+      "failed_configurations": 0,
+      "first_attempt_business_all_passed": true
+    },
+    "selective": {
+      "reference_target_states": {
+        "known_correct": 428,
+        "unknown": 3
+      },
+      "affected_reference_instances": [],
+      "failed_configurations": 0,
+      "first_attempt_business_all_passed": true
+    }
+  },
+  "primary_business_failures": [],
+  "first_attempt_business_all_passed": true,
+  "unqualified_end_to_end_acceptance": true,
+  "business_repeat_protocol_sha256": "7c14958935189446d5c17ac1004ee81125ef145a55d1d11d462780daa601f8a3",
+  "jackson_isolation_verified": true,
+  "agent_original_jackson_classes": 0,
+  "native_runtime_configurations_verified": 126,
+  "original_native_mapper_hashes": {
+    "orders": [
+      "BOOT-INF/lib/jackson-databind-2.8.6.jar",
+      "c9d931c46efbc313108215ad320a7fa1b1c25bd82af5f4ae781b46f4d1d99e59"
+    ],
+    "carts": [
+      "BOOT-INF/lib/jackson-databind-2.8.6.jar",
+      "c9d931c46efbc313108215ad320a7fa1b1c25bd82af5f4ae781b46f4d1d99e59"
+    ],
+    "shipping": [
+      "BOOT-INF/lib/jackson-databind-2.8.1.jar",
+      "56240417490a2ba984009df1f2de0f8113356d09c57d51a47df83ba3df03a1cc"
+    ],
+    "station": [
+      "BOOT-INF/lib/jackson-databind-2.8.11.3.jar",
+      "1a33365556ca88668006a549208e136c5c20c965b7cdc8406a106ac8f5bae7f3"
+    ],
+    "basic": [
+      "BOOT-INF/lib/jackson-databind-2.8.11.3.jar",
+      "1a33365556ca88668006a549208e136c5c20c965b7cdc8406a106ac8f5bae7f3"
+    ],
+    "ticketinfo": [
+      "BOOT-INF/lib/jackson-databind-2.8.11.3.jar",
+      "1a33365556ca88668006a549208e136c5c20c965b7cdc8406a106ac8f5bae7f3"
+    ],
+    "train": [
+      "BOOT-INF/lib/jackson-databind-2.8.11.3.jar",
+      "1a33365556ca88668006a549208e136c5c20c965b7cdc8406a106ac8f5bae7f3"
+    ],
+    "route": [
+      "BOOT-INF/lib/jackson-databind-2.8.11.3.jar",
+      "1a33365556ca88668006a549208e136c5c20c965b7cdc8406a106ac8f5bae7f3"
+    ],
+    "price": [
+      "BOOT-INF/lib/jackson-databind-2.8.11.3.jar",
+      "1a33365556ca88668006a549208e136c5c20c965b7cdc8406a106ac8f5bae7f3"
+    ]
+  },
+  "controls": {
+    "kernel": {
+      "all_passed": true,
+      "results_sha256": "0229f3cba25d435969d96da4ccb71aa23bdc58a34a323c0f70591aafd1f337da"
+    },
+    "application": {
+      "all_passed": true,
+      "results_sha256": "4493992f1985201c75ac3641baeafc4ea541f060934499ead2db79ba5719db8b"
+    },
+    "date": {
+      "all_passed": true,
+      "results_sha256": "66bdce3a0fe71f2ab3b1df4dd0ab24aed1e025fd0794689761cf283ede0d3930"
+    },
+    "received": {
+      "all_passed": true,
+      "results_sha256": "cc73f17a8d8024ce138c37deda3a0513ffe55ea49018065adeb16ac894eee5f7"
+    },
+    "legacy": {
+      "all_passed": true,
+      "results_sha256": "7ca33c7f8d3aac37e6a20cc9f4e04db505cbce5c613d938b0bc083ca7676e49e"
+    },
+    "conversion-native": {
+      "all_passed": true,
+      "results_sha256": "ba02c500c99346de3dc9e209cb28980d53febf28578c70d71aed934c3fba28c2"
+    },
+    "conversion-286": {
+      "all_passed": true,
+      "results_sha256": "ba02c500c99346de3dc9e209cb28980d53febf28578c70d71aed934c3fba28c2"
+    },
+    "uuid-native": {
+      "all_passed": true,
+      "results_sha256": "5d3ed44f218ab0fa405ad88a062476c8189b6178942fc0c573006291096640a1"
+    },
+    "uuid-286": {
+      "all_passed": true,
+      "results_sha256": "5d3ed44f218ab0fa405ad88a062476c8189b6178942fc0c573006291096640a1"
+    }
+  },
+  "loader_probe_sha256": "f37566d1e6e67afa40b4bf73aa65fed1813f4cb1e19963a51e52528d31ced975",
+  "loader_probe_all_class_definitions_identical": true,
+  "historical_correctness": {
+    "sockshop": {
+      "queries": 198,
+      "exact": 198,
+      "unknown": 0,
+      "tp": 258,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "trainticket": {
+      "queries": 31,
+      "exact": 31,
+      "unknown": 0,
+      "tp": 30,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  },
+  "historical_comparison_sha256": "d2d36689ad500dce860e7dde46f2034a26cc127c695cb8ab39a527342ca1ad58",
+  "full_audit_sha256": "0024f0f4510d6cf17e2adaf0a1068dd5cf49b22752c0f7849f6cd99804cb4534"
+}

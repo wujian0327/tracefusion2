@@ -36,6 +36,7 @@ def audit(root,out):
     for group in ('kernel','application','date','received','legacy','conversion-native','conversion-286','uuid-native','uuid-286'):
         p=control_root/group;d=load(p/'results.json');assert d['all_passed'];assert class_hashes(p/'build/distributed-observer.jar')==classes;controls[group]={'all_passed':True,'results_sha256':sha(p/'results.json')}
     loader=load(control_root/'loader/results.json');assert loader['all_passed'] and loader['agent_sha256']==sha(control_root/'conversion-native/build/distributed-observer.jar')
+    purity=load(control_root/'observer-purity/results.json');assert purity['all_passed'] and purity['user_override_calls']==0 and purity['agent_sha256']==loader['agent_sha256']
     # ZIP timestamps can differ across builds; all class definitions and manifest must agree.
     with ZipFile(agent)as a,ZipFile(control_root/'conversion-native/build/distributed-observer.jar')as b:
         assert set(a.namelist())==set(b.namelist()) and a.read('META-INF/MANIFEST.MF')==b.read('META-INF/MANIFEST.MF')

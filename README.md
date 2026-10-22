@@ -1,5 +1,10 @@
 # TraceFusion 2
 
+2026-10-22完成[Jackson依赖隔离与原版运行时回归](experiments/sockshop-mirrortaint/JACKSON-ISOLATION-20261022.md)，最终核心冻结 `76d2050`。
+Agent内部JSON迁入私有包，业务检查使用实际原库；126个新观测配置的Mapper哈希均与原业务包一致，Shipping另核验原2.8.1。
+全部62查询重新部署，full/selective各 **428正确 / 3unknown / 0错误确定答案**（431目标，**99.30%**）；基线原正确368/368、旧TF正确213/213保留，历史跨服务198/198及31/31也重新通过。
+首候选元数据回调缺陷及中止记录保留，最终版回调保护通过。29候选继续封存，无新成本结论；旧428/431及旧成本按原版本保留。
+
 2026-10-22完成[公共转换契约、UUID与62查询全量复验](experiments/sockshop-mirrortaint/LIBRARY-GAP-REVISION-20261022.md)，核心冻结 `223ea07`。
 同一新Agent实际运行126个业务JVM配置；full/selective各 **428正确 / 3unknown / 0错误确定答案**，固定431目标正确回答率 **99.30%**；两模式逐目标状态一致，首轮业务全部完成。
 MirrorTaint原正确368/368、旧TF正确213/213逐项保留；剩余3个为Cart新建商品的有限保存/容器效果缺口。
