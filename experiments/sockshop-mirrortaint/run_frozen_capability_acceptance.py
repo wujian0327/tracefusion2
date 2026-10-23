@@ -231,7 +231,9 @@ def orders(out,base,only=None,modes=('full','selective')):
                     for c,oldcase in zip(cases,frozen):
                         assert c['request_body']==oldcase['request_body'] and c['fixture']==oldcase['fixture'] and c['http_status']==oldcase['http_status']
                         # Independent environment clock is not expected to repeat.
-                        if q['path']!='/date':assert old.leaves(c['response'],q['path'])==old.leaves(oldcase['response'],q['path'])
+                        # Clock and Mongo-generated order ID are new in each
+                        # deployment. Neither is an input-equivalence check.
+                        if q['path']not in('/date','/id'):assert old.leaves(c['response'],q['path'])==old.leaves(oldcase['response'],q['path'])
                         assert all(c['response'][k]==oldcase['response'][k] for k in ('customer','address','card','items','total'))
                         audits.append({'case':c['case'],'same_request_actual_source_business_values':True,'environment_clock_new':True})
                     save(cap/'run.json',{'status':'business-completed','roles':['orders'],'mode':mode,'cases':cases});old.verify_build(d/'build');save(d/'input-audit.json',{'baseline':str(prior),'sha256':sha(prior/'run.json'),'checks':audits});r=evaluate(d,q)

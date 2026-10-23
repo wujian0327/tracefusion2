@@ -43,5 +43,8 @@ def choose(model,query):
     if CONVERSION in model['methods']:
         plan['json_conversion_methods']=[CONVERSION];plan['json_conversion_contract']='Existing pinned default Jackson relative-path conversion contract; not a business formula.'
     plan['source_evidence']=True
-    if plan['profile']=='execution-dependency':specialize_transport(plan)
+    if plan['profile']=='execution-dependency':
+        specialize_transport(plan)
+        from plan_execution_closure import attach_execution_closure
+        attach_execution_closure(plan,model)
     return plan,{'version':1,'reason':reason,'structural_triggers':sorted(set(shape)),'failed_candidates':failures,'answer_independent':True}

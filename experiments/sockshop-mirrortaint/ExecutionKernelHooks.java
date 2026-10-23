@@ -10,6 +10,30 @@ public final class ExecutionKernelHooks implements Opcodes {
     static boolean enabled(){return "execution-dependency".equals(PlannedServiceAgent.plan.get("profile"));}
     static boolean method(String key){return enabled()&&(((Map)PlannedServiceAgent.plan.get("execution_kernel")).containsKey("methods")?((Map)((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("methods")).containsKey(key):key.equals(PlannedServiceAgent.plan.get("entry")));}
     static boolean contracts(){return PlannedServiceAgent.plan!=null&&enabled()&&Boolean.TRUE.equals(((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("public_contracts"));}
+    static Map observationClosure(){
+        Map c=(Map)PlannedServiceAgent.plan.get("execution_observation_closure");
+        if(c!=null&&((Number)c.get("version")).intValue()!=1)throw new IllegalStateException("Unknown execution observation closure");
+        return c;
+    }
+    static boolean closureCandidate(String site,String field){
+        if(PlannedServiceAgent.full||!enabled())return false;Map c=observationClosure();if(c==null||Boolean.FALSE.equals(c.get("enabled")))return false;
+        Map proof=(Map)((Map)c.get("candidate_write_sites")).get(site);if(proof==null)return false;
+        if(!field.equals(proof.get("field"))||((Map)c.get("needed_fields")).containsKey(field))throw new IllegalStateException("Closure candidate overlaps necessary field");
+        return true;
+    }
+    static boolean sourceBoundary(Map call){Map c=observationClosure();return c!=null&&((List)c.get("source_calls")).contains(call.get("callee"));}
+    public static boolean omitWrite(String site,String field){
+        if(!closureCandidate(site,field)||CollectionServiceHooks.CALLS.get().isEmpty())return false;
+        boolean root=false;for(PlannedServiceAgent.Recorder.Frame f:PlannedServiceAgent.Recorder.STACK.get())if(f.method.equals(PlannedServiceAgent.plan.get("entry")))root=true;
+        return root&&sourceBoundary(CollectionServiceHooks.CALLS.get().peek());
+    }
+    static void elidedWrite(String site,String field){
+        if(!omitWrite(site,field))throw new IllegalStateException("Write elision outside certified source scope");
+        Map call=CollectionServiceHooks.CALLS.get().peek();Map counts=(Map)call.get("_closure_elided_writes");if(counts==null){counts=new TreeMap();call.put("_closure_elided_writes",counts);}counts.put(site,((Number)counts.getOrDefault(site,0)).intValue()+1);
+    }
+    static void closureCompletion(Map start,Map row){
+        if(!enabled()||!sourceBoundary(start))return;Map fact=new LinkedHashMap();fact.put("version",1);fact.put("elided_writes",start.getOrDefault("_closure_elided_writes",Collections.emptyMap()));row.put("execution_closure",fact);
+    }
     static final Map<Object,List> STREAMS=new IdentityHashMap<>();
     static final Map<Object,Integer> ARRAY_VERSIONS=new IdentityHashMap<>();
     static final Map<Object,int[]> ARRAY_SLOTS=new IdentityHashMap<>();
@@ -100,7 +124,7 @@ public final class ExecutionKernelHooks implements Opcodes {
         Deque<Map<String,Object>> pending=CollectionServiceHooks.CALLS.get();if(pending.isEmpty())return;
         Map<String,Object> top=pending.peek(),current=PlannedServiceAgent.Recorder.row();
         if(Objects.equals(top.get("frame"),current.get("frame"))&&Objects.equals(top.get("callee"),call)){
-            pending.pop();current.put("pc",top.get("pc"));current.put("call_id",top.get("call_id"));current.put("exception_type",error.getClass().getName());current.put("exception",PlannedServiceAgent.Recorder.value(error));AsyncTaskHooks.completed(top,null,error,current);PlannedServiceAgent.Recorder.emit("collection-call-throw",current);
+            pending.pop();current.put("pc",top.get("pc"));current.put("call_id",top.get("call_id"));current.put("exception_type",error.getClass().getName());current.put("exception",PlannedServiceAgent.Recorder.value(error));closureCompletion(top,current);AsyncTaskHooks.completed(top,null,error,current);PlannedServiceAgent.Recorder.emit("collection-call-throw",current);
         }
     }
     static boolean probeExtended;

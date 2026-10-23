@@ -90,6 +90,8 @@ def build(out,inputs):
         manifest['sources'][str(HERE/name)]=sha(HERE/name)
     manifest['sources'][str(HERE/'date-effects-contracts-20261021.json')]=sha(HERE/'date-effects-contracts-20261021.json')
     manifest['sources'][str(HERE/'plan_capability_policy.py')]=sha(HERE/'plan_capability_policy.py')
+    manifest['sources'][str(HERE/'plan_execution_closure.py')]=sha(HERE/'plan_execution_closure.py')
+    manifest['sources'][str(HERE/'infer_execution_closure.py')]=sha(HERE/'infer_execution_closure.py')
     manifest['sources'][str(HERE/'library-value-runtimes-20261022.json')]=sha(HERE/'library-value-runtimes-20261022.json')
     manifest['sources'][str(HERE/'plain-conversion-contracts-20261022.json')]=sha(HERE/'plain-conversion-contracts-20261022.json')
     for name in ('plan_uuid_projection.py','infer_uuid_projection.py','uuid-projection-contracts-20261022.json'):manifest['sources'][str(HERE/name)]=sha(HERE/name)

@@ -13,6 +13,8 @@ def infer_application(plan,rows,worker_request=None):
     from infer_async_protocol import validate_async_protocol
     async_audit=validate_async_protocol(plan,rows)
     cfg=plan['execution_kernel']
+    from infer_execution_closure import validate as validate_closure
+    validate_closure(plan,rows)
     primitive_fields={i['owner']+'.'+i['name'] for m in cfg.get('methods',{}).values() for i in m['instructions'] if i['op'] in (180,181) and i['desc'] in ('Z','B','C','S','I','J','F','D')}
     if cfg.get('request_entity_contracts') and cfg['request_entity_contracts'].get('version')!=2:raise AnalysisLimit('typed-decoder-version','Old candidate decoder evidence requires its frozen interpreter; source/default write roles are missing')
     runtime=[r for r in rows if r['kind']=='execution-runtime']
