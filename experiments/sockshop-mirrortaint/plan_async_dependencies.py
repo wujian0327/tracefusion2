@@ -27,7 +27,7 @@ def attach_async_dependencies(plan, features=None, inventory=None):
         if chosen:plan['async_protocol']=chosen;plan['async_dependencies'] = {'version': 1, 'mutable_argument_heap_inheritance': False,
                                 'export': 'immutable scalar or private task allocation with scalar fields',
                                 'nested_tasks': False}
-    if 'request' in features:
+    if 'request' in features or 'render' in features:
         chosen=contract('request-entity-contracts-20261021.json','request')
         if chosen:cfg['request_entity_contracts']=chosen
     model_births = cfg.get('decoder_birth_sites', {})

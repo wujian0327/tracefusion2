@@ -93,6 +93,7 @@ def build(out,inputs):
     manifest['sources'][str(HERE/'date-effects-contracts-20261021.json')]=sha(HERE/'date-effects-contracts-20261021.json')
     manifest['sources'][str(HERE/'save-provided-id-contracts-20261023.json')]=sha(HERE/'save-provided-id-contracts-20261023.json')
     manifest['sources'][str(HERE/'contract_applicability.py')]=sha(HERE/'contract_applicability.py')
+    manifest['sources'][str(HERE/'contract_obligations.py')]=sha(HERE/'contract_obligations.py')
     manifest['sources'][str(HERE/'finite_string_values.py')]=sha(HERE/'finite_string_values.py')
     manifest['sources'][str(HERE/'plan_capability_policy.py')]=sha(HERE/'plan_capability_policy.py')
     manifest['sources'][str(HERE/'plan_execution_closure.py')]=sha(HERE/'plan_execution_closure.py')
