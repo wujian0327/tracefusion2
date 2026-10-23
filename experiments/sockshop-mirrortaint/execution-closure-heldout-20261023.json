@@ -1,0 +1,454 @@
+{
+  "schema": 1,
+  "sealed_at_utc": "2026-10-23T10:41:02.516923+00:00",
+  "parent_commit": "c1f6b5337c20ed6c25728aac78c585c08f107d5a",
+  "parent_algorithm": "e78cc04cd1319ed8a7cd28c1441b261a04715cca",
+  "eligibility": "Non-void, domain-DTO-bearing create/update business service methods in the nine deployed original JARs, with a known public HTTP route. Exclude health/welcome, void mutations, scalar acknowledgements, thin controller wrappers and helper methods without their own endpoint. Catalogue selected by API/response review, before any planner attempt.",
+  "selection": "Include all declared instance fields of all five eligible methods, no acceptance-based replacement. Lists are wildcard families, not one candidate per index.",
+  "candidate_counts": {
+    "sockshop": 0,
+    "trainticket": 21
+  },
+  "sockshop_shortfall": "All remaining Cart methods return void; Orders has no unused domain response controller; remaining Shipping GETs are fixed strings. No new application/method is invented.",
+  "entry_count": 5,
+  "models_sha256": {
+    "station": "106f7182f2b1666bc040dea3b40b64dd11e47cfe62e21d14ee958c97085cf39d",
+    "route": "0e742d81192e86f8c35e919fdc3eaa300c7b3b03598195462350d33ebaafe62e",
+    "price": "cdc262f1b7fb6af26df36c1c852bcde530df83d841e5cd6b60974b32000d2fbb"
+  },
+  "original_jars_sha256": {
+    "station": "0143034bae170d40dfad41c5ab44d30d0c3783dd4e4b3fbddfca26e0d07613f9",
+    "route": "fd65028763bfd7b3c97fabd0f081453d7e78167696e692b3b5c7cd92c79e26f8",
+    "price": "dc6b002e0dd58a5371e192cf03ebce2adc638ce42c786dbc0911b9fb849d9f7a"
+  },
+  "queries": [
+    {
+      "id": "heldout-closure-station-create-id",
+      "application": "trainticket",
+      "role": "station",
+      "entry": "fdse/microservice/service/StationServiceImpl.create(Lfdse/microservice/entity/Station;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "target": "fdse.microservice.entity.Station.id",
+      "path": "/data/id",
+      "http": "POST /api/v1/stationservice/stations",
+      "novelty": "new service entry with creation/update semantics; class may have been inspected before",
+      "source_boundary": {
+        "scope": "Original entry arguments, repository read-return fields/elements and actual RPC reads; save/output are not new sources",
+        "selection_origins": "separate, not merged into data dependencies"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_path": 1,
+        "source_boundary": 1,
+        "per_query_propagation_rules": 0
+      }
+    },
+    {
+      "id": "heldout-closure-station-create-name",
+      "application": "trainticket",
+      "role": "station",
+      "entry": "fdse/microservice/service/StationServiceImpl.create(Lfdse/microservice/entity/Station;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "target": "fdse.microservice.entity.Station.name",
+      "path": "/data/name",
+      "http": "POST /api/v1/stationservice/stations",
+      "novelty": "new service entry with creation/update semantics; class may have been inspected before",
+      "source_boundary": {
+        "scope": "Original entry arguments, repository read-return fields/elements and actual RPC reads; save/output are not new sources",
+        "selection_origins": "separate, not merged into data dependencies"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_path": 1,
+        "source_boundary": 1,
+        "per_query_propagation_rules": 0
+      }
+    },
+    {
+      "id": "heldout-closure-station-create-stayTime",
+      "application": "trainticket",
+      "role": "station",
+      "entry": "fdse/microservice/service/StationServiceImpl.create(Lfdse/microservice/entity/Station;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "target": "fdse.microservice.entity.Station.stayTime",
+      "path": "/data/stayTime",
+      "http": "POST /api/v1/stationservice/stations",
+      "novelty": "new service entry with creation/update semantics; class may have been inspected before",
+      "source_boundary": {
+        "scope": "Original entry arguments, repository read-return fields/elements and actual RPC reads; save/output are not new sources",
+        "selection_origins": "separate, not merged into data dependencies"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_path": 1,
+        "source_boundary": 1,
+        "per_query_propagation_rules": 0
+      }
+    },
+    {
+      "id": "heldout-closure-station-update-id",
+      "application": "trainticket",
+      "role": "station",
+      "entry": "fdse/microservice/service/StationServiceImpl.update(Lfdse/microservice/entity/Station;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "target": "fdse.microservice.entity.Station.id",
+      "path": "/data/id",
+      "http": "PUT /api/v1/stationservice/stations",
+      "novelty": "new service entry with creation/update semantics; class may have been inspected before",
+      "source_boundary": {
+        "scope": "Original entry arguments, repository read-return fields/elements and actual RPC reads; save/output are not new sources",
+        "selection_origins": "separate, not merged into data dependencies"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_path": 1,
+        "source_boundary": 1,
+        "per_query_propagation_rules": 0
+      }
+    },
+    {
+      "id": "heldout-closure-station-update-name",
+      "application": "trainticket",
+      "role": "station",
+      "entry": "fdse/microservice/service/StationServiceImpl.update(Lfdse/microservice/entity/Station;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "target": "fdse.microservice.entity.Station.name",
+      "path": "/data/name",
+      "http": "PUT /api/v1/stationservice/stations",
+      "novelty": "new service entry with creation/update semantics; class may have been inspected before",
+      "source_boundary": {
+        "scope": "Original entry arguments, repository read-return fields/elements and actual RPC reads; save/output are not new sources",
+        "selection_origins": "separate, not merged into data dependencies"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_path": 1,
+        "source_boundary": 1,
+        "per_query_propagation_rules": 0
+      }
+    },
+    {
+      "id": "heldout-closure-station-update-stayTime",
+      "application": "trainticket",
+      "role": "station",
+      "entry": "fdse/microservice/service/StationServiceImpl.update(Lfdse/microservice/entity/Station;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "target": "fdse.microservice.entity.Station.stayTime",
+      "path": "/data/stayTime",
+      "http": "PUT /api/v1/stationservice/stations",
+      "novelty": "new service entry with creation/update semantics; class may have been inspected before",
+      "source_boundary": {
+        "scope": "Original entry arguments, repository read-return fields/elements and actual RPC reads; save/output are not new sources",
+        "selection_origins": "separate, not merged into data dependencies"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_path": 1,
+        "source_boundary": 1,
+        "per_query_propagation_rules": 0
+      }
+    },
+    {
+      "id": "heldout-closure-route-createAndModify-id",
+      "application": "trainticket",
+      "role": "route",
+      "entry": "route/service/RouteServiceImpl.createAndModify(Lroute/entity/RouteInfo;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "target": "route.entity.Route.id",
+      "path": "/data/id",
+      "http": "POST /api/v1/routeservice/routes",
+      "novelty": "new service entry with creation/update semantics; class may have been inspected before",
+      "source_boundary": {
+        "scope": "Original entry arguments, repository read-return fields/elements and actual RPC reads; save/output are not new sources",
+        "selection_origins": "separate, not merged into data dependencies"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_path": 1,
+        "source_boundary": 1,
+        "per_query_propagation_rules": 0
+      }
+    },
+    {
+      "id": "heldout-closure-route-createAndModify-stations",
+      "application": "trainticket",
+      "role": "route",
+      "entry": "route/service/RouteServiceImpl.createAndModify(Lroute/entity/RouteInfo;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "target": "route.entity.Route.stations",
+      "path": "/data/stations/*",
+      "http": "POST /api/v1/routeservice/routes",
+      "novelty": "new service entry with creation/update semantics; class may have been inspected before",
+      "source_boundary": {
+        "scope": "Original entry arguments, repository read-return fields/elements and actual RPC reads; save/output are not new sources",
+        "selection_origins": "separate, not merged into data dependencies"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_path": 1,
+        "source_boundary": 1,
+        "per_query_propagation_rules": 0
+      }
+    },
+    {
+      "id": "heldout-closure-route-createAndModify-distances",
+      "application": "trainticket",
+      "role": "route",
+      "entry": "route/service/RouteServiceImpl.createAndModify(Lroute/entity/RouteInfo;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "target": "route.entity.Route.distances",
+      "path": "/data/distances/*",
+      "http": "POST /api/v1/routeservice/routes",
+      "novelty": "new service entry with creation/update semantics; class may have been inspected before",
+      "source_boundary": {
+        "scope": "Original entry arguments, repository read-return fields/elements and actual RPC reads; save/output are not new sources",
+        "selection_origins": "separate, not merged into data dependencies"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_path": 1,
+        "source_boundary": 1,
+        "per_query_propagation_rules": 0
+      }
+    },
+    {
+      "id": "heldout-closure-route-createAndModify-startStationId",
+      "application": "trainticket",
+      "role": "route",
+      "entry": "route/service/RouteServiceImpl.createAndModify(Lroute/entity/RouteInfo;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "target": "route.entity.Route.startStationId",
+      "path": "/data/startStationId",
+      "http": "POST /api/v1/routeservice/routes",
+      "novelty": "new service entry with creation/update semantics; class may have been inspected before",
+      "source_boundary": {
+        "scope": "Original entry arguments, repository read-return fields/elements and actual RPC reads; save/output are not new sources",
+        "selection_origins": "separate, not merged into data dependencies"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_path": 1,
+        "source_boundary": 1,
+        "per_query_propagation_rules": 0
+      }
+    },
+    {
+      "id": "heldout-closure-route-createAndModify-terminalStationId",
+      "application": "trainticket",
+      "role": "route",
+      "entry": "route/service/RouteServiceImpl.createAndModify(Lroute/entity/RouteInfo;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "target": "route.entity.Route.terminalStationId",
+      "path": "/data/terminalStationId",
+      "http": "POST /api/v1/routeservice/routes",
+      "novelty": "new service entry with creation/update semantics; class may have been inspected before",
+      "source_boundary": {
+        "scope": "Original entry arguments, repository read-return fields/elements and actual RPC reads; save/output are not new sources",
+        "selection_origins": "separate, not merged into data dependencies"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_path": 1,
+        "source_boundary": 1,
+        "per_query_propagation_rules": 0
+      }
+    },
+    {
+      "id": "heldout-closure-price-createNewPriceConfig-id",
+      "application": "trainticket",
+      "role": "price",
+      "entry": "price/service/PriceServiceImpl.createNewPriceConfig(Lprice/entity/PriceConfig;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "target": "price.entity.PriceConfig.id",
+      "path": "/data/id",
+      "http": "POST /api/v1/priceservice/prices",
+      "novelty": "new service entry with creation/update semantics; class may have been inspected before",
+      "source_boundary": {
+        "scope": "Original entry arguments, repository read-return fields/elements and actual RPC reads; save/output are not new sources",
+        "selection_origins": "separate, not merged into data dependencies"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_path": 1,
+        "source_boundary": 1,
+        "per_query_propagation_rules": 0
+      }
+    },
+    {
+      "id": "heldout-closure-price-createNewPriceConfig-trainType",
+      "application": "trainticket",
+      "role": "price",
+      "entry": "price/service/PriceServiceImpl.createNewPriceConfig(Lprice/entity/PriceConfig;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "target": "price.entity.PriceConfig.trainType",
+      "path": "/data/trainType",
+      "http": "POST /api/v1/priceservice/prices",
+      "novelty": "new service entry with creation/update semantics; class may have been inspected before",
+      "source_boundary": {
+        "scope": "Original entry arguments, repository read-return fields/elements and actual RPC reads; save/output are not new sources",
+        "selection_origins": "separate, not merged into data dependencies"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_path": 1,
+        "source_boundary": 1,
+        "per_query_propagation_rules": 0
+      }
+    },
+    {
+      "id": "heldout-closure-price-createNewPriceConfig-routeId",
+      "application": "trainticket",
+      "role": "price",
+      "entry": "price/service/PriceServiceImpl.createNewPriceConfig(Lprice/entity/PriceConfig;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "target": "price.entity.PriceConfig.routeId",
+      "path": "/data/routeId",
+      "http": "POST /api/v1/priceservice/prices",
+      "novelty": "new service entry with creation/update semantics; class may have been inspected before",
+      "source_boundary": {
+        "scope": "Original entry arguments, repository read-return fields/elements and actual RPC reads; save/output are not new sources",
+        "selection_origins": "separate, not merged into data dependencies"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_path": 1,
+        "source_boundary": 1,
+        "per_query_propagation_rules": 0
+      }
+    },
+    {
+      "id": "heldout-closure-price-createNewPriceConfig-basicPriceRate",
+      "application": "trainticket",
+      "role": "price",
+      "entry": "price/service/PriceServiceImpl.createNewPriceConfig(Lprice/entity/PriceConfig;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "target": "price.entity.PriceConfig.basicPriceRate",
+      "path": "/data/basicPriceRate",
+      "http": "POST /api/v1/priceservice/prices",
+      "novelty": "new service entry with creation/update semantics; class may have been inspected before",
+      "source_boundary": {
+        "scope": "Original entry arguments, repository read-return fields/elements and actual RPC reads; save/output are not new sources",
+        "selection_origins": "separate, not merged into data dependencies"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_path": 1,
+        "source_boundary": 1,
+        "per_query_propagation_rules": 0
+      }
+    },
+    {
+      "id": "heldout-closure-price-createNewPriceConfig-firstClassPriceRate",
+      "application": "trainticket",
+      "role": "price",
+      "entry": "price/service/PriceServiceImpl.createNewPriceConfig(Lprice/entity/PriceConfig;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "target": "price.entity.PriceConfig.firstClassPriceRate",
+      "path": "/data/firstClassPriceRate",
+      "http": "POST /api/v1/priceservice/prices",
+      "novelty": "new service entry with creation/update semantics; class may have been inspected before",
+      "source_boundary": {
+        "scope": "Original entry arguments, repository read-return fields/elements and actual RPC reads; save/output are not new sources",
+        "selection_origins": "separate, not merged into data dependencies"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_path": 1,
+        "source_boundary": 1,
+        "per_query_propagation_rules": 0
+      }
+    },
+    {
+      "id": "heldout-closure-price-updatePriceConfig-id",
+      "application": "trainticket",
+      "role": "price",
+      "entry": "price/service/PriceServiceImpl.updatePriceConfig(Lprice/entity/PriceConfig;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "target": "price.entity.PriceConfig.id",
+      "path": "/data/id",
+      "http": "PUT /api/v1/priceservice/prices",
+      "novelty": "new service entry with creation/update semantics; class may have been inspected before",
+      "source_boundary": {
+        "scope": "Original entry arguments, repository read-return fields/elements and actual RPC reads; save/output are not new sources",
+        "selection_origins": "separate, not merged into data dependencies"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_path": 1,
+        "source_boundary": 1,
+        "per_query_propagation_rules": 0
+      }
+    },
+    {
+      "id": "heldout-closure-price-updatePriceConfig-trainType",
+      "application": "trainticket",
+      "role": "price",
+      "entry": "price/service/PriceServiceImpl.updatePriceConfig(Lprice/entity/PriceConfig;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "target": "price.entity.PriceConfig.trainType",
+      "path": "/data/trainType",
+      "http": "PUT /api/v1/priceservice/prices",
+      "novelty": "new service entry with creation/update semantics; class may have been inspected before",
+      "source_boundary": {
+        "scope": "Original entry arguments, repository read-return fields/elements and actual RPC reads; save/output are not new sources",
+        "selection_origins": "separate, not merged into data dependencies"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_path": 1,
+        "source_boundary": 1,
+        "per_query_propagation_rules": 0
+      }
+    },
+    {
+      "id": "heldout-closure-price-updatePriceConfig-routeId",
+      "application": "trainticket",
+      "role": "price",
+      "entry": "price/service/PriceServiceImpl.updatePriceConfig(Lprice/entity/PriceConfig;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "target": "price.entity.PriceConfig.routeId",
+      "path": "/data/routeId",
+      "http": "PUT /api/v1/priceservice/prices",
+      "novelty": "new service entry with creation/update semantics; class may have been inspected before",
+      "source_boundary": {
+        "scope": "Original entry arguments, repository read-return fields/elements and actual RPC reads; save/output are not new sources",
+        "selection_origins": "separate, not merged into data dependencies"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_path": 1,
+        "source_boundary": 1,
+        "per_query_propagation_rules": 0
+      }
+    },
+    {
+      "id": "heldout-closure-price-updatePriceConfig-basicPriceRate",
+      "application": "trainticket",
+      "role": "price",
+      "entry": "price/service/PriceServiceImpl.updatePriceConfig(Lprice/entity/PriceConfig;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "target": "price.entity.PriceConfig.basicPriceRate",
+      "path": "/data/basicPriceRate",
+      "http": "PUT /api/v1/priceservice/prices",
+      "novelty": "new service entry with creation/update semantics; class may have been inspected before",
+      "source_boundary": {
+        "scope": "Original entry arguments, repository read-return fields/elements and actual RPC reads; save/output are not new sources",
+        "selection_origins": "separate, not merged into data dependencies"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_path": 1,
+        "source_boundary": 1,
+        "per_query_propagation_rules": 0
+      }
+    },
+    {
+      "id": "heldout-closure-price-updatePriceConfig-firstClassPriceRate",
+      "application": "trainticket",
+      "role": "price",
+      "entry": "price/service/PriceServiceImpl.updatePriceConfig(Lprice/entity/PriceConfig;Lorg/springframework/http/HttpHeaders;)Ledu/fudan/common/util/Response;",
+      "target": "price.entity.PriceConfig.firstClassPriceRate",
+      "path": "/data/firstClassPriceRate",
+      "http": "PUT /api/v1/priceservice/prices",
+      "novelty": "new service entry with creation/update semantics; class may have been inspected before",
+      "source_boundary": {
+        "scope": "Original entry arguments, repository read-return fields/elements and actual RPC reads; save/output are not new sources",
+        "selection_origins": "separate, not merged into data dependencies"
+      },
+      "manual_configuration": {
+        "entry": 1,
+        "target_path": 1,
+        "source_boundary": 1,
+        "per_query_propagation_rules": 0
+      }
+    }
+  ],
+  "first_run_rules": {
+    "planner_invocations_at_seal": 0,
+    "business_requests_at_seal": 0,
+    "unseal": "Only after the execution-closure implementation/support declaration is frozen. Rejections/unknown/analysis_limited/evidence_invalid/N/A are retained; no test-based core change overwrites first results.",
+    "input_shapes": "Six cases per accepted family: create missing, duplicate/existing, update existing/missing, repeated/equal field values and boundary empty/zero cases as applicable; actual valid HTTP shapes and independent original-code truth rules fixed before first run.",
+    "independent_truth": "Original bytecode plus actual input/DB/RPC/object/call facts; never TF graph propagation or baseline labels. Nullable/empty output is counted by actual JSON presence, not expected success.",
+    "novelty_limit": "Author-selected new entries in familiar classes, not third-party blind applications. Previously used 62+29 queries are regression only."
+  }
+}
