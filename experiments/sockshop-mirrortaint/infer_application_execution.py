@@ -814,7 +814,7 @@ def infer_application(plan,rows,worker_request=None):
                                         require(k in after and after[k]==f,'Unmodeled save field effect')
                                     if identifier:
                                         require(identifier['owner']==identity(args[0]) and identifier['field']==proof['id_field'] and coordinate(identifier) not in before,'Save ID write object/field/version differs')
-                                        ws=[w for w in writes if w['seq']==identifier['seq']];require(len(ws)==1 and all(ws[0][k]==identifier[k] for k in ('owner','field','version','observed')),'Native save ID write evidence absent/differs');write_field(identifier,Value(identifier['observed'],unknown=True))
+                                        ws=[w for w in writes if w['seq']==identifier['seq']];require(len(ws)==1 and all(ws[0][k]==identifier[k] for k in ('owner','field','version','observed')),'Native save ID write evidence absent/differs');write_field(ws[0],Value(identifier['observed'],unknown=True))
                                     # The finite contract confines domain DTOs, not all
                                     # database/global effects. Existing shared state and
                                     # mutable Date operands remain conservative.
