@@ -25,7 +25,7 @@ public class ApplicationCallFixture {
     static Item recursive(Item x){return recursive(x);}
     static void opaqueGlobal(){int[] unsupported=new int[1];GLOBAL.setText("SAME");}
     static Item capturedBeforeOpaque(Item x,Item y){Item result=copy(x);opaque(y);return result;}
-    static void voidWrite(Item x,Item source){x.setOther(field(source));}
+    static void voidWrite(Item x,Item source){x.other=field(source);}
     static Item collected(Item left,Item right){List<String> xs=new ArrayList<>();xs.add(field(left));xs.add(field(right));return new Item(xs.get(1),"unchanged");}
     static String rethrow(Item x){try{return field(x);}catch(NullPointerException e){throw e;}}
     public static Item root(Item left,Item right,int mode){

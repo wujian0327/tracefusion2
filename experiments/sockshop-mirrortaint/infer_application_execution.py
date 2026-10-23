@@ -75,8 +75,8 @@ def infer_application(plan,rows,worker_request=None):
             require(invocation and invocation['method']==row['constructor'] and invocation['receiver']==row['object'] and invocation['seq']<row['seq'],'Object birth constructor frame/receiver differs')
             require(row['object'] not in births,'Object birth identity repeated')
             births[row['object']]=row['seq']
-        methods=cfg['methods'];events=[r for r in relevant if r['kind'] in ('enter','exit','abort','collection-call-enter','collection-call-exit','collection-call-throw','execution-constructor-enter','execution-constructed','execution-constructor-throw','execution-static-read','execution-lambda','execution-class-literal','execution-array','execution-array-throw','collection-catch','branch','read','write') and (r['kind'] not in ('read','write','branch') or r['site'].rsplit('@',1)[0] in methods)]
-        writes=[r for r in relevant if r['kind']=='write'];providers=defaultdict(list)
+        methods=cfg['methods'];events=[r for r in relevant if r['kind'] in ('enter','exit','abort','collection-call-enter','collection-call-exit','collection-call-throw','execution-constructor-enter','execution-constructed','execution-constructor-throw','execution-static-read','execution-lambda','execution-class-literal','execution-array','execution-array-throw','collection-catch','branch','read','write','write-version') and (r['kind'] not in ('read','write','write-version','branch') or r['site'].rsplit('@',1)[0] in methods)]
+        writes=[r for r in relevant if r['kind']in ('write','write-version')];providers=defaultdict(list)
         for row in relevant:
             if row['kind'] in ('binding-source','binding-input'):
                 for index,f in enumerate(row['fields']):providers[coordinate(f)].append((row,index,f))
@@ -120,6 +120,8 @@ def infer_application(plan,rows,worker_request=None):
             if key in state.fields and field_seq[key]>poisoned_at.get(f['owner'],-1):return state.fields[key]
             return origin(f,before)
         def write_field(w,v):
+            if w['kind']=='write-version':
+                state.field_write(coordinate(w),Value(unknown=True));field_seq[coordinate(w)]=w['seq'];return
             if 'date_epoch_ms' in w['observed'] and w['observed']['object'] in date_values:v=date_values[w['observed']['object']]
             bind(v,w['observed'])
             # Reflection/Recorder boxes primitive fields independently at every
@@ -353,8 +355,9 @@ def infer_application(plan,rows,worker_request=None):
                         if ins['desc'] in ('Z','B','C','S','I','J','F','D'):v=v.project({k:x for k,x in v.observed.items() if k!='object'})
                         fr.stack.append(v)
                     elif op==181:
-                        value,receiver=pop(),pop();write=take('write');require(identity(receiver)==write['owner'] and write['field']==ins['owner']+'.'+ins['name'],'Execution field write differs')
-                        bind(value,write['observed']);write_field(write,value)
+                        value,receiver=pop(),pop();write=take('write-version'if pos<len(events)and events[pos]['kind']=='write-version'else'write');require(identity(receiver)==write['owner'] and write['field']==ins['owner']+'.'+ins['name'],'Execution field write differs')
+                        if write['kind']=='write':bind(value,write['observed'])
+                        write_field(write,value)
                     elif op==192:pass  # Exact runtime invocation/schema checks retain the object identity.
                     elif op in (96,100,104):
                         b,a=pop(),pop();require('value' in a.observed and 'value' in b.observed,'Execution integer operands absent')
@@ -842,7 +845,9 @@ def infer_application(plan,rows,worker_request=None):
                                 if 'date_epoch_ms' in observed:heap_refs[f['owner']].add(observed['object'])
                             elif key in plan['collection_setters']:
                                 name=plan['collection_setters'][key]['field'];matching=[w for w in writes if w['owner']==identity(recv) and w['field']==name and call['seq']<w['seq']<ret['seq']]
-                                require(len(matching)==1,'Execution setter version missing');w=matching[0];bind(args[0],w['observed']);write_field(w,args[0]);v=Value(observed)
+                                require(len(matching)==1,'Execution setter version missing');w=matching[0]
+                                if w['kind']=='write':bind(args[0],w['observed'])
+                                write_field(w,args[0]);v=Value(observed)
                             elif key in ('java/util/Collection.stream()Ljava/util/stream/Stream;','java/util/List.stream()Ljava/util/stream/Stream;'):
                                 fact=ret.get('contract');require(fact and fact['kind']=='list-stream' and fact['valid'] and ret['result_type']=='java.util.stream.ReferencePipeline$Head','Sequential stream contract absent/invalid');c=container(call)
                                 require(fact['source']==c.owner and fact['epoch']==c.epoch and fact['elements']==call['collection'],'Stream source identity/stage differs')

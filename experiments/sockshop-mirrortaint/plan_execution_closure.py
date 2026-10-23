@@ -15,6 +15,38 @@ from query_observation_planner import digest
 SCALARS={'Z','B','C','S','I','J','F','D','Ljava/lang/String;'}
 
 
+def application_value_fields(plan):
+    cfg=plan['execution_kernel'];required={plan['target']}
+    for m in cfg['methods'].values():
+        for ins in m['instructions']:
+            if ins['op']==180:required.add(ins['owner']+'.'+ins['name'])
+            if ins['op']in (182,183,184,185):
+                getter=plan.get('collection_getters',{}).get(callee(ins))
+                if getter:required.add(getter['field'])
+    for effect in cfg.get('constructors',{}).values():
+        fields=effect.get('fields',{})if isinstance(effect,dict)and effect.get('kind')=='assignments'else effect if isinstance(effect,dict)and 'kind'not in effect else {}
+        for value in fields.values():
+            if isinstance(value,dict)and 'field'in value:required.add(value['field'])
+    return required
+
+
+def application_write_sites(plan,model):
+    required=application_value_fields(plan);methods=plan['execution_kernel']['methods'];sites={}
+    invoked={callee(i)for m in methods.values()for i in m['instructions']if i['op']in (182,183,184,185)}
+    for key,m in model['methods'].items():
+        frame=key in methods and m['name']!='<init>'
+        setter=key in invoked and key in plan.get('collection_setters',{})and not m['exception_handlers']
+        if not(frame or setter):continue
+        for ins in m['instructions']:
+            if ins['op']!=181 or ins['desc']not in SCALARS:continue
+            field=ins['owner']+'.'+ins['name'];owner=model['classes'].get(ins['owner'],{})
+            if field in required or owner.get('super')!='java/lang/Object':continue
+            declared=[f for f in owner.get('fields',[])if f['name']==ins['name']and f['desc']==ins['desc']and not f['access']&8]
+            if len(declared)!=1:continue
+            sites[key+'@'+str(ins['index'])]={'field':field,'descriptor':ins['desc'],'method':key,'pc':ins['index'],'kind':'frame'if frame else'setter','field_owner':ins['owner'],'method_owner':m['owner'],'method_sha256':model['classes'][m['owner']]['sha256'],'field_class_sha256':owner['sha256'],'proof':'Scalar value never read by planned bytecode/getter/constructor projection and is not the target. Actual exact receiver class and rooted Frame/call required; retain object, field, version and site, all calls and paths.'}
+    return required,sites
+
+
 def attach_execution_closure(plan,model):
     if plan.get('profile')!='execution-dependency':return plan
     cfg=plan['execution_kernel'];methods=cfg['methods'];needed=defaultdict(set);reasons={};work=[];graphs={}
@@ -79,4 +111,6 @@ def attach_execution_closure(plan,model):
                 if field in needed or ins['desc']not in SCALARS:continue
                 candidates[site]={'field':field,'descriptor':ins['desc'],'constructor':key,'class_sha256':model['classes'][m['owner']]['sha256'],'proof':'exact argument-assignment constructor outside interpreted methods; scalar field outside target/effect/path closure; only elide within declared source-call extent; versions/guards retained'}
     plan['execution_observation_closure']={'version':1,'enabled':True,'strategy':'source-boundary scalar write-value cut','needed_fields':{k:sorted(v)for k,v in sorted(needed.items())},'retained_instruction_reasons':reasons,'retained_methods':sorted(methods),'marked_instruction_count':sum(pc>=0 for _,pc in marked),'source_calls':sources,'candidate_write_sites':candidates,'disabled_reasons':disabled,'model_sha256':digest(model),'full':'All original value observations; identical version and required semantic checks','selective':'Only certified irrelevant scalar write values inside source boundaries may be omitted; keep all application frames/calls, branches, handlers, container effects, sources and actual write counters','general_execution_slicing_complete':False}
+    values,sites=application_write_sites(plan,model)
+    plan['execution_observation_closure']['application_write_values']={'version':1,'enabled':True,'required_value_fields':sorted(values),'sites':sites,'record':'write-version retains concrete owner/field/version/site; no value boxing/persistence at certified sites. No event-count, call-deletion or global format-compression claim.'}
     return plan

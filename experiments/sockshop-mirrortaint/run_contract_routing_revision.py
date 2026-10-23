@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Matched development follow-up; immutable first new-entry results stay separate."""
-import argparse,datetime,json,traceback,copy
+import argparse,datetime,json,traceback,copy,shutil,subprocess
 from pathlib import Path
 from collections import Counter,defaultdict
 from run_planned_service import ROOT,HERE,load,save,sha
@@ -82,7 +82,7 @@ def rescore(root):
     save(root/'native-first/results-corrected-oracle.json',{'complete':True,'results':results,'first_scores_unchanged':True,'oracle_correction':'For existing Route/Price-create IDs, original code preserves repository object field; root argument is not copied. Original first21 and native scores retained. Same captured inputs/native labels; no propagation edits.'})
 
 
-def build(root,iteration='04'):
+def build(root,iteration='05'):
     import build_distributed_plans as builder
     from plan_capability_policy import choose
     base=root/('development-base-'+iteration);prior=load(PARENT/'frozen-base/build.json');builder.build(base,{k:v['query_config']for k,v in prior['inputs'].items()})
@@ -108,7 +108,47 @@ def development(root,role,smoke=False):
     save(out/'results.json',{'complete':True,'results':records})
 
 
+def freeze(root):
+    """Freeze new integration semantics, not an observation-only parent reuse."""
+    import build_distributed_plans as builder
+    from plan_capability_policy import choose
+    assert not(root/'algorithm-freeze.json').exists()
+    assert load(root/'application-cut-controls-direct/write-cut-audit.json')['all_passed']
+    prior=load(PARENT/'frozen-base/build.json');base=root/'frozen-base'
+    builder.build(base,{k:v['query_config']for k,v in prior['inputs'].items()})
+    manifest=load(base/'build.json');old=load(PARENT/'algorithm-freeze.json')
+    commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+    assert {k:v['original_jar_sha256']for k,v in manifest['inputs'].items()}==old['original_jars']
+    cohorts=[('frozen-plans',tf.QUERIES),('regression29-plans',load(ROOT/'artifacts/heldout29-first-20261023/protocol-before-first.json')['queries']),('write-plans',load(root/'protocol.json')['queries'])]
+    for folder,queries in cohorts:
+        out=root/folder;out.mkdir();records=[]
+        for q in queries:
+            try:
+                p,policy=choose(load(base/q['role']/'model.json'),q);save(out/(q['id']+'.json'),p);records.append({'query':q,'status':'accepted','policy':policy,'plan_sha256':sha(out/(q['id']+'.json'))})
+            except ValueError as e:records.append({'query':q,'status':'rejected','rejection':str(e)})
+        save(out/'planning.json',records)
+    for f,h in manifest['sources'].items():
+        assert sha(Path(f))==h;dest=root/'source-snapshot'/Path(f).relative_to(ROOT);dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(f,dest)
+    old.update(commit=commit,algorithm_commit=commit,commit_at_build=commit,base_build=str(base),sources=manifest['sources'],builder_sha256=sha(HERE/'build_distributed_plans.py'),planning_sha256=sha(root/'frozen-plans/planning.json'),original_jars={k:v['original_jar_sha256']for k,v in manifest['inputs'].items()},pair_driver_sha256=sha(HERE/'run_cart_reread_baseline_pair.py'),parent_algorithm='dff3d48',scope='Finite library applicability, automatic replay routing and immutable field preservation; certified unused scalar application write values. All queries exposed; no new unseen-query claim.')
+    save(root/'algorithm-freeze.json',old)
+    for name in ('run_contract_routing_revision.py','run_frozen_capability_acceptance.py','run_quota_capability_acceptance.py','run_cart_reread_baseline_pair.py'):
+        shutil.copyfile(HERE/name,root/'drivers'/('cart-pair-library-driver-at-launch.py'if name=='run_cart_reread_baseline_pair.py'else name))
+    save(root/'protocol-before-business.json',{'algorithm':commit,'cohorts':{'development62':431,'exposed29':244,'write15':96},'Station':'Retain403; no auth retry','original_first_results_preserved':True,'truth_correction':'Existing Route/Price-create IDs come from actual repository return, not root argument. First expected sets and scores retained separately.','ablation':'Only application_write_values.enabled; old source-boundary cut, calls, paths and all required checks shared. No new timed cost experiment.'})
+    save(root/'development-current.json',{'base':str(base),'plans':str(root/'write-plans'),'iteration':'frozen'})
+    print({'algorithm_frozen':commit,'sources':len(manifest['sources']),'cohorts':[(folder,len(queries))for folder,queries in cohorts]},flush=True)
+
+
+def application_off(root):
+    """Same selective semantics, only disable the new write-value policy."""
+    tf.HOME=root;tf.check();tf.independent=independent_tf
+    p=load(root/'protocol.json');qs=[q for q in p['queries']if q['role']=='route'];out=root/'application-off';out.mkdir();records=[]
+    for q in qs:
+        d=out/('selective-'+q['id']);d.mkdir();plan=load(root/'write-plans'/(q['id']+'.json'));plan['execution_observation_closure']['application_write_values']['enabled']=False
+        business.query_build(d/'build',root/'frozen-base',q,plan);first.capture(d,root,q,'selective',p['inputs'][q['entry']]);records.append(tf.evaluate(d,q));save(out/'results.json',{'complete':False,'results':records})
+    save(out/'results.json',{'complete':True,'results':records,'only_changed':'execution_observation_closure.application_write_values.enabled','not_performance_measurements':True})
+
+
 if __name__=='__main__':
-    a=argparse.ArgumentParser();a.add_argument('--root',required=True,type=Path);a.add_argument('--stage',choices=('prepare','native','native-rescore','build','smoke','development'),required=True);a.add_argument('--role',choices=('route','price'));v=a.parse_args()
+    a=argparse.ArgumentParser();a.add_argument('--root',required=True,type=Path);a.add_argument('--stage',choices=('prepare','native','native-rescore','build','smoke','development','freeze','application-off'),required=True);a.add_argument('--role',choices=('route','price'));v=a.parse_args()
     if v.stage in ('smoke','development'):development(v.root.resolve(),v.role,v.stage=='smoke')
-    else:{'prepare':prepare,'native':native,'native-rescore':rescore,'build':build}[v.stage](v.root.resolve())
+    else:{'prepare':prepare,'native':native,'native-rescore':rescore,'build':build,'freeze':freeze,'application-off':application_off}[v.stage](v.root.resolve())
