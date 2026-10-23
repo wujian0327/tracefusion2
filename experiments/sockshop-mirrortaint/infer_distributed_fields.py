@@ -25,7 +25,7 @@ def equivalent(a,b):
 class Reconstruction:
     def __init__(self,build,root,roles,decoded_rows=None):
         self.nodes={};self.edges={};self.rows={};self.plans={};self.providers=defaultdict(list);self.unpaired=[]
-        self.stats={};self.local_queries={}
+        self.stats={};self.local_queries={};self.root_return_messages={}
         for role in roles:
             plan=json.loads((build/role/'plan.json').read_text());path=root/role/'events.jsonl'
             rows=decoded_rows[role] if decoded_rows is not None else [json.loads(l) for l in path.read_text().splitlines()]
@@ -35,6 +35,12 @@ class Reconstruction:
             require(rows[0]['plan_sha256']==hashlib.sha256((build/role/'plan.json').read_bytes()).hexdigest(),'Frozen plan differs')
             if any(r.get('transport_protocol')=='w3c-trace-context' for r in rows):validate_protocol(rows)
             self.rows[role]=rows;self.plans[role]=plan
+            returns=defaultdict(list)
+            for row in rows:
+                if row['kind']=='binding-return':returns[row['frame']].append(row.get('message'))
+            # Retain every candidate. Duplicate returns are not resolved by
+            # insertion order, including equal-message duplicates.
+            self.root_return_messages[role]=returns
             from infer_date_projection import validate_date_serialization
             validate_date_serialization(plan,rows)
             from infer_uuid_projection import validate_uuid_projection
@@ -85,8 +91,9 @@ class Reconstruction:
         n=self.nodes[key];possible=[k for k in self.providers[(n['service'],coord(n))] if self.nodes[k]['seq']<n['seq']]
         if self.plans[n['service']].get('response_binding'):
             frame=n.get('root_frame',n.get('frame'))
-            root_messages={r['frame']:r.get('message') for r in self.rows[n['service']] if r['kind']=='binding-return'}
-            message=n.get('message') or root_messages.get(frame)
+            root_messages=self.root_return_messages[n['service']].get(frame,[])
+            require(len(root_messages)<=1,'Ambiguous root-return message for alias binding')
+            message=n.get('message') or (root_messages[0]if root_messages else None)
             possible=[k for k in possible if (
                 self.nodes[k].get('root_frame',self.nodes[k].get('frame'))==frame and frame is not None
                 or self.nodes[k]['kind']=='http-json' and self.nodes[k].get('direction')=='response'
