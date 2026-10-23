@@ -1,0 +1,197 @@
+{
+  "algorithm": "76d2050",
+  "protocol_commit": "dfd9195",
+  "queries": 29,
+  "entries": 8,
+  "novelty": "All are previously untested fields at previously used entries, not new entries or third-party blind queries. Inputs reuse frozen six-case repository/Orders or eight-case travel structures.",
+  "planning_accepted": 29,
+  "coverage": {
+    "full/sockshop": {
+      "evaluated_queries": 7,
+      "requests_including_NA": 42,
+      "N/A_requests": 12,
+      "targets": 30,
+      "states": {
+        "unknown": 12,
+        "known_correct": 18
+      },
+      "independently_correct_fraction": 0.6,
+      "oracle_unavailable": 12,
+      "families_with_correct_answer": 3,
+      "relations": {
+        "tp": 18,
+        "fp": 0,
+        "fn": 0
+      }
+    },
+    "full/trainticket": {
+      "evaluated_queries": 22,
+      "requests_including_NA": 148,
+      "N/A_requests": 29,
+      "targets": 214,
+      "states": {
+        "known_correct": 214
+      },
+      "independently_correct_fraction": 1.0,
+      "oracle_unavailable": 0,
+      "families_with_correct_answer": 21,
+      "relations": {
+        "tp": 207,
+        "fp": 0,
+        "fn": 0
+      }
+    },
+    "full/all": {
+      "evaluated_queries": 29,
+      "requests_including_NA": 190,
+      "N/A_requests": 41,
+      "targets": 244,
+      "states": {
+        "known_correct": 232,
+        "unknown": 12
+      },
+      "independently_correct_fraction": 0.9508196721311475,
+      "oracle_unavailable": 12,
+      "families_with_correct_answer": 24,
+      "relations": {
+        "tp": 225,
+        "fp": 0,
+        "fn": 0
+      }
+    },
+    "selective/sockshop": {
+      "evaluated_queries": 7,
+      "requests_including_NA": 42,
+      "N/A_requests": 12,
+      "targets": 30,
+      "states": {
+        "known_correct": 18,
+        "unknown": 12
+      },
+      "independently_correct_fraction": 0.6,
+      "oracle_unavailable": 12,
+      "families_with_correct_answer": 3,
+      "relations": {
+        "tp": 18,
+        "fp": 0,
+        "fn": 0
+      }
+    },
+    "selective/trainticket": {
+      "evaluated_queries": 22,
+      "requests_including_NA": 148,
+      "N/A_requests": 29,
+      "targets": 214,
+      "states": {
+        "known_correct": 214
+      },
+      "independently_correct_fraction": 1.0,
+      "oracle_unavailable": 0,
+      "families_with_correct_answer": 21,
+      "relations": {
+        "tp": 207,
+        "fp": 0,
+        "fn": 0
+      }
+    },
+    "selective/all": {
+      "evaluated_queries": 29,
+      "requests_including_NA": 190,
+      "N/A_requests": 41,
+      "targets": 244,
+      "states": {
+        "known_correct": 232,
+        "unknown": 12
+      },
+      "independently_correct_fraction": 0.9508196721311475,
+      "oracle_unavailable": 12,
+      "families_with_correct_answer": 24,
+      "relations": {
+        "tp": 225,
+        "fp": 0,
+        "fn": 0
+      }
+    },
+    "mirrortaint/sockshop": {
+      "evaluated_queries": 7,
+      "requests_including_NA": 42,
+      "N/A_requests": 12,
+      "targets": 30,
+      "states": {
+        "known_unchecked": 12,
+        "known_correct": 18
+      },
+      "independently_correct_fraction": 0.6,
+      "oracle_unavailable": 12,
+      "families_with_correct_answer": 3,
+      "relations": {
+        "tp": 18,
+        "fp": 0,
+        "fn": 0
+      }
+    },
+    "mirrortaint/trainticket": {
+      "evaluated_queries": 22,
+      "requests_including_NA": 148,
+      "N/A_requests": 29,
+      "targets": 214,
+      "states": {
+        "known_correct": 192,
+        "known_wrong": 17,
+        "unknown": 5
+      },
+      "independently_correct_fraction": 0.897196261682243,
+      "oracle_unavailable": 0,
+      "families_with_correct_answer": 19,
+      "relations": {
+        "tp": 185,
+        "fp": 10,
+        "fn": 22
+      }
+    },
+    "mirrortaint/all": {
+      "evaluated_queries": 29,
+      "requests_including_NA": 190,
+      "N/A_requests": 41,
+      "targets": 244,
+      "states": {
+        "known_correct": 210,
+        "known_wrong": 17,
+        "unknown": 5,
+        "known_unchecked": 12
+      },
+      "independently_correct_fraction": 0.860655737704918,
+      "oracle_unavailable": 12,
+      "families_with_correct_answer": 22,
+      "relations": {
+        "tp": 203,
+        "fp": 10,
+        "fn": 22
+      }
+    }
+  },
+  "not_evaluated": [],
+  "full_selective_state_or_relation_disagreements": [],
+  "source_coordinates_note": "Independent physical instance truth is evaluated within each fresh JVM. Across JVMs, object/call IDs are different; agreement below compares aligned query/case/path states and relation counts, not literal object IDs.",
+  "baseline_mapper_audits": [
+    "/home/wujian/tracefusion2/artifacts/heldout29-first-20261023/native-orders-packaging-correction/native/native-library-audit.json",
+    "/home/wujian/tracefusion2/artifacts/heldout29-first-20261023/train-first/native-trainticket-ticketinfo-queryForTravel-data-status/native-library-audit.json",
+    "/home/wujian/tracefusion2/artifacts/heldout29-first-20261023/train-first/native-trainticket-route-getRouteByStartAndTerminal-data-each-id/native-library-audit.json",
+    "/home/wujian/tracefusion2/artifacts/heldout29-first-20261023/train-first/native-trainticket-price-findByRouteIdAndTrainType-data-id/native-library-audit.json",
+    "/home/wujian/tracefusion2/artifacts/heldout29-first-20261023/train-first/native-trainticket-route-getAllRoutes-data-each-id/native-library-audit.json",
+    "/home/wujian/tracefusion2/artifacts/heldout29-first-20261023/train-first/native-trainticket-basic-queryForTravel-data-percent/native-library-audit.json",
+    "/home/wujian/tracefusion2/artifacts/heldout29-first-20261023/train-first/native-trainticket-train-query-data-each-id/native-library-audit.json",
+    "/home/wujian/tracefusion2/artifacts/heldout29-first-20261023/train-first/native-trainticket-price-findAllPriceConfig-data-each-routeId/native-library-audit.json"
+  ],
+  "baseline_selective_pairing": {
+    "known_unchecked -> unknown": 12,
+    "known_correct -> known_correct": 210,
+    "known_wrong -> known_correct": 17,
+    "unknown -> known_correct": 5
+  },
+  "initial_selective_scoring_before_document_key_correction": {
+    "known_correct": 222,
+    "known_unchecked": 10,
+    "unknown": 12
+  }
+}

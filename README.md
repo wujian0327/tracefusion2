@@ -1,5 +1,9 @@
 # TraceFusion 2
 
+2026-10-23完成[原29个封存新字段首次验证](experiments/sockshop-mirrortaint/HELDOUT29-FIRST-20261023.md)，核心仍为 `76d2050`。29/29规划接纳，来自8个旧入口；full/selective各 **232/244正确、12unknown、0错误确定答案**，24/29查询族至少给出一个正确答案。Train Ticket214/214，Sock Shop18/30；另外41/190次查询请求未生成目标。
+新固定配置MirrorTaint为210正确、17错误、5unknown、12个答案真值不足；其中正确210个全部被TF正确回答。12个真值不足目标不能判断能力优劣，不宣称全部新查询能力对齐。
+[Cart证据与阶段分解](experiments/sockshop-mirrortaint/CART-EVIDENCE-DECOMPOSITION-20261023.md)复用旧成本捕获；两项观测收缩的离线可行性试验各保持两模式431个完整答案，尚非新Agent部署或成本结果。旧431开发集和成本表不改写。
+
 2026-10-22完成[隔离版正式性能与全部进展汇总](experiments/sockshop-mirrortaint/PROGRESS-20261022.md)，算法冻结仍为 `76d2050`。
 Cart、Train返回绑定、五服务票价三任务各五轮，原版/full/selective共 **45次独立部署全部通过**；
 full/selective各1350/1350、900/900、1800/1800目标正确，70个被观测JVM原版Jackson核验、30份离线VmHWM复算及15次规划测量通过。
