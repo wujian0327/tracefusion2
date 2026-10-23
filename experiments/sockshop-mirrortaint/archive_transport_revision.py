@@ -11,7 +11,14 @@ def run(capability,cost,out):
     assert load(cost/'pipeline-complete.json')['all_passed']
     assert load(cost/'cost-audit.json')['all_passed']
     first=ROOT/'artifacts/heldout29-first-20261023'
-    assert load(first/'audit-final-reviewed/audit.json')['all_passed']
+    heldout=load(first/'audit-final-reviewed/audit.json')
+    assert heldout['queries']==heldout['planning_accepted']==29
+    assert not heldout['not_evaluated']and not heldout['full_selective_state_or_relation_disagreements']
+    for mode in ('full','selective'):
+        result=heldout['coverage'][mode+'/all']
+        assert result['targets']==244 and result['states']=={'known_correct':232,'unknown':12}
+    assert len(heldout['baseline_mapper_audits'])==8 and all(load(Path(p))['passed']for p in heldout['baseline_mapper_audits'])
+    assert all(sha(first/'frozen-source-snapshot'/Path(p).name)==h for p,h in load(first/'algorithm-freeze.json')['sources'].items())
     native=Path(load(ROOT/'artifacts/baseline-capability-20261020/mirror-build-09/build.json')['native_jar'])
     extra=[cost,first,native.parent,
         ROOT/'artifacts/jackson-isolation-20261022/candidate-v2/final-capability',
