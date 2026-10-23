@@ -37,3 +37,5 @@ full保留完整的响应字段输出。来源、应用方法帧、调用开始/
 入口为[自动策略](plan_capability_policy.py)、[传输观测](SpringTransportAgent.java)、[原序列化读取证明](RequestEntityHooks.java)、[不变的执行还原](infer_application_execution.py)及[返回绑定](infer_response_binding.py)。十五项策略控制与实际Jackson/JVM保护验证full也执行公共清理，同时只有selective投影字段。
 
 后续真正的执行切片仍需对跨方法返回、可能别名写入、容器成员选择和异常路径形成保守闭包，并支持提前扩采。当前保留这些证据，不能因记录字节下降就声称应用调用或指令观测已经大幅减少。
+
+最终冻结为`e78cc04`，62查询两配置各428/431正确，逐项保持父版状态与来源；Cart五配置共25次新部署通过。详见[完整进展](PROGRESS-20261023.md)及[成本与阶段分解](TRANSPORT-CART-COST-20261023.md)。后者披露当前alias的重复扫描因素：输出投影减少非目标响应图节点与连接工作，不能将离线核心时间下降理解为字节码执行重放本身同比加速。
