@@ -13,11 +13,11 @@ def specialize_transport(plan, *, scope=True, fields=True):
     The two options permit separate observation ablations, not answer routing.
     """
     if plan.get('response_binding'):
-        plan['transport_evidence_policy']={'version':1,
+        plan['transport_evidence_policy']={'version':2,
             'request_proofs_outbound_only':bool(scope),
             'project_bound_response_fields':bool(fields),
             'response_path':plan['response_binding']['path'],
-            'conditions':'Selective mode, actual bound-return message and response direction. Retain full target serialization checks and pre/post snapshot comparison; outbound request proofs and all application evidence unchanged.'}
+            'conditions':'Both modes share optional outbound-only request-proof cleanup on actual bound server responses. Field persistence projection is selective-only. Retain target serializer and complete pre/post snapshot checks, outbound request proofs and all application evidence.'}
     return plan
 
 def choose(model,query):

@@ -12,7 +12,7 @@ import run_response_binding_revision as binding
 import run_bound_query_cost as bound
 from run_isolated_cost import install,JVM
 
-ARMS={'original':('original',True,True),'full':('full',True,True),'scope':('selective',True,False),'fields':('selective',False,True),'combined':('selective',True,True)}
+ARMS={'original':('original',True,True),'full_legacy':('full',False,False),'full':('full',True,False),'selective_base':('selective',True,False),'selective':('selective',True,True)}
 
 
 def check(root):
@@ -28,7 +28,7 @@ def prepare(root,capability):
     root.mkdir(parents=True,exist_ok=False);(root/'logs').mkdir();(root/'builds').mkdir();base=capability/'frozen-base';q=bound.query('cart');p,policy=choose(load(base/'carts/model.json'),q);assert p['profile']=='execution-dependency'and p['source_evidence']
     for arm,(_,scope,fields)in ARMS.items():
         plan=copy.deepcopy(p);specialize_transport(plan,scope=scope,fields=fields);binding.query_build(root/'builds'/arm,base,q,plan)
-    (root/'cart-build').symlink_to(root/'builds/combined',target_is_directory=True)
+    (root/'cart-build').symlink_to(root/'builds/selective',target_is_directory=True)
     sources=load(capability/'algorithm-freeze.json')['sources'];sources={**sources,**{str(HERE/n):sha(HERE/n)for n in ['run_transport_cart_cost.py','run_bound_query_cost.py','run_isolated_cost.py','run_sockshop_cost.py','run_frozen_capability_acceptance.py','audit_cost_request_records.py','measure_offline_memory.py','measure_isolated_planning.py','measure_static_planning.py']}}
     order=[];rng=random.Random(231023)
     for i in range(1,6):
@@ -45,7 +45,7 @@ def gate(root):
 
 def calibrate(root):
     gate(root);install();out=root/'calibration';out.mkdir();results={}
-    for arm in ('full','scope','fields','combined'):
+    for arm in ('full_legacy','full','selective_base','selective'):
         mode=ARMS[arm][0];d=out/arm;results[arm]=bound.trial_run(d,root/'builds'/arm,'cart',mode,load(root/'templates.json'),3,6,2,2,2)['offline']['summary']
     assert all(r['queries']==r['exact']and not r['unknown']for r in results.values());save(root/'calibration-audit.json',{'all_passed':True,'arms':results,'not_formal_cost_samples':True})
 
@@ -91,3 +91,5 @@ if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--stage',choices=('prepare','calibrate','run','memory','planning'),required=True);p.add_argument('--capability',type=Path);a=p.parse_args();r=a.root.resolve()
     if a.stage=='prepare':prepare(r,a.capability.resolve())
     else:{'calibrate':calibrate,'run':run,'memory':memory,'planning':planning}[a.stage](r)
+
+# First cost prefix retained; shared-cleanup baseline redesign before final reporting.

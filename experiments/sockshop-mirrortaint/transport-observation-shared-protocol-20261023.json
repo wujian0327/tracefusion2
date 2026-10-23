@@ -1,0 +1,48 @@
+{
+  "parent_algorithm": "76d2050",
+  "parent_capability": {
+    "queries": 62,
+    "targets": 431,
+    "known_correct": 428,
+    "unknown": 3,
+    "wrong": 0
+  },
+  "parent_unseen_first": "e37d0ae;29 old-entry new-field queries:232/244 correct,12unknown, no wrong known answer. All now exposed.",
+  "scope": "Observation only. Same application execution, effect, call, exception and source semantics. Automatic policy for execution-dependency response queries.",
+  "two_independent_changes": [
+    "Shared direction-only cleanup in both full and selective",
+    "Selective-only target response field persistence after full snapshot checks"
+  ],
+  "full_mode": "Both reductions disabled; same required safety/meaning checks as selective.",
+  "not_claimed": [
+    "General instruction/call slicing",
+    "Event-format compression",
+    "Additional semantic coverage",
+    "New unseen-query generalization",
+    "New external baseline performance advantage"
+  ],
+  "acceptance": [
+    "Freeze core and plans before fresh62 full/selective deployment",
+    "All428 correct states preserved individually;3unknown preserved; no extra wrong/invalid/limited",
+    "Retain historicalMirrorTaint368 andoldTF213 correct instances",
+    "Actual original business ObjectMapper definitions, originalJARhashes andnewAgentclass hashes audited",
+    "Single missing necessary request/target serializer/call/constructor/write evidence cannot create false known answer"
+  ],
+  "guard_status": {
+    "policy_guards": 15,
+    "controls_and_guards": "All passed; actual new Agent; nested serializer refusal, kernel, Date/Mongo, received mutations, collections and real HTTP."
+  },
+  "cost_after_acceptance": "Existing fixed2rps warm30s measure60s five deployments per configuration, random order, same JVM/resource/input constraints. Measure actual new collector, report observation arms separately; do not reuse old overhead figures.",
+  "policy_version": 2,
+  "reason_for_revision": "Shared direction-proof cleanup must benefit full and selective equally. Preserve423199f and six exploratory cost deployments, excluding them from final costs. This is a fairness redesign, not a semantic-capability fix.",
+  "cost_arms": [
+    "original",
+    "full_legacy",
+    "full_clean",
+    "selective_clean_without_projection",
+    "selective_clean_with_projection"
+  ],
+  "main_cost_comparison": "selective_clean_with_projection/full_clean, same global required evidence and shared cleanup",
+  "engineering_comparison": "full_clean/full_legacy, never attributed to query specialization",
+  "field_persistence_comparison": "selective_clean_with_projection/selective_clean_without_projection; temporary complete snapshots remain"
+}

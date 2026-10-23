@@ -37,10 +37,10 @@ def audit(root,out):
                 assert 'request_serialization'in v,('Necessary outbound observation missing',r['query'],mode);outbound_count+=1
             if v['direction']=='response'and v['message']in returns:
                 response_count+=1;field_count+=len(v['fields'])
-                if mode=='selective'and policy:
-                    assert 'request_serialization'not in v
-                    assert all(matches(policy['response_path'],f['path'])for f in v['fields'])
-                elif mode=='full'and request_cfg:assert 'request_serialization'in v
+                cleaned=policy and policy.get('request_proofs_outbound_only')and (policy['version']>=2 or mode=='selective')
+                if cleaned:assert 'request_serialization'not in v
+                elif request_cfg:assert 'request_serialization'in v
+                if mode=='selective'and policy and policy.get('project_bound_response_fields'):assert all(matches(policy['response_path'],f['path'])for f in v['fields'])
         if (d/'reconstruction-error.txt').exists():errors.append(str(d/'reconstruction-error.txt'))
         receipts.append({'query':r['query'],'role':role,'mode':mode,'native_mapper_sha256':native[1],'bound_responses':response_count,'response_fields':field_count,'outgoing_request_proofs_retained':outbound_count,'policy_enabled':bool(policy),'events_sha256':sha(cap/role/'events.jsonl')})
     for mode in ('full','selective'):
