@@ -133,6 +133,10 @@ public final class ExecutionKernelHooks implements Opcodes {
     }}
     static void libraryEnd(Map start,Object result,Map row)throws Exception{if(!contracts())return;
         String valueCall=(String)start.get("callee");
+        if(Arrays.asList("java/lang/String.length()I","java/lang/String.split(Ljava/lang/String;)[Ljava/lang/String;","java/util/UUID.toString()Ljava/lang/String;","java/lang/Integer.parseInt(Ljava/lang/String;)I").contains(valueCall)){
+            Class type=valueCall.startsWith("java/lang/String.")?String.class:valueCall.startsWith("java/util/UUID.")?UUID.class:Integer.class;Map proof=new LinkedHashMap();proof.put("class_sha256",classHash(type));proof.put("class",type.getName().replace('.','/'));proof.put("callee",valueCall);row.put("finite_value_contract",proof);
+            if(valueCall.contains(".split("))proof.put("array",arrayRow("split",(Object[])result,-1,((Number)start.get("pc")).intValue()));
+        }
         if(((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("library_values")!=null&&(valueCall.equals("java/lang/Integer.intValue()I")||valueCall.startsWith("java/util/HashMap.")||valueCall.startsWith("java/util/Map.")))row.put("library_values",libraryValues());
         String call=(String)start.get("callee");Object recv=start.get("_receiver_ref");Map fact=new LinkedHashMap();
         if(call.equals("java/util/Collection.stream()Ljava/util/stream/Stream;")||call.equals("java/util/List.stream()Ljava/util/stream/Stream;")){

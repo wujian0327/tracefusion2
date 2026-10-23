@@ -119,6 +119,10 @@ def closure(graph, seeds):
 def plan_collection(model, entry, target, scalar_target=False):
     target = any_target(model, target); m = model['methods'][entry]; c = m['instructions']
     graph, operands, states, steps = analyze(m); getters, setters = direct_accessors(model)
+    # Shared static transfer semantics exceed this specialized interpreter.
+    replay_ops=set(range(0,19))|set(range(21,26))|set(range(54,59))|{87,89,178,187,192,133,135,138,141,167,198,199}|set(range(96,108))|set(range(153,167))|set(range(172,178))|set(range(182,186))
+    for ins in c:
+        require(ins['op'] in replay_ops,'Specialized replay semantic unsupported: opcode '+str(ins['op'])+' at '+str(ins['index']))
     writers = [i for i, x in enumerate(c) if x['op'] in (182, 183, 185) and callee(x) in setters and setters[callee(x)]['field'] == target]
     require(writers, 'No direct target setter call')
     # Calls on a local mutable allocation depend on all its possible mutations.

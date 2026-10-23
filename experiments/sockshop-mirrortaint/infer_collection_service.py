@@ -9,6 +9,7 @@ from dataclasses import dataclass, field
 import math
 from query_observation_planner import descriptors, require
 from plan_service_observations import callee
+from analysis_status import AnalysisLimit
 
 
 @dataclass
@@ -73,7 +74,9 @@ def infer_collection(plan, rows):
             return Value({'value': value}, union(args), union(args, 'selectors'))
 
         while True:
-            steps += 1; require(steps < 10000, 'Replay bound'); ins = code[pc]; op = ins['op']
+            steps += 1
+            if steps >= 10000:raise AnalysisLimit('specialized-replay-budget','Replay step budget exceeded')
+            ins = code[pc]; op = ins['op']
             if 21 <= op <= 25: require(ins['var'] in locals_, 'Replay uninitialized local'); stack.append(locals_[ins['var']])
             elif 54 <= op <= 58: locals_[ins['var']] = pop()
             elif op == 0: pass
@@ -182,7 +185,7 @@ def infer_collection(plan, rows):
                 result=None if op==177 else pop()
                 if result is not None:bind(result,end['result'])
                 require(pos==len(events),'Unconsumed replay observations'); break
-            else: raise ValueError('Unsupported replay opcode '+str(op))
+            else: raise AnalysisLimit('specialized-replay-semantics','Unsupported replay opcode '+str(op))
             pc+=1
         for call,ret,value in scalar_writes:
             writes=[r for r in rows if r['kind']=='write' and r.get('frame')==root['frame'] and

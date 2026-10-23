@@ -16,6 +16,7 @@ def infer_application(plan,rows,worker_request=None):
     from infer_execution_closure import validate as validate_closure
     validate_closure(plan,rows)
     primitive_fields={i['owner']+'.'+i['name'] for m in cfg.get('methods',{}).values() for i in m['instructions'] if i['op'] in (180,181) and i['desc'] in ('Z','B','C','S','I','J','F','D')}
+    primitive_fields.update(v['field']for v in plan.get('collection_getters',{}).values()if v['descriptor']in ('Z','B','C','S','I','J','F','D'))
     if cfg.get('request_entity_contracts') and cfg['request_entity_contracts'].get('version')!=2:raise AnalysisLimit('typed-decoder-version','Old candidate decoder evidence requires its frozen interpreter; source/default write roles are missing')
     runtime=[r for r in rows if r['kind']=='execution-runtime']
     require(len(runtime)==1 and any(all(runtime[0][k]==p[k] for k in ('java_runtime_version','class_sha256')) for p in cfg['runtime_profiles']),'Application runtime pin differs')
@@ -79,7 +80,7 @@ def infer_application(plan,rows,worker_request=None):
         for row in relevant:
             if row['kind'] in ('binding-source','binding-input'):
                 for index,f in enumerate(row['fields']):providers[coordinate(f)].append((row,index,f))
-        state=State(Frame(root['frame']));pos=1;allocation_count=0;total_steps=0;branch_count=0
+        state=State(Frame(root['frame']));preserved_fields={};pos=1;allocation_count=0;total_steps=0;branch_count=0
         request_builders={};request_entities={};resources={};decoded_types={};decoded_fields={};decoded_seq={};http_entities={};response_entities={};class_literals={};date_values={};calendars={};environment_facts=[];builders={};opaque_calls=[];async_results={};future_states={};async_transfers=[];maps={}
         fr=None;method=None;code=None;entry=None;field_seq={};poisoned_at={};frame_audits=[]
         execution_budget=worker_request['budget'] if worker_request else {'steps':0}
@@ -108,6 +109,9 @@ def infer_application(plan,rows,worker_request=None):
             row,index,source=candidates[0];same_value(source['observed'],f['observed']);return Value(f['observed'],frozenset({('http',row['seq'],source['path']) if row['kind']=='http-json' else ('field',row['seq'],index)}))
         def lookup(f,before):
             key=coordinate(f)
+            preserved=preserved_fields.get(key)
+            if preserved and poisoned_at.get(f['owner'],-1)<=preserved[0]<before:
+                bind(preserved[1],f['observed']);return preserved[1].project(f['observed'])
             if f['observed'].get('uuid_type') and f['observed'].get('object')in poisoned_at:return Value(f['observed'],unknown=True)
             if 'date_epoch_ms' in f['observed']:
                 obj=f['observed'].get('object')
@@ -786,10 +790,22 @@ def infer_application(plan,rows,worker_request=None):
                             elif key.endswith('.save(Ljava/lang/Object;)Ljava/lang/Object;') and cfg.get('save_effect_contracts') and not cfg['save_effect_contracts'].get('observation_only',True):
                                 proofs=[r for r in relevant if r['kind']=='mongo-save-effect' and r.get('call_id')==call['call_id'] and call['seq']<r['seq']<ret['seq']]
                                 require(len(proofs)==1,'Save effect completion missing/ambiguous');proof=proofs[0]
-                                require(proof['class_sha256']==cfg['save_effect_contracts']['class_sha256'] and proof['completion']=='normal' and proof['frame']==fr.invocation,'Save library/lifecycle differs');bind(args[0],proof['entity']);bind(args[0],proof['result']);bind(args[0],observed)
+                                require(proof['completion']=='normal' and proof['frame']==fr.invocation,'Save lifecycle differs');bind(args[0],proof['entity']);bind(Value(observed),proof['result'])
                                 if proof['valid']:
+                                    contract=cfg['save_effect_contracts'];matches=[p for p in [contract,*contract.get('additional_profiles',[])]if p['class_sha256']==proof['class_sha256']];require(len(matches)==1,'Save library profile absent/ambiguous');profile=matches[0]
+                                    bind(args[0],proof['result']);bind(args[0],observed)
+                                    if profile.get('provided_id_only'):require(proof.get('provided_id_only') and proof['id_before'].get('value')is not None and proof['id_before']==proof['id_after'] and not proof.get('id_write'),'Provided-ID save changed/generates ID')
                                     require(proof.get('preconditions') and proof.get('listeners_verified') and proof.get('callback_invocations')==0 and proof['events']>=3 and proof['registry']==proof['default_registry'] and proof['converters']==proof['default_converters'],'Save preservation conditions contradict runtime')
                                     before={coordinate(f):f for f in proof['before']};after={coordinate(f):f for f in proof['after']};identifier=proof.get('id_write')
+                                    protected={}
+                                    for k,f in before.items():
+                                        if identifier and k[:2]==(identifier['owner'],identifier['field']):continue
+                                        if 'value' not in f['observed']:continue  # Mutable references/Date need their own proofs.
+                                        c=state.containers.get(k[0])
+                                        if k[1].startswith('@list:')and c is not None and c.local and not c.escaped:
+                                            index=int(k[1].split(':')[1]);require(k[2]==c.epoch and 0<=index<len(c.elements),'Save list member stage differs');value=c.elements[index];bind(value,f['observed']);protected[k]=value
+                                        else:protected[k]=lookup(f,call['seq'])
+                                    protected={k:v.project({a:b for a,b in v.observed.items()if a!='object'})if k[1]in primitive_fields else v for k,v in protected.items()}
                                     for k,f in before.items():
                                         if identifier and k[0]==identifier['owner'] and k[1]==identifier['field']:continue
                                         require(k in after and after[k]==f,'Unmodeled save field effect')
@@ -800,6 +816,11 @@ def infer_application(plan,rows,worker_request=None):
                                     # database/global effects. Existing shared state and
                                     # mutable Date operands remain conservative.
                                     poison([recv] if recv else [],ret['seq'])
+                                    # Retain only dependencies already established
+                                    # before this verified effect. This cannot turn
+                                    # an earlier unknown into a source or protect
+                                    # unobserved fields/versions from later calls.
+                                    for k,value in protected.items():preserved_fields[k]=(ret['seq'],value)
                                     dates_safe=False
                                     if plan.get('date_effects'):
                                         codecs=proof.get('date_codecs');require(isinstance(codecs,list) and len(codecs)==proof.get('date_codec_calls'),'Date codec observation count differs')
@@ -897,6 +918,21 @@ def infer_application(plan,rows,worker_request=None):
                                 require(observed.get('value')==(recv.observed['value']==args[0].observed['value']),'String equality contradicts operands');v=combine(observed,[recv,args[0]])
                             elif key=='java/lang/Object.getClass()Ljava/lang/Class;':
                                 fact=ret.get('contract');require(fact and fact['kind']=='object-class' and fact['valid'] and fact['receiver_type']==call['receiver_type'] and ret['result_type']=='java.lang.Class','Object.getClass runtime identity differs');v=Value(observed)
+                            elif key in ('java/lang/String.length()I','java/lang/String.split(Ljava/lang/String;)[Ljava/lang/String;','java/util/UUID.toString()Ljava/lang/String;','java/lang/Integer.parseInt(Ljava/lang/String;)I'):
+                                from finite_string_values import utf16_length,literal_split,decimal_int
+                                fact=ret.get('finite_value_contract');own=ins['owner'];require(fact and fact['callee']==key and fact['class']==own,'Immutable value call proof missing/different')
+                                profiles=cfg['library_contracts']['filter_profiles']if own=='java/lang/String'else cfg['library_values']['profiles']
+                                require(any(p['java_runtime_version']==runtime[0]['java_runtime_version']and p['class_sha256'].get(own)==fact['class_sha256']for p in profiles),'Immutable value runtime class differs')
+                                if own=='java/lang/String':require(call['receiver_type']=='java.lang.String'and type(recv.observed.get('value'))is str,'String receiver differs')
+                                if key=='java/lang/String.length()I':require(observed.get('value')==utf16_length(recv.observed['value']),'String length differs');v=combine(observed,[recv])
+                                elif key=='java/util/UUID.toString()Ljava/lang/String;':
+                                    require(call['receiver_type']=='java.util.UUID'and recv.observed.get('uuid_type')=='java.util.UUID'and observed.get('value')==recv.observed.get('value'),'UUID projection differs');v=combine(observed,[recv])
+                                elif own=='java/lang/Integer':require(observed.get('value')==decimal_int(args[0].observed['value']),'Decimal parse differs');v=combine(observed,args)
+                                else:
+                                    expected=literal_split(recv.observed['value'],args[0].observed['value']);array=fact['array'];bind(Value(observed),array['array']);owner=observed.get('object')
+                                    require(ret['result_type']=='[Ljava.lang.String;'and owner not in state.arrays and owner not in nonlocal_owners and array['version']==0 and array['element_versions']==[0]*len(expected)and array['component']=='java.lang.String'and [x.get('value')for x in array['elements']]==expected,'Split fresh array/contents differs')
+                                    values=[Value(x,recv.origins,recv.selectors|args[0].origins|args[0].selectors,recv.unknown or args[0].unknown)for x in array['elements']]
+                                    state.arrays[owner]={'elements':values,'version':0,'versions':[0]*len(values)};v=Value(observed)
                             elif key=='java/lang/Integer.intValue()I' and cfg.get('library_values'):
                                 library_values(ret.get('library_values'));require(call['receiver_type']=='java.lang.Integer','Unboxing implementation differs');same_value(recv.observed,observed);v=recv.project(observed)
                             elif ins['owner'] in ('java/util/Map','java/util/HashMap') and ins['name'] in ('get','put') and cfg.get('library_values') and identity(recv) in maps and identity(recv) not in poisoned_at and identity(recv) not in nonlocal_owners:
@@ -993,7 +1029,9 @@ def infer_application(plan,rows,worker_request=None):
             owner,name,version=coordinate(f)
             if name.startswith('@list:') and owner in state.containers and state.containers[owner].local:
                 c=state.containers[owner];index=int(name.split(':')[1]);require(version==c.epoch and 0<=index<len(c.elements),'Application returned container version differs');value=c.elements[index]
-                if c.escaped:value=Value(f['observed'],unknown=True)
+                if c.escaped:
+                    preservation=preserved_fields.get(coordinate(f))
+                    value=lookup(f,ret['seq'])if preservation and poisoned_at.get(owner,-1)<=preservation[0]<ret['seq']else Value(f['observed'],unknown=True)
             else:value=lookup(f,ret['seq'])
             if 'date_epoch_ms' in f['observed'] and f['observed']['object'] in poisoned_at:value=Value(f['observed'],unknown=True)
             bind(value,f['observed'])

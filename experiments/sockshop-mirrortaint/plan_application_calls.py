@@ -146,7 +146,7 @@ def augment_calls(plan,model,sources):
         'Offline/static budget exhaustion is analysis_limited, never business N/A or automatically evidence_invalid.']
     plan['execution_kernel']['library_values']=json.loads((Path(__file__).parent/'library-value-runtimes-20261022.json').read_text())
     conversion='edu/fudan/common/util/JsonUtils.conveterObject(Ljava/lang/Object;Ljava/lang/Class;)Ljava/lang/Object;'
-    if conversion in model['methods']:
+    if conversion in model['methods'] and any(i['op']in (182,183,184,185)and callee(i)==conversion for m in methods.values()for i in m['instructions']):
         contract=json.loads(Path(__file__).with_name('plain-conversion-contracts-20261022.json').read_text())
         if all(model['classes'].get(o,{}).get('sha256')==h for o,h in contract['summary_class_sha256'].items()):
             plan['json_conversion_methods']=[conversion]

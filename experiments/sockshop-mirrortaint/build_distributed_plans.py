@@ -59,7 +59,9 @@ def build(out,inputs):
                             if requested in dz.namelist():
                                 f=app/requested;f.parent.mkdir(parents=True,exist_ok=True);f.write_bytes(dz.read(requested));extra[requested]={'jar_entry':n,'sha256':sha(f)}
         command(['java','-cp',str(tools)+':'+cp,'QueryBytecodeModel',str(app),str(dest/'model.json')],dest/'model.log')
-        model=load(dest/'model.json');local=None
+        model=load(dest/'model.json')
+        from contract_applicability import library_inventory
+        model['library_inventory']=library_inventory(source);save(dest/'model.json',model);local=None
         if config.get('entry'):
             entry=config['entry'];target=config['targets'][0]
             if config.get('response_path'):
@@ -89,6 +91,9 @@ def build(out,inputs):
     for name in ('plan_response_binding.py','infer_response_binding.py','plan_read_effects.py','read-forward-runtimes-20261020.json','plan_execution_kernel.py','infer_execution_kernel.py','execution_dependency_state.py','execution-kernel-runtimes-20261020.json','analysis_status.py','plan_application_calls.py','infer_application_execution.py','kernel-contract-runtimes-20261020.json','plan_constructor_effects.py','constructor-library-contracts-20261020.json','framework-wrapper-contracts-20261020.json','plan_date_projection.py','date-runtime-contracts-20261020.json','infer_date_projection.py','async-task-contracts-20261021.json','infer_async_protocol.py','plan_async_dependencies.py','request-entity-contracts-20261021.json','save-effect-contracts-20261021.json'):
         manifest['sources'][str(HERE/name)]=sha(HERE/name)
     manifest['sources'][str(HERE/'date-effects-contracts-20261021.json')]=sha(HERE/'date-effects-contracts-20261021.json')
+    manifest['sources'][str(HERE/'save-provided-id-contracts-20261023.json')]=sha(HERE/'save-provided-id-contracts-20261023.json')
+    manifest['sources'][str(HERE/'contract_applicability.py')]=sha(HERE/'contract_applicability.py')
+    manifest['sources'][str(HERE/'finite_string_values.py')]=sha(HERE/'finite_string_values.py')
     manifest['sources'][str(HERE/'plan_capability_policy.py')]=sha(HERE/'plan_capability_policy.py')
     manifest['sources'][str(HERE/'plan_execution_closure.py')]=sha(HERE/'plan_execution_closure.py')
     manifest['sources'][str(HERE/'infer_execution_closure.py')]=sha(HERE/'infer_execution_closure.py')

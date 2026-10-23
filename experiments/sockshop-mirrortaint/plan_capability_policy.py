@@ -39,12 +39,22 @@ def choose(model,query):
     elif legacy:plan=legacy;reason='Existing finite return-forward contract'
     elif kernel:plan=kernel;reason='Execution fallback with supported semantics'
     else:raise ValueError('No supported static plan: '+str(failures))
-    if plan['profile']=='execution-dependency' and set(shape)&{'task-or-save-effects','request-entity-effects'}:plan=attach_async_dependencies(plan)
-    if CONVERSION in model['methods']:
+    features=set()
+    if plan['profile']=='execution-dependency':
+        repos={o for o,c in model['classes'].items() if any(i.startswith('org/springframework/data/') and i.endswith('Repository') for i in c.get('interfaces',[]))}
+        for m in plan['execution_kernel']['methods'].values():
+            for i in m['instructions']:
+                if i['op'] not in (182,183,184,185):continue
+                if i['owner'] in repos and i['name']=='save' and i['desc']=='(Ljava/lang/Object;)Ljava/lang/Object;':features.add('save')
+                if i['desc'].endswith('Ljava/util/concurrent/Future;'):features.add('async')
+                if i['owner'].startswith('org/springframework/http/RequestEntity'):features.add('request')
+        if features:plan=attach_async_dependencies(plan,features,model.get('library_inventory'))
+        plan['contract_applicability']={'version':1,'features':sorted(features),'selection':'Actual planned APIs; library implementation/hash and runtime preconditions remain mandatory. Save is not a task or decoder contract.'}
+    if CONVERSION in model['methods'] and any(i['op']in (182,183,184,185)and i.get('owner','')+'.'+i.get('name','')+i.get('desc','')==CONVERSION for m in plan.get('execution_kernel',{}).get('methods',{}).values()for i in m['instructions']):
         plan['json_conversion_methods']=[CONVERSION];plan['json_conversion_contract']='Existing pinned default Jackson relative-path conversion contract; not a business formula.'
     plan['source_evidence']=True
     if plan['profile']=='execution-dependency':
         specialize_transport(plan)
         from plan_execution_closure import attach_execution_closure
         attach_execution_closure(plan,model)
-    return plan,{'version':1,'reason':reason,'structural_triggers':sorted(set(shape)),'failed_candidates':failures,'answer_independent':True}
+    return plan,{'version':2,'reason':reason,'contract_features':sorted(features),'structural_triggers':sorted(set(shape)),'failed_candidates':failures,'answer_independent':True}
