@@ -63,6 +63,20 @@ def heldout(root):
             else:records.append(r)
     modes={m:{'runtime_query_families':sum(r['mode']==m for r in records),'requests':sum(r['requests']for r in records if r['mode']==m),'targets':sum(r['targets']for r in records if r['mode']==m),'states':dict(sum((Counter(r['states'])for r in records if r['mode']==m),Counter())),'N/A_requests':sum(r['N/A_requests']for r in records if r['mode']==m),'oracle_unavailable':sum(r['oracle_unavailable']for r in records if r['mode']==m)}for m in('full','selective')}
     result={'first_results_preserved':True,'algorithm':load(root/'algorithm-freeze.json')['commit'],'candidate_queries':21,'entries':5,'accepted':sum(r['accepted']for r in planning),'rejected':sum(not r['accepted']for r in planning),'modes':modes,'runtime_failures':failures,'records':records,'auth_failure_policy':'Requests rejected with403 before entering the query method are experimental access failures, not business N/A or TF unknown. Count separately.','no_core_repair_or_query_replacement_after_unseal':True};save(out/'audit-first.json',result);print({'heldout21_first':modes,'runtime_failures':len(failures)},flush=True)
+    # Additional post-capture oracle audit. This reads only raw argument facts
+    # and the original literal case projection; no TF graph is instantiated.
+    truth_checks=[];layers={m:Counter()for m in('full','selective')}
+    for role in('route','price'):
+        for source in sorted((out/('runtime-'+role)).glob('*/evaluation.json')):
+            d=source.parent;raw=[json.loads(v)for v in(d/'capture'/role/'events.jsonl').read_text().splitlines()];by_seq={r['seq']:r for r in raw};by_frame={r['frame']:r for r in raw if r['kind']=='enter'}
+            evaluation=load(source)
+            for prediction in evaluation['predictions']:
+                error=prediction.get('error','');layers[evaluation['mode']]['unsupported_replay_semantics'if error.startswith('Unsupported replay opcode')else'collector_problem'if error=='Collector problem'else'other']+=1
+                assert len(prediction['expected'])==1;coordinate=prediction['expected'][0];fact=by_seq[coordinate[3]];entry=by_frame[coordinate[2]];owner=entry['args'][0]['object'];assert fact['kind']=='binding-input'and fact['frame']==entry['frame']and fact['argument']==0
+                fields=[f for f in fact['fields']if f['owner']==owner and f['field']==coordinate[5]and f['version']==coordinate[6]and f['path']==coordinate[7]];assert len(fields)==1 and coordinate[4]==owner
+                truth_checks.append({'query':prediction['query'],'case':prediction['case'],'path':prediction['path'],'actual_argument0_owner_verified':True,'snapshot_coordinate_verified':True})
+    assert len(truth_checks)==192;save(out/'independent-argument-coordinate-audit.json',{'all_passed':True,'checks':truth_checks,'not_a_TF_source_propagation_or_graph_check':True})
+    save(out/'failure-layer-audit.json',{'counts_per_mode':{m:dict(v)for m,v in layers.items()},'first_driver_states_unchanged':True,'classification_limit':'The first driver labeled unsupported bounded-scalar replay GETFIELD as evidence_invalid. These20 targets per mode are an analysis-semantics/profile-routing limitation, not missing/contradictory capture evidence. Preserve the first classification and report this diagnostic distinction separately.','core_repaired_after_unseal':False})
 
 
 if __name__=='__main__':

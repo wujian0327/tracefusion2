@@ -28,7 +28,7 @@ def run(root,cost):
     '| 首次业务结果，每种配置 | 查询族 | 请求 | 实际目标 | 已知／unknown／证据无效 |','| --- | ---: | ---: | ---: | --- |']
     for mode,m in h['modes'].items():lines.append(f"| {mode}：Route／Price | {m['runtime_query_families']} | {m['requests']} | {m['targets']} | {m['states'].get('known_correct',0)}／{m['states'].get('unknown',0)}／{m['states'].get('evidence_invalid',0)} |")
     lines+=['','另6个Station查询族的两配置共12次运行在首个请求被原应用返回403，未进入待测方法；它们是认证准备失败，不能计成业务N/A、TF unknown或来源正确。Route／Price各配置另有10次请求未生成目标。192个实际目标（两配置）有独立入口字段真值，但整批必要证据无效；可回答率为0，条件来源匹配率及关系准确率N/A，不能引用评分中空样本的FP/FN零值。', '',
-    '首个阻断已查到：原有保存／任务接入将Sock Shop版本的保存、异步和请求解码契约附到了新Train Ticket写入口；运行时框架类哈希不符，以及应用中没有相应HATEOAS类，触发Collector problem。此为规划与公共模型接入限制；本轮没有放宽哈希、补模型后覆盖首次结果。原始故障、完整问题清单和首次计划全部保留。', '',
+    '逐项诊断进一步区分两层：每种配置76个目标因原有保存／任务接入附加的Sock Shop框架契约与新Train Ticket写入口不符，触发Collector problem；其余20个Price.update标量目标在旧bounded-scalar还原器遇到未支持GETFIELD（opcode180）。后20个属于语义／profile路由限制，首轮评分驱动却也记作evidence_invalid，不能把它们解释成采集缺失或矛盾。原始分类保持，另存分层诊断；没有放宽哈希、修复核心后覆盖首次结果。', '',
     '因此，新的未见入口实验没有提供正向来源覆盖证据。它暴露了此前旧入口新字段验证没有覆盖的写入口集成问题；论文应连同规划接纳率一起披露，而非只展示历史成功路径。', '',
     '## 共享 alias 索引先行校准','',
     '184份图和1350个完整目标答案在原还原器与索引还原器间逐项相同；索引保留完整坐标和全部歧义候选，不取第一个匹配。对原20份成本捕获进行40次新进程配对复算，旧捕获和在线计时不变。', '',

@@ -20,6 +20,9 @@ ARMS={'original':('original',True),'full':('full',True),'selective_without_closu
 
 def check(root,gate=True):
     c=load(root/'config.json');assert sha(root/'config.json')==load(root/'protocol-freeze.json')['config_sha256']
+    assert sha(root/'templates.json')==c['templates_sha256']
+    assert sha(root/'price-inputs.json')==c['price_inputs_sha256']
+    assert sha(ROOT/'artifacts/desktop-inputs/images-lock.json')==c['image_lock_sha256']
     for p,h in c['sources'].items():assert sha(Path(p))==h,p
     for arm in ARMS:binding.verify_build(root/'builds'/arm)
     binding.verify_build(root/'price-build')
@@ -35,11 +38,14 @@ def prepare(root,capability):
     (root/'cart-build').symlink_to(root/'builds/selective',target_is_directory=True)
     previous=load(OLD_COST/'price-build/build.json');builder.build(root/'price-build',{r:{**v['query_config'],'source_evidence':True}for r,v in previous['inputs'].items()})
     sources=load(capability/'algorithm-freeze.json')['sources'];names=['run_execution_closure_cost.py','run_bound_query_cost.py','run_train_cost.py','run_sockshop_cost.py','run_isolated_cost.py','run_response_binding_revision.py','run_train_multisource.py','measure_offline_memory.py','measure_isolated_planning.py','measure_static_planning.py','audit_execution_closure_cost.py','audit_cost_request_records.py']
-    sources={**sources,**{str(HERE/n):sha(HERE/n)for n in names}};order=[];rng=random.Random(231026)
+    names+=['run_frozen_capability_acceptance.py','run_sockshop_model_revision.py','run_execution_kernel_pilot.py','audit_train_multisource.py','audit_cost_population.py','audit_baseline_capabilities.py','normalize_orders_origins.py','run_distributed_paths.py','audit_jackson_isolation.py','audit_application_call_revision.py']
+    sources={**sources,**{str(HERE/n):sha(HERE/n)for n in names},str(ROOT/'scripts/sockshop.py'):sha(ROOT/'scripts/sockshop.py')};order=[];rng=random.Random(231026)
     for i in range(1,6):
         arms=list(ARMS);rng.shuffle(arms);order.extend({'name':f'round-{i:02d}-{j:02d}-{a}','arm':a,'mode':ARMS[a][0]}for j,a in enumerate(arms,1))
     save(root/'templates.json',bound.templates('cart'))
+    save(root/'price-inputs.json',load(Path(load(OLD_COST/'cost-price/config.json')['inputs'])))
     c={'algorithm_commit':load(capability/'algorithm-freeze.json')['commit'],'capability':str(capability),'sources':sources,'jvm':JVM,'rounds':5,'warmup':30,'seconds':60,'rate':2,'concurrency':2,'sample_interval':2,'seed':231026,'cart_order':order,'cart_arms':ARMS,'source_evidence':True,'format_compression':False,'shared_alias_index':True,'scope':'Cart original/full/selective without closure/selective with closure:20 independent deployments. Cross-service collection price path:15 separate deployments; not generic-kernel slicing evidence. All online deployments sequential after 62+29 capability gates. No maximum throughput or external baseline ranking.','templates_sha256':sha(root/'templates.json')}
+    c.update(price_inputs_sha256=sha(root/'price-inputs.json'),image_lock_sha256=sha(ROOT/'artifacts/desktop-inputs/images-lock.json'))
     save(root/'config.json',c);save(root/'protocol-freeze.json',{'config_sha256':sha(root/'config.json'),'formal_trials_started':False});save(root/'run-status.json',{'status':'prepared'});print({'prepared':True,'formal_deployments':35},flush=True)
 
 
@@ -48,7 +54,7 @@ def calibrate(root):
     for arm in ARMS:
         if arm=='original':continue
         results[arm]=bound.trial_run(out/arm,root/'builds'/arm,'cart',ARMS[arm][0],load(root/'templates.json'),3,6,2,2,2)['offline']['summary']
-    inputs=Path(load(OLD_COST/'cost-price/config.json')['inputs']);p=out/'price';calibration.freeze(p,root/'price-build',inputs,161019)
+    inputs=root/'price-inputs.json';p=out/'price';calibration.freeze(p,root/'price-build',inputs,161019)
     for mode in('full','selective'):calibration.capture(p,root/'price-build',inputs,mode);calibration.evaluate(p,root/'price-build',mode)
     from audit_train_multisource import audit
     audit(p,root/'price-build');results['price']=load(p/'independent-audit.json');save(root/'calibration-audit.json',{'all_passed':True,'results':results})
