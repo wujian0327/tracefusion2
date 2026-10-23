@@ -24,4 +24,6 @@
 
 `artifacts/execution-closure-revision-20261023/alias-index/`保存协议、reference源码、40次命令/阶段计量/完整图/预测、逐项相等检查及原始哈希。`regression/`保留首次定位失败：独立_id评分修正目录本来没有业务捕获；最终驱动按原不可变receipt定位回原捕获，在`regression-final/`完成核验，没有改核心或重跑业务。
 
-当前21个新入口字段已先在8e62954封存，未尝试规划；原62+29仅作下一阶段回归。剩余12个Orders真值缺口的独立原始事实检查见`orders-oracle-gap-audit/audit.json`：生成器配置与目标ID写入不能替代实际生成调用配对，self-link及后续Link调用仍缺解码字段来源坐标，未改判正确或空来源。
+本索引阶段结束时，21个新入口字段已先在8e62954封存，尚未尝试规划；原62+29仅作下一阶段回归。剩余12个Orders真值缺口的独立原始事实检查见`orders-oracle-gap-audit/audit.json`：生成器配置与目标ID写入不能替代实际生成调用配对，self-link及后续Link调用仍缺解码字段来源坐标，未改判正确或空来源。
+
+后续冻结版的首次新入口结果、62+29新部署与成本见[执行观测闭包报告](EXECUTION-CLOSURE-20261023.md)；本表保留原索引复算批次，不覆盖为后续数字。
