@@ -15,10 +15,14 @@ def audit(root,out,partial=False,pair_root=None,reuse=None):
     assert sha(root/'frozen-plans/planning.json')==freeze['planning_sha256']
     reused_hashes=load(reuse/'raw-hashes.json')if reuse else None
     if reuse:
-        assert load(reuse/'audit.json')['all_passed']
+        cache_audit=load(reuse/'audit.json');assert cache_audit['all_passed']
         for name in ('run_frozen_capability_acceptance.py','run_response_binding_revision.py','run_execution_kernel_pilot.py','run_sockshop_model_revision.py','normalize_orders_origins.py','audit_baseline_capabilities.py'):
-            source=HERE/name;original=subprocess.check_output(['git','show',freeze['experiment_commit']+':'+str(source.relative_to(ROOT))],cwd=ROOT);import hashlib
-            assert sha(source)==hashlib.sha256(original).hexdigest(),name
+            source=HERE/name
+            if 'scoring_source_sha256'in cache_audit:
+                assert cache_audit['scoring_source_sha256'][str(source)]==sha(source),name
+            else:
+                original=subprocess.check_output(['git','show',freeze['experiment_commit']+':'+str(source.relative_to(ROOT))],cwd=ROOT);import hashlib
+                assert sha(source)==hashlib.sha256(original).hexdigest(),name
     for planned in load(root/'frozen-plans/planning.json'):
         if planned['status']=='accepted':assert sha(root/'frozen-plans'/(planned['query']['id']+'.json'))==planned['plan_sha256']
     queries=driver.QUERIES;by_query={q['id']:q for q in queries};records=[];families=[];receipts={};builds=[]
@@ -58,7 +62,9 @@ def audit(root,out,partial=False,pair_root=None,reuse=None):
             derived={}
             for name in ('evaluation.json','independent-truth.json','execution-audit.json'):
                 path=cached/name
-                if path.exists():shutil.copyfile(path,rec/name);derived[name]=sha(path)
+                if path.exists():
+                    if 'derived_sha256'in cache_audit:assert sha(path)==cache_audit['derived_sha256'][str(path.relative_to(reuse))]
+                    shutil.copyfile(path,rec/name);derived[name]=sha(path)
             save(rec/'reuse.json',{'source_audit':str(reuse),'source_audit_sha256':sha(reuse/'audit.json'),'derived_sha256':derived,'raw_inputs_agent_plans_jars_sources_and_scoring_code_unchanged':True,'new_deployment_or_new_independent_rescore':False})
             result={key:value for key,value in load(rec/'evaluation.json').items()if key!='predictions'}
         else:result=driver.evaluate(rec,q)

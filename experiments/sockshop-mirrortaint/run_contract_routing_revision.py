@@ -148,7 +148,26 @@ def application_off(root):
     save(out/'results.json',{'complete':True,'results':records,'only_changed':'execution_observation_closure.application_write_values.enabled','not_performance_measurements':True})
 
 
+def final_writes(root,role):
+    from audit_application_call_revision import class_hashes
+    tf.HOME=root;tf.check();tf.independent=independent_tf
+    parent=root.parent;p=load(root/'protocol.json');out=root/('development-'+role+'-frozen');out.mkdir();records=[];agent=class_hashes(root/'frozen-base/distributed-observer.jar')
+    for mode in ('full','selective'):
+        for q in [q for q in p['queries']if q['role']==role]:
+            d=out/(mode+'-'+q['id']);d.mkdir();old=parent/('development-'+role+'-05')/d.name;plan=root/'write-plans'/(q['id']+'.json')
+            completed=(old/'capture/run.json').exists()and load(old/'capture/run.json')['status']=='business-completed'
+            if completed:
+                assert class_hashes(old/'build/distributed-observer.jar')==agent and sha(old/'build'/role/'plan.json')==sha(plan)
+                (d/'build').symlink_to(old/'build',target_is_directory=True);(d/'capture').symlink_to(old/'capture',target_is_directory=True)
+                save(d/'reuse.json',{'source':str(old),'source_manifest_sha256':sha(old/'build/build.json'),'raw_sha256':sha(old/'capture'/role/'events.jsonl'),'all_compiled_Agent_classes_and_plan_bytes_identical':True,'offline_fix':'Pass validated concrete generated-ID write record instead of metadata; Price/Route have supplied IDs.','new_deployment':False,'prior_evaluation_retained':(old/'evaluation.json').exists()})
+            else:
+                business.query_build(d/'build',root/'frozen-base',q,load(plan));first.capture(d,root,q,mode,p['inputs'][q['entry']])
+            record=tf.evaluate(d,q);records.append(record);save(out/'results.json',{'complete':False,'results':records});print(record,flush=True)
+    save(out/'results.json',{'complete':True,'results':records})
+
+
 if __name__=='__main__':
-    a=argparse.ArgumentParser();a.add_argument('--root',required=True,type=Path);a.add_argument('--stage',choices=('prepare','native','native-rescore','build','smoke','development','freeze','application-off'),required=True);a.add_argument('--role',choices=('route','price'));v=a.parse_args()
+    a=argparse.ArgumentParser();a.add_argument('--root',required=True,type=Path);a.add_argument('--stage',choices=('prepare','native','native-rescore','build','smoke','development','freeze','application-off','final-writes'),required=True);a.add_argument('--role',choices=('route','price'));v=a.parse_args()
     if v.stage in ('smoke','development'):development(v.root.resolve(),v.role,v.stage=='smoke')
+    elif v.stage=='final-writes':final_writes(v.root.resolve(),v.role)
     else:{'prepare':prepare,'native':native,'native-rescore':rescore,'build':build,'freeze':freeze,'application-off':application_off}[v.stage](v.root.resolve())

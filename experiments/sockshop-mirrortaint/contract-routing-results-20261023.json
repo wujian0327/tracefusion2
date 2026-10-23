@@ -1,0 +1,133 @@
+{
+  "all_passed": true,
+  "algorithm": "ae7fe8d8b9e23d8ce197870ff0069c7f1bee84eb",
+  "original_jars_unchanged": true,
+  "development62": {
+    "full": {
+      "actual_targets": 431,
+      "states": {
+        "known_correct": 428,
+        "unknown": 3
+      },
+      "answerability": 0.9930394431554525,
+      "baseline_correct_preserved": 368,
+      "old_tf_correct_preserved": 213,
+      "union_preserved": 382,
+      "tp": 397,
+      "fp": 0,
+      "fn_including_unknown": 3
+    },
+    "selective": {
+      "actual_targets": 431,
+      "states": {
+        "known_correct": 428,
+        "unknown": 3
+      },
+      "answerability": 0.9930394431554525,
+      "baseline_correct_preserved": 368,
+      "old_tf_correct_preserved": 213,
+      "union_preserved": 382,
+      "tp": 397,
+      "fp": 0,
+      "fn_including_unknown": 3
+    }
+  },
+  "exposed29": {
+    "full": {
+      "query_families": 29,
+      "targets": 244,
+      "states": {
+        "known_correct": 232,
+        "unknown": 12
+      },
+      "oracle_unavailable": 12,
+      "N/A_requests": 41,
+      "requests": 190
+    },
+    "selective": {
+      "query_families": 29,
+      "targets": 244,
+      "states": {
+        "known_correct": 232,
+        "unknown": 12
+      },
+      "oracle_unavailable": 12,
+      "N/A_requests": 41,
+      "requests": 190
+    }
+  },
+  "write15": {
+    "full": {
+      "queries": 15,
+      "requests": 90,
+      "targets": 96,
+      "states": {
+        "known_correct": 96
+      },
+      "N/A_requests": 10,
+      "tp": 96,
+      "fp": 0,
+      "fn": 0,
+      "paired_capability": {
+        "known_correct / known_wrong": 26,
+        "known_correct / known_correct": 58,
+        "known_correct / unknown": 12
+      }
+    },
+    "selective": {
+      "queries": 15,
+      "requests": 90,
+      "targets": 96,
+      "states": {
+        "known_correct": 96
+      },
+      "N/A_requests": 10,
+      "tp": 96,
+      "fp": 0,
+      "fn": 0,
+      "paired_capability": {
+        "known_correct / known_wrong": 26,
+        "known_correct / known_correct": 58,
+        "known_correct / unknown": 12
+      }
+    }
+  },
+  "fixed_native_write15": {
+    "known_wrong": 26,
+    "known_correct": 58,
+    "unknown": 12
+  },
+  "write_entry_baseline_unique_deployments": 3,
+  "write_entry_baseline_unique_http_requests": 18,
+  "oracle_corrected_expected_sets_in_original_first": 8,
+  "first_negative_results_preserved": true,
+  "reused_unchanged62_configurations": 118,
+  "recaptured_changed62_configurations": 6,
+  "reused_29_configurations": 44,
+  "new_29_Orders_configurations": 14,
+  "application_value_ablation": {
+    "events_per_arm": 3055,
+    "version_only_writes": 52,
+    "bytes_without": 3296741,
+    "bytes_with": 3294893,
+    "bytes_saved": 1848,
+    "is_performance_experiment": false
+  },
+  "controls": {
+    "new_JVM_per_mode": {
+      "known_correct": 26,
+      "expected_unknown": 8,
+      "aborted_roots": 2
+    },
+    "new_version_evidence_faults": 7,
+    "application_runtime_guards": 17,
+    "save_evidence_faults": 7,
+    "score_cache_faults": 3,
+    "static_checks": 17
+  },
+  "no_Station_authenticated_followup": true,
+  "no_new_unseen_query_evidence": true,
+  "general_call_instruction_slicing_complete": false,
+  "no_new_performance_claim": true,
+  "push_performed": false
+}

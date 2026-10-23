@@ -1,5 +1,12 @@
 # TraceFusion 2
 
+2026-10-23新增[写入口契约修订、基线能力校准与应用内写值收缩](experiments/sockshop-mirrortaint/CONTRACT-ROUTING-20261023.md)，最终核心 `ae7fe8d`。
+已暴露的Route/Price 15个查询，full/selective各 **96/96来源实例正确**；同任务固定MirrorTaint＋适配器为58正确、26错误、12unknown。原首次负结果及更正前真值均保留，Station继续403，不做鉴权后复验。
+历史62查询full/selective各 **428/431正确、3unknown**，29字段各 **232/244正确、12unknown**；逐项保留历史基线368个和旧TF213个正确实例。只有计划改变的三个Cart查询重采，其余经过Agent class、计划与离线语义一致性核验后复用，原失败不覆盖。
+应用内无关标量写值省略已验证，但五个Route查询合计仅减少约0.056%记录字节，事件数不变；**通用调用／指令切片尚未完成，本轮没有新性能优势结论**。
+
+以下保留前一冻结版本及对应成本。
+
 2026-10-23新增[执行观测闭包、首次新入口与正式成本报告](experiments/sockshop-mirrortaint/EXECUTION-CLOSURE-20261023.md)，核心冻结 `dff3d48`。
 同一新Agent重跑62个开发查询及已启封29字段：full/selective各保持 **428/431、232/244正确**，未知分别3和12，错误确定答案0；历史MirrorTaint正确368个及旧TF正确213个逐项保持。
 修改前另封存21个新入口查询，21/21规划接纳；Route/Price每配置96个目标均未得到答案，诊断为76个框架契约问题和20个语义/profile限制；Station按用户决定保留403，不做鉴权后复验。**新入口没有正向来源覆盖证据。**
