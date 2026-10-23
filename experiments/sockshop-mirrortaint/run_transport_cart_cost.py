@@ -25,7 +25,7 @@ def check(root):
 
 
 def prepare(root,capability):
-    root.mkdir(parents=True,exist_ok=False);(root/'logs').mkdir();base=capability/'frozen-base';q=bound.query('cart');p,policy=choose(load(base/'carts/model.json'),q);assert p['profile']=='execution-dependency'and p['source_evidence']
+    root.mkdir(parents=True,exist_ok=False);(root/'logs').mkdir();(root/'builds').mkdir();base=capability/'frozen-base';q=bound.query('cart');p,policy=choose(load(base/'carts/model.json'),q);assert p['profile']=='execution-dependency'and p['source_evidence']
     for arm,(_,scope,fields)in ARMS.items():
         plan=copy.deepcopy(p);specialize_transport(plan,scope=scope,fields=fields);binding.query_build(root/'builds'/arm,base,q,plan)
     (root/'cart-build').symlink_to(root/'builds/combined',target_is_directory=True)
