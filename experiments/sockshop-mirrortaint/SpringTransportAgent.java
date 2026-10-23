@@ -118,9 +118,27 @@ public final class SpringTransportAgent implements ClassFileTransformer,Opcodes 
                 }
             }finally{active.remove(o);}
         }
-        public static Object writeStartWithMapper(Object body,Object message,Object mapper){try{BusinessJackson.observe(mapper);ResponseBindingHooks.verifySerialization(body,mapper);Object token=writeStart(body,message);if(token!=null&&RequestEntityHooks.config()!=null)((Map)token).put("request_serialization",RequestEntityHooks.serialization(body,mapper));return token;}catch(Throwable e){PlannedServiceAgent.Recorder.problem("binding-serializer:"+e);return null;}}
+        static Map queryTransportPolicy(Map context)throws Exception{
+            Object raw=PlannedServiceAgent.plan.get("transport_evidence_policy");
+            if(!"selective".equals(PlannedServiceAgent.mode)||raw==null)return null;
+            if(!(raw instanceof Map)||!Integer.valueOf(1).equals(((Map)raw).get("version")))throw new IllegalStateException("Unknown query transport evidence policy");
+            Map policy=(Map)raw,binding=(Map)PlannedServiceAgent.plan.get("response_binding");
+            if(binding==null||!binding.get("path").equals(policy.get("response_path")))throw new IllegalStateException("Transport projection differs from query binding");
+            if(!"response".equals(context.get("direction")))return null;
+            synchronized(PlannedServiceAgent.Recorder.class){if(!ResponseBindingHooks.RETURN_MESSAGES.contains(context.get("message")))return null;}
+            return policy;
+        }
+        static List<Object> queryResponseFields(List<Object> fields,String pattern){
+            List<Object> chosen=new ArrayList<>();String[] target=pattern.split("/",-1);
+            for(Object raw:fields){Map field=(Map)raw;String[] path=((String)field.get("path")).split("/",-1);if(path.length!=target.length)continue;boolean match=true;
+                for(int i=0;i<path.length;i++)if(!target[i].equals(path[i])&&!(target[i].equals("*")&&path[i].matches("[0-9]+")))match=false;
+                if(match)chosen.add(raw);
+            }
+            return chosen;
+        }
+        public static Object writeStartWithMapper(Object body,Object message,Object mapper){try{BusinessJackson.observe(mapper);ResponseBindingHooks.verifySerialization(body,mapper);Object token=writeStart(body,message);if(token!=null&&RequestEntityHooks.config()!=null){Map r=(Map)token,policy=queryTransportPolicy(r);if(policy==null||!Boolean.TRUE.equals(policy.get("request_proofs_outbound_only")))r.put("request_serialization",RequestEntityHooks.serialization(body,mapper));}return token;}catch(Throwable e){PlannedServiceAgent.Recorder.problem("binding-serializer:"+e);return null;}}
         public static Object writeStart(Object body,Object message){try{Map<String,Object> r=context();if(r.get("message")==null)return null;r.put("fields",snapshot(body));r.put("phase","write");return r;}catch(Throwable e){PlannedServiceAgent.Recorder.problem("json-write-start:"+e);return null;}}
-        public static void writeEnd(Object token,Object body){if(token==null)return;try{Map<String,Object> r=(Map)token;if(!r.get("fields").equals(snapshot(body)))throw new IllegalStateException("DTO changed during serialization");emit("http-json",r);}catch(Throwable e){PlannedServiceAgent.Recorder.problem("json-write-end:"+e);}}
+        public static void writeEnd(Object token,Object body){if(token==null)return;try{Map<String,Object> r=(Map)token;if(!r.get("fields").equals(snapshot(body)))throw new IllegalStateException("DTO changed during serialization");Map policy=queryTransportPolicy(r);if(policy!=null&&Boolean.TRUE.equals(policy.get("project_bound_response_fields")))r.put("fields",queryResponseFields((List)r.get("fields"),(String)policy.get("response_path")));emit("http-json",r);}catch(Throwable e){PlannedServiceAgent.Recorder.problem("json-write-end:"+e);}}
         public static void writeAbort(Object token){if(token!=null)emit("http-json-abort",(Map)token);}
         static void received(Object o,IdentityHashMap<Object,Boolean> seen)throws Exception{if(o==null||primitive(o)||seen.put(o,true)!=null)return;if(o instanceof List){CollectionServiceHooks.received(o);for(Object v:(List)o)received(v,seen);}else if(o instanceof Map){CollectionServiceHooks.received(o);for(Object v:((Map)o).values())received(v,seen);}else{List<Map<String,Object>> props=schema.get(o.getClass().getName().replace('.','/'));if(props!=null)for(Map p:props){String name=(String)p.get("field");Field f=o.getClass().getDeclaredField(name.substring(name.lastIndexOf('.')+1));f.setAccessible(true);received(f.get(o),seen);}}}
         static final ThreadLocal<Map> DECODER=new ThreadLocal<Map>();

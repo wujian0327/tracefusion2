@@ -1,0 +1,51 @@
+{
+  "parent_algorithm": "76d2050",
+  "parent_capability": {
+    "queries": 62,
+    "targets": 431,
+    "known_correct": 428,
+    "unknown": 3,
+    "wrong": 0
+  },
+  "parent_unseen_first": "e37d0ae;29 old-entry new-field queries:232/244 correct,12unknown, no wrong known answer. All now exposed.",
+  "scope": "Observation only. Same application execution, effect, call, exception and source semantics. Automatic policy for execution-dependency response queries.",
+  "two_independent_changes": [
+    "Bound server responses do not collect outbound-request serialization proofs; target serializer check stays.",
+    "After full before/after snapshot equality, emit only declared target response fields."
+  ],
+  "full_mode": "Both reductions disabled; same required safety/meaning checks as selective.",
+  "not_claimed": [
+    "General instruction/call slicing",
+    "Event-format compression",
+    "Additional semantic coverage",
+    "New unseen-query generalization",
+    "New external baseline performance advantage"
+  ],
+  "acceptance": [
+    "Freeze core and plans before fresh62 full/selective deployment",
+    "All428 correct states preserved individually;3unknown preserved; no extra wrong/invalid/limited",
+    "Retain historicalMirrorTaint368 andoldTF213 correct instances",
+    "Actual original business ObjectMapper definitions, originalJARhashes andnewAgentclass hashes audited",
+    "Single missing necessary request/target serializer/call/constructor/write evidence cannot create false known answer"
+  ],
+  "guard_status": {
+    "policy_guards": 13,
+    "nested_target_binding_custom_serializer": "passed",
+    "kernel_each": {
+      "known_exact": 50,
+      "expected_unknown": 8,
+      "targets": 58,
+      "faults_rejected": 20
+    },
+    "date_received_legacy_request": "passed",
+    "old_request_oracle_fix": "Raw HTTP source frame must not be replaced with None. Initial failure retained, corrected control in separate directory."
+  },
+  "cost_after_acceptance": "Existing fixed2rps warm30s measure60s five deployments per configuration, random order, same JVM/resource/input constraints. Measure actual new collector, report observation arms separately; do not reuse old overhead figures.",
+  "freeze_sources_before_candidate_commit": {
+    "experiments/sockshop-mirrortaint/SpringTransportAgent.java": "82532643e0ae3c87d1c6a99f88fe4fe8b54105d862521c2f7317c9c73829184f",
+    "experiments/sockshop-mirrortaint/plan_capability_policy.py": "1e70226537b326e027f1fa5f377e70f3f275fcf00e466da4ce55c38ccd3f87ec",
+    "experiments/sockshop-mirrortaint/run_transport_observation_revision.py": "e17b92cf5f4d02778c370017fc7c7609b5720d4462e3eb5d1acdb131a894ea13",
+    "experiments/sockshop-mirrortaint/TransportPolicyProbe.java": "dd1dc60e722a19da5c9703b1dc4e7fc2dbe14c0c2265291412ed871a342de908",
+    "experiments/sockshop-mirrortaint/run_request_async_semantics.py": "c819fd9c397a2632859a12f1947948f9271d8391aca35af996fe0074b1597c75"
+  }
+}

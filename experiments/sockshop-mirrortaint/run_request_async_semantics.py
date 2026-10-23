@@ -39,7 +39,7 @@ def run(out,libs):
                 expected_known=c['mode'] in (0,1,2,4,6,9,10);assert a['known']==expected_known,(mode,c,a)
                 truth=set()
                 if expected_known and c['mode'] not in (2,6,9):
-                    suffix='/first' if c['mode']==1 else '/null' if c['mode']==10 else '/second';read=next(r for r in reads if r['uri'].endswith(suffix));f=next(f for f in read['fields'] if f['path']=='/text');truth={old.source_coord('fixture',{**read,'frame':None},f)}
+                    suffix='/first' if c['mode']==1 else '/null' if c['mode']==10 else '/second';read=next(r for r in reads if r['uri'].endswith(suffix));f=next(f for f in read['fields'] if f['path']=='/text');truth={old.source_coord('fixture',read,f)}
                 if expected_known:assert {old.predicted_coord(s) for s in a['sources']}==truth,(mode,c,a,truth)
                 assert all(f['path']!='/id' for r in reads for f in r['fields']),'Ignored wire id became a decoded source'
                 checks.append({'case':c,'answer':a,'truth':sorted(truth,key=str) if expected_known else None})

@@ -4,6 +4,22 @@ from plan_async_dependencies import attach_async_dependencies
 from query_observation_planner import require
 CONVERSION='edu/fudan/common/util/JsonUtils.conveterObject(Ljava/lang/Object;Ljava/lang/Class;)Ljava/lang/Object;'
 
+def specialize_transport(plan, *, scope=True, fields=True):
+    """Project evidence only after a query's return is bound.
+
+    Application execution/effect closure is unchanged. Request-serialization
+    proofs are consumed only on outbound requests; target serialization has
+    its own mapper/path and before/after object checks, in both policies.
+    The two options permit separate observation ablations, not answer routing.
+    """
+    if plan.get('response_binding'):
+        plan['transport_evidence_policy']={'version':1,
+            'request_proofs_outbound_only':bool(scope),
+            'project_bound_response_fields':bool(fields),
+            'response_path':plan['response_binding']['path'],
+            'conditions':'Selective mode, actual bound-return message and response direction. Retain full target serialization checks and pre/post snapshot comparison; outbound request proofs and all application evidence unchanged.'}
+    return plan
+
 def choose(model,query):
     args=(model,query['entry'],query['target'],query['path']);failures={};legacy=kernel=None
     try:legacy=plan_response(*args,read_forward_contracts=True)
@@ -27,4 +43,5 @@ def choose(model,query):
     if CONVERSION in model['methods']:
         plan['json_conversion_methods']=[CONVERSION];plan['json_conversion_contract']='Existing pinned default Jackson relative-path conversion contract; not a business formula.'
     plan['source_evidence']=True
+    if plan['profile']=='execution-dependency':specialize_transport(plan)
     return plan,{'version':1,'reason':reason,'structural_triggers':sorted(set(shape)),'failed_candidates':failures,'answer_independent':True}
