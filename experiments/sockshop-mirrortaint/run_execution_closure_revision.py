@@ -41,6 +41,12 @@ def regression29(root,part):
     import run_heldout29_first as first
     quota.install(root);base=root/'frozen-base';driver.QUERIES=load(FIRST29/'protocol-before-first.json')['queries'];oldplan=driver.plan
     driver.plan=lambda q:load(root/'regression29-plans'/(q['id']+'.json'))
+    # The established training driver checks plan existence separately from
+    # its plan() callback. Add disjoint links; never alter the 62-plan manifest.
+    for q in driver.QUERIES:
+        destination=root/'frozen-plans'/(q['id']+'.json');source=root/'regression29-plans'/(q['id']+'.json')
+        if not destination.exists():destination.symlink_to(source)
+        assert sha(destination)==sha(source)
     records=load(FIRST29/'audit-final-reviewed/audit.json')['records'];captures={}
     for r in records:
         if r['mode']!='full':continue
