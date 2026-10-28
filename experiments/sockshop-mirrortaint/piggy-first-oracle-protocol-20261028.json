@@ -1,0 +1,155 @@
+{
+  "sealed_before_this_scoring": true,
+  "retrospective_review": true,
+  "note": "Original first captures already existed. Do not misrepresent this review as pre-registered before their execution. Core/Agent/models unchanged.",
+  "sources_sha256": {
+    "upstream/piggymetrics/account-service/src/main/java/com/piggymetrics/account/AccountApplication.java": "611fd1dfe45d0418f441643884430a6eb1b3bac7c02fb8a12a7eda1abd13dc1a",
+    "upstream/piggymetrics/account-service/src/main/java/com/piggymetrics/account/config/ResourceServerConfig.java": "76aacb7bd3d884a7aa8b58c11dabb86120bcfd38cb6f89b2595a29189e0d7955",
+    "upstream/piggymetrics/account-service/src/main/java/com/piggymetrics/account/repository/AccountRepository.java": "96c570183450a648b8c287bf89a120e1339865af7e6d36bcb589f8b36588ec86",
+    "upstream/piggymetrics/account-service/src/main/java/com/piggymetrics/account/domain/Saving.java": "cac85b826a9821c09c5af33639ecb11711959c7ff82a78c251bb7f791adef4cd",
+    "upstream/piggymetrics/account-service/src/main/java/com/piggymetrics/account/domain/TimePeriod.java": "414bb8f973f971a4ef5acdf92da30d85bacf3875f0bca9a5a2ce3a062bb31e73",
+    "upstream/piggymetrics/account-service/src/main/java/com/piggymetrics/account/domain/Item.java": "4c4e72209093b482cd637c17c1e6d1261d6c9e7eced12f8447a4b8382c3d94dd",
+    "upstream/piggymetrics/account-service/src/main/java/com/piggymetrics/account/domain/User.java": "6ac4518ff1938dbca077bc0c5a23356050e670713263bd9210f3181109882d45",
+    "upstream/piggymetrics/account-service/src/main/java/com/piggymetrics/account/domain/Currency.java": "6cf7c1f098d7b668f55c5fe0d0e9b08b8b7dd2882869e3d71e18dbea7be4b03a",
+    "upstream/piggymetrics/account-service/src/main/java/com/piggymetrics/account/domain/Account.java": "0459c909851d021c05a1fe157e977f5e33fabd92ef4c34042bcbb61f3306b0a1",
+    "upstream/piggymetrics/account-service/src/main/java/com/piggymetrics/account/controller/ErrorHandler.java": "d5e813101da069143dc845ab742449e2241ed5230f552169cf6f45b826d98df8",
+    "upstream/piggymetrics/account-service/src/main/java/com/piggymetrics/account/controller/AccountController.java": "703a1e218d8173f9d47dc85f3de5d8fd333dc8531130f6371887b4f21d2144a5",
+    "upstream/piggymetrics/account-service/src/main/java/com/piggymetrics/account/client/StatisticsServiceClient.java": "2bb01422b9e2ad417ec25d68d7459da9ab008dca1b3727a133a108a73793ba93",
+    "upstream/piggymetrics/account-service/src/main/java/com/piggymetrics/account/client/StatisticsServiceClientFallback.java": "454f8d0cce8dc82bcd2eecd3ec29bba4afc49977a974dd899bc5858434f829b4",
+    "upstream/piggymetrics/account-service/src/main/java/com/piggymetrics/account/client/AuthServiceClient.java": "14ac8447a77903a09ae4622ddb486d67868d7b55a8f10867efab6f98cc0db37a",
+    "upstream/piggymetrics/account-service/src/main/java/com/piggymetrics/account/service/AccountServiceImpl.java": "60c25f01e6553c642f2536177f96bc8a6500be0b8a881a812b227068461ee27d",
+    "upstream/piggymetrics/account-service/src/main/java/com/piggymetrics/account/service/AccountService.java": "d6fe6af641b18b8305a81620ac99c11021096a58de802fd21ff07e97d07521e2",
+    "upstream/piggymetrics/account-service/src/main/java/com/piggymetrics/account/service/security/CustomUserInfoTokenServices.java": "b8ed676aa4ac72e2ef9fd71f4574440a969bccd9b767d5d3e3384f2ab7f799db",
+    "upstream/piggymetrics/auth-service/src/main/java/com/piggymetrics/auth/AuthApplication.java": "f3ec2b496bda416e52f62b0e5ee14fb6b6d7606babcd5dc2444a61bed570cffb",
+    "upstream/piggymetrics/auth-service/src/main/java/com/piggymetrics/auth/config/OAuth2AuthorizationConfig.java": "71b2afe7b3b6ebf9583f988eb74fabfe347d73b16e209aa09daaf9a785086cab",
+    "upstream/piggymetrics/auth-service/src/main/java/com/piggymetrics/auth/config/WebSecurityConfig.java": "cf60446d5af29bc5a623238e27cbe07557446bb2201dc06a17e63143a04a2942",
+    "upstream/piggymetrics/auth-service/src/main/java/com/piggymetrics/auth/repository/UserRepository.java": "cdeb6c427f16da61b1d125d028147b66f4f60255a97a23265d0903ee45f4a95f",
+    "upstream/piggymetrics/auth-service/src/main/java/com/piggymetrics/auth/domain/User.java": "8667bc65b821c7a2b1661bdd810410e5021a990faf9e3fd309c767b4855819ed",
+    "upstream/piggymetrics/auth-service/src/main/java/com/piggymetrics/auth/controller/UserController.java": "4bbdb4b88ae3cb47f840fba77a8adb61b29be372ea16aac02a6f47bf26f0a6a0",
+    "upstream/piggymetrics/auth-service/src/main/java/com/piggymetrics/auth/service/UserService.java": "2be76323355d81c4c98ef0103beb7319cc5d8d03c3d4b81c25c8ccd811b88ea6",
+    "upstream/piggymetrics/auth-service/src/main/java/com/piggymetrics/auth/service/UserServiceImpl.java": "3f3e2a7f8bdbe33886ed5f63faf213aae5eeaee81e7708730ff869a88160c3c6",
+    "upstream/piggymetrics/auth-service/src/main/java/com/piggymetrics/auth/service/security/MongoUserDetailsService.java": "ebf5b9711ace25c75cc7549ef9094258d716abe1f43398170a0f639dec1d7dc9",
+    "upstream/piggymetrics/notification-service/src/main/java/com/piggymetrics/notification/NotificationServiceApplication.java": "646627833587eebda873582fff86839e1ee19721eea4ebbdaee3d3314abff406",
+    "upstream/piggymetrics/notification-service/src/main/java/com/piggymetrics/notification/config/ResourceServerConfig.java": "3856f001fa0503472b214fd7e119fcbb822c726f2ac7ce24a4b398cf4a1e51aa",
+    "upstream/piggymetrics/notification-service/src/main/java/com/piggymetrics/notification/repository/RecipientRepository.java": "a1eb82612a0d91167e215c681df3de91bdc79815bddf9d13a54db78d1fbc1c10",
+    "upstream/piggymetrics/notification-service/src/main/java/com/piggymetrics/notification/repository/converter/FrequencyReaderConverter.java": "389a9d00a125b458a309573baf00203e0844d916abeaee91c03fdb63b3c4cb12",
+    "upstream/piggymetrics/notification-service/src/main/java/com/piggymetrics/notification/repository/converter/FrequencyWriterConverter.java": "4313f48dfd65bae35eee5870969a358cb3cfe1489f0df54d2e6a7b47a45b46a1",
+    "upstream/piggymetrics/notification-service/src/main/java/com/piggymetrics/notification/domain/NotificationSettings.java": "8f387fa0000715623957cf57254ed8ec71b8e0f1e2d53fc0aaf004253ff1a899",
+    "upstream/piggymetrics/notification-service/src/main/java/com/piggymetrics/notification/domain/Frequency.java": "b7cc87a7c9377a2cb3906c56cd7fae1907185bc3e7233f24bf4d498c7cfd8cae",
+    "upstream/piggymetrics/notification-service/src/main/java/com/piggymetrics/notification/domain/Recipient.java": "288affd3dacc67cee444f0c826683f7edd6ae651213381c5f2367ee2dde8e48f",
+    "upstream/piggymetrics/notification-service/src/main/java/com/piggymetrics/notification/domain/NotificationType.java": "b9635e2cbe3f9e83334a48161c399d458ba156a9eef240b5aaeedb476bf192fe",
+    "upstream/piggymetrics/notification-service/src/main/java/com/piggymetrics/notification/controller/RecipientController.java": "89322a45a18efcf6b7e5182e072844690eb96ba8532867f062a00ef390315061",
+    "upstream/piggymetrics/notification-service/src/main/java/com/piggymetrics/notification/client/AccountServiceClient.java": "51a2667d69c8212a77ad9de9b575014336359917476a2c5621afa726533b7807",
+    "upstream/piggymetrics/notification-service/src/main/java/com/piggymetrics/notification/service/NotificationServiceImpl.java": "2df6159a4609a539b3de5df49d897bc80ec01ea4260b87cdb8e29086def03a8c",
+    "upstream/piggymetrics/notification-service/src/main/java/com/piggymetrics/notification/service/RecipientServiceImpl.java": "6a25f0f40ee9aab9a024fd8cf752fd3b54a0664d7b1c9f80294e4f2189eee355",
+    "upstream/piggymetrics/notification-service/src/main/java/com/piggymetrics/notification/service/RecipientService.java": "522a9eba36cd95fc17ca36f0a39cfbff1293ef62f40c2b0241a8df81840cb28f",
+    "upstream/piggymetrics/notification-service/src/main/java/com/piggymetrics/notification/service/NotificationService.java": "605f0ae6bcaaf94b45028ed17c9b79760643ff9ef990ae64a616f5a9a5be9945",
+    "upstream/piggymetrics/notification-service/src/main/java/com/piggymetrics/notification/service/EmailService.java": "9c00a26da5487471b695724b70bccc9b5717e07fefc3cc17fd6a0de719e7cb00",
+    "upstream/piggymetrics/notification-service/src/main/java/com/piggymetrics/notification/service/EmailServiceImpl.java": "bff9c988f01d33b40d7d80bda59ba1bf3b79ab0c4d8271fb4765280941f0068f"
+  },
+  "oracle_code_sha256": "1e4fa30659d84a06e3052208750ebd2f2a32148c1105bf138616ba26f1861212",
+  "native_decoder_sha256": "adc1cbc31c1d4bb79172319768d02507fed9faa0b8170f9108a4bdb11d3f3b92",
+  "inventory": [
+    {
+      "api": "piggymetrics-1",
+      "method_return": "void",
+      "sinks": [
+        {
+          "id": "account-save",
+          "kind": "persistence",
+          "method": "com/piggymetrics/account/service/AccountServiceImpl.saveChanges(Ljava/lang/String;Lcom/piggymetrics/account/domain/Account;)V",
+          "site": 39,
+          "callee": "com/piggymetrics/account/repository/AccountRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+          "argument": 0,
+          "targets": "All Account scalar/null leaves; empty incomes/expenses are structural checkpoints",
+          "rules": {
+            "/name": "Actual findByName return.name (NOT input Account.name)",
+            "/note": "Root argument1.note",
+            "/saving/*": "Corresponding root argument1.saving field",
+            "/lastSeen": "Fresh Date producer, no declared boundary input",
+            "/incomes/*": "Corresponding input member; empty inputs have no member target",
+            "/expenses/*": "Corresponding input member; empty inputs have no member target"
+          }
+        },
+        {
+          "id": "statistics-outbound",
+          "kind": "supplementary-RPC-attempt",
+          "method": "com/piggymetrics/account/service/AccountServiceImpl.saveChanges(Ljava/lang/String;Lcom/piggymetrics/account/domain/Account;)V",
+          "site": 50,
+          "callee": "com/piggymetrics/account/client/StatisticsServiceClient.updateStatistics(Ljava/lang/String;Lcom/piggymetrics/account/domain/Account;)V",
+          "targets": "Actual outgoing account argument if request serialized; fallback invocation is not actual remote execution",
+          "rule": "Name comes from Principal.getName; account content as saved",
+          "scope": "Supplementary communication audit, do not merge with persistence counts"
+        }
+      ]
+    },
+    {
+      "api": "piggymetrics-2",
+      "method_return": "Account scalar/null response fields; include null incomes/expenses, not only element paths",
+      "sinks": [
+        {
+          "id": "account-create-save",
+          "kind": "persistence",
+          "method": "com/piggymetrics/account/service/AccountServiceImpl.create(Lcom/piggymetrics/account/domain/User;)Lcom/piggymetrics/account/domain/Account;",
+          "site": 67,
+          "callee": "com/piggymetrics/account/repository/AccountRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+          "targets": "All saved Account fields",
+          "rules": "Same original Account construction rule as method return; target occurrence remains save argument, NOT response occurrence"
+        },
+        {
+          "id": "auth-create-outbound",
+          "kind": "supplementary-RPC-and-remote-persistence",
+          "method": "com/piggymetrics/account/service/AccountServiceImpl.create(Lcom/piggymetrics/account/domain/User;)Lcom/piggymetrics/account/domain/Account;",
+          "site": 20,
+          "callee": "com/piggymetrics/account/client/AuthServiceClient.createUser(Lcom/piggymetrics/account/domain/User;)V",
+          "targets": "Actual User request and remote UserRepository.save fields",
+          "rules": "username copies root argument0.username; remote password is BCrypt of root argument0.password plus generated salt; requires actual cross-service message and remote object/write coordinates"
+        }
+      ]
+    },
+    {
+      "api": "piggymetrics-3",
+      "method_return": "void; native collector null sentinel is NOT a source answer",
+      "sinks": [
+        {
+          "id": "user-save",
+          "kind": "persistence",
+          "method": "com/piggymetrics/auth/service/UserServiceImpl.create(Lcom/piggymetrics/auth/domain/User;)V",
+          "site": 20,
+          "callee": "com/piggymetrics/auth/repository/UserRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+          "argument": 0,
+          "targets": "username and encoded password",
+          "rules": {
+            "/username": "Root argument0.username",
+            "/password": "Root argument0.password through BCrypt plus generated salt; not a known empty source"
+          }
+        }
+      ]
+    },
+    {
+      "api": "piggymetrics-4",
+      "method_return": "All actual Principal/OAuth2Authentication serialized scalar/null leaves; empty sets/maps separate structural checkpoints",
+      "sinks": [],
+      "rules": "Identity return of root argument0, physical projection required; cannot equate every computed JSON path to same-name physical field"
+    },
+    {
+      "api": "piggymetrics-5",
+      "method_return": "Actual Recipient scalar/null leaves including both BACKUP/REMIND settings",
+      "sinks": [
+        {
+          "id": "recipient-save",
+          "kind": "persistence",
+          "method": "com/piggymetrics/notification/service/RecipientServiceImpl.save(Ljava/lang/String;Lcom/piggymetrics/notification/domain/Recipient;)Lcom/piggymetrics/notification/domain/Recipient;",
+          "site": 11,
+          "callee": "com/piggymetrics/notification/repository/RecipientRepository.save(Ljava/lang/Object;)Ljava/lang/Object;",
+          "argument": 0,
+          "targets": "All Recipient scalar/null leaves; Map keys are enum NotificationType, not String in memory",
+          "rules": "accountName from Principal.getName; email/active/frequency from actual root argument1; null lastNotified replaced by fresh Date; return is same mutated Recipient"
+        }
+      ]
+    }
+  ],
+  "scope": "Every scalar/null actual original method-return leaf AND actual original persistence argument leaves; empty containers separately audited structurally. Supplementary outbound RPC not mixed with primary counts.",
+  "coordinate_rule": "Pair API/case/path tasks across different JVMs. Known answers require their own raw message/object/field/version and source occurrence; never equate object IDs across JVMs or choose by equal values. Missing source/sink coordinates remain explicit.",
+  "clock_rule": "Fresh Date is a generation fact outside input/DB/RPC-read boundary, not an input-derived source. Do not mix selection/control into data operands."
+}

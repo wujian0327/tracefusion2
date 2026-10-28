@@ -1,0 +1,521 @@
+{
+  "TF_core": "ae7fe8d8b9e23d8ce197870ff0069c7f1bee84eb",
+  "entries": [
+    {
+      "id": "apollo-1",
+      "application": "apollo",
+      "entry": "com/ctrip/framework/apollo/portal/controller/NamespaceController.findNamespace(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/bo/NamespaceBO;",
+      "role": "apollo-proxy",
+      "static_return_candidates": {
+        "accepted": 29,
+        "target_binding_unsupported": 4
+      },
+      "original_latest_attempt": "artifacts/portability-first-20261028/original/apollo/attempt04/results.json",
+      "original_http_statuses": {
+        "200": 5,
+        "404": 1
+      },
+      "original_business_codes": {},
+      "tools": "not_executed"
+    },
+    {
+      "id": "apollo-2",
+      "application": "apollo",
+      "entry": "com/ctrip/framework/apollo/portal/controller/ReleaseController.findActiveReleases(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;II)Ljava/util/List;",
+      "role": "apollo-proxy",
+      "static_return_candidates": {
+        "target_binding_unsupported": 1
+      },
+      "original_latest_attempt": "artifacts/portability-first-20261028/original/apollo/attempt04/results.json",
+      "original_http_statuses": {
+        "200": 6
+      },
+      "original_business_codes": {},
+      "tools": "not_executed"
+    },
+    {
+      "id": "apollo-3",
+      "application": "apollo",
+      "entry": "com/ctrip/framework/apollo/adminservice/controller/InstanceConfigController.getInstancesCountByNamespace(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)J",
+      "role": "apollo-proxy",
+      "static_return_candidates": {
+        "target_binding_unsupported": 1
+      },
+      "original_latest_attempt": "artifacts/portability-first-20261028/original/apollo/attempt04/results.json",
+      "original_http_statuses": {
+        "200": 6
+      },
+      "original_business_codes": {},
+      "tools": "not_executed"
+    },
+    {
+      "id": "apollo-4",
+      "application": "apollo",
+      "entry": "com/ctrip/framework/apollo/portal/controller/NamespaceBranchController.findBranch(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/bo/NamespaceBO;",
+      "role": "apollo-proxy",
+      "static_return_candidates": {
+        "accepted": 29,
+        "target_binding_unsupported": 4
+      },
+      "original_latest_attempt": "artifacts/portability-first-20261028/original/apollo/attempt04/results.json",
+      "original_http_statuses": {
+        "200": 5,
+        "400": 1
+      },
+      "original_business_codes": {},
+      "tools": "not_executed"
+    },
+    {
+      "id": "apollo-5",
+      "application": "apollo",
+      "entry": "com/ctrip/framework/apollo/portal/controller/InstanceController.getByRelease(Ljava/lang/String;JII)Lcom/ctrip/framework/apollo/common/dto/PageDTO;",
+      "role": "apollo-proxy",
+      "static_return_candidates": {
+        "rejected": 1,
+        "accepted": 3
+      },
+      "original_latest_attempt": "artifacts/portability-first-20261028/original/apollo/attempt04/results.json",
+      "original_http_statuses": {
+        "200": 6
+      },
+      "original_business_codes": {},
+      "tools": "not_executed"
+    },
+    {
+      "id": "piggymetrics-1",
+      "application": "piggymetrics",
+      "entry": "com/piggymetrics/account/controller/AccountController.saveCurrentAccount(Ljava/security/Principal;Lcom/piggymetrics/account/domain/Account;)V",
+      "role": "piggy-account",
+      "static_return_candidates": {},
+      "original_latest_attempt": "artifacts/portability-first-20261028/original/piggymetrics/attempt04-approved8/results.json",
+      "original_http_statuses": {
+        "200": 5,
+        "400": 1
+      },
+      "original_business_codes": {},
+      "tools": "First Piggy captures retained, oracle/scoring details in piggy-first-capability-results-20261028.json"
+    },
+    {
+      "id": "piggymetrics-2",
+      "application": "piggymetrics",
+      "entry": "com/piggymetrics/account/controller/AccountController.createNewAccount(Lcom/piggymetrics/account/domain/User;)Lcom/piggymetrics/account/domain/Account;",
+      "role": "piggy-account",
+      "static_return_candidates": {
+        "accepted": 18
+      },
+      "original_latest_attempt": "artifacts/portability-first-20261028/original/piggymetrics/attempt04-approved8/results.json",
+      "original_http_statuses": {
+        "200": 4,
+        "400": 2
+      },
+      "original_business_codes": {},
+      "tools": "First Piggy captures retained, oracle/scoring details in piggy-first-capability-results-20261028.json"
+    },
+    {
+      "id": "piggymetrics-3",
+      "application": "piggymetrics",
+      "entry": "com/piggymetrics/auth/controller/UserController.createUser(Lcom/piggymetrics/auth/domain/User;)V",
+      "role": "piggy-auth",
+      "static_return_candidates": {},
+      "original_latest_attempt": "artifacts/portability-first-20261028/original/piggymetrics/attempt04-approved8/results.json",
+      "original_http_statuses": {
+        "200": 5,
+        "500": 1
+      },
+      "original_business_codes": {},
+      "tools": "First Piggy captures retained, oracle/scoring details in piggy-first-capability-results-20261028.json"
+    },
+    {
+      "id": "piggymetrics-4",
+      "application": "piggymetrics",
+      "entry": "com/piggymetrics/auth/controller/UserController.getUser(Ljava/security/Principal;)Ljava/security/Principal;",
+      "role": "piggy-auth",
+      "static_return_candidates": {
+        "target_binding_unsupported": 1
+      },
+      "original_latest_attempt": "artifacts/portability-first-20261028/original/piggymetrics/attempt04-approved8/results.json",
+      "original_http_statuses": {
+        "200": 5,
+        "401": 1
+      },
+      "original_business_codes": {},
+      "tools": "First Piggy captures retained, oracle/scoring details in piggy-first-capability-results-20261028.json"
+    },
+    {
+      "id": "piggymetrics-5",
+      "application": "piggymetrics",
+      "entry": "com/piggymetrics/notification/controller/RecipientController.saveCurrentNotificationsSettings(Ljava/security/Principal;Lcom/piggymetrics/notification/domain/Recipient;)Ljava/lang/Object;",
+      "role": "piggy-notification",
+      "static_return_candidates": {
+        "accepted": 5
+      },
+      "original_latest_attempt": "artifacts/portability-first-20261028/original/piggymetrics/attempt04-approved8/results.json",
+      "original_http_statuses": {
+        "200": 5,
+        "400": 1
+      },
+      "original_business_codes": {},
+      "tools": "First Piggy captures retained, oracle/scoring details in piggy-first-capability-results-20261028.json"
+    },
+    {
+      "id": "ZLT-MP-1",
+      "application": "ZLT-MP",
+      "entry": "com/central/oauth/controller/ClientController.list(Ljava/util/Map;)Lcom/central/common/model/PageResult;",
+      "role": "zlt-uaa",
+      "static_return_candidates": {
+        "accepted": 3
+      },
+      "original_state": "environment_preflight_blocked",
+      "tools": "not_executed"
+    },
+    {
+      "id": "ZLT-MP-2",
+      "application": "ZLT-MP",
+      "entry": "com/central/user/controller/SysUserController.saveOrUpdate(Lcom/central/common/model/SysUser;)Lcom/central/common/model/Result;",
+      "role": "zlt-user",
+      "static_return_candidates": {
+        "accepted": 3
+      },
+      "original_state": "environment_preflight_blocked",
+      "tools": "not_executed"
+    },
+    {
+      "id": "ZLT-MP-3",
+      "application": "ZLT-MP",
+      "entry": "com/central/user/controller/SysUserController.findByMobile(Ljava/lang/String;)Lcom/central/common/model/SysUser;",
+      "role": "zlt-user",
+      "static_return_candidates": {
+        "accepted": 24,
+        "target_binding_unsupported": 1
+      },
+      "original_state": "environment_preflight_blocked",
+      "tools": "not_executed"
+    },
+    {
+      "id": "ZLT-MP-4",
+      "application": "ZLT-MP",
+      "entry": "com/central/user/controller/SysUserController.findUsers(Ljava/util/Map;)Lcom/central/common/model/PageResult;",
+      "role": "zlt-user",
+      "static_return_candidates": {
+        "accepted": 3
+      },
+      "original_state": "environment_preflight_blocked",
+      "tools": "not_executed"
+    },
+    {
+      "id": "ZLT-MP-5",
+      "application": "ZLT-MP",
+      "entry": "com/central/user/controller/SysUserController.getLoginAppUser(Lcom/central/common/model/SysUser;)Lcom/central/common/model/Result;",
+      "role": "zlt-user",
+      "static_return_candidates": {
+        "accepted": 3
+      },
+      "original_state": "environment_preflight_blocked",
+      "tools": "not_executed"
+    },
+    {
+      "id": "SockShop-1",
+      "application": "SockShop",
+      "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+      "role": "sock-orders",
+      "static_return_candidates": {
+        "accepted": 34
+      },
+      "original_state": "not_reexecuted_for_this_common_task",
+      "tools": "not_executed"
+    },
+    {
+      "id": "SockShop-2",
+      "application": "SockShop",
+      "entry": "works/weave/socks/cart/controllers/CartsController.get(Ljava/lang/String;)Lworks/weave/socks/cart/entities/Cart;",
+      "role": "sock-carts",
+      "static_return_candidates": {
+        "target_binding_unsupported": 1
+      },
+      "original_state": "not_reexecuted_for_this_common_task",
+      "tools": "not_executed"
+    },
+    {
+      "id": "SockShop-3",
+      "application": "SockShop",
+      "entry": "works/weave/socks/cart/controllers/CartsController.delete(Ljava/lang/String;)V",
+      "role": "sock-carts",
+      "static_return_candidates": {},
+      "original_state": "not_reexecuted_for_this_common_task",
+      "tools": "not_executed"
+    },
+    {
+      "id": "SockShop-4",
+      "application": "SockShop",
+      "entry": "works/weave/socks/cart/controllers/CartsController.mergeCarts(Ljava/lang/String;Ljava/lang/String;)V",
+      "role": "sock-carts",
+      "static_return_candidates": {},
+      "original_state": "not_reexecuted_for_this_common_task",
+      "tools": "not_executed"
+    },
+    {
+      "id": "SockShop-5",
+      "application": "SockShop",
+      "entry": "works/weave/socks/shipping/controllers/ShippingController.postShipping(Lworks/weave/socks/shipping/entities/Shipment;)Lworks/weave/socks/shipping/entities/Shipment;",
+      "role": "sock-shipping",
+      "static_return_candidates": {
+        "accepted": 2
+      },
+      "original_state": "not_reexecuted_for_this_common_task",
+      "tools": "not_executed"
+    },
+    {
+      "id": "FEBS-Cloud-1",
+      "application": "FEBS-Cloud",
+      "entry": "cc/mrbird/febs/auth/controller/OauthClientDetailsController.addOauthCliendetails(Lcc/mrbird/febs/auth/entity/OauthClientDetails;)V",
+      "role": "febs-auth",
+      "static_return_candidates": {},
+      "original_state": "environment_preflight_blocked",
+      "tools": "not_executed"
+    },
+    {
+      "id": "FEBS-Cloud-2",
+      "application": "FEBS-Cloud",
+      "entry": "cc/mrbird/febs/server/job/controller/JobController.jobList(Lcc/mrbird/febs/common/core/entity/QueryRequest;Lcc/mrbird/febs/server/job/entity/Job;)Lcc/mrbird/febs/common/core/entity/FebsResponse;",
+      "role": "febs-job",
+      "static_return_candidates": {
+        "target_binding_unsupported": 3
+      },
+      "original_state": "environment_preflight_blocked",
+      "tools": "not_executed"
+    },
+    {
+      "id": "FEBS-Cloud-3",
+      "application": "FEBS-Cloud",
+      "entry": "cc/mrbird/febs/server/system/controller/UserController.userList(Lcc/mrbird/febs/common/core/entity/QueryRequest;Lcc/mrbird/febs/common/core/entity/system/SystemUser;)Lcc/mrbird/febs/common/core/entity/FebsResponse;",
+      "role": "febs-system",
+      "static_return_candidates": {
+        "target_binding_unsupported": 3
+      },
+      "original_state": "environment_preflight_blocked",
+      "tools": "not_executed"
+    },
+    {
+      "id": "FEBS-Cloud-4",
+      "application": "FEBS-Cloud",
+      "entry": "cc/mrbird/febs/server/system/controller/UserController.index()Lcc/mrbird/febs/common/core/entity/FebsResponse;",
+      "role": "febs-system",
+      "static_return_candidates": {
+        "target_binding_unsupported": 3
+      },
+      "original_state": "environment_preflight_blocked",
+      "tools": "not_executed"
+    },
+    {
+      "id": "FEBS-Cloud-5",
+      "application": "FEBS-Cloud",
+      "entry": "cc/mrbird/febs/server/system/controller/UserController.addUser(Lcc/mrbird/febs/common/core/entity/system/SystemUser;)V",
+      "role": "febs-system",
+      "static_return_candidates": {},
+      "original_state": "environment_preflight_blocked",
+      "tools": "not_executed"
+    },
+    {
+      "id": "goodsKill-1",
+      "application": "goodsKill",
+      "entry": "com/goodskill/service/impl/SeckillServiceImpl.executeSeckill(JLjava/lang/String;Ljava/lang/String;)Lcom/goodskill/api/dto/SeckillExecutionDTO;",
+      "role": "goods-service",
+      "static_return_candidates": {
+        "rejected": 12
+      },
+      "original_state": "environment_preflight_blocked",
+      "tools": "not_executed"
+    },
+    {
+      "id": "goodsKill-2",
+      "application": "goodsKill",
+      "entry": "com/goodskill/web/controller/SeckillMockController.doWithSychronized(Lcom/goodskill/web/dto/SeckillWebMockRequestDTO;)Lcom/goodskill/common/info/Result;",
+      "role": "goods-web",
+      "static_return_candidates": {
+        "accepted": 4
+      },
+      "original_state": "environment_preflight_blocked",
+      "tools": "not_executed"
+    },
+    {
+      "id": "goodsKill-3",
+      "application": "goodsKill",
+      "entry": "com/goodskill/web/controller/SeckillController.getDirectoryPermissionList()Lcom/goodskill/web/dto/ResponseDTO;",
+      "role": "goods-web",
+      "static_return_candidates": {
+        "accepted": 4
+      },
+      "original_state": "environment_preflight_blocked",
+      "tools": "not_executed"
+    },
+    {
+      "id": "goodsKill-4",
+      "application": "goodsKill",
+      "entry": "com/goodskill/web/controller/SeckillController.execute(Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;)Lcom/goodskill/common/info/Result;",
+      "role": "goods-web",
+      "static_return_candidates": {
+        "accepted": 4
+      },
+      "original_state": "environment_preflight_blocked",
+      "tools": "not_executed"
+    },
+    {
+      "id": "goodsKill-5",
+      "application": "goodsKill",
+      "entry": "com/goodskill/web/controller/AdminController.roleLess(II)Lcom/goodskill/web/dto/ResponseDTO;",
+      "role": "goods-web",
+      "static_return_candidates": {
+        "rejected": 4
+      },
+      "original_state": "environment_preflight_blocked",
+      "tools": "not_executed"
+    },
+    {
+      "id": "mall-swarm-1",
+      "application": "mall-swarm",
+      "entry": "com/macro/mall/portal/controller/UmsMemberController.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;",
+      "role": "mall-portal",
+      "static_return_candidates": {
+        "accepted": 3
+      },
+      "original_latest_attempt": "artifacts/portability-first-20261028/original/mall-swarm/attempt04/results.json",
+      "original_http_statuses": {
+        "200": 6
+      },
+      "original_business_codes": {
+        "200": 5,
+        "500": 1
+      },
+      "tools": "not_executed"
+    },
+    {
+      "id": "mall-swarm-2",
+      "application": "mall-swarm",
+      "entry": "com/macro/mall/portal/controller/UmsMemberController.register(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;",
+      "role": "mall-portal",
+      "static_return_candidates": {
+        "accepted": 3
+      },
+      "original_latest_attempt": "artifacts/portability-first-20261028/original/mall-swarm/attempt04/results.json",
+      "original_http_statuses": {
+        "200": 6
+      },
+      "original_business_codes": {
+        "200": 4,
+        "500": 2
+      },
+      "tools": "not_executed"
+    },
+    {
+      "id": "mall-swarm-3",
+      "application": "mall-swarm",
+      "entry": "com/macro/mall/controller/UmsAdminController.login(Lcom/macro/mall/dto/UmsAdminLoginParam;)Lcom/macro/mall/common/api/CommonResult;",
+      "role": "mall-admin",
+      "static_return_candidates": {
+        "accepted": 3
+      },
+      "original_latest_attempt": "artifacts/portability-first-20261028/original/mall-swarm/attempt04/results.json",
+      "original_http_statuses": {
+        "200": 6
+      },
+      "original_business_codes": {
+        "200": 5,
+        "404": 1
+      },
+      "tools": "not_executed"
+    },
+    {
+      "id": "mall-swarm-4",
+      "application": "mall-swarm",
+      "entry": "com/macro/mall/controller/UmsAdminController.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)Lcom/macro/mall/common/api/CommonResult;",
+      "role": "mall-admin",
+      "static_return_candidates": {
+        "accepted": 3
+      },
+      "original_latest_attempt": "artifacts/portability-first-20261028/original/mall-swarm/attempt04/results.json",
+      "original_http_statuses": {
+        "200": 6
+      },
+      "original_business_codes": {
+        "200": 5,
+        "500": 1
+      },
+      "tools": "not_executed"
+    },
+    {
+      "id": "mall-swarm-5",
+      "application": "mall-swarm",
+      "entry": "com/macro/mall/controller/UmsAdminController.update(Ljava/lang/Long;Lcom/macro/mall/model/UmsAdmin;)Lcom/macro/mall/common/api/CommonResult;",
+      "role": "mall-admin",
+      "static_return_candidates": {
+        "accepted": 3
+      },
+      "original_latest_attempt": "artifacts/portability-first-20261028/original/mall-swarm/attempt04/results.json",
+      "original_http_statuses": {
+        "200": 5,
+        "500": 1
+      },
+      "original_business_codes": {
+        "200": 5
+      },
+      "tools": "not_executed"
+    },
+    {
+      "id": "SuperMarket-1",
+      "application": "SuperMarket",
+      "entry": "com/supermarket/cart/controller/CartController.updateCart(Lcom/supermarket/common/domain/Cart;)Lcom/supermarket/common/vo/SysResult;",
+      "role": "cart",
+      "static_return_candidates": {
+        "accepted": 3
+      },
+      "original_state": "environment_preflight_blocked",
+      "tools": "not_executed"
+    },
+    {
+      "id": "SuperMarket-2",
+      "application": "SuperMarket",
+      "entry": "com/supermarket/cart/controller/CartController.addCart(Lcom/supermarket/common/domain/Cart;)Lcom/supermarket/common/vo/SysResult;",
+      "role": "cart",
+      "static_return_candidates": {
+        "accepted": 3
+      },
+      "original_state": "environment_preflight_blocked",
+      "tools": "not_executed"
+    },
+    {
+      "id": "SuperMarket-3",
+      "application": "SuperMarket",
+      "entry": "com/supermarket/order/controller/OrderController.addOrder(Lcom/supermarket/common/domain/Order;)Lcom/supermarket/common/vo/SysResult;",
+      "role": "order",
+      "static_return_candidates": {
+        "accepted": 3
+      },
+      "original_state": "environment_preflight_blocked",
+      "tools": "not_executed"
+    },
+    {
+      "id": "SuperMarket-4",
+      "application": "SuperMarket",
+      "entry": "com/supermarket/product/controller/ProductController.pageManage(Ljava/lang/Integer;Ljava/lang/Integer;)Lcom/supermarket/common/vo/CommonResult;",
+      "role": "product",
+      "static_return_candidates": {
+        "accepted": 3
+      },
+      "original_state": "environment_preflight_blocked",
+      "tools": "not_executed"
+    },
+    {
+      "id": "SuperMarket-5",
+      "application": "SuperMarket",
+      "entry": "com/supermarket/user/controller/UserController.registUser(Lcom/supermarket/common/domain/User;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lorg/springframework/validation/Errors;)Lcom/supermarket/common/vo/SysResult;",
+      "role": "user",
+      "static_return_candidates": {
+        "accepted": 3
+      },
+      "original_state": "environment_preflight_blocked",
+      "tools": "not_executed"
+    }
+  ],
+  "complete": false,
+  "scope": "All original forty APIs retained; original environment status is not tool correctness"
+}

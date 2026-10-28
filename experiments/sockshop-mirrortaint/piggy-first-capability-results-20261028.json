@@ -1,0 +1,74 @@
+{
+  "core": "ae7fe8d8b9e23d8ce197870ff0069c7f1bee84eb",
+  "first_capture_manifest_sha256": "8aa62ab5ad24283681624a22f8a4ebb50d2e1a349628c8810bd16cf5b07cbe68",
+  "oracle_protocol_sha256": "5837ccb25b51877117137e06fe41d0584749ce6566568790928f6ae13cb9cfa4",
+  "account_return_targets": 40,
+  "per_tool": {
+    "baseline": {
+      "states": {
+        "known_correct": 36,
+        "unknown": 4
+      },
+      "TP": 4,
+      "FP": 0,
+      "FN": 0
+    },
+    "full": {
+      "states": {
+        "unknown": 16,
+        "evidence_invalid": 16,
+        "target_binding_unsupported": 8
+      },
+      "TP": 0,
+      "FP": 0,
+      "FN": 4
+    },
+    "selective": {
+      "states": {
+        "unknown": 16,
+        "evidence_invalid": 16,
+        "target_binding_unsupported": 8
+      },
+      "TP": 0,
+      "FP": 0,
+      "FN": 4
+    }
+  },
+  "remaining_return_targets": 229,
+  "persistence_targets": 132,
+  "empty_container_checkpoints": 11,
+  "all40APIs_retained": true,
+  "no_new_cost_or_contracts": true,
+  "primary_task_complete": false,
+  "reason": "All five APIs are inventoried and per-task rows retained, but frozen first captures lack required void-sink, Principal and enum Map source coordinates. Complete fine-grained task accuracy/Recall is therefore not asserted.",
+  "paired_gap_counts": {
+    "full": {
+      "baseline_correct_TF_unanswered": 36,
+      "both_unanswered": 4
+    },
+    "selective": {
+      "baseline_correct_TF_unanswered": 36,
+      "both_unanswered": 4
+    }
+  },
+  "native_export_failures": {
+    "piggymetrics-1": "Fixed first exporter invalid; see full artifact summary",
+    "piggymetrics-3": null,
+    "piggymetrics-4": "Fixed first exporter invalid; see full artifact summary",
+    "piggymetrics-5": "Fixed first exporter invalid; see full artifact summary"
+  },
+  "artifact_directory": "artifacts/portability-first-20261028/piggy-independent-first-03",
+  "capture_status": "First captures unchanged; retrospective independent scoring. Full five-API instance score unavailable.",
+  "single_worker_diagnostic": {
+    "full": "business_preservation_and_cleanup_failed",
+    "selective": "business_preservation_and_cleanup_failed",
+    "original": "5 legal requests200; invalid400",
+    "separate_from_first_scoring": true
+  },
+  "pre_save_fact_supplement": {
+    "path": "artifacts/portability-first-20261028/piggy-save-fact-supplement-01",
+    "per_mode_raw_instance_tasks": 36,
+    "no_new_query_answers": true,
+    "MT_persistence_export_still_missing": true
+  }
+}
