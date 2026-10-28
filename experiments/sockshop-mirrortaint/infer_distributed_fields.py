@@ -44,6 +44,8 @@ class Reconstruction:
             self.root_return_messages[role]=returns
             from infer_date_projection import validate_date_serialization
             validate_date_serialization(plan,rows)
+            from infer_scalar_projection import validate as validate_scalar_projection
+            validate_scalar_projection(plan,rows)
             from infer_uuid_projection import validate_uuid_projection
             validate_uuid_projection(plan,rows)
             self.stats[role]={'events':len(rows),'json_events':sum(r['kind']=='http-json' for r in rows),'log_bytes':path.stat().st_size}

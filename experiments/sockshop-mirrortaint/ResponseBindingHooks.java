@@ -127,6 +127,7 @@ public final class ResponseBindingHooks implements Opcodes {
           "com.fasterxml.jackson.databind.ser.std.NullSerializer","com.fasterxml.jackson.databind.ser.std.MapSerializer",
           "com.fasterxml.jackson.databind.ser.impl.IndexedListSerializer","com.fasterxml.jackson.databind.ser.impl.IndexedStringListSerializer",
           "com.fasterxml.jackson.databind.ser.impl.StringCollectionSerializer","com.fasterxml.jackson.databind.ser.std.CollectionSerializer"));
+        if(ScalarProjectionHooks.config()!=null&&(name.equals("com.fasterxml.jackson.databind.ser.std.NumberSerializer")||name.equals("com.fasterxml.jackson.databind.ser.std.EnumSerializer"))){ScalarProjectionHooks.serializer(serializer,value);return;}
         if(TemporalDateHooks.config()!=null&&name.equals("com.fasterxml.jackson.databind.ser.std.DateSerializer")){TemporalDateHooks.serializer(serializer);return;}
         if(UuidProjectionHooks.config()!=null&&name.equals("com.fasterxml.jackson.databind.ser.std.UUIDSerializer")){UuidProjectionHooks.serializer(serializer);return;}
         if(!allowed.contains(name)||BusinessJackson.yes(BusinessJackson.call(serializer,"usesObjectId")))throw new IllegalStateException("Unmodeled serializer: "+name);
@@ -149,7 +150,7 @@ public final class ResponseBindingHooks implements Opcodes {
     static void checkPath(Object value,Object mapper,String[] path,int index)throws Exception{
         if(value!=null&&UuidProjectionHooks.config()!=null&&BusinessJackson.call(mapper,"findMixInClassFor",value.getClass())!=null)throw new IllegalStateException("UUID path mix-in unsupported");
         if(value==null)return;serializer(BusinessJackson.call(BusinessJackson.call(mapper,"getSerializerProviderInstance"),"findValueSerializer",value.getClass()),value);
-        if(index==path.length){if(UuidProjectionHooks.uuid(value))UuidProjectionHooks.serialization((java.util.UUID)value,mapper);if(TemporalDateHooks.date(value))TemporalDateHooks.serialization((java.util.Date)value,mapper);return;}String part=path[index].replace("~1","/").replace("~0","~");
+        if(index==path.length){ScalarProjectionHooks.serialization(value,mapper);if(UuidProjectionHooks.uuid(value))UuidProjectionHooks.serialization((java.util.UUID)value,mapper);if(TemporalDateHooks.date(value))TemporalDateHooks.serialization((java.util.Date)value,mapper);return;}String part=path[index].replace("~1","/").replace("~0","~");
         if(value instanceof List){if(part.equals("*")){for(Object x:(List)value)checkPath(x,mapper,path,index+1);}else{int at=Integer.parseInt(part);if(at<((List)value).size())checkPath(((List)value).get(at),mapper,path,index+1);}return;}
         if(value instanceof Map){Object key=BusinessJackson.call(BusinessJackson.call(mapper,"getSerializerProviderInstance"),"findKeySerializer",BusinessJackson.call(mapper,"constructType",String.class),null);if(!key.getClass().getName().equals("com.fasterxml.jackson.databind.ser.std.StdKeySerializers$StringKeySerializer"))throw new IllegalStateException("Custom map-key serializer");if(((Map)value).containsKey(part))checkPath(((Map)value).get(part),mapper,path,index+1);return;}
         if(BusinessJackson.call(mapper,"findMixInClassFor",value.getClass())!=null)throw new IllegalStateException("Serialization mix-in unsupported");
@@ -166,7 +167,7 @@ public final class ResponseBindingHooks implements Opcodes {
         else if(!(used instanceof Field)||!used.getName().equals(name))throw new IllegalStateException("Serializer field differs");
         Field f=value.getClass().getDeclaredField(name);f.setAccessible(true);Object child=f.get(value);
         if(BusinessJackson.call(writer,"getTypeSerializer")!=null||member(writer,"_suppressableValue")!=null||BusinessJackson.yes(BusinessJackson.call(writer,"willSuppressNulls"))&&child==null)throw new IllegalStateException("Polymorphic or suppressing property serialization unsupported");
-        serializer(BusinessJackson.call(writer,"getSerializer"),null);Object nullSer=member(writer,"_nullSerializer");if(nullSer!=null)serializer(nullSer,null);
+        serializer(BusinessJackson.call(writer,"getSerializer"),ScalarProjectionHooks.config()!=null&&(child instanceof java.math.BigDecimal||ScalarProjectionHooks.enumeration(child))?child:null);Object nullSer=member(writer,"_nullSerializer");if(nullSer!=null)serializer(nullSer,null);
         checkPath(child,mapper,path,index+1);
     }
 }

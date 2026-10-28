@@ -44,6 +44,15 @@
         "com/fasterxml/jackson/databind/util/StdDateFormat": "418611dec2d800c7e886be4e78d5d42ad357eb2fa028be82b3288c01b2ecac48"
       },
       "scope": "BOOT-INF/lib/jackson-databind-2.8.6.jar"
+    },
+    {
+      "class_sha256": {
+        "com/fasterxml/jackson/databind/ObjectMapper": "c6bdc6685515ff73e47481143af95a493aa04d54320c7dfabe5e5143565034c2",
+        "com/fasterxml/jackson/databind/ser/std/DateSerializer": "52d34a85699540cea11fd8783dd08f180a6ed12f2d3cb8815886108e2397db8a",
+        "com/fasterxml/jackson/databind/ser/std/DateTimeSerializerBase": "2bcedad9e6c44c6f0797e3f3eeae4c6a5fe086b8408ed06bbf78119d3f80b0ec",
+        "com/fasterxml/jackson/databind/util/StdDateFormat": "6c3ab8c6008df87ef14bafcb9cd46a331419c30b827aea557c33077606e261cf"
+      },
+      "scope": "Jackson2.9.6 reviewed actual DateSerializer getTime/StdDateFormat branches; exact Date, default serializer/customFormat/useTimestamp checks and epoch/ISO proof still required."
     }
   ],
   "scope": "Exact Date identity/read/copy/newDate(long), fresh default GregorianCalendar and default DateSerializer/StdDateFormat; Date mutations unmodeled; environment separate from declared field sources",

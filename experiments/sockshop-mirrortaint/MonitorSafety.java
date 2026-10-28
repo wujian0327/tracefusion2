@@ -17,17 +17,18 @@ public final class MonitorSafety implements Opcodes {
         Checkpoint(){
             add(PlannedServiceAgent.Recorder.STACK);add(PlannedServiceAgent.Recorder.PENDING);
             add(CollectionServiceHooks.CALLS);add(ReadEffectHooks.STACK);add(ReadEffectHooks.STREAMS);add(ReadEffectHooks.OPTIONALS);add(ReadEffectHooks.COUNTS);
-            add(ExecutionKernelHooks.CONSTRUCTORS);add(SaveEffectHooks.ACTIVE);add(ConversionContractHooks.ACTIVE);add(AsyncTaskHooks.ACTIVE);
+            add(ExecutionKernelHooks.CONSTRUCTORS);add(FeignEffectHooks.CALLERS);add(FeignEffectHooks.WORKERS);add(SaveEffectHooks.ACTIVE);add(ConversionContractHooks.ACTIVE);add(AsyncTaskHooks.ACTIVE);
             add(SpringTransportAgent.Transport.RPC);add(SpringTransportAgent.Transport.SPANS);add(SpringTransportAgent.Transport.ASYNC);add(SpringTransportAgent.Transport.DECODER);
         }
         void add(ThreadLocal x){slots.add(new Slot(x));}
         void restore(){for(Slot s:slots)try{s.restore();}catch(Throwable e){failureMarker("state-restore",e);}}
     }
     static final class Scope {
-        final String method;final Checkpoint before;final Set<String> returnMessages=new HashSet<>();
+        final String method;final Checkpoint before;final Set<String> returnMessages=new HashSet<>();final List<Runnable> cleanup=new ArrayList<>();
         PlannedServiceAgent.Recorder.Frame frame;boolean failed,closed;
         Scope(String key){method=key;before=new Checkpoint();failed=!allowed();}
-        void rollback(){
+        void release(){for(Runnable r:new ArrayList<Runnable>(cleanup))try{r.run();}catch(Throwable failure){failureMarker("scope-resource-release",failure);}cleanup.clear();}
+        void rollback(){release();
             if(frame!=null){for(Iterator<Map.Entry<String,Set<String>>> i=PlannedServiceAgent.Recorder.ACTIVE.entrySet().iterator();i.hasNext();){Set<String> users=i.next().getValue();users.remove(frame.id);if(users.isEmpty())i.remove();}}
             for(String msg:returnMessages)ResponseBindingHooks.RETURN_MESSAGES.remove(msg);returnMessages.clear();before.restore();
         }
@@ -35,20 +36,21 @@ public final class MonitorSafety implements Opcodes {
         void close(){if(closed)return;closed=true;try{fault("cleanup",method);}catch(Throwable e){fatal(e);failed=true;failureMarker("cleanup",e);}finally{
             if(frame!=null){for(Iterator<Map.Entry<String,Set<String>>> i=PlannedServiceAgent.Recorder.ACTIVE.entrySet().iterator();i.hasNext();){Set<String> users=i.next().getValue();users.remove(frame.id);if(users.isEmpty())i.remove();}}
             if(failed){for(String m:returnMessages)ResponseBindingHooks.RETURN_MESSAGES.remove(m);}
-            before.restore();if(frame!=null)PlannedServiceAgent.Recorder.PENDING.remove();Deque<Scope> stack=SCOPES.get();if(stack.peek()==this)stack.pop();else{failureMarker("scope-completion-order",new IllegalStateException("Wrong monitor scope"));stack.remove(this);}
+            release();before.restore();if(frame!=null)PlannedServiceAgent.Recorder.PENDING.remove();Deque<Scope> stack=SCOPES.get();if(stack.peek()==this)stack.pop();else{failureMarker("scope-completion-order",new IllegalStateException("Wrong monitor scope"));stack.remove(this);}
         }}
     }
     static Scope open(String method){Scope s=new Scope(method);SCOPES.get().push(s);return s;}
+    static void onClose(Runnable cleanup){if(!SCOPES.get().isEmpty())SCOPES.get().peek().cleanup.add(cleanup);}
     public static boolean allowed(){return SCOPES.get().isEmpty()||!SCOPES.get().peek().failed;}
     static void rememberReturn(String message){if(message!=null&&!SCOPES.get().isEmpty()&&!ResponseBindingHooks.RETURN_MESSAGES.contains(message))SCOPES.get().peek().returnMessages.add(message);}
     static void fatal(Throwable t){if(t instanceof ThreadDeath)throw(ThreadDeath)t;if(t instanceof VirtualMachineError)throw(VirtualMachineError)t;}
     public static void failed(String site,Throwable error){synchronized(PlannedServiceAgent.Recorder.class){fatal(error);Scope s=SCOPES.get().peek();if(s==null)failureMarker(site,error);else s.fail(site,error);}}
     static void failureMarker(String site,Throwable error){try{PlannedServiceAgent.Recorder.problem("monitor-failure:"+site+":"+error.getClass().getName());}catch(Throwable ignored){PlannedServiceAgent.Recorder.captureInvalid=true;}}
     static void fault(String point,String method){if(!Boolean.getBoolean("service.monitor.test.enabled"))return;String key=System.getProperty("service.monitor.test.fault"),filter=System.getProperty("service.monitor.test.method","");if(point.equals(key)&&method.contains(filter)){System.clearProperty("service.monitor.test.fault");throw new IllegalStateException("Injected monitor "+point);}}
-    public static Map inspect(){synchronized(PlannedServiceAgent.Recorder.class){Map m=new LinkedHashMap();m.put("frames",PlannedServiceAgent.Recorder.STACK.get().size());m.put("scopes",SCOPES.get().size());m.put("calls",CollectionServiceHooks.CALLS.get().size());m.put("effects",ReadEffectHooks.STACK.get().size());m.put("constructors",ExecutionKernelHooks.CONSTRUCTORS.get().size());m.put("save",SaveEffectHooks.ACTIVE.get().size());m.put("conversions",ConversionContractHooks.ACTIVE.get().size());m.put("pending",PlannedServiceAgent.Recorder.PENDING.get());int active=0;for(Set<String>s:PlannedServiceAgent.Recorder.ACTIVE.values())active+=s.size();m.put("active",active);return m;}}
+    public static Map inspect(){synchronized(PlannedServiceAgent.Recorder.class){Map m=new LinkedHashMap();m.put("frames",PlannedServiceAgent.Recorder.STACK.get().size());m.put("scopes",SCOPES.get().size());m.put("calls",CollectionServiceHooks.CALLS.get().size());m.put("effects",ReadEffectHooks.STACK.get().size());m.put("constructors",ExecutionKernelHooks.CONSTRUCTORS.get().size());m.put("save",SaveEffectHooks.ACTIVE.get().size());m.put("conversions",ConversionContractHooks.ACTIVE.get().size());m.put("feign_callers",FeignEffectHooks.CALLERS.get().size());m.put("feign_workers",FeignEffectHooks.WORKERS.get().size());m.put("feign_commands",FeignEffectHooks.COMMANDS.size());m.put("feign_inputs",FeignEffectHooks.INPUTS.size());m.put("pending",PlannedServiceAgent.Recorder.PENDING.get());int active=0;for(Set<String>s:PlannedServiceAgent.Recorder.ACTIVE.values())active+=s.size();m.put("active",active);return m;}}
     // Only monitor-owned static calls injected by our transformers are wrapped.
     // The original business invocation (including its Throwable) stays outside.
-    static final Set<String> OWNERS=new HashSet<>(Arrays.asList("PlannedServiceAgent$Recorder","CollectionServiceHooks","ExecutionKernelHooks","ResponseBindingHooks","ReadEffectHooks","ConversionContractHooks","SaveEffectHooks","TemporalDateHooks","UuidProjectionHooks","AsyncTaskHooks","FrameworkCallHooks","RequestEntityHooks","SourceEvidenceHooks","SpringTransportAgent$Transport"));
+    static final Set<String> OWNERS=new HashSet<>(Arrays.asList("PlannedServiceAgent$Recorder","CollectionServiceHooks","ExecutionKernelHooks","FeignEffectHooks","DocumentDateHooks","ResponseBindingHooks","ReadEffectHooks","ConversionContractHooks","SaveEffectHooks","TemporalDateHooks","UuidProjectionHooks","AsyncTaskHooks","FrameworkCallHooks","RequestEntityHooks","SourceEvidenceHooks","SpringTransportAgent$Transport"));
     static void instrument(ClassNode owner){
         Map<String,String> wrappers=new LinkedHashMap<>();List<MethodNode> generated=new ArrayList<>();
         for(MethodNode method:new ArrayList<MethodNode>(owner.methods))for(AbstractInsnNode node:method.instructions.toArray()){
@@ -62,7 +64,7 @@ public final class MonitorSafety implements Opcodes {
     static MethodNode wrapper(String name,MethodInsnNode original){
         MethodNode m=new MethodNode(ASM9,ACC_PRIVATE|ACC_STATIC|ACC_SYNTHETIC,name,original.desc,null,null);Type[] args=Type.getArgumentTypes(original.desc);Type ret=Type.getReturnType(original.desc);int slots=0;for(Type t:args)slots+=t.getSize();m.maxLocals=slots+1;
         LabelNode start=new LabelNode(),end=new LabelNode(),handler=new LabelNode(),fallback=new LabelNode();InsnList x=m.instructions;x.add(start);
-        boolean lifecycle=original.owner.equals("PlannedServiceAgent$Recorder")&&Arrays.asList("enter","exit","abort").contains(original.name)||original.owner.equals("SpringTransportAgent$Transport")&&Arrays.asList("rpcExit","rpcAbort").contains(original.name)||original.owner.equals("SourceEvidenceHooks")&&Arrays.asList("read","abort").contains(original.name);
+        boolean lifecycle=original.owner.equals("PlannedServiceAgent$Recorder")&&Arrays.asList("enter","exit","abort").contains(original.name)||original.owner.equals("SpringTransportAgent$Transport")&&Arrays.asList("rpcExit","rpcAbort").contains(original.name)||original.owner.equals("SourceEvidenceHooks")&&Arrays.asList("read","abort").contains(original.name)||original.owner.equals("FeignEffectHooks")&&original.name.endsWith("End")||original.owner.equals("DocumentDateHooks")&&original.name.equals("end");
         if(!lifecycle){x.add(new MethodInsnNode(INVOKESTATIC,"MonitorSafety","allowed","()Z",false));x.add(new JumpInsnNode(IFEQ,fallback));}
         int slot=0;for(Type t:args){x.add(new VarInsnNode(t.getOpcode(ILOAD),slot));slot+=t.getSize();}
         x.add(new MethodInsnNode(INVOKESTATIC,original.owner,original.name,original.desc,false));x.add(end);x.add(new InsnNode(ret.getOpcode(IRETURN)));x.add(handler);x.add(new VarInsnNode(ASTORE,slots));x.add(new LdcInsnNode(original.owner+"."+original.name));x.add(new VarInsnNode(ALOAD,slots));x.add(new MethodInsnNode(INVOKESTATIC,"MonitorSafety","failed","(Ljava/lang/String;Ljava/lang/Throwable;)V",false));x.add(fallback);

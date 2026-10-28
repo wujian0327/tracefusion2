@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "jdk_profiles": [
+    {
+      "java_runtime_version": "1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01",
+      "class_sha256": {
+        "java/lang/Boolean": "0110c958c24f1e52a01cb34f7527fefa39e41cd0c250f5493fe5b785eaeae6cc",
+        "java/math/BigDecimal": "3a2a2aad71f1f3c888b9c550e27a40be9cf41a80e4f72506700848ec8dc31c08",
+        "java/math/BigInteger": "e1b771d89ad2fd2444ddd9f4f93b4bcb63ad08cc10ee529039f3520c5086d55a",
+        "java/lang/Enum": "e19ed4bdb80d4869ef9fdc4790a4b7bbd32a3a22c5da9ff885c03466a10731ec",
+        "java/lang/Object": "91e9554ea0fac57b7ca9595ab777fe2578af2e5b111e8c240e1793f1a3686292",
+        "java/lang/IllegalArgumentException": "86fa521e5cd3364b54c1f4f04cb200c285ea72383205904bee15b2c45f28f400",
+        "java/lang/Throwable": "48cc88a0797afe282c55f2aa889e84485198b90ab9965e59244ed7367dcad19b",
+        "java/lang/Number": "fcd410a44ef259d973ebc682f4d86d30940560081fb3b168eb2cd3ede692ad0b"
+      }
+    }
+  ],
+  "assert_profiles": [
+    {
+      "class_sha256": {
+        "org/springframework/util/Assert": "0fe1705e5ed9e2301e6d39b2ac427a28832c4ac9ce233fd6bd4233e12a291459"
+      },
+      "library": "Spring Core5.0.7.RELEASE",
+      "method": "org/springframework/util/Assert.isNull(Ljava/lang/Object;Ljava/lang/String;)V"
+    }
+  ],
+  "methods": {
+    "boolean": "java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;",
+    "decimal": "java/math/BigDecimal.<init>(I)V",
+    "assert": "org/springframework/util/Assert.isNull(Ljava/lang/Object;Ljava/lang/String;)V"
+  },
+  "conditions": {
+    "boolean": "Exact pinned Boolean.valueOf chooses cached constants only; dependence follows each actual primitive operand, never cached identity.",
+    "decimal": "Exact pinned BigDecimal(int) constructs an exact scale-zero integer in a fresh object; no arbitrary Number/subclass or arithmetic support.",
+    "assert": "Only Object,String overload; checks reference null and creates actual IllegalArgumentException on non-null; Supplier/other overloads are not modeled.",
+    "enum": "Planner proves closed javac8 enum constructor/clinit and constant table. Runtime checks actual class, name, ordinal and constant identity; no arbitrary initializer or enum subclass.",
+    "defaults": "Only local NEW with paired supported constructor, witnessed immediately after empty Object constructor, version-zero defaults and closed constructor evidence. Opaque effects or later versions invalidate them."
+  }
+}

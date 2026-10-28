@@ -11,6 +11,8 @@ import json,re
 def augment_calls(plan,model,sources):
     from plan_execution_kernel import constructor_writes
     methods={};targets={};opaque={};visiting=set();lambdas={};constructor_starts={};constructors=dict(plan['execution_kernel']['constructors'])
+    from plan_foundation_values import enum_proofs,attach as attach_foundations
+    enums,unproved_enums=enum_proofs(model)
     supported={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,87,89,96,100,104,132,167,178,180,181,182,183,184,185,187,191,192,198,199,186,189,190,50,83}|set(range(21,26))|set(range(54,59))|set(range(153,167))|set(range(172,178))
     supported|={107,135}  # Finite double multiply and exact JVM int-to-double.
     def subtype(child,parent,seen=None):
@@ -28,7 +30,7 @@ def augment_calls(plan,model,sources):
         require(not model['classes'][m['owner']]['access']&512,'Interface default method dispatch unsupported')
         initializer=model['methods'].get(m['owner']+'.<clinit>()V')
         if m['access']&8 and m['owner']!=model['methods'][plan['entry']]['owner']:
-            require(initializer is None or all(x['op'] in (0,177) for x in initializer['instructions']),'Foreign application static initialization unsupported')
+            require(initializer is None or all(x['op'] in (0,177) for x in initializer['instructions']) or m['owner'] in enums,'Foreign application static initialization unsupported')
         require(not m['access']&32,'Synchronized application methods unsupported')
         require(not re.search(r'\[[ZBCSIJFD]|\[\[',m['desc']),'Primitive/multidimensional array parameters unsupported')
         for ins in m['instructions']:
@@ -53,6 +55,7 @@ def augment_calls(plan,model,sources):
                     constructors[call]={'kind':'http-entity-null-headers'}
                 elif call=='org/springframework/http/HttpEntity.<init>(Lorg/springframework/util/MultiValueMap;)V':constructors[call]={'kind':'http-entity-headers-effects'}
                 elif call=='java/util/HashMap.<init>()V':constructors[call]={'kind':'local-map'}
+                elif call=='java/math/BigDecimal.<init>(I)V':constructors[call]={'kind':'decimal-int'}
                 else:
                     try:
                         require(call in model['methods'],'Application constructor bytecode absent: '+call)
@@ -152,4 +155,5 @@ def augment_calls(plan,model,sources):
             plan['json_conversion_methods']=[conversion]
             plan['execution_kernel']['conversion_contracts']={'version':1,'methods':[conversion],'summary_class_sha256':contract['summary_class_sha256']}
             plan['execution_kernel']['request_entity_contracts']=contract
-    return plan
+    from plan_feign_effects import attach as attach_feign_effects
+    return attach_feign_effects(attach_foundations(plan,model,enums,unproved_enums),model)

@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-28T14:43:29.623159+00:00",
+  "base": "667e2b23da3e768add54f45e24f54d780879041e",
+  "sequence": [
+    "Generic Boolean/BigDecimal/default field semantics",
+    "Exact Assert and verified plain enum constants",
+    "Separate Feign/Hystrix field preservation design and negative controls",
+    "Current Mongo save and independent serialization projections",
+    "Freeze candidate; full/selective Account40; final106 historical business acceptance"
+  ],
+  "scope": "Exposed Piggy Account development queries, no unseen or performance claim",
+  "first_results": "ae7fe8d preserved; protected manifest from reliability checkpoint unchanged",
+  "reliability_suite": "Only affected targeted tests during development; one final integrated acceptance",
+  "oracle": "Existing independent Piggy oracle and first40 input/source boundaries unchanged",
+  "manual_work": "Maintain per-feature library models, core modifications, reviewed bytecode/method counts and elapsed review/process time. No invented labor-hour estimate.",
+  "inputs_sha256": "43a988c0bb18cadb0fc43ea11d65302e475bf81051734b91a85d8dd3d49cf561",
+  "protected_first_files": 2322
+}

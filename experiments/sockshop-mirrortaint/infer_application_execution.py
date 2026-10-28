@@ -13,6 +13,10 @@ def infer_application(plan,rows,worker_request=None):
     from infer_async_protocol import validate_async_protocol
     async_audit=validate_async_protocol(plan,rows)
     cfg=plan['execution_kernel']
+    from infer_foundation_values import runtime as foundation_runtime,call_fact,default_facts
+    foundation_supported=foundation_runtime(cfg,rows)
+    from infer_feign_effects import validate as validate_feign
+    feign_effects=validate_feign(cfg,rows)
     from infer_execution_closure import validate as validate_closure
     validate_closure(plan,rows)
     primitive_fields={i['owner']+'.'+i['name'] for m in cfg.get('methods',{}).values() for i in m['instructions'] if i['op'] in (180,181) and i['desc'] in ('Z','B','C','S','I','J','F','D')}
@@ -75,6 +79,8 @@ def infer_application(plan,rows,worker_request=None):
             require(invocation and invocation['method']==row['constructor'] and invocation['receiver']==row['object'] and invocation['seq']<row['seq'],'Object birth constructor frame/receiver differs')
             require(row['object'] not in births,'Object birth identity repeated')
             births[row['object']]=row['seq']
+        defaults=default_facts(cfg,relevant,[r for r in relevant if r['kind']=='execution-constructor-enter'])
+        active_defaults={};decimal_values={}
         methods=cfg['methods'];events=[r for r in relevant if r['kind'] in ('enter','exit','abort','collection-call-enter','collection-call-exit','collection-call-throw','execution-constructor-enter','execution-constructed','execution-constructor-throw','execution-static-read','execution-lambda','execution-class-literal','execution-array','execution-array-throw','collection-catch','branch','read','write','write-version') and (r['kind'] not in ('read','write','write-version','branch') or r['site'].rsplit('@',1)[0] in methods)]
         writes=[r for r in relevant if r['kind']in ('write','write-version')];providers=defaultdict(list)
         for row in relevant:
@@ -91,6 +97,12 @@ def infer_application(plan,rows,worker_request=None):
         task_by_call={t['parent_call_id']:t for t in async_audit.get('tasks',[])} if plan.get('async_dependencies') else {}
         def identity(v):return state.allocations.get(v.allocation) if v.allocation is not None else v.observed.get('object')
         def actual(v):return {'object':identity(v)} if v.allocation is not None else v.observed
+        def scalar_value(value):
+            # Only a NEW token gets its constructor dependencies. An opaque
+            # return/reference cannot regain certainty from equal object/value.
+            if value.allocation is not None and identity(value)in decimal_values:
+                data=decimal_values[identity(value)];return Value(data.observed,data.origins|value.origins,data.selectors|value.selectors,data.unknown or value.unknown,value.allocation)
+            return value
         def bind(v,observed):
             if v.allocation is not None:
                 require(observed.get('object') is not None,'Application allocation identity absent');old=state.allocations.setdefault(v.allocation,observed['object']);require(old==observed['object'],'Application allocation rebound')
@@ -110,7 +122,8 @@ def infer_application(plan,rows,worker_request=None):
         def lookup(f,before):
             key=coordinate(f)
             preserved=preserved_fields.get(key)
-            if preserved and poisoned_at.get(f['owner'],-1)<=preserved[0]<before:
+            barrier=max(poisoned_at.get(f['owner'],-1),poisoned_at.get(f['observed'].get('object'),-1)if 'date_epoch_ms'in f['observed']else -1)
+            if preserved and barrier<=preserved[0]<before:
                 bind(preserved[1],f['observed']);return preserved[1].project(f['observed'])
             if f['observed'].get('uuid_type') and f['observed'].get('object')in poisoned_at:return Value(f['observed'],unknown=True)
             if 'date_epoch_ms' in f['observed']:
@@ -118,7 +131,17 @@ def infer_application(plan,rows,worker_request=None):
                 if obj in poisoned_at:return Value(f['observed'],unknown=True)
                 if obj in date_values:return date_values[obj].project(f['observed'])
             if key in state.fields and field_seq[key]>poisoned_at.get(f['owner'],-1):return state.fields[key]
+            default=active_defaults.get(f['owner'])
+            if default and default['seq']<before and default['seq']>poisoned_at.get(f['owner'],-1) and coordinate(f)not in providers:
+                matches=[v for v in default['fields']if coordinate(v)==key]
+                if len(matches)==1:same_value(matches[0]['observed'],f['observed']);return Value(f['observed'])
             return origin(f,before)
+        def register_defaults(ctor_start,receiver,completed=None):
+            if not cfg.get('default_initializers',{}).get(ctor_start['callee']):return
+            fact=defaults.get(ctor_start['constructor_id']);require(fact is not None,'Required allocation default witness absent')
+            require(fact['object']==identity(receiver),'Default witness wrong allocation object')
+            if completed:require(fact['seq']<completed['seq'],'Default witness after constructor completion')
+            prior=active_defaults.setdefault(fact['object'],fact);require(prior==fact,'Default allocation witness rebound')
         def write_field(w,v):
             if w['kind']=='write-version':
                 state.field_write(coordinate(w),Value(unknown=True));field_seq[coordinate(w)]=w['seq'];return
@@ -271,7 +294,7 @@ def infer_application(plan,rows,worker_request=None):
                 while True:
                     fr.steps+=1; total_steps+=1;execution_budget['steps']+=1
                     if execution_budget['steps']>cfg['step_limit']:raise AnalysisLimit('offline-execution','Application execution budget exceeded on complete evidence')
-                    ins=code[fr.pc];op=ins['op'];pop=fr.pop
+                    ins=code[fr.pc];op=ins['op'];pop=lambda:scalar_value(fr.pop())
                     if 21<=op<=25:
                         require(ins['var'] in fr.locals,'Execution uninitialized local');fr.stack.append(fr.locals[ins['var']])
                     elif 54<=op<=58:fr.locals[ins['var']]=pop()
@@ -335,13 +358,19 @@ def infer_application(plan,rows,worker_request=None):
                             if pos<len(events) and events[pos]['kind']=='enter':
                                 finish=next((j for j in range(pos,len(events)) if events[j]['kind']=='execution-static-read' and events[j].get('frame')==fr.invocation and events[j].get('pc')==fr.pc),None);opaque_extent(finish)
                             fact=take('execution-static-read');require(fact['field']==ins['owner']+'.'+ins['name'] and fact['descriptor']==ins['desc'],'Static field evidence differs')
-                            if ins['owner']!=method['owner']:
+                            enum_spec=cfg.get('plain_enum_classes',{}).get(ins['owner']);enum_fact=fact.get('foundation_enum');enum_known=False
+                            if enum_spec:
+                                require(enum_fact and enum_fact['class_sha256']==enum_spec['class_sha256'] and enum_fact['jdk_approved']==foundation_supported,'Enum constant witness/hash absent/differs')
+                                require(enum_fact['constant']==ins['name'] and enum_fact['ordinal']==enum_spec['constants'].index(ins['name']),'Enum constant selection differs')
+                                enum_known=enum_fact['valid'];require(not enum_known or foundation_supported and enum_fact['default_environment'],'Enum preconditions contradict runtime')
+                                if plan.get('scalar_projection'):require(fact['observed'].get('enum_type')==ins['owner'].replace('/','.')and fact['observed'].get('enum_ordinal')==enum_fact['ordinal']and fact['observed'].get('value')==ins['name'],'Enum constant physical value differs')
+                            if ins['owner']!=method['owner'] and not enum_known:
                                 contracts=cfg.get('request_entity_contracts',{});pinned=contracts.get('class_sha256',{}).get(ins['owner']) if ins['owner'] in ('org/springframework/hateoas/MediaTypes','org/springframework/http/MediaType','org/springframework/http/HttpMethod') else None
                                 if ins['owner']=='java/util/concurrent/TimeUnit':pinned=next((p['class_sha256'][ins['owner']] for p in contracts.get('jdk_profiles',[]) if p['java_runtime_version']==runtime[0]['java_runtime_version']),None)
                                 if pinned:require(fact.get('declaring_class_sha256')==pinned,'Static library owner differs')
                                 else:poison([],fact['seq']);unproved_statics.append(fact['seq'])
                             if fact['observed'].get('object'):nonlocal_owners.add(fact['observed']['object'])
-                            fr.stack.append(Value(fact['observed'],unknown=True))
+                            fr.stack.append(Value(fact['observed'],unknown=not enum_known))
                         else:fr.stack.append(Value(unknown=True))
                     elif op==180:
                         receiver=pop()
@@ -385,7 +414,7 @@ def infer_application(plan,rows,worker_request=None):
                             child_error=None
                             if effect.get('kind')=='frame':
                                 begin=take('enter',check_frame=False);require(begin['method']==key and begin['parent']==fr.invocation and begin['callsite']==entry+'@'+str(fr.pc),'Constructor Frame binding differs')
-                                bind(recv,{'object':begin['receiver']});_,child_error=execute(begin,args,recv)
+                                bind(recv,{'object':begin['receiver']});register_defaults(ctor_start,recv);_,child_error=execute(begin,args,recv)
                             elif effect.get('input_projections'):
                                 # A pure accessor may also be instrumented as a
                                 # lambda target elsewhere. Consume its real Frame
@@ -417,7 +446,12 @@ def infer_application(plan,rows,worker_request=None):
                             if effect.get('kind')=='opaque':poison([recv]+args,event['seq'])
                             for desc,a,b in zip(descriptors(ins['desc']),args,event['args']):bind_argument(a,b,desc)
                             owner=identity(recv)
+                            if ctor_start:register_defaults(ctor_start,recv,event)
                             if key=='java/util/ArrayList.<init>()V':state.containers[owner]=Container(owner,[],0,True)
+                            elif effect.get('kind')=='decimal-int':
+                                f=call_fact(cfg,event,'decimal-int',foundation_supported);require(len(args)==1 and f['int_value']==args[0].observed['value'] and f['scale']==0,'Decimal int constructor input/scale differs');require(event['receiver'].get('value')==f['int_value'],'Decimal int value differs')
+                                if f['valid']:decimal_values[owner]=args[0].project(event['receiver'])
+                                else:poison([recv]+args,event['seq']);decimal_values[owner]=Value(event['receiver'],unknown=True)
                             elif effect.get('kind')=='string-builder':builders[owner]=('',Value({'value':''}))
                             elif effect.get('kind')=='opaque':
                                 opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':event['seq'],'completion':'normal-constructor'})
@@ -565,6 +599,9 @@ def infer_application(plan,rows,worker_request=None):
                                 failure=take('collection-call-throw');require(failure['call_id']==call['call_id'],'Application throw instance differs')
                                 if child_error and child_error.get('object') is not None:require(child_error['object']==failure['exception']['object'],'Application rethrown object differs')
                                 read_only_bounds=False
+                                if key=='org/springframework/util/Assert.isNull(Ljava/lang/Object;Ljava/lang/String;)V' and cfg.get('foundation_values'):
+                                    f=call_fact(cfg,failure,'assert-is-null-string',foundation_supported)
+                                    if f['valid']:require(not f['null_input'] and failure['exception_type']=='java.lang.IllegalArgumentException','Assert throw contradicts null check');read_only_bounds=True
                                 if key in ('java/util/List.get(I)Ljava/lang/Object;','java/util/ArrayList.get(I)Ljava/lang/Object;') and recv is not None and call.get('receiver_type') in ('java.util.ArrayList','java.util.Arrays$ArrayList') and failure['exception_type'] in ('java.lang.IndexOutOfBoundsException','java.lang.ArrayIndexOutOfBoundsException'):
                                     c=container(call);index=args[0].observed.get('value')
                                     require(type(index) is int and not 0<=index<len(c.elements),'List bounds failure contradicts actual index/members')
@@ -797,6 +834,9 @@ def infer_application(plan,rows,worker_request=None):
                                 if proof['valid']:
                                     contract=cfg['save_effect_contracts'];matches=[p for p in [contract,*contract.get('additional_profiles',[])]if p['class_sha256']==proof['class_sha256']];require(len(matches)==1,'Save library profile absent/ambiguous');profile=matches[0]
                                     bind(args[0],proof['result']);bind(args[0],observed)
+                                    if profile.get('profile_kind')=='mongo2-provided-field-id':
+                                        from infer_listener_registry import validate as validate_listener_registry
+                                        validate_listener_registry(profile,proof)
                                     if profile.get('provided_id_only'):require(proof.get('provided_id_only') and proof['id_before'].get('value')is not None and proof['id_before']==proof['id_after'] and not proof.get('id_write'),'Provided-ID save changed/generates ID')
                                     require(proof.get('preconditions') and proof.get('listeners_verified') and proof.get('callback_invocations')==0 and proof['events']>=3 and proof['registry']==proof['default_registry'] and proof['converters']==proof['default_converters'],'Save preservation conditions contradict runtime')
                                     before={coordinate(f):f for f in proof['before']};after={coordinate(f):f for f in proof['after']};identifier=proof.get('id_write')
@@ -809,6 +849,7 @@ def infer_application(plan,rows,worker_request=None):
                                             index=int(k[1].split(':')[1]);require(k[2]==c.epoch and 0<=index<len(c.elements),'Save list member stage differs');value=c.elements[index];bind(value,f['observed']);protected[k]=value
                                         else:protected[k]=lookup(f,call['seq'])
                                     protected={k:v.project({a:b for a,b in v.observed.items()if a!='object'})if k[1]in primitive_fields else v for k,v in protected.items()}
+                                    protected_dates={coordinate(f):lookup(f,call['seq'])for f in proof['before']if 'date_epoch_ms'in f['observed']}
                                     for k,f in before.items():
                                         if identifier and k[0]==identifier['owner'] and k[1]==identifier['field']:continue
                                         require(k in after and after[k]==f,'Unmodeled save field effect')
@@ -828,11 +869,21 @@ def infer_application(plan,rows,worker_request=None):
                                     if plan.get('date_effects'):
                                         codecs=proof.get('date_codecs');require(isinstance(codecs,list) and len(codecs)==proof.get('date_codec_calls'),'Date codec observation count differs')
                                         dates_safe=bool(codecs) and all(c['valid'] for c in codecs)
+                                        if plan['date_effects'].get('codec_kind')=='document-3.6':require(len({c['start_seq']for c in codecs})==len(codecs)==sum(r['kind']=='document-date-enter'and r.get('call_id')==call['call_id']for r in rows)==sum(r['kind']=='document-date-exit'and r.get('call_id')==call['call_id']for r in rows),'Document codec witness coverage differs')
                                         for c in codecs:
                                             require(c.get('class_sha256')==plan['date_effects']['codec_class_sha256'],'Date codec class hashes differ')
-                                            if c['valid']:require(c['encoder']=='com.mongodb.DBObjectCodec' and c['date_codec']=='org.bson.codecs.DateCodec' and c['default_registry'] and not c['encoding_hooks'] and c['id_generator']=='org.bson.codecs.ObjectIdGenerator','Default Date encoder conditions contradict runtime')
+                                            if plan['date_effects'].get('codec_kind')=='document-3.6':
+                                                enters_=[r for r in rows if r['kind']=='document-date-enter'and r['seq']==c['start_seq']];exits_=[r for r in rows if r['kind']=='document-date-exit'and r['seq']==c['end_seq']]
+                                                require(len(enters_)==len(exits_)==1 and call['seq']<enters_[0]['seq']<exits_[0]['seq']<proof['seq']<ret['seq']and c['call_id']==call['call_id'],'Document codec lifecycle missing/ambiguous')
+                                                require(all(exits_[0].get(k)==c.get(k)for k in ('call_id','document','encoder','class_sha256','before','after','normal','valid')),'Document codec completion differs')
+                                                require(all(enters_[0].get(k)==c.get(k)for k in ('call_id','document','encoder','class_sha256','before')),'Document codec start differs')
+                                                if c['valid']:require(c['encoder']=='org.bson.codecs.DocumentCodec'and c['date_codec']=='org.bson.codecs.DateCodec'and c['default_registry']and proof['default_driver_registry']and c['normal']and c['before']==c['after'],'Default document Date encoder conditions contradict runtime')
+                                            elif c['valid']:require(c['encoder']=='com.mongodb.DBObjectCodec' and c['date_codec']=='org.bson.codecs.DateCodec' and c['default_registry'] and not c['encoding_hooks'] and c['id_generator']=='org.bson.codecs.ObjectIdGenerator','Default Date encoder conditions contradict runtime')
                                     for f in proof['before']:
-                                        if 'date_epoch_ms' in f['observed'] and not dates_safe:poison([Value(f['observed'])],ret['seq'])
+                                        if 'date_epoch_ms'not in f['observed']:continue
+                                        witnessed=dates_safe and (plan['date_effects'].get('codec_kind')!='document-3.6'or any(f['observed']in c['before']for c in codecs))
+                                        if witnessed:preserved_fields[coordinate(f)]=(ret['seq'],protected_dates[coordinate(f)])
+                                        else:poison([Value(f['observed'])],ret['seq'])
                                     v=args[0].project(observed)
                                 else:
                                     poison(([recv] if recv else [])+args,ret['seq']);opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':ret['seq'],'completion':'unsupported-save-effects','reason':proof.get('reason')})
@@ -949,6 +1000,22 @@ def infer_application(plan,rows,worker_request=None):
                                     mapping['values'][key_value]=args[1].project(call['args'][1])
                                     if 'value'not in args[1].observed and identity(args[1])is not None:heap_refs[owner].add(identity(args[1]))
                                 require({x['key']:x['observed']for x in ret['collection_after']}=={k:actual(x)for k,x in mapping['values'].items()},'Map post-state differs');mapping['epoch']=ret['collection_epoch'];v=previous.project(observed)
+                            elif call['call_id']in feign_effects:
+                                fact=feign_effects[call['call_id']];protected={coordinate(f):lookup(f,call['seq'])for f in fact['before']}if fact['valid']else {}
+                                # The public protocol proves only these input fields.
+                                # Retain conservative barriers for all other reachable state.
+                                poison(([recv]if recv else[])+args,ret['seq'])
+                                for k,value in protected.items():preserved_fields[k]=(ret['seq'],value)
+                                if not fact['valid']:opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':ret['seq'],'completion':'unproved-feign-effects','reason':fact['reason']})
+                                v=Value(observed,unknown=not fact['valid'])
+                            elif key=='java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;' and cfg.get('foundation_values'):
+                                f=call_fact(cfg,ret,'boolean-box',foundation_supported)
+                                if f['valid']:require(args[0].observed.get('value')in (0,1,False,True) and observed.get('value')==bool(args[0].observed['value']),'Boolean box value differs');v=args[0].project(observed)
+                                else:poison(args,ret['seq'])
+                            elif key=='org/springframework/util/Assert.isNull(Ljava/lang/Object;Ljava/lang/String;)V' and cfg.get('foundation_values'):
+                                f=call_fact(cfg,ret,'assert-is-null-string',foundation_supported)
+                                if f['valid']:require(f['null_input'] and args[0].observed.get('value','@missing')is None and identity(args[0])is None,'Assert normal completion contradicts reference');v=Value(observed)
+                                else:poison(args,ret['seq'])
                             elif key=='java/lang/Integer.valueOf(I)Ljava/lang/Integer;':v=args[0].project(observed);same_value(args[0].observed,observed)
                             elif ins['owner']=='org/slf4j/Logger' and ins['name'] in ('info','warn','error','debug') and all('value' in a.observed for a in args):v=Value(observed)
                             else:
@@ -1038,7 +1105,9 @@ def infer_application(plan,rows,worker_request=None):
                     preservation=preserved_fields.get(coordinate(f))
                     value=lookup(f,ret['seq'])if preservation and poisoned_at.get(owner,-1)<=preservation[0]<ret['seq']else Value(f['observed'],unknown=True)
             else:value=lookup(f,ret['seq'])
-            if 'date_epoch_ms' in f['observed'] and f['observed']['object'] in poisoned_at:value=Value(f['observed'],unknown=True)
+            if 'date_epoch_ms'in f['observed']and f['observed']['object']in poisoned_at:
+                protection=preserved_fields.get(coordinate(f));barrier=max(poisoned_at.get(owner,-1),poisoned_at[f['observed']['object']])
+                if not(protection and barrier<=protection[0]<ret['seq']):value=Value(f['observed'],unknown=True)
             bind(value,f['observed'])
             results.append({'root_frame':root['frame'],'seq':ret['seq'],'path':f['path'],**f,'known':not value.unknown,'origins':[list(x) for x in sorted(value.origins,key=str)],'selectors':[list(x) for x in sorted(value.selectors,key=str)]})
         audits.append({'frame':root['frame'],'completion':'normal','steps':total_steps,'frames':frame_audits,'answers':len(ret['fields']),'poisoned_objects':len(poisoned_at),'opaque_frames':opaque_frames,'opaque_calls':opaque_calls,'environment_facts':environment_facts,'async_transfers':async_transfers,'steps_including_tasks':execution_budget['steps']})

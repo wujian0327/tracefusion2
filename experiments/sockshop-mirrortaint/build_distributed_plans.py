@@ -19,7 +19,7 @@ from isolate_agent_jackson import agent_class, symbolic_types, OLD
 
 def build(out,inputs):
     out.mkdir(parents=True,exist_ok=False);tools=out/'tools';tools.mkdir()
-    sources=[HERE/n for n in ('QueryObservationAgent.java','QueryBytecodeModel.java','PlannedServiceAgent.java','MonitorSafety.java','CollectionServiceHooks.java','ConversionContractHooks.java','ExecutionKernelHooks.java','AsyncTaskHooks.java','FrameworkCallHooks.java','RequestEntityHooks.java','SaveEffectHooks.java','TemporalDateHooks.java','UuidProjectionHooks.java','ResponseBindingHooks.java','ReadEffectHooks.java','JdkContractProbe.java','SourceEvidenceHooks.java','SpringTransportAgent.java','W3CTraceContext.java')]
+    sources=[HERE/n for n in ('QueryObservationAgent.java','QueryBytecodeModel.java','PlannedServiceAgent.java','MonitorSafety.java','CollectionServiceHooks.java','ConversionContractHooks.java','ExecutionKernelHooks.java','FoundationValueHooks.java','ScalarProjectionHooks.java','DocumentDateHooks.java','ListenerRegistryHooks.java','FeignEffectHooks.java','FeignProtocolInstrumentation.java','AsyncTaskHooks.java','FrameworkCallHooks.java','RequestEntityHooks.java','SaveEffectHooks.java','TemporalDateHooks.java','UuidProjectionHooks.java','ResponseBindingHooks.java','ReadEffectHooks.java','JdkContractProbe.java','SourceEvidenceHooks.java','SpringTransportAgent.java','W3CTraceContext.java')]
     sources.append(HERE/'BusinessJackson.java')
     # JDK 8 has no --release option; its own platform is already Java 8.
     compiler_version,target=java8_target()
@@ -27,7 +27,7 @@ def build(out,inputs):
     jar=out/'distributed-observer.jar'
     with ZipFile(jar,'w',ZIP_DEFLATED) as z:
         z.writestr('META-INF/MANIFEST.MF','Manifest-Version: 1.0\nPremain-Class: SpringTransportAgent\n\n')
-        for prefix in ('PlannedServiceAgent','MonitorSafety','CollectionServiceHooks','ConversionContractHooks','ExecutionKernelHooks','AsyncTaskHooks','FrameworkCallHooks','RequestEntityHooks','SaveEffectHooks','TemporalDateHooks','UuidProjectionHooks','ResponseBindingHooks','ReadEffectHooks','JdkContractProbe','SourceEvidenceHooks','SpringTransportAgent','W3CTraceContext'):
+        for prefix in ('PlannedServiceAgent','MonitorSafety','CollectionServiceHooks','ConversionContractHooks','ExecutionKernelHooks','FoundationValueHooks','ScalarProjectionHooks','DocumentDateHooks','ListenerRegistryHooks','FeignEffectHooks','FeignProtocolInstrumentation','AsyncTaskHooks','FrameworkCallHooks','RequestEntityHooks','SaveEffectHooks','TemporalDateHooks','UuidProjectionHooks','ResponseBindingHooks','ReadEffectHooks','JdkContractProbe','SourceEvidenceHooks','SpringTransportAgent','W3CTraceContext'):
             for f in tools.glob(prefix+'*.class'):
                 name,data=agent_class(f.name,f.read_bytes());z.writestr(name,data)
         for f in tools.glob('BusinessJackson*.class'):z.writestr(f.name,f.read_bytes())
@@ -103,6 +103,7 @@ def build(out,inputs):
     for name in ('plan_uuid_projection.py','infer_uuid_projection.py','uuid-projection-contracts-20261022.json'):manifest['sources'][str(HERE/name)]=sha(HERE/name)
     manifest['sources'][str(HERE/'isolate_agent_jackson.py')]=sha(HERE/'isolate_agent_jackson.py')
     manifest['jackson_isolation']='Internal JSON relocated to tracefusion.internal.jackson; business inspection has no Jackson type linkage'
+    for name in ('plan_foundation_values.py','foundation-value-contracts-20261028.json','infer_foundation_values.py','plan_feign_effects.py','feign-input-effect-contracts-20261028.json','mongo2-provided-id-contracts-20261028.json','plan_scalar_projection.py','scalar-projection-contracts-20261028.json','infer_scalar_projection.py','document-date-effects-20261028.json','infer_listener_registry.py','infer_feign_effects.py'):manifest['sources'][str(HERE/name)]=sha(HERE/name)
     manifest['builder_sha256']=sha(Path(__file__));save(out/'build.json',manifest)
 
 

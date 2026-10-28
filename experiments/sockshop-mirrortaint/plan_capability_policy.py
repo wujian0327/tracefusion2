@@ -44,6 +44,8 @@ def choose(model,query):
         from contract_obligations import features as api_obligations
         features=api_obligations(plan,model)
         if features:plan=attach_async_dependencies(plan,features,model.get('library_inventory'))
+        from plan_feign_effects import attach as attach_feign_effects
+        attach_feign_effects(plan,model)
         plan['contract_applicability']={'version':1,'features':sorted(features),'selection':'Actual planned APIs; library implementation/hash and runtime preconditions remain mandatory. Save is not a task or decoder contract.'}
     if CONVERSION in model['methods'] and any(i['op']in (182,183,184,185)and i.get('owner','')+'.'+i.get('name','')+i.get('desc','')==CONVERSION for m in plan.get('execution_kernel',{}).get('methods',{}).values()for i in m['instructions']):
         plan['json_conversion_methods']=[CONVERSION];plan['json_conversion_contract']='Existing pinned default Jackson relative-path conversion contract; not a business formula.'

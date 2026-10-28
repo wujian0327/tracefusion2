@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "class_sha256": {
+    "com/fasterxml/jackson/databind/ObjectMapper": "c6bdc6685515ff73e47481143af95a493aa04d54320c7dfabe5e5143565034c2",
+    "com/fasterxml/jackson/databind/ser/std/NumberSerializer": "af229ced6b25d557748cd61b5526e6ef36283818b8dc974ac65f61bd8dfe25d8",
+    "com/fasterxml/jackson/databind/ser/std/EnumSerializer": "f10f0176d614856bb9980a05e5f36a8c0a910e00804b9a406d0103905d2bc341",
+    "com/fasterxml/jackson/databind/util/EnumValues": "84572b3567eaac9ed562874608183ef82757e9eb16ee86ef1ed3ae64f73cd0ca",
+    "com/fasterxml/jackson/core/JsonFactory": "3bac00173230cb66cae75bc611ac1117026c791ba81ac3986b0a25276e6f538c",
+    "com/fasterxml/jackson/databind/MappingJsonFactory": "c92f420db890a498d81f3ae54736c243e06378a4ca29f92efb55bafa21d0b3d2",
+    "com/fasterxml/jackson/core/JsonGenerator$Feature": "84053e91979b310fe594af33ba81851fd4f86222dc6722a21a8f509e6afc1285",
+    "com/fasterxml/jackson/core/json/UTF8JsonGenerator": "e8de49c19d6f7ca747c3fced897aa59a335f41ebc6107f0c5ba5244f2816bf61",
+    "com/fasterxml/jackson/core/json/WriterBasedJsonGenerator": "e22741c1eb033d56ec4ffd73e3d0e203b52ae7a1869a7e8949517f12e48f4078",
+    "com/fasterxml/jackson/core/json/JsonGeneratorImpl": "7af022f717ccfcb78b99291f9a96be4bc12e5f85975bf4761af4b043c5fb18b7",
+    "com/fasterxml/jackson/databind/util/TokenBuffer": "64d0b7b7f36bbd85333f78a89ea3b93d85380db8e02b89871b3f21aa981c6df9"
+  },
+  "scope": "Exact BigDecimal values produced in the int range at scale0, default numeric JSON; closed plain-enum classes, actual EnumSerializer values and name projection, no index/toString/custom format/mixin. Runtime identity and target binding required; no origins created.",
+  "default_generator_features": 31
+}

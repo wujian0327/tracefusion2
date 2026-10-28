@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "date_semantics": "Exact java.util.Date semantic millis; lazy JDK calendar cache changes are not treated as input data. Unknown mutations remain unknown.",
+  "runtime_profiles": [
+    {
+      "java_runtime_version": "1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01",
+      "class_sha256": {
+        "java/util/Calendar": "de5d90542f1e18ef2103522940835bfb6c260b82c1a4ac2b6b7a48ea8a72b814",
+        "java/util/Calendar$Builder": "7227684b849406584767ffc9d72f72630e709f1fce8c40c3b01ea9174679a3a7",
+        "java/util/Date": "9195ac44b7b3b2da08672ac72ebd97944d6d37b73b8bd7e50a8df3c1fe582240",
+        "java/util/GregorianCalendar": "0ac50777d565e1f9b31fb23046d36de7e6063d60e3993df1702d004a4e681a8e",
+        "sun/util/locale/provider/CalendarProviderImpl": "ef90150809205debeb93251b8fe15b57a35397c7d0f8289c9f09c4369c00e205",
+        "sun/util/locale/provider/LocaleProviderAdapter": "11580abfe139f868d8f7e34769b52ae400c3a088675584bdad4d773e8c90ce94"
+      },
+      "scope": "host semantic controls, fixed Calendar provider"
+    },
+    {
+      "java_runtime_version": "1.8.0_111-internal-alpine-r0-b14",
+      "class_sha256": {
+        "java/util/Calendar": "aa9a8bf4822252f42e038ae8f5f744d9b6d5bee1f060418bc514234899c0521b",
+        "java/util/Calendar$Builder": "7227684b849406584767ffc9d72f72630e709f1fce8c40c3b01ea9174679a3a7",
+        "java/util/Date": "9195ac44b7b3b2da08672ac72ebd97944d6d37b73b8bd7e50a8df3c1fe582240",
+        "java/util/GregorianCalendar": "1cdbe887a9b202eb9d75b83d7819971576fc5daf058b3b4abf4e52259e672a77",
+        "sun/util/locale/provider/CalendarProviderImpl": "ef90150809205debeb93251b8fe15b57a35397c7d0f8289c9f09c4369c00e205",
+        "sun/util/locale/provider/LocaleProviderAdapter": "11580abfe139f868d8f7e34769b52ae400c3a088675584bdad4d773e8c90ce94"
+      },
+      "scope": "original Orders JDK including Calendar provider"
+    }
+  ],
+  "codec_class_sha256": {
+    "org/springframework/data/mongodb/core/SimpleMongoDbFactory": "4318ba8d6c81697f6c62456f41ad0fd14ced352859ec9f8d793dd3354197d449",
+    "org/bson/codecs/DocumentCodec": "4bd40b9c0e451bdb408cfcfa9a85db785063d1ff39f542d0e1001efeeb48004a",
+    "org/bson/codecs/DateCodec": "60be94a104fe7acd945012df4a10da5712cd3ce06d7a7eaee0fb6c1074f9be2b",
+    "org/bson/codecs/configuration/ChildCodecRegistry": "e4c0544c3ba1fb731c6f618aaf9d7f687231ad3a9276b5a88b612dddaa86722a",
+    "org/bson/codecs/configuration/ProvidersCodecRegistry": "bc36ed87611ca5a1820befe8c384d2858727739ae671a0d340a1e5c01e23e9ef",
+    "com/mongodb/MongoClient": "0fc22325ab29017d8cf4d3ff0decf1dde82a1482a72fe3e4b2f68937e850dd57",
+    "com/mongodb/MongoClientOptions": "d25e475c0fd6b6d2ea4e77cbf8fdf6122ee813ae243f776140d96fe32f0abdac"
+  },
+  "render": "Exact Date and fixed default ZoneInfo only; rendered text stays unknown, only Date semantic state preserved.",
+  "save": "Existing converter/callback checks PLUS actual default DBObject/Date codec and no BSON encoding hooks; before/after Date identity/epoch equality is necessary, not sufficient.",
+  "render_runtime_profiles": [
+    {
+      "java_runtime_version": "1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01",
+      "class_sha256": {
+        "java/util/Date": "9195ac44b7b3b2da08672ac72ebd97944d6d37b73b8bd7e50a8df3c1fe582240",
+        "java/util/TimeZone": "a05ba07f053de82d9d67e4ecc8e089ab4fab7a1ab0b91023a355b6245e298efc",
+        "sun/util/calendar/BaseCalendar": "af247da1d3bf9afa50928fb49261f263da1b474395ff5544dd671950e69b4253",
+        "sun/util/calendar/BaseCalendar$Date": "2d31c09a7ab541d8a83ff5a3543c8db9f667395ab4a0aebc438198a6d5bce648",
+        "sun/util/calendar/CalendarSystem": "9f2f1c2787fda4540c370f5dfaffbbc39df94d1267597625ac9eb2eb46776bfe",
+        "sun/util/calendar/CalendarUtils": "c46103903def3d3d2cb704aa8951ba71536d4b82fc5ef75e486df02c2156edb4",
+        "sun/util/calendar/Gregorian": "47636fe0163c603c511152477adb5b1544757d975e37f1efad9297e9dd713ec2",
+        "sun/util/calendar/ZoneInfo": "f146c683f5672842ed8b5f1507a5dcd2921d9498b85a1710ed06e083efaf7b99"
+      }
+    },
+    {
+      "java_runtime_version": "1.8.0_111-internal-alpine-r0-b14",
+      "class_sha256": {
+        "java/util/Date": "9195ac44b7b3b2da08672ac72ebd97944d6d37b73b8bd7e50a8df3c1fe582240",
+        "java/util/TimeZone": "a05ba07f053de82d9d67e4ecc8e089ab4fab7a1ab0b91023a355b6245e298efc",
+        "sun/util/calendar/BaseCalendar": "af247da1d3bf9afa50928fb49261f263da1b474395ff5544dd671950e69b4253",
+        "sun/util/calendar/BaseCalendar$Date": "2d31c09a7ab541d8a83ff5a3543c8db9f667395ab4a0aebc438198a6d5bce648",
+        "sun/util/calendar/CalendarSystem": "9f2f1c2787fda4540c370f5dfaffbbc39df94d1267597625ac9eb2eb46776bfe",
+        "sun/util/calendar/CalendarUtils": "c46103903def3d3d2cb704aa8951ba71536d4b82fc5ef75e486df02c2156edb4",
+        "sun/util/calendar/Gregorian": "47636fe0163c603c511152477adb5b1544757d975e37f1efad9297e9dd713ec2",
+        "sun/util/calendar/ZoneInfo": "ead08b604c3c93bd3b1aec482a3c94ab2532805cad8cee2ae2a9c3d7691ad3f6"
+      }
+    }
+  ],
+  "codec_kind": "document-3.6",
+  "scope": "Default MongoClient/SimpleMongoDbFactory registry plus actual pinned DocumentCodec -> DateCodec encode; paired normal document completion and same Date identity/millis. Protect only already established Date dependencies."
+}

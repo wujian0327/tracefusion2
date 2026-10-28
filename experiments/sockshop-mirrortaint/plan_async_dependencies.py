@@ -17,7 +17,7 @@ def attach_async_dependencies(plan, features=None, inventory=None):
     unavailable=[]
     def contract(name,feature):
         c=json.loads((Path(__file__).parent/name).read_text())
-        if feature=='save':c['additional_profiles']=[json.loads((Path(__file__).parent/'save-provided-id-contracts-20261023.json').read_text())]
+        if feature=='save':c['additional_profiles']=[json.loads((Path(__file__).parent/n).read_text())for n in ('save-provided-id-contracts-20261023.json','mongo2-provided-id-contracts-20261028.json')]
         if explicit_legacy:return c
         picked=select(c,inventory)
         if picked is None:unavailable.append({'feature':feature,'reason':'No reviewed full library hash profile for actual input JAR'})
@@ -34,7 +34,9 @@ def attach_async_dependencies(plan, features=None, inventory=None):
     cfg['decoder_birth_sites'] = model_births
     if 'save' in features:
         chosen=contract('save-effect-contracts-20261021.json','save')
-        if chosen:cfg['save_effect_contracts']=chosen
+        if chosen:
+            cfg['save_effect_contracts']=chosen
+            if chosen.get('profile_kind')=='mongo2-provided-field-id'and plan.get('date_projection'):plan['date_effects']=json.loads((Path(__file__).parent/'document-date-effects-20261028.json').read_text())
     cfg['unavailable_library_contracts']=unavailable
     if plan.get('async_protocol') and RESULT_CTOR in cfg['constructors']:
         cfg['constructors'][RESULT_CTOR] = {'kind': 'async-result'}

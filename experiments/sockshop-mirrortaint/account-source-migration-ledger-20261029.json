@@ -1,0 +1,361 @@
+{
+  "scope": "Exposed Account development. Model and implementation work, not unseen coverage or performance.",
+  "features": [
+    {
+      "feature": "Boolean boxing and BigDecimal(int)",
+      "kind": "JDK operand/state models",
+      "reuse": "Cached equal object and distinct input origins; no arithmetic generalization"
+    },
+    {
+      "feature": "Fresh defaults",
+      "kind": "Generic allocation/constructor proof",
+      "reuse": "All declared fields, default null/zero/false and writes; no Account.note rule"
+    },
+    {
+      "feature": "Exact Assert and plain enum initialization",
+      "kind": "Pinned overload and bytecode closure",
+      "reuse": "No blanket Assert, enum or helper purity"
+    },
+    {
+      "feature": "Finite Feign/Hystrix input preservation",
+      "kind": "Public framework protocol",
+      "reuse": "Actual command/task/future/encoder/converter/serializer/mapper/generator identity and versions; synchronous void flat String bodies only"
+    },
+    {
+      "feature": "Mongo2 provided-ID save",
+      "kind": "Public version/configuration contract",
+      "reuse": "Direct field metadata/default converters/default driver; registered listener filter closure and actual callback veto; no isNew custom implementation"
+    },
+    {
+      "feature": "Document/Date codec",
+      "kind": "Public finite encoder protocol",
+      "reuse": "Existing dependency only, paired default codec Date identity/epoch; no revival of prior unknown or later mutation"
+    },
+    {
+      "feature": "Number/enum/Date wire projection",
+      "kind": "Public serializer/configuration contracts",
+      "reuse": "Default actual implementations, contextual enum settings, generator defaults; no source creation"
+    }
+  ],
+  "review_artifacts": [
+    {
+      "file": "artifacts/account-semantics-20261028/foundation-review/java.lang.Boolean.javap",
+      "sha256": "46bc45e104935bb3cf17952e350c6c840d4e0297fb3d88defcf7a2c07d3f5af8",
+      "available": true,
+      "lines": 214
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/foundation-review/java.lang.Enum.javap",
+      "sha256": "c702dadbfc957f36e632fe33c0e7a57067a5722a7f3bbb375582fbe4e9a4ad70",
+      "available": true,
+      "lines": 167
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/foundation-review/java.lang.IllegalArgumentException.javap",
+      "sha256": "e9c2d1c3d6c59bb8d44641f63dac4d30ddbe46599cd4b8441fd890673b0d63ee",
+      "available": true,
+      "lines": 32
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/foundation-review/java.lang.Number.javap",
+      "sha256": "add266dc6bbceddfbd28fb522a1bee8caa76211a4f1dea56a63d990f21101baa",
+      "available": true,
+      "lines": 32
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/foundation-review/java.lang.Object.javap",
+      "sha256": "4ac5189b6d529fd273f68b0cec8a85217ae6cf5d8f61ce90da493e86445ae94c",
+      "available": true,
+      "lines": 96
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/foundation-review/java.lang.Throwable.javap",
+      "sha256": "060b845796c837537e95587b69c7a985356b429522ba48c408d4fcf009f8c92f",
+      "available": true,
+      "lines": 930
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/foundation-review/java.math.BigDecimal.javap",
+      "sha256": "72e4d00a148d41d9638e9e6bd39542560cca2bf08fd24923b0bd4b2ce89060f7",
+      "available": true,
+      "lines": 9773
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/foundation-review/java.math.BigInteger.javap",
+      "sha256": "d290bf1e2cc5b6d8c02bef99823c5dc96e331589d2052cebd61728d1a28d6628",
+      "available": true,
+      "lines": 10293
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/feign-review/com.netflix.hystrix.HystrixCommand.javap",
+      "sha256": "8b44d218aea51b574c1d6c5073e284d44845c4f0b09dea617d14cbb0e4880ac0",
+      "available": true,
+      "lines": 530
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/feign-review/feign.ReflectiveFeign$BuildEncodedTemplateFromArgs.javap",
+      "sha256": "1c8d6ea7f421715364f1868323967c976aeb71f74439e051594a8fbd26436381",
+      "available": true,
+      "lines": 78
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/feign-review/feign.ReflectiveFeign$BuildTemplateByResolvingArgs.javap",
+      "sha256": "74676526ef277f5a7d2b67093f17014a6f294ac7960a6b919eda569b5cb50785",
+      "available": true,
+      "lines": 473
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/feign-review/feign.SynchronousMethodHandler.javap",
+      "sha256": "cdc63ae603056b2bd88fcbfe881d5ef70a41f6e2ad660b188febbfb9cc519e57",
+      "available": true,
+      "lines": 535
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/feign-review/feign.hystrix.HystrixInvocationHandler$1.javap",
+      "sha256": "f9d717a8acd6bd4335063bcf39d029e09dffd8918e8ed62101087adf6812f264",
+      "available": true,
+      "lines": 149
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/feign-review/feign.hystrix.HystrixInvocationHandler.javap",
+      "sha256": "82d1fd910e1d79a6df5fb7d32955f57746ba88c935bc95e31cfb5712d3685fee",
+      "available": true,
+      "lines": 312
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/feign-review/org.springframework.cloud.openfeign.support.SpringEncoder.javap",
+      "sha256": "f733029f5261264ed56918f6f8dd2ccedba3a2204fd7711dab746dad4a63cb18",
+      "available": true,
+      "lines": 209
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/mongo2-review/org.springframework.context.event.SimpleApplicationEventMulticaster.javap",
+      "sha256": "c2248883c3340ab1e3fde63ac34dce06b2189c1eeae7504d3b5a5d804bbe53be",
+      "available": true,
+      "lines": 211
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/mongo2-review/org.springframework.context.support.AbstractApplicationContext.javap",
+      "sha256": "c4555e7c6761546ce957d7be9c0ac08bca1e693009308b2dec99618a08e4adf6",
+      "available": true,
+      "lines": 1725
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/mongo2-review/org.springframework.data.convert.CustomConversions.javap",
+      "sha256": "124e41c09d455bccce9f6680b25fc131ddd5b1d2625036d0545b8b308886e1b2",
+      "available": true,
+      "lines": 568
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/mongo2-review/org.springframework.data.mapping.model.BasicPersistentEntity.javap",
+      "sha256": "9179ee7cdde6b465b449b5e7968534ec7f614225f5d6dd68d69073d989867005",
+      "available": true,
+      "lines": 694
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/mongo2-review/org.springframework.data.mapping.model.BeanWrapperPropertyAccessorFactory.javap",
+      "sha256": "ef2fa5b60afa6b4244d3890454b8af65a9976678665e17eb98973386cd93e3dd",
+      "available": true,
+      "lines": 59
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/mongo2-review/org.springframework.data.mapping.model.ClassGeneratingPropertyAccessorFactory.javap",
+      "sha256": "5c638917b81262f3521aac2cf013f36438283326c14ee4d315f2a4025a19b0ce",
+      "available": true,
+      "lines": 773
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/mongo2-review/org.springframework.data.mongodb.core.EntityOperations$MappedEntity.javap",
+      "sha256": "4a8318916fe89daa5dea7f46717cfe2336ce7a4bf8551398f57e4f41d487a166",
+      "available": false,
+      "lines": 1
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/mongo2-review/org.springframework.data.mongodb.core.EntityOperations.javap",
+      "sha256": "2432d30cda953ee7fcb12d4f69695b6773c7f45b2d583c8015d0d2f6295c4361",
+      "available": false,
+      "lines": 1
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/mongo2-review/org.springframework.data.mongodb.core.MongoTemplate.javap",
+      "sha256": "955743c0bff3b5abe9664c93f63ba4bd01e323b772ec20191a5a5b070cbcc64b",
+      "available": true,
+      "lines": 4541
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/mongo2-review/org.springframework.data.mongodb.core.convert.AbstractMongoConverter.javap",
+      "sha256": "51aa8751687d56eb37a9540406d6cda2a9ac990f2d34629ed994f2fd252a5eab",
+      "available": true,
+      "lines": 105
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/mongo2-review/org.springframework.data.mongodb.core.convert.DefaultDbRefResolver.javap",
+      "sha256": "bf5059b0d23ec3503000dba16ece05b00d97b5a35c9fa55bc0bd250757084fb4",
+      "available": true,
+      "lines": 344
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/mongo2-review/org.springframework.data.mongodb.core.convert.MappingMongoConverter.javap",
+      "sha256": "36f33588ddbc3aed0bec2028097e43094eae120de41d51aa7b5d1c6673a5c64d",
+      "available": true,
+      "lines": 2848
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/mongo2-review/org.springframework.data.mongodb.core.convert.MongoCustomConversions.javap",
+      "sha256": "557449d40679df1bc67ece181e73b4c962bbc87b042dcf97662741e607c14d02",
+      "available": true,
+      "lines": 52
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/mongo2-review/org.springframework.data.mongodb.core.mapping.BasicMongoPersistentEntity.javap",
+      "sha256": "b79a508e5257124e7d4c17b28b65877465a7a4aeba7d269af5c4b0778b80535a",
+      "available": true,
+      "lines": 302
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/mongo2-review/org.springframework.data.mongodb.core.mapping.CachingMongoPersistentProperty.javap",
+      "sha256": "753380f61a3b951c1121df598d1800a5751f0cc0217d0a27cd8e25ef027dc99c",
+      "available": true,
+      "lines": 95
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/mongo2-review/org.springframework.data.mongodb.repository.support.SimpleMongoRepository.javap",
+      "sha256": "31444d565a38cabb6ab5a088e0bcce03a7cb8785e422229c51c110064d9fa583",
+      "available": true,
+      "lines": 555
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/serialization-review/com.fasterxml.jackson.core.json.UTF8JsonGenerator.javap",
+      "sha256": "27d731c6749a6c6e54067c928a3715c69142951b145554fe3263b1f0a8824cfe",
+      "available": true,
+      "lines": 4954
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/serialization-review/com.fasterxml.jackson.databind.MappingJsonFactory.javap",
+      "sha256": "4cb113d66760c33100d4a9252e2c4ba6fe1f0ba514aa29f9356c3141920b2204",
+      "available": true,
+      "lines": 87
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/serialization-review/com.fasterxml.jackson.databind.ser.std.DateSerializer.javap",
+      "sha256": "19ff4332f30a7630bc828a9db28e5e8814b9bc6e138e37ed575dfb06cc61e6f0",
+      "available": true,
+      "lines": 93
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/serialization-review/com.fasterxml.jackson.databind.ser.std.DateTimeSerializerBase.javap",
+      "sha256": "d5d1769b94035e4da0e4fd30e841bc81b3bef675992efde3b92e879aa0b9a403",
+      "available": true,
+      "lines": 333
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/serialization-review/com.fasterxml.jackson.databind.ser.std.EnumSerializer.javap",
+      "sha256": "d351bf859e6b291504e95ffa83640e102141d1bb6be9623db939eabfed037f16",
+      "available": true,
+      "lines": 321
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/serialization-review/com.fasterxml.jackson.databind.ser.std.NumberSerializer.javap",
+      "sha256": "ff9e2e0db22cb590029d4cb783b6a69185fa0e24e62c6f9918f32f154049345e",
+      "available": true,
+      "lines": 170
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/serialization-review/com.fasterxml.jackson.databind.util.EnumValues.javap",
+      "sha256": "432263674ed63666e0a8cd8370134dcbe8dbecf8bc594f985e77ea084d69b202",
+      "available": true,
+      "lines": 251
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/serialization-review/com.fasterxml.jackson.databind.util.StdDateFormat.javap",
+      "sha256": "5d1b48cf6a07bf0d2ad37a0953345d1dc2cca2013cbc319db14f3aede1b6bb0a",
+      "available": true,
+      "lines": 1405
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/serialization-review/org.bson.codecs.DateCodec.javap",
+      "sha256": "5f3d09a2da35f15487c15780a855da3774264c943bff9446b2d3f117f784cebf",
+      "available": true,
+      "lines": 48
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/serialization-review/org.bson.codecs.DocumentCodec.javap",
+      "sha256": "362f05bbb6bc4f6d8bec2620bf6050d1ed364a1f1d4586fa9590f1a91062ae24",
+      "available": true,
+      "lines": 484
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/serialization-review/org.bson.codecs.configuration.ChildCodecRegistry.javap",
+      "sha256": "9e58c5676d777dbab0c0a19d68048457f099f9d6019d561162915a5d7f897d97",
+      "available": true,
+      "lines": 174
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/listener-filter-review/ContextCloserListener.javap",
+      "sha256": "abdcc8cca5602c944d718fd6c9dfc05c65ccc59b1430c1268d602f8dc0c50bd1",
+      "available": true,
+      "lines": 83
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/listener-filter-review/org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener$ConditionEvaluationReportListener.javap",
+      "sha256": "d2c0964d16f26fd2d57dd671c05841fee32686f8e55c4fd04c7e127bb9566ad1",
+      "available": true,
+      "lines": 60
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/listener-filter-review/org.springframework.boot.context.config.ConfigFileApplicationListener.javap",
+      "sha256": "831b8b3add6e54f504b47644433d62ca639003a1d306727b29eb56c741af7be9",
+      "available": true,
+      "lines": 231
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/listener-filter-review/org.springframework.boot.context.logging.ClasspathLoggingApplicationListener.javap",
+      "sha256": "b0fc20034299ed9fa9293c089a4a2903aa09bd5b178c6bd755b05b9c88cc7162",
+      "available": true,
+      "lines": 103
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/listener-filter-review/org.springframework.boot.context.logging.LoggingApplicationListener.javap",
+      "sha256": "78a4c4abc8587ec0d71bb0299d3f540368b638e9d4d5b40bc56bae72ce05ba51",
+      "available": true,
+      "lines": 630
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/listener-filter-review/org.springframework.cloud.context.restart.RestartListener.javap",
+      "sha256": "c5c8ef7f595e3cdd3ffb251d798b9776953382d508c8acca3317925ea99fb21c",
+      "available": true,
+      "lines": 97
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/listener-filter-review/org.springframework.context.event.ApplicationListenerMethodAdapter.javap",
+      "sha256": "cf30aad59d90837fe071fad5d22638790219b0648033f56be60077f59004926d",
+      "available": true,
+      "lines": 725
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/listener-filter-review/org.springframework.context.event.GenericApplicationListenerAdapter.javap",
+      "sha256": "27422af1771a096a56dc56020910dbba0bc8fee30a6a35e96243e069aace7ea8",
+      "available": true,
+      "lines": 148
+    },
+    {
+      "file": "artifacts/account-semantics-20261028/listener-filter-review/org.springframework.context.event.SourceFilteringListener.javap",
+      "sha256": "e2c243c30e76e2ec31a8a152b8c7786821f4170fa72f3f2c1f838190c757b646",
+      "available": true,
+      "lines": 113
+    }
+  ],
+  "successful_review_files": 49,
+  "unavailable_review_attempts": 2,
+  "manual_labor_hours": null,
+  "labor_note": "No human-hour estimate: artifact counts measure review footprint, not labor. Class/JAR pins include compatibility coverage and are not counts of manually proved semantic rules.",
+  "first_evidence_files_rechecked": 2322,
+  "additional_reliability_defect": "Framework safety wrappers required StackMap recomputation; original failed startup preserved.",
+  "remaining_scope": [
+    "Recipient enum-key Map provenance",
+    "dynamic Principal",
+    "persistence sink query interface and MT exporter calibration",
+    "remaining361 task facts",
+    "other applications first-pass ae7 unchanged"
+  ]
+}
