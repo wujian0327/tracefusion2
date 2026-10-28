@@ -22,6 +22,8 @@ HTTP 字节旁路的 read/abort 在失败作用域中仍释放对应输入捕获
 
 `d7bfbe0f125dd7ee86e10599d4716f159169bd14e3f020fc1f57ad7fc63776e5`
 
+可靠性源码检查点提交为 **`b1380a62a0189bc9991368d18757602d19995565`**，归档与来源哈希见 `artifacts/monitor-reliability-account-20261028/reliability-checkpoint-freeze.json`。补充保护清单锁定 2322 个首次捕获、评分、泄漏诊断和保存事实文件。
+
 这是已核对源码/二进制的可靠性开发检查点，**不是完成来源扩展后的最终算法冻结**。
 
 | 检查，每种模式单独验收 | full | selective |
