@@ -30,7 +30,8 @@ class Reconstruction:
             plan=json.loads((build/role/'plan.json').read_text());path=root/role/'events.jsonl'
             rows=decoded_rows[role] if decoded_rows is not None else [json.loads(l) for l in path.read_text().splitlines()]
             require([r['seq'] for r in rows]==list(range(1,len(rows)+1)),'Event sequence gap')
-            require(not any(r['kind']=='problem' for r in rows),'Collector problem')
+            require(not any(r['kind']=='problem' or r['kind']=='metrics' and r.get('capture_invalid') for r in rows),'Collector problem')
+            require(not path.with_name(path.name+'.invalid').exists(),'Collector failure sidecar')
             require(sum(r['kind']=='metrics' for r in rows)==1,'Capture did not close')
             require(rows[0]['plan_sha256']==hashlib.sha256((build/role/'plan.json').read_bytes()).hexdigest(),'Frozen plan differs')
             if any(r.get('transport_protocol')=='w3c-trace-context' for r in rows):validate_protocol(rows)

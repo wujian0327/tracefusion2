@@ -10,6 +10,7 @@ from run_query_planner import command, JARS
 from run_planned_service import HERE, save, load, sha
 from experiment_environment import java8_target
 from infer_collection_service import infer_collection
+from infer_planned_service import infer_service
 
 
 def run(out):
@@ -50,12 +51,18 @@ def run(out):
         reports[mode]={'queries':len(result['answers']),'exact':10,'events':len(rows),'bytes':log.stat().st_size,'tamper_rejected':True};all_answers[mode]=semantic
     if all_answers['full']!=all_answers['selective']:raise ValueError('Policies disagree')
     negative={}
-    for case,marker in [('mutation','MUTATION_REJECTED'),('virtual','DISPATCH_REJECTED')]:
-        log=out/(case+'.events.jsonl')
-        result=command(['java','-javaagent:'+str(out/'build/distributed-observer.jar'),'-Dservice.plan='+str(out/'build/fixture/plan.json'),'-Dservice.mode=selective','-Dservice.events='+str(log),'-cp',str(app),'CollectionServiceFixture',case],out/(case+'.stdout.log'))
-        rows=[json.loads(s) for s in log.read_text().splitlines()]
-        if marker not in result.stdout or not any(r['kind']=='problem' for r in rows):raise ValueError('Negative runtime contract accepted: '+case)
-        negative[case]={'rejected':True,'problem_events':[r['message'] for r in rows if r['kind']=='problem']}
+    for case in ('mutation','virtual'):
+        original=command(['java','-cp',str(app),'CollectionServiceFixture',case],out/(case+'.original.log'))
+        for mode in ('full','selective'):
+            log=out/(case+'-'+mode+'.events.jsonl')
+            result=command(['java','-javaagent:'+str(out/'build/distributed-observer.jar'),'-Dservice.plan='+str(out/'build/fixture/plan.json'),'-Dservice.mode='+mode,'-Dservice.events='+str(log),'-cp',str(app),'CollectionServiceFixture',case],out/(case+'-'+mode+'.stdout.log'))
+            rows=[json.loads(s) for s in log.read_text().splitlines()]
+            assert result.stdout==original.stdout,(case,mode,'Monitoring changed business')
+            assert any(r['kind']=='problem'for r in rows) and rows[-1]['capture_invalid']
+            try:infer_service(p,log)
+            except ValueError as failure:assert str(failure)=='Failed collection'
+            else:raise AssertionError('Invalid collection contract was certified')
+            negative[case+'-'+mode]={'business_matches_original':True,'capture_refused':True,'problem_events':[r['message']for r in rows if r['kind']=='problem']}
     save(out/'results.json',{'all_passed':True,'profiles':reports,'negative_contracts':negative,'planning':p['planning_stats'],'cases':['equal boxed values at distinct positions','different positions/values','failed List.get and original catch fallback','branch zero and overwritten Map entry','repeated invocation with same input objects'],'scope':'Controlled generic JVM semantic tests, not original Train Ticket or a performance benchmark'})
     print(json.dumps(reports,indent=2))
 

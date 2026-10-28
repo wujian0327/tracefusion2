@@ -19,7 +19,7 @@ from isolate_agent_jackson import agent_class, symbolic_types, OLD
 
 def build(out,inputs):
     out.mkdir(parents=True,exist_ok=False);tools=out/'tools';tools.mkdir()
-    sources=[HERE/n for n in ('QueryObservationAgent.java','QueryBytecodeModel.java','PlannedServiceAgent.java','CollectionServiceHooks.java','ConversionContractHooks.java','ExecutionKernelHooks.java','AsyncTaskHooks.java','FrameworkCallHooks.java','RequestEntityHooks.java','SaveEffectHooks.java','TemporalDateHooks.java','UuidProjectionHooks.java','ResponseBindingHooks.java','ReadEffectHooks.java','JdkContractProbe.java','SourceEvidenceHooks.java','SpringTransportAgent.java','W3CTraceContext.java')]
+    sources=[HERE/n for n in ('QueryObservationAgent.java','QueryBytecodeModel.java','PlannedServiceAgent.java','MonitorSafety.java','CollectionServiceHooks.java','ConversionContractHooks.java','ExecutionKernelHooks.java','AsyncTaskHooks.java','FrameworkCallHooks.java','RequestEntityHooks.java','SaveEffectHooks.java','TemporalDateHooks.java','UuidProjectionHooks.java','ResponseBindingHooks.java','ReadEffectHooks.java','JdkContractProbe.java','SourceEvidenceHooks.java','SpringTransportAgent.java','W3CTraceContext.java')]
     sources.append(HERE/'BusinessJackson.java')
     # JDK 8 has no --release option; its own platform is already Java 8.
     compiler_version,target=java8_target()
@@ -27,7 +27,7 @@ def build(out,inputs):
     jar=out/'distributed-observer.jar'
     with ZipFile(jar,'w',ZIP_DEFLATED) as z:
         z.writestr('META-INF/MANIFEST.MF','Manifest-Version: 1.0\nPremain-Class: SpringTransportAgent\n\n')
-        for prefix in ('PlannedServiceAgent','CollectionServiceHooks','ConversionContractHooks','ExecutionKernelHooks','AsyncTaskHooks','FrameworkCallHooks','RequestEntityHooks','SaveEffectHooks','TemporalDateHooks','UuidProjectionHooks','ResponseBindingHooks','ReadEffectHooks','JdkContractProbe','SourceEvidenceHooks','SpringTransportAgent','W3CTraceContext'):
+        for prefix in ('PlannedServiceAgent','MonitorSafety','CollectionServiceHooks','ConversionContractHooks','ExecutionKernelHooks','AsyncTaskHooks','FrameworkCallHooks','RequestEntityHooks','SaveEffectHooks','TemporalDateHooks','UuidProjectionHooks','ResponseBindingHooks','ReadEffectHooks','JdkContractProbe','SourceEvidenceHooks','SpringTransportAgent','W3CTraceContext'):
             for f in tools.glob(prefix+'*.class'):
                 name,data=agent_class(f.name,f.read_bytes());z.writestr(name,data)
         for f in tools.glob('BusinessJackson*.class'):z.writestr(f.name,f.read_bytes())

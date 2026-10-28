@@ -41,11 +41,11 @@ public final class CollectionServiceFixture {
         Input different=new Input(labels,Arrays.asList(7,11,19),1.25);
         if(args.length>0){
             if(args[0].equals("mutation")){
-                Class.forName("CollectionServiceHooks").getMethod("received",Object.class).invoke(null,equal.getSamples());
-                try{equal.getSamples().set(0,7);throw new AssertionError("Mutation accepted");}catch(IllegalStateException expected){System.out.println("MUTATION_REJECTED");}return;
+                try{Class.forName("CollectionServiceHooks").getMethod("received",Object.class).invoke(null,equal.getSamples());}catch(ClassNotFoundException original){}
+                equal.getSamples().set(0,7);System.out.println("MUTATION_BUSINESS_RESULT="+equal.getSamples());return;
             }
             if(args[0].equals("virtual")){
-                try{transform(new OverriddenInput(labels,Arrays.asList(7,7,7)),"same","last",false);throw new AssertionError("Dispatch accepted");}catch(IllegalStateException expected){System.out.println("DISPATCH_REJECTED");}return;
+                System.out.println("DISPATCH_BUSINESS_RESULT="+transform(new OverriddenInput(labels,Arrays.asList(7,7,7)),"same","last",false).getCells());return;
             }
         }
         System.out.println(transform(equal,"same","last",false).getCells());

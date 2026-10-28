@@ -1,0 +1,932 @@
+{
+  "development_base": "6873a487d4af1dc3c629f20db24d572660dff0fa",
+  "first_core": "ae7fe8d8b9e23d8ce197870ff0069c7f1bee84eb",
+  "first_files_unchanged": 2192,
+  "protocol_sha256": "5d7d971a09bf26b58d05c37c6cf9f89132de92c87e477f1a77c090d82b74e915",
+  "acceptance_input_sha256": "48d61d82c0048c308e97cf0a3f1b101f9d245c073f618f0669cce1abec1549ce",
+  "agent_sha256": "d7bfbe0f125dd7ee86e10599d4716f159169bd14e3f020fc1f57ad7fc63776e5",
+  "fixture": {
+    "checks": [
+      {
+        "mode": "full",
+        "business_rows_equal": 27,
+        "parent_scope_checks": 5,
+        "no_residual_state_after_each_root": true,
+        "original_exception_identity_and_finally_preserved": true,
+        "damaged_capture_has_problem_sidecar_and_footer": true
+      },
+      {
+        "mode": "selective",
+        "business_rows_equal": 27,
+        "parent_scope_checks": 5,
+        "no_residual_state_after_each_root": true,
+        "original_exception_identity_and_finally_preserved": true,
+        "damaged_capture_has_problem_sidecar_and_footer": true
+      }
+    ],
+    "fixture": "Independent control only; real Recipient separate",
+    "agent_sha256": "d7bfbe0f125dd7ee86e10599d4716f159169bd14e3f020fc1f57ad7fc63776e5"
+  },
+  "framework": [
+    {
+      "mode": "full",
+      "business_rows_equal": 8,
+      "RPC_parent_and_idempotent_completion": 4,
+      "source_capture_cleanup_in_failed_scope": true,
+      "task_exception_identity_and_parent_preserved": true,
+      "invalid_capture_stays_invalid": true
+    },
+    {
+      "mode": "selective",
+      "business_rows_equal": 8,
+      "RPC_parent_and_idempotent_completion": 4,
+      "source_capture_cleanup_in_failed_scope": true,
+      "task_exception_identity_and_parent_preserved": true,
+      "invalid_capture_stays_invalid": true
+    }
+  ],
+  "recipient": {
+    "checks": [
+      {
+        "mode": "full",
+        "old_plan_index": 0,
+        "responses_and_saving_match_original": 6,
+        "normal_200": 5,
+        "invalid_400": 1,
+        "subsequent_roots_parent_none": 5,
+        "single_worker": true,
+        "capture_still_invalid": true,
+        "capture_invalid_footer_guard": true,
+        "events_sha256": "f108688e71480c84724c211c0d3980dff422267bb1674ff88c973f45036871d8"
+      },
+      {
+        "mode": "full",
+        "old_plan_index": 4,
+        "responses_and_saving_match_original": 6,
+        "normal_200": 5,
+        "invalid_400": 1,
+        "subsequent_roots_parent_none": 5,
+        "single_worker": true,
+        "capture_still_invalid": true,
+        "capture_invalid_footer_guard": true,
+        "events_sha256": "7eb3542d78d52f6ae0e23352b87c9195838a0fa063e35fcacf1cfdea4b315251"
+      },
+      {
+        "mode": "selective",
+        "old_plan_index": 0,
+        "responses_and_saving_match_original": 6,
+        "normal_200": 5,
+        "invalid_400": 1,
+        "subsequent_roots_parent_none": 5,
+        "single_worker": true,
+        "capture_still_invalid": true,
+        "capture_invalid_footer_guard": true,
+        "events_sha256": "c0d615f4595f2695a762ae48a575c6052c3132ae405a6bc5b31a0cb0f9fcad36"
+      },
+      {
+        "mode": "selective",
+        "old_plan_index": 4,
+        "responses_and_saving_match_original": 6,
+        "normal_200": 5,
+        "invalid_400": 1,
+        "subsequent_roots_parent_none": 5,
+        "single_worker": true,
+        "capture_still_invalid": true,
+        "capture_invalid_footer_guard": true,
+        "events_sha256": "0e0da7e55d9df0e762683ea7a17267590b26b510d29662b9770b2195724a4481"
+      }
+    ],
+    "source_semantics_extended": false,
+    "scope": "Reliability only. Old Map/JDK proof limitations still reject the whole capture."
+  },
+  "application_compatibility": {
+    "full": {
+      "targets": 34,
+      "known": 26,
+      "expected_unknown": 8,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-child": true,
+        "wrong-parent": true,
+        "duplicate-call-id": true,
+        "missing-constructor-write": true,
+        "same-value-wrong-argument": true,
+        "wrong-exception": true
+      }
+    },
+    "selective": {
+      "targets": 34,
+      "known": 26,
+      "expected_unknown": 8,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-child": true,
+        "wrong-parent": true,
+        "duplicate-call-id": true,
+        "missing-constructor-write": true,
+        "same-value-wrong-argument": true,
+        "wrong-exception": true
+      }
+    }
+  },
+  "null_fields": {
+    "full": {
+      "bound": 8,
+      "known_correct": 0,
+      "unknown": 8
+    },
+    "selective": {
+      "bound": 8,
+      "known_correct": 0,
+      "unknown": 8
+    },
+    "capture_agent_sha256": "3036111743d4d010c5a3762153deef89062e5fb582d35c9c6ec7ecb23a49cbe5",
+    "newer_agent_fresh_null_acceptance": false
+  },
+  "Account_40_complete": false,
+  "historical_62_29_15_fresh_final_complete": false,
+  "source_semantics_extended": false,
+  "cost_experiment": false,
+  "note": "Reliability development checkpoint only. Not final Account or full-history freeze/acceptance. No first result overwritten.",
+  "rpc_business_regression": {
+    "full": {
+      "requests": 20,
+      "completed_price_requests": 19,
+      "queries": 38,
+      "exact": 38,
+      "tp": 92,
+      "fp": 0,
+      "fn": 0,
+      "unknown": 0,
+      "target_unavailable_queries": [
+        {
+          "case": "missing-train",
+          "queries": 2,
+          "status": "N/A",
+          "reason": "Original upstream train HTTP 404 aborts Basic before target creation"
+        }
+      ],
+      "events": 5378,
+      "bytes": 2244674
+    },
+    "selective": {
+      "requests": 20,
+      "completed_price_requests": 19,
+      "queries": 38,
+      "exact": 38,
+      "tp": 92,
+      "fp": 0,
+      "fn": 0,
+      "unknown": 0,
+      "target_unavailable_queries": [
+        {
+          "case": "missing-train",
+          "queries": 2,
+          "status": "N/A",
+          "reason": "Original upstream train HTTP 404 aborts Basic before target creation"
+        }
+      ],
+      "events": 2658,
+      "bytes": 1635902
+    }
+  },
+  "historical_plans": {
+    "count": 106,
+    "checks": [
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-orders-newOrder-customer-firstName",
+        "same_plan": true,
+        "reference_sha256": "d039634ae3b6583a749403e8132eba8c6f42e07eb0e2c16b48da4d4b1cfde167"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-orders-newOrder-customer-lastName",
+        "same_plan": true,
+        "reference_sha256": "85999cabbd37ca6147697993c8f7b2363c02d86657c629ab175042f3b9649d2e"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-orders-newOrder-customer-addresses-each-country",
+        "same_plan": true,
+        "reference_sha256": "b89c198ce471091ab71f5d7022a97e1468b32537fa6018f4a2a65230edc7fd80"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-orders-newOrder-address-number",
+        "same_plan": true,
+        "reference_sha256": "1623d090425235b2d52cf9595a6b2b948ab857facef43384ff4aa8ccf031c2d3"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-orders-newOrder-address-country",
+        "same_plan": true,
+        "reference_sha256": "3ee8777492357ecba54e94157cd1a6048a0abe4224a27ace850ae1b8e5a7e30d"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-carts-get-customerId",
+        "same_plan": true,
+        "reference_sha256": "9be12fa8c2d28c06497909353a3cedebccd5a6f563e55f6c9bb6e687c58c9642"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-carts-get-quantity",
+        "same_plan": true,
+        "reference_sha256": "0f41c42bf7c61afc0b9e4983b6a84bab96fb49a697050dd5c06aa589b0d3d0ff"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-carts-getItems-each-quantity",
+        "same_plan": true,
+        "reference_sha256": "ebf75493f0d776ae2de7d3a1c636563d13a0bdecee85a8f762468c602c0505ca"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-carts-getItems-each-unitPrice",
+        "same_plan": true,
+        "reference_sha256": "440d5104eb2e74dc501ee7a9dc09cff6445dac5a8bf769cba005325bf20113fb"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-carts-addToCart-unitPrice",
+        "same_plan": true,
+        "reference_sha256": "d71bed4d557a9299017fd9668d95f61bf9b46518acd85dd58ba46dda6b6543e0"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-station-query-data-each-id",
+        "same_plan": true,
+        "reference_sha256": "8d2ce1169839036c316168a486013d15ffaa5e0ec790290f76e43ff4392fe0e2"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-station-query-data-each-name",
+        "same_plan": true,
+        "reference_sha256": "54425d72c83eea3b82f647ebce38828cdef42e78c198213e73083d29b5ab7f10"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-basic-queryForTravel-data-status",
+        "same_plan": true,
+        "reference_sha256": "bfc078583a10938579d5d8f07f7d6054f8d22032361c4597a206a8a06c7f4bfb"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-basic-queryForTravel-data-trainType-economyClass",
+        "same_plan": true,
+        "reference_sha256": "29e2d8a719c2eb6e56fa6cc6933751c2e32e756f52c3d713be67b7e20d6534a8"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-ticketinfo-queryForTravel-data-trainType-id",
+        "same_plan": true,
+        "reference_sha256": "adb62d98d90bc9f9fffc1f2f62c1b4ccf91f3f749f24e0f69db9d8fa26d56c0c"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-train-query-data-each-confortClass",
+        "same_plan": true,
+        "reference_sha256": "8971c1c16fb8e5f4a34f09d9fc97d3b01b77466a447ebf3bc9e0f94f03c60176"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-route-getRouteByStartAndTerminal-data-each-stations-each",
+        "same_plan": true,
+        "reference_sha256": "14182399ca6b41a3923e5b5bb2066bb0249bf2bfba69d40876fdc67415511f80"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-route-getAllRoutes-data-each-distances-each",
+        "same_plan": true,
+        "reference_sha256": "6a3e889bfaf42d87130fab8e5161bd03eff3995c48baa8101c47ba3cc757877b"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-price-findByRouteIdAndTrainType-data-firstClassPriceRate",
+        "same_plan": true,
+        "reference_sha256": "8237660f80ecb5672a560d9cb0957992186093317840628222ef29da19b2c789"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-price-findAllPriceConfig-data-each-trainType",
+        "same_plan": true,
+        "reference_sha256": "add62f40b005dc45d4586b65be5ad9d04a6fe2ba8f4947753df564c36948961a"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-orders-newOrder-card-id",
+        "same_plan": true,
+        "reference_sha256": "19cc907ca0557c012cdc0ea92113264aa758a0a5e89b80bf69c53e2250e1f049"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-orders-newOrder-customer-addresses-each-postcode",
+        "same_plan": true,
+        "reference_sha256": "2940e8b4807c409420328dbddc81580ed66129a581ffb95b282a5d1c774e3a25"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-carts-addToCart-quantity",
+        "same_plan": true,
+        "reference_sha256": "b784d52b86008e9fa86bcbdca3c5be955901a62f6b943733985f48b46c0e3498"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-orders-newOrder-customer-cards-each-ccv",
+        "same_plan": true,
+        "reference_sha256": "96f0d481c65697449aa22695510e1fd033b64e4c83f68eeaa2f28da5b1d28407"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-orders-newOrder-customer-id",
+        "same_plan": true,
+        "reference_sha256": "af4bcebf82635debb550f232c79b797f8ab4bd76d8efc9f26e0f8256b2b60668"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-orders-newOrder-address-id",
+        "same_plan": true,
+        "reference_sha256": "f5663ab8b41a32147eeeb030c2eecdf3c5f24425f65dd6bd27c2ad6fc48ebbd6"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-orders-newOrder-customer-addresses-each-street",
+        "same_plan": true,
+        "reference_sha256": "05352b5ed88f877ef5ed22c7ee81c421dcf79aadcfaf8b99a852a3ee5b07a501"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-orders-newOrder-customer-addresses-each-id",
+        "same_plan": true,
+        "reference_sha256": "eb4918b05ce7d6352c448a578e217c152fef97beb94f77a2f2ff6159685ba0ad"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-orders-newOrder-customer-username",
+        "same_plan": true,
+        "reference_sha256": "77522ef5dc0bf9c2a9ccbbcf6462357c16432b3277d5653d87f242652bb05a9b"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-carts-get-itemId",
+        "same_plan": true,
+        "reference_sha256": "96ee2f1d6b75f642cd1d7df477ddce73bbdea1420f01e0e3a0db6e04ebc80fa2"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-route-getRouteById-data-distances-each",
+        "same_plan": true,
+        "reference_sha256": "50436a498631da4e08ee2aa836310b09c1fe815b4bedf74ce09ee0752a77c1f5"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-route-getRouteById-data-id",
+        "same_plan": true,
+        "reference_sha256": "642915cd01cbade03565a3331ff4d27a77f82a14aeb5db381e9666b5b3d1ae0f"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-route-getRouteById-data-startStationId",
+        "same_plan": true,
+        "reference_sha256": "d796b13151e75a5de007c2f6f81ed694bc567ac5aeeb865d438be8652432a70a"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-route-getRouteById-data-stations-each",
+        "same_plan": true,
+        "reference_sha256": "c74710262f36857aabafcd465f2c86449027ea97b8357f47c7e5d9d3bb7f6867"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-route-getRouteById-data-terminalStationId",
+        "same_plan": true,
+        "reference_sha256": "0b490e5d7faafa23cfd1326f1ce2d56500df4b6639bf41092a24c65fbd67bfc8"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-station-queryById-data",
+        "same_plan": true,
+        "reference_sha256": "09d68f9741935b82d9d2a68600428c56be4b667a41665ab68cf05ad0bce4f1c9"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-station-queryByIdBatch-data-each",
+        "same_plan": true,
+        "reference_sha256": "c270a11bbe6fac089fb0a90c98ee383b112e091638309192ecbbe9ce708201b1"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-station-queryForIdBatch-data-each",
+        "same_plan": true,
+        "reference_sha256": "0af3350d34ff3bf08df8c77481d2ed7d6dc3a78bae7aa2c24fb4a6e4d055ae43"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-train-retrieve-data-averageSpeed",
+        "same_plan": true,
+        "reference_sha256": "c269d5de4fc5fea5d55dd9252ea81849004e855432df380b6d1b48ede5089048"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-train-retrieve-data-confortClass",
+        "same_plan": true,
+        "reference_sha256": "e2e16f084ec46c898ab634886f602d18d17d443b310d979def777c6654530074"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-train-retrieve-data-economyClass",
+        "same_plan": true,
+        "reference_sha256": "8b6d570666d7b51a9a157596134aa1bbf78379d33d30625812f344ef4ddd9979"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-train-retrieve-data-id",
+        "same_plan": true,
+        "reference_sha256": "40c63962b44711679daa5c1977f3c341ed750dc23effed1bfe87e893e84d01d3"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-carts-addToCart-itemId",
+        "same_plan": true,
+        "reference_sha256": "bea9efdf104c14d0a98420f53f16ab9a016ab029e859f6ed4463bf009f968706"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-carts-get-unitPrice",
+        "same_plan": true,
+        "reference_sha256": "1d73392bd7fb3330dc46c0b091d193a6f2fd9ad783ed85206d16121c566a1218"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-carts-getItems-each-itemId",
+        "same_plan": true,
+        "reference_sha256": "b34462dbe48d4cead0646f091dccffa10d30678c2c04f7ee8ceb2acac9a101fa"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-orders-newOrder-card-longNum",
+        "same_plan": true,
+        "reference_sha256": "496d5558ddd9817ac22ca60c370823c02337903a9ebc8b67ada48614832173fc"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-orders-newOrder-customer-addresses-each-number",
+        "same_plan": true,
+        "reference_sha256": "bb4308b2cf040c7deba72f3209a6b5de4c28d278e1ac056605bbbc9420c29e82"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-orders-newOrder-customer-cards-each-longNum",
+        "same_plan": true,
+        "reference_sha256": "9463c992ec524d187831e774f736510ffadf3caf06cba27e078b6ec6d2790ad2"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-orders-newOrder-customer-cards-each-expires",
+        "same_plan": true,
+        "reference_sha256": "a4d4073f8a435f8ec2ddffed8d542db2700138991c505e9126fae62fa438f854"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-orders-newOrder-address-postcode",
+        "same_plan": true,
+        "reference_sha256": "21d2b247d8c4f186b42407efe484980cf322bb9cdc643d9b2421db7141132c4c"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-orders-newOrder-card-expires",
+        "same_plan": true,
+        "reference_sha256": "5991e6e0d5d518906e8efe72773f241051addc85bbe76d503ba6619256f352be"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "sockshop-orders-newOrder-date",
+        "same_plan": true,
+        "reference_sha256": "36f7157a0af98cd59457caf7ca6cef1d36b9e84aa4053db243b79c3d09aea25e"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-ticketinfo-queryForTravel-data-prices-economyClass",
+        "same_plan": true,
+        "reference_sha256": "fcb08fae5e937e5411a0fb2de77152fbb5b5ccb1ec6f6ebe41f12f6451544acb"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-basic-queryForTravel-data-trainType-id",
+        "same_plan": true,
+        "reference_sha256": "7fbc87a5df21259461d0aec214d16dfdfc5872a6a901b0d9e2fee8077c5a092c"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-train-query-data-each-economyClass",
+        "same_plan": true,
+        "reference_sha256": "aed0b0c58331c08dda6b35a659dbde4c64d8deda2c9eba25da0fc7ae33e0a34c"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-price-findAllPriceConfig-data-each-id",
+        "same_plan": true,
+        "reference_sha256": "592c56958c3d64b826875432779a1f9431e5c93f2f11809455b5cb3b5dee5acb"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-route-getAllRoutes-data-each-startStationId",
+        "same_plan": true,
+        "reference_sha256": "d1691893c330c9dbe7cd44d208fb248bf26a28b03ce2f4173f6d5d53ab8ffa65"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-station-query-data-each-stayTime",
+        "same_plan": true,
+        "reference_sha256": "0bb1c3b1c51a2d6d0b429feae6d58505dec12d23811e3ff2570ec1f0bd262eca"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-price-findByRouteIdAndTrainType-data-trainType",
+        "same_plan": true,
+        "reference_sha256": "bea02f5221efdc7a885cc462a22a9ebff911f48c54868e74aeee80d1ecb0ed42"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-route-getRouteByStartAndTerminal-data-each-terminalStationId",
+        "same_plan": true,
+        "reference_sha256": "3ed50f6bdd7ab8751914a9313f3183c957a819655c75fbea3d5b3bb1f23f44bf"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-ticketinfo-queryForTravel-data-trainType-averageSpeed",
+        "same_plan": true,
+        "reference_sha256": "5cff0d8153233712339068a7bd1a2d9279032e79bc0acdf359f9450bf70465fb"
+      },
+      {
+        "set": "frozen-plans",
+        "query": "trainticket-basic-queryForTravel-data-trainType-averageSpeed",
+        "same_plan": true,
+        "reference_sha256": "8a313e0204275fc496813f979001041395ffa4e5dbebed1f6c978dce708e65ab"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "sockshop-orders-newOrder-id",
+        "same_plan": true,
+        "reference_sha256": "ab7adba7e275cb4bf69a36fc82dd73b9a28e51f82c39006cacd8c0b2c3023f65"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "sockshop-orders-newOrder-customerId",
+        "same_plan": true,
+        "reference_sha256": "4850fb3746cf6392e8ae6733c1b5f7949c8d670abda24b7cf1462f03cf217c20"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "sockshop-orders-newOrder-customer-addresses-each-city",
+        "same_plan": true,
+        "reference_sha256": "8fe6f3eed032a67a949838c85fc4edb0065988f642ab559eeac691b1c3aa07af"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "sockshop-orders-newOrder-customer-cards-each-id",
+        "same_plan": true,
+        "reference_sha256": "f857f2137a951c48a9508a829db69e5f7fae87193135070f662343c1101311a5"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "sockshop-orders-newOrder-address-street",
+        "same_plan": true,
+        "reference_sha256": "1b43dff9b6b092dac77369d8662d00c7a440e66693f38abbe93ced328bc8d834"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "sockshop-orders-newOrder-address-city",
+        "same_plan": true,
+        "reference_sha256": "19a25f5a9b0942615e9003d41e17903e1c67e1d76d5035375361bbecf0088f0c"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "sockshop-orders-newOrder-card-ccv",
+        "same_plan": true,
+        "reference_sha256": "8661cd49d230b5636ae0b6b4be303179d9b452a11812cf2630000634a60e4339"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-basic-queryForTravel-data-percent",
+        "same_plan": true,
+        "reference_sha256": "224e2c0c59ce10bc30d6c2672c4164eaf38b3dc82c20f6b94dc0a572da3908b3"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-basic-queryForTravel-data-trainType-confortClass",
+        "same_plan": true,
+        "reference_sha256": "f949e721bd74115bf8ad18c25c4a549b1797038028e624e7be987232aecc814b"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-ticketinfo-queryForTravel-data-status",
+        "same_plan": true,
+        "reference_sha256": "80bee0fc001acff5bd3669851c50524c89035700acbf7520aa96395670ee75b5"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-ticketinfo-queryForTravel-data-percent",
+        "same_plan": true,
+        "reference_sha256": "86395e8fc4a02d233b71c6be900dfd0e885957c1c72b99b37de767838ffe8a79"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-ticketinfo-queryForTravel-data-trainType-economyClass",
+        "same_plan": true,
+        "reference_sha256": "3b63e7b2ccfc2fb6693ef71e9ba554e2d5536aa3a340ff858ec9f09e4f11ae27"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-ticketinfo-queryForTravel-data-trainType-confortClass",
+        "same_plan": true,
+        "reference_sha256": "cc43e1b0712b4888bb0bd7704b4289b93f5cbc4856f788617f26a4ef420a06be"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-ticketinfo-queryForTravel-data-prices-confortClass",
+        "same_plan": true,
+        "reference_sha256": "3f354f7457af89169cc45a1b41cfc86f76f6a941daa4b1857bfc0f1c4acd2507"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-ticketinfo-queryForTravel-data-message",
+        "same_plan": true,
+        "reference_sha256": "b351c6f4baaabcc70eb181c183f1492bc70f403463873a34a6bba5529a3105bb"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-train-query-data-each-id",
+        "same_plan": true,
+        "reference_sha256": "4ea040190bef0c232ba9864bd4e5cda8a86553e237bbe03b5c37a9b00518daad"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-train-query-data-each-averageSpeed",
+        "same_plan": true,
+        "reference_sha256": "d315e1291ff350d7a6d42149114358569f80ca1ab6f9d7723748e9e84a36caa7"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-route-getRouteByStartAndTerminal-data-each-id",
+        "same_plan": true,
+        "reference_sha256": "9fdef634ab280bc1beff9bab552022d31575548fda956ab9e09ed83f76e2fbb0"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-route-getRouteByStartAndTerminal-data-each-distances-each",
+        "same_plan": true,
+        "reference_sha256": "0904aad5408feccc80d3894d9e1b33019d9a936169afa08a722e72950eeabd68"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-route-getRouteByStartAndTerminal-data-each-startStationId",
+        "same_plan": true,
+        "reference_sha256": "2528534ea441417607f0ed00f69f89290baebc2740cc2f2591626e8d2675fde0"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-route-getAllRoutes-data-each-id",
+        "same_plan": true,
+        "reference_sha256": "24f7d59a54af7502f13e004c7f3442c38f7a9a7d99c9a06d1425e08ceeb5c2fc"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-route-getAllRoutes-data-each-stations-each",
+        "same_plan": true,
+        "reference_sha256": "c664e8e224f30d0042db73b911f440c7ae1e3d8b2bc58299ede0ae1b01a34330"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-route-getAllRoutes-data-each-terminalStationId",
+        "same_plan": true,
+        "reference_sha256": "e8a2d0a24b0504317e4aa512fed114d5f3f2bc604f1cda8b102f069959044628"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-price-findByRouteIdAndTrainType-data-id",
+        "same_plan": true,
+        "reference_sha256": "90d62c2a511ea89caf970601d1e6f2a7f94b5f36bd57638f100e8a625ec03a70"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-price-findByRouteIdAndTrainType-data-routeId",
+        "same_plan": true,
+        "reference_sha256": "2b9e05e3d745d8c2809d96ae7a86a9bfbcc7de40ff9e33bc8f80ecadfb212d33"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-price-findByRouteIdAndTrainType-data-basicPriceRate",
+        "same_plan": true,
+        "reference_sha256": "2d85f0ffc0fe4f22782e694c3e8fed43272ccac5e360038b7ecfec7c6723c5a6"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-price-findAllPriceConfig-data-each-routeId",
+        "same_plan": true,
+        "reference_sha256": "be23338e3033053f56f52bc5d851a5dea6a05627d9eb06d66c5217700064e40d"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-price-findAllPriceConfig-data-each-basicPriceRate",
+        "same_plan": true,
+        "reference_sha256": "ea240e942133552ce86303a9ff71c6290f0689f0fda5e8b905919a190d1614b7"
+      },
+      {
+        "set": "regression29-plans",
+        "query": "trainticket-price-findAllPriceConfig-data-each-firstClassPriceRate",
+        "same_plan": true,
+        "reference_sha256": "822ca0bac6fe304c2e2afe16e8b1160303c8141125365e9e15f776aab98fda25"
+      },
+      {
+        "set": "write-plans",
+        "query": "heldout-closure-route-createAndModify-id",
+        "same_plan": true,
+        "reference_sha256": "7bc08a8e0841de599bef795cb3c009bb537107eec5c313e0a0560e2ab1f88e62"
+      },
+      {
+        "set": "write-plans",
+        "query": "heldout-closure-route-createAndModify-stations",
+        "same_plan": true,
+        "reference_sha256": "4af4464d45664445c44fbf44f40124dfcd5b42d4daadc34e4848db3c1e292d55"
+      },
+      {
+        "set": "write-plans",
+        "query": "heldout-closure-route-createAndModify-distances",
+        "same_plan": true,
+        "reference_sha256": "2dc2365c02a5cff9f90e95e3f7a011286bb47efbd72bc80800da52e3755746e2"
+      },
+      {
+        "set": "write-plans",
+        "query": "heldout-closure-route-createAndModify-startStationId",
+        "same_plan": true,
+        "reference_sha256": "cc3ac958a1b0352984790cdbde94fc767cc8d3753b06bdb39cefd4a1a3beb737"
+      },
+      {
+        "set": "write-plans",
+        "query": "heldout-closure-route-createAndModify-terminalStationId",
+        "same_plan": true,
+        "reference_sha256": "e98a94158191deba0403435ce67bd9bbb00598cffdf20880e8c0ba9bc8f1c003"
+      },
+      {
+        "set": "write-plans",
+        "query": "heldout-closure-price-createNewPriceConfig-id",
+        "same_plan": true,
+        "reference_sha256": "6f7f58f00b89acfe38631d4f7e4230d5b18bb0c9c454f2d2c99b6a147688d5d4"
+      },
+      {
+        "set": "write-plans",
+        "query": "heldout-closure-price-createNewPriceConfig-trainType",
+        "same_plan": true,
+        "reference_sha256": "f51d5f9d71b0f4dfa793dfb295e799b79e4abf75c9699ce84f060ad5dd6b9930"
+      },
+      {
+        "set": "write-plans",
+        "query": "heldout-closure-price-createNewPriceConfig-routeId",
+        "same_plan": true,
+        "reference_sha256": "50317b9b3f955da63fcc497af4220aa5c5612ea9a2a3400fa47bb1515915c59f"
+      },
+      {
+        "set": "write-plans",
+        "query": "heldout-closure-price-createNewPriceConfig-basicPriceRate",
+        "same_plan": true,
+        "reference_sha256": "822d07e7078983c9f7a4d562580dc4d4a55fe7a56dcc5ab7644280e83ec2aacb"
+      },
+      {
+        "set": "write-plans",
+        "query": "heldout-closure-price-createNewPriceConfig-firstClassPriceRate",
+        "same_plan": true,
+        "reference_sha256": "aa406c014d8b0c32e4c695a0e7acda0d2cff5f51d9b780109fa144356446daee"
+      },
+      {
+        "set": "write-plans",
+        "query": "heldout-closure-price-updatePriceConfig-id",
+        "same_plan": true,
+        "reference_sha256": "4f31e315fe12f391af0535c38ef250cd972f024d54a9721c8c1d2c5f67440e87"
+      },
+      {
+        "set": "write-plans",
+        "query": "heldout-closure-price-updatePriceConfig-trainType",
+        "same_plan": true,
+        "reference_sha256": "74a1eacbeabdffdbae3a475f84f1e4d146192c012c0dab4ebdf4b66c821d2de9"
+      },
+      {
+        "set": "write-plans",
+        "query": "heldout-closure-price-updatePriceConfig-routeId",
+        "same_plan": true,
+        "reference_sha256": "393af83408e2f087f86cfd291a0941c3a3592450cadc901c7ed3cf18cc51562b"
+      },
+      {
+        "set": "write-plans",
+        "query": "heldout-closure-price-updatePriceConfig-basicPriceRate",
+        "same_plan": true,
+        "reference_sha256": "609555080154f57e5e9b3bbe7e4008aa15e0f750e62b609fa539ea77eeb01da3"
+      },
+      {
+        "set": "write-plans",
+        "query": "heldout-closure-price-updatePriceConfig-firstClassPriceRate",
+        "same_plan": true,
+        "reference_sha256": "6a1adf3765a24267bbb6d80de9584f2613930696da9050a92d22419ecb51dd4d"
+      }
+    ],
+    "not_new_Agent_business_acceptance": true
+  },
+  "new_capture_folders": [
+    "fixture-07",
+    "recipient-03",
+    "reliability-audit-05",
+    "application-compatibility-03",
+    "rpc-business-regression-02"
+  ],
+  "legacy_controls": {
+    "call_lifecycle-compatibility-01": {
+      "results_sha256": "0d74340ff01ec3e349b61fd32b8d5dfe5c7d2aa5a055bd58fff5dc680d5226d8",
+      "all_passed": true
+    },
+    "read_forward-compatibility-01": {
+      "results_sha256": "d774317ac4219d703d7a4b3fbb7ebf0de2ea5889121d30a3f277a2d2e2ac035c",
+      "all_passed": true,
+      "by_mode": {
+        "full": {
+          "targets": 48,
+          "known": 18,
+          "refused_contract_families": 1
+        },
+        "selective": {
+          "targets": 48,
+          "known": 18,
+          "refused_contract_families": 1
+        }
+      }
+    },
+    "binding-compatibility-02": {
+      "results_sha256": "0a262915376a257d98983c79bd037117acd45797d015ad60b9b985faac31f788",
+      "all_passed": true,
+      "targets": 54,
+      "known": 48
+    },
+    "binding-compatibility-full-01": {
+      "results_sha256": "0a262915376a257d98983c79bd037117acd45797d015ad60b9b985faac31f788",
+      "all_passed": true,
+      "targets": 54,
+      "known": 48
+    },
+    "collection-compatibility-01": {
+      "results_sha256": "2550977d1ebc03299706f9e5354e221994694bcb2ba92da72dc8b633e973044c",
+      "all_passed": true,
+      "profiles": {
+        "full": {
+          "queries": 10,
+          "exact": 10,
+          "events": 281,
+          "bytes": 54464,
+          "tamper_rejected": true
+        },
+        "selective": {
+          "queries": 10,
+          "exact": 10,
+          "events": 204,
+          "bytes": 39925,
+          "tamper_rejected": true
+        }
+      },
+      "negative_contracts": {
+        "mutation-full": {
+          "business_matches_original": true,
+          "capture_refused": true,
+          "problem_events": [
+            "Mutation of a received collection",
+            "monitor-failure:CollectionServiceHooks.guardMutation:java.lang.IllegalStateException"
+          ]
+        },
+        "mutation-selective": {
+          "business_matches_original": true,
+          "capture_refused": true,
+          "problem_events": [
+            "Mutation of a received collection",
+            "monitor-failure:CollectionServiceHooks.guardMutation:java.lang.IllegalStateException"
+          ]
+        },
+        "virtual-full": {
+          "business_matches_original": true,
+          "capture_refused": true,
+          "problem_events": [
+            "collection-begin:java.lang.IllegalStateException: Unresolved accessor virtual dispatch",
+            "monitor-failure:CollectionServiceHooks.beginAt:java.lang.IllegalStateException"
+          ]
+        },
+        "virtual-selective": {
+          "business_matches_original": true,
+          "capture_refused": true,
+          "problem_events": [
+            "collection-begin:java.lang.IllegalStateException: Unresolved accessor virtual dispatch",
+            "monitor-failure:CollectionServiceHooks.beginAt:java.lang.IllegalStateException"
+          ]
+        }
+      }
+    }
+  }
+}

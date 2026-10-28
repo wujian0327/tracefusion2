@@ -1,0 +1,20 @@
+{
+  "at_utc": "2026-10-28T12:56:27.354342+00:00",
+  "development_base_commit": "6873a487d4af1dc3c629f20db24d572660dff0fa",
+  "first_algorithm": "ae7fe8d8b9e23d8ce197870ff0069c7f1bee84eb",
+  "first_immutable_manifest_sha256": "8aa62ab5ad24283681624a22f8a4ebb50d2e1a349628c8810bd16cf5b07cbe68",
+  "first_files_unchanged": 2192,
+  "source_archive_sha256": "224a04565e944307bf4152f31f80b0d378f3b6823c75a79defe07929bc0d4671",
+  "inputs_sha256": "48d61d82c0048c308e97cf0a3f1b101f9d245c073f618f0669cce1abec1549ce",
+  "sequence": [
+    "monitor reliability and state lifecycle audit",
+    "full/selective mixed tests and original Recipient parity; corrupted batch still refused",
+    "only then Account semantics with exact 40-target oracle",
+    "candidate freeze and final business/history/negative-evidence acceptance"
+  ],
+  "development_queries_not_unseen": true,
+  "no_cost_experiment": true,
+  "no_push": true,
+  "remaining_361_out_of_scope_except_dependencies": true,
+  "stopping_rule": "Never promote binding or restored business parity to known provenance; report any incomplete gate explicitly"
+}

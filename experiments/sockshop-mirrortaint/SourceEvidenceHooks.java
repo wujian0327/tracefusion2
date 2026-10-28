@@ -45,7 +45,7 @@ public final class SourceEvidenceHooks {
         return body;
     }
     public static void read(Object body,Object message,Object mapper){
-        if(!enabled())return;Capture c=CAPTURES.remove(message);if(c==null)return;
+        Capture c=CAPTURES.remove(message);if(!enabled()||!MonitorSafety.allowed()||c==null)return;
         synchronized(PlannedServiceAgent.Recorder.class){try{
             Map r=new LinkedHashMap();if(!SpringTransportAgent.Transport.RPC.get().isEmpty()){r.putAll(SpringTransportAgent.Transport.RPC.get().peek());r.put("direction","response");}
             else{r.putAll(SpringTransportAgent.Transport.context());r.put("direction","request");}

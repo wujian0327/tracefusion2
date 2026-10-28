@@ -43,8 +43,11 @@ public class BindingSemanticFixture {
             if(args[0].equals("custom-serializer")){
                 result=nested(left);ObjectMapper mapper=new ObjectMapper();SimpleModule module=new SimpleModule();module.addSerializer(String.class,new SameValueSerializer());mapper.registerModule(module);
                 if(!mapper.writeValueAsString(result).contains("SAME"))throw new AssertionError();
-                try{ResponseBindingHooks.verifySerialization(result,mapper);throw new AssertionError("Custom equal-value serializer accepted");}
-                catch(IllegalStateException expected){System.out.println("CUSTOM_SERIALIZER_REJECTED="+expected.getMessage());}return;
+                ResponseBindingHooks.verifySerialization(result,mapper);
+                // Monitoring must not change serialization behavior. The Python
+                // harness separately requires a failed capture and graph refusal.
+                if(!mapper.writeValueAsString(result).contains("SAME"))throw new AssertionError();
+                System.out.println("CUSTOM_SERIALIZER_BUSINESS_UNCHANGED");return;
             }
             switch(args[0]){
                 case "direct":result=direct(i%2==0?left:right);break;

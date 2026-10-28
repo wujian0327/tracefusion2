@@ -1,0 +1,234 @@
+{
+  "diagnostic_only": true,
+  "not_oracle_or_propagation_rule": true,
+  "semantic_changes": false,
+  "queries": [
+    {
+      "query_index": 11,
+      "path": "/name",
+      "target": "com/piggymetrics/account/domain/Account.name",
+      "first_capture_sha256": "042388d618121d673f8cf83b3dab6c4c1a2b322305fad793f847f2c062b431d1",
+      "answer_states": [
+        {
+          "root": "f1",
+          "known": false
+        },
+        {
+          "root": "f3",
+          "known": false
+        },
+        {
+          "root": "f7",
+          "known": false
+        },
+        {
+          "root": "f9",
+          "known": false
+        }
+      ],
+      "first_write": {
+        "kind": "target_field_write",
+        "field": "com/piggymetrics/account/domain/Account.name",
+        "method": "com/piggymetrics/account/service/AccountServiceImpl.create(Lcom/piggymetrics/account/domain/User;)Lcom/piggymetrics/account/domain/Account;",
+        "pc": 55,
+        "write": {
+          "frame": "f2",
+          "owner": "o43",
+          "field": "com/piggymetrics/account/domain/Account.name",
+          "version": 1,
+          "observed": {
+            "object": "o29",
+            "value": "port-account-0"
+          },
+          "site": "com/piggymetrics/account/domain/Account.setName(Ljava/lang/String;)V@2",
+          "seq": 102,
+          "kind": "write",
+          "thread": 35
+        },
+        "dependency_already_unknown": true,
+        "origin_count": 0
+      },
+      "first_lookup": {
+        "kind": "target_field_lookup",
+        "field": {
+          "owner": "o43",
+          "field": "com/piggymetrics/account/domain/Account.name",
+          "version": 1,
+          "descriptor": "Ljava/lang/String;",
+          "observed": {
+            "object": "o29",
+            "value": "port-account-0"
+          }
+        },
+        "before_seq": 122,
+        "unknown": true,
+        "has_interpreted_write": true
+      }
+    },
+    {
+      "query_index": 12,
+      "path": "/note",
+      "target": "com/piggymetrics/account/domain/Account.note",
+      "first_capture_sha256": "67ebade0edce27ee9c8f95e38d12c5d6d4be38f106be786694903b7597d58c2f",
+      "answer_states": [
+        {
+          "root": "f1",
+          "known": false
+        },
+        {
+          "root": "f3",
+          "known": false
+        },
+        {
+          "root": "f7",
+          "known": false
+        },
+        {
+          "root": "f9",
+          "known": false
+        }
+      ],
+      "first_write": null,
+      "first_lookup": {
+        "kind": "target_field_lookup",
+        "field": {
+          "path": "/note",
+          "owner": "o43",
+          "field": "com/piggymetrics/account/domain/Account.note",
+          "version": 0,
+          "observed": {
+            "object": null,
+            "value": null
+          }
+        },
+        "before_seq": 134,
+        "unknown": true,
+        "has_interpreted_write": false
+      }
+    },
+    {
+      "query_index": 14,
+      "path": "/saving/capitalization",
+      "target": "com/piggymetrics/account/domain/Saving.capitalization",
+      "first_capture_sha256": "7e9e3b7f0bb8fd887383fe7edafa541595c8ba9f0780d3f64c64fdc1028aff6f",
+      "answer_states": [
+        {
+          "root": "f1",
+          "known": false
+        },
+        {
+          "root": "f3",
+          "known": false
+        },
+        {
+          "root": "f7",
+          "known": false
+        },
+        {
+          "root": "f9",
+          "known": false
+        }
+      ],
+      "first_write": {
+        "kind": "target_field_write",
+        "field": "com/piggymetrics/account/domain/Saving.capitalization",
+        "method": "com/piggymetrics/account/service/AccountServiceImpl.create(Lcom/piggymetrics/account/domain/User;)Lcom/piggymetrics/account/domain/Account;",
+        "pc": 47,
+        "write": {
+          "frame": "f2",
+          "owner": "o38",
+          "field": "com/piggymetrics/account/domain/Saving.capitalization",
+          "version": 1,
+          "observed": {
+            "object": "o21",
+            "value": false
+          },
+          "site": "com/piggymetrics/account/domain/Saving.setCapitalization(Ljava/lang/Boolean;)V@2",
+          "seq": 94,
+          "kind": "write",
+          "thread": 35
+        },
+        "dependency_already_unknown": true,
+        "origin_count": 0
+      },
+      "first_lookup": {
+        "kind": "target_field_lookup",
+        "field": {
+          "path": "/saving/capitalization",
+          "owner": "o38",
+          "field": "com/piggymetrics/account/domain/Saving.capitalization",
+          "version": 1,
+          "observed": {
+            "object": "o21",
+            "value": false
+          }
+        },
+        "before_seq": 134,
+        "unknown": true,
+        "has_interpreted_write": true
+      }
+    },
+    {
+      "query_index": 16,
+      "path": "/saving/deposit",
+      "target": "com/piggymetrics/account/domain/Saving.deposit",
+      "first_capture_sha256": "563903ee0c3b4ad61b7fae0e1e14468230b277e5748416d07c0d40206eec956d",
+      "answer_states": [
+        {
+          "root": "f1",
+          "known": false
+        },
+        {
+          "root": "f3",
+          "known": false
+        },
+        {
+          "root": "f7",
+          "known": false
+        },
+        {
+          "root": "f9",
+          "known": false
+        }
+      ],
+      "first_write": {
+        "kind": "target_field_write",
+        "field": "com/piggymetrics/account/domain/Saving.deposit",
+        "method": "com/piggymetrics/account/service/AccountServiceImpl.create(Lcom/piggymetrics/account/domain/User;)Lcom/piggymetrics/account/domain/Account;",
+        "pc": 43,
+        "write": {
+          "frame": "f2",
+          "owner": "o38",
+          "field": "com/piggymetrics/account/domain/Saving.deposit",
+          "version": 1,
+          "observed": {
+            "object": "o21",
+            "value": false
+          },
+          "site": "com/piggymetrics/account/domain/Saving.setDeposit(Ljava/lang/Boolean;)V@2",
+          "seq": 89,
+          "kind": "write",
+          "thread": 35
+        },
+        "dependency_already_unknown": true,
+        "origin_count": 0
+      },
+      "first_lookup": {
+        "kind": "target_field_lookup",
+        "field": {
+          "path": "/saving/deposit",
+          "owner": "o38",
+          "field": "com/piggymetrics/account/domain/Saving.deposit",
+          "version": 1,
+          "observed": {
+            "object": "o21",
+            "value": false
+          }
+        },
+        "before_seq": 134,
+        "unknown": true,
+        "has_interpreted_write": true
+      }
+    }
+  ]
+}

@@ -12,7 +12,7 @@ from run_planned_service import HERE,save,load
 from infer_distributed_fields import Reconstruction
 
 
-def run(out,base,only=None):
+def run(out,base,only=None,mode='selective'):
     out.mkdir(parents=True,exist_ok=False);classes=out/'classes';classes.mkdir()
     _,target=java8_target();cp=':'.join(map(str,[base/'tools',*JARS]))
     command(['javac',*target,'-cp',cp,'-d',str(classes),str(HERE/'BindingSemanticFixture.java')],out/'compile.log')
@@ -35,7 +35,7 @@ def run(out,base,only=None):
         dest=out/name;dest.mkdir();config={'fixture':{'jar':str(jar),'entry':'BindingSemanticFixture.'+method,'targets':[field],'response_path':path}}
         build(dest/'build',config);capture=dest/'capture';(capture/'fixture').mkdir(parents=True)
         log=capture/'fixture/events.jsonl'
-        command(['java','-javaagent:'+str(dest/'build/distributed-observer.jar'),'-Dservice.plan='+str(dest/'build/fixture/plan.json'),'-Dservice.mode=selective','-Dservice.events='+str(log),'-cp',str(classes)+':'+':'.join(map(str,JARS)),'BindingSemanticFixture',name],dest/'stdout.log')
+        command(['java','-javaagent:'+str(dest/'build/distributed-observer.jar'),'-Dservice.plan='+str(dest/'build/fixture/plan.json'),'-Dservice.mode='+mode,'-Dservice.events='+str(log),'-cp',str(classes)+':'+':'.join(map(str,JARS)),'BindingSemanticFixture',name],dest/'stdout.log')
         rows=[json.loads(x) for x in log.read_text().splitlines()]
         assert not any(r['kind']=='problem' for r in rows)
         graph=Reconstruction(dest/'build',capture,['fixture']);wires=[r for r in rows if r['kind']=='http-json'];checks=[]
@@ -56,9 +56,14 @@ def run(out,base,only=None):
         negatives={}
         if name=='nested':
             custom=capture/'custom';custom.mkdir()
-            result_custom=command(['java','-javaagent:'+str(dest/'build/distributed-observer.jar'),'-Dservice.plan='+str(dest/'build/fixture/plan.json'),'-Dservice.mode=selective','-Dservice.events='+str(custom/'events.jsonl'),'-cp',str(classes)+':'+':'.join(map(str,JARS)),'BindingSemanticFixture','custom-serializer'],dest/'custom-serializer.log')
-            assert 'CUSTOM_SERIALIZER_REJECTED=Unmodeled serializer:' in result_custom.stdout
-            negatives['custom-equal-value-serializer']='rejected'
+            result_custom=command(['java','-javaagent:'+str(dest/'build/distributed-observer.jar'),'-Dservice.plan='+str(dest/'build/fixture/plan.json'),'-Dservice.mode='+mode,'-Dservice.events='+str(custom/'events.jsonl'),'-cp',str(classes)+':'+':'.join(map(str,JARS)),'BindingSemanticFixture','custom-serializer'],dest/'custom-serializer.log')
+            assert 'CUSTOM_SERIALIZER_BUSINESS_UNCHANGED' in result_custom.stdout
+            custom_rows=[json.loads(x)for x in(custom/'events.jsonl').read_text().splitlines()]
+            assert any(r['kind']=='problem'for r in custom_rows) and custom_rows[-1]['capture_invalid']
+            try:Reconstruction(dest/'build',custom,['fixture'],decoded_rows={'fixture':custom_rows})
+            except ValueError as e:assert str(e)=='Collector problem'
+            else:raise AssertionError('Custom serializer capture incorrectly certified')
+            negatives['custom-equal-value-serializer']='business unchanged; failed capture refused'
             for mutation in ('missing-return','missing-input','ambiguous-return','wrong-return-owner','ambiguous-message'):
                 bad=copy.deepcopy(rows)
                 if mutation=='missing-return':bad=[r for r in bad if r['kind']!='binding-return']
@@ -83,4 +88,4 @@ def run(out,base,only=None):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--base',type=Path,required=True);p.add_argument('--only');a=p.parse_args();run(a.out.resolve(),a.base.resolve(),a.only)
+    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--base',type=Path,required=True);p.add_argument('--only');p.add_argument('--mode',choices=('full','selective'),default='selective');a=p.parse_args();run(a.out.resolve(),a.base.resolve(),a.only,a.mode)

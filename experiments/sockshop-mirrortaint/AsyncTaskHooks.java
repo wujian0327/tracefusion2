@@ -52,10 +52,12 @@ public final class AsyncTaskHooks {
     static final class Task implements Callable<Object>{
         final long id;final Callable<Object> delegate;
         Task(Callable<?> original,Callable<Object> delegate){id=++next;this.delegate=delegate;}
-        public Object call()throws Exception{Task previous=ACTIVE.get();ACTIVE.set(this);synchronized(PlannedServiceAgent.Recorder.class){emit("async-worker-start",row(this));}
-            try{Object result=delegate.call();synchronized(PlannedServiceAgent.Recorder.class){Map r=row(this);r.put("result",value(result));emit("async-worker-end",r);}return result;}
-            catch(Throwable error){synchronized(PlannedServiceAgent.Recorder.class){Map r=row(this);r.put("exception",value(error));r.put("exception_type",error.getClass().getName());emit("async-worker-throw",r);}if(error instanceof Exception)throw (Exception)error;if(error instanceof Error)throw (Error)error;throw new IllegalStateException(error);}
+        void observe(String kind,Object result,Throwable error){synchronized(PlannedServiceAgent.Recorder.class){try{MonitorSafety.fault(kind,"async-task");Map r=row(this);if(error==null)r.put("result",value(result));else{r.put("exception",value(error));r.put("exception_type",error.getClass().getName());}emit(kind,r);}catch(Throwable monitor){MonitorSafety.failed("async-observation",monitor);}}}
+        public Object call()throws Exception{Task previous=ACTIVE.get();ACTIVE.set(this);observe("async-worker-start",null,null);
+            try{Object result=delegate.call();observe("async-worker-end",result,null);return result;}
+            catch(Throwable error){observe("async-worker-throw",null,error);if(error instanceof Exception)throw(Exception)error;if(error instanceof Error)throw(Error)error;throw new IllegalStateException(error);}
             finally{if(previous==null)ACTIVE.remove();else ACTIVE.set(previous);}
+
         }
     }
 }

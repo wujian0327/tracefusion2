@@ -58,15 +58,15 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
                 }
                 if(frames.contains(key)) {
                     if(!initialized)throw new IllegalStateException("Uninitialized framed constructor");
-                    InsnList h=new InsnList();h.add(new LdcInsnNode(key));h.add((m.access&ACC_STATIC)!=0?new InsnNode(ACONST_NULL):new VarInsnNode(ALOAD,0));arguments(h,m);h.add(new MethodInsnNode(INVOKESTATIC,R,"enter","(Ljava/lang/String;Ljava/lang/Object;[Ljava/lang/Object;)V",false));LabelNode start=new LabelNode(),end=new LabelNode(),handler=new LabelNode();h.add(start);
+                    InsnList h=new InsnList();h.add(new LdcInsnNode(key));h.add((m.access&ACC_STATIC)!=0?new InsnNode(ACONST_NULL):new VarInsnNode(ALOAD,0));arguments(h,m);h.add(new MethodInsnNode(INVOKESTATIC,R,"enter","(Ljava/lang/String;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;",false));int scope=m.maxLocals++;h.add(new VarInsnNode(ASTORE,scope));LabelNode start=new LabelNode(),end=new LabelNode(),handler=new LabelNode();h.add(start);
                     if(entry==null)m.instructions.insert(h);else m.instructions.insert(entry,h);
                     for(AbstractInsnNode n:code)if(n.getOpcode()>=IRETURN&&n.getOpcode()<=RETURN) {
-                        InsnList e=new InsnList();Type t=Type.getReturnType(m.desc);if(t.getSort()==Type.VOID)e.add(new InsnNode(ACONST_NULL));else{e.add(new InsnNode(t.getSize()==2?DUP2:DUP));box(e,t);}e.add(new MethodInsnNode(INVOKESTATIC,R,"exit","(Ljava/lang/Object;)V",false));m.instructions.insertBefore(n,e);
+                        InsnList e=new InsnList();Type t=Type.getReturnType(m.desc);if(t.getSort()==Type.VOID)e.add(new InsnNode(ACONST_NULL));else{e.add(new InsnNode(t.getSize()==2?DUP2:DUP));box(e,t);}e.add(new VarInsnNode(ALOAD,scope));e.add(new MethodInsnNode(INVOKESTATIC,R,"exit","(Ljava/lang/Object;Ljava/lang/Object;)V",false));m.instructions.insertBefore(n,e);
                     }
-                    m.instructions.add(end);m.instructions.add(handler);int error=m.maxLocals++;m.instructions.add(new VarInsnNode(ASTORE,error));m.instructions.add(new MethodInsnNode(INVOKESTATIC,R,"abort","()V",false));m.instructions.add(new VarInsnNode(ALOAD,error));m.instructions.add(new InsnNode(ATHROW));m.tryCatchBlocks.add(new TryCatchBlockNode(start,end,handler,"java/lang/Throwable"));changed=true;
+                    m.instructions.add(end);m.instructions.add(handler);int error=m.maxLocals++;m.instructions.add(new VarInsnNode(ASTORE,error));m.instructions.add(new VarInsnNode(ALOAD,scope));m.instructions.add(new MethodInsnNode(INVOKESTATIC,R,"abort","(Ljava/lang/Object;)V",false));m.instructions.add(new VarInsnNode(ALOAD,error));m.instructions.add(new InsnNode(ATHROW));m.tryCatchBlocks.add(new TryCatchBlockNode(start,end,handler,"java/lang/Throwable"));changed=true;
                 }
             }
-            Recorder.transformed(owner);
+            MonitorSafety.instrument(cls);Recorder.transformed(owner);
             if(!changed)return null;
             ClassWriter w=new ClassWriter(ClassWriter.COMPUTE_MAXS|ClassWriter.COMPUTE_FRAMES){protected String getCommonSuperClass(String a,String b){return commonType(loader,a,b);}};cls.accept(w);return w.toByteArray();
         }catch(Throwable e){Recorder.problem("transform:"+owner+":"+e);return null;}
@@ -129,12 +129,13 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
         static final Set<String> CHECKED_CLASSES=new HashSet<>();
         static final ThreadLocal<Deque<Frame>> STACK=new ThreadLocal<Deque<Frame>>(){protected Deque<Frame> initialValue(){return new ArrayDeque<>();}};
         static final ThreadLocal<String> PENDING=new ThreadLocal<>();static final Map<String,Set<String>> ACTIVE=new HashMap<>();
+        static volatile boolean captureInvalid;
         static class Frame{String id,method;List<String> locked=new ArrayList<>();List<Object> inputs;}
         static synchronized String id(Object o){if(o==null)return null;String s=IDS.get(o);if(s==null){if(IDS.size()>100000)throw new IllegalStateException("Object bound");s="o"+(IDS.size()+1);IDS.put(o,s);}return s;}
         static Map<String,Object> row(){Map<String,Object> r=new LinkedHashMap<>();r.put("frame",STACK.get().isEmpty()?null:STACK.get().peek().id);return r;}
         static synchronized Map<String,Object> value(Object o){Map<String,Object> r=new LinkedHashMap<>();r.put("object",id(o));if(TemporalDateHooks.date(o))return TemporalDateHooks.observe((java.util.Date)o);if(UuidProjectionHooks.uuid(o)){r.put("value",o.toString());r.put("uuid_type","java.util.UUID");return r;}if(o instanceof Character&&ExecutionKernelHooks.extended())r.put("value",(int)((Character)o).charValue());else if(o==null||o instanceof Number||o instanceof String||o instanceof Boolean)r.put("value",o);return r;}
         static String hash(byte[] data)throws Exception{StringBuilder s=new StringBuilder();for(byte b:MessageDigest.getInstance("SHA-256").digest(data))s.append(String.format("%02x",b&255));return s.toString();}
-        public static synchronized void start()throws Exception{output=Files.newBufferedWriter(Paths.get(System.getProperty("service.events")),StandardOpenOption.CREATE_NEW);Map<String,Object> r=row();r.put("mode",mode);r.put("plan_sha256",hash(Files.readAllBytes(Paths.get(System.getProperty("service.plan")))));emit("start",r);Runtime.getRuntime().addShutdownHook(new Thread(()->{synchronized(Recorder.class){Map<String,Object> m=row();m.put("field_hook_calls",fieldHooks);m.put("branch_hook_calls",branches);emit("metrics",m);}}));}
+        public static synchronized void start()throws Exception{output=Files.newBufferedWriter(Paths.get(System.getProperty("service.events")),StandardOpenOption.CREATE_NEW);Map<String,Object> r=row();r.put("mode",mode);r.put("plan_sha256",hash(Files.readAllBytes(Paths.get(System.getProperty("service.plan")))));emit("start",r);Runtime.getRuntime().addShutdownHook(new Thread(()->{synchronized(Recorder.class){Map<String,Object> m=row();m.put("capture_invalid",captureInvalid);m.put("field_hook_calls",fieldHooks);m.put("branch_hook_calls",branches);emit("metrics",m);}}));}
         public static synchronized void callsite(String site){if(!STACK.get().isEmpty())PENDING.set(site);}
         static List<Object> snapshot(Object o,boolean target)throws Exception{
             List<Object> out=new ArrayList<>();if(o==null)return out;Set<String> wanted=new HashSet<>((List<String>)plan.get(target?"snapshot_fields":full?"full_snapshot_fields":"mapper_fields"));
@@ -143,8 +144,8 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
                 Map<String,Object> r=new LinkedHashMap<>();r.put("owner",id(o));r.put("field",name);r.put("version",VERSIONS.getOrDefault(id(o)+":"+name,0));r.put("observed",value(f.get(o)));out.add(r);
             }return out;
         }
-        public static synchronized void enter(String method,Object self,Object[] args){try{
-            Frame f=new Frame();f.id="f"+(++framesCounter);f.method=method;Map<String,Object> r=row();r.put("parent",r.get("frame"));r.put("frame",f.id);r.put("method",method);r.put("receiver",id(self));r.put("callsite",PENDING.get());PENDING.remove();List<Object> vs=new ArrayList<>();for(Object a:args)vs.add(value(a));r.put("args",vs);ExecutionKernelHooks.callbackSite(r);AsyncTaskHooks.frame(r);
+        public static synchronized Object enter(String method,Object self,Object[] args){MonitorSafety.Scope scope=MonitorSafety.open(method);if(scope.failed)return scope;try{
+            Frame f=new Frame();f.id="f"+(++framesCounter);f.method=method;scope.frame=f;Map<String,Object> r=row();r.put("parent",r.get("frame"));r.put("frame",f.id);r.put("method",method);r.put("receiver",id(self));r.put("callsite",PENDING.get());PENDING.remove();List<Object> vs=new ArrayList<>();for(Object a:args)vs.add(value(a));r.put("args",vs);ExecutionKernelHooks.callbackSite(r);AsyncTaskHooks.frame(r);
             if(method.equals(plan.get("entry")))try{r.put("trace_id",Class.forName("org.slf4j.MDC",false,Thread.currentThread().getContextClassLoader()).getMethod("get",String.class).invoke(null,"X-B3-TraceId"));}catch(Exception ignored){}
             if(method.equals(plan.get("entry"))&&"identity-return".equals(plan.get("profile"))){Object a=args[((Number)plan.get("input_argument")).intValue()];if(a==null||!a.getClass().getName().replace('.','/').equals(plan.get("input_owner")))throw new IllegalStateException("Runtime input DTO differs");r.put("input_object",id(a));r.put("input_fields",snapshot(a,true));Set<String> users=ACTIVE.computeIfAbsent(id(a),k->new HashSet<>());if(!users.isEmpty())throw new IllegalStateException("Shared active input DTO");users.add(f.id);f.locked.add(id(a));}
             if(method.equals(plan.get("producer_method"))) {
@@ -152,15 +153,19 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
                 List<Object> inputs=new ArrayList<>();for(Object member:(List<?>)a){if(inputs.size()>=10000)throw new IllegalStateException("Collection bound");if(member==null||!member.getClass().getName().replace('.','/').equals(plan.get("mapper_owner")))throw new IllegalStateException("Runtime mapper DTO differs");Map<String,Object> v=new LinkedHashMap<>();v.put("object",id(member));v.put("fields",snapshot(member,false));inputs.add(v);}
                 f.inputs=inputs;r.put("inputs",inputs);for(Object member:(List<?>)a){String o=id(member);Set<String> users=ACTIVE.computeIfAbsent(o,k->new HashSet<>());if(!users.isEmpty()&&!users.contains(f.id))throw new IllegalStateException("Concurrent shared mapper DTO");users.add(f.id);f.locked.add(o);}
             }
-            STACK.get().push(f);emit("enter",r);
+            MonitorSafety.fault("enter-active",method);STACK.get().push(f);emit("enter",r);MonitorSafety.fault("enter",method);
             if(method.equals(plan.get("entry")))ResponseBindingHooks.enter(args);
-        }catch(Throwable e){problem("enter:"+e);throw new IllegalStateException(e);}}
-        public static synchronized void exit(Object result){try{Frame f=STACK.get().peek();Map<String,Object> r=row();r.put("result",value(result));
-            if(f.method.equals(plan.get("entry"))){r.put("fields",snapshot(result,true));ResponseBindingHooks.exit(result);}
-            for(String o:f.locked)ACTIVE.get(o).remove(f.id);
-            emit("exit",r);STACK.get().pop();
-        }catch(Throwable e){problem("exit:"+e);throw new IllegalStateException(e);}}
-        public static synchronized void abort(){try{if(!STACK.get().isEmpty()){Frame f=STACK.get().peek();if(f.method.equals(plan.get("entry")))ResponseBindingHooks.abort();for(String o:f.locked)ACTIVE.get(o).remove(f.id);emit("abort",row());STACK.get().pop();}PENDING.remove();}catch(Throwable e){problem("abort:"+e);throw new IllegalStateException(e);}}
+        }catch(Throwable e){MonitorSafety.fatal(e);scope.fail("enter",e);}return scope;}
+        public static synchronized void exit(Object result,Object token){finish(token,result,false);}
+        public static synchronized void abort(Object token){finish(token,null,true);}
+        static void finish(Object token,Object result,boolean exceptional){
+            if(!(token instanceof MonitorSafety.Scope))return;MonitorSafety.Scope scope=(MonitorSafety.Scope)token;if(scope.closed)return;
+            try{if(scope.failed)return;if(STACK.get().peek()!=scope.frame)throw new IllegalStateException("Frame completion owner differs");Frame f=scope.frame;
+                MonitorSafety.fault(exceptional?"abort":"exit",f.method);
+                if(exceptional){if(f.method.equals(plan.get("entry")))ResponseBindingHooks.abort();emit("abort",row());}
+                else{Map<String,Object> r=row();r.put("result",value(result));if(f.method.equals(plan.get("entry"))){r.put("fields",snapshot(result,true));ResponseBindingHooks.exit(result);}emit("exit",r);}
+            }catch(Throwable e){MonitorSafety.fatal(e);scope.fail(exceptional?"abort":"exit",e);}finally{scope.close();}
+        }
         public static synchronized void field(Object o,String field,Object v,String site,boolean write,boolean log){fieldHooks++;String key=id(o)+":"+field;int version=VERSIONS.getOrDefault(key,0);if(write){VERSIONS.put(key,++version);if(ACTIVE.containsKey(id(o))&&!ACTIVE.get(id(o)).isEmpty()){problem("Source mutated within read-only reduction epoch");throw new IllegalStateException("Source mutation");}}
             if(!STACK.get().isEmpty()&&log){Map<String,Object> r=row();r.put("owner",id(o));r.put("field",field);r.put("version",version);r.put("observed",value(v));r.put("site",site);emit(write?"write":"read",r);}}
         public static synchronized void fieldVersion(Object o,String field,String site){fieldHooks++;String key=id(o)+":"+field;VERSIONS.put(key,VERSIONS.getOrDefault(key,0)+1);if(ACTIVE.containsKey(id(o))&&!ACTIVE.get(id(o)).isEmpty()){problem("Source mutated within read-only reduction epoch");throw new IllegalStateException("Source mutation");}ExecutionKernelHooks.elidedWrite(site,field);}
@@ -169,7 +174,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
         public static synchronized void sumStart(Object s){Map<String,Object> r=row();r.put("parallel",((java.util.stream.DoubleStream)s).isParallel());emit("sum-enter",r);}
         public static synchronized void sumEnd(double d){Map<String,Object> r=row();r.put("value",d);emit("sum-exit",r);}
         public static synchronized void transformed(String owner){CHECKED_CLASSES.add(owner);Map<String,Object> r=row();r.put("class",owner);emit("class",r);}
-        public static synchronized void problem(String message){Map<String,Object> r=row();r.put("message",message);emit("problem",r);System.err.println("QUERY_SERVICE: "+message);}
+        public static synchronized void problem(String message){captureInvalid=true;try{Files.write(Paths.get(System.getProperty("service.events")+".invalid"),Collections.singletonList(message),StandardOpenOption.CREATE,StandardOpenOption.APPEND);}catch(Exception ignored){}try{Map<String,Object> r=row();r.put("message",message);emit("problem",r);}catch(Exception ignored){}try{System.err.println("QUERY_SERVICE: "+message);}catch(Exception ignored){}}
         static void safeEvent(Object value,IdentityHashMap<Object,Boolean> seen,int depth){
             if(value==null||value instanceof String||value instanceof Boolean)return;
             String type=value.getClass().getName();if(Arrays.asList("java.lang.Byte","java.lang.Short","java.lang.Integer","java.lang.Long","java.lang.Float","java.lang.Double","java.math.BigDecimal","java.math.BigInteger").contains(type))return;

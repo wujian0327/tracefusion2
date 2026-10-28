@@ -1,0 +1,445 @@
+{
+  "business_cases": {
+    "piggymetrics-1": [
+      {
+        "case": "input-00",
+        "kind": "normal",
+        "method": "PUT",
+        "path": "/accounts/current",
+        "body": {
+          "name": "tf2-current",
+          "note": "case-0",
+          "incomes": [],
+          "expenses": [],
+          "saving": {
+            "amount": 0,
+            "currency": "USD",
+            "interest": 0,
+            "deposit": false,
+            "capitalization": false
+          }
+        },
+        "expected_auth": "ordinary user token"
+      },
+      {
+        "case": "input-01",
+        "kind": "same-value-new-instance",
+        "method": "PUT",
+        "path": "/accounts/current",
+        "body": {
+          "name": "tf2-current",
+          "note": "SAME",
+          "incomes": [],
+          "expenses": [],
+          "saving": {
+            "amount": 0,
+            "currency": "USD",
+            "interest": 0,
+            "deposit": false,
+            "capitalization": false
+          }
+        },
+        "expected_auth": "ordinary user token"
+      },
+      {
+        "case": "input-02",
+        "kind": "repeat-or-overwrite",
+        "method": "PUT",
+        "path": "/accounts/current",
+        "body": {
+          "name": "tf2-current",
+          "note": "SAME",
+          "incomes": [],
+          "expenses": [],
+          "saving": {
+            "amount": 0,
+            "currency": "USD",
+            "interest": 0,
+            "deposit": false,
+            "capitalization": false
+          }
+        },
+        "expected_auth": "ordinary user token"
+      },
+      {
+        "case": "input-03",
+        "kind": "empty-list-or-map",
+        "method": "PUT",
+        "path": "/accounts/current",
+        "body": {
+          "name": "tf2-current",
+          "note": "case-3",
+          "incomes": [],
+          "expenses": [],
+          "saving": {
+            "amount": 0,
+            "currency": "USD",
+            "interest": 0,
+            "deposit": false,
+            "capitalization": false
+          }
+        },
+        "expected_auth": "ordinary user token"
+      },
+      {
+        "case": "input-04",
+        "kind": "invalid-input",
+        "method": "PUT",
+        "path": "/accounts/current",
+        "body": {
+          "name": "tf2-current",
+          "note": "case-4",
+          "incomes": [],
+          "expenses": [],
+          "saving": null
+        },
+        "expected_auth": "ordinary user token"
+      },
+      {
+        "case": "input-05",
+        "kind": "normal-after-failure",
+        "method": "PUT",
+        "path": "/accounts/current",
+        "body": {
+          "name": "tf2-current",
+          "note": "case-5",
+          "incomes": [],
+          "expenses": [],
+          "saving": {
+            "amount": 0,
+            "currency": "USD",
+            "interest": 0,
+            "deposit": false,
+            "capitalization": false
+          }
+        },
+        "expected_auth": "ordinary user token"
+      }
+    ],
+    "piggymetrics-2": [
+      {
+        "case": "input-00",
+        "kind": "normal",
+        "method": "POST",
+        "path": "/accounts/",
+        "body": {
+          "username": "port-account-0",
+          "password": "fixture-password-123"
+        },
+        "expected_auth": "account-service client_credentials"
+      },
+      {
+        "case": "input-01",
+        "kind": "same-value-new-instance",
+        "method": "POST",
+        "path": "/accounts/",
+        "body": {
+          "username": "port-account-1",
+          "password": "fixture-password-123"
+        },
+        "expected_auth": "account-service client_credentials"
+      },
+      {
+        "case": "input-02",
+        "kind": "repeat-or-overwrite",
+        "method": "POST",
+        "path": "/accounts/",
+        "body": {
+          "username": "port-account-1",
+          "password": "fixture-password-123"
+        },
+        "expected_auth": "account-service client_credentials"
+      },
+      {
+        "case": "input-03",
+        "kind": "empty-list-or-map",
+        "method": "POST",
+        "path": "/accounts/",
+        "body": {
+          "username": "port-account-3",
+          "password": "fixture-password-123"
+        },
+        "expected_auth": "account-service client_credentials"
+      },
+      {
+        "case": "input-04",
+        "kind": "invalid-input",
+        "method": "POST",
+        "path": "/accounts/",
+        "body": {
+          "username": "",
+          "password": ""
+        },
+        "expected_auth": "account-service client_credentials"
+      },
+      {
+        "case": "input-05",
+        "kind": "normal-after-failure",
+        "method": "POST",
+        "path": "/accounts/",
+        "body": {
+          "username": "port-account-5",
+          "password": "fixture-password-123"
+        },
+        "expected_auth": "account-service client_credentials"
+      }
+    ],
+    "piggymetrics-3": [
+      {
+        "case": "input-00",
+        "kind": "normal",
+        "method": "POST",
+        "path": "/uaa/users",
+        "body": {
+          "username": "port-user-0",
+          "password": "fixture-password-123"
+        },
+        "expected_auth": "account-service client_credentials"
+      },
+      {
+        "case": "input-01",
+        "kind": "same-value-new-instance",
+        "method": "POST",
+        "path": "/uaa/users",
+        "body": {
+          "username": "port-user-1",
+          "password": "fixture-password-123"
+        },
+        "expected_auth": "account-service client_credentials"
+      },
+      {
+        "case": "input-02",
+        "kind": "repeat-or-overwrite",
+        "method": "POST",
+        "path": "/uaa/users",
+        "body": {
+          "username": "port-user-1",
+          "password": "fixture-password-123"
+        },
+        "expected_auth": "account-service client_credentials"
+      },
+      {
+        "case": "input-03",
+        "kind": "empty-list-or-map",
+        "method": "POST",
+        "path": "/uaa/users",
+        "body": {
+          "username": "port-user-3",
+          "password": "fixture-password-123"
+        },
+        "expected_auth": "account-service client_credentials"
+      },
+      {
+        "case": "input-04",
+        "kind": "invalid-input",
+        "method": "POST",
+        "path": "/uaa/users",
+        "body": {
+          "username": "",
+          "password": ""
+        },
+        "expected_auth": "account-service client_credentials"
+      },
+      {
+        "case": "input-05",
+        "kind": "normal-after-failure",
+        "method": "POST",
+        "path": "/uaa/users",
+        "body": {
+          "username": "port-user-5",
+          "password": "fixture-password-123"
+        },
+        "expected_auth": "account-service client_credentials"
+      }
+    ],
+    "piggymetrics-4": [
+      {
+        "case": "input-00",
+        "kind": "normal",
+        "method": "GET",
+        "path": "/uaa/users/current",
+        "body": null,
+        "expected_auth": "ordinary user token"
+      },
+      {
+        "case": "input-01",
+        "kind": "same-value-new-instance",
+        "method": "GET",
+        "path": "/uaa/users/current",
+        "body": null,
+        "expected_auth": "ordinary user token"
+      },
+      {
+        "case": "input-02",
+        "kind": "repeat-or-overwrite",
+        "method": "GET",
+        "path": "/uaa/users/current",
+        "body": null,
+        "expected_auth": "ordinary user token"
+      },
+      {
+        "case": "input-03",
+        "kind": "empty-list-or-map",
+        "method": "GET",
+        "path": "/uaa/users/current",
+        "body": null,
+        "expected_auth": "ordinary user token"
+      },
+      {
+        "case": "input-04",
+        "kind": "missing-authentication",
+        "method": "GET",
+        "path": "/uaa/users/current",
+        "body": null,
+        "expected_auth": "absent"
+      },
+      {
+        "case": "input-05",
+        "kind": "normal-after-failure",
+        "method": "GET",
+        "path": "/uaa/users/current",
+        "body": null,
+        "expected_auth": "ordinary user token"
+      }
+    ],
+    "piggymetrics-5": [
+      {
+        "case": "input-00",
+        "kind": "normal",
+        "method": "PUT",
+        "path": "/notifications/recipients/current",
+        "body": {
+          "accountName": "ignored-input-name",
+          "email": "fixture@example.invalid",
+          "scheduledNotifications": {
+            "BACKUP": {
+              "active": false,
+              "frequency": "MONTHLY",
+              "lastNotified": null
+            },
+            "REMIND": {
+              "active": false,
+              "frequency": "MONTHLY",
+              "lastNotified": null
+            }
+          }
+        },
+        "expected_auth": "ordinary user token"
+      },
+      {
+        "case": "input-01",
+        "kind": "same-value-new-instance",
+        "method": "PUT",
+        "path": "/notifications/recipients/current",
+        "body": {
+          "accountName": "ignored-input-name",
+          "email": "fixture@example.invalid",
+          "scheduledNotifications": {
+            "BACKUP": {
+              "active": false,
+              "frequency": "MONTHLY",
+              "lastNotified": null
+            },
+            "REMIND": {
+              "active": false,
+              "frequency": "MONTHLY",
+              "lastNotified": null
+            }
+          }
+        },
+        "expected_auth": "ordinary user token"
+      },
+      {
+        "case": "input-02",
+        "kind": "repeat-or-overwrite",
+        "method": "PUT",
+        "path": "/notifications/recipients/current",
+        "body": {
+          "accountName": "ignored-input-name",
+          "email": "fixture@example.invalid",
+          "scheduledNotifications": {
+            "BACKUP": {
+              "active": false,
+              "frequency": "MONTHLY",
+              "lastNotified": null
+            },
+            "REMIND": {
+              "active": false,
+              "frequency": "MONTHLY",
+              "lastNotified": null
+            }
+          }
+        },
+        "expected_auth": "ordinary user token"
+      },
+      {
+        "case": "input-03",
+        "kind": "empty-list-or-map",
+        "method": "PUT",
+        "path": "/notifications/recipients/current",
+        "body": {
+          "accountName": "ignored-input-name",
+          "email": "fixture@example.invalid",
+          "scheduledNotifications": {}
+        },
+        "expected_auth": "ordinary user token"
+      },
+      {
+        "case": "input-04",
+        "kind": "invalid-input",
+        "method": "PUT",
+        "path": "/notifications/recipients/current",
+        "body": {
+          "accountName": "ignored-input-name",
+          "email": "not-an-email",
+          "scheduledNotifications": {
+            "BACKUP": {
+              "active": false,
+              "frequency": "MONTHLY",
+              "lastNotified": null
+            },
+            "REMIND": {
+              "active": false,
+              "frequency": "MONTHLY",
+              "lastNotified": null
+            }
+          }
+        },
+        "expected_auth": "ordinary user token"
+      },
+      {
+        "case": "input-05",
+        "kind": "normal-after-failure",
+        "method": "PUT",
+        "path": "/notifications/recipients/current",
+        "body": {
+          "accountName": "ignored-input-name",
+          "email": "fixture@example.invalid",
+          "scheduledNotifications": {
+            "BACKUP": {
+              "active": false,
+              "frequency": "MONTHLY",
+              "lastNotified": null
+            },
+            "REMIND": {
+              "active": false,
+              "frequency": "MONTHLY",
+              "lastNotified": null
+            }
+          }
+        },
+        "expected_auth": "ordinary user token"
+      }
+    ]
+  },
+  "reliability_cases": [
+    "normal; monitor enter fails; normal; original business exception; normal on SAME worker",
+    "nested enter failure restores parent",
+    "normal exit/cleanup failure, duplicate cleanup protection",
+    "enumMap nonempty, emptyMap, validation failure",
+    "same original Throwable instance, handler/finally counts",
+    "ACTIVE registration and pending/effect/call stacks restored"
+  ],
+  "account_targets": "Same forty actual Account return targets; maintain original source boundary and literal independent oracle; null incomes/expenses are field targets.",
+  "history": "62 queries,29 fields,15 write queries; keep original known sources and unknown states; no performance"
+}

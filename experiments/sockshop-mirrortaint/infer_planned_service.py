@@ -42,7 +42,8 @@ def infer_service(plan,path,rows=None):
     else:log_bytes=Path(path).stat().st_size
     require(rows and rows[0]['kind']=='start','Capture start missing')
     require([r['seq'] for r in rows]==list(range(1,len(rows)+1)),'Observation sequence gap')
-    require(not any(r['kind']=='problem' for r in rows),'Failed collection')
+    require(not any(r['kind']=='problem' or r['kind']=='metrics' and r.get('capture_invalid') for r in rows),'Failed collection')
+    require(not Path(path).with_name(Path(path).name+'.invalid').exists(),'Collector failure sidecar')
     require(len([r for r in rows if r['kind']=='metrics'])==1,'Capture did not close')
     mode=rows[0]['mode'];require(mode in ('full','selective','boundary'),'Unknown mode')
     require(rows[0]['plan_sha256']==hashlib.sha256((json.dumps(plan,indent=2)+'\n').encode()).hexdigest(),'Frozen plan differs')
