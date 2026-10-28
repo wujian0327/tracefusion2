@@ -161,7 +161,13 @@ def audit(root,out,partial=False,pair_root=None,reuse=None):
     if legacy:
         assert legacy['all_passed'] and class_hashes(root/'legacy-collection-controls/build/distributed-observer.jar')==agent
         assert all(r['exact']==r['queries']==10 and r['tamper_rejected']for r in legacy['profiles'].values())
-        assert all(r['rejected']for r in legacy['negative_contracts'].values())
+        for negative in legacy['negative_contracts'].values():
+            if 'capture_refused' in negative:
+                # Reliability revision keeps the business operation running;
+                # the capture, rather than the application, must be refused.
+                assert negative['business_matches_original'] and negative['capture_refused'] and negative['problem_events']
+            else:
+                assert negative['rejected']
     seen={(f['mode'],f['query']) for f in families};complete_queries=len(seen)==124
     result={'algorithm_commit':freeze['commit'],'queries':62,'entries':len({q['entry'] for q in queries}),'query_configurations_scored':len(families),'complete_query_configurations':complete_queries,'modes':summaries,'full_selective_state_agreement':sum(r['same_state'] for r in concordance),'paired_target_instances':len(concordance),'date_controls_passed':bool(controls),'planning_accepted':sum(r.get('status')=='accepted'for r in load(root/'frozen-plans/planning.json')),'planning_rejected':sum(r.get('status')=='rejected'for r in load(root/'frozen-plans/planning.json')),'received_mutation_controls_passed':bool(mutation),'legacy_collection_controls_passed':bool(legacy),'heldout_candidates_unexamined':29,'no_new_performance':True,'all_passed':complete_queries and all(r['all_passed'] for r in summaries.values()) and len(concordance)==431 and all(r['same_state'] for r in concordance) and bool(controls) and bool(mutation) and bool(legacy)}
     first_pairs=collections.Counter()

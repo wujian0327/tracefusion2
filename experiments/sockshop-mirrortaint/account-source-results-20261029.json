@@ -1,0 +1,144 @@
+{
+  "algorithm_commit": "78a95343c127fcc5732174b783e9d528b354a9d7",
+  "account": {
+    "full": {
+      "targets": 40,
+      "known_correct": 40,
+      "known_wrong": 0,
+      "unknown": 0,
+      "known_positive": 4,
+      "known_empty": 36,
+      "historic_MT_correct_present": 36,
+      "historic_MT_correct_preserved": 36,
+      "TP": 4,
+      "FP": 0,
+      "FN": 0
+    },
+    "selective": {
+      "targets": 40,
+      "known_correct": 40,
+      "known_wrong": 0,
+      "unknown": 0,
+      "known_positive": 4,
+      "known_empty": 36,
+      "historic_MT_correct_present": 36,
+      "historic_MT_correct_preserved": 36,
+      "TP": 4,
+      "FP": 0,
+      "FN": 0
+    }
+  },
+  "historical62": {
+    "full": {
+      "expected_targets": 431,
+      "actual_targets": 431,
+      "states": {
+        "known_correct": 428,
+        "unknown": 3
+      },
+      "known_answer_exact_rate": 1.0,
+      "answerability": 0.9930394431554525,
+      "baseline_correct_preserved": 368,
+      "baseline_correct_required": 368,
+      "baseline_nonempty_correct_preserved": 337,
+      "baseline_nonempty_correct_required": 337,
+      "old_tf_correct_preserved": 213,
+      "old_tf_correct_required": 213,
+      "union_preserved": 382,
+      "union_required": 382,
+      "union_losses": [],
+      "missing_targets": [],
+      "tp": 397,
+      "fp": 0,
+      "fn_including_unknown": 3,
+      "all_passed": true
+    },
+    "selective": {
+      "expected_targets": 431,
+      "actual_targets": 431,
+      "states": {
+        "known_correct": 428,
+        "unknown": 3
+      },
+      "known_answer_exact_rate": 1.0,
+      "answerability": 0.9930394431554525,
+      "baseline_correct_preserved": 368,
+      "baseline_correct_required": 368,
+      "baseline_nonempty_correct_preserved": 337,
+      "baseline_nonempty_correct_required": 337,
+      "old_tf_correct_preserved": 213,
+      "old_tf_correct_required": 213,
+      "union_preserved": 382,
+      "union_required": 382,
+      "union_losses": [],
+      "missing_targets": [],
+      "tp": 397,
+      "fp": 0,
+      "fn_including_unknown": 3,
+      "all_passed": true
+    }
+  },
+  "historical62_changes": [],
+  "fields29": {
+    "full": {
+      "query_families": 29,
+      "targets": 244,
+      "states": {
+        "known_correct": 232,
+        "unknown": 12
+      },
+      "oracle_unavailable": 12,
+      "N/A_requests": 41,
+      "requests": 190
+    },
+    "selective": {
+      "query_families": 29,
+      "targets": 244,
+      "states": {
+        "known_correct": 232,
+        "unknown": 12
+      },
+      "oracle_unavailable": 12,
+      "N/A_requests": 41,
+      "requests": 190
+    }
+  },
+  "write15": {
+    "full": {
+      "targets": 96,
+      "states": {
+        "known_correct": 96
+      }
+    },
+    "selective": {
+      "targets": 96,
+      "states": {
+        "known_correct": 96
+      }
+    }
+  },
+  "immutable": {
+    "core_files": 87,
+    "original_jars": 10,
+    "protected_first_files": 2322,
+    "all_unchanged": true
+  },
+  "audit_source_sha256": "3f04f770f83564f1d191f40c6484f6be0da703743ee62c5f6225f981e52d022f",
+  "no_performance": true,
+  "fresh_business_deployments": true,
+  "all_passed": true,
+  "at": "2026-10-28T18:06:37.343201+00:00",
+  "scope": "Exposed Account and historical development regressions; no unseen-query or performance claim",
+  "artifact_root": "artifacts/account-semantics-20261028/final-candidate-01",
+  "controls_Agent_builds": 34,
+  "Agent_sha256": "b20ba71e568672a0a91be3c113b4e6db44686d9967ddb1ca4d5f95c8ca70a45a",
+  "algorithm_freeze_sha256": "4d29ce7414f732615cbcc49bc3b9803cac55068b876106a3f13f4c404bb3c70d",
+  "final_audit_sha256": "07f5b32d4da7893116a993ff35e29b1b03e2d6e602b2814f58df8bd4f15160b6",
+  "source_archive": {
+    "algorithm": "78a95343c127fcc5732174b783e9d528b354a9d7",
+    "file": "artifacts/account-semantics-20261028/final-candidate-01/candidate-core-78a9534.tar.gz",
+    "sha256": "95cc29e01dca3dc904e9643350a2445c5e50edc602eaad9ca9f629ead87c61d8",
+    "original_snapshot": true
+  },
+  "remaining_task_instances": 361
+}

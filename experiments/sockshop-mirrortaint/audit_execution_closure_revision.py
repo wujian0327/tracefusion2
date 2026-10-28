@@ -34,8 +34,8 @@ def development(root):
     save(out/'mapper-receipts.json',mapper);save(out/'audit.json',result);assert result['all_passed'];print({'development62_passed':True,'targets_per_mode':431,'states':{m:r['states']for m,r in result['modes'].items()}},flush=True)
 
 
-def fields29(root):
-    driver.HOME=root;driver.check();out=root/'regression29-audit';out.mkdir();old=load(ROOT/'artifacts/heldout29-first-20261023/audit-final-reviewed/audit.json');reference={};seen=set();actual={};records=[];failures=[];agent=class_hashes(root/'frozen-base/distributed-observer.jar')
+def fields29(root,out=None):
+    driver.HOME=root;driver.check();out=out if out is not None else root/'regression29-audit';out.mkdir(parents=True);old=load(ROOT/'artifacts/heldout29-first-20261023/audit-final-reviewed/audit.json');reference={};seen=set();actual={};records=[];failures=[];agent=class_hashes(root/'frozen-base/distributed-observer.jar')
     for rec in old['records']:
         if rec['mode']not in('full','selective'):continue
         ev=load(Path(rec['evaluation_file']))
