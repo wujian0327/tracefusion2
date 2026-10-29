@@ -11,16 +11,20 @@ def run(plan_path,events,out):
  out.mkdir(parents=True,exist_ok=False);digest=sha(events);plan=load(plan_path);rows=[json.loads(s)for s in events.read_text().splitlines()];sources=[(r,f)for r in rows if r['kind']=='binding-source'for f in r['fields']];active={};first={};errors=[]
  def trace(frame,event,arg):
   if frame.f_code.co_filename.endswith('/infer_application_execution.py')and frame.f_code.co_name=='poison':
-   parent=frame.f_back;scope=parent.f_locals;lookup=scope.get('lookup');fr=scope.get('fr');call=scope.get('call');seq=frame.f_locals.get('seq')
-   if lookup and fr and call and seq:
+   parent=frame.f_back
+   while parent and not(parent.f_code.co_filename.endswith('/infer_application_execution.py')and parent.f_code.co_name=='execute'):parent=parent.f_back
+   scope=parent.f_locals if parent else {};lookup=scope.get('lookup');fr=scope.get('fr');call=scope.get('call');seq=frame.f_locals.get('seq');instruction=scope.get('ins',{})
+   if lookup and fr and seq:
     if event=='call':
      fields=[]
      for source,field in sources:
-      if not source['seq']<call['seq']:continue
-      try:value=lookup(field,call['seq'])
+      if not source['seq']<seq:continue
+      try:value=lookup(field,seq)
       except ValueError as e:errors.append(str(e));continue
       if not value.unknown:fields.append((source,field))
-     active[id(frame)]={'fields':fields,'seq':seq,'method':scope.get('entry'),'pc':fr.pc,'callee':scope.get('key'),'call_id':call['call_id'],'frame':fr.invocation}
+     key=instruction['owner']+'.'+instruction['name']+instruction['desc']if instruction.get('op')in (182,183,184,185)else scope.get('key')
+     actual=scope.get('ctor_start')if instruction.get('name')=='<init>'else call
+     active[id(frame)]={'fields':fields,'seq':seq,'method':scope.get('entry'),'pc':fr.pc,'callee':key,'call_id':(actual or {}).get('call_id'),'constructor_id':(actual or {}).get('constructor_id'),'frame':fr.invocation}
     elif event=='return':
      record=active.pop(id(frame),None)
      if record:

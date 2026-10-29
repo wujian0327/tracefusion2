@@ -1,0 +1,35 @@
+{
+  "algorithm_commit": "59dbdf82ec6a1e586c04c415d34ba3e95dd2c757",
+  "recorded_at": "2026-10-29T10:48:18.538793+00:00",
+  "new_mechanisms": [
+    {
+      "kind": "observation_protocol",
+      "name": "communication v2",
+      "scope": "Pinned synchronous Feign/default/OkHttp/load-balancer request and response lineage, codec roles and completion; no generic client purity"
+    },
+    {
+      "kind": "execution_instruction",
+      "name": "LCMP",
+      "scope": "Exact signed64 comparison with observed branch consistency"
+    },
+    {
+      "kind": "bytecode_proof",
+      "name": "private literal enum state",
+      "scope": "Private int/long/String fields; literal initializer, no extra application writes/calls, runtime identity and version witnesses"
+    }
+  ],
+  "reviewed_communication_classes": 16,
+  "business_source_edits": 0,
+  "new_JDK_runtime_profiles": 0,
+  "native_MT_propagation_changes": 0,
+  "new_save_mapper_cache_purity_summaries": 0,
+  "development_tasks": "All Mall5 APIs and original103 targets retained; previously exposed queries, no unseen transfer claim",
+  "reproduction_levels": {
+    "Mall": "New Agent/plan/captures, same original JAR and fixed oracle",
+    "historical": "Final same Agent fresh62+29+15 and Account40, state and source-signature audit passed",
+    "controls": "Actual class-byte equality recorded, separate from business coverage"
+  },
+  "human_hours": "Not measured; disassembly count and file count are not person-hours",
+  "first_and_revised_results_separate": true,
+  "no_performance": true
+}

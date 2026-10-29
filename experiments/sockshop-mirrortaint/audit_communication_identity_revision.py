@@ -1,5 +1,5 @@
 """Separate revised results from all first/C1 and previous revision artifacts."""
-import argparse,collections,csv
+import argparse,collections,csv,copy,json
 from pathlib import Path
 from run_plan_applicability_revision import ROOT,HERE,FIRST,load,save,sha
 from audit_application_call_revision import class_hashes
@@ -78,5 +78,34 @@ def historical(root,out):
  summary={'algorithm':load(root/'algorithm-freeze.json')['commit'],'historical62':current['modes'],'historical62_changes':changes,'fields29':load(out/'fields29/audit.json'),'write15':{m:{'targets':sum(v['targets']for v in writes if v['mode']==m),'states':dict(sum((collections.Counter(v['states'])for v in writes if v['mode']==m),collections.Counter()))}for m in ('full','selective')},'write15_changes':write_changes,'fresh_Agent_deployments':True,'all_passed':not changes and not write_changes,'no_performance':True}
  save(out/'write15-records.json',writes);save(out/'summary.json',summary);assert summary['all_passed'];print(summary,flush=True)
 
+def source_guards(home,out):
+ from infer_distributed_fields import Reconstruction
+ out.mkdir(parents=True,exist_ok=False);checks=[];boundary=[{'kind':'binding-source'},{'kind':'argument'},{'kind':'http-json','direction':'response','phase':'read'}]
+ for mode in ('full','selective'):
+  raw=home/'tool-runs/mall-swarm-1'/mode/'query-002/capture/events.jsonl';digest=sha(raw);rows=[json.loads(s)for s in raw.read_text().splitlines()];plan=home/'planning-first/mall-swarm-1/002-plan.json';path=load(plan)['response_binding']['path'];run=load(raw.parents[1]/'results.json');message=next(c['message']for c in run['cases']if c['case']=='input-00')
+  def graph_for(label,changed=None):
+   work=out/(mode+'-'+label);(work/'build/mall-portal').mkdir(parents=True);(work/'capture/mall-portal').mkdir(parents=True);(work/'build/mall-portal/plan.json').write_bytes(plan.read_bytes());target=work/'capture/mall-portal/events.jsonl'
+   if changed is None:target.symlink_to(raw.resolve())
+   else:
+    for seq,row in enumerate(changed,1):row['seq']=seq
+    target.write_text(''.join(json.dumps(row)+'\n'for row in changed))
+   return Reconstruction(work/'build',work/'capture',['mall-portal'])
+  assert graph_for('positive').query(message,path,'mall-portal',boundary=boundary)['known'],'Guard must have a working positive on the same frozen path'
+  for fault in ('wrong-source-callsite','wrong-source-call-id','missing-source','ambiguous-source','wrong-source-caller','missing-source-completion'):
+   changed=copy.deepcopy(rows);source=next(row for row in changed if row['kind']=='binding-source'and row.get('message')==message and 'AuthService.getAccessToken'in row.get('callee',''));callid=source['source_call_id']
+   if fault=='wrong-source-callsite':source['source_callsite']='other.method()V@0'
+   elif fault=='wrong-source-call-id':source['source_call_id']=-999
+   elif fault=='missing-source':changed=[row for row in changed if row['kind']!='binding-source']
+   elif fault=='ambiguous-source':changed.insert(changed.index(source)+1,copy.deepcopy(source))
+   elif fault=='wrong-source-caller':source['source_caller_method']='other.method()V'
+   else:changed=[row for row in changed if not(row['kind']=='collection-call-exit'and row.get('call_id')==callid)]
+   try:
+    answer=graph_for(fault,changed).query(message,path,'mall-portal',boundary=boundary);assert not answer['known'],(mode,fault,answer);status='unknown';error=None
+   except ValueError as e:status='rejected';error=str(e)
+   checks.append({'mode':mode,'fault':fault,'path':path,'positive_control_known':True,'state':status,'error':error,'source_capture_sha256':digest})
+  assert sha(raw)==digest
+ save(out/'checks.json',{'all_passed':True,'checks':checks,'derived_only':True});print({'source_guards':len(checks),'all_passed':True},flush=True)
+
+
 if __name__=='__main__':
- p=argparse.ArgumentParser();p.add_argument('--stage',choices=('mall','historical'),required=True);p.add_argument('--root',type=Path,required=True);p.add_argument('--out',type=Path,required=True);a=p.parse_args();{'mall':mall,'historical':historical}[a.stage](a.root.resolve(),a.out.resolve())
+ p=argparse.ArgumentParser();p.add_argument('--stage',choices=('mall','historical','source-guards'),required=True);p.add_argument('--root',type=Path,required=True);p.add_argument('--out',type=Path,required=True);a=p.parse_args();{'mall':mall,'historical':historical,'source-guards':source_guards}[a.stage](a.root.resolve(),a.out.resolve())

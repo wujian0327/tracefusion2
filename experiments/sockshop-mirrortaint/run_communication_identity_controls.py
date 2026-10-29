@@ -21,7 +21,7 @@ def output(path):
     assert len(rows)==1,'Business result missing/duplicated'
     return rows[0]
 
-def run(out,agent,client='default'):
+def run(out,agent,client='default',network_failure=False):
     out.mkdir(parents=True,exist_ok=False);classes=out/'classes';classes.mkdir();deps=out/'deps';deps.mkdir()
     business=ROOT/'artifacts/external-frozen-transfer-20261029/78a9534/business-jars/mall-admin.jar'
     with ZipFile(business)as z:
@@ -41,8 +41,9 @@ def run(out,agent,client='default'):
     environment=load(ROOT/'artifacts/plan-applicability-revision-20261029/deployment-environment.json')
     plan,route=choose(model,query,deployment=environment);assert plan['communication_identity']['version']==2
     save(b/'fixture/plan.json',plan);save(out/'route.json',route);classpath=str(classes)+':'+cp
-    options=['-Dfixture.okhttp='+str(client!='default').lower(),'-Dfixture.retryable.lb='+str(client=='retryable-lb-okhttp').lower()]
+    options=['-Dfixture.okhttp='+str(client!='default').lower(),'-Dfixture.retryable.lb='+str(client=='retryable-lb-okhttp').lower(),'-Dfixture.network.failure='+str(network_failure).lower()]
     command([java,*options,'-cp',classpath,'CommunicationIdentityFixture'],out/'baseline.txt');baseline=output(out/'baseline.txt')
+    assert all(r.get('same_cause')is True for r in baseline['cases']if r['status']=='business-exception')
     reports={}
     for mode in ('full','selective'):
         cap=out/mode;cap.mkdir();command([java,*options,'-javaagent:'+str(agent),'-Dfixture.observe=true','-Dservice.plan='+str(b/'fixture/plan.json'),'-Dservice.events='+str(cap/'events.jsonl'),'-Dservice.mode='+mode,'-cp',classpath,'CommunicationIdentityFixture'],cap/'stdout.txt')
@@ -87,4 +88,4 @@ def run(out,agent,client='default'):
     save(out/'results.json',{'all_passed':True,'modes':reports,'agent_sha256':sha(agent),'scope':'Protocol and execution controls, not new application coverage or performance.'});print(reports,flush=True)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--agent',type=Path,required=True);p.add_argument('--client',choices=('default','okhttp','retryable-lb-okhttp'),default='default');a=p.parse_args();run(a.out.resolve(),a.agent.resolve(),a.client)
+    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--agent',type=Path,required=True);p.add_argument('--client',choices=('default','okhttp','retryable-lb-okhttp'),default='default');p.add_argument('--network-failure',action='store_true');a=p.parse_args();run(a.out.resolve(),a.agent.resolve(),a.client,a.network_failure)

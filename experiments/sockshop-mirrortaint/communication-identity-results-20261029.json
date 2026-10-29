@@ -1,0 +1,861 @@
+{
+  "modes": {
+    "full": {
+      "targets": 103,
+      "states": {
+        "known_correct": 68,
+        "unknown": 35
+      },
+      "positive_correct": 32,
+      "known_empty_correct": 36,
+      "MT_correct_preserved": 58,
+      "MT_positive_preserved": 32,
+      "previous_correct_preserved": 43,
+      "MT_gap": [
+        {
+          "api": "mall-swarm-3",
+          "case": "input-00",
+          "path": "/code",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-01",
+          "path": "/code",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-02",
+          "path": "/code",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-03",
+          "path": "/code",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-05",
+          "path": "/code",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-00",
+          "path": "/data/expiresIn",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-01",
+          "path": "/data/expiresIn",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-02",
+          "path": "/data/expiresIn",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-03",
+          "path": "/data/expiresIn",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-05",
+          "path": "/data/expiresIn",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-00",
+          "path": "/data/refreshToken",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-01",
+          "path": "/data/refreshToken",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-02",
+          "path": "/data/refreshToken",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-03",
+          "path": "/data/refreshToken",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-05",
+          "path": "/data/refreshToken",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-00",
+          "path": "/data/token",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-01",
+          "path": "/data/token",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-02",
+          "path": "/data/token",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-03",
+          "path": "/data/token",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-05",
+          "path": "/data/token",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-00",
+          "path": "/data/tokenHead",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-01",
+          "path": "/data/tokenHead",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-02",
+          "path": "/data/tokenHead",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-03",
+          "path": "/data/tokenHead",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-05",
+          "path": "/data/tokenHead",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-00",
+          "path": "/message",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-01",
+          "path": "/message",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-02",
+          "path": "/message",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-03",
+          "path": "/message",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-05",
+          "path": "/message",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        }
+      ]
+    },
+    "selective": {
+      "targets": 103,
+      "states": {
+        "known_correct": 68,
+        "unknown": 35
+      },
+      "positive_correct": 32,
+      "known_empty_correct": 36,
+      "MT_correct_preserved": 58,
+      "MT_positive_preserved": 32,
+      "previous_correct_preserved": 43,
+      "MT_gap": [
+        {
+          "api": "mall-swarm-3",
+          "case": "input-00",
+          "path": "/code",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-01",
+          "path": "/code",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-02",
+          "path": "/code",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-03",
+          "path": "/code",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-05",
+          "path": "/code",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-00",
+          "path": "/data/expiresIn",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-01",
+          "path": "/data/expiresIn",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-02",
+          "path": "/data/expiresIn",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-03",
+          "path": "/data/expiresIn",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-05",
+          "path": "/data/expiresIn",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-00",
+          "path": "/data/refreshToken",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-01",
+          "path": "/data/refreshToken",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-02",
+          "path": "/data/refreshToken",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-03",
+          "path": "/data/refreshToken",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-05",
+          "path": "/data/refreshToken",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-00",
+          "path": "/data/token",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-01",
+          "path": "/data/token",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-02",
+          "path": "/data/token",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-03",
+          "path": "/data/token",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-05",
+          "path": "/data/token",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-00",
+          "path": "/data/tokenHead",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-01",
+          "path": "/data/tokenHead",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-02",
+          "path": "/data/tokenHead",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-03",
+          "path": "/data/tokenHead",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-05",
+          "path": "/data/tokenHead",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-00",
+          "path": "/message",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-01",
+          "path": "/message",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-02",
+          "path": "/message",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-03",
+          "path": "/message",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        },
+        {
+          "api": "mall-swarm-3",
+          "case": "input-05",
+          "path": "/message",
+          "positive": true,
+          "state": "unknown",
+          "error": null
+        }
+      ]
+    }
+  },
+  "full_selective_states_equal": true,
+  "agent_sha256": "9f95c829970e238e18b6562baccfc937eee93ef36ccd5949ec25435bfa159f2f",
+  "protected_files_unchanged": {
+    "old_first": 2322,
+    "external_first": 16862,
+    "C1": 7248,
+    "previous_revision": 1746
+  },
+  "fresh_deployments": 42,
+  "no_performance": true,
+  "all40_completed": false,
+  "Apollo_Gson_implemented": false,
+  "algorithm_commit": "59dbdf82ec6a1e586c04c415d34ba3e95dd2c757",
+  "historical_acceptance": "passed",
+  "all_controls_Agent_class_equality": {
+    "final_Agent": "artifacts/communication-identity-revision-20261029/final-historical-02/frozen-base/distributed-observer.jar",
+    "final_sha256": "9f95c829970e238e18b6562baccfc937eee93ef36ccd5949ec25435bfa159f2f",
+    "class_count": 876,
+    "checks": [
+      {
+        "jar": "artifacts/communication-identity-revision-20261029/build-06/distributed-observer.jar",
+        "sha256": "ac0cb4719c07dcfa6b9ca9e5615ba1940a1e5cd05355765b3ac7096e44b70d20",
+        "all_Agent_classes_equal": true
+      },
+      {
+        "jar": "artifacts/communication-identity-revision-20261029/final-application-controls/build/distributed-observer.jar",
+        "sha256": "e921eedd2e93b741b184d1914daf7eeba972c394988d3fe4906c173112287533",
+        "all_Agent_classes_equal": true
+      },
+      {
+        "jar": "artifacts/communication-identity-revision-20261029/final-long-enum-controls/number/build/distributed-observer.jar",
+        "sha256": "e921eedd2e93b741b184d1914daf7eeba972c394988d3fe4906c173112287533",
+        "all_Agent_classes_equal": true
+      },
+      {
+        "jar": "artifacts/communication-identity-revision-20261029/final-long-enum-controls/text/build/distributed-observer.jar",
+        "sha256": "8ca8e482e96e7eda3e77cebbcbbf860de39162f05e06e022de12d4d0153ea94b",
+        "all_Agent_classes_equal": true
+      },
+      {
+        "jar": "artifacts/communication-identity-revision-20261029/final-long-enum-controls/chosen/build/distributed-observer.jar",
+        "sha256": "00a57576961996eb0cbb08f084e5a99629ddb86f718f09012e3457fac111a4d3",
+        "all_Agent_classes_equal": true
+      }
+    ],
+    "meaning": "Exact Agent class-byte equality; distinct JAR ZIP hashes retained, no old business capture called a new deployment."
+  },
+  "stage": "Communication and Mall development revision, final historical regression complete",
+  "physical_client_failure_controls": {
+    "checks": [
+      {
+        "client": "default",
+        "mode": "original",
+        "original_client_cause_identity": true,
+        "business_output_sha256": "6d53085d70c692118076d46c594785e8c5da0c6458f090feae1fc0d3d6a8d2e0"
+      },
+      {
+        "client": "default",
+        "mode": "full",
+        "original_client_cause_identity": true,
+        "business_output_sha256": "51e0a7b50458b6bfd54b1c841187310b818a2a9cf9ae60cb79277ecfee537af1",
+        "separate_client_exception_completions": 2
+      },
+      {
+        "client": "default",
+        "mode": "selective",
+        "original_client_cause_identity": true,
+        "business_output_sha256": "835c1c80914c677f8e5c75f6895e522fd60cd8e8e2c756683fb4e3bc65274b4a",
+        "separate_client_exception_completions": 2
+      },
+      {
+        "client": "okhttp",
+        "mode": "original",
+        "original_client_cause_identity": true,
+        "business_output_sha256": "e90a762b03eaf65b09951b5e54c641fdfb5f54865ebe6580816358125d5399a0"
+      },
+      {
+        "client": "okhttp",
+        "mode": "full",
+        "original_client_cause_identity": true,
+        "business_output_sha256": "a79d5b938c2683d74a3c4b376f3ec65e7103aa8f859956a2dab66bd2a208f294",
+        "separate_client_exception_completions": 2
+      },
+      {
+        "client": "okhttp",
+        "mode": "selective",
+        "original_client_cause_identity": true,
+        "business_output_sha256": "ab8e212583e55c4779cc6054c26c443a4175465b4a973b698ef283d9a6e218dd",
+        "separate_client_exception_completions": 2
+      }
+    ],
+    "no_core_change": true,
+    "internal_network_retries_not_individually_certified": true
+  },
+  "official_negative_checks": 12,
+  "historical": {
+    "all_passed": true,
+    "queries62": {
+      "full": {
+        "expected_targets": 431,
+        "actual_targets": 431,
+        "states": {
+          "known_correct": 428,
+          "unknown": 3
+        },
+        "known_answer_exact_rate": 1.0,
+        "answerability": 0.9930394431554525,
+        "baseline_correct_preserved": 368,
+        "baseline_correct_required": 368,
+        "baseline_nonempty_correct_preserved": 337,
+        "baseline_nonempty_correct_required": 337,
+        "old_tf_correct_preserved": 213,
+        "old_tf_correct_required": 213,
+        "union_preserved": 382,
+        "union_required": 382,
+        "union_losses": [],
+        "missing_targets": [],
+        "tp": 397,
+        "fp": 0,
+        "fn_including_unknown": 3,
+        "all_passed": true
+      },
+      "selective": {
+        "expected_targets": 431,
+        "actual_targets": 431,
+        "states": {
+          "known_correct": 428,
+          "unknown": 3
+        },
+        "known_answer_exact_rate": 1.0,
+        "answerability": 0.9930394431554525,
+        "baseline_correct_preserved": 368,
+        "baseline_correct_required": 368,
+        "baseline_nonempty_correct_preserved": 337,
+        "baseline_nonempty_correct_required": 337,
+        "old_tf_correct_preserved": 213,
+        "old_tf_correct_required": 213,
+        "union_preserved": 382,
+        "union_required": 382,
+        "union_losses": [],
+        "missing_targets": [],
+        "tp": 397,
+        "fp": 0,
+        "fn_including_unknown": 3,
+        "all_passed": true
+      }
+    },
+    "fields29": {
+      "full": {
+        "query_families": 29,
+        "targets": 244,
+        "states": {
+          "known_correct": 232,
+          "unknown": 12
+        },
+        "oracle_unavailable": 12,
+        "N/A_requests": 41,
+        "requests": 190
+      },
+      "selective": {
+        "query_families": 29,
+        "targets": 244,
+        "states": {
+          "known_correct": 232,
+          "unknown": 12
+        },
+        "oracle_unavailable": 12,
+        "N/A_requests": 41,
+        "requests": 190
+      }
+    },
+    "write15": {
+      "full": {
+        "targets": 96,
+        "states": {
+          "known_correct": 96
+        }
+      },
+      "selective": {
+        "targets": 96,
+        "states": {
+          "known_correct": 96
+        }
+      }
+    },
+    "Account40": {
+      "full": {
+        "targets": 40,
+        "known_correct": 40,
+        "known_wrong": 0,
+        "unknown": 0,
+        "known_positive": 4,
+        "known_empty": 36,
+        "historic_MT_correct_present": 36,
+        "historic_MT_correct_preserved": 36,
+        "TP": 4,
+        "FP": 0,
+        "FN": 0
+      },
+      "selective": {
+        "targets": 40,
+        "known_correct": 40,
+        "known_wrong": 0,
+        "unknown": 0,
+        "known_positive": 4,
+        "known_empty": 36,
+        "historic_MT_correct_present": 36,
+        "historic_MT_correct_preserved": 36,
+        "TP": 4,
+        "FP": 0,
+        "FN": 0
+      }
+    },
+    "state_and_source_signature_changes": {
+      "queries62": [],
+      "fields29": [],
+      "write15": []
+    },
+    "fresh_Agent_deployments": true
+  },
+  "actual_source_guards": {
+    "all_passed": true,
+    "checks": [
+      {
+        "mode": "full",
+        "fault": "wrong-source-callsite",
+        "path": "/data/refreshToken",
+        "positive_control_known": true,
+        "state": "rejected",
+        "error": "Declared source actual callsite differs",
+        "source_capture_sha256": "fc5e0c274df1d80a8f6c3df881f20f022f91f9b8ed036623d000b3fa72adc0bf"
+      },
+      {
+        "mode": "full",
+        "fault": "wrong-source-call-id",
+        "path": "/data/refreshToken",
+        "positive_control_known": true,
+        "state": "rejected",
+        "error": "Declared source call pair absent/ambiguous",
+        "source_capture_sha256": "fc5e0c274df1d80a8f6c3df881f20f022f91f9b8ed036623d000b3fa72adc0bf"
+      },
+      {
+        "mode": "full",
+        "fault": "missing-source",
+        "path": "/data/refreshToken",
+        "positive_control_known": true,
+        "state": "unknown",
+        "error": null,
+        "source_capture_sha256": "fc5e0c274df1d80a8f6c3df881f20f022f91f9b8ed036623d000b3fa72adc0bf"
+      },
+      {
+        "mode": "full",
+        "fault": "ambiguous-source",
+        "path": "/data/refreshToken",
+        "positive_control_known": true,
+        "state": "unknown",
+        "error": null,
+        "source_capture_sha256": "fc5e0c274df1d80a8f6c3df881f20f022f91f9b8ed036623d000b3fa72adc0bf"
+      },
+      {
+        "mode": "full",
+        "fault": "wrong-source-caller",
+        "path": "/data/refreshToken",
+        "positive_control_known": true,
+        "state": "rejected",
+        "error": "Declared source occurrence coordinates differ",
+        "source_capture_sha256": "fc5e0c274df1d80a8f6c3df881f20f022f91f9b8ed036623d000b3fa72adc0bf"
+      },
+      {
+        "mode": "full",
+        "fault": "missing-source-completion",
+        "path": "/data/refreshToken",
+        "positive_control_known": true,
+        "state": "rejected",
+        "error": "Application frame has unfinished calls",
+        "source_capture_sha256": "fc5e0c274df1d80a8f6c3df881f20f022f91f9b8ed036623d000b3fa72adc0bf"
+      },
+      {
+        "mode": "selective",
+        "fault": "wrong-source-callsite",
+        "path": "/data/refreshToken",
+        "positive_control_known": true,
+        "state": "rejected",
+        "error": "Declared source actual callsite differs",
+        "source_capture_sha256": "09b33042bf56076f30e3891e17141b0d14127eeae827666b7a855d77518e53b6"
+      },
+      {
+        "mode": "selective",
+        "fault": "wrong-source-call-id",
+        "path": "/data/refreshToken",
+        "positive_control_known": true,
+        "state": "rejected",
+        "error": "Declared source call pair absent/ambiguous",
+        "source_capture_sha256": "09b33042bf56076f30e3891e17141b0d14127eeae827666b7a855d77518e53b6"
+      },
+      {
+        "mode": "selective",
+        "fault": "missing-source",
+        "path": "/data/refreshToken",
+        "positive_control_known": true,
+        "state": "unknown",
+        "error": null,
+        "source_capture_sha256": "09b33042bf56076f30e3891e17141b0d14127eeae827666b7a855d77518e53b6"
+      },
+      {
+        "mode": "selective",
+        "fault": "ambiguous-source",
+        "path": "/data/refreshToken",
+        "positive_control_known": true,
+        "state": "unknown",
+        "error": null,
+        "source_capture_sha256": "09b33042bf56076f30e3891e17141b0d14127eeae827666b7a855d77518e53b6"
+      },
+      {
+        "mode": "selective",
+        "fault": "wrong-source-caller",
+        "path": "/data/refreshToken",
+        "positive_control_known": true,
+        "state": "rejected",
+        "error": "Declared source occurrence coordinates differ",
+        "source_capture_sha256": "09b33042bf56076f30e3891e17141b0d14127eeae827666b7a855d77518e53b6"
+      },
+      {
+        "mode": "selective",
+        "fault": "missing-source-completion",
+        "path": "/data/refreshToken",
+        "positive_control_known": true,
+        "state": "rejected",
+        "error": "Application frame has unfinished calls",
+        "source_capture_sha256": "09b33042bf56076f30e3891e17141b0d14127eeae827666b7a855d77518e53b6"
+      }
+    ],
+    "derived_only": true
+  },
+  "remaining_positive_gap_diagnosis": {
+    "targets_each_mode": 30,
+    "independent_coordinate_join_passed": true,
+    "method": "com/macro/mall/model/UmsAdminExample.createCriteriaInternal()Lcom/macro/mall/model/UmsAdminExample$Criteria;",
+    "pc": 2,
+    "callee": "com/macro/mall/model/UmsAdminExample$Criteria.<init>()V",
+    "earlier_diagnostic_omitted_constructor_barriers": true
+  },
+  "final_artifact_sha256": {
+    "artifacts/communication-identity-revision-20261029/audit-final-mall-02/summary.json": "2891fc57d61e79c3c67b862e3e8354f36844b7b595a76dc353d22a5f0f7a6a89",
+    "artifacts/communication-identity-revision-20261029/audit-final-historical-02/summary.json": "f76f7dbb881fa1a65aec776f6cd9d7963d8cc5c99c2d941103c8a3b2e0a7bdac",
+    "artifacts/communication-identity-revision-20261029/final-historical-02/account-score-first/summary.json": "74fe85f045a5c340954935440a7a67eff9597e8e25093f0b64706d5a6c3268c9",
+    "artifacts/communication-identity-revision-20261029/all-admin-target-loss-02/summary.json": "9221a24f7cb72e7b1cc5173a8b0785bb24acc1a66a679c9e69858285bd5023bf",
+    "artifacts/communication-identity-revision-20261029/source-59dbdf8.tar.gz": "2020f57a61ff5e395637eb50d6a0229e54913d88e7a3e7b3ec36432492db6eaa"
+  }
+}
