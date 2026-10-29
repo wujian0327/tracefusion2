@@ -13,6 +13,11 @@ def infer_application(plan,rows,worker_request=None):
     from infer_async_protocol import validate_async_protocol
     async_audit=validate_async_protocol(plan,rows)
     cfg=plan['execution_kernel']
+    dispatch_facts=[r for r in rows if r['kind']=='execution-direct-dispatch']
+    if dispatch_facts:
+        contract=cfg.get('direct_dispatch_contract');framework=[r for r in rows if r['kind']=='direct-dispatch-framework']
+        require(contract and len(framework)==1 and framework[0]['class']=='org/springframework/aop/framework/CglibAopProxy$DynamicAdvisedInterceptor' and framework[0]['class_sha256']==contract['class_sha256'][framework[0]['class']],'Direct dispatch framework witness absent/differs')
+        require(all(r['seq']>framework[0]['seq']for r in dispatch_facts),'Direct dispatch fact precedes framework witness')
     from infer_foundation_values import runtime as foundation_runtime,call_fact,default_facts
     foundation_supported=foundation_runtime(cfg,rows)
     from infer_feign_effects import validate as validate_feign
@@ -81,7 +86,7 @@ def infer_application(plan,rows,worker_request=None):
             births[row['object']]=row['seq']
         defaults=default_facts(cfg,relevant,[r for r in relevant if r['kind']=='execution-constructor-enter'])
         active_defaults={};decimal_values={}
-        methods=cfg['methods'];events=[r for r in relevant if r['kind'] in ('enter','exit','abort','collection-call-enter','collection-call-exit','collection-call-throw','execution-constructor-enter','execution-constructed','execution-constructor-throw','execution-static-read','execution-lambda','execution-class-literal','execution-array','execution-array-throw','collection-catch','branch','read','write','write-version') and (r['kind'] not in ('read','write','write-version','branch') or r['site'].rsplit('@',1)[0] in methods)]
+        methods=cfg['methods'];events=[r for r in relevant if r['kind'] in ('enter','exit','abort','collection-call-enter','collection-call-exit','collection-call-throw','execution-direct-dispatch','execution-constructor-enter','execution-constructed','execution-constructor-throw','execution-static-read','execution-lambda','execution-class-literal','execution-array','execution-array-throw','collection-catch','branch','read','write','write-version') and (r['kind'] not in ('read','write','write-version','branch') or r['site'].rsplit('@',1)[0] in methods)]
         writes=[r for r in relevant if r['kind']in ('write','write-version')];providers=defaultdict(list)
         for row in relevant:
             if row['kind'] in ('binding-source','binding-input'):
@@ -117,7 +122,15 @@ def infer_application(plan,rows,worker_request=None):
         def origin(f,before):
             candidates=[v for v in providers.get(coordinate(f),[]) if v[0]['seq']<before]
             if len(candidates)!=1:return Value(f['observed'],unknown=True)
-            if f['owner'] in poisoned_at and not (candidates[0][0]['kind']=='http-json' and candidates[0][0]['seq']>poisoned_at[f['owner']]):return Value(f['observed'],unknown=True)
+            source_row=candidates[0][0]
+            if source_row['kind']=='binding-source'and plan['response_binding'].get('source_occurrence_protocol')==1:
+                if source_row.get('source_call_id')is None:return Value(f['observed'],unknown=True)
+                starts=[r for r in relevant if r['kind']=='collection-call-enter'and r.get('call_id')==source_row['source_call_id']]
+                finishes=[r for r in relevant if r['kind']=='collection-call-exit'and r.get('call_id')==source_row['source_call_id']]
+                require(len(starts)==len(finishes)==1,'Declared source call pair absent/ambiguous')
+                start,finish=starts[0],finishes[0]
+                require(start['seq']<source_row['seq']<finish['seq'] and start['frame']==source_row['frame']==finish['frame'] and start['callee']==source_row['callee'] and start['method']==source_row['source_caller_method'] and start['pc']==source_row['source_pc'],'Declared source occurrence coordinates differ')
+            if f['owner'] in poisoned_at and not (candidates[0][0]['kind'] in ('http-json','binding-source') and candidates[0][0]['seq']>poisoned_at[f['owner']]):return Value(f['observed'],unknown=True)
             row,index,source=candidates[0];same_value(source['observed'],f['observed']);return Value(f['observed'],frozenset({('http',row['seq'],source['path']) if row['kind']=='http-json' else ('field',row['seq'],index)}))
         def lookup(f,before):
             key=coordinate(f)
@@ -515,10 +528,20 @@ def infer_application(plan,rows,worker_request=None):
                                             filter_selection=Value(member.observed,member.origins,member.selectors|filter_selectors,member.unknown,member.allocation);accepted=True;break
                                     if not accepted and child_error is None:require(not (pos<len(events) and events[pos]['kind']=='enter'),'Filter callback count exceeds source membership')
                             permitted=cfg['call_targets'].get(entry+'@'+str(fr.pc),[])
+                            dispatch=None
+                            if pos<len(events) and events[pos]['kind']=='execution-direct-dispatch':
+                                dispatch=take('execution-direct-dispatch')
+                                proof=cfg.get('direct_dispatch_contract')
+                                require(proof and dispatch['class_sha256']==proof['class_sha256'] and dispatch['empty_chain'] and dispatch['static_target'],'Direct dispatch contract absent/differs')
+                                require(dispatch['call_id']==call['call_id'] and dispatch['callee']==key and dispatch['proxy']==identity(recv),'Direct dispatch invocation differs')
+                                require(len(dispatch['args'])==len(call['args']),'Direct dispatch argument count differs')
+                                for desc,a,b in zip(descriptors(ins['desc']),dispatch['args'],call['args']):
+                                    require(a.get('value')==b.get('value') if desc in ('Z','B','C','S','I','J','F','D') else a==b,'Direct dispatch arguments differ')
+                                require(cfg['class_hashes'].get(dispatch['target_type'])==dispatch['target_sha256'],'Direct dispatch target class differs')
                             expected_impl=None
                             if ins['op'] in (183,184):expected_impl=key if key in permitted else None
                             else:
-                                actual_owner=call['receiver_type'].replace('.','/') if call['receiver_type'] else None;suffix='.'+ins['name']+ins['desc']
+                                actual_owner=dispatch['target_type'] if dispatch else call['receiver_type'].replace('.','/') if call['receiver_type'] else None;suffix='.'+ins['name']+ins['desc']
                                 while actual_owner:
                                     candidate=actual_owner+suffix
                                     if candidate in permitted:expected_impl=candidate;break
@@ -529,7 +552,7 @@ def infer_application(plan,rows,worker_request=None):
                             if key in ('java/util/function/Supplier.get()Ljava/lang/Object;','java/lang/Runnable.run()V') and identity(recv) in state.lambdas:callback=state.lambdas[identity(recv)]
                             elif key in ('java/util/Optional.orElseGet(Ljava/util/function/Supplier;)Ljava/lang/Object;','java/util/Optional.orElseThrow(Ljava/util/function/Supplier;)Ljava/lang/Object;') and identity(recv) in state.optionals and state.optionals[identity(recv)] is None:
                                 callback=state.lambdas.get(identity(args[0]))
-                            child_args=args;child_recv=recv
+                            child_args=args;child_recv=Value({'object':dispatch['target']}) if dispatch else recv
                             render_callback=False
                             if key=='java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;' and cfg.get('scalar_builders') and args and 'value' not in args[0].observed:
                                 permitted=cfg['call_targets'].get(entry+'@'+str(fr.pc)+':render',[]);actual_owner=call.get('argument_types',[None])[0];actual_owner=actual_owner.replace('.','/') if actual_owner else None
@@ -584,7 +607,7 @@ def infer_application(plan,rows,worker_request=None):
                                 elif render_callback or resource_render:require(begin['method']==expected_impl,'Rendering actual implementation differs')
                                 elif ins['op'] in (183,184):require(begin['method']==key,'Static/special application implementation differs')
                                 else:
-                                    actual_owner=call['receiver_type'].replace('.','/');suffix='.'+ins['name']+ins['desc'];resolved=None
+                                    actual_owner=dispatch['target_type'] if dispatch else call['receiver_type'].replace('.','/');suffix='.'+ins['name']+ins['desc'];resolved=None
                                     while actual_owner:
                                         candidate=actual_owner+suffix
                                         if candidate in methods:resolved=candidate;break

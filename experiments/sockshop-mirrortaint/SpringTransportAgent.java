@@ -9,8 +9,48 @@ import org.objectweb.asm.tree.*;
 /** Reusable default-Jackson / Spring HTTP observations, without provenance labels. */
 public final class SpringTransportAgent implements ClassFileTransformer,Opcodes {
     static final String R="SpringTransportAgent$Transport";
+/** Actual zero-advice Spring dispatch facts; never a general proxy purity claim. */
+public static final class DirectDispatchHooks implements Opcodes {
+    static final String OWNER="org/springframework/aop/framework/CglibAopProxy$DynamicAdvisedInterceptor";
+    static Map config(){return ExecutionKernelHooks.enabled()?(Map)((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("direct_dispatch_contract"):null;}
+    static byte[] transform(final ClassLoader loader,String owner,byte[] bytes)throws Exception{
+        if(!owner.equals(OWNER)||config()==null)return null;
+        if(!PlannedServiceAgent.Recorder.hash(bytes).equals(((Map)config().get("class_sha256")).get(owner)))throw new IllegalStateException("Direct dispatch implementation differs");
+        ClassNode c=new ClassNode(ASM9);new ClassReader(bytes).accept(c,ClassReader.EXPAND_FRAMES);int count=0;
+        for(MethodNode m:c.methods)if(m.name.equals("intercept")&&m.desc.equals("(Ljava/lang/Object;Ljava/lang/reflect/Method;[Ljava/lang/Object;Lorg/springframework/cglib/proxy/MethodProxy;)Ljava/lang/Object;")){
+            for(AbstractInsnNode n:m.instructions.toArray())if(n instanceof MethodInsnNode){MethodInsnNode call=(MethodInsnNode)n;
+                if(call.owner.equals("org/springframework/aop/framework/AdvisedSupport")&&call.name.equals("getInterceptorsAndDynamicInterceptionAdvice")&&call.desc.equals("(Ljava/lang/reflect/Method;Ljava/lang/Class;)Ljava/util/List;")){
+                    // Exact pinned locals, actual chain from the original call.
+                    // Leave the same list on the original operand stack.
+                    int chain=m.maxLocals++;InsnList h=new InsnList();h.add(new VarInsnNode(ASTORE,chain));
+                    for(int slot:new int[]{1,2,8,7,chain,3})h.add(new VarInsnNode(ALOAD,slot));
+                    h.add(new MethodInsnNode(INVOKESTATIC,"SpringTransportAgent$DirectDispatchHooks","observe","(Ljava/lang/Object;Ljava/lang/reflect/Method;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;[Ljava/lang/Object;)V",false));h.add(new VarInsnNode(ALOAD,chain));m.instructions.insert(n,h);count++;
+                }
+            }
+        }
+        if(count!=1)throw new IllegalStateException("Direct dispatch fast path shape differs");
+        MonitorSafety.instrument(c);ClassWriter w=new ClassWriter(ClassWriter.COMPUTE_MAXS|ClassWriter.COMPUTE_FRAMES){protected String getCommonSuperClass(String a,String b){return PlannedServiceAgent.commonType(loader,a,b);}};c.accept(w);Map witnessed=PlannedServiceAgent.Recorder.row();witnessed.put("class",owner);witnessed.put("class_sha256",PlannedServiceAgent.Recorder.hash(bytes));PlannedServiceAgent.Recorder.emit("direct-dispatch-framework",witnessed);return w.toByteArray();
+    }
+    public static void observe(Object proxy,Method method,Object targetSource,Object target,Object chain,Object[] args)throws Exception{synchronized(PlannedServiceAgent.Recorder.class){
+        if(config()==null||!MonitorSafety.allowed()||CollectionServiceHooks.CALLS.get().isEmpty())return;
+        Map call=CollectionServiceHooks.CALLS.get().peek();String suffix="."+method.getName()+org.objectweb.asm.Type.getMethodDescriptor(method);
+        Map diagnostic=PlannedServiceAgent.Recorder.row();diagnostic.put("call_id",call.get("call_id"));diagnostic.put("same_proxy",call.get("_receiver_ref")==proxy);diagnostic.put("same_method",((String)call.get("callee")).endsWith(suffix));diagnostic.put("target_source_type",targetSource==null?null:targetSource.getClass().getName());diagnostic.put("chain_type",chain==null?null:chain.getClass().getName());diagnostic.put("chain_empty",chain instanceof List&&((List)chain).isEmpty());diagnostic.put("same_args_count",args.length==((Object[])call.get("_args_ref")).length);PlannedServiceAgent.Recorder.emit("direct-dispatch-check",diagnostic);
+        if(call.get("_receiver_ref")!=proxy||!((String)call.get("callee")).endsWith(suffix))return;
+        if(method.isVarArgs()||target==null||targetSource==null||!targetSource.getClass().getName().equals("org.springframework.aop.target.SingletonTargetSource")||chain==null||!Arrays.asList("java.util.ArrayList","java.util.Collections$EmptyList").contains(chain.getClass().getName())||!((List)chain).isEmpty())return;
+        Field f=targetSource.getClass().getDeclaredField("target");f.setAccessible(true);if(f.get(targetSource)!=target)return;
+        Object[] original=(Object[])call.get("_args_ref");if(args.length!=original.length)return;Class<?>[] parameterTypes=method.getParameterTypes();for(int i=0;i<args.length;i++)if(parameterTypes[i].isPrimitive()?args[i]==null||original[i]==null||args[i].getClass()!=original[i].getClass()||!args[i].equals(original[i]):args[i]!=original[i])return;
+        Map pins=new TreeMap();for(Object raw:((Map)config().get("class_sha256")).keySet()){String name=(String)raw;pins.put(name,ExecutionKernelHooks.classHash(Class.forName(name.replace('/','.'),false,target.getClass().getClassLoader())));}
+        if(!pins.equals(config().get("class_sha256")))throw new IllegalStateException("Direct dispatch framework class differs");
+        Map r=PlannedServiceAgent.Recorder.row();r.put("call_id",call.get("call_id"));r.put("pc",call.get("pc"));r.put("callee",call.get("callee"));r.put("proxy",PlannedServiceAgent.Recorder.id(proxy));r.put("target",PlannedServiceAgent.Recorder.id(target));r.put("target_type",target.getClass().getName().replace('.','/'));r.put("target_sha256",ExecutionKernelHooks.classHash(target.getClass()));r.put("class_sha256",pins);r.put("empty_chain",true);r.put("static_target",true);
+        List values=new ArrayList();for(Object arg:args)values.add(PlannedServiceAgent.Recorder.value(arg));r.put("args",values);PlannedServiceAgent.Recorder.emit("execution-direct-dispatch",r);
+    }}
+}
+
     public static void premain(String args,Instrumentation i)throws Exception{PlannedServiceAgent.premain(args,i);Transport.start();i.addTransformer(new SpringTransportAgent());}
     public byte[] transform(final ClassLoader loader,String owner,Class<?> prior,ProtectionDomain domain,byte[] bytes){
+        if(DirectDispatchHooks.config()!=null&&owner.equals(DirectDispatchHooks.OWNER)){
+            try{return DirectDispatchHooks.transform(loader,owner,bytes);}catch(Throwable failure){PlannedServiceAgent.Recorder.problem("direct-dispatch-transform:"+failure);return null;}
+        }
         if(FeignEffectHooks.config()!=null&&FeignProtocolInstrumentation.owns(owner)){
             try{return FeignProtocolInstrumentation.transform(loader,owner,bytes);}catch(Throwable failure){PlannedServiceAgent.Recorder.problem("feign-transform:"+owner+":"+failure);return null;}
         }

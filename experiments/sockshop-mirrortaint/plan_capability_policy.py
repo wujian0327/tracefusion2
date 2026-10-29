@@ -20,11 +20,13 @@ def specialize_transport(plan, *, scope=True, fields=True):
             'conditions':'Both modes share optional outbound-only request-proof cleanup on actual bound server responses. Field persistence projection is selective-only. Retain target serializer and complete pre/post snapshot checks, outbound request proofs and all application evidence.'}
     return plan
 
-def choose(model,query):
+def choose(model,query,*,deployment=None):
+    from plan_applicability import declared_sources,check
     args=(model,query['entry'],query['target'],query['path']);failures={};legacy=kernel=None
-    try:legacy=plan_response(*args,read_forward_contracts=True)
+    sources=declared_sources(query)
+    try:legacy=plan_response(*args,source_calls=sources,read_forward_contracts=True)
     except ValueError as error:failures['legacy']=str(error)
-    try:kernel=plan_response(*args,execution_kernel=True,application_calls=True)
+    try:kernel=plan_response(*args,source_calls=sources,execution_kernel=True,application_calls=True)
     except ValueError as error:failures['execution']=str(error)
     shape=[]
     if kernel:
@@ -34,13 +36,31 @@ def choose(model,query):
                 if i['op'] in (182,183,184,185) and i.get('owner','').startswith('org/springframework/http/RequestEntity'):shape.append('request-entity-effects')
                 if i['op'] in (182,183,184,185) and (i.get('desc','').endswith('Ljava/util/concurrent/Future;') or i.get('name')=='save' and i.get('desc')=='(Ljava/lang/Object;)Ljava/lang/Object;'):shape.append('task-or-save-effects')
                 if 'target' in i and i['target']<=i['index']:shape.append('control-flow-backedge')
-    if legacy and legacy['profile']!='response-forward':plan=legacy;reason='Existing specialized scalar/copy proof has priority'
+    applicability={}
+    for name,candidate in [('legacy',legacy),('execution',kernel)]:
+        if candidate is None:continue
+        applicability[name]=check(candidate,model,query,deployment)
+        if applicability[name]['status']=='rejected':
+            failures[name]='; '.join(applicability[name]['rejections'])
+            if name=='legacy':legacy=None
+            else:kernel=None
+    def covered(name):return {s['callee'] for s in applicability.get(name,{}).get('source_coverage',[]) if s['has_observable_callsite']}
+    if kernel and legacy and covered('execution')>covered('legacy'):plan=kernel;reason='Execution candidate covers a strict superset of declared source callsites before execution'
+    elif legacy and legacy['profile']!='response-forward':plan=legacy;reason='Existing specialized scalar/copy proof has priority'
     elif kernel and (not legacy or shape or query['entry'] not in legacy.get('read_forward_contracts',{}).get('composed_methods',{})):plan=kernel;reason='Execution semantics for structural effects or unavailable root composition'
     elif legacy:plan=legacy;reason='Existing finite return-forward contract'
     elif kernel:plan=kernel;reason='Execution fallback with supported semantics'
     else:raise ValueError('No supported static plan: '+str(failures))
     features=set()
     if plan['profile']=='execution-dependency':
+        plan['response_binding']['source_occurrence_protocol']=1
+        import json
+        from pathlib import Path
+        from contract_applicability import select
+        dispatch=json.loads(Path(__file__).with_name('direct-dispatch-contracts-20261029.json').read_text())
+        selected=select(dispatch,model.get('library_inventory',{}))
+        if selected:plan['execution_kernel']['direct_dispatch_contract']=selected
+        plan['execution_kernel']['class_hashes']={o:c['sha256'] for o,c in model['classes'].items()}
         from contract_obligations import features as api_obligations
         features=api_obligations(plan,model)
         if features:plan=attach_async_dependencies(plan,features,model.get('library_inventory'))
@@ -54,4 +74,5 @@ def choose(model,query):
         specialize_transport(plan)
         from plan_execution_closure import attach_execution_closure
         attach_execution_closure(plan,model)
-    return plan,{'version':2,'reason':reason,'contract_features':sorted(features),'structural_triggers':sorted(set(shape)),'failed_candidates':failures,'answer_independent':True}
+    plan['preexecution_applicability']=check(plan,model,query,deployment)
+    return plan,{'version':3,'reason':reason,'contract_features':sorted(features),'structural_triggers':sorted(set(shape)),'failed_candidates':failures,'candidate_applicability':applicability,'answer_independent':True}

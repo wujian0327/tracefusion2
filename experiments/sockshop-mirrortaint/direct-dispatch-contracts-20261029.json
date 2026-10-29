@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "class_sha256": {
+    "org/springframework/aop/framework/CglibAopProxy$DynamicAdvisedInterceptor": "e7b198c87d3a2371023560e6f61bdb65fa631c71b3d71e0a0a5154fd808ac5ae",
+    "org/springframework/aop/framework/CglibAopProxy": "085cc2bf35fad1482702c37d3a01e8b7ad816867c077736575d5cebda7779238",
+    "org/springframework/aop/framework/AopProxyUtils": "d50c8ea9b55955d1fdea095b7ea07c0b3dff6acf45c65ae17528599947abaea8",
+    "org/springframework/aop/target/SingletonTargetSource": "16753094163eabb11cf4ed413b227a7dc747266778f5a00106162ec4ff599650",
+    "org/springframework/aop/framework/CglibAopProxy$CglibMethodInvocation": "a2f5a9b63fc003642a1391a19fb7c28e1164136dd02c1a1462f6a8239ee7dd47",
+    "org/springframework/aop/framework/ReflectiveMethodInvocation": "111edefed4deed796640c89133a093781aec5c67eb1f7b8cfeb3ff54530a53a5",
+    "org/springframework/aop/framework/AdvisedSupport": "40439439dc4ecb4db0da81ff4190c8155752643a96366991fd633618e485d165",
+    "org/springframework/aop/support/AopUtils": "edc21a0ad144de2423b730974ad4f43d6ffe37950209399f2bc661efeea224f8"
+  },
+  "kind": "cglib-zero-interceptor-static-target",
+  "conditions": [
+    "Actual empty interceptor chain of exact DynamicAdvisedInterceptor, non-varargs; direct or empty-chain invocation path, no advice",
+    "Exact SingletonTargetSource; actual target from original getTarget",
+    "Same receiver, method descriptor and actual adapted argument identities",
+    "Actual application Frame, target implementation/hash, normal or exceptional completion and return checked",
+    "Nonempty advice chains, other target sources, return substitution and missing/ambiguous proof remain opaque/invalid"
+  ],
+  "not_a_general_proxy_readonly_model": true
+}

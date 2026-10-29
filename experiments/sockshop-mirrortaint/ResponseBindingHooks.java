@@ -103,7 +103,12 @@ public final class ResponseBindingHooks implements Opcodes {
             // the original invocation and reachable effects as opaque.
             Map r=row();r.put("callee",call);r.put("fields",Collections.emptyList());r.put("opaque_identity",PlannedServiceAgent.Recorder.value(value));r.put("snapshot_unsupported",unsupported.getMessage());emit(kind,r);return;
         }
-        if(fields.isEmpty())return;Map r=row();r.put("callee",call);r.put("fields",fields);emit(kind,r);
+        if(fields.isEmpty())return;Map r=row();r.put("callee",call);r.put("fields",fields);
+        if(kind.equals("binding-source")&&ExecutionKernelHooks.enabled()&&binding().get("source_occurrence_protocol")!=null){
+            Map invocation=CollectionServiceHooks.CALLS.get().peek();boolean paired=invocation!=null&&call.equals(invocation.get("callee"))&&Objects.equals(r.get("frame"),invocation.get("frame"));
+            r.put("source_call_id",paired?invocation.get("call_id"):null);r.put("source_caller_method",paired?invocation.get("method"):null);r.put("source_pc",paired?invocation.get("pc"):null);r.put("source_scope",paired?"planned-call":"unscoped-fact-only");
+        }
+        emit(kind,r);
     }
     public static void before(String call,Object recv,Object[] args){synchronized(PlannedServiceAgent.Recorder.class){if(!active())return;try{if(ReadEffectHooks.enabled()){ReadEffectHooks.before(call,recv,args);return;}if(admitted(call,recv))return;mark("binding-opaque-touch",call,recv);for(Object a:args)mark("binding-opaque-touch",call,a);}catch(Throwable e){PlannedServiceAgent.Recorder.problem("binding-before:"+e);throw new IllegalStateException(e);}}}
     public static void after(String call,Object recv,Object[] args,Object result){synchronized(PlannedServiceAgent.Recorder.class){if(!active())return;try{
