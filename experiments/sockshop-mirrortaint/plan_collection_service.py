@@ -78,6 +78,7 @@ def analyze(method, allow_loops=False):
             push()
         elif op in (96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111): pop(); pop(); push()
         elif 133 <= op <= 147: pop(); push()
+        elif op == 148 and allow_loops: pop(); pop(); push()
         elif op in (182, 183, 184, 185):
             for _ in descriptors(ins['desc']): pop()
             if op != 184: pop()

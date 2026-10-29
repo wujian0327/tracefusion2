@@ -25,7 +25,8 @@ def prepare(only_api=None,only_index=None):
         model['library_inventory']=library_inventory(HOME/'business-jars'/(role+'.jar'))
         save(HOME/'metadata'/role/'model.json',model)
     save(HOME/'task-seal.json',load(FIRST/'task-seal.json'))
-    save(HOME/'protocol-start.json',{'TF_commit':'development from 93a5a86; Agent unchanged78a9534'})
+    base_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+    save(HOME/'protocol-start.json',{'TF_commit':'development from '+base_commit,'base_commit':base_commit,'meaning':'Development candidate; exact sources and Agent locked separately before business capture'})
     tools=HOME/'runtime-probe';tools.mkdir(exist_ok=True)
     subprocess.run(['/usr/lib/jvm/java-8-openjdk-amd64/bin/javac','-d',str(tools),str(HERE/'JdkContractProbe.java')],check=True)
     names=set()
@@ -64,14 +65,14 @@ def run(api,mode,index):
     def verify(root):
         assert sha(BASE/'distributed-observer.jar')==load(HOME/'candidate-code.json')['agent_sha256']
         protocol=load(HOME/'development-protocol-before-change.json')
-        for f,h in protocol['protected'].items():assert sha(ROOT/f)==h,f
+        for f,h in protocol.get('protected',protocol.get('first_results_preserved',{})).items():assert sha(ROOT/f)==h,f
         for f,h in load(HOME/'candidate-code.json')['sources'].items():assert sha(ROOT/f)==h,f
         for f,h in load(HOME/'candidate-code.json').get('planning_inputs',{}).items():assert sha(HOME/f)==h,f
     config.verify=verify;env.verify=verify
     original_config=config.configure
     def configure(root,out,cfg,q,mode,index=None):
         original_config(root,out,cfg,q,mode,index)
-        receipt=load(out/'tool-binaries.json');receipt['no_core_agent_or_contract_changes']=False;receipt['development_revision']='Preexecution routing, observed zero-advice dispatch and later-source establishment; no change to first/C1 artifacts';save(out/'tool-binaries.json',receipt)
+        receipt=load(out/'tool-binaries.json');receipt['no_core_agent_or_contract_changes']=False;receipt['development_revision']=load(HOME/'candidate-code.json')['meaning'];save(out/'tool-binaries.json',receipt)
         save(out/'revision-before-business.json',{'candidate_sources':load(HOME/'candidate-code.json'),'agent_sha256':sha(BASE/'distributed-observer.jar'),'plan_sha256':sha(HOME/'planning-first'/api/('%03d-plan.json'%index)),'first_or_C1_replaced':False})
     config.configure=configure
     native=Deployment.compose;latest={};native_save=env.save
@@ -107,9 +108,9 @@ def freeze():
     # Complete semantic core snapshot, not just the two modified planners.
     previous=load(ROOT/'artifacts/account-semantics-20261028/final-candidate-01/algorithm-freeze.json')['sources']
     sources={str(Path(f).relative_to(ROOT)):sha(Path(f))for f in previous}
-    for name in ('plan_applicability.py','direct-dispatch-contracts-20261029.json'):
+    for name in ('plan_applicability.py','direct-dispatch-contracts-20261029.json','plan_communication_identity.py','communication-identity-contracts-20261029.json','plan_literal_enums.py'):
         sources[str((HERE/name).relative_to(ROOT))]=sha(HERE/name)
-    receipt={'sources':sources,'agent_sha256':sha(BASE/'distributed-observer.jar'),'meaning':'Development checkpoint before business capture; preexecution routing and finite zero-advice/source reestablishment support, separate from first/C1.'}
+    receipt={'sources':sources,'agent_sha256':sha(BASE/'distributed-observer.jar'),'meaning':'Development checkpoint before business capture; source/contract hashes define this candidate, separate from all first/C1 captures.'}
     receipt['planning_inputs']={str(p.relative_to(HOME)):sha(p)for folder in ('planning-first','metadata')for p in (HOME/folder).rglob('*.json')}
     receipt['planning_inputs']['deployment-environment.json']=sha(HOME/'deployment-environment.json')
     if (HOME/'candidate-code.json').exists():assert load(HOME/'candidate-code.json')==receipt,'Do not overwrite a candidate freeze; use a new --home'

@@ -103,7 +103,7 @@ def build(out,inputs):
     for name in ('plan_uuid_projection.py','infer_uuid_projection.py','uuid-projection-contracts-20261022.json'):manifest['sources'][str(HERE/name)]=sha(HERE/name)
     manifest['sources'][str(HERE/'isolate_agent_jackson.py')]=sha(HERE/'isolate_agent_jackson.py')
     manifest['jackson_isolation']='Internal JSON relocated to tracefusion.internal.jackson; business inspection has no Jackson type linkage'
-    for name in ('plan_foundation_values.py','foundation-value-contracts-20261028.json','infer_foundation_values.py','plan_feign_effects.py','feign-input-effect-contracts-20261028.json','mongo2-provided-id-contracts-20261028.json','plan_scalar_projection.py','scalar-projection-contracts-20261028.json','infer_scalar_projection.py','document-date-effects-20261028.json','infer_listener_registry.py','infer_feign_effects.py'):manifest['sources'][str(HERE/name)]=sha(HERE/name)
+    for name in ('plan_communication_identity.py','communication-identity-contracts-20261029.json','plan_literal_enums.py','plan_foundation_values.py','foundation-value-contracts-20261028.json','infer_foundation_values.py','plan_feign_effects.py','feign-input-effect-contracts-20261028.json','mongo2-provided-id-contracts-20261028.json','plan_scalar_projection.py','scalar-projection-contracts-20261028.json','infer_scalar_projection.py','document-date-effects-20261028.json','infer_listener_registry.py','infer_feign_effects.py'):manifest['sources'][str(HERE/name)]=sha(HERE/name)
     manifest['builder_sha256']=sha(Path(__file__));save(out/'build.json',manifest)
 
 

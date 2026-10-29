@@ -34,7 +34,7 @@ class Reconstruction:
             require(not path.with_name(path.name+'.invalid').exists(),'Collector failure sidecar')
             require(sum(r['kind']=='metrics' for r in rows)==1,'Capture did not close')
             require(rows[0]['plan_sha256']==hashlib.sha256((build/role/'plan.json').read_bytes()).hexdigest(),'Frozen plan differs')
-            if any(r.get('transport_protocol')=='w3c-trace-context' for r in rows):validate_protocol(rows)
+            if any(r.get('transport_protocol')=='w3c-trace-context' for r in rows):validate_protocol(rows,plan.get('communication_identity',{}).get('version',1),plan.get('communication_identity'))
             self.rows[role]=rows;self.plans[role]=plan
             returns=defaultdict(list)
             for row in rows:

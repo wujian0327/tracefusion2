@@ -51,9 +51,9 @@ public final class ResponseBindingHooks implements Opcodes {
                 m.tryCatchBlocks.add(0,new TryCatchBlockNode(start,end,handler,"java/lang/Throwable"));
             }
             if(ret.getSort()!=Type.VOID)after.add(new VarInsnNode(ret.getOpcode(ISTORE),result));
-            arguments(after,call,recv,types,slots);
+            after.add(new LdcInsnNode(key+"@"+code.indexOf(n)));arguments(after,call,recv,types,slots);
             if(ret.getSort()==Type.VOID)after.add(new InsnNode(ACONST_NULL));else{after.add(new VarInsnNode(ret.getOpcode(ILOAD),result));PlannedServiceAgent.box(after,ret);}
-            after.add(new MethodInsnNode(INVOKESTATIC,R,"after","(Ljava/lang/String;Ljava/lang/Object;[Ljava/lang/Object;Ljava/lang/Object;)V",false));
+            after.add(new MethodInsnNode(INVOKESTATIC,R,"afterAt","(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Object;[Ljava/lang/Object;Ljava/lang/Object;)V",false));
             if(ret.getSort()!=Type.VOID)after.add(new VarInsnNode(ret.getOpcode(ILOAD),result));
             m.instructions.insertBefore(n,before);m.instructions.insert(n,after);changed=true;
         }return changed;
@@ -94,7 +94,8 @@ public final class ResponseBindingHooks implements Opcodes {
         }finally{seen.remove(o);}
     }
     static List<Map> sourceSnapshot(Object value)throws Exception{boolean old=sourceCapture;sourceCapture=true;try{return snapshot(value,false);}finally{sourceCapture=old;}}
-    static void mark(String kind,String call,Object value)throws Exception{
+    static void mark(String kind,String call,Object value)throws Exception{mark(kind,call,value,null);}
+    static void mark(String kind,String call,Object value,String site)throws Exception{
         List<Map> fields;try{fields=kind.equals("binding-source")?sourceSnapshot(value):snapshot(value,false);}
         catch(IllegalStateException unsupported){
             if(!ExecutionKernelHooks.enabled()||!kind.startsWith("binding-opaque")||!"Unmodeled binding Map type".equals(unsupported.getMessage()))throw unsupported;
@@ -106,15 +107,18 @@ public final class ResponseBindingHooks implements Opcodes {
         if(fields.isEmpty())return;Map r=row();r.put("callee",call);r.put("fields",fields);
         if(kind.equals("binding-source")&&ExecutionKernelHooks.enabled()&&binding().get("source_occurrence_protocol")!=null){
             Map invocation=CollectionServiceHooks.CALLS.get().peek();boolean paired=invocation!=null&&call.equals(invocation.get("callee"))&&Objects.equals(r.get("frame"),invocation.get("frame"));
+            if(((Number)binding().get("source_occurrence_protocol")).intValue()>=2)paired=paired&&Objects.equals(site,invocation.get("method")+"@"+invocation.get("pc"));
+            r.put("source_callsite",site);
             r.put("source_call_id",paired?invocation.get("call_id"):null);r.put("source_caller_method",paired?invocation.get("method"):null);r.put("source_pc",paired?invocation.get("pc"):null);r.put("source_scope",paired?"planned-call":"unscoped-fact-only");
         }
         emit(kind,r);
     }
     public static void before(String call,Object recv,Object[] args){synchronized(PlannedServiceAgent.Recorder.class){if(!active())return;try{if(ReadEffectHooks.enabled()){ReadEffectHooks.before(call,recv,args);return;}if(admitted(call,recv))return;mark("binding-opaque-touch",call,recv);for(Object a:args)mark("binding-opaque-touch",call,a);}catch(Throwable e){PlannedServiceAgent.Recorder.problem("binding-before:"+e);throw new IllegalStateException(e);}}}
-    public static void after(String call,Object recv,Object[] args,Object result){synchronized(PlannedServiceAgent.Recorder.class){if(!active())return;try{
+    public static void after(String call,Object recv,Object[] args,Object result){afterAt(null,call,recv,args,result);}
+    public static void afterAt(String site,String call,Object recv,Object[] args,Object result){synchronized(PlannedServiceAgent.Recorder.class){if(!active())return;try{
         TemporalDateHooks.bindingCall(call,recv,args,result);
         if(ReadEffectHooks.enabled()){ReadEffectHooks.after(call,recv,args,result);return;}
-        if(((List)binding().get("source_calls")).contains(call)){mark("binding-source",call,result);}
+        if(((List)binding().get("source_calls")).contains(call)){mark("binding-source",call,result,site);}
         else if(!admitted(call,recv))mark("binding-opaque-result",call,result);
     }catch(Throwable e){PlannedServiceAgent.Recorder.problem("binding-after:"+e);throw new IllegalStateException(e);}}}
     public static void exceptional(String call,Object recv,Object[] args,Throwable error){synchronized(PlannedServiceAgent.Recorder.class){if(!active())return;try{if(ExecutionKernelHooks.enabled()){SaveEffectHooks.exceptional(call,error);ExecutionKernelHooks.exceptional(call,error);}else if(ReadEffectHooks.enabled())ReadEffectHooks.exceptional(call,recv,args,error);}catch(Throwable e){PlannedServiceAgent.Recorder.problem("binding-exceptional:"+e);throw new IllegalStateException(e);}}}

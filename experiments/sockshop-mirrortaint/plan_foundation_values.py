@@ -33,7 +33,11 @@ def enum_proofs(model):
     for owner,c in model['classes'].items():
         if c.get('super')!='java/lang/Enum':continue
         try:valid[owner]=plain_enum(model,owner)
-        except (ValueError,KeyError)as error:rejected[owner]=str(error)
+        except (ValueError,KeyError)as error:
+            try:
+                from plan_literal_enums import prove
+                valid[owner]=prove(model,owner)
+            except (ValueError,KeyError)as literal_error:rejected[owner]=str(error)+'; '+str(literal_error)
     return valid,rejected
 
 def attach(plan,model,enums,rejected):
@@ -48,6 +52,6 @@ def attach(plan,model,enums,rejected):
         if cl['super']!='java/lang/Object':continue
         defaults[key]={'pc':1,'class_sha256':cl['sha256'],'fields':[{'field':owner+'.'+f['name'],'descriptor':f['desc']}for f in cl['fields']if not f['access']&8]}
     cfg['default_initializers']=defaults
-    plan['snapshot_fields']=sorted(set(plan['snapshot_fields'])|{f['field']for v in defaults.values()for f in v['fields']})
+    plan['snapshot_fields']=sorted(set(plan['snapshot_fields'])|{f['field']for v in defaults.values()for f in v['fields']}|{f['field']for e in enums.values()for fields in e.get('literal_fields',{}).values()for f in fields})
     from plan_scalar_projection import attach as scalar_projection
     return scalar_projection(plan,model)

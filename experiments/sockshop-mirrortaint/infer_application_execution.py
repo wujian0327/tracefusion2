@@ -91,7 +91,7 @@ def infer_application(plan,rows,worker_request=None):
         for row in relevant:
             if row['kind'] in ('binding-source','binding-input'):
                 for index,f in enumerate(row['fields']):providers[coordinate(f)].append((row,index,f))
-        state=State(Frame(root['frame']));preserved_fields={};pos=1;allocation_count=0;total_steps=0;branch_count=0
+        state=State(Frame(root['frame']));preserved_fields={};literal_enum_fields={};pos=1;allocation_count=0;total_steps=0;branch_count=0
         request_builders={};request_entities={};resources={};decoded_types={};decoded_fields={};decoded_seq={};http_entities={};response_entities={};class_literals={};date_values={};calendars={};environment_facts=[];builders={};opaque_calls=[];async_results={};future_states={};async_transfers=[];maps={}
         fr=None;method=None;code=None;entry=None;field_seq={};poisoned_at={};frame_audits=[]
         execution_budget=worker_request['budget'] if worker_request else {'steps':0}
@@ -123,17 +123,22 @@ def infer_application(plan,rows,worker_request=None):
             candidates=[v for v in providers.get(coordinate(f),[]) if v[0]['seq']<before]
             if len(candidates)!=1:return Value(f['observed'],unknown=True)
             source_row=candidates[0][0]
-            if source_row['kind']=='binding-source'and plan['response_binding'].get('source_occurrence_protocol')==1:
+            if source_row['kind']=='binding-source'and plan['response_binding'].get('source_occurrence_protocol',0)>=1:
                 if source_row.get('source_call_id')is None:return Value(f['observed'],unknown=True)
                 starts=[r for r in relevant if r['kind']=='collection-call-enter'and r.get('call_id')==source_row['source_call_id']]
                 finishes=[r for r in relevant if r['kind']=='collection-call-exit'and r.get('call_id')==source_row['source_call_id']]
                 require(len(starts)==len(finishes)==1,'Declared source call pair absent/ambiguous')
                 start,finish=starts[0],finishes[0]
                 require(start['seq']<source_row['seq']<finish['seq'] and start['frame']==source_row['frame']==finish['frame'] and start['callee']==source_row['callee'] and start['method']==source_row['source_caller_method'] and start['pc']==source_row['source_pc'],'Declared source occurrence coordinates differ')
+                if plan['response_binding']['source_occurrence_protocol']>=2:require(source_row.get('source_callsite')==start['method']+'@'+str(start['pc']),'Declared source actual callsite differs')
             if f['owner'] in poisoned_at and not (candidates[0][0]['kind'] in ('http-json','binding-source') and candidates[0][0]['seq']>poisoned_at[f['owner']]):return Value(f['observed'],unknown=True)
             row,index,source=candidates[0];same_value(source['observed'],f['observed']);return Value(f['observed'],frozenset({('http',row['seq'],source['path']) if row['kind']=='http-json' else ('field',row['seq'],index)}))
         def lookup(f,before):
             key=coordinate(f)
+            if key in literal_enum_fields:
+                # Closed private enum state has no application write after its
+                # literal initializer; ordinary opaque calls cannot mutate it.
+                value=literal_enum_fields[key];same_value(value.observed,f['observed']);return value.project(f['observed'])
             preserved=preserved_fields.get(key)
             barrier=max(poisoned_at.get(f['owner'],-1),poisoned_at.get(f['observed'].get('object'),-1)if 'date_epoch_ms'in f['observed']else -1)
             if preserved and barrier<=preserved[0]<before:
@@ -376,6 +381,14 @@ def infer_application(plan,rows,worker_request=None):
                                 require(enum_fact and enum_fact['class_sha256']==enum_spec['class_sha256'] and enum_fact['jdk_approved']==foundation_supported,'Enum constant witness/hash absent/differs')
                                 require(enum_fact['constant']==ins['name'] and enum_fact['ordinal']==enum_spec['constants'].index(ins['name']),'Enum constant selection differs')
                                 enum_known=enum_fact['valid'];require(not enum_known or foundation_supported and enum_fact['default_environment'],'Enum preconditions contradict runtime')
+                                if enum_spec.get('literal_fields') and enum_known:
+                                    expected=enum_spec['literal_fields'][ins['name']];actual_fields=enum_fact.get('literal_fields')
+                                    require(actual_fields is not None and len(actual_fields)==len(expected),'Enum literal field evidence missing')
+                                    for specification,observed_field in zip(expected,actual_fields):
+                                        require(observed_field['field']==specification['field'] and observed_field['descriptor']==specification['descriptor'] and observed_field['owner']==fact['observed']['object'] and observed_field['version']==1,'Enum physical field/initial version differs')
+                                        require(type(observed_field['observed'].get('value'))is (str if specification['descriptor']=='Ljava/lang/String;'else bool if specification['descriptor']=='Z'else int),'Enum literal field value type differs')
+                                        require(observed_field['observed']['value']==specification['value'],'Enum field is not its proved literal initializer')
+                                        literal_enum_fields[coordinate(observed_field)]=Value(observed_field['observed'])
                                 if plan.get('scalar_projection'):require(fact['observed'].get('enum_type')==ins['owner'].replace('/','.')and fact['observed'].get('enum_ordinal')==enum_fact['ordinal']and fact['observed'].get('value')==ins['name'],'Enum constant physical value differs')
                             if ins['owner']!=method['owner'] and not enum_known:
                                 contracts=cfg.get('request_entity_contracts',{});pinned=contracts.get('class_sha256',{}).get(ins['owner']) if ins['owner'] in ('org/springframework/hateoas/MediaTypes','org/springframework/http/MediaType','org/springframework/http/HttpMethod') else None
@@ -409,6 +422,10 @@ def infer_application(plan,rows,worker_request=None):
                         value=pop();n=value.observed.get('value')
                         require(type(n) is int and -2**31<=n<2**31,'I2D requires an actual JVM int')
                         fr.stack.append(value.project({'value':float(n)}))
+                    elif op==148:
+                        b,a=pop(),pop();x,y=a.observed.get('value'),b.observed.get('value')
+                        require(type(x)is int and type(y)is int and -2**63<=x<2**63 and -2**63<=y<2**63,'LCMP requires exact signed JVM long operands')
+                        fr.stack.append(combine({'value':(x>y)-(x<y)},[a,b]))
                     elif op==107:
                         import math
                         b,a=pop(),pop();x,y=a.observed.get('value'),b.observed.get('value')

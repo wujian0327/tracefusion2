@@ -53,7 +53,7 @@ def choose(model,query,*,deployment=None):
     else:raise ValueError('No supported static plan: '+str(failures))
     features=set()
     if plan['profile']=='execution-dependency':
-        plan['response_binding']['source_occurrence_protocol']=1
+        plan['response_binding']['source_occurrence_protocol']=2
         import json
         from pathlib import Path
         from contract_applicability import select
@@ -74,5 +74,7 @@ def choose(model,query,*,deployment=None):
         specialize_transport(plan)
         from plan_execution_closure import attach_execution_closure
         attach_execution_closure(plan,model)
+    from plan_communication_identity import attach as attach_communication_identity
+    attach_communication_identity(plan,model)
     plan['preexecution_applicability']=check(plan,model,query,deployment)
     return plan,{'version':3,'reason':reason,'contract_features':sorted(features),'structural_triggers':sorted(set(shape)),'failed_candidates':failures,'candidate_applicability':applicability,'answer_independent':True}

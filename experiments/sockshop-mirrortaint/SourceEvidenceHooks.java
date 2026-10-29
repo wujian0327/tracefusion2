@@ -47,9 +47,9 @@ public final class SourceEvidenceHooks {
     public static void read(Object body,Object message,Object mapper){
         Capture c=CAPTURES.remove(message);if(!enabled()||!MonitorSafety.allowed()||c==null)return;
         synchronized(PlannedServiceAgent.Recorder.class){try{
-            Map r=new LinkedHashMap();if(!SpringTransportAgent.Transport.RPC.get().isEmpty()){r.putAll(SpringTransportAgent.Transport.RPC.get().peek());r.put("direction","response");}
+            Map r=new LinkedHashMap();if(SpringTransportAgent.Communication.enabled())r.putAll(SpringTransportAgent.Communication.codec(c.original,true));else if(!SpringTransportAgent.Transport.RPC.get().isEmpty()){r.putAll(SpringTransportAgent.Transport.RPC.get().peek());r.put("direction","response");}
             else{r.putAll(SpringTransportAgent.Transport.context());r.put("direction","request");}
-            if(r.get("message")==null)return;
+            if(r.get("message")==null&&!Boolean.TRUE.equals(r.get("unbound")))return;
             byte[] bytes=c.bytes.toByteArray();ObjectMapper parser=new ObjectMapper();parser.enable(JsonParser.Feature.STRICT_DUPLICATE_DETECTION);
             JsonParser jp=parser.getFactory().createParser(bytes);JsonNode document=parser.readTree(jp);
             long length=((Number)SpringTransportAgent.Transport.api(SpringTransportAgent.Transport.headers(message),"org.springframework.http.HttpHeaders","getContentLength",new Class[0])).longValue();

@@ -14,7 +14,7 @@ def augment_calls(plan,model,sources):
     from plan_foundation_values import enum_proofs,attach as attach_foundations
     enums,unproved_enums=enum_proofs(model)
     supported={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,87,89,96,100,104,132,167,178,180,181,182,183,184,185,187,191,192,198,199,186,189,190,50,83}|set(range(21,26))|set(range(54,59))|set(range(153,167))|set(range(172,178))
-    supported|={107,135}  # Finite double multiply and exact JVM int-to-double.
+    supported|={107,135,148}  # Finite double multiply, int-to-double and exact signed LCMP.
     def subtype(child,parent,seen=None):
         if child==parent:return True
         seen=set() if seen is None else seen

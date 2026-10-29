@@ -19,6 +19,7 @@ public final class MonitorSafety implements Opcodes {
             add(CollectionServiceHooks.CALLS);add(ReadEffectHooks.STACK);add(ReadEffectHooks.STREAMS);add(ReadEffectHooks.OPTIONALS);add(ReadEffectHooks.COUNTS);
             add(ExecutionKernelHooks.CONSTRUCTORS);add(FeignEffectHooks.CALLERS);add(FeignEffectHooks.WORKERS);add(SaveEffectHooks.ACTIVE);add(ConversionContractHooks.ACTIVE);add(AsyncTaskHooks.ACTIVE);
             add(SpringTransportAgent.Transport.RPC);add(SpringTransportAgent.Transport.SPANS);add(SpringTransportAgent.Transport.ASYNC);add(SpringTransportAgent.Transport.DECODER);
+            add(SpringTransportAgent.Communication.ACTIVE);
         }
         void add(ThreadLocal x){slots.add(new Slot(x));}
         void restore(){for(Slot s:slots)try{s.restore();}catch(Throwable e){failureMarker("state-restore",e);}}
@@ -51,7 +52,7 @@ public final class MonitorSafety implements Opcodes {
     // Only monitor-owned static calls injected by our transformers are wrapped.
     // The original business invocation (including its Throwable) stays outside.
     static final Set<String> OWNERS=new HashSet<>(Arrays.asList("PlannedServiceAgent$Recorder","CollectionServiceHooks","ExecutionKernelHooks","FeignEffectHooks","DocumentDateHooks","ResponseBindingHooks","ReadEffectHooks","ConversionContractHooks","SaveEffectHooks","TemporalDateHooks","UuidProjectionHooks","AsyncTaskHooks","FrameworkCallHooks","RequestEntityHooks","SourceEvidenceHooks","SpringTransportAgent$Transport"));
-    static {OWNERS.add("SpringTransportAgent$DirectDispatchHooks");}
+    static {OWNERS.add("SpringTransportAgent$DirectDispatchHooks");OWNERS.add("SpringTransportAgent$Communication");}
     static void instrument(ClassNode owner){
         Map<String,String> wrappers=new LinkedHashMap<>();List<MethodNode> generated=new ArrayList<>();
         for(MethodNode method:new ArrayList<MethodNode>(owner.methods))for(AbstractInsnNode node:method.instructions.toArray()){
@@ -65,13 +66,13 @@ public final class MonitorSafety implements Opcodes {
     static MethodNode wrapper(String name,MethodInsnNode original){
         MethodNode m=new MethodNode(ASM9,ACC_PRIVATE|ACC_STATIC|ACC_SYNTHETIC,name,original.desc,null,null);Type[] args=Type.getArgumentTypes(original.desc);Type ret=Type.getReturnType(original.desc);int slots=0;for(Type t:args)slots+=t.getSize();m.maxLocals=slots+1;
         LabelNode start=new LabelNode(),end=new LabelNode(),handler=new LabelNode(),fallback=new LabelNode();InsnList x=m.instructions;x.add(start);
-        boolean lifecycle=original.owner.equals("PlannedServiceAgent$Recorder")&&Arrays.asList("enter","exit","abort").contains(original.name)||original.owner.equals("SpringTransportAgent$Transport")&&Arrays.asList("rpcExit","rpcAbort").contains(original.name)||original.owner.equals("SourceEvidenceHooks")&&Arrays.asList("read","abort").contains(original.name)||original.owner.equals("FeignEffectHooks")&&original.name.endsWith("End")||original.owner.equals("DocumentDateHooks")&&original.name.equals("end");
+        boolean lifecycle=original.owner.equals("PlannedServiceAgent$Recorder")&&Arrays.asList("enter","exit","abort").contains(original.name)||original.owner.equals("SpringTransportAgent$Communication")&&Arrays.asList("finish","networkEnd").contains(original.name)||original.owner.equals("SpringTransportAgent$Transport")&&Arrays.asList("rpcExit","rpcAbort").contains(original.name)||original.owner.equals("SourceEvidenceHooks")&&Arrays.asList("read","abort").contains(original.name)||original.owner.equals("FeignEffectHooks")&&original.name.endsWith("End")||original.owner.equals("DocumentDateHooks")&&original.name.equals("end");
         if(!lifecycle){x.add(new MethodInsnNode(INVOKESTATIC,"MonitorSafety","allowed","()Z",false));x.add(new JumpInsnNode(IFEQ,fallback));}
         int slot=0;for(Type t:args){x.add(new VarInsnNode(t.getOpcode(ILOAD),slot));slot+=t.getSize();}
         x.add(new MethodInsnNode(INVOKESTATIC,original.owner,original.name,original.desc,false));x.add(end);x.add(new InsnNode(ret.getOpcode(IRETURN)));x.add(handler);x.add(new VarInsnNode(ASTORE,slots));x.add(new LdcInsnNode(original.owner+"."+original.name));x.add(new VarInsnNode(ALOAD,slots));x.add(new MethodInsnNode(INVOKESTATIC,"MonitorSafety","failed","(Ljava/lang/String;Ljava/lang/Throwable;)V",false));x.add(fallback);
         // Identity fallback ONLY for explicitly wrapping an application argument.
         boolean identity=original.owner.equals("SourceEvidenceHooks")&&original.name.equals("input")||original.owner.equals("SpringTransportAgent$Transport")&&original.name.equals("wrap");
-        if(identity)x.add(new VarInsnNode(ALOAD,0));else if(ret.getSort()==Type.OBJECT||ret.getSort()==Type.ARRAY)x.add(new InsnNode(ACONST_NULL));else if(ret.getSort()!=Type.VOID)x.add(new InsnNode(ret.getSort()==Type.LONG?LCONST_0:ret.getSort()==Type.DOUBLE?DCONST_0:ret.getSort()==Type.FLOAT?FCONST_0:ICONST_0));
+        if(original.owner.equals("SpringTransportAgent$Communication")&&original.name.equals("wireRequest"))x.add(new VarInsnNode(ALOAD,1));else if(identity)x.add(new VarInsnNode(ALOAD,0));else if(ret.getSort()==Type.OBJECT||ret.getSort()==Type.ARRAY)x.add(new InsnNode(ACONST_NULL));else if(ret.getSort()!=Type.VOID)x.add(new InsnNode(ret.getSort()==Type.LONG?LCONST_0:ret.getSort()==Type.DOUBLE?DCONST_0:ret.getSort()==Type.FLOAT?FCONST_0:ICONST_0));
         x.add(new InsnNode(ret.getOpcode(IRETURN)));m.tryCatchBlocks.add(new TryCatchBlockNode(start,end,handler,"java/lang/Throwable"));return m;
     }
 }
