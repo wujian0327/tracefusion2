@@ -18,13 +18,18 @@ public class CommunicationIdentityFixture {
     public Remote api;
     public Box root(String key){api.get("first");return api.get(key);}
     static Remote nested;static boolean observe;static final AtomicBoolean retried=new AtomicBoolean();static final IOException ORIGINAL=new IOException("original-client-failure");
+    static class RetryableRequestPath extends org.springframework.cloud.openfeign.loadbalancer.RetryableFeignBlockingLoadBalancerClient {
+        RetryableRequestPath(Client delegate){super(delegate,null,null,(org.springframework.cloud.loadbalancer.support.LoadBalancerClientFactory)null);}
+        Request actualRequest(Request input){return buildRequest(input,input.url());}
+    }
     static Remote client(String url,Decoder decoder,boolean negative){
         Client delegate=Boolean.getBoolean("fixture.okhttp")?new feign.okhttp.OkHttpClient():new Client.Default(null,null);
+        RetryableRequestPath retryable=Boolean.getBoolean("fixture.retryable.lb")?new RetryableRequestPath(delegate):null;
         Client client=(request,options)->{
             if(request.url().contains("key=retry")&&!retried.getAndSet(true))throw ORIGINAL;
             if(request.url().contains("key=error"))throw ORIGINAL;
             if(request.url().contains("key=nested"))nested.get("inner");
-            Response response=delegate.execute(request,options);
+            Response response=delegate.execute(retryable==null?request:retryable.actualRequest(request),options);
             if(negative&&request.url().contains("key=wrong")){
                 Request other=Request.create(request.httpMethod(),request.url(),request.headers(),request.body(),request.charset(),request.requestTemplate());
                 return response.toBuilder().request(other).build();

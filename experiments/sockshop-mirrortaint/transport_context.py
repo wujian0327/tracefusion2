@@ -66,7 +66,7 @@ def validate_message_identity(rows,contract):
         if r['kind']in ('communication-class','communication-framework'):
             require(contract['class_sha256'].get(r.get('class'))==r.get('class_sha256'),'Communication implementation proof differs')
             checked[r['class']]=r['class_sha256']
-    stacks=defaultdict(list);calls={};ids=set();observations=set();servers={}
+    stacks=defaultdict(list);calls={};ids=set();observations=set();servers={};server_inputs={}
     related={'http-client-attempt','http-request-derived','http-client-send','http-client-receive','http-client-failure','http-response-derived'}
     roles={('request','read'):'server-receive-request',('request','write'):'client-send-request',('response','read'):'client-receive-response',('response','write'):'server-send-response'}
     def current(r):
@@ -78,6 +78,9 @@ def validate_message_identity(rows,contract):
         require(r.get('communication_message')==r['message']+'|'+direction,'Communication message key differs from actual exchange/direction')
     for r in rows:
         kind=r['kind']
+        if kind=='http-server-input':
+            require('org/springframework/web/servlet/mvc/method/annotation/AbstractMessageConverterMethodArgumentResolver$EmptyBodyCheckingHttpInputMessage'in checked,'Servlet input wrapper implementation not verified')
+            identity=(r['message'],r.get('carrier_object'));require(r.get('request_object')and identity not in server_inputs,'Duplicate/missing servlet input carrier binding');server_inputs[identity]=r['request_object']
         if kind in ('http-rpc-enter','http-rpc-exit','http-rpc-abort','http-json')or kind in related:
             require(r.get('communication_version')==2,'V2 capture lacks required communication coordinates; never infer them from a root context')
         if kind=='http-rpc-enter':
@@ -89,6 +92,7 @@ def validate_message_identity(rows,contract):
             if kind=='http-client-attempt':
                 require(not c['attempt']and r.get('request_object')and r.get('original_request'),'Missing/duplicate concrete client attempt');c['attempt']=True;c['requests'].add(r['request_object'])
             elif kind=='http-request-derived':
+                require(r.get('derivation_class')in ('org/springframework/cloud/openfeign/loadbalancer/FeignBlockingLoadBalancerClient','org/springframework/cloud/openfeign/loadbalancer/RetryableFeignBlockingLoadBalancerClient')and r['derivation_class']in checked,'Unverified request derivation implementation')
                 require(r.get('parent_request')in c['requests']and r.get('request_object')not in c['requests'],'Foreign/repeated request derivation');c['requests'].add(r['request_object'])
             elif kind=='http-client-send':
                 require(r.get('client_class')in ('feign/Client$Default','feign/okhttp/OkHttpClient')and r['client_class']in checked,'Actual client implementation proof missing')
@@ -114,11 +118,14 @@ def validate_message_identity(rows,contract):
             for link in r.get('carrier_chain',[]):
                 require(link['wrapper']==carrier and checked.get(link['class'])==link['class_sha256'],'Broken/unverified codec carrier chain');carrier=link['delegate']
             require(carrier==r.get('codec_adapter_object'),'Codec adapter is not the actual carrier/delegate')
+            require(r.get('codec_adapter_class')in checked and checked[r['codec_adapter_class']]==r.get('codec_adapter_sha256'),'Codec adapter implementation is not verified')
             if wanted.startswith('client-'):
                 c=current(r)
                 if wanted=='client-receive-response':require(r.get('response_object')in c['responses']and c['responses'][r['response_object']]==r.get('network_response_object')==r['message_instance']and r.get('request_object')in c['requests'],'Codec response is not part of this completed client message')
                 else:require(r.get('request_object')==r['message_instance']in c['requests'],'Codec request is not part of the actual client message')
             else:
+                member='request_object'if wanted=='server-receive-request'else'response_object';require(r.get(member)==r['message_instance'],'Servlet codec object does not match message identity')
+                if wanted=='server-receive-request'and r['codec_adapter_class'].endswith('$EmptyBodyCheckingHttpInputMessage'):require(server_inputs.get((r['message'],carrier))==r['request_object'],'Servlet wrapper lacks its actual request binding')
                 prior=servers.setdefault((r['message'],wanted),r['message_instance']);require(prior==r['message_instance'],'Server codec changed physical message identity')
         elif kind in ('http-rpc-exit','http-rpc-abort'):
             c=current(r)

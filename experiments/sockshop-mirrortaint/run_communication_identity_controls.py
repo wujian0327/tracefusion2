@@ -27,6 +27,9 @@ def run(out,agent,client='default'):
     with ZipFile(business)as z:
         for n in z.namelist():
             if n.startswith('BOOT-INF/lib/')and n.endswith('.jar'):(deps/Path(n).name).write_bytes(z.read(n))
+    with ZipFile(business.with_name('mall-portal.jar'))as z:
+        for n in z.namelist():
+            if n.startswith('BOOT-INF/lib/spring-retry-')and n.endswith('.jar'):(deps/Path(n).name).write_bytes(z.read(n))
     cp=':'.join(map(str,[agent,*deps.glob('*.jar')]));java='/usr/lib/jvm/java-8-openjdk-amd64/bin/java';javac='/usr/lib/jvm/java-8-openjdk-amd64/bin/javac'
     command([javac,'-cp',cp,'-d',str(classes),str(HERE/'CommunicationIdentityFixture.java')],out/'compile.log')
     fixture=out/'fixture.jar'
@@ -38,10 +41,11 @@ def run(out,agent,client='default'):
     environment=load(ROOT/'artifacts/plan-applicability-revision-20261029/deployment-environment.json')
     plan,route=choose(model,query,deployment=environment);assert plan['communication_identity']['version']==2
     save(b/'fixture/plan.json',plan);save(out/'route.json',route);classpath=str(classes)+':'+cp
-    command([java,'-Dfixture.okhttp='+str(client=='okhttp').lower(),'-cp',classpath,'CommunicationIdentityFixture'],out/'baseline.txt');baseline=output(out/'baseline.txt')
+    options=['-Dfixture.okhttp='+str(client!='default').lower(),'-Dfixture.retryable.lb='+str(client=='retryable-lb-okhttp').lower()]
+    command([java,*options,'-cp',classpath,'CommunicationIdentityFixture'],out/'baseline.txt');baseline=output(out/'baseline.txt')
     reports={}
     for mode in ('full','selective'):
-        cap=out/mode;cap.mkdir();command([java,'-Dfixture.okhttp='+str(client=='okhttp').lower(),'-javaagent:'+str(agent),'-Dfixture.observe=true','-Dservice.plan='+str(b/'fixture/plan.json'),'-Dservice.events='+str(cap/'events.jsonl'),'-Dservice.mode='+mode,'-cp',classpath,'CommunicationIdentityFixture'],cap/'stdout.txt')
+        cap=out/mode;cap.mkdir();command([java,*options,'-javaagent:'+str(agent),'-Dfixture.observe=true','-Dservice.plan='+str(b/'fixture/plan.json'),'-Dservice.events='+str(cap/'events.jsonl'),'-Dservice.mode='+mode,'-cp',classpath,'CommunicationIdentityFixture'],cap/'stdout.txt')
         actual=output(cap/'stdout.txt');expected=[{k:v for k,v in r.items()if k not in('clean_frames','clean_calls','clean_rpc')}for r in actual['cases']]
         assert expected==baseline['cases'],(mode,expected,baseline['cases'])
         assert all(r['clean_frames']and r['clean_calls']and r['clean_rpc']for r in actual['cases'])
@@ -52,7 +56,15 @@ def run(out,agent,client='default'):
         assert {r['wire_traceparent']for r in sent}=={r['traceparent']for r in actual['wire']}
         assert any(r['kind']=='http-rpc-abort'for r in rows)
         root_messages={r['message']for r in actual['cases']};assert any(r['parent_message']not in root_messages for r in entered),'Nested call not distinguished'
-        replay=infer_execution(plan,rows);known=[a for a in replay['answers']if a['known']];assert known
+        replay=infer_execution(plan,rows);known=[a for a in replay['answers']if a['known']];assert len(known)==4
+        for case in actual['cases']:
+            if case['status']!='normal':continue
+            returned=next(r for r in rows if r['kind']=='binding-return'and r['message']==case['message'])
+            root=next(r for r in rows if r['kind']=='enter'and r['method']==query['entry']and r['frame']==returned['frame'])
+            calls=[r for r in rows if r['kind']=='collection-call-enter'and r['frame']==root['frame']and r['callee']==query['source_calls'][0]and r['args'][0].get('value')==case['key']];assert len(calls)==1
+            source=[r for r in rows if r['kind']=='binding-source'and r.get('source_call_id')==calls[0]['call_id']];assert len(source)==1
+            field=[i for i,f in enumerate(source[0]['fields'])if f['field']=='CommunicationIdentityFixture$Box.text'];assert len(field)==1
+            answer=next(a for a in known if a['root_frame']==root['frame']);assert set(map(tuple,answer['origins']))=={('field',source[0]['seq'],field[0])},'Same-valued earlier/nested source substituted for returned call'
         faults={}
         for label in ('wrong-response','duplicate-new-sequence','missing-completion','wrong-parent','reuse-attempt','legacy-missing-coordinates','missing-carrier-link'):
             changed=copy.deepcopy(rows)
@@ -68,11 +80,11 @@ def run(out,agent,client='default'):
             try:validate_protocol(changed,2,plan['communication_identity'])
             except ValueError:faults[label]=True
             else:raise AssertionError('Bad communication evidence accepted: '+label)
-        negative=out/(mode+'-wrong-response');negative.mkdir();command([java,'-Dfixture.okhttp='+str(client=='okhttp').lower(),'-javaagent:'+str(agent),'-Dfixture.observe=true','-Dfixture.wrong.response=true','-Dservice.plan='+str(b/'fixture/plan.json'),'-Dservice.events='+str(negative/'events.jsonl'),'-Dservice.mode='+mode,'-cp',classpath,'CommunicationIdentityFixture'],negative/'stdout.txt')
+        negative=out/(mode+'-wrong-response');negative.mkdir();command([java,*options,'-javaagent:'+str(agent),'-Dfixture.observe=true','-Dfixture.wrong.response=true','-Dservice.plan='+str(b/'fixture/plan.json'),'-Dservice.events='+str(negative/'events.jsonl'),'-Dservice.mode='+mode,'-cp',classpath,'CommunicationIdentityFixture'],negative/'stdout.txt')
         bad=[json.loads(s)for s in(negative/'events.jsonl').read_text().splitlines()];bad_result=output(negative/'stdout.txt');assert [r['value']for r in bad_result['cases']]==['SAME']*3
         assert all(r['clean_frames']and r['clean_calls']and r['clean_rpc']for r in bad_result['cases']);assert any(r['kind']=='problem'for r in bad)and bad[-1]['capture_invalid']
         reports[mode]={'root_requests':len(actual['cases']),'actual_attempts':len(entered),'actual_client_sends':len(sent),'actual_responses':len(received),'business_equal':True,'state_clean':True,'negative_business_preserved_capture_invalid':True,'known_execution_targets':len(known),'faults':faults}
     save(out/'results.json',{'all_passed':True,'modes':reports,'agent_sha256':sha(agent),'scope':'Protocol and execution controls, not new application coverage or performance.'});print(reports,flush=True)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--agent',type=Path,required=True);p.add_argument('--client',choices=('default','okhttp'),default='default');a=p.parse_args();run(a.out.resolve(),a.agent.resolve(),a.client)
+    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--agent',type=Path,required=True);p.add_argument('--client',choices=('default','okhttp','retryable-lb-okhttp'),default='default');a=p.parse_args();run(a.out.resolve(),a.agent.resolve(),a.client)

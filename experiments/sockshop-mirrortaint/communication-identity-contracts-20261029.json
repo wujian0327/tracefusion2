@@ -16,7 +16,8 @@
     "org/springframework/http/server/ServletServerHttpRequest": "bf37eeff9c2fcf99dad86dfd392037364a649049fa2db66a51609f5bd7a705bd",
     "org/springframework/http/server/ServletServerHttpResponse": "e52eb70d8bf1d4d675f6f074def9af2f8d99262fccf622fab7bf3c431bbad649",
     "org/springframework/web/client/MessageBodyClientHttpResponseWrapper": "f511525a71550ce51959700b6f8ea9e4b414e632447f768932dec5e317045c5c",
-    "feign/okhttp/OkHttpClient": "65d3969b7923e95710054923bfd90a5d5f0975c6bef4a3db1588bafcfc8f11a0"
+    "feign/okhttp/OkHttpClient": "65d3969b7923e95710054923bfd90a5d5f0975c6bef4a3db1588bafcfc8f11a0",
+    "org/springframework/cloud/openfeign/loadbalancer/RetryableFeignBlockingLoadBalancerClient": "85ee80d639d212f41612ae91919f2ce4fa77a97ae0e58bd67dddcbe1f595c192"
   },
   "scope": "Pinned Feign synchronous executeAndDecode invocations, with default/OkHttp/load-balanced Client invocation and actual request/response object lineage and completion. Feign retries are distinct invocations; internal redirects/retries inside a single client invocation are not individually certified. No source propagation or blanket client purity.",
   "roles": [
@@ -28,7 +29,8 @@
   "unsupported": [
     "Unmodeled internal client retries/redirects",
     "Arbitrary request/response replacement without recorded identity lineage",
-    "Async decoder migration across unpaired threads"
+    "Async decoder migration across unpaired threads",
+    "Repeated physical Client.execute within one synchronous Feign invocation remains rejected; retry-capable load-balancer request rebuilding alone is modeled."
   ],
   "optional_wire_bytes": "Incomplete audit bytes do not certify wire projection and do not invalidate declared return-field boundary answers."
 }
