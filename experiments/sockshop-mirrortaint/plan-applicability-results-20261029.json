@@ -1,0 +1,46 @@
+{
+  "algorithm_commit": "8168ab7ce8a455731ede72809be04abe6317135e",
+  "agent_sha256": "eef5b5f8cda745e3825571a0fb238c259d246fc9442648d8b4651c621b540ff8",
+  "modes": {
+    "full": {
+      "targets": 103,
+      "states": {
+        "evidence_invalid": 30,
+        "known_correct": 43,
+        "unknown": 30
+      },
+      "positive_correct": 32,
+      "known_empty_correct": 11,
+      "MT_correct_preserved": 33,
+      "MT_positive_preserved": 32,
+      "MT_wrong_now_correct": 5,
+      "MT_unknown_now_correct": 5
+    },
+    "selective": {
+      "targets": 103,
+      "states": {
+        "evidence_invalid": 30,
+        "known_correct": 43,
+        "unknown": 30
+      },
+      "positive_correct": 32,
+      "known_empty_correct": 11,
+      "MT_correct_preserved": 33,
+      "MT_positive_preserved": 32,
+      "MT_wrong_now_correct": 5,
+      "MT_unknown_now_correct": 5
+    }
+  },
+  "full_selective_target_states_equal": true,
+  "fresh_deployments": 42,
+  "all_cleanup_and_audits_passed": true,
+  "protected_files_unchanged": {
+    "old_first": 2322,
+    "external_first": 16862,
+    "C1": 7248
+  },
+  "all40_retained": true,
+  "whole40_completed": false,
+  "Gson_binding_implemented": false,
+  "no_performance_or_push": true
+}

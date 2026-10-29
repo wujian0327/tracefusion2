@@ -1,0 +1,1330 @@
+[
+  {
+    "api": "mall-swarm-1",
+    "mode": "full",
+    "failure_groups": [],
+    "planned_obligations": [
+      {
+        "query_path": "/code",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/common/exception/ApiException.<init>(Ljava/lang/String;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants",
+          "com/macro/mall/portal/domain/QueueEnum": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data/expiresIn",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/common/exception/ApiException.<init>(Ljava/lang/String;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants",
+          "com/macro/mall/portal/domain/QueueEnum": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data/refreshToken",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/common/exception/ApiException.<init>(Ljava/lang/String;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants",
+          "com/macro/mall/portal/domain/QueueEnum": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data/token",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/common/exception/ApiException.<init>(Ljava/lang/String;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants",
+          "com/macro/mall/portal/domain/QueueEnum": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data/tokenHead",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/common/exception/ApiException.<init>(Ljava/lang/String;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants",
+          "com/macro/mall/portal/domain/QueueEnum": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/message",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/common/exception/ApiException.<init>(Ljava/lang/String;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants",
+          "com/macro/mall/portal/domain/QueueEnum": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      }
+    ]
+  },
+  {
+    "api": "mall-swarm-2",
+    "mode": "full",
+    "failure_groups": [
+      {
+        "error": null,
+        "oracle_gap": null,
+        "targets": 4
+      }
+    ],
+    "planned_obligations": [
+      {
+        "query_path": "/code",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/common/exception/ApiException.<init>(Ljava/lang/String;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+          "com/macro/mall/model/UmsMemberExample$Criteria.<init>()V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+          "java/lang/RuntimeException.<init>(Ljava/lang/String;)V": "Application constructor bytecode absent: java/lang/RuntimeException.<init>(Ljava/lang/String;)V",
+          "com/macro/mall/model/UmsMemberExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;)V": "Constructor needs execution Frame at com/macro/mall/model/UmsMemberExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;)V@12; Constructor Frame currently requires direct empty Object initialization",
+          "com/macro/mall/model/UmsMemberLevelExample$Criteria.<init>()V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+          "com/macro/mall/model/UmsMemberLevelExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;)V": "Constructor needs execution Frame at com/macro/mall/model/UmsMemberLevelExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;)V@12; Constructor Frame currently requires direct empty Object initialization"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants",
+          "com/macro/mall/portal/domain/QueueEnum": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/message",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/common/exception/ApiException.<init>(Ljava/lang/String;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+          "com/macro/mall/model/UmsMemberExample$Criteria.<init>()V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+          "java/lang/RuntimeException.<init>(Ljava/lang/String;)V": "Application constructor bytecode absent: java/lang/RuntimeException.<init>(Ljava/lang/String;)V",
+          "com/macro/mall/model/UmsMemberExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;)V": "Constructor needs execution Frame at com/macro/mall/model/UmsMemberExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;)V@12; Constructor Frame currently requires direct empty Object initialization",
+          "com/macro/mall/model/UmsMemberLevelExample$Criteria.<init>()V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+          "com/macro/mall/model/UmsMemberLevelExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;)V": "Constructor needs execution Frame at com/macro/mall/model/UmsMemberLevelExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;)V@12; Constructor Frame currently requires direct empty Object initialization"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants",
+          "com/macro/mall/portal/domain/QueueEnum": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      }
+    ]
+  },
+  {
+    "api": "mall-swarm-3",
+    "mode": "full",
+    "failure_groups": [
+      {
+        "error": "Duplicate transport event for same message/phase",
+        "oracle_gap": null,
+        "targets": 30
+      }
+    ],
+    "planned_obligations": [
+      {
+        "query_path": "/code",
+        "conditional_sources": [
+          {
+            "callee": "com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.getAdminByUsername(Ljava/lang/String;)Lcom/macro/mall/model/UmsAdmin;@12",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.list(Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/util/List;@47",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.register(Lcom/macro/mall/dto/UmsAdminParam;)Lcom/macro/mall/model/UmsAdmin;@29",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)I@27",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          },
+          {
+            "callee": "com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;@40",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          }
+        ],
+        "opaque_application_methods": {
+          "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;": "Application opcode unsupported: 148"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Declared source has no covered callsite: com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+          "Declared source has no covered callsite: com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data",
+        "conditional_sources": [
+          {
+            "callee": "com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.getAdminByUsername(Ljava/lang/String;)Lcom/macro/mall/model/UmsAdmin;@12",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.list(Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/util/List;@47",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.register(Lcom/macro/mall/dto/UmsAdminParam;)Lcom/macro/mall/model/UmsAdmin;@29",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)I@27",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          },
+          {
+            "callee": "com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;@40",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          }
+        ],
+        "opaque_application_methods": {
+          "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;": "Application opcode unsupported: 148"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Declared source has no covered callsite: com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+          "Declared source has no covered callsite: com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data/expiresIn",
+        "conditional_sources": [
+          {
+            "callee": "com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.getAdminByUsername(Ljava/lang/String;)Lcom/macro/mall/model/UmsAdmin;@12",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.list(Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/util/List;@47",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.register(Lcom/macro/mall/dto/UmsAdminParam;)Lcom/macro/mall/model/UmsAdmin;@29",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)I@27",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          },
+          {
+            "callee": "com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;@40",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          }
+        ],
+        "opaque_application_methods": {
+          "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;": "Application opcode unsupported: 148"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Declared source has no covered callsite: com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+          "Declared source has no covered callsite: com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data/refreshToken",
+        "conditional_sources": [
+          {
+            "callee": "com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.getAdminByUsername(Ljava/lang/String;)Lcom/macro/mall/model/UmsAdmin;@12",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.list(Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/util/List;@47",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.register(Lcom/macro/mall/dto/UmsAdminParam;)Lcom/macro/mall/model/UmsAdmin;@29",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)I@27",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          },
+          {
+            "callee": "com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;@40",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          }
+        ],
+        "opaque_application_methods": {
+          "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;": "Application opcode unsupported: 148"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Declared source has no covered callsite: com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+          "Declared source has no covered callsite: com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data/token",
+        "conditional_sources": [
+          {
+            "callee": "com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.getAdminByUsername(Ljava/lang/String;)Lcom/macro/mall/model/UmsAdmin;@12",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.list(Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/util/List;@47",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.register(Lcom/macro/mall/dto/UmsAdminParam;)Lcom/macro/mall/model/UmsAdmin;@29",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)I@27",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          },
+          {
+            "callee": "com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;@40",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          }
+        ],
+        "opaque_application_methods": {
+          "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;": "Application opcode unsupported: 148"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Declared source has no covered callsite: com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+          "Declared source has no covered callsite: com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data/tokenHead",
+        "conditional_sources": [
+          {
+            "callee": "com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.getAdminByUsername(Ljava/lang/String;)Lcom/macro/mall/model/UmsAdmin;@12",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.list(Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/util/List;@47",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.register(Lcom/macro/mall/dto/UmsAdminParam;)Lcom/macro/mall/model/UmsAdmin;@29",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)I@27",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          },
+          {
+            "callee": "com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;@40",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          }
+        ],
+        "opaque_application_methods": {
+          "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;": "Application opcode unsupported: 148"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Declared source has no covered callsite: com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+          "Declared source has no covered callsite: com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/message",
+        "conditional_sources": [
+          {
+            "callee": "com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.getAdminByUsername(Ljava/lang/String;)Lcom/macro/mall/model/UmsAdmin;@12",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.list(Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/util/List;@47",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.register(Lcom/macro/mall/dto/UmsAdminParam;)Lcom/macro/mall/model/UmsAdmin;@29",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)I@27",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          },
+          {
+            "callee": "com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;@40",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          }
+        ],
+        "opaque_application_methods": {
+          "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;": "Application opcode unsupported: 148"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Declared source has no covered callsite: com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+          "Declared source has no covered callsite: com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      }
+    ]
+  },
+  {
+    "api": "mall-swarm-4",
+    "mode": "full",
+    "failure_groups": [
+      {
+        "error": null,
+        "oracle_gap": null,
+        "targets": 11
+      }
+    ],
+    "planned_obligations": [
+      {
+        "query_path": "/code",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/model/UmsAdminExample$Criteria.<init>()V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+          "java/lang/RuntimeException.<init>(Ljava/lang/String;)V": "Application constructor bytecode absent: java/lang/RuntimeException.<init>(Ljava/lang/String;)V",
+          "com/macro/mall/model/UmsAdminExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;)V": "Constructor needs execution Frame at com/macro/mall/model/UmsAdminExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;)V@12; Constructor Frame currently requires direct empty Object initialization",
+          "com/macro/mall/model/CmsPrefrenceArea.toString()Ljava/lang/String;": "Primitive/multidimensional array effects unsupported"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Necessary library effect lacks applicable contract: {'feature': 'request', 'reason': 'No reviewed full library hash profile for actual input JAR'}",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/model/UmsAdminExample$Criteria.<init>()V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+          "java/lang/RuntimeException.<init>(Ljava/lang/String;)V": "Application constructor bytecode absent: java/lang/RuntimeException.<init>(Ljava/lang/String;)V",
+          "com/macro/mall/model/UmsAdminExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;)V": "Constructor needs execution Frame at com/macro/mall/model/UmsAdminExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;)V@12; Constructor Frame currently requires direct empty Object initialization",
+          "com/macro/mall/model/CmsPrefrenceArea.toString()Ljava/lang/String;": "Primitive/multidimensional array effects unsupported"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Necessary library effect lacks applicable contract: {'feature': 'request', 'reason': 'No reviewed full library hash profile for actual input JAR'}",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/message",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/model/UmsAdminExample$Criteria.<init>()V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+          "java/lang/RuntimeException.<init>(Ljava/lang/String;)V": "Application constructor bytecode absent: java/lang/RuntimeException.<init>(Ljava/lang/String;)V",
+          "com/macro/mall/model/UmsAdminExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;)V": "Constructor needs execution Frame at com/macro/mall/model/UmsAdminExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;)V@12; Constructor Frame currently requires direct empty Object initialization",
+          "com/macro/mall/model/CmsPrefrenceArea.toString()Ljava/lang/String;": "Primitive/multidimensional array effects unsupported"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Necessary library effect lacks applicable contract: {'feature': 'request', 'reason': 'No reviewed full library hash profile for actual input JAR'}",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      }
+    ]
+  },
+  {
+    "api": "mall-swarm-5",
+    "mode": "full",
+    "failure_groups": [
+      {
+        "error": null,
+        "oracle_gap": null,
+        "targets": 10
+      },
+      {
+        "error": null,
+        "oracle_gap": "Independent logical rule unresolved",
+        "targets": 5
+      }
+    ],
+    "planned_obligations": [
+      {
+        "query_path": "/code",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/model/CmsPrefrenceArea.toString()Ljava/lang/String;": "Primitive/multidimensional array effects unsupported"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Necessary library effect lacks applicable contract: {'feature': 'request', 'reason': 'No reviewed full library hash profile for actual input JAR'}",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/model/CmsPrefrenceArea.toString()Ljava/lang/String;": "Primitive/multidimensional array effects unsupported"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Necessary library effect lacks applicable contract: {'feature': 'request', 'reason': 'No reviewed full library hash profile for actual input JAR'}",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/message",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/model/CmsPrefrenceArea.toString()Ljava/lang/String;": "Primitive/multidimensional array effects unsupported"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Necessary library effect lacks applicable contract: {'feature': 'request', 'reason': 'No reviewed full library hash profile for actual input JAR'}",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      }
+    ]
+  },
+  {
+    "api": "mall-swarm-1",
+    "mode": "selective",
+    "failure_groups": [],
+    "planned_obligations": [
+      {
+        "query_path": "/code",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/common/exception/ApiException.<init>(Ljava/lang/String;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants",
+          "com/macro/mall/portal/domain/QueueEnum": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data/expiresIn",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/common/exception/ApiException.<init>(Ljava/lang/String;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants",
+          "com/macro/mall/portal/domain/QueueEnum": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data/refreshToken",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/common/exception/ApiException.<init>(Ljava/lang/String;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants",
+          "com/macro/mall/portal/domain/QueueEnum": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data/token",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/common/exception/ApiException.<init>(Ljava/lang/String;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants",
+          "com/macro/mall/portal/domain/QueueEnum": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data/tokenHead",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/common/exception/ApiException.<init>(Ljava/lang/String;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants",
+          "com/macro/mall/portal/domain/QueueEnum": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/message",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/common/exception/ApiException.<init>(Ljava/lang/String;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants",
+          "com/macro/mall/portal/domain/QueueEnum": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      }
+    ]
+  },
+  {
+    "api": "mall-swarm-2",
+    "mode": "selective",
+    "failure_groups": [
+      {
+        "error": null,
+        "oracle_gap": null,
+        "targets": 4
+      }
+    ],
+    "planned_obligations": [
+      {
+        "query_path": "/code",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/common/exception/ApiException.<init>(Ljava/lang/String;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+          "com/macro/mall/model/UmsMemberExample$Criteria.<init>()V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+          "java/lang/RuntimeException.<init>(Ljava/lang/String;)V": "Application constructor bytecode absent: java/lang/RuntimeException.<init>(Ljava/lang/String;)V",
+          "com/macro/mall/model/UmsMemberExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;)V": "Constructor needs execution Frame at com/macro/mall/model/UmsMemberExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;)V@12; Constructor Frame currently requires direct empty Object initialization",
+          "com/macro/mall/model/UmsMemberLevelExample$Criteria.<init>()V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+          "com/macro/mall/model/UmsMemberLevelExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;)V": "Constructor needs execution Frame at com/macro/mall/model/UmsMemberLevelExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;)V@12; Constructor Frame currently requires direct empty Object initialization"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants",
+          "com/macro/mall/portal/domain/QueueEnum": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/message",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/common/exception/ApiException.<init>(Ljava/lang/String;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+          "com/macro/mall/model/UmsMemberExample$Criteria.<init>()V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+          "java/lang/RuntimeException.<init>(Ljava/lang/String;)V": "Application constructor bytecode absent: java/lang/RuntimeException.<init>(Ljava/lang/String;)V",
+          "com/macro/mall/model/UmsMemberExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;)V": "Constructor needs execution Frame at com/macro/mall/model/UmsMemberExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;)V@12; Constructor Frame currently requires direct empty Object initialization",
+          "com/macro/mall/model/UmsMemberLevelExample$Criteria.<init>()V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+          "com/macro/mall/model/UmsMemberLevelExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;)V": "Constructor needs execution Frame at com/macro/mall/model/UmsMemberLevelExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;)V@12; Constructor Frame currently requires direct empty Object initialization"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants",
+          "com/macro/mall/portal/domain/QueueEnum": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      }
+    ]
+  },
+  {
+    "api": "mall-swarm-3",
+    "mode": "selective",
+    "failure_groups": [
+      {
+        "error": "Duplicate transport event for same message/phase",
+        "oracle_gap": null,
+        "targets": 30
+      }
+    ],
+    "planned_obligations": [
+      {
+        "query_path": "/code",
+        "conditional_sources": [
+          {
+            "callee": "com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.getAdminByUsername(Ljava/lang/String;)Lcom/macro/mall/model/UmsAdmin;@12",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.list(Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/util/List;@47",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.register(Lcom/macro/mall/dto/UmsAdminParam;)Lcom/macro/mall/model/UmsAdmin;@29",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)I@27",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          },
+          {
+            "callee": "com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;@40",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          }
+        ],
+        "opaque_application_methods": {
+          "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;": "Application opcode unsupported: 148"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Declared source has no covered callsite: com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+          "Declared source has no covered callsite: com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data",
+        "conditional_sources": [
+          {
+            "callee": "com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.getAdminByUsername(Ljava/lang/String;)Lcom/macro/mall/model/UmsAdmin;@12",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.list(Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/util/List;@47",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.register(Lcom/macro/mall/dto/UmsAdminParam;)Lcom/macro/mall/model/UmsAdmin;@29",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)I@27",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          },
+          {
+            "callee": "com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;@40",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          }
+        ],
+        "opaque_application_methods": {
+          "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;": "Application opcode unsupported: 148"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Declared source has no covered callsite: com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+          "Declared source has no covered callsite: com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data/expiresIn",
+        "conditional_sources": [
+          {
+            "callee": "com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.getAdminByUsername(Ljava/lang/String;)Lcom/macro/mall/model/UmsAdmin;@12",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.list(Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/util/List;@47",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.register(Lcom/macro/mall/dto/UmsAdminParam;)Lcom/macro/mall/model/UmsAdmin;@29",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)I@27",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          },
+          {
+            "callee": "com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;@40",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          }
+        ],
+        "opaque_application_methods": {
+          "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;": "Application opcode unsupported: 148"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Declared source has no covered callsite: com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+          "Declared source has no covered callsite: com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data/refreshToken",
+        "conditional_sources": [
+          {
+            "callee": "com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.getAdminByUsername(Ljava/lang/String;)Lcom/macro/mall/model/UmsAdmin;@12",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.list(Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/util/List;@47",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.register(Lcom/macro/mall/dto/UmsAdminParam;)Lcom/macro/mall/model/UmsAdmin;@29",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)I@27",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          },
+          {
+            "callee": "com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;@40",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          }
+        ],
+        "opaque_application_methods": {
+          "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;": "Application opcode unsupported: 148"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Declared source has no covered callsite: com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+          "Declared source has no covered callsite: com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data/token",
+        "conditional_sources": [
+          {
+            "callee": "com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.getAdminByUsername(Ljava/lang/String;)Lcom/macro/mall/model/UmsAdmin;@12",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.list(Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/util/List;@47",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.register(Lcom/macro/mall/dto/UmsAdminParam;)Lcom/macro/mall/model/UmsAdmin;@29",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)I@27",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          },
+          {
+            "callee": "com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;@40",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          }
+        ],
+        "opaque_application_methods": {
+          "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;": "Application opcode unsupported: 148"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Declared source has no covered callsite: com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+          "Declared source has no covered callsite: com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data/tokenHead",
+        "conditional_sources": [
+          {
+            "callee": "com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.getAdminByUsername(Ljava/lang/String;)Lcom/macro/mall/model/UmsAdmin;@12",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.list(Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/util/List;@47",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.register(Lcom/macro/mall/dto/UmsAdminParam;)Lcom/macro/mall/model/UmsAdmin;@29",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)I@27",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          },
+          {
+            "callee": "com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;@40",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          }
+        ],
+        "opaque_application_methods": {
+          "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;": "Application opcode unsupported: 148"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Declared source has no covered callsite: com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+          "Declared source has no covered callsite: com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/message",
+        "conditional_sources": [
+          {
+            "callee": "com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.getAdminByUsername(Ljava/lang/String;)Lcom/macro/mall/model/UmsAdmin;@12",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.list(Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/util/List;@47",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.register(Lcom/macro/mall/dto/UmsAdminParam;)Lcom/macro/mall/model/UmsAdmin;@29",
+                "caller_planned": false,
+                "call_instrumented": false
+              },
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)I@27",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          },
+          {
+            "callee": "com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+            "sites": [
+              {
+                "site": "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;@40",
+                "caller_planned": false,
+                "call_instrumented": false
+              }
+            ],
+            "has_observable_callsite": false,
+            "runtime_obligation": "Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence."
+          }
+        ],
+        "opaque_application_methods": {
+          "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;": "Application opcode unsupported: 148"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Declared source has no covered callsite: com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+          "Declared source has no covered callsite: com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      }
+    ]
+  },
+  {
+    "api": "mall-swarm-4",
+    "mode": "selective",
+    "failure_groups": [
+      {
+        "error": null,
+        "oracle_gap": null,
+        "targets": 11
+      }
+    ],
+    "planned_obligations": [
+      {
+        "query_path": "/code",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/model/UmsAdminExample$Criteria.<init>()V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+          "java/lang/RuntimeException.<init>(Ljava/lang/String;)V": "Application constructor bytecode absent: java/lang/RuntimeException.<init>(Ljava/lang/String;)V",
+          "com/macro/mall/model/UmsAdminExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;)V": "Constructor needs execution Frame at com/macro/mall/model/UmsAdminExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;)V@12; Constructor Frame currently requires direct empty Object initialization",
+          "com/macro/mall/model/CmsPrefrenceArea.toString()Ljava/lang/String;": "Primitive/multidimensional array effects unsupported"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Necessary library effect lacks applicable contract: {'feature': 'request', 'reason': 'No reviewed full library hash profile for actual input JAR'}",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/model/UmsAdminExample$Criteria.<init>()V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+          "java/lang/RuntimeException.<init>(Ljava/lang/String;)V": "Application constructor bytecode absent: java/lang/RuntimeException.<init>(Ljava/lang/String;)V",
+          "com/macro/mall/model/UmsAdminExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;)V": "Constructor needs execution Frame at com/macro/mall/model/UmsAdminExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;)V@12; Constructor Frame currently requires direct empty Object initialization",
+          "com/macro/mall/model/CmsPrefrenceArea.toString()Ljava/lang/String;": "Primitive/multidimensional array effects unsupported"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Necessary library effect lacks applicable contract: {'feature': 'request', 'reason': 'No reviewed full library hash profile for actual input JAR'}",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/message",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/model/UmsAdminExample$Criteria.<init>()V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+          "java/lang/RuntimeException.<init>(Ljava/lang/String;)V": "Application constructor bytecode absent: java/lang/RuntimeException.<init>(Ljava/lang/String;)V",
+          "com/macro/mall/model/UmsAdminExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;)V": "Constructor needs execution Frame at com/macro/mall/model/UmsAdminExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;)V@12; Constructor Frame currently requires direct empty Object initialization",
+          "com/macro/mall/model/CmsPrefrenceArea.toString()Ljava/lang/String;": "Primitive/multidimensional array effects unsupported"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Necessary library effect lacks applicable contract: {'feature': 'request', 'reason': 'No reviewed full library hash profile for actual input JAR'}",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      }
+    ]
+  },
+  {
+    "api": "mall-swarm-5",
+    "mode": "selective",
+    "failure_groups": [
+      {
+        "error": null,
+        "oracle_gap": null,
+        "targets": 10
+      },
+      {
+        "error": null,
+        "oracle_gap": "Independent logical rule unresolved",
+        "targets": 5
+      }
+    ],
+    "planned_obligations": [
+      {
+        "query_path": "/code",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/model/CmsPrefrenceArea.toString()Ljava/lang/String;": "Primitive/multidimensional array effects unsupported"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Necessary library effect lacks applicable contract: {'feature': 'request', 'reason': 'No reviewed full library hash profile for actual input JAR'}",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/data",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/model/CmsPrefrenceArea.toString()Ljava/lang/String;": "Primitive/multidimensional array effects unsupported"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Necessary library effect lacks applicable contract: {'feature': 'request', 'reason': 'No reviewed full library hash profile for actual input JAR'}",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      },
+      {
+        "query_path": "/message",
+        "conditional_sources": [],
+        "opaque_application_methods": {
+          "com/macro/mall/model/CmsPrefrenceArea.toString()Ljava/lang/String;": "Primitive/multidimensional array effects unsupported"
+        },
+        "unproved_enum_classes": {
+          "com/macro/mall/common/api/ResultCode": "Enum has instance state/too many constants"
+        },
+        "conditions": [
+          "Necessary library effect lacks applicable contract: {'feature': 'request', 'reason': 'No reviewed full library hash profile for actual input JAR'}",
+          "Jackson implementation, configuration and actual target field projection require existing runtime serialization proofs"
+        ]
+      }
+    ]
+  }
+]

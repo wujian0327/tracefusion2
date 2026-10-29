@@ -1,0 +1,333 @@
+{
+  "algorithm": "8168ab7ce8a455731ede72809be04abe6317135e",
+  "candidate_freeze": {
+    "sources": {
+      "experiments/sockshop-mirrortaint/QueryObservationAgent.java": "3f48ead5b09077c8ba8568da0037619c01636766e56f2d8d186e517fb1b99ff4",
+      "experiments/sockshop-mirrortaint/QueryBytecodeModel.java": "194f7710c0b77f69caa644209a037f5476595f5c91af9daabaddf70cae12546f",
+      "experiments/sockshop-mirrortaint/PlannedServiceAgent.java": "ed76c6d7c4edde52bbe5f594b1495b52a335b4ae8ab450ce2c373fc2f78c4e64",
+      "experiments/sockshop-mirrortaint/MonitorSafety.java": "c4045355ffe7516e46bc731e6fd3676db2f02d17289a2e6a6335623305858af7",
+      "experiments/sockshop-mirrortaint/CollectionServiceHooks.java": "0251be3a3713101a0ebef2589a977395cd54f5ad621f039be3b068c213cc9b97",
+      "experiments/sockshop-mirrortaint/ConversionContractHooks.java": "8d32e6acce22d07d60cfd4ead8f104ffe757151534416943f0596198e5a8827e",
+      "experiments/sockshop-mirrortaint/ExecutionKernelHooks.java": "df2b6010d46c82987978561f0f99e51ec7af735db68c643235542fd7c16cdfd4",
+      "experiments/sockshop-mirrortaint/FoundationValueHooks.java": "9af02d68afe5027487373b9abc7f82e0cf5ad6c2aa626dc1f2d60de80e505075",
+      "experiments/sockshop-mirrortaint/ScalarProjectionHooks.java": "da37f308347c1d514c23ffb551e7ae5d974a9782364b2a48e1648b6708da2f16",
+      "experiments/sockshop-mirrortaint/DocumentDateHooks.java": "ca433b72fd85039bcbd9cfac3cac170a01f732a22a9394b22684a7b918898e1e",
+      "experiments/sockshop-mirrortaint/ListenerRegistryHooks.java": "a4745806244f55a1b670d15fac814a4158fb83e341fe415af9df3026452d394b",
+      "experiments/sockshop-mirrortaint/FeignEffectHooks.java": "5e75d302d149f5b1266d7c4ae486cc6ff6a5d5f96ad66feb9764b7823a990581",
+      "experiments/sockshop-mirrortaint/FeignProtocolInstrumentation.java": "9bf42633ec64f867a51a231ac84a1c9cb03fb3277f457303947e48ab258bd969",
+      "experiments/sockshop-mirrortaint/AsyncTaskHooks.java": "c6d68d062230dcf60c1e3fb631b02c513a65db562f53f13e84a9bbbcc0fc5d93",
+      "experiments/sockshop-mirrortaint/FrameworkCallHooks.java": "878eda2f2c2f05a582973ee878de94a84d2f559f47e2c91f1796a21433e11b9d",
+      "experiments/sockshop-mirrortaint/RequestEntityHooks.java": "5108b79bf2542bb4e1214684e4a3104c06acb91102176b8504bc794f11eedf1a",
+      "experiments/sockshop-mirrortaint/SaveEffectHooks.java": "1e6c07e92cc43b310ff9de5cd63c20525ec28a5e3ffc822b4d189e4fd00757e1",
+      "experiments/sockshop-mirrortaint/TemporalDateHooks.java": "290d233fd53d63ad28bb7949f296c16676db8db57c977923a994e2a4345f69ce",
+      "experiments/sockshop-mirrortaint/UuidProjectionHooks.java": "4a195d890bf678275f351a76e7d83107a85f06373c393cfc194e1a599cf36660",
+      "experiments/sockshop-mirrortaint/ResponseBindingHooks.java": "ef2fa313f02090181e5a53b2710bbb5bae8eb7f5353b45950c1d771c010e6aaf",
+      "experiments/sockshop-mirrortaint/ReadEffectHooks.java": "96fbc630810b0c5c23ebb1005b0c484e1b5a11e0085779140f29b60277b98935",
+      "experiments/sockshop-mirrortaint/JdkContractProbe.java": "61fb8470c0c6da1fbb6ff19c03086ee2906fe3060b5bf97c7197022a64826760",
+      "experiments/sockshop-mirrortaint/SourceEvidenceHooks.java": "33e68d0d1ab95943d55f21860726eafd33fff4f0a1af23581c6ff90c56166a14",
+      "experiments/sockshop-mirrortaint/SpringTransportAgent.java": "c11996dbed1e1493b9ee56c5cd6169bc16dae8b5683f6891958a40e34dde9341",
+      "experiments/sockshop-mirrortaint/W3CTraceContext.java": "23ea705e55cc2a5f13aa01a982917d685915371f2e2b1f8f480ce8cdd0f5651f",
+      "experiments/sockshop-mirrortaint/BusinessJackson.java": "9c9569052c6008647ab8bab63304a6dd2740aa250804569c9baf858a020fa0e1",
+      "experiments/sockshop-mirrortaint/experiment_environment.py": "91c2609c43a99e18d3aa9e4a1fb113ade860b8ec4fa86133a6823f35eb501e96",
+      "experiments/sockshop-mirrortaint/plan_distributed_fields.py": "69f87a010de48b0c4457813cc8f2e2c46ba4c0d1215d58964d41d79f4303bf0a",
+      "experiments/sockshop-mirrortaint/plan_service_observations.py": "b4b641a63bb5bf2f6a06e6ff8b83d8923aced0796b40db8aaeeb57718a255fe0",
+      "experiments/sockshop-mirrortaint/plan_collection_service.py": "59a0e39720f55d73168e799e36cfbaf9fe8d47b8e1806e7811b448c4877454f4",
+      "experiments/sockshop-mirrortaint/query_observation_planner.py": "1d7ba77430c902ca00259a7a4ad3bf3bb955fe91f8a885d5efc7f9500b56a30d",
+      "experiments/sockshop-mirrortaint/infer_planned_service.py": "3393a7f069d068c4067babe42935f35d2822def09f0d4f055f645272a925be00",
+      "experiments/sockshop-mirrortaint/infer_distributed_fields.py": "12bad976f17c20fa687e9a3aee5f1704d30f45a5443870999185441fd24568ad",
+      "experiments/sockshop-mirrortaint/transport_context.py": "e17f112abf65b3df196865f96c394c87d4031ba949de1c7aff5613eceb1c9cc3",
+      "experiments/sockshop-mirrortaint/run_distributed_paths.py": "05cc20245405d3952a7df780d919190022792b5eccf27a91cc05cb54afcec854",
+      "experiments/sockshop-mirrortaint/evaluate_distributed_paths.py": "ba3faf14ee024839644d3f0c229e69f997bafc45f7132a72d18c08d095deff88",
+      "experiments/sockshop-mirrortaint/audit_distributed_paths.py": "6226c32ecb8197c2066473d3e7a50bfbe993aef9192b30554f00b738138c753a",
+      "experiments/sockshop-mirrortaint/infer_collection_service.py": "96ad71f2ab01c54c16c70842d1654d20ab3cd6c35d78af6f71af7aa588a68bfe",
+      "experiments/sockshop-mirrortaint/plan_response_binding.py": "7027915adb3105e957e1bc9b93ee29dae1dd1364229e47a027e7b93e67e8e8c7",
+      "experiments/sockshop-mirrortaint/infer_response_binding.py": "c85edb13ffb08b80ac1dee06c393c6dfdd8f79ca44d93e8e47aa90ef3b7c6eca",
+      "experiments/sockshop-mirrortaint/plan_read_effects.py": "df2a656176b888f8ad7523a72ba83a8b54875d592434432871e50842ab035d6a",
+      "experiments/sockshop-mirrortaint/read-forward-runtimes-20261020.json": "1fca4ceccb7c396f61dedc5da2bd1b166b65fff5e9d07f9f3b4da00731c9ee08",
+      "experiments/sockshop-mirrortaint/plan_execution_kernel.py": "d42a8ce5be0f264c124bea431c4891e124585dfb13bde1c11cad99f52039f8da",
+      "experiments/sockshop-mirrortaint/infer_execution_kernel.py": "d15bd77df7db73ba9d0c4172f9d7fb1ccfd576b3987f129165b731605646e673",
+      "experiments/sockshop-mirrortaint/execution_dependency_state.py": "b55ca3cbef4c20c21d58703856ba2183acef42f20af8889ee8a7bae9a4e62cec",
+      "experiments/sockshop-mirrortaint/execution-kernel-runtimes-20261020.json": "d904d2ab91dd8881a78e465448ee61bd0b628cb6b88e984c10b0796abec7381a",
+      "experiments/sockshop-mirrortaint/analysis_status.py": "4223472df2350906c1463577d5f82e0157745531a676289823325cff19ab0d49",
+      "experiments/sockshop-mirrortaint/plan_application_calls.py": "bdf2dbd534e71ea600aec11be01295ab890e0312e62fabffed8f9f626d5a4b31",
+      "experiments/sockshop-mirrortaint/infer_application_execution.py": "bb729daef654217f3e6da9cdf92a9c459e8387dee55a4919848b9a22ca3b89e7",
+      "experiments/sockshop-mirrortaint/kernel-contract-runtimes-20261020.json": "9c9bfc030daf327102da957dc8b54c7db6ef6ebc9a0f104a22c1fc37d2414706",
+      "experiments/sockshop-mirrortaint/plan_constructor_effects.py": "2e84a1f577fe1a0abb66880436afa4537a77552b7a09a848bfd765e0f7d27db2",
+      "experiments/sockshop-mirrortaint/constructor-library-contracts-20261020.json": "636a225c97f57ba597a0ed49afed4b335406a22b1622f20ad03f448e438d579e",
+      "experiments/sockshop-mirrortaint/framework-wrapper-contracts-20261020.json": "242e0f1f2c01fa51c4a9a941b4ae7943d558ec4ec001af114558c56732c28ae1",
+      "experiments/sockshop-mirrortaint/plan_date_projection.py": "59bcd215d86ea728523f55c7dcbdfcf17079b1e693cb2a3b3710fa6e3cd41722",
+      "experiments/sockshop-mirrortaint/date-runtime-contracts-20261020.json": "407e4bb5049d0879b7298208fe32ae98d97880c0cf587455762f58250282c33c",
+      "experiments/sockshop-mirrortaint/infer_date_projection.py": "6653961e8dc4c827e100b01879f942b31a6fee2054fe1edc5bb7114d2e5b54e9",
+      "experiments/sockshop-mirrortaint/async-task-contracts-20261021.json": "2df60b7e1d06a7fb3eda3e076a1f63ec9bc97820f068c5300d1da5a80756a617",
+      "experiments/sockshop-mirrortaint/infer_async_protocol.py": "b4fc6dd5a3568deee8ae1b1647c813ab9784101c314c17d339b7b16553922230",
+      "experiments/sockshop-mirrortaint/plan_async_dependencies.py": "212a0985dffa1f76668fb1ff82b96bd7e8539e75f96423336baa741637c27a27",
+      "experiments/sockshop-mirrortaint/request-entity-contracts-20261021.json": "d1059c1cbb2ddfebac10e7c615e4a09ab441d0700ace4a2a2d470b2ed548dc94",
+      "experiments/sockshop-mirrortaint/save-effect-contracts-20261021.json": "d7a5f50485995f326254b596bd1048c3c49f434f573f21038dc04749d111eac1",
+      "experiments/sockshop-mirrortaint/date-effects-contracts-20261021.json": "985edda4ce92038d8f47961c28d134fff3f6d748c9d898eeaa5d7d1d31349052",
+      "experiments/sockshop-mirrortaint/save-provided-id-contracts-20261023.json": "29e94787b96d3c8290a2166e20ec288119a94ad3fab9390884db560b178d2c56",
+      "experiments/sockshop-mirrortaint/contract_applicability.py": "966373329d9c3626b1da361f232eccf75e4d4680e6ce9f4d3401c461aebf7197",
+      "experiments/sockshop-mirrortaint/contract_obligations.py": "4d275d9d5e21217e002fba46a67acbbb0411084946d85eb7b158d3bb5a06b579",
+      "experiments/sockshop-mirrortaint/finite_string_values.py": "f543563545142dbdc6cd2b9d99ecd06613ecfca37abf437c7a959ab0aeaec3cf",
+      "experiments/sockshop-mirrortaint/plan_capability_policy.py": "9ec9380261dbed489c7d61adb739a283736eac5b3266554ca2bb0be7ce393186",
+      "experiments/sockshop-mirrortaint/plan_execution_closure.py": "d62271ee0471352fee287c87443878d4db1008b62625d91ea5c96e793f7878e0",
+      "experiments/sockshop-mirrortaint/infer_execution_closure.py": "cccb2933e7935df288e71c449482a3b9c34c61a3274833777aac1fcfb4defe53",
+      "experiments/sockshop-mirrortaint/library-value-runtimes-20261022.json": "ba9edefb5007e025a7801e365d8ee04ae6ee87d2cda15934d83b65c9b2ca377c",
+      "experiments/sockshop-mirrortaint/plain-conversion-contracts-20261022.json": "10c450f81032b9941095a5c86b0cc9c68a90df47b863ae3eafb765fadc392cd4",
+      "experiments/sockshop-mirrortaint/plan_uuid_projection.py": "343efa11edf0454c2e3d651d922ce27516a4543a01930009c9b001726f6ed227",
+      "experiments/sockshop-mirrortaint/infer_uuid_projection.py": "8f28be5b461bda9f390e0c14d1c89be48aec2df5554b8ea39ecfd08115f03642",
+      "experiments/sockshop-mirrortaint/uuid-projection-contracts-20261022.json": "a4115df072a092edab9d5ced6df8ca0e17c37ec4861aea0bf60e9edf141b0921",
+      "experiments/sockshop-mirrortaint/isolate_agent_jackson.py": "018d68e0840c14c44367c526e31ef86d8889c906c932ebf9c4f3c879257235e2",
+      "experiments/sockshop-mirrortaint/plan_foundation_values.py": "1f88c67bf2de3ba246b546fe283b04509903c137884d8dc673a45bc5a78d9647",
+      "experiments/sockshop-mirrortaint/foundation-value-contracts-20261028.json": "511240763e1fcc1bb3f4d556513df74e6786628b8f3e6d01d06da46921d705a3",
+      "experiments/sockshop-mirrortaint/infer_foundation_values.py": "a2c0a3b1d68c0f8a949d5f370c81baba20907672c0328c057466d3cb94d3547b",
+      "experiments/sockshop-mirrortaint/plan_feign_effects.py": "6fa410224ae66cd360c4e79feb36a8a6a54b48b25b661594919d150148627861",
+      "experiments/sockshop-mirrortaint/feign-input-effect-contracts-20261028.json": "ed336e1a18d481cc665c3d4c49ea6b046bb16a944d9d5681ae4c3f7df93fbe85",
+      "experiments/sockshop-mirrortaint/mongo2-provided-id-contracts-20261028.json": "4c13de798a4d2384895433c64c6cefa5b7c9cd6fab47cd3c9a6f7c2ee3ffb964",
+      "experiments/sockshop-mirrortaint/plan_scalar_projection.py": "98e7c086ebbe05a9692fca2b7828c7941311cf93094c0ebf3ecd5c4fe060416f",
+      "experiments/sockshop-mirrortaint/scalar-projection-contracts-20261028.json": "1bdcdd875b25aa39b97f4d96b462fc8087fbcd68091b0e8cc2295d68a77dbe0f",
+      "experiments/sockshop-mirrortaint/infer_scalar_projection.py": "85e4ad4c260a72b42c58a9c978c8a73fca119a6a938f165b7a9fefa07a8e8c5c",
+      "experiments/sockshop-mirrortaint/document-date-effects-20261028.json": "b5b1843d8ff6ed9d4eb0726504ffaff7e3f3b16a12b45f09951a6e0d679c1eb6",
+      "experiments/sockshop-mirrortaint/infer_listener_registry.py": "06730897bc03848cb49d71319578b1f929d57adab6aac6d4314a8c25747c554b",
+      "experiments/sockshop-mirrortaint/infer_feign_effects.py": "0d8415284515add3df82c13b5bc2ebd2aa1f836e76cd85c3d475eab7e502555d",
+      "experiments/sockshop-mirrortaint/plan_applicability.py": "520729e3a15709552726f0939686e984e34cbd9adf4407745704b7014b969372",
+      "experiments/sockshop-mirrortaint/direct-dispatch-contracts-20261029.json": "e34e3d86b52379ea5de4b6797189c37c12873865331ca58195e6855f4251b99b"
+    },
+    "agent_sha256": "eef5b5f8cda745e3825571a0fb238c259d246fc9442648d8b4651c621b540ff8",
+    "meaning": "Development checkpoint before business capture; preexecution routing and finite zero-advice/source reestablishment support, separate from first/C1.",
+    "planning_inputs": {
+      "planning-first/mall-swarm-3/002-plan.json": "b1daacb55b34e976b3e0099b9d11f54bc77a8fec048f611f6b0c28bc8e456749",
+      "planning-first/mall-swarm-3/000-plan.json": "d2211c469833da4dc07564a2e527737f9379b45422fbe950129a508b9f90faa0",
+      "planning-first/mall-swarm-3/006-plan.json": "c41bc3d22a9332438d345dfb09ccfc57ce29961bfb9b3aa5cdb11cb6cef1c389",
+      "planning-first/mall-swarm-3/003.json": "8303af103af44c11400433e411e91bebb91622b7d4a7061ac4b52db6e822f652",
+      "planning-first/mall-swarm-3/004.json": "a5fb87e3ca640e8e16df936f5d1bbcaf01ad360a80ab685887c0769499c1990b",
+      "planning-first/mall-swarm-3/001-plan.json": "8cbc6368a24bbf29f68364270877619567ed93269b8f4fa4c878f5922e71534f",
+      "planning-first/mall-swarm-3/006.json": "d6ab59448271690b733e2755e473a6c2feb49cdd3abd7555c3aef17ce15467a1",
+      "planning-first/mall-swarm-3/003-plan.json": "6ca34031e64d267f931a6f83f047753273c3e0e5eb06a603d00a591d928586f9",
+      "planning-first/mall-swarm-3/005-plan.json": "5f63cc0296a2ae2af1a6fe7065fb3776da3c097abe953aa499c77ed7e5720819",
+      "planning-first/mall-swarm-3/004-plan.json": "02b1b6a0349e324aa05712666209cf5c7371883f033cdb21f87754a9c06b1df0",
+      "planning-first/mall-swarm-3/005.json": "a784521856bf9eb9c788c514e62b87d30efba1de850e1838995a0d7de19748e0",
+      "planning-first/mall-swarm-3/001.json": "8d1c9fa87698d15ea106d9c6fc40b4e290013597abd01ce94b70ef2733e69860",
+      "planning-first/mall-swarm-3/000.json": "59d41e48e29ebd3f387b5e4203c90ac64b6e4a3342bd3cdb248c83a66b3adeea",
+      "planning-first/mall-swarm-3/002.json": "67a33ba81048fe15f1bf19f3b0d0f9352f3749354cc4cb1e14fc6a36cf8c150c",
+      "planning-first/mall-swarm-1/002-plan.json": "a567fc45ae6ddac8a02fe67c328333feca1a57c2a55403a34f42a91d3263bbdb",
+      "planning-first/mall-swarm-1/000-plan.json": "b60f4c3cc180e52510959796e55e93f63b4d450611e81772ce70ae990aeb8225",
+      "planning-first/mall-swarm-1/003.json": "998dab817050cb3be5e2a591f395ebe35c6ed55e3f2c9018b001dc5d04672a83",
+      "planning-first/mall-swarm-1/004.json": "5e32c261d19672de337841f11b822c26c870eec098eb1ba16887788647147fd2",
+      "planning-first/mall-swarm-1/001-plan.json": "cac22766bbd84e61d31b168a9e7aa0acaeccb663a77613291f9da589e2b94796",
+      "planning-first/mall-swarm-1/003-plan.json": "ec3f8284b25a3f3b47d063dec73b255429d430ed1f82deb68e9c4c7dce1bcc18",
+      "planning-first/mall-swarm-1/005-plan.json": "2c6eaa8aedde4e113d4a139bbe239304b29af9004e755f7a3e1341b3d094492b",
+      "planning-first/mall-swarm-1/004-plan.json": "f29a26c72b1f5853bae08fedae69b801a13b010d50a6e129cc725e99c86559e6",
+      "planning-first/mall-swarm-1/005.json": "b79fc48894c955820c1485743e32626534724c96bf77d313c44d184974535d53",
+      "planning-first/mall-swarm-1/001.json": "efb36330319290985b817ff28955b452d34f763ec3d46e9b53c959c83af2faa1",
+      "planning-first/mall-swarm-1/000.json": "ad97e13db010b4a67204ffc7e2178c52d49e85e9655cb61d59eff08fd4765a29",
+      "planning-first/mall-swarm-1/002.json": "4d45d3bd04af4ee9ce9eb5a254caa6d4dbcbd95ae07d4c42592bef673bf2d8aa",
+      "planning-first/mall-swarm-4/002-plan.json": "b4d08c91796c88da6be44099c4e1a86a5669f673759421d6618d0274d4486829",
+      "planning-first/mall-swarm-4/000-plan.json": "35a45c97c4ed1944f1fd296bac4b46f56aeb01af197c1470c982a9da0443e3cd",
+      "planning-first/mall-swarm-4/001-plan.json": "7b3bb070f8f38cfdf0b4e6504aeb6da92ba78bd092cc6af7a38c9a15393d7796",
+      "planning-first/mall-swarm-4/001.json": "9e3abee438d01b8886ce6ac7b2631607673bedf9725cb74fb3fe409badcbe8c9",
+      "planning-first/mall-swarm-4/000.json": "4518347e64f4c1df7d699a13b2e2b3620e500a683a1a35f583cbcf1678070d3a",
+      "planning-first/mall-swarm-4/002.json": "457b173ac0bb0f9031f3ca51d7c7c8ff8cd25fce98f7f7e5afea3b1fdd1f7986",
+      "planning-first/mall-swarm-2/000-plan.json": "3294de741b8d5a852f5f10ac797915828b95410700ae70b06b89a24e36e8c800",
+      "planning-first/mall-swarm-2/001-plan.json": "e13768419a62afaba0f7e314cbdef1e9bed5dbdbd26cd7d094aefa4dc915d325",
+      "planning-first/mall-swarm-2/001.json": "8242eff6d7a9283716d04da91c50802e4cf1e9887db8c722dc6680797a9ca1ca",
+      "planning-first/mall-swarm-2/000.json": "f0bf0a2818ffd0f55790c2e50de9489922b5a976db2beba03f117d2ca25fce29",
+      "planning-first/mall-swarm-5/002-plan.json": "7d748166ba5455ac76f1942f762c7471632d7f553afdcb46e3011d740b4ea766",
+      "planning-first/mall-swarm-5/000-plan.json": "664768d40fb6f618bc27e6469c5e6da7ff00cab9d7a914c35778ad7e4ed459bf",
+      "planning-first/mall-swarm-5/001-plan.json": "e06133d599bac1a9f8079d074f82cfab3d62de611dbfd7508ede3a2eff94e195",
+      "planning-first/mall-swarm-5/001.json": "f764ed14e1e7f51ab6f8a81ddc5410dd918e4b629315c3d468a26d3028f63988",
+      "planning-first/mall-swarm-5/000.json": "daf8e444b3f0cbee0c13af8c0f628551d6a8e8105b9d0befcdde7271c040a687",
+      "planning-first/mall-swarm-5/002.json": "8ea11ca725867aea9d2ed6595790282189953d8ac7f250ba6c3c8ebe702cb196",
+      "metadata/mall-admin/model.json": "196a04486d0a0ff43484bf495439b56c0958f0478eebccadbad4c112f136e718",
+      "metadata/mall-portal/model.json": "272db088eb2217584e251a9fb9edaddc019f9cf3ec98f7505d68c823675b902a",
+      "deployment-environment.json": "d1baeec8d800265b46edc34a95f92e4afd10787586d62a86461ef8fc9246f8af"
+    }
+  },
+  "development_protocol": {
+    "at": "2026-10-29T07:27:59.602501+00:00",
+    "base_commit": "93a5a86fb2307d0c8cf504d72328d57f3d71397a",
+    "scope": [
+      "Unified source declaration propagation to all candidates",
+      "Preexecution contract applicability and conditional coverage/transport obligations",
+      "Mall positive source pilot then fixed allMall cases without answer-based routing",
+      "Apollo Gson support separated from MT dependency calibration"
+    ],
+    "no_performance_or_push": true,
+    "protected": {
+      "artifacts/external-frozen-transfer-20261029/task-seal.json": "1e24d0313083b7973d5d06e8a817ed2f002887658c1e663701791b2686063739",
+      "artifacts/external-frozen-transfer-20261029/oracle-before-tools.json": "3e6244b5298a4f257214cf2e5f4731015962c1b1474a044e6271d6ef1bdd8cb2",
+      "artifacts/external-frozen-transfer-20261029/audit-C1-reviewed-02/summary.json": "f6a5e43c7c6faf817339c1b0b9a31bca335517c77e2d24ff991ccd75759f61b8",
+      "artifacts/external-frozen-transfer-20261029/first-matrix-manifest-before-B1.json": "a34e4ceb9c03d397c9d6506b978d15a8469eedbaf2cab915af454c0a0ec05223",
+      "artifacts/external-frozen-transfer-20261029/C1-first-captures-before-final-scoring.json": "b1cd127417082eff77a0a3b877f7ec47d05e5c78d8bcbb7b23dd545fafbfa23c"
+    },
+    "development_queries": true,
+    "first_results_never_overwritten": true,
+    "task_scope": "299 root targets and7 handler obligations retain separate denominators; all40 API ledger retained",
+    "pilot": {
+      "api": "mall-swarm-1",
+      "query_index": 3,
+      "path": "/data/token",
+      "reason": "32 baseline positive instances for this RPC-return entry; token has sufficient independent physical source truth. Concrete repository-return positive target does not exist among current fixed successful response targets; DB-related selection is not relabeled data dependence."
+    },
+    "acceptance": [
+      "Explicit source declarations never dropped",
+      "Runtime version plus class hashes/configuration checked before candidate selection; rejected alternatives saved",
+      "Observed source caller/callee coordinates must close; unresolved dispatch stays conditional/unknown",
+      "No value-based source matching or success-based profile selection",
+      "Target source correct in full/selective and preserve MT88/62positive as acceptance goal, not assumed outcome",
+      "Missing/ambiguous evidence guards remain",
+      "No handler target moved into or out of denominator after seeing revised results"
+    ],
+    "input_and_oracle_reuse": {
+      "artifacts/external-frozen-transfer-20261029/task-seal.json": "1e24d0313083b7973d5d06e8a817ed2f002887658c1e663701791b2686063739",
+      "artifacts/external-frozen-transfer-20261029/oracle-before-tools.json": "3e6244b5298a4f257214cf2e5f4731015962c1b1474a044e6271d6ef1bdd8cb2"
+    }
+  },
+  "direct_dispatch_semantics": {
+    "all_passed": true,
+    "modes": {
+      "full": {
+        "business_same": true,
+        "known_positive": 2,
+        "unknown": 4,
+        "same_business_exception": 2,
+        "guards": {
+          "wrong-call": true,
+          "wrong-target": true,
+          "wrong-class": true,
+          "nonempty-chain": true,
+          "wrong-argument": true,
+          "duplicate-proof": true,
+          "missing-proof": true,
+          "missing-framework": true,
+          "wrong-source-call": true,
+          "missing-source": true,
+          "ambiguous-source": true
+        },
+        "checks": [
+          {
+            "mode": 0,
+            "known": true
+          },
+          {
+            "mode": 1,
+            "known": false
+          },
+          {
+            "mode": 3,
+            "known": false
+          },
+          {
+            "mode": 0,
+            "known": true
+          },
+          {
+            "mode": 1,
+            "known": false
+          },
+          {
+            "mode": 3,
+            "known": false
+          }
+        ]
+      },
+      "selective": {
+        "business_same": true,
+        "known_positive": 2,
+        "unknown": 4,
+        "same_business_exception": 2,
+        "guards": {
+          "wrong-call": true,
+          "wrong-target": true,
+          "wrong-class": true,
+          "nonempty-chain": true,
+          "wrong-argument": true,
+          "duplicate-proof": true,
+          "missing-proof": true,
+          "missing-framework": true,
+          "wrong-source-call": true,
+          "missing-source": true,
+          "ambiguous-source": true
+        },
+        "checks": [
+          {
+            "mode": 0,
+            "known": true
+          },
+          {
+            "mode": 1,
+            "known": false
+          },
+          {
+            "mode": 3,
+            "known": false
+          },
+          {
+            "mode": 0,
+            "known": true
+          },
+          {
+            "mode": 1,
+            "known": false
+          },
+          {
+            "mode": 3,
+            "known": false
+          }
+        ]
+      }
+    }
+  },
+  "application_compatibility": {
+    "full": {
+      "targets": 34,
+      "known": 26,
+      "expected_unknown": 8,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-child": true,
+        "wrong-parent": true,
+        "duplicate-call-id": true,
+        "missing-constructor-write": true,
+        "same-value-wrong-argument": true,
+        "wrong-exception": true
+      }
+    },
+    "selective": {
+      "targets": 34,
+      "known": 26,
+      "expected_unknown": 8,
+      "aborted": 2,
+      "budget_status": "analysis_limited",
+      "faults": {
+        "missing-child": true,
+        "wrong-parent": true,
+        "duplicate-call-id": true,
+        "missing-constructor-write": true,
+        "same-value-wrong-argument": true,
+        "wrong-exception": true
+      }
+    }
+  },
+  "compatibility_class_equivalence": {
+    "classes": 873,
+    "all_equal": true,
+    "AgentA_sha256": "eef5b5f8cda745e3825571a0fb238c259d246fc9442648d8b4651c621b540ff8",
+    "AgentB_sha256": "2e920a4cc8844e72ecaad72b1841f5882030f318a32aba8345e26b4d9502027f"
+  },
+  "planner_guard_checks": 6,
+  "existing_contract_guard_checks": 7,
+  "protected_files_unchanged": {
+    "old_first": 2322,
+    "external_first": 16862,
+    "C1": 7248
+  },
+  "fresh_captures_manifest_sha256": "d5aaab37fce7fcf524ea2d447b949e603181c9754b12bba22706e1f1bcd4cacc",
+  "rpc_decode_fact_review": {
+    "matching_physical_field_coordinate_per_positive": true,
+    "positive_target_instances_each_mode": 32,
+    "raw_wire_projection_certified": false,
+    "raw_document_complete_count": 0
+  },
+  "no_performance_or_push": true
+}
