@@ -1,0 +1,872 @@
+[
+  {
+    "api": "apollo-1",
+    "case": "input-00",
+    "kind": "empty-container",
+    "path": "/items",
+    "wire_field_target": false,
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "case": "input-01",
+    "kind": "empty-container",
+    "path": "/items",
+    "wire_field_target": false,
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "case": "input-02",
+    "kind": "empty-container",
+    "path": "/items",
+    "wire_field_target": false,
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "case": "input-03",
+    "kind": "empty-container",
+    "path": "/items",
+    "wire_field_target": false,
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "case": "input-05",
+    "kind": "empty-container",
+    "path": "/items",
+    "wire_field_target": false,
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/baseInfo/dataChangeCreatedByDisplayName",
+      "target": "com/ctrip/framework/apollo/common/dto/BaseDTO.dataChangeCreatedByDisplayName",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/baseInfo/dataChangeLastModifiedByDisplayName",
+      "target": "com/ctrip/framework/apollo/common/dto/BaseDTO.dataChangeLastModifiedByDisplayName",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/configHidden",
+      "target": null,
+      "type": "boolean",
+      "binding": "computed-property"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/deleted",
+      "target": null,
+      "type": "boolean",
+      "binding": "computed-property"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/comment",
+      "target": "com/ctrip/framework/apollo/common/dto/ItemDTO.comment",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/dataChangeCreatedBy",
+      "target": "com/ctrip/framework/apollo/common/dto/BaseDTO.dataChangeCreatedBy",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/dataChangeCreatedByDisplayName",
+      "target": "com/ctrip/framework/apollo/common/dto/BaseDTO.dataChangeCreatedByDisplayName",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/dataChangeCreatedTime",
+      "target": "com/ctrip/framework/apollo/common/dto/BaseDTO.dataChangeCreatedTime",
+      "type": "java.util.Date",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/dataChangeLastModifiedBy",
+      "target": "com/ctrip/framework/apollo/common/dto/BaseDTO.dataChangeLastModifiedBy",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/dataChangeLastModifiedByDisplayName",
+      "target": "com/ctrip/framework/apollo/common/dto/BaseDTO.dataChangeLastModifiedByDisplayName",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/dataChangeLastModifiedTime",
+      "target": "com/ctrip/framework/apollo/common/dto/BaseDTO.dataChangeLastModifiedTime",
+      "type": "java.util.Date",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/id",
+      "target": "com/ctrip/framework/apollo/common/dto/ItemDTO.id",
+      "type": "long",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/key",
+      "target": "com/ctrip/framework/apollo/common/dto/ItemDTO.key",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/lineNum",
+      "target": "com/ctrip/framework/apollo/common/dto/ItemDTO.lineNum",
+      "type": "int",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/namespaceId",
+      "target": "com/ctrip/framework/apollo/common/dto/ItemDTO.namespaceId",
+      "type": "long",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/type",
+      "target": "com/ctrip/framework/apollo/common/dto/ItemDTO.type",
+      "type": "int",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/value",
+      "target": "com/ctrip/framework/apollo/common/dto/ItemDTO.value",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/modified",
+      "target": null,
+      "type": "boolean",
+      "binding": "computed-property"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/newValue",
+      "target": "com/ctrip/framework/apollo/portal/entity/bo/ItemBO.newValue",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/oldValue",
+      "target": "com/ctrip/framework/apollo/portal/entity/bo/ItemBO.oldValue",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/public",
+      "target": null,
+      "type": "boolean",
+      "binding": "computed-property"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-2",
+    "case": "input-04",
+    "kind": "empty-container",
+    "path": "/",
+    "wire_field_target": false,
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-2",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/empty",
+      "target": null,
+      "type": "boolean",
+      "binding": "computed-property"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "case": "input-00",
+    "kind": "method-null/empty-HTTP-body",
+    "wire_field_target": false,
+    "original_http": 200,
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "case": "input-01",
+    "kind": "method-null/empty-HTTP-body",
+    "wire_field_target": false,
+    "original_http": 200,
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "case": "input-02",
+    "kind": "method-null/empty-HTTP-body",
+    "wire_field_target": false,
+    "original_http": 200,
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "case": "input-03",
+    "kind": "method-null/empty-HTTP-body",
+    "wire_field_target": false,
+    "original_http": 200,
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "case": "input-04",
+    "kind": "method-null/empty-HTTP-body",
+    "wire_field_target": false,
+    "original_http": 400,
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "case": "input-05",
+    "kind": "method-null/empty-HTTP-body",
+    "wire_field_target": false,
+    "original_http": 200,
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/baseInfo/appId",
+      "target": "com/ctrip/framework/apollo/common/dto/NamespaceDTO.appId",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/baseInfo/clusterName",
+      "target": "com/ctrip/framework/apollo/common/dto/NamespaceDTO.clusterName",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/baseInfo/dataChangeCreatedBy",
+      "target": "com/ctrip/framework/apollo/common/dto/BaseDTO.dataChangeCreatedBy",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/baseInfo/dataChangeCreatedByDisplayName",
+      "target": "com/ctrip/framework/apollo/common/dto/BaseDTO.dataChangeCreatedByDisplayName",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/baseInfo/dataChangeCreatedTime",
+      "target": "com/ctrip/framework/apollo/common/dto/BaseDTO.dataChangeCreatedTime",
+      "type": "java.util.Date",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/baseInfo/dataChangeLastModifiedBy",
+      "target": "com/ctrip/framework/apollo/common/dto/BaseDTO.dataChangeLastModifiedBy",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/baseInfo/dataChangeLastModifiedByDisplayName",
+      "target": "com/ctrip/framework/apollo/common/dto/BaseDTO.dataChangeLastModifiedByDisplayName",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/baseInfo/dataChangeLastModifiedTime",
+      "target": "com/ctrip/framework/apollo/common/dto/BaseDTO.dataChangeLastModifiedTime",
+      "type": "java.util.Date",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/baseInfo/id",
+      "target": "com/ctrip/framework/apollo/common/dto/NamespaceDTO.id",
+      "type": "long",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/baseInfo/namespaceName",
+      "target": "com/ctrip/framework/apollo/common/dto/NamespaceDTO.namespaceName",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/comment",
+      "target": "com/ctrip/framework/apollo/portal/entity/bo/NamespaceBO.comment",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/configHidden",
+      "target": null,
+      "type": "boolean",
+      "binding": "computed-property"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/format",
+      "target": "com/ctrip/framework/apollo/portal/entity/bo/NamespaceBO.format",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/itemModifiedCnt",
+      "target": "com/ctrip/framework/apollo/portal/entity/bo/NamespaceBO.itemModifiedCnt",
+      "type": "int",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/deleted",
+      "target": null,
+      "type": "boolean",
+      "binding": "computed-property"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/comment",
+      "target": "com/ctrip/framework/apollo/common/dto/ItemDTO.comment",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/dataChangeCreatedBy",
+      "target": "com/ctrip/framework/apollo/common/dto/BaseDTO.dataChangeCreatedBy",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/dataChangeCreatedByDisplayName",
+      "target": "com/ctrip/framework/apollo/common/dto/BaseDTO.dataChangeCreatedByDisplayName",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/dataChangeCreatedTime",
+      "target": "com/ctrip/framework/apollo/common/dto/BaseDTO.dataChangeCreatedTime",
+      "type": "java.util.Date",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/dataChangeLastModifiedBy",
+      "target": "com/ctrip/framework/apollo/common/dto/BaseDTO.dataChangeLastModifiedBy",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/dataChangeLastModifiedByDisplayName",
+      "target": "com/ctrip/framework/apollo/common/dto/BaseDTO.dataChangeLastModifiedByDisplayName",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/dataChangeLastModifiedTime",
+      "target": "com/ctrip/framework/apollo/common/dto/BaseDTO.dataChangeLastModifiedTime",
+      "type": "java.util.Date",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/id",
+      "target": "com/ctrip/framework/apollo/common/dto/ItemDTO.id",
+      "type": "long",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/key",
+      "target": "com/ctrip/framework/apollo/common/dto/ItemDTO.key",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/lineNum",
+      "target": "com/ctrip/framework/apollo/common/dto/ItemDTO.lineNum",
+      "type": "int",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/namespaceId",
+      "target": "com/ctrip/framework/apollo/common/dto/ItemDTO.namespaceId",
+      "type": "long",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/type",
+      "target": "com/ctrip/framework/apollo/common/dto/ItemDTO.type",
+      "type": "int",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/item/value",
+      "target": "com/ctrip/framework/apollo/common/dto/ItemDTO.value",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/modified",
+      "target": null,
+      "type": "boolean",
+      "binding": "computed-property"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/newValue",
+      "target": "com/ctrip/framework/apollo/portal/entity/bo/ItemBO.newValue",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/items/*/oldValue",
+      "target": "com/ctrip/framework/apollo/portal/entity/bo/ItemBO.oldValue",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/parentAppId",
+      "target": "com/ctrip/framework/apollo/portal/entity/bo/NamespaceBO.parentAppId",
+      "type": "java.lang.String",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-4",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/public",
+      "target": null,
+      "type": "boolean",
+      "binding": "computed-property"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "apollo-5",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/content/*",
+      "target": "com/ctrip/framework/apollo/common/dto/PageDTO.content",
+      "type": "java.util.List",
+      "binding": "dynamic-container-element"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "mall-swarm-1",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/data",
+      "target": "com/macro/mall/common/api/CommonResult.data",
+      "type": "java.lang.Object",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "mall-swarm-2",
+    "case": "input-02",
+    "kind": "original-root-exception-handler-response",
+    "handler_wire_fields": [
+      [
+        "/code",
+        500
+      ],
+      [
+        "/message",
+        "该用户已经存在"
+      ]
+    ],
+    "declared_entry_return_target": false,
+    "API_kept": true,
+    "answered_source_claim": false
+  },
+  {
+    "api": "mall-swarm-2",
+    "case": "input-04",
+    "kind": "original-root-exception-handler-response",
+    "handler_wire_fields": [
+      [
+        "/code",
+        500
+      ],
+      [
+        "/message",
+        "验证码错误"
+      ]
+    ],
+    "declared_entry_return_target": false,
+    "API_kept": true,
+    "answered_source_claim": false
+  },
+  {
+    "api": "mall-swarm-2",
+    "kind": "sink-obligation",
+    "site": {
+      "caller": "com/macro/mall/portal/service/impl/UmsMemberServiceImpl.register(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",
+      "site": 83,
+      "callee": "com/macro/mall/mapper/UmsMemberMapper.insert(Lcom/macro/mall/model/UmsMember;)I",
+      "kind": "domain-write"
+    },
+    "scored_return_answer_substituted": false,
+    "frozen_TF_sink_query": "unsupported",
+    "B0_sink_export": "unsupported"
+  },
+  {
+    "api": "mall-swarm-2",
+    "kind": "legacy-static-candidate-not-in-observed-wire-query-set",
+    "target": {
+      "path": "/data",
+      "target": "com/macro/mall/common/api/CommonResult.data",
+      "type": "java.lang.Object",
+      "binding": "physical-field"
+    },
+    "answered_source_claim": false
+  },
+  {
+    "api": "mall-swarm-3",
+    "case": "input-04",
+    "kind": "original-root-exception-handler-response",
+    "handler_wire_fields": [
+      [
+        "/code",
+        404
+      ],
+      [
+        "/message",
+        "usernamemust not be empty"
+      ],
+      [
+        "/data",
+        null
+      ]
+    ],
+    "declared_entry_return_target": false,
+    "API_kept": true,
+    "answered_source_claim": false
+  },
+  {
+    "api": "mall-swarm-3",
+    "kind": "sink-obligation",
+    "site": {
+      "caller": "com/macro/mall/service/impl/UmsAdminServiceImpl.insertLoginLog(Ljava/lang/String;)V",
+      "site": 33,
+      "callee": "com/macro/mall/mapper/UmsAdminLoginLogMapper.insert(Lcom/macro/mall/model/UmsAdminLoginLog;)I",
+      "kind": "domain-write"
+    },
+    "scored_return_answer_substituted": false,
+    "frozen_TF_sink_query": "unsupported",
+    "B0_sink_export": "unsupported"
+  },
+  {
+    "api": "mall-swarm-4",
+    "kind": "sink-obligation",
+    "site": {
+      "caller": "com/macro/mall/service/impl/UmsAdminServiceImpl.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)I",
+      "site": 55,
+      "callee": "com/macro/mall/mapper/UmsAdminMapper.updateByPrimaryKey(Lcom/macro/mall/model/UmsAdmin;)I",
+      "kind": "domain-write"
+    },
+    "scored_return_answer_substituted": false,
+    "frozen_TF_sink_query": "unsupported",
+    "B0_sink_export": "unsupported"
+  },
+  {
+    "api": "mall-swarm-4",
+    "kind": "sink-obligation",
+    "site": {
+      "caller": "com/macro/mall/common/service/impl/RedisServiceImpl.del(Ljava/lang/String;)Ljava/lang/Boolean;",
+      "site": 3,
+      "callee": "org/springframework/data/redis/core/RedisTemplate.delete(Ljava/lang/Object;)Ljava/lang/Boolean;",
+      "kind": "domain-write"
+    },
+    "scored_return_answer_substituted": false,
+    "frozen_TF_sink_query": "unsupported",
+    "B0_sink_export": "unsupported"
+  },
+  {
+    "api": "mall-swarm-5",
+    "kind": "sink-obligation",
+    "site": {
+      "caller": "com/macro/mall/service/impl/UmsAdminServiceImpl.update(Ljava/lang/Long;Lcom/macro/mall/model/UmsAdmin;)I",
+      "site": 34,
+      "callee": "com/macro/mall/mapper/UmsAdminMapper.updateByPrimaryKeySelective(Lcom/macro/mall/model/UmsAdmin;)I",
+      "kind": "domain-write"
+    },
+    "scored_return_answer_substituted": false,
+    "frozen_TF_sink_query": "unsupported",
+    "B0_sink_export": "unsupported"
+  },
+  {
+    "api": "mall-swarm-5",
+    "kind": "sink-obligation",
+    "site": {
+      "caller": "com/macro/mall/common/service/impl/RedisServiceImpl.del(Ljava/lang/String;)Ljava/lang/Boolean;",
+      "site": 3,
+      "callee": "org/springframework/data/redis/core/RedisTemplate.delete(Ljava/lang/Object;)Ljava/lang/Boolean;",
+      "kind": "domain-write"
+    },
+    "scored_return_answer_substituted": false,
+    "frozen_TF_sink_query": "unsupported",
+    "B0_sink_export": "unsupported"
+  }
+]

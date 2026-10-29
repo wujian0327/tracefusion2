@@ -15,6 +15,7 @@ def diagnostic_category(r):
  error=str(r.get('error') or r.get('oracle_gap') or '')
  reason=str(r.get('answer',{}).get('reason',''))
  if r['tool']=='MT-B0' and 'serialized field instance absent' in reason:return 'baseline_wire_target_export_gap'
+ if r['tool']=='MT-B0' and r['api']=='apollo-3' and 'target absent' in reason:return 'baseline_primitive_root_export_interface_gap'
  if 'Query target absent or duplicated' in error:return 'response_target_binding_gap_not_proof_of_log_corruption'
  if 'Collector problem' in error or 'capture_invalid' in error:return 'monitor_failure_capture_rejected'
  if 'serializer' in error.lower():return 'serializer_contract_or_projection_limit'
@@ -24,12 +25,15 @@ def diagnostic_category(r):
  return r['state']
 
 def capture_diagnostics(source):
- paths=list((source/'capture').glob('*.jsonl'));problems=[];footers=[];kinds=collections.Counter()
+ paths=list((source/'capture').glob('*.jsonl'));problems=[];footers=[];kinds=collections.Counter();calls=collections.Counter();return_fields=[];http_reads=0
  for p in paths:
   for line in p.open():
    try:r=json.loads(line)
    except ValueError:continue
    kinds[r.get('kind')]+=1
+   if r.get('kind')=='binding-source':calls[r.get('callee')]+=1
+   if r.get('kind')=='binding-return':return_fields.append(len(r.get('fields',[])))
+   if r.get('kind')=='http-json'and r.get('phase')=='read':http_reads+=len(r.get('fields',[]))
    if r.get('kind')=='problem':problems.append(r)
    if r.get('kind') in ('closed','capture-footer'):footers.append(r)
  prep=source/'ready-portal-admin-path.json'
@@ -37,7 +41,7 @@ def capture_diagnostics(source):
  if prep.exists():
   observed=load(prep)
   if observed.get('http_status',0)>=400:preparation={'http_status':observed['http_status'],'response':observed.get('response')}
- return {'event_kinds':dict(kinds),'problems':problems,'footers':footers,'preparation_business_failure':preparation}
+ return {'event_kinds':dict(kinds),'TF_binding_source_occurrences':dict(calls),'TF_bound_return_snapshot_field_counts':return_fields,'HTTP_read_field_records':http_reads,'problems':problems,'footers':footers,'preparation_business_failure':preparation,'absence_of_observation_is_not_claim_of_business_nonexecution':True}
 
 def original(q):
  p=HOME/'ae7fe8d/original'/q['application']/('sealed-'+q['id'])/'results.json'
@@ -52,6 +56,7 @@ def missing_run_state(api,version,mode,index=None):
 def score_native(q,out):
  source=HOME/'ae7fe8d/tool-runs'/q['id']/'mirrortaint/fixed-adapter'
  if not(source/'results.json').exists():return [],missing_run_state(q['id'],'ae7fe8d','mirrortaint')
+ if 'cleanup_returncode'not in load(source/'results.json'):return [],{'state':'capture_still_open'}
  result=load(source/'results.json');work=out/'native-view'/q['id'];work.mkdir(parents=True);(work/'role').symlink_to(source/'capture',target_is_directory=True)
  try:rows=read_events(work,'role');error=None
  except Exception as e:rows=[];error=str(e)
@@ -92,19 +97,21 @@ def run(out,partial=False):
    for mode in ('full','selective'):
     for p in plans:
      home=HOME/version/'tool-runs'/q['id']/mode/('query-%03d'%p['index'])
-     if p['status']=='accepted'and(home/'results.json').exists():
+     closed=(home/'results.json').exists()and'cleanup_returncode'in load(home/'results.json')
+     if(home/'runtime-preflight.json').exists():state=load(home/'runtime-preflight.json')
+     elif p['status']=='accepted'and closed:
       analysis=home/'evaluation-frozen-v3/graph-construction.json'
       if not analysis.exists():
        log=out/(q['id']+'-'+version+'-'+mode+'-'+str(p['index'])+'.log')
        with log.open('w')as f:subprocess.run([sys.executable,str(HERE/'external_frozen_entry.py'),'--stage','evaluate','--version',version,'--api',q['id'],'--mode',mode,'--index',str(p['index']),*(['--source-calibrated']if SOURCE_CALIBRATED else[])],stdout=f,stderr=subprocess.STDOUT)
       state=load(analysis)if analysis.exists()else{'state':'evaluation_driver_failed'}
-     else:state={'state':p['status']}if p['status']!='accepted'else missing_run_state(q['id'],version,mode,p['index'])
+     else:state={'state':p['status'],'reason':p.get('reason')}if p['status']!='accepted'else {'state':'capture_still_open'}if(home/'results.json').exists()and not closed else missing_run_state(q['id'],version,mode,p['index'])
      scored=load(home/'evaluation-frozen-v3/instances.json')if(home/'evaluation-frozen-v3/instances.json').exists()else[]
      for c,path,value in targets:
       if oracle.wildcard(path)!=p['query']['path']:continue
       complete=next((r for r in scored if r['case']==c['case']and r['path']==path),None)
       if complete is not None:rows.append(complete);continue
-      record={'api':q['id'],'case':c['case'],'path':path,'version':version,'tool':mode,'state':state['state'],'oracle_adequate':False,'oracle_gap':'Raw source/target instance evaluation pending'if state['state']=='constructed'else state.get('error'),'TP':None,'FP':None,'FN':None}
+      record={'api':q['id'],'case':c['case'],'path':path,'version':version,'tool':mode,'state':state['state'],'oracle_adequate':False,'tool_reason':state.get('error')or state.get('reason'),'oracle_gap':'No complete source/target instance facts for this tool/configuration','TP':None,'FP':None,'FN':None}
       rows.append(record)
      versions[version]['runtime_configurations'][mode+'-'+str(p['index'])]={'state':state['state'],'error':state.get('error'),'diagnostics':capture_diagnostics(home) if (home/'results.json').exists() else None}
   apis.append({'api':q['id'],'original':None if control is None else{**{k:v for k,v in control.items()if k!='cases'},'cases':len(control['cases'])},'MT':receipt,'TF':versions,'sink_sites':q['effect_sink_candidates'],'method_null_or_unbound_root':q['id']in('apollo-3','apollo-4'),'all_task_obligations_answered':False})
@@ -116,8 +123,30 @@ def run(out,partial=False):
 def export_tables(out,entries,rows,apis,summary):
  def write(name,data,fields):
   with(out/name).open('w',newline='')as f:
-   w=csv.DictWriter(f,fieldnames=fields,extrasaction='ignore');w.writeheader();w.writerows(data)
- write('instances.csv',[{**r,'oracle_gap':r.get('oracle_gap') or r.get('error'),'diagnostic_category':diagnostic_category(r)}for r in rows],['api','case','path','version','tool','state','diagnostic_category','oracle_adequate','oracle_gap','TP','FP','FN'])
+   w=csv.DictWriter(f,fieldnames=fields,extrasaction='ignore',lineterminator='\n');w.writeheader();w.writerows(data)
+ write('instances.csv',[{**r,'tool_reason':r.get('tool_reason')or r.get('error'),'diagnostic_category':diagnostic_category(r)}for r in rows],['api','case','path','version','tool','state','diagnostic_category','tool_reason','oracle_adequate','oracle_gap','TP','FP','FN'])
+ requests=[]
+ for q in entries:
+  control,_=original(q);original_cases={c['case']:c for c in(control or{}).get('cases',[])}
+  for version,mode in [('ae7fe8d','mirrortaint'),*[(v,m)for v in('ae7fe8d','78a9534')for m in('full','selective')]]:
+   folder=HOME/version/'tool-runs'/q['id']/mode
+   for p in sorted(folder.glob('*/results.json')):
+    for c in load(p).get('cases',[]):
+     before=original_cases.get(c['case']);requests.append({'api':q['id'],'case':c['case'],'version':version,'tool':mode,'configuration':p.parent.name,'original_http':None if before is None else before['http_status'],'observed_http':c['http_status'],'HTTP_changed':None if before is None else before['http_status']!=c['http_status'],'original_declared_root_returns':None if before is None else oracle.original_root_returns(before),'message':c.get('message'),'response_content_equivalence_certified':False})
+ write('requests.csv',requests,['api','case','version','tool','configuration','original_http','observed_http','HTTP_changed','original_declared_root_returns','message','response_content_equivalence_certified'])
+ generation=[]
+ for q in entries:
+  control,_=original(q)
+  for c in(control or{}).get('cases',[]):
+   for target in q['return_targets']:
+    n=sum(oracle.wildcard(path)==target['path']for path,value in oracle.targets(c['response']))if oracle.original_root_returns(c)and q['id']!='apollo-4'else 0
+    state='wire_target_generated'if n else'original_method_exception_or_pre_entry_failure'if not oracle.original_root_returns(c)else'method_null_empty_body_obligation'if q['id']=='apollo-4'else'no_matching_wire_leaf'
+    generation.append({'api':q['id'],'case':c['case'],'query_path':target['path'],'original_wire_targets':n,'state':state,'tool_planning_rejection_is_not_NA':True})
+ write('original-target-generation.csv',generation,['api','case','query_path','original_wire_targets','state','tool_planning_rejection_is_not_NA'])
+ summary['actual_query_requests_including_original_exception_cases']=dict(collections.Counter('MT-B0'if r['tool']=='mirrortaint'else r['version']+'-'+r['tool']for r in requests))
+ summary['HTTP_status_changes']=dict(collections.Counter('MT-B0'if r['tool']=='mirrortaint'else r['version']+'-'+r['tool']for r in requests if r['HTTP_changed']))
+ summary['original_query_case_generation_states']=dict(collections.Counter(r['state']for r in generation))
+ summary['original_query_case_generation_unit']='One original input per query family; not independent deployed requests. Actual null fields are leaves; empty container member queries have no leaf. Tool refusals remain separate.'
  keys=sorted({(r['api'],r['case'],r['path'])for r in rows});paired=[]
  for key in keys:
   matching={tool_name(r):r for r in rows if(r['api'],r['case'],r['path'])==key}
@@ -160,8 +189,15 @@ def export_tables(out,entries,rows,apis,summary):
  for q in load(HOME/'task-seal.json')['all40_retained']:
   api=q['id'];current=next((a for a in per_api if a['api']==api),None)
   state='current_matrix' if current else'prior_Piggy_first_and_development_results_separate' if api.startswith('piggymetrics') else'original_roles_started_entry_unverified' if api.startswith('ZLT-') else'original_environment_blocked' if api.startswith(('FEBS-','goodsKill-','SuperMarket-')) else'this_API_common_task_pending'
-  ledger.append({**q,'locked_actual_entry':reviewed[api]['entry'],'batch_state':state,'current_batch_result':current})
+  ledger.append({'id':api,'application':q['application'],'paper_method':q['paper_method'],'original_task_record':q,'locked_actual_entry':reviewed[api]['entry'],'batch_state':state,'current_batch_result':current})
  assert len(ledger)==40;save(out/'all40-ledger.json',ledger)
+ gaps=[]
+ for q in entries:
+  for version in('ae7fe8d','78a9534'):
+   folder=HOME/version/'planning-first'/q['id'];metadata=[load(p)for p in sorted(folder.glob('[0-9][0-9][0-9].json'))];accepted=next((p for p in metadata if p['status']=='accepted'),None);p=load(folder/('%03d-plan.json'%accepted['index']))if accepted else{}
+   opaque=p.get('execution_kernel',{}).get('opaque_methods',{})
+   gaps.append({'api':q['id'],'version':version,'representative_plan_index':None if accepted is None else accepted['index'],'profile':p.get('profile'),'static_rejections':[{'index':m['index'],'path':m['query']['path'],'state':m['status'],'reason':m.get('reason')}for m in metadata if m['status']!='accepted'],'declared_boundary_sites':[dict(s,caller_is_planned_frame=s['caller']in p.get('frame_methods',[]),direct_caller_opaque_reason=opaque.get(s['caller']))for s in q['read_source_candidates']],'unresolved_necessary_calls':p.get('planning_caveats',{}).get('unresolved_necessary_calls',[]),'opaque_application_methods':opaque,'read_forward_allowed_runtime_versions':[r['java_runtime_version']for r in p.get('read_forward_contracts',{}).get('runtime_profiles',[])],'interpretation':'First blockers and candidate unsupported effects only. Observing an opaque method is not proof that every listed effect is necessary for every target; fixing one blocker does not guarantee the group succeeds.'})
+ save(out/'support-gaps.json',gaps)
  summary['paired_target_rows']=len(paired)
  summary['paired_confirmed_MT_correct_TF_not_correct']={v:sum(r[v+'_MT_correct_TF_not_correct']for r in paired) for v in('ae7fe8d','78a9534')}
  summary['paired_confirmed_TF_correct_MT_not_correct']={v:sum(r[v+'_TF_correct_MT_not_correct']for r in paired) for v in('ae7fe8d','78a9534')}

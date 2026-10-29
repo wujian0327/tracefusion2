@@ -1,0 +1,1038 @@
+[
+  {
+    "api": "apollo-1",
+    "version": "ae7fe8d",
+    "representative_plan_index": 0,
+    "profile": "execution-dependency",
+    "static_rejections": [
+      {
+        "index": 10,
+        "path": "/isConfigHidden",
+        "state": "planning_rejected",
+        "reason": "No supported static plan: {'legacy': 'Target serialization schema unsupported or custom: com/ctrip/framework/apollo/portal/entity/bo/NamespaceBO.isConfigHidden', 'execution': 'Target serialization unsupported'}"
+      },
+      {
+        "index": 11,
+        "path": "/isPublic",
+        "state": "planning_rejected",
+        "reason": "No supported static plan: {'legacy': 'Target serialization schema unsupported or custom: com/ctrip/framework/apollo/portal/entity/bo/NamespaceBO.isPublic', 'execution': 'Target serialization unsupported'}"
+      }
+    ],
+    "declared_boundary_sites": [
+      {
+        "caller": "com/ctrip/framework/apollo/portal/service/AppNamespaceService.findByAppIdAndName(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/common/entity/AppNamespace;",
+        "site": 4,
+        "callee": "com/ctrip/framework/apollo/portal/repository/AppNamespaceRepository.findByAppIdAndName(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/common/entity/AppNamespace;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": true,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/service/AppNamespaceService.findPublicAppNamespace(Ljava/lang/String;)Lcom/ctrip/framework/apollo/common/entity/AppNamespace;",
+        "site": 4,
+        "callee": "com/ctrip/framework/apollo/portal/repository/AppNamespaceRepository.findByNameAndIsPublic(Ljava/lang/String;Z)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z",
+        "site": 4,
+        "callee": "com/ctrip/framework/apollo/portal/repository/PermissionRepository.findTopByPermissionTypeAndTargetId(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/po/Permission;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": "Lambda SAM unsupported"
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z",
+        "site": 37,
+        "callee": "com/ctrip/framework/apollo/portal/repository/RolePermissionRepository.findByRoleIdIn(Ljava/util/Collection;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": "Lambda SAM unsupported"
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/oidc/OidcLocalUserServiceImpl.findByUserId(Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/bo/UserInfo;",
+        "site": 3,
+        "callee": "com/ctrip/framework/apollo/portal/repository/UserRepository.findByUsername(Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/po/UserPO;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": true,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/oidc/OidcLocalUserServiceImpl.findByUserIds(Ljava/util/List;)Ljava/util/List;",
+        "site": 3,
+        "callee": "com/ctrip/framework/apollo/portal/repository/UserRepository.findByUsernameIn(Ljava/util/List;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z",
+        "site": 19,
+        "callee": "com/ctrip/framework/apollo/portal/repository/UserRoleRepository.findByUserId(Ljava/lang/String;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": "Lambda SAM unsupported"
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.doExecute(Lorg/springframework/http/HttpMethod;Lorg/springframework/http/HttpHeaders;Lcom/ctrip/framework/apollo/core/dto/ServiceDTO;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Class;[Ljava/lang/Object;)Ljava/lang/Object;",
+        "site": 57,
+        "callee": "org/springframework/web/client/RestTemplate.exchange(Ljava/lang/String;Lorg/springframework/http/HttpMethod;Lorg/springframework/http/HttpEntity;Ljava/lang/Class;[Ljava/lang/Object;)Lorg/springframework/http/ResponseEntity;",
+        "kind": "rpc-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": "Primitive/multidimensional array effects unsupported"
+      }
+    ],
+    "unresolved_necessary_calls": [],
+    "opaque_application_methods": {
+      "com/ctrip/framework/apollo/portal/environment/Env.valueOf(Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/environment/Env;": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/common/exception/ServiceException.<init>(Ljava/lang/String;[Ljava/lang/Object;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+      "com/ctrip/framework/apollo/tracer/Tracer.newTransaction(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/tracer/spi/Transaction;": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogger.isEnabled()Z": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogCache.info(Lorg/slf4j/Logger;Ljava/lang/String;[Ljava/lang/Object;)V": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogCache.warn(Lorg/slf4j/Logger;Ljava/lang/String;[Ljava/lang/Object;)V": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/core/utils/ApolloThreadFactory.create(Ljava/lang/String;Z)Ljava/util/concurrent/ThreadFactory;": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogCache.debug(Lorg/slf4j/Logger;Ljava/lang/String;[Ljava/lang/Object;)V": "Foreign application static initialization unsupported",
+      "java/net/URL.<init>(Ljava/lang/String;)V": "Application constructor bytecode absent: java/net/URL.<init>(Ljava/lang/String;)V",
+      "java/io/InputStreamReader.<init>(Ljava/io/InputStream;Ljava/nio/charset/Charset;)V": "Application constructor bytecode absent: java/io/InputStreamReader.<init>(Ljava/io/InputStream;Ljava/nio/charset/Charset;)V",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogCache.warn(Lorg/slf4j/Logger;Ljava/lang/String;Ljava/lang/Throwable;)V": "Foreign application static initialization unsupported",
+      "org/springframework/http/HttpHeaders.<init>()V": "Application constructor bytecode absent: org/springframework/http/HttpHeaders.<init>()V",
+      "com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.getAdminServiceAccessToken(Lcom/ctrip/framework/apollo/portal/environment/Env;)Ljava/lang/String;": "Application opcode unsupported: 194",
+      "com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.doExecute(Lorg/springframework/http/HttpMethod;Lorg/springframework/http/HttpHeaders;Lcom/ctrip/framework/apollo/core/dto/ServiceDTO;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Class;[Ljava/lang/Object;)Ljava/lang/Object;": "Primitive/multidimensional array effects unsupported",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogCache.error(Lorg/slf4j/Logger;Ljava/lang/String;[Ljava/lang/Object;)V": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/tracer/Tracer.logError(Ljava/lang/Throwable;)V": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.canRetry(Ljava/lang/Throwable;Lorg/springframework/http/HttpMethod;)Z": "Application opcode unsupported: 193",
+      "com/ctrip/framework/apollo/tracer/Tracer.logEvent(Ljava/lang/String;Ljava/lang/String;)V": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/common/exception/BadRequestException.<init>(Ljava/lang/String;[Ljava/lang/Object;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+      "java/util/LinkedList.<init>()V": "Application constructor bytecode absent: java/util/LinkedList.<init>()V",
+      "com/ctrip/framework/apollo/portal/service/NamespaceService.transformNamespace2BO(Lcom/ctrip/framework/apollo/portal/environment/Env;Lcom/ctrip/framework/apollo/common/dto/NamespaceDTO;Z)Lcom/ctrip/framework/apollo/portal/entity/bo/NamespaceBO;": "Lambda bootstrap/handle unsupported",
+      "com/ctrip/framework/apollo/portal/spi/oidc/OidcUserInfoHolder.getUserInternal()Lcom/ctrip/framework/apollo/portal/entity/bo/UserInfo;": "Application opcode unsupported: 193",
+      "com/ctrip/framework/apollo/portal/spi/ldap/LdapUserService.searchUserInfoByGroup(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Ljava/util/List;": "Lambda SAM unsupported",
+      "com/ctrip/framework/apollo/portal/spi/ldap/LdapUserService.ldapQueryCriteria()Lorg/springframework/ldap/query/ContainerCriteria;": "Lambda SAM unsupported",
+      "com/ctrip/framework/apollo/portal/spi/springsecurity/SpringSecurityUserInfoHolder.getCurrentUsername()Ljava/lang/String;": "Application opcode unsupported: 193",
+      "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z": "Lambda SAM unsupported",
+      "com/ctrip/framework/apollo/portal/util/RoleUtils.buildNamespaceTargetId(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/portal/util/RoleUtils.buildNamespaceTargetId(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;": "Foreign application static initialization unsupported"
+    },
+    "read_forward_allowed_runtime_versions": [],
+    "interpretation": "First blockers and candidate unsupported effects only. Observing an opaque method is not proof that every listed effect is necessary for every target; fixing one blocker does not guarantee the group succeeds."
+  },
+  {
+    "api": "apollo-1",
+    "version": "78a9534",
+    "representative_plan_index": 0,
+    "profile": "execution-dependency",
+    "static_rejections": [
+      {
+        "index": 10,
+        "path": "/isConfigHidden",
+        "state": "planning_rejected",
+        "reason": "No supported static plan: {'legacy': 'Target serialization schema unsupported or custom: com/ctrip/framework/apollo/portal/entity/bo/NamespaceBO.isConfigHidden', 'execution': 'Target serialization unsupported'}"
+      },
+      {
+        "index": 11,
+        "path": "/isPublic",
+        "state": "planning_rejected",
+        "reason": "No supported static plan: {'legacy': 'Target serialization schema unsupported or custom: com/ctrip/framework/apollo/portal/entity/bo/NamespaceBO.isPublic', 'execution': 'Target serialization unsupported'}"
+      }
+    ],
+    "declared_boundary_sites": [
+      {
+        "caller": "com/ctrip/framework/apollo/portal/service/AppNamespaceService.findByAppIdAndName(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/common/entity/AppNamespace;",
+        "site": 4,
+        "callee": "com/ctrip/framework/apollo/portal/repository/AppNamespaceRepository.findByAppIdAndName(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/common/entity/AppNamespace;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": true,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/service/AppNamespaceService.findPublicAppNamespace(Ljava/lang/String;)Lcom/ctrip/framework/apollo/common/entity/AppNamespace;",
+        "site": 4,
+        "callee": "com/ctrip/framework/apollo/portal/repository/AppNamespaceRepository.findByNameAndIsPublic(Ljava/lang/String;Z)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z",
+        "site": 4,
+        "callee": "com/ctrip/framework/apollo/portal/repository/PermissionRepository.findTopByPermissionTypeAndTargetId(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/po/Permission;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": "Lambda SAM unsupported"
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z",
+        "site": 37,
+        "callee": "com/ctrip/framework/apollo/portal/repository/RolePermissionRepository.findByRoleIdIn(Ljava/util/Collection;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": "Lambda SAM unsupported"
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/oidc/OidcLocalUserServiceImpl.findByUserId(Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/bo/UserInfo;",
+        "site": 3,
+        "callee": "com/ctrip/framework/apollo/portal/repository/UserRepository.findByUsername(Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/po/UserPO;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": true,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/oidc/OidcLocalUserServiceImpl.findByUserIds(Ljava/util/List;)Ljava/util/List;",
+        "site": 3,
+        "callee": "com/ctrip/framework/apollo/portal/repository/UserRepository.findByUsernameIn(Ljava/util/List;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z",
+        "site": 19,
+        "callee": "com/ctrip/framework/apollo/portal/repository/UserRoleRepository.findByUserId(Ljava/lang/String;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": "Lambda SAM unsupported"
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.doExecute(Lorg/springframework/http/HttpMethod;Lorg/springframework/http/HttpHeaders;Lcom/ctrip/framework/apollo/core/dto/ServiceDTO;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Class;[Ljava/lang/Object;)Ljava/lang/Object;",
+        "site": 57,
+        "callee": "org/springframework/web/client/RestTemplate.exchange(Ljava/lang/String;Lorg/springframework/http/HttpMethod;Lorg/springframework/http/HttpEntity;Ljava/lang/Class;[Ljava/lang/Object;)Lorg/springframework/http/ResponseEntity;",
+        "kind": "rpc-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": "Primitive/multidimensional array effects unsupported"
+      }
+    ],
+    "unresolved_necessary_calls": [],
+    "opaque_application_methods": {
+      "com/ctrip/framework/apollo/portal/environment/Env.valueOf(Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/environment/Env;": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/common/exception/ServiceException.<init>(Ljava/lang/String;[Ljava/lang/Object;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+      "com/ctrip/framework/apollo/tracer/Tracer.newTransaction(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/tracer/spi/Transaction;": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogger.isEnabled()Z": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogCache.info(Lorg/slf4j/Logger;Ljava/lang/String;[Ljava/lang/Object;)V": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogCache.warn(Lorg/slf4j/Logger;Ljava/lang/String;[Ljava/lang/Object;)V": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/core/utils/ApolloThreadFactory.create(Ljava/lang/String;Z)Ljava/util/concurrent/ThreadFactory;": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogCache.debug(Lorg/slf4j/Logger;Ljava/lang/String;[Ljava/lang/Object;)V": "Foreign application static initialization unsupported",
+      "java/net/URL.<init>(Ljava/lang/String;)V": "Application constructor bytecode absent: java/net/URL.<init>(Ljava/lang/String;)V",
+      "java/io/InputStreamReader.<init>(Ljava/io/InputStream;Ljava/nio/charset/Charset;)V": "Application constructor bytecode absent: java/io/InputStreamReader.<init>(Ljava/io/InputStream;Ljava/nio/charset/Charset;)V",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogCache.warn(Lorg/slf4j/Logger;Ljava/lang/String;Ljava/lang/Throwable;)V": "Foreign application static initialization unsupported",
+      "org/springframework/http/HttpHeaders.<init>()V": "Application constructor bytecode absent: org/springframework/http/HttpHeaders.<init>()V",
+      "com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.getAdminServiceAccessToken(Lcom/ctrip/framework/apollo/portal/environment/Env;)Ljava/lang/String;": "Application opcode unsupported: 194",
+      "com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.doExecute(Lorg/springframework/http/HttpMethod;Lorg/springframework/http/HttpHeaders;Lcom/ctrip/framework/apollo/core/dto/ServiceDTO;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Class;[Ljava/lang/Object;)Ljava/lang/Object;": "Primitive/multidimensional array effects unsupported",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogCache.error(Lorg/slf4j/Logger;Ljava/lang/String;[Ljava/lang/Object;)V": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/tracer/Tracer.logError(Ljava/lang/Throwable;)V": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.canRetry(Ljava/lang/Throwable;Lorg/springframework/http/HttpMethod;)Z": "Application opcode unsupported: 193",
+      "com/ctrip/framework/apollo/tracer/Tracer.logEvent(Ljava/lang/String;Ljava/lang/String;)V": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/common/exception/BadRequestException.<init>(Ljava/lang/String;[Ljava/lang/Object;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+      "java/util/LinkedList.<init>()V": "Application constructor bytecode absent: java/util/LinkedList.<init>()V",
+      "com/ctrip/framework/apollo/portal/service/NamespaceService.transformNamespace2BO(Lcom/ctrip/framework/apollo/portal/environment/Env;Lcom/ctrip/framework/apollo/common/dto/NamespaceDTO;Z)Lcom/ctrip/framework/apollo/portal/entity/bo/NamespaceBO;": "Lambda bootstrap/handle unsupported",
+      "com/ctrip/framework/apollo/portal/spi/oidc/OidcUserInfoHolder.getUserInternal()Lcom/ctrip/framework/apollo/portal/entity/bo/UserInfo;": "Application opcode unsupported: 193",
+      "com/ctrip/framework/apollo/portal/spi/ldap/LdapUserService.searchUserInfoByGroup(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Ljava/util/List;": "Lambda SAM unsupported",
+      "com/ctrip/framework/apollo/portal/spi/ldap/LdapUserService.ldapQueryCriteria()Lorg/springframework/ldap/query/ContainerCriteria;": "Lambda SAM unsupported",
+      "com/ctrip/framework/apollo/portal/spi/springsecurity/SpringSecurityUserInfoHolder.getCurrentUsername()Ljava/lang/String;": "Application opcode unsupported: 193",
+      "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z": "Lambda SAM unsupported",
+      "com/ctrip/framework/apollo/portal/util/RoleUtils.buildNamespaceTargetId(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/portal/util/RoleUtils.buildNamespaceTargetId(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;": "Foreign application static initialization unsupported"
+    },
+    "read_forward_allowed_runtime_versions": [],
+    "interpretation": "First blockers and candidate unsupported effects only. Observing an opaque method is not proof that every listed effect is necessary for every target; fixing one blocker does not guarantee the group succeeds."
+  },
+  {
+    "api": "apollo-2",
+    "version": "ae7fe8d",
+    "representative_plan_index": 0,
+    "profile": "execution-dependency",
+    "static_rejections": [
+      {
+        "index": 8,
+        "path": "/*/isAbandoned",
+        "state": "planning_rejected",
+        "reason": "No supported static plan: {'legacy': 'Target serialization schema unsupported or custom: com/ctrip/framework/apollo/common/dto/ReleaseDTO.isAbandoned', 'execution': 'Target serialization unsupported'}"
+      }
+    ],
+    "declared_boundary_sites": [
+      {
+        "caller": "com/ctrip/framework/apollo/portal/service/AppNamespaceService.findByAppIdAndName(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/common/entity/AppNamespace;",
+        "site": 4,
+        "callee": "com/ctrip/framework/apollo/portal/repository/AppNamespaceRepository.findByAppIdAndName(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/common/entity/AppNamespace;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": true,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z",
+        "site": 4,
+        "callee": "com/ctrip/framework/apollo/portal/repository/PermissionRepository.findTopByPermissionTypeAndTargetId(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/po/Permission;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": "Lambda SAM unsupported"
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z",
+        "site": 37,
+        "callee": "com/ctrip/framework/apollo/portal/repository/RolePermissionRepository.findByRoleIdIn(Ljava/util/Collection;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": "Lambda SAM unsupported"
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/oidc/OidcLocalUserServiceImpl.findByUserId(Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/bo/UserInfo;",
+        "site": 3,
+        "callee": "com/ctrip/framework/apollo/portal/repository/UserRepository.findByUsername(Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/po/UserPO;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": true,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z",
+        "site": 19,
+        "callee": "com/ctrip/framework/apollo/portal/repository/UserRoleRepository.findByUserId(Ljava/lang/String;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": "Lambda SAM unsupported"
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.doExecute(Lorg/springframework/http/HttpMethod;Lorg/springframework/http/HttpHeaders;Lcom/ctrip/framework/apollo/core/dto/ServiceDTO;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Class;[Ljava/lang/Object;)Ljava/lang/Object;",
+        "site": 57,
+        "callee": "org/springframework/web/client/RestTemplate.exchange(Ljava/lang/String;Lorg/springframework/http/HttpMethod;Lorg/springframework/http/HttpEntity;Ljava/lang/Class;[Ljava/lang/Object;)Lorg/springframework/http/ResponseEntity;",
+        "kind": "rpc-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      }
+    ],
+    "unresolved_necessary_calls": [],
+    "opaque_application_methods": {
+      "com/ctrip/framework/apollo/portal/spi/oidc/OidcUserInfoHolder.getUserInternal()Lcom/ctrip/framework/apollo/portal/entity/bo/UserInfo;": "Application opcode unsupported: 193",
+      "com/ctrip/framework/apollo/portal/spi/ldap/LdapUserService.searchUserInfoByGroup(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Ljava/util/List;": "Lambda SAM unsupported",
+      "com/ctrip/framework/apollo/portal/spi/ldap/LdapUserService.ldapQueryCriteria()Lorg/springframework/ldap/query/ContainerCriteria;": "Lambda SAM unsupported",
+      "com/ctrip/framework/apollo/portal/spi/springsecurity/SpringSecurityUserInfoHolder.getCurrentUsername()Ljava/lang/String;": "Application opcode unsupported: 193",
+      "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z": "Lambda SAM unsupported",
+      "com/ctrip/framework/apollo/portal/util/RoleUtils.buildNamespaceTargetId(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/portal/util/RoleUtils.buildNamespaceTargetId(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/portal/environment/Env.valueOf(Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/environment/Env;": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/portal/api/AdminServiceAPI$ReleaseAPI.findActiveReleases(Ljava/lang/String;Lcom/ctrip/framework/apollo/portal/environment/Env;Ljava/lang/String;Ljava/lang/String;II)Ljava/util/List;": "Class literal requires frozen concrete class"
+    },
+    "read_forward_allowed_runtime_versions": [],
+    "interpretation": "First blockers and candidate unsupported effects only. Observing an opaque method is not proof that every listed effect is necessary for every target; fixing one blocker does not guarantee the group succeeds."
+  },
+  {
+    "api": "apollo-2",
+    "version": "78a9534",
+    "representative_plan_index": 0,
+    "profile": "execution-dependency",
+    "static_rejections": [
+      {
+        "index": 8,
+        "path": "/*/isAbandoned",
+        "state": "planning_rejected",
+        "reason": "No supported static plan: {'legacy': 'Target serialization schema unsupported or custom: com/ctrip/framework/apollo/common/dto/ReleaseDTO.isAbandoned', 'execution': 'Target serialization unsupported'}"
+      }
+    ],
+    "declared_boundary_sites": [
+      {
+        "caller": "com/ctrip/framework/apollo/portal/service/AppNamespaceService.findByAppIdAndName(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/common/entity/AppNamespace;",
+        "site": 4,
+        "callee": "com/ctrip/framework/apollo/portal/repository/AppNamespaceRepository.findByAppIdAndName(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/common/entity/AppNamespace;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": true,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z",
+        "site": 4,
+        "callee": "com/ctrip/framework/apollo/portal/repository/PermissionRepository.findTopByPermissionTypeAndTargetId(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/po/Permission;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": "Lambda SAM unsupported"
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z",
+        "site": 37,
+        "callee": "com/ctrip/framework/apollo/portal/repository/RolePermissionRepository.findByRoleIdIn(Ljava/util/Collection;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": "Lambda SAM unsupported"
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/oidc/OidcLocalUserServiceImpl.findByUserId(Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/bo/UserInfo;",
+        "site": 3,
+        "callee": "com/ctrip/framework/apollo/portal/repository/UserRepository.findByUsername(Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/po/UserPO;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": true,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z",
+        "site": 19,
+        "callee": "com/ctrip/framework/apollo/portal/repository/UserRoleRepository.findByUserId(Ljava/lang/String;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": "Lambda SAM unsupported"
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.doExecute(Lorg/springframework/http/HttpMethod;Lorg/springframework/http/HttpHeaders;Lcom/ctrip/framework/apollo/core/dto/ServiceDTO;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Class;[Ljava/lang/Object;)Ljava/lang/Object;",
+        "site": 57,
+        "callee": "org/springframework/web/client/RestTemplate.exchange(Ljava/lang/String;Lorg/springframework/http/HttpMethod;Lorg/springframework/http/HttpEntity;Ljava/lang/Class;[Ljava/lang/Object;)Lorg/springframework/http/ResponseEntity;",
+        "kind": "rpc-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      }
+    ],
+    "unresolved_necessary_calls": [],
+    "opaque_application_methods": {
+      "com/ctrip/framework/apollo/portal/spi/oidc/OidcUserInfoHolder.getUserInternal()Lcom/ctrip/framework/apollo/portal/entity/bo/UserInfo;": "Application opcode unsupported: 193",
+      "com/ctrip/framework/apollo/portal/spi/ldap/LdapUserService.searchUserInfoByGroup(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Ljava/util/List;": "Lambda SAM unsupported",
+      "com/ctrip/framework/apollo/portal/spi/ldap/LdapUserService.ldapQueryCriteria()Lorg/springframework/ldap/query/ContainerCriteria;": "Lambda SAM unsupported",
+      "com/ctrip/framework/apollo/portal/spi/springsecurity/SpringSecurityUserInfoHolder.getCurrentUsername()Ljava/lang/String;": "Application opcode unsupported: 193",
+      "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z": "Lambda SAM unsupported",
+      "com/ctrip/framework/apollo/portal/util/RoleUtils.buildNamespaceTargetId(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/portal/util/RoleUtils.buildNamespaceTargetId(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/portal/environment/Env.valueOf(Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/environment/Env;": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/portal/api/AdminServiceAPI$ReleaseAPI.findActiveReleases(Ljava/lang/String;Lcom/ctrip/framework/apollo/portal/environment/Env;Ljava/lang/String;Ljava/lang/String;II)Ljava/util/List;": "Class literal requires frozen concrete class"
+    },
+    "read_forward_allowed_runtime_versions": [],
+    "interpretation": "First blockers and candidate unsupported effects only. Observing an opaque method is not proof that every listed effect is necessary for every target; fixing one blocker does not guarantee the group succeeds."
+  },
+  {
+    "api": "apollo-3",
+    "version": "ae7fe8d",
+    "representative_plan_index": null,
+    "profile": null,
+    "static_rejections": [
+      {
+        "index": 0,
+        "path": "/",
+        "state": "target_binding_unsupported",
+        "reason": "unsupported-root-or-dynamic-target"
+      }
+    ],
+    "declared_boundary_sites": [
+      {
+        "caller": "com/ctrip/framework/apollo/biz/service/InstanceService.findInstancesByNamespace(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lorg/springframework/data/domain/Pageable;)Lorg/springframework/data/domain/Page;",
+        "site": 8,
+        "callee": "com/ctrip/framework/apollo/biz/repository/InstanceConfigRepository.findByConfigAppIdAndConfigClusterNameAndConfigNamespaceNameAndDataChangeLastModifiedTimeAfter(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Date;Lorg/springframework/data/domain/Pageable;)Lorg/springframework/data/domain/Page;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/biz/service/InstanceService.findInstancesByIds(Ljava/util/Set;)Ljava/util/List;",
+        "site": 3,
+        "callee": "com/ctrip/framework/apollo/biz/repository/InstanceRepository.findAllById(Ljava/lang/Iterable;)Ljava/lang/Iterable;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      }
+    ],
+    "unresolved_necessary_calls": [],
+    "opaque_application_methods": {},
+    "read_forward_allowed_runtime_versions": [],
+    "interpretation": "First blockers and candidate unsupported effects only. Observing an opaque method is not proof that every listed effect is necessary for every target; fixing one blocker does not guarantee the group succeeds."
+  },
+  {
+    "api": "apollo-3",
+    "version": "78a9534",
+    "representative_plan_index": null,
+    "profile": null,
+    "static_rejections": [
+      {
+        "index": 0,
+        "path": "/",
+        "state": "target_binding_unsupported",
+        "reason": "unsupported-root-or-dynamic-target"
+      }
+    ],
+    "declared_boundary_sites": [
+      {
+        "caller": "com/ctrip/framework/apollo/biz/service/InstanceService.findInstancesByNamespace(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lorg/springframework/data/domain/Pageable;)Lorg/springframework/data/domain/Page;",
+        "site": 8,
+        "callee": "com/ctrip/framework/apollo/biz/repository/InstanceConfigRepository.findByConfigAppIdAndConfigClusterNameAndConfigNamespaceNameAndDataChangeLastModifiedTimeAfter(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Date;Lorg/springframework/data/domain/Pageable;)Lorg/springframework/data/domain/Page;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/biz/service/InstanceService.findInstancesByIds(Ljava/util/Set;)Ljava/util/List;",
+        "site": 3,
+        "callee": "com/ctrip/framework/apollo/biz/repository/InstanceRepository.findAllById(Ljava/lang/Iterable;)Ljava/lang/Iterable;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      }
+    ],
+    "unresolved_necessary_calls": [],
+    "opaque_application_methods": {},
+    "read_forward_allowed_runtime_versions": [],
+    "interpretation": "First blockers and candidate unsupported effects only. Observing an opaque method is not proof that every listed effect is necessary for every target; fixing one blocker does not guarantee the group succeeds."
+  },
+  {
+    "api": "apollo-4",
+    "version": "ae7fe8d",
+    "representative_plan_index": null,
+    "profile": null,
+    "static_rejections": [
+      {
+        "index": 0,
+        "path": "/",
+        "state": "target_binding_unsupported",
+        "reason": "unsupported-root-or-dynamic-target"
+      }
+    ],
+    "declared_boundary_sites": [
+      {
+        "caller": "com/ctrip/framework/apollo/portal/service/AppNamespaceService.findByAppIdAndName(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/common/entity/AppNamespace;",
+        "site": 4,
+        "callee": "com/ctrip/framework/apollo/portal/repository/AppNamespaceRepository.findByAppIdAndName(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/common/entity/AppNamespace;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/service/AppNamespaceService.findPublicAppNamespace(Ljava/lang/String;)Lcom/ctrip/framework/apollo/common/entity/AppNamespace;",
+        "site": 4,
+        "callee": "com/ctrip/framework/apollo/portal/repository/AppNamespaceRepository.findByNameAndIsPublic(Ljava/lang/String;Z)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z",
+        "site": 4,
+        "callee": "com/ctrip/framework/apollo/portal/repository/PermissionRepository.findTopByPermissionTypeAndTargetId(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/po/Permission;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z",
+        "site": 37,
+        "callee": "com/ctrip/framework/apollo/portal/repository/RolePermissionRepository.findByRoleIdIn(Ljava/util/Collection;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/oidc/OidcLocalUserServiceImpl.findByUserId(Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/bo/UserInfo;",
+        "site": 3,
+        "callee": "com/ctrip/framework/apollo/portal/repository/UserRepository.findByUsername(Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/po/UserPO;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/oidc/OidcLocalUserServiceImpl.findByUserIds(Ljava/util/List;)Ljava/util/List;",
+        "site": 3,
+        "callee": "com/ctrip/framework/apollo/portal/repository/UserRepository.findByUsernameIn(Ljava/util/List;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z",
+        "site": 19,
+        "callee": "com/ctrip/framework/apollo/portal/repository/UserRoleRepository.findByUserId(Ljava/lang/String;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.doExecute(Lorg/springframework/http/HttpMethod;Lorg/springframework/http/HttpHeaders;Lcom/ctrip/framework/apollo/core/dto/ServiceDTO;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Class;[Ljava/lang/Object;)Ljava/lang/Object;",
+        "site": 57,
+        "callee": "org/springframework/web/client/RestTemplate.exchange(Ljava/lang/String;Lorg/springframework/http/HttpMethod;Lorg/springframework/http/HttpEntity;Ljava/lang/Class;[Ljava/lang/Object;)Lorg/springframework/http/ResponseEntity;",
+        "kind": "rpc-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      }
+    ],
+    "unresolved_necessary_calls": [],
+    "opaque_application_methods": {},
+    "read_forward_allowed_runtime_versions": [],
+    "interpretation": "First blockers and candidate unsupported effects only. Observing an opaque method is not proof that every listed effect is necessary for every target; fixing one blocker does not guarantee the group succeeds."
+  },
+  {
+    "api": "apollo-4",
+    "version": "78a9534",
+    "representative_plan_index": null,
+    "profile": null,
+    "static_rejections": [
+      {
+        "index": 0,
+        "path": "/",
+        "state": "target_binding_unsupported",
+        "reason": "unsupported-root-or-dynamic-target"
+      }
+    ],
+    "declared_boundary_sites": [
+      {
+        "caller": "com/ctrip/framework/apollo/portal/service/AppNamespaceService.findByAppIdAndName(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/common/entity/AppNamespace;",
+        "site": 4,
+        "callee": "com/ctrip/framework/apollo/portal/repository/AppNamespaceRepository.findByAppIdAndName(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/common/entity/AppNamespace;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/service/AppNamespaceService.findPublicAppNamespace(Ljava/lang/String;)Lcom/ctrip/framework/apollo/common/entity/AppNamespace;",
+        "site": 4,
+        "callee": "com/ctrip/framework/apollo/portal/repository/AppNamespaceRepository.findByNameAndIsPublic(Ljava/lang/String;Z)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z",
+        "site": 4,
+        "callee": "com/ctrip/framework/apollo/portal/repository/PermissionRepository.findTopByPermissionTypeAndTargetId(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/po/Permission;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z",
+        "site": 37,
+        "callee": "com/ctrip/framework/apollo/portal/repository/RolePermissionRepository.findByRoleIdIn(Ljava/util/Collection;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/oidc/OidcLocalUserServiceImpl.findByUserId(Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/bo/UserInfo;",
+        "site": 3,
+        "callee": "com/ctrip/framework/apollo/portal/repository/UserRepository.findByUsername(Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/po/UserPO;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/oidc/OidcLocalUserServiceImpl.findByUserIds(Ljava/util/List;)Ljava/util/List;",
+        "site": 3,
+        "callee": "com/ctrip/framework/apollo/portal/repository/UserRepository.findByUsernameIn(Ljava/util/List;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.userHasPermission(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z",
+        "site": 19,
+        "callee": "com/ctrip/framework/apollo/portal/repository/UserRoleRepository.findByUserId(Ljava/lang/String;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.doExecute(Lorg/springframework/http/HttpMethod;Lorg/springframework/http/HttpHeaders;Lcom/ctrip/framework/apollo/core/dto/ServiceDTO;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Class;[Ljava/lang/Object;)Ljava/lang/Object;",
+        "site": 57,
+        "callee": "org/springframework/web/client/RestTemplate.exchange(Ljava/lang/String;Lorg/springframework/http/HttpMethod;Lorg/springframework/http/HttpEntity;Ljava/lang/Class;[Ljava/lang/Object;)Lorg/springframework/http/ResponseEntity;",
+        "kind": "rpc-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      }
+    ],
+    "unresolved_necessary_calls": [],
+    "opaque_application_methods": {},
+    "read_forward_allowed_runtime_versions": [],
+    "interpretation": "First blockers and candidate unsupported effects only. Observing an opaque method is not proof that every listed effect is necessary for every target; fixing one blocker does not guarantee the group succeeds."
+  },
+  {
+    "api": "apollo-5",
+    "version": "ae7fe8d",
+    "representative_plan_index": 0,
+    "profile": "execution-dependency",
+    "static_rejections": [],
+    "declared_boundary_sites": [
+      {
+        "caller": "com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.exchangeGet(Lcom/ctrip/framework/apollo/portal/environment/Env;Ljava/lang/String;Lorg/springframework/core/ParameterizedTypeReference;[Ljava/lang/Object;)Lorg/springframework/http/ResponseEntity;",
+        "site": 61,
+        "callee": "org/springframework/web/client/RestTemplate.exchange(Ljava/lang/String;Lorg/springframework/http/HttpMethod;Lorg/springframework/http/HttpEntity;Lorg/springframework/core/ParameterizedTypeReference;[Ljava/lang/Object;)Lorg/springframework/http/ResponseEntity;",
+        "kind": "rpc-read",
+        "caller_is_planned_frame": true,
+        "direct_caller_opaque_reason": null
+      }
+    ],
+    "unresolved_necessary_calls": [],
+    "opaque_application_methods": {
+      "com/ctrip/framework/apollo/portal/environment/Env.valueOf(Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/environment/Env;": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/common/exception/ServiceException.<init>(Ljava/lang/String;[Ljava/lang/Object;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+      "com/ctrip/framework/apollo/tracer/Tracer.newTransaction(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/tracer/spi/Transaction;": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogger.isEnabled()Z": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogCache.info(Lorg/slf4j/Logger;Ljava/lang/String;[Ljava/lang/Object;)V": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogCache.warn(Lorg/slf4j/Logger;Ljava/lang/String;[Ljava/lang/Object;)V": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/core/utils/ApolloThreadFactory.create(Ljava/lang/String;Z)Ljava/util/concurrent/ThreadFactory;": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogCache.debug(Lorg/slf4j/Logger;Ljava/lang/String;[Ljava/lang/Object;)V": "Foreign application static initialization unsupported",
+      "java/net/URL.<init>(Ljava/lang/String;)V": "Application constructor bytecode absent: java/net/URL.<init>(Ljava/lang/String;)V",
+      "java/io/InputStreamReader.<init>(Ljava/io/InputStream;Ljava/nio/charset/Charset;)V": "Application constructor bytecode absent: java/io/InputStreamReader.<init>(Ljava/io/InputStream;Ljava/nio/charset/Charset;)V",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogCache.warn(Lorg/slf4j/Logger;Ljava/lang/String;Ljava/lang/Throwable;)V": "Foreign application static initialization unsupported",
+      "org/springframework/http/HttpHeaders.<init>()V": "Application constructor bytecode absent: org/springframework/http/HttpHeaders.<init>()V",
+      "com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.getAdminServiceAccessToken(Lcom/ctrip/framework/apollo/portal/environment/Env;)Ljava/lang/String;": "Application opcode unsupported: 194",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogCache.error(Lorg/slf4j/Logger;Ljava/lang/String;[Ljava/lang/Object;)V": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/tracer/Tracer.logError(Ljava/lang/Throwable;)V": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.canRetry(Ljava/lang/Throwable;Lorg/springframework/http/HttpMethod;)Z": "Application opcode unsupported: 193",
+      "com/ctrip/framework/apollo/tracer/Tracer.logEvent(Ljava/lang/String;Ljava/lang/String;)V": "Foreign application static initialization unsupported"
+    },
+    "read_forward_allowed_runtime_versions": [],
+    "interpretation": "First blockers and candidate unsupported effects only. Observing an opaque method is not proof that every listed effect is necessary for every target; fixing one blocker does not guarantee the group succeeds."
+  },
+  {
+    "api": "apollo-5",
+    "version": "78a9534",
+    "representative_plan_index": 0,
+    "profile": "execution-dependency",
+    "static_rejections": [],
+    "declared_boundary_sites": [
+      {
+        "caller": "com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.exchangeGet(Lcom/ctrip/framework/apollo/portal/environment/Env;Ljava/lang/String;Lorg/springframework/core/ParameterizedTypeReference;[Ljava/lang/Object;)Lorg/springframework/http/ResponseEntity;",
+        "site": 61,
+        "callee": "org/springframework/web/client/RestTemplate.exchange(Ljava/lang/String;Lorg/springframework/http/HttpMethod;Lorg/springframework/http/HttpEntity;Lorg/springframework/core/ParameterizedTypeReference;[Ljava/lang/Object;)Lorg/springframework/http/ResponseEntity;",
+        "kind": "rpc-read",
+        "caller_is_planned_frame": true,
+        "direct_caller_opaque_reason": null
+      }
+    ],
+    "unresolved_necessary_calls": [],
+    "opaque_application_methods": {
+      "com/ctrip/framework/apollo/portal/environment/Env.valueOf(Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/environment/Env;": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/common/exception/ServiceException.<init>(Ljava/lang/String;[Ljava/lang/Object;)V": "Only same-class constructor delegation shortcut; Constructor Frame currently requires direct empty Object initialization",
+      "com/ctrip/framework/apollo/tracer/Tracer.newTransaction(Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/tracer/spi/Transaction;": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogger.isEnabled()Z": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogCache.info(Lorg/slf4j/Logger;Ljava/lang/String;[Ljava/lang/Object;)V": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogCache.warn(Lorg/slf4j/Logger;Ljava/lang/String;[Ljava/lang/Object;)V": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/core/utils/ApolloThreadFactory.create(Ljava/lang/String;Z)Ljava/util/concurrent/ThreadFactory;": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogCache.debug(Lorg/slf4j/Logger;Ljava/lang/String;[Ljava/lang/Object;)V": "Foreign application static initialization unsupported",
+      "java/net/URL.<init>(Ljava/lang/String;)V": "Application constructor bytecode absent: java/net/URL.<init>(Ljava/lang/String;)V",
+      "java/io/InputStreamReader.<init>(Ljava/io/InputStream;Ljava/nio/charset/Charset;)V": "Application constructor bytecode absent: java/io/InputStreamReader.<init>(Ljava/io/InputStream;Ljava/nio/charset/Charset;)V",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogCache.warn(Lorg/slf4j/Logger;Ljava/lang/String;Ljava/lang/Throwable;)V": "Foreign application static initialization unsupported",
+      "org/springframework/http/HttpHeaders.<init>()V": "Application constructor bytecode absent: org/springframework/http/HttpHeaders.<init>()V",
+      "com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.getAdminServiceAccessToken(Lcom/ctrip/framework/apollo/portal/environment/Env;)Ljava/lang/String;": "Application opcode unsupported: 194",
+      "com/ctrip/framework/apollo/core/utils/DeferredLogCache.error(Lorg/slf4j/Logger;Ljava/lang/String;[Ljava/lang/Object;)V": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/tracer/Tracer.logError(Ljava/lang/Throwable;)V": "Foreign application static initialization unsupported",
+      "com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.canRetry(Ljava/lang/Throwable;Lorg/springframework/http/HttpMethod;)Z": "Application opcode unsupported: 193",
+      "com/ctrip/framework/apollo/tracer/Tracer.logEvent(Ljava/lang/String;Ljava/lang/String;)V": "Foreign application static initialization unsupported"
+    },
+    "read_forward_allowed_runtime_versions": [],
+    "interpretation": "First blockers and candidate unsupported effects only. Observing an opaque method is not proof that every listed effect is necessary for every target; fixing one blocker does not guarantee the group succeeds."
+  },
+  {
+    "api": "mall-swarm-1",
+    "version": "ae7fe8d",
+    "representative_plan_index": 0,
+    "profile": "response-forward",
+    "static_rejections": [],
+    "declared_boundary_sites": [
+      {
+        "caller": "com/macro/mall/portal/service/impl/UmsMemberServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;",
+        "site": 40,
+        "callee": "com/macro/mall/portal/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+        "kind": "rpc-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      }
+    ],
+    "unresolved_necessary_calls": [
+      "com/macro/mall/portal/service/UmsMemberService.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;"
+    ],
+    "opaque_application_methods": {},
+    "read_forward_allowed_runtime_versions": [
+      "1.8.0_111-internal-alpine-r0-b14",
+      "1.8.0_111-8u111-b14-2~bpo8+1-b14"
+    ],
+    "interpretation": "First blockers and candidate unsupported effects only. Observing an opaque method is not proof that every listed effect is necessary for every target; fixing one blocker does not guarantee the group succeeds."
+  },
+  {
+    "api": "mall-swarm-1",
+    "version": "78a9534",
+    "representative_plan_index": 0,
+    "profile": "response-forward",
+    "static_rejections": [],
+    "declared_boundary_sites": [
+      {
+        "caller": "com/macro/mall/portal/service/impl/UmsMemberServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;",
+        "site": 40,
+        "callee": "com/macro/mall/portal/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+        "kind": "rpc-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      }
+    ],
+    "unresolved_necessary_calls": [
+      "com/macro/mall/portal/service/UmsMemberService.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;"
+    ],
+    "opaque_application_methods": {},
+    "read_forward_allowed_runtime_versions": [
+      "1.8.0_111-internal-alpine-r0-b14",
+      "1.8.0_111-8u111-b14-2~bpo8+1-b14"
+    ],
+    "interpretation": "First blockers and candidate unsupported effects only. Observing an opaque method is not proof that every listed effect is necessary for every target; fixing one blocker does not guarantee the group succeeds."
+  },
+  {
+    "api": "mall-swarm-2",
+    "version": "ae7fe8d",
+    "representative_plan_index": 0,
+    "profile": "response-forward",
+    "static_rejections": [],
+    "declared_boundary_sites": [
+      {
+        "caller": "com/macro/mall/portal/service/impl/UmsMemberServiceImpl.register(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",
+        "site": 68,
+        "callee": "com/macro/mall/mapper/UmsMemberLevelMapper.selectByExample(Lcom/macro/mall/model/UmsMemberLevelExample;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/macro/mall/portal/service/impl/UmsMemberServiceImpl.register(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",
+        "site": 25,
+        "callee": "com/macro/mall/mapper/UmsMemberMapper.selectByExample(Lcom/macro/mall/model/UmsMemberExample;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/macro/mall/common/service/impl/RedisServiceImpl.get(Ljava/lang/String;)Ljava/lang/Object;",
+        "site": 4,
+        "callee": "org/springframework/data/redis/core/ValueOperations.get(Ljava/lang/Object;)Ljava/lang/Object;",
+        "kind": "redis-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      }
+    ],
+    "unresolved_necessary_calls": [
+      "com/macro/mall/common/api/CommonResult.success(Ljava/lang/Object;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;",
+      "com/macro/mall/portal/service/UmsMemberService.register(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V"
+    ],
+    "opaque_application_methods": {},
+    "read_forward_allowed_runtime_versions": [
+      "1.8.0_111-internal-alpine-r0-b14",
+      "1.8.0_111-8u111-b14-2~bpo8+1-b14"
+    ],
+    "interpretation": "First blockers and candidate unsupported effects only. Observing an opaque method is not proof that every listed effect is necessary for every target; fixing one blocker does not guarantee the group succeeds."
+  },
+  {
+    "api": "mall-swarm-2",
+    "version": "78a9534",
+    "representative_plan_index": 0,
+    "profile": "response-forward",
+    "static_rejections": [],
+    "declared_boundary_sites": [
+      {
+        "caller": "com/macro/mall/portal/service/impl/UmsMemberServiceImpl.register(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",
+        "site": 68,
+        "callee": "com/macro/mall/mapper/UmsMemberLevelMapper.selectByExample(Lcom/macro/mall/model/UmsMemberLevelExample;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/macro/mall/portal/service/impl/UmsMemberServiceImpl.register(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",
+        "site": 25,
+        "callee": "com/macro/mall/mapper/UmsMemberMapper.selectByExample(Lcom/macro/mall/model/UmsMemberExample;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/macro/mall/common/service/impl/RedisServiceImpl.get(Ljava/lang/String;)Ljava/lang/Object;",
+        "site": 4,
+        "callee": "org/springframework/data/redis/core/ValueOperations.get(Ljava/lang/Object;)Ljava/lang/Object;",
+        "kind": "redis-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      }
+    ],
+    "unresolved_necessary_calls": [
+      "com/macro/mall/common/api/CommonResult.success(Ljava/lang/Object;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;",
+      "com/macro/mall/portal/service/UmsMemberService.register(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V"
+    ],
+    "opaque_application_methods": {},
+    "read_forward_allowed_runtime_versions": [
+      "1.8.0_111-internal-alpine-r0-b14",
+      "1.8.0_111-8u111-b14-2~bpo8+1-b14"
+    ],
+    "interpretation": "First blockers and candidate unsupported effects only. Observing an opaque method is not proof that every listed effect is necessary for every target; fixing one blocker does not guarantee the group succeeds."
+  },
+  {
+    "api": "mall-swarm-3",
+    "version": "ae7fe8d",
+    "representative_plan_index": 0,
+    "profile": "response-forward",
+    "static_rejections": [],
+    "declared_boundary_sites": [
+      {
+        "caller": "com/macro/mall/service/impl/UmsAdminServiceImpl.getAdminByUsername(Ljava/lang/String;)Lcom/macro/mall/model/UmsAdmin;",
+        "site": 12,
+        "callee": "com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;",
+        "site": 40,
+        "callee": "com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+        "kind": "rpc-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      }
+    ],
+    "unresolved_necessary_calls": [
+      "com/macro/mall/service/UmsAdminService.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;"
+    ],
+    "opaque_application_methods": {},
+    "read_forward_allowed_runtime_versions": [
+      "1.8.0_111-internal-alpine-r0-b14",
+      "1.8.0_111-8u111-b14-2~bpo8+1-b14"
+    ],
+    "interpretation": "First blockers and candidate unsupported effects only. Observing an opaque method is not proof that every listed effect is necessary for every target; fixing one blocker does not guarantee the group succeeds."
+  },
+  {
+    "api": "mall-swarm-3",
+    "version": "78a9534",
+    "representative_plan_index": 0,
+    "profile": "response-forward",
+    "static_rejections": [],
+    "declared_boundary_sites": [
+      {
+        "caller": "com/macro/mall/service/impl/UmsAdminServiceImpl.getAdminByUsername(Ljava/lang/String;)Lcom/macro/mall/model/UmsAdmin;",
+        "site": 12,
+        "callee": "com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      },
+      {
+        "caller": "com/macro/mall/service/impl/UmsAdminServiceImpl.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;",
+        "site": 40,
+        "callee": "com/macro/mall/service/AuthService.getAccessToken(Ljava/util/Map;)Lcom/macro/mall/common/api/CommonResult;",
+        "kind": "rpc-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      }
+    ],
+    "unresolved_necessary_calls": [
+      "com/macro/mall/service/UmsAdminService.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;"
+    ],
+    "opaque_application_methods": {},
+    "read_forward_allowed_runtime_versions": [
+      "1.8.0_111-internal-alpine-r0-b14",
+      "1.8.0_111-8u111-b14-2~bpo8+1-b14"
+    ],
+    "interpretation": "First blockers and candidate unsupported effects only. Observing an opaque method is not proof that every listed effect is necessary for every target; fixing one blocker does not guarantee the group succeeds."
+  },
+  {
+    "api": "mall-swarm-4",
+    "version": "ae7fe8d",
+    "representative_plan_index": 0,
+    "profile": "response-forward",
+    "static_rejections": [],
+    "declared_boundary_sites": [
+      {
+        "caller": "com/macro/mall/service/impl/UmsAdminServiceImpl.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)I",
+        "site": 27,
+        "callee": "com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      }
+    ],
+    "unresolved_necessary_calls": [
+      "com/macro/mall/common/api/CommonResult.failed()Lcom/macro/mall/common/api/CommonResult;",
+      "com/macro/mall/common/api/CommonResult.failed(Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;",
+      "com/macro/mall/common/api/CommonResult.success(Ljava/lang/Object;)Lcom/macro/mall/common/api/CommonResult;",
+      "com/macro/mall/service/UmsAdminService.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)I",
+      "java/lang/Integer.valueOf(I)Ljava/lang/Integer;"
+    ],
+    "opaque_application_methods": {},
+    "read_forward_allowed_runtime_versions": [
+      "1.8.0_111-internal-alpine-r0-b14",
+      "1.8.0_111-8u111-b14-2~bpo8+1-b14"
+    ],
+    "interpretation": "First blockers and candidate unsupported effects only. Observing an opaque method is not proof that every listed effect is necessary for every target; fixing one blocker does not guarantee the group succeeds."
+  },
+  {
+    "api": "mall-swarm-4",
+    "version": "78a9534",
+    "representative_plan_index": 0,
+    "profile": "response-forward",
+    "static_rejections": [],
+    "declared_boundary_sites": [
+      {
+        "caller": "com/macro/mall/service/impl/UmsAdminServiceImpl.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)I",
+        "site": 27,
+        "callee": "com/macro/mall/mapper/UmsAdminMapper.selectByExample(Lcom/macro/mall/model/UmsAdminExample;)Ljava/util/List;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      }
+    ],
+    "unresolved_necessary_calls": [
+      "com/macro/mall/common/api/CommonResult.failed()Lcom/macro/mall/common/api/CommonResult;",
+      "com/macro/mall/common/api/CommonResult.failed(Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;",
+      "com/macro/mall/common/api/CommonResult.success(Ljava/lang/Object;)Lcom/macro/mall/common/api/CommonResult;",
+      "com/macro/mall/service/UmsAdminService.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)I",
+      "java/lang/Integer.valueOf(I)Ljava/lang/Integer;"
+    ],
+    "opaque_application_methods": {},
+    "read_forward_allowed_runtime_versions": [
+      "1.8.0_111-internal-alpine-r0-b14",
+      "1.8.0_111-8u111-b14-2~bpo8+1-b14"
+    ],
+    "interpretation": "First blockers and candidate unsupported effects only. Observing an opaque method is not proof that every listed effect is necessary for every target; fixing one blocker does not guarantee the group succeeds."
+  },
+  {
+    "api": "mall-swarm-5",
+    "version": "ae7fe8d",
+    "representative_plan_index": 0,
+    "profile": "response-forward",
+    "static_rejections": [],
+    "declared_boundary_sites": [
+      {
+        "caller": "com/macro/mall/service/impl/UmsAdminServiceImpl.update(Ljava/lang/Long;Lcom/macro/mall/model/UmsAdmin;)I",
+        "site": 6,
+        "callee": "com/macro/mall/mapper/UmsAdminMapper.selectByPrimaryKey(Ljava/lang/Long;)Lcom/macro/mall/model/UmsAdmin;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      }
+    ],
+    "unresolved_necessary_calls": [
+      "com/macro/mall/common/api/CommonResult.failed()Lcom/macro/mall/common/api/CommonResult;",
+      "com/macro/mall/common/api/CommonResult.success(Ljava/lang/Object;)Lcom/macro/mall/common/api/CommonResult;",
+      "com/macro/mall/service/UmsAdminService.update(Ljava/lang/Long;Lcom/macro/mall/model/UmsAdmin;)I",
+      "java/lang/Integer.valueOf(I)Ljava/lang/Integer;"
+    ],
+    "opaque_application_methods": {},
+    "read_forward_allowed_runtime_versions": [
+      "1.8.0_111-internal-alpine-r0-b14",
+      "1.8.0_111-8u111-b14-2~bpo8+1-b14"
+    ],
+    "interpretation": "First blockers and candidate unsupported effects only. Observing an opaque method is not proof that every listed effect is necessary for every target; fixing one blocker does not guarantee the group succeeds."
+  },
+  {
+    "api": "mall-swarm-5",
+    "version": "78a9534",
+    "representative_plan_index": 0,
+    "profile": "response-forward",
+    "static_rejections": [],
+    "declared_boundary_sites": [
+      {
+        "caller": "com/macro/mall/service/impl/UmsAdminServiceImpl.update(Ljava/lang/Long;Lcom/macro/mall/model/UmsAdmin;)I",
+        "site": 6,
+        "callee": "com/macro/mall/mapper/UmsAdminMapper.selectByPrimaryKey(Ljava/lang/Long;)Lcom/macro/mall/model/UmsAdmin;",
+        "kind": "repository-read",
+        "caller_is_planned_frame": false,
+        "direct_caller_opaque_reason": null
+      }
+    ],
+    "unresolved_necessary_calls": [
+      "com/macro/mall/common/api/CommonResult.failed()Lcom/macro/mall/common/api/CommonResult;",
+      "com/macro/mall/common/api/CommonResult.success(Ljava/lang/Object;)Lcom/macro/mall/common/api/CommonResult;",
+      "com/macro/mall/service/UmsAdminService.update(Ljava/lang/Long;Lcom/macro/mall/model/UmsAdmin;)I",
+      "java/lang/Integer.valueOf(I)Ljava/lang/Integer;"
+    ],
+    "opaque_application_methods": {},
+    "read_forward_allowed_runtime_versions": [
+      "1.8.0_111-internal-alpine-r0-b14",
+      "1.8.0_111-8u111-b14-2~bpo8+1-b14"
+    ],
+    "interpretation": "First blockers and candidate unsupported effects only. Observing an opaque method is not proof that every listed effect is necessary for every target; fixing one blocker does not guarantee the group succeeds."
+  }
+]

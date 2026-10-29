@@ -1,0 +1,112 @@
+{
+  "partial": false,
+  "APIs_retained": 40,
+  "selected_batch_APIs": 10,
+  "no_core_agent_contract_changes": true,
+  "no_performance": true,
+  "api_complete_success_not_claimed": true,
+  "states": {
+    "MT-B0": {
+      "unknown": 195,
+      "evidence_invalid": 6,
+      "known_correct": 88,
+      "known_wrong": 5,
+      "known_unchecked": 5
+    },
+    "ae7fe8d-full": {
+      "instrumented_business_failure": 120,
+      "planning_rejected": 15,
+      "evidence_invalid": 55,
+      "target_binding_unsupported": 6,
+      "runtime_contract_rejected": 103
+    },
+    "ae7fe8d-selective": {
+      "instrumented_business_failure": 120,
+      "planning_rejected": 15,
+      "evidence_invalid": 55,
+      "target_binding_unsupported": 6,
+      "runtime_contract_rejected": 103
+    },
+    "78a9534-full": {
+      "evidence_invalid": 175,
+      "planning_rejected": 15,
+      "target_binding_unsupported": 6,
+      "runtime_contract_rejected": 103
+    },
+    "78a9534-selective": {
+      "evidence_invalid": 175,
+      "planning_rejected": 15,
+      "target_binding_unsupported": 6,
+      "runtime_contract_rejected": 103
+    }
+  },
+  "oracle_adequate": {
+    "MT-B0": 223
+  },
+  "actual_query_requests_including_original_exception_cases": {
+    "MT-B0": 60,
+    "ae7fe8d-full": 198,
+    "ae7fe8d-selective": 198,
+    "78a9534-full": 198,
+    "78a9534-selective": 198
+  },
+  "HTTP_status_changes": {
+    "ae7fe8d-full": 132,
+    "ae7fe8d-selective": 132
+  },
+  "original_query_case_generation_states": {
+    "wire_target_generated": 299,
+    "original_method_exception_or_pre_entry_failure": 29,
+    "no_matching_wire_leaf": 21,
+    "method_null_empty_body_obligation": 5
+  },
+  "original_query_case_generation_unit": "One original input per query family; not independent deployed requests. Actual null fields are leaves; empty container member queries have no leaf. Tool refusals remain separate.",
+  "paired_target_rows": 299,
+  "paired_confirmed_MT_correct_TF_not_correct": {
+    "ae7fe8d": 88,
+    "78a9534": 88
+  },
+  "paired_confirmed_TF_correct_MT_not_correct": {
+    "ae7fe8d": 0,
+    "78a9534": 0
+  },
+  "paired_limit": "Counts only independently certified answers. Zero identified baseline-leading pairs is not equivalence when baseline target export or truth is incomplete.",
+  "diagnoses": {
+    "MT-B0": {
+      "baseline_wire_target_export_gap": 190,
+      "baseline_primitive_root_export_interface_gap": 6,
+      "known_correct": 88,
+      "unknown": 5,
+      "known_wrong": 5,
+      "known_unchecked": 5
+    },
+    "ae7fe8d-full": {
+      "monitor_failure_capture_rejected": 120,
+      "planning_rejected": 15,
+      "response_target_binding_gap_not_proof_of_log_corruption": 55,
+      "target_binding_unsupported": 6,
+      "runtime_contract_rejected": 103
+    },
+    "ae7fe8d-selective": {
+      "monitor_failure_capture_rejected": 120,
+      "planning_rejected": 15,
+      "response_target_binding_gap_not_proof_of_log_corruption": 55,
+      "target_binding_unsupported": 6,
+      "runtime_contract_rejected": 103
+    },
+    "78a9534-full": {
+      "monitor_failure_capture_rejected": 120,
+      "planning_rejected": 15,
+      "response_target_binding_gap_not_proof_of_log_corruption": 55,
+      "target_binding_unsupported": 6,
+      "runtime_contract_rejected": 103
+    },
+    "78a9534-selective": {
+      "monitor_failure_capture_rejected": 120,
+      "planning_rejected": 15,
+      "response_target_binding_gap_not_proof_of_log_corruption": 55,
+      "target_binding_unsupported": 6,
+      "runtime_contract_rejected": 103
+    }
+  }
+}

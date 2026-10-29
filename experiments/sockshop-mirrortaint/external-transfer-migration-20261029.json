@@ -1,0 +1,397 @@
+{
+  "at": "2026-10-29T02:01:21.691715+00:00",
+  "measured_human_hours": null,
+  "meaning": "Auditable work inventory, not human effort estimate or proven number of rules",
+  "levels": [
+    "query declaration only",
+    "implementation/version/configuration revalidation",
+    "new public model required",
+    "core/collector/target interface required"
+  ],
+  "API_records": [
+    {
+      "api": "apollo-1",
+      "prior_exposure": "Original sources, reflection, ae7 static planning and no-Agent environment diagnostics already exposed; not blind",
+      "frozen_algorithms": [
+        "ae7fe8d",
+        "78a9534"
+      ],
+      "TF_core_changes": 0,
+      "TF_agent_changes": 0,
+      "TF_public_models_added": 0,
+      "query_and_boundary_declarations": 14,
+      "read_boundary_candidates": 8,
+      "domain_sink_candidates": 0,
+      "environment_work": [
+        "Original historical candidate JAR/version locked",
+        "Isolated database/network and legitimate public test login",
+        "Prerequest message and DB receipts"
+      ],
+      "MT_baseline_configuration_work": "Concrete repository/RPC sources discovered beyond service interfaces; full application prefix; B0 binaries unchanged",
+      "successful_model_reuse_claim": "No independently certified TF answer; end-to-end reuse of the added Account models was not demonstrated.",
+      "required_support_level": "Query/target interface or collector/serialization and application-call semantics",
+      "static_traversal_methods": 198,
+      "source_configuration_calibration": "C1: official frozen plan_response(source_calls) API; high-level route profile retained; new TF captures, first incorrect integration preserved",
+      "actual_TF_result_states": {
+        "ae7fe8d-full": {
+          "instrumented_business_failure": 60,
+          "planning_rejected": 10
+        },
+        "ae7fe8d-selective": {
+          "instrumented_business_failure": 60,
+          "planning_rejected": 10
+        },
+        "78a9534-full": {
+          "evidence_invalid": 60,
+          "planning_rejected": 10
+        },
+        "78a9534-selective": {
+          "evidence_invalid": 60,
+          "planning_rejected": 10
+        }
+      }
+    },
+    {
+      "api": "apollo-2",
+      "prior_exposure": "Original sources, reflection, ae7 static planning and no-Agent environment diagnostics already exposed; not blind",
+      "frozen_algorithms": [
+        "ae7fe8d",
+        "78a9534"
+      ],
+      "TF_core_changes": 0,
+      "TF_agent_changes": 0,
+      "TF_public_models_added": 0,
+      "query_and_boundary_declarations": 12,
+      "read_boundary_candidates": 6,
+      "domain_sink_candidates": 0,
+      "environment_work": [
+        "Original historical candidate JAR/version locked",
+        "Isolated database/network and legitimate public test login",
+        "Prerequest message and DB receipts"
+      ],
+      "MT_baseline_configuration_work": "Concrete repository/RPC sources discovered beyond service interfaces; full application prefix; B0 binaries unchanged",
+      "successful_model_reuse_claim": "No independently certified TF answer; end-to-end reuse of the added Account models was not demonstrated.",
+      "required_support_level": "Query/target interface or collector/serialization and application-call semantics",
+      "static_traversal_methods": 117,
+      "source_configuration_calibration": "C1: official frozen plan_response(source_calls) API; high-level route profile retained; new TF captures, first incorrect integration preserved",
+      "actual_TF_result_states": {
+        "ae7fe8d-full": {
+          "evidence_invalid": 55,
+          "planning_rejected": 5
+        },
+        "ae7fe8d-selective": {
+          "evidence_invalid": 55,
+          "planning_rejected": 5
+        },
+        "78a9534-full": {
+          "evidence_invalid": 55,
+          "planning_rejected": 5
+        },
+        "78a9534-selective": {
+          "evidence_invalid": 55,
+          "planning_rejected": 5
+        }
+      }
+    },
+    {
+      "api": "apollo-3",
+      "prior_exposure": "Original sources, reflection, ae7 static planning and no-Agent environment diagnostics already exposed; not blind",
+      "frozen_algorithms": [
+        "ae7fe8d",
+        "78a9534"
+      ],
+      "TF_core_changes": 0,
+      "TF_agent_changes": 0,
+      "TF_public_models_added": 0,
+      "query_and_boundary_declarations": 1,
+      "read_boundary_candidates": 2,
+      "domain_sink_candidates": 0,
+      "environment_work": [
+        "Original historical candidate JAR/version locked",
+        "Isolated database/network and legitimate public test login",
+        "Prerequest message and DB receipts"
+      ],
+      "MT_baseline_configuration_work": "Concrete repository/RPC sources discovered beyond service interfaces; full application prefix; B0 binaries unchanged",
+      "successful_model_reuse_claim": "No independently certified TF answer; end-to-end reuse of the added Account models was not demonstrated.",
+      "required_support_level": "Query/target interface or collector/serialization and application-call semantics",
+      "static_traversal_methods": 4,
+      "source_configuration_calibration": "C1: official frozen plan_response(source_calls) API; high-level route profile retained; new TF captures, first incorrect integration preserved",
+      "actual_TF_result_states": {
+        "ae7fe8d-full": {
+          "target_binding_unsupported": 6
+        },
+        "ae7fe8d-selective": {
+          "target_binding_unsupported": 6
+        },
+        "78a9534-full": {
+          "target_binding_unsupported": 6
+        },
+        "78a9534-selective": {
+          "target_binding_unsupported": 6
+        }
+      }
+    },
+    {
+      "api": "apollo-4",
+      "prior_exposure": "Original sources, reflection, ae7 static planning and no-Agent environment diagnostics already exposed; not blind",
+      "frozen_algorithms": [
+        "ae7fe8d",
+        "78a9534"
+      ],
+      "TF_core_changes": 0,
+      "TF_agent_changes": 0,
+      "TF_public_models_added": 0,
+      "query_and_boundary_declarations": 1,
+      "read_boundary_candidates": 8,
+      "domain_sink_candidates": 0,
+      "environment_work": [
+        "Original historical candidate JAR/version locked",
+        "Isolated database/network and legitimate public test login",
+        "Prerequest message and DB receipts"
+      ],
+      "MT_baseline_configuration_work": "Concrete repository/RPC sources discovered beyond service interfaces; full application prefix; B0 binaries unchanged",
+      "successful_model_reuse_claim": "No independently certified TF answer; end-to-end reuse of the added Account models was not demonstrated.",
+      "required_support_level": "Query/target interface or collector/serialization and application-call semantics",
+      "static_traversal_methods": 201,
+      "source_configuration_calibration": "C1: official frozen plan_response(source_calls) API; high-level route profile retained; new TF captures, first incorrect integration preserved",
+      "actual_TF_result_states": {
+        "ae7fe8d-full": {},
+        "ae7fe8d-selective": {},
+        "78a9534-full": {},
+        "78a9534-selective": {}
+      }
+    },
+    {
+      "api": "apollo-5",
+      "prior_exposure": "Original sources, reflection, ae7 static planning and no-Agent environment diagnostics already exposed; not blind",
+      "frozen_algorithms": [
+        "ae7fe8d",
+        "78a9534"
+      ],
+      "TF_core_changes": 0,
+      "TF_agent_changes": 0,
+      "TF_public_models_added": 0,
+      "query_and_boundary_declarations": 10,
+      "read_boundary_candidates": 1,
+      "domain_sink_candidates": 0,
+      "environment_work": [
+        "Original historical candidate JAR/version locked",
+        "Isolated database/network and legitimate public test login",
+        "Prerequest message and DB receipts"
+      ],
+      "MT_baseline_configuration_work": "Concrete repository/RPC sources discovered beyond service interfaces; full application prefix; B0 binaries unchanged",
+      "successful_model_reuse_claim": "No independently certified TF answer; end-to-end reuse of the added Account models was not demonstrated.",
+      "required_support_level": "Query/target interface or collector/serialization and application-call semantics",
+      "static_traversal_methods": 65,
+      "source_configuration_calibration": "C1: official frozen plan_response(source_calls) API; high-level route profile retained; new TF captures, first incorrect integration preserved",
+      "actual_TF_result_states": {
+        "ae7fe8d-full": {
+          "instrumented_business_failure": 60
+        },
+        "ae7fe8d-selective": {
+          "instrumented_business_failure": 60
+        },
+        "78a9534-full": {
+          "evidence_invalid": 60
+        },
+        "78a9534-selective": {
+          "evidence_invalid": 60
+        }
+      }
+    },
+    {
+      "api": "mall-swarm-1",
+      "prior_exposure": "Original sources, reflection, ae7 static planning and no-Agent environment diagnostics already exposed; not blind",
+      "frozen_algorithms": [
+        "ae7fe8d",
+        "78a9534"
+      ],
+      "TF_core_changes": 0,
+      "TF_agent_changes": 0,
+      "TF_public_models_added": 0,
+      "query_and_boundary_declarations": 6,
+      "read_boundary_candidates": 1,
+      "domain_sink_candidates": 0,
+      "environment_work": [
+        "Original historical candidate JAR/version locked",
+        "Isolated database/network and legitimate public test login",
+        "Prerequest message and DB receipts"
+      ],
+      "MT_baseline_configuration_work": "Concrete repository/RPC sources discovered beyond service interfaces; full application prefix; B0 binaries unchanged",
+      "successful_model_reuse_claim": "No independently certified TF answer; end-to-end reuse of the added Account models was not demonstrated.",
+      "required_support_level": "Runtime revalidation and routing/opaque-call integration",
+      "static_traversal_methods": 5,
+      "source_configuration_calibration": "C1: official frozen plan_response(source_calls) API; high-level route profile retained; new TF captures, first incorrect integration preserved",
+      "actual_TF_result_states": {
+        "ae7fe8d-full": {
+          "runtime_contract_rejected": 32
+        },
+        "ae7fe8d-selective": {
+          "runtime_contract_rejected": 32
+        },
+        "78a9534-full": {
+          "runtime_contract_rejected": 32
+        },
+        "78a9534-selective": {
+          "runtime_contract_rejected": 32
+        }
+      }
+    },
+    {
+      "api": "mall-swarm-2",
+      "prior_exposure": "Original sources, reflection, ae7 static planning and no-Agent environment diagnostics already exposed; not blind",
+      "frozen_algorithms": [
+        "ae7fe8d",
+        "78a9534"
+      ],
+      "TF_core_changes": 0,
+      "TF_agent_changes": 0,
+      "TF_public_models_added": 0,
+      "query_and_boundary_declarations": 2,
+      "read_boundary_candidates": 3,
+      "domain_sink_candidates": 1,
+      "environment_work": [
+        "Original historical candidate JAR/version locked",
+        "Isolated database/network and legitimate public test login",
+        "Prerequest message and DB receipts"
+      ],
+      "MT_baseline_configuration_work": "Concrete repository/RPC sources discovered beyond service interfaces; full application prefix; B0 binaries unchanged",
+      "successful_model_reuse_claim": "No independently certified TF answer; end-to-end reuse of the added Account models was not demonstrated.",
+      "required_support_level": "Runtime revalidation and routing/opaque-call integration",
+      "static_traversal_methods": 44,
+      "source_configuration_calibration": "C1: official frozen plan_response(source_calls) API; high-level route profile retained; new TF captures, first incorrect integration preserved",
+      "actual_TF_result_states": {
+        "ae7fe8d-full": {
+          "runtime_contract_rejected": 8
+        },
+        "ae7fe8d-selective": {
+          "runtime_contract_rejected": 8
+        },
+        "78a9534-full": {
+          "runtime_contract_rejected": 8
+        },
+        "78a9534-selective": {
+          "runtime_contract_rejected": 8
+        }
+      }
+    },
+    {
+      "api": "mall-swarm-3",
+      "prior_exposure": "Original sources, reflection, ae7 static planning and no-Agent environment diagnostics already exposed; not blind",
+      "frozen_algorithms": [
+        "ae7fe8d",
+        "78a9534"
+      ],
+      "TF_core_changes": 0,
+      "TF_agent_changes": 0,
+      "TF_public_models_added": 0,
+      "query_and_boundary_declarations": 7,
+      "read_boundary_candidates": 2,
+      "domain_sink_candidates": 1,
+      "environment_work": [
+        "Original historical candidate JAR/version locked",
+        "Isolated database/network and legitimate public test login",
+        "Prerequest message and DB receipts"
+      ],
+      "MT_baseline_configuration_work": "Concrete repository/RPC sources discovered beyond service interfaces; full application prefix; B0 binaries unchanged",
+      "successful_model_reuse_claim": "No independently certified TF answer; end-to-end reuse of the added Account models was not demonstrated.",
+      "required_support_level": "Runtime revalidation and routing/opaque-call integration",
+      "static_traversal_methods": 27,
+      "source_configuration_calibration": "C1: official frozen plan_response(source_calls) API; high-level route profile retained; new TF captures, first incorrect integration preserved",
+      "actual_TF_result_states": {
+        "ae7fe8d-full": {
+          "runtime_contract_rejected": 30
+        },
+        "ae7fe8d-selective": {
+          "runtime_contract_rejected": 30
+        },
+        "78a9534-full": {
+          "runtime_contract_rejected": 30
+        },
+        "78a9534-selective": {
+          "runtime_contract_rejected": 30
+        }
+      }
+    },
+    {
+      "api": "mall-swarm-4",
+      "prior_exposure": "Original sources, reflection, ae7 static planning and no-Agent environment diagnostics already exposed; not blind",
+      "frozen_algorithms": [
+        "ae7fe8d",
+        "78a9534"
+      ],
+      "TF_core_changes": 0,
+      "TF_agent_changes": 0,
+      "TF_public_models_added": 0,
+      "query_and_boundary_declarations": 3,
+      "read_boundary_candidates": 1,
+      "domain_sink_candidates": 2,
+      "environment_work": [
+        "Original historical candidate JAR/version locked",
+        "Isolated database/network and legitimate public test login",
+        "Prerequest message and DB receipts"
+      ],
+      "MT_baseline_configuration_work": "Concrete repository/RPC sources discovered beyond service interfaces; full application prefix; B0 binaries unchanged",
+      "successful_model_reuse_claim": "No independently certified TF answer; end-to-end reuse of the added Account models was not demonstrated.",
+      "required_support_level": "Runtime revalidation and routing/opaque-call integration",
+      "static_traversal_methods": 33,
+      "source_configuration_calibration": "C1: official frozen plan_response(source_calls) API; high-level route profile retained; new TF captures, first incorrect integration preserved",
+      "actual_TF_result_states": {
+        "ae7fe8d-full": {
+          "runtime_contract_rejected": 18
+        },
+        "ae7fe8d-selective": {
+          "runtime_contract_rejected": 18
+        },
+        "78a9534-full": {
+          "runtime_contract_rejected": 18
+        },
+        "78a9534-selective": {
+          "runtime_contract_rejected": 18
+        }
+      }
+    },
+    {
+      "api": "mall-swarm-5",
+      "prior_exposure": "Original sources, reflection, ae7 static planning and no-Agent environment diagnostics already exposed; not blind",
+      "frozen_algorithms": [
+        "ae7fe8d",
+        "78a9534"
+      ],
+      "TF_core_changes": 0,
+      "TF_agent_changes": 0,
+      "TF_public_models_added": 0,
+      "query_and_boundary_declarations": 3,
+      "read_boundary_candidates": 1,
+      "domain_sink_candidates": 2,
+      "environment_work": [
+        "Original historical candidate JAR/version locked",
+        "Isolated database/network and legitimate public test login",
+        "Prerequest message and DB receipts"
+      ],
+      "MT_baseline_configuration_work": "Concrete repository/RPC sources discovered beyond service interfaces; full application prefix; B0 binaries unchanged",
+      "successful_model_reuse_claim": "No independently certified TF answer; end-to-end reuse of the added Account models was not demonstrated.",
+      "required_support_level": "Runtime revalidation and routing/opaque-call integration",
+      "static_traversal_methods": 19,
+      "source_configuration_calibration": "C1: official frozen plan_response(source_calls) API; high-level route profile retained; new TF captures, first incorrect integration preserved",
+      "actual_TF_result_states": {
+        "ae7fe8d-full": {
+          "runtime_contract_rejected": 15
+        },
+        "ae7fe8d-selective": {
+          "runtime_contract_rejected": 15
+        },
+        "78a9534-full": {
+          "runtime_contract_rejected": 15
+        },
+        "78a9534-selective": {
+          "runtime_contract_rejected": 15
+        }
+      }
+    }
+  ],
+  "separate_B1_exporter": "New raw source/sink call facts and actual Gson identity only; native propagation unchanged, no provenance or certified serializer model added",
+  "other_environment_restoration": "Original ZLT two roles start with local original SQL/MySQL/Redis/Nacos addresses. API auth/entry readiness still not verified.",
+  "manual_review_measure": "No human hours reconstructed. Static traversal counts are automated work inventory, not the number of manually audited methods.",
+  "runtime_applicability": "84 C1 query/mode combinations rejected by existing necessary JDK version condition before deployment. Separate first real failures preserved."
+}

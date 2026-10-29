@@ -21,6 +21,12 @@ def original_root_returns(case):
   # GlobalExceptionHandler returns a separate CommonResult over HTTP 200.
   # Preserve those requests as exception cases, not root-return field targets.
   return isinstance(case['response'],dict)and case['response'].get('code')==200
+ if case['api']=='mall-swarm-3':
+  # @Validated UmsAdminLoginParam has @NotEmpty username/password. The
+  # frozen input-04 materialization omits username, so its HTTP-200 handler
+  # response is outside the declared controller's return instances.
+  body=case.get('body')or{}
+  return body.get('username')not in(None,'')and body.get('password')not in(None,'')
  return True
 def rule(protocol,api,path):return next(r for r in protocol['rules']if r['api']==api and r['path']==wildcard(path))
 def require_complete_raw_capture(rows):

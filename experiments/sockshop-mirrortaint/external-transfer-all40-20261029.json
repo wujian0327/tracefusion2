@@ -1,0 +1,1119 @@
+[
+  {
+    "id": "apollo-1",
+    "application": "apollo",
+    "paper_method": "findNamespace",
+    "original_task_record": {
+      "id": "apollo-1",
+      "application": "apollo",
+      "paper_service": "apollo",
+      "paper_method": "findNamespace",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/ctrip/framework/apollo/portal/controller/NamespaceController.findNamespace(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/bo/NamespaceBO;",
+    "batch_state": "current_matrix",
+    "current_batch_result": {
+      "api": "apollo-1",
+      "entry": "com/ctrip/framework/apollo/portal/controller/NamespaceController.findNamespace(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/bo/NamespaceBO;",
+      "queries": 14,
+      "original": {
+        "application": "apollo",
+        "mode": "original",
+        "paper_version_reproduced": false,
+        "state": "business_attempts_completed_entry_and_target_generation_need_witness",
+        "cleanup_returncode": 0,
+        "cases": 6
+      },
+      "MT": {
+        "unknown": 70
+      },
+      "TF": {
+        "ae7fe8d-full": {
+          "instrumented_business_failure": 60,
+          "planning_rejected": 10
+        },
+        "ae7fe8d-selective": {
+          "instrumented_business_failure": 60,
+          "planning_rejected": 10
+        },
+        "78a9534-full": {
+          "evidence_invalid": 60,
+          "planning_rejected": 10
+        },
+        "78a9534-selective": {
+          "evidence_invalid": 60,
+          "planning_rejected": 10
+        }
+      },
+      "sink_sites": 0,
+      "source_sites": 8,
+      "complete_API_verified": false
+    }
+  },
+  {
+    "id": "apollo-2",
+    "application": "apollo",
+    "paper_method": "findActiveReleases",
+    "original_task_record": {
+      "id": "apollo-2",
+      "application": "apollo",
+      "paper_service": "apollo",
+      "paper_method": "findActiveReleases",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/ctrip/framework/apollo/portal/controller/ReleaseController.findActiveReleases(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;II)Ljava/util/List;",
+    "batch_state": "current_matrix",
+    "current_batch_result": {
+      "api": "apollo-2",
+      "entry": "com/ctrip/framework/apollo/portal/controller/ReleaseController.findActiveReleases(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;II)Ljava/util/List;",
+      "queries": 12,
+      "original": {
+        "application": "apollo",
+        "mode": "original",
+        "paper_version_reproduced": false,
+        "state": "business_attempts_completed_entry_and_target_generation_need_witness",
+        "cleanup_returncode": 0,
+        "cases": 6
+      },
+      "MT": {
+        "unknown": 60
+      },
+      "TF": {
+        "ae7fe8d-full": {
+          "evidence_invalid": 55,
+          "planning_rejected": 5
+        },
+        "ae7fe8d-selective": {
+          "evidence_invalid": 55,
+          "planning_rejected": 5
+        },
+        "78a9534-full": {
+          "evidence_invalid": 55,
+          "planning_rejected": 5
+        },
+        "78a9534-selective": {
+          "evidence_invalid": 55,
+          "planning_rejected": 5
+        }
+      },
+      "sink_sites": 0,
+      "source_sites": 6,
+      "complete_API_verified": false
+    }
+  },
+  {
+    "id": "apollo-3",
+    "application": "apollo",
+    "paper_method": "getInstancesCountByNamespace",
+    "original_task_record": {
+      "id": "apollo-3",
+      "application": "apollo",
+      "paper_service": "apollo",
+      "paper_method": "getInstancesCountByNamespace",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/ctrip/framework/apollo/adminservice/controller/InstanceConfigController.getInstancesCountByNamespace(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)J",
+    "batch_state": "current_matrix",
+    "current_batch_result": {
+      "api": "apollo-3",
+      "entry": "com/ctrip/framework/apollo/adminservice/controller/InstanceConfigController.getInstancesCountByNamespace(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)J",
+      "queries": 1,
+      "original": {
+        "application": "apollo",
+        "mode": "original",
+        "paper_version_reproduced": false,
+        "state": "business_attempts_completed_entry_and_target_generation_need_witness",
+        "cleanup_returncode": 0,
+        "cases": 6
+      },
+      "MT": {
+        "evidence_invalid": 6
+      },
+      "TF": {
+        "ae7fe8d-full": {
+          "target_binding_unsupported": 6
+        },
+        "ae7fe8d-selective": {
+          "target_binding_unsupported": 6
+        },
+        "78a9534-full": {
+          "target_binding_unsupported": 6
+        },
+        "78a9534-selective": {
+          "target_binding_unsupported": 6
+        }
+      },
+      "sink_sites": 0,
+      "source_sites": 2,
+      "complete_API_verified": false
+    }
+  },
+  {
+    "id": "apollo-4",
+    "application": "apollo",
+    "paper_method": "findBranch",
+    "original_task_record": {
+      "id": "apollo-4",
+      "application": "apollo",
+      "paper_service": "apollo",
+      "paper_method": "findBranch",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/ctrip/framework/apollo/portal/controller/NamespaceBranchController.findBranch(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/bo/NamespaceBO;",
+    "batch_state": "current_matrix",
+    "current_batch_result": {
+      "api": "apollo-4",
+      "entry": "com/ctrip/framework/apollo/portal/controller/NamespaceBranchController.findBranch(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/ctrip/framework/apollo/portal/entity/bo/NamespaceBO;",
+      "queries": 1,
+      "original": {
+        "application": "apollo",
+        "mode": "original",
+        "paper_version_reproduced": false,
+        "state": "business_attempts_completed_entry_and_target_generation_need_witness",
+        "cleanup_returncode": 0,
+        "cases": 6
+      },
+      "MT": {},
+      "TF": {
+        "ae7fe8d-full": {},
+        "ae7fe8d-selective": {},
+        "78a9534-full": {},
+        "78a9534-selective": {}
+      },
+      "sink_sites": 0,
+      "source_sites": 8,
+      "complete_API_verified": false
+    }
+  },
+  {
+    "id": "apollo-5",
+    "application": "apollo",
+    "paper_method": "getByRelease",
+    "original_task_record": {
+      "id": "apollo-5",
+      "application": "apollo",
+      "paper_service": "apollo",
+      "paper_method": "getByRelease",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/ctrip/framework/apollo/portal/controller/InstanceController.getByRelease(Ljava/lang/String;JII)Lcom/ctrip/framework/apollo/common/dto/PageDTO;",
+    "batch_state": "current_matrix",
+    "current_batch_result": {
+      "api": "apollo-5",
+      "entry": "com/ctrip/framework/apollo/portal/controller/InstanceController.getByRelease(Ljava/lang/String;JII)Lcom/ctrip/framework/apollo/common/dto/PageDTO;",
+      "queries": 10,
+      "original": {
+        "application": "apollo",
+        "mode": "original",
+        "paper_version_reproduced": false,
+        "state": "business_attempts_completed_entry_and_target_generation_need_witness",
+        "cleanup_returncode": 0,
+        "cases": 6
+      },
+      "MT": {
+        "unknown": 60
+      },
+      "TF": {
+        "ae7fe8d-full": {
+          "instrumented_business_failure": 60
+        },
+        "ae7fe8d-selective": {
+          "instrumented_business_failure": 60
+        },
+        "78a9534-full": {
+          "evidence_invalid": 60
+        },
+        "78a9534-selective": {
+          "evidence_invalid": 60
+        }
+      },
+      "sink_sites": 0,
+      "source_sites": 1,
+      "complete_API_verified": false
+    }
+  },
+  {
+    "id": "piggymetrics-1",
+    "application": "piggymetrics",
+    "paper_method": "saveCurrentAccount",
+    "original_task_record": {
+      "id": "piggymetrics-1",
+      "application": "piggymetrics",
+      "paper_service": "account-service",
+      "paper_method": "saveCurrentAccount",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/piggymetrics/account/controller/AccountController.saveCurrentAccount(Ljava/security/Principal;Lcom/piggymetrics/account/domain/Account;)V",
+    "batch_state": "prior_Piggy_first_and_development_results_separate",
+    "current_batch_result": null
+  },
+  {
+    "id": "piggymetrics-2",
+    "application": "piggymetrics",
+    "paper_method": "createNewAccount",
+    "original_task_record": {
+      "id": "piggymetrics-2",
+      "application": "piggymetrics",
+      "paper_service": "account-service",
+      "paper_method": "createNewAccount",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/piggymetrics/account/controller/AccountController.createNewAccount(Lcom/piggymetrics/account/domain/User;)Lcom/piggymetrics/account/domain/Account;",
+    "batch_state": "prior_Piggy_first_and_development_results_separate",
+    "current_batch_result": null
+  },
+  {
+    "id": "piggymetrics-3",
+    "application": "piggymetrics",
+    "paper_method": "createUser",
+    "original_task_record": {
+      "id": "piggymetrics-3",
+      "application": "piggymetrics",
+      "paper_service": "auth-service",
+      "paper_method": "createUser",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/piggymetrics/auth/controller/UserController.createUser(Lcom/piggymetrics/auth/domain/User;)V",
+    "batch_state": "prior_Piggy_first_and_development_results_separate",
+    "current_batch_result": null
+  },
+  {
+    "id": "piggymetrics-4",
+    "application": "piggymetrics",
+    "paper_method": "getUser",
+    "original_task_record": {
+      "id": "piggymetrics-4",
+      "application": "piggymetrics",
+      "paper_service": "auth-service",
+      "paper_method": "getUser",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/piggymetrics/auth/controller/UserController.getUser(Ljava/security/Principal;)Ljava/security/Principal;",
+    "batch_state": "prior_Piggy_first_and_development_results_separate",
+    "current_batch_result": null
+  },
+  {
+    "id": "piggymetrics-5",
+    "application": "piggymetrics",
+    "paper_method": "saveCurrentNotificationsSettings",
+    "original_task_record": {
+      "id": "piggymetrics-5",
+      "application": "piggymetrics",
+      "paper_service": "notification-service",
+      "paper_method": "saveCurrentNotificationsSettings",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/piggymetrics/notification/controller/RecipientController.saveCurrentNotificationsSettings(Ljava/security/Principal;Lcom/piggymetrics/notification/domain/Recipient;)Ljava/lang/Object;",
+    "batch_state": "prior_Piggy_first_and_development_results_separate",
+    "current_batch_result": null
+  },
+  {
+    "id": "ZLT-MP-1",
+    "application": "ZLT-MP",
+    "paper_method": "list",
+    "original_task_record": {
+      "id": "ZLT-MP-1",
+      "application": "ZLT-MP",
+      "paper_service": "UaaServer",
+      "paper_method": "list",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/central/oauth/controller/ClientController.list(Ljava/util/Map;)Lcom/central/common/model/PageResult;",
+    "batch_state": "original_roles_started_entry_unverified",
+    "current_batch_result": null
+  },
+  {
+    "id": "ZLT-MP-2",
+    "application": "ZLT-MP",
+    "paper_method": "saveOrUpdate",
+    "original_task_record": {
+      "id": "ZLT-MP-2",
+      "application": "ZLT-MP",
+      "paper_service": "UserCenter",
+      "paper_method": "saveOrUpdate",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/central/user/controller/SysUserController.saveOrUpdate(Lcom/central/common/model/SysUser;)Lcom/central/common/model/Result;",
+    "batch_state": "original_roles_started_entry_unverified",
+    "current_batch_result": null
+  },
+  {
+    "id": "ZLT-MP-3",
+    "application": "ZLT-MP",
+    "paper_method": "findByMobile",
+    "original_task_record": {
+      "id": "ZLT-MP-3",
+      "application": "ZLT-MP",
+      "paper_service": "UserCenter",
+      "paper_method": "findByMobile",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/central/user/controller/SysUserController.findByMobile(Ljava/lang/String;)Lcom/central/common/model/SysUser;",
+    "batch_state": "original_roles_started_entry_unverified",
+    "current_batch_result": null
+  },
+  {
+    "id": "ZLT-MP-4",
+    "application": "ZLT-MP",
+    "paper_method": "findUsers",
+    "original_task_record": {
+      "id": "ZLT-MP-4",
+      "application": "ZLT-MP",
+      "paper_service": "UserCenter",
+      "paper_method": "findUsers",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/central/user/controller/SysUserController.findUsers(Ljava/util/Map;)Lcom/central/common/model/PageResult;",
+    "batch_state": "original_roles_started_entry_unverified",
+    "current_batch_result": null
+  },
+  {
+    "id": "ZLT-MP-5",
+    "application": "ZLT-MP",
+    "paper_method": "getLoginAppUser",
+    "original_task_record": {
+      "id": "ZLT-MP-5",
+      "application": "ZLT-MP",
+      "paper_service": "UserCenter",
+      "paper_method": "getLoginAppUser",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/central/user/controller/SysUserController.getLoginAppUser(Lcom/central/common/model/SysUser;)Lcom/central/common/model/Result;",
+    "batch_state": "original_roles_started_entry_unverified",
+    "current_batch_result": null
+  },
+  {
+    "id": "SockShop-1",
+    "application": "SockShop",
+    "paper_method": "newOrder",
+    "original_task_record": {
+      "id": "SockShop-1",
+      "application": "SockShop",
+      "paper_service": "Orders",
+      "paper_method": "newOrder",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+    "batch_state": "this_API_common_task_pending",
+    "current_batch_result": null
+  },
+  {
+    "id": "SockShop-2",
+    "application": "SockShop",
+    "paper_method": "get",
+    "original_task_record": {
+      "id": "SockShop-2",
+      "application": "SockShop",
+      "paper_service": "Carts",
+      "paper_method": "get",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "works/weave/socks/cart/controllers/CartsController.get(Ljava/lang/String;)Lworks/weave/socks/cart/entities/Cart;",
+    "batch_state": "this_API_common_task_pending",
+    "current_batch_result": null
+  },
+  {
+    "id": "SockShop-3",
+    "application": "SockShop",
+    "paper_method": "delete",
+    "original_task_record": {
+      "id": "SockShop-3",
+      "application": "SockShop",
+      "paper_service": "Carts",
+      "paper_method": "delete",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "works/weave/socks/cart/controllers/CartsController.delete(Ljava/lang/String;)V",
+    "batch_state": "this_API_common_task_pending",
+    "current_batch_result": null
+  },
+  {
+    "id": "SockShop-4",
+    "application": "SockShop",
+    "paper_method": "mergeCarts",
+    "original_task_record": {
+      "id": "SockShop-4",
+      "application": "SockShop",
+      "paper_service": "Carts",
+      "paper_method": "mergeCarts",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "works/weave/socks/cart/controllers/CartsController.mergeCarts(Ljava/lang/String;Ljava/lang/String;)V",
+    "batch_state": "this_API_common_task_pending",
+    "current_batch_result": null
+  },
+  {
+    "id": "SockShop-5",
+    "application": "SockShop",
+    "paper_method": "postShipping",
+    "original_task_record": {
+      "id": "SockShop-5",
+      "application": "SockShop",
+      "paper_service": "Shipping",
+      "paper_method": "postShipping",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "works/weave/socks/shipping/controllers/ShippingController.postShipping(Lworks/weave/socks/shipping/entities/Shipment;)Lworks/weave/socks/shipping/entities/Shipment;",
+    "batch_state": "this_API_common_task_pending",
+    "current_batch_result": null
+  },
+  {
+    "id": "FEBS-Cloud-1",
+    "application": "FEBS-Cloud",
+    "paper_method": "addOauthCliendetails",
+    "original_task_record": {
+      "id": "FEBS-Cloud-1",
+      "application": "FEBS-Cloud",
+      "paper_service": "auth",
+      "paper_method": "addOauthCliendetails",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "cc/mrbird/febs/auth/controller/OauthClientDetailsController.addOauthCliendetails(Lcc/mrbird/febs/auth/entity/OauthClientDetails;)V",
+    "batch_state": "original_environment_blocked",
+    "current_batch_result": null
+  },
+  {
+    "id": "FEBS-Cloud-2",
+    "application": "FEBS-Cloud",
+    "paper_method": "jobList",
+    "original_task_record": {
+      "id": "FEBS-Cloud-2",
+      "application": "FEBS-Cloud",
+      "paper_service": "server-job",
+      "paper_method": "jobList",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "cc/mrbird/febs/server/job/controller/JobController.jobList(Lcc/mrbird/febs/common/core/entity/QueryRequest;Lcc/mrbird/febs/server/job/entity/Job;)Lcc/mrbird/febs/common/core/entity/FebsResponse;",
+    "batch_state": "original_environment_blocked",
+    "current_batch_result": null
+  },
+  {
+    "id": "FEBS-Cloud-3",
+    "application": "FEBS-Cloud",
+    "paper_method": "userList",
+    "original_task_record": {
+      "id": "FEBS-Cloud-3",
+      "application": "FEBS-Cloud",
+      "paper_service": "server-system",
+      "paper_method": "userList",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "cc/mrbird/febs/server/system/controller/UserController.userList(Lcc/mrbird/febs/common/core/entity/QueryRequest;Lcc/mrbird/febs/common/core/entity/system/SystemUser;)Lcc/mrbird/febs/common/core/entity/FebsResponse;",
+    "batch_state": "original_environment_blocked",
+    "current_batch_result": null
+  },
+  {
+    "id": "FEBS-Cloud-4",
+    "application": "FEBS-Cloud",
+    "paper_method": "index",
+    "original_task_record": {
+      "id": "FEBS-Cloud-4",
+      "application": "FEBS-Cloud",
+      "paper_service": "server-system",
+      "paper_method": "index",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "cc/mrbird/febs/server/system/controller/UserController.index()Lcc/mrbird/febs/common/core/entity/FebsResponse;",
+    "batch_state": "original_environment_blocked",
+    "current_batch_result": null
+  },
+  {
+    "id": "FEBS-Cloud-5",
+    "application": "FEBS-Cloud",
+    "paper_method": "addUser",
+    "original_task_record": {
+      "id": "FEBS-Cloud-5",
+      "application": "FEBS-Cloud",
+      "paper_service": "server-system",
+      "paper_method": "addUser",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "cc/mrbird/febs/server/system/controller/UserController.addUser(Lcc/mrbird/febs/common/core/entity/system/SystemUser;)V",
+    "batch_state": "original_environment_blocked",
+    "current_batch_result": null
+  },
+  {
+    "id": "goodsKill-1",
+    "application": "goodsKill",
+    "paper_method": "executeSeckill",
+    "original_task_record": {
+      "id": "goodsKill-1",
+      "application": "goodsKill",
+      "paper_service": "goodsservice",
+      "paper_method": "executeSeckill",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/goodskill/service/impl/SeckillServiceImpl.executeSeckill(JLjava/lang/String;Ljava/lang/String;)Lcom/goodskill/api/dto/SeckillExecutionDTO;",
+    "batch_state": "original_environment_blocked",
+    "current_batch_result": null
+  },
+  {
+    "id": "goodsKill-2",
+    "application": "goodsKill",
+    "paper_method": "doWithSychronized",
+    "original_task_record": {
+      "id": "goodsKill-2",
+      "application": "goodsKill",
+      "paper_service": "goodsweb",
+      "paper_method": "doWithSychronized",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/goodskill/web/controller/SeckillMockController.doWithSychronized(Lcom/goodskill/web/dto/SeckillWebMockRequestDTO;)Lcom/goodskill/common/info/Result;",
+    "batch_state": "original_environment_blocked",
+    "current_batch_result": null
+  },
+  {
+    "id": "goodsKill-3",
+    "application": "goodsKill",
+    "paper_method": "getDirectoryPermissionList",
+    "original_task_record": {
+      "id": "goodsKill-3",
+      "application": "goodsKill",
+      "paper_service": "goodsweb",
+      "paper_method": "getDirectoryPermissionList",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/goodskill/web/controller/SeckillController.getDirectoryPermissionList()Lcom/goodskill/web/dto/ResponseDTO;",
+    "batch_state": "original_environment_blocked",
+    "current_batch_result": null
+  },
+  {
+    "id": "goodsKill-4",
+    "application": "goodsKill",
+    "paper_method": "execute",
+    "original_task_record": {
+      "id": "goodsKill-4",
+      "application": "goodsKill",
+      "paper_service": "goodsweb",
+      "paper_method": "execute",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/goodskill/web/controller/SeckillController.execute(Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;)Lcom/goodskill/common/info/Result;",
+    "batch_state": "original_environment_blocked",
+    "current_batch_result": null
+  },
+  {
+    "id": "goodsKill-5",
+    "application": "goodsKill",
+    "paper_method": "roleLess",
+    "original_task_record": {
+      "id": "goodsKill-5",
+      "application": "goodsKill",
+      "paper_service": "goodsweb",
+      "paper_method": "roleLess",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/goodskill/web/controller/AdminController.roleLess(II)Lcom/goodskill/web/dto/ResponseDTO;",
+    "batch_state": "original_environment_blocked",
+    "current_batch_result": null
+  },
+  {
+    "id": "mall-swarm-1",
+    "application": "mall-swarm",
+    "paper_method": "login",
+    "original_task_record": {
+      "id": "mall-swarm-1",
+      "application": "mall-swarm",
+      "paper_service": "portal",
+      "paper_method": "login",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/macro/mall/portal/controller/UmsMemberController.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;",
+    "batch_state": "current_matrix",
+    "current_batch_result": {
+      "api": "mall-swarm-1",
+      "entry": "com/macro/mall/portal/controller/UmsMemberController.login(Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;",
+      "queries": 6,
+      "original": {
+        "application": "mall-swarm",
+        "mode": "original",
+        "state": "business_attempts_completed_access_and_target_entry_need_witness",
+        "cleanup_returncode": 0,
+        "cases": 6
+      },
+      "MT": {
+        "known_correct": 32
+      },
+      "TF": {
+        "ae7fe8d-full": {
+          "runtime_contract_rejected": 32
+        },
+        "ae7fe8d-selective": {
+          "runtime_contract_rejected": 32
+        },
+        "78a9534-full": {
+          "runtime_contract_rejected": 32
+        },
+        "78a9534-selective": {
+          "runtime_contract_rejected": 32
+        }
+      },
+      "sink_sites": 0,
+      "source_sites": 1,
+      "complete_API_verified": false
+    }
+  },
+  {
+    "id": "mall-swarm-2",
+    "application": "mall-swarm",
+    "paper_method": "register",
+    "original_task_record": {
+      "id": "mall-swarm-2",
+      "application": "mall-swarm",
+      "paper_service": "portal",
+      "paper_method": "register",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/macro/mall/portal/controller/UmsMemberController.register(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;",
+    "batch_state": "current_matrix",
+    "current_batch_result": {
+      "api": "mall-swarm-2",
+      "entry": "com/macro/mall/portal/controller/UmsMemberController.register(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/macro/mall/common/api/CommonResult;",
+      "queries": 2,
+      "original": {
+        "application": "mall-swarm",
+        "mode": "original",
+        "state": "business_attempts_completed_access_and_target_entry_need_witness",
+        "cleanup_returncode": 0,
+        "cases": 6
+      },
+      "MT": {
+        "known_correct": 4,
+        "unknown": 4
+      },
+      "TF": {
+        "ae7fe8d-full": {
+          "runtime_contract_rejected": 8
+        },
+        "ae7fe8d-selective": {
+          "runtime_contract_rejected": 8
+        },
+        "78a9534-full": {
+          "runtime_contract_rejected": 8
+        },
+        "78a9534-selective": {
+          "runtime_contract_rejected": 8
+        }
+      },
+      "sink_sites": 1,
+      "source_sites": 3,
+      "complete_API_verified": false
+    }
+  },
+  {
+    "id": "mall-swarm-3",
+    "application": "mall-swarm",
+    "paper_method": "login",
+    "original_task_record": {
+      "id": "mall-swarm-3",
+      "application": "mall-swarm",
+      "paper_service": "admn",
+      "paper_method": "login",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/macro/mall/controller/UmsAdminController.login(Lcom/macro/mall/dto/UmsAdminLoginParam;)Lcom/macro/mall/common/api/CommonResult;",
+    "batch_state": "current_matrix",
+    "current_batch_result": {
+      "api": "mall-swarm-3",
+      "entry": "com/macro/mall/controller/UmsAdminController.login(Lcom/macro/mall/dto/UmsAdminLoginParam;)Lcom/macro/mall/common/api/CommonResult;",
+      "queries": 7,
+      "original": {
+        "application": "mall-swarm",
+        "mode": "original",
+        "state": "business_attempts_completed_access_and_target_entry_need_witness",
+        "cleanup_returncode": 0,
+        "cases": 6
+      },
+      "MT": {
+        "known_correct": 30
+      },
+      "TF": {
+        "ae7fe8d-full": {
+          "runtime_contract_rejected": 30
+        },
+        "ae7fe8d-selective": {
+          "runtime_contract_rejected": 30
+        },
+        "78a9534-full": {
+          "runtime_contract_rejected": 30
+        },
+        "78a9534-selective": {
+          "runtime_contract_rejected": 30
+        }
+      },
+      "sink_sites": 1,
+      "source_sites": 2,
+      "complete_API_verified": false
+    }
+  },
+  {
+    "id": "mall-swarm-4",
+    "application": "mall-swarm",
+    "paper_method": "updatePassword",
+    "original_task_record": {
+      "id": "mall-swarm-4",
+      "application": "mall-swarm",
+      "paper_service": "admn",
+      "paper_method": "updatePassword",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/macro/mall/controller/UmsAdminController.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)Lcom/macro/mall/common/api/CommonResult;",
+    "batch_state": "current_matrix",
+    "current_batch_result": {
+      "api": "mall-swarm-4",
+      "entry": "com/macro/mall/controller/UmsAdminController.updatePassword(Lcom/macro/mall/dto/UpdateAdminPasswordParam;)Lcom/macro/mall/common/api/CommonResult;",
+      "queries": 3,
+      "original": {
+        "application": "mall-swarm",
+        "mode": "original",
+        "state": "business_attempts_completed_access_and_target_entry_need_witness",
+        "cleanup_returncode": 0,
+        "cases": 6
+      },
+      "MT": {
+        "known_correct": 12,
+        "known_wrong": 5,
+        "unknown": 1
+      },
+      "TF": {
+        "ae7fe8d-full": {
+          "runtime_contract_rejected": 18
+        },
+        "ae7fe8d-selective": {
+          "runtime_contract_rejected": 18
+        },
+        "78a9534-full": {
+          "runtime_contract_rejected": 18
+        },
+        "78a9534-selective": {
+          "runtime_contract_rejected": 18
+        }
+      },
+      "sink_sites": 2,
+      "source_sites": 1,
+      "complete_API_verified": false
+    }
+  },
+  {
+    "id": "mall-swarm-5",
+    "application": "mall-swarm",
+    "paper_method": "update",
+    "original_task_record": {
+      "id": "mall-swarm-5",
+      "application": "mall-swarm",
+      "paper_service": "admn",
+      "paper_method": "update",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/macro/mall/controller/UmsAdminController.update(Ljava/lang/Long;Lcom/macro/mall/model/UmsAdmin;)Lcom/macro/mall/common/api/CommonResult;",
+    "batch_state": "current_matrix",
+    "current_batch_result": {
+      "api": "mall-swarm-5",
+      "entry": "com/macro/mall/controller/UmsAdminController.update(Ljava/lang/Long;Lcom/macro/mall/model/UmsAdmin;)Lcom/macro/mall/common/api/CommonResult;",
+      "queries": 3,
+      "original": {
+        "application": "mall-swarm",
+        "mode": "original",
+        "state": "business_attempts_completed_access_and_target_entry_need_witness",
+        "cleanup_returncode": 0,
+        "cases": 6
+      },
+      "MT": {
+        "known_correct": 10,
+        "known_unchecked": 5
+      },
+      "TF": {
+        "ae7fe8d-full": {
+          "runtime_contract_rejected": 15
+        },
+        "ae7fe8d-selective": {
+          "runtime_contract_rejected": 15
+        },
+        "78a9534-full": {
+          "runtime_contract_rejected": 15
+        },
+        "78a9534-selective": {
+          "runtime_contract_rejected": 15
+        }
+      },
+      "sink_sites": 2,
+      "source_sites": 1,
+      "complete_API_verified": false
+    }
+  },
+  {
+    "id": "SuperMarket-1",
+    "application": "SuperMarket",
+    "paper_method": "updateCart",
+    "original_task_record": {
+      "id": "SuperMarket-1",
+      "application": "SuperMarket",
+      "paper_service": "cart",
+      "paper_method": "updateCart",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/supermarket/cart/controller/CartController.updateCart(Lcom/supermarket/common/domain/Cart;)Lcom/supermarket/common/vo/SysResult;",
+    "batch_state": "original_environment_blocked",
+    "current_batch_result": null
+  },
+  {
+    "id": "SuperMarket-2",
+    "application": "SuperMarket",
+    "paper_method": "addCart",
+    "original_task_record": {
+      "id": "SuperMarket-2",
+      "application": "SuperMarket",
+      "paper_service": "cart",
+      "paper_method": "addCart",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/supermarket/cart/controller/CartController.addCart(Lcom/supermarket/common/domain/Cart;)Lcom/supermarket/common/vo/SysResult;",
+    "batch_state": "original_environment_blocked",
+    "current_batch_result": null
+  },
+  {
+    "id": "SuperMarket-3",
+    "application": "SuperMarket",
+    "paper_method": "addOrder",
+    "original_task_record": {
+      "id": "SuperMarket-3",
+      "application": "SuperMarket",
+      "paper_service": "order",
+      "paper_method": "addOrder",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/supermarket/order/controller/OrderController.addOrder(Lcom/supermarket/common/domain/Order;)Lcom/supermarket/common/vo/SysResult;",
+    "batch_state": "original_environment_blocked",
+    "current_batch_result": null
+  },
+  {
+    "id": "SuperMarket-4",
+    "application": "SuperMarket",
+    "paper_method": "pageManage",
+    "original_task_record": {
+      "id": "SuperMarket-4",
+      "application": "SuperMarket",
+      "paper_service": "product",
+      "paper_method": "pageManage",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/supermarket/product/controller/ProductController.pageManage(Ljava/lang/Integer;Ljava/lang/Integer;)Lcom/supermarket/common/vo/CommonResult;",
+    "batch_state": "original_environment_blocked",
+    "current_batch_result": null
+  },
+  {
+    "id": "SuperMarket-5",
+    "application": "SuperMarket",
+    "paper_method": "registUser",
+    "original_task_record": {
+      "id": "SuperMarket-5",
+      "application": "SuperMarket",
+      "paper_service": "user",
+      "paper_method": "registUser",
+      "actual_entry_signature": null,
+      "http_route": null,
+      "sink_kind": null,
+      "target_queries": [],
+      "status": "not_executed",
+      "note": "原表拼写保留；真实类、签名、HTTP路由与sink必须在锁定版本上核对，不能仅按方法名猜测。"
+    },
+    "locked_actual_entry": "com/supermarket/user/controller/UserController.registUser(Lcom/supermarket/common/domain/User;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lorg/springframework/validation/Errors;)Lcom/supermarket/common/vo/SysResult;",
+    "batch_state": "original_environment_blocked",
+    "current_batch_result": null
+  }
+]

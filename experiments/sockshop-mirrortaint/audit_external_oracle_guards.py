@@ -38,7 +38,17 @@ def run(out):
  rejects('problem-even-with-clean-footer',lambda:oracle.require_complete_raw_capture(broken))
  broken=copy.deepcopy(tf);broken[1]['seq']=1
  rejects('duplicate-sequence',lambda:oracle.require_complete_raw_capture(broken))
+ assert oracle.targets({'items':None})==[('/items',None)]
+ assert oracle.targets({'items':[]})==[]
+ assert not oracle.original_root_returns({'api':'mall-swarm-2','http_status':200,'response':{'code':500,'message':'duplicate'}})
+ assert oracle.original_root_returns({'api':'mall-swarm-4','http_status':200,'response':{'code':500,'message':'invalid parameters'}})
+ guards.update(actual_null_field_retained=True,empty_list_has_no_elements=True,handler_HTTP200_not_root_return=True,normal_failed_wrapper_not_filtered=True)
+ assert not oracle.original_root_returns({'api':'mall-swarm-3','http_status':200,'body':{'password':'wrong'},'response':{'code':404}})
+ assert oracle.original_root_returns({'api':'mall-swarm-3','http_status':200,'body':{'username':'test','password':'wrong'},'response':{'code':500}})
+ guards.update(admin_missing_username_is_preentry_validation=True,admin_valid_body_failed_RPC_not_filtered=True)
  save(out/'checks.json',{'all_passed':True,'guards':guards,'truth_without_labels_or_TF_graph':True,'actual_original_capture_sha256':sha(capture),'new_business_targets':0})
  print({'guards':len(guards),'all_passed':True},flush=True)
 
-if __name__=='__main__':run(HOME/'independent-oracle-guards-01')
+if __name__=='__main__':
+ import argparse
+ p=argparse.ArgumentParser();p.add_argument('--out',type=Path,default=HOME/'independent-oracle-guards-01');a=p.parse_args();run(a.out.resolve())

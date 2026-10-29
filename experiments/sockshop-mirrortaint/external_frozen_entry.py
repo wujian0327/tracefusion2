@@ -102,6 +102,17 @@ def plan(version,only_api=None,only_index=None):
 
 def environment(version,api,mode,index,attempt,addon=False,observer_home=None,source_calibrated=False):
  here,base,expected=setup(version);home=calibrated_home(version)if source_calibrated else OUT/((observer_home or'MT-B1')if addon else version)
+ if source_calibrated and api.startswith('mall-swarm-') and mode in('full','selective'):
+  path=home/'planning-first'/api/('%03d-plan.json'%index);p=load(path)
+  if p.get('profile')=='response-forward'and p.get('read_forward_contracts'):
+   java=Path('/usr/lib/jvm/java-8-openjdk-amd64/bin/java');probe=subprocess.run([str(java),'-XshowSettings:properties','-version'],text=True,capture_output=True,check=True)
+   runtime=next(line.split('=',1)[1].strip()for line in(probe.stdout+probe.stderr).splitlines()if line.strip().startswith('java.runtime.version ='))
+   approved=[r['java_runtime_version']for r in p['read_forward_contracts']['runtime_profiles']]
+   if runtime not in approved:
+    metadata=load(path.with_name('%03d.json'%index));assert sha(path)==metadata['plan_sha256']
+    dest=home/'tool-runs'/api/mode/('query-%03d'%index);dest.mkdir(parents=True,exist_ok=False)
+    receipt={'state':'runtime_contract_rejected','api':api,'mode':mode,'query_index':index,'deployed':False,'algorithm':version,'actual_java_runtime_version':runtime,'approved_java_runtime_versions':approved,'java_binary_sha256':sha(java),'same_JDK_as_environment_mount':'run_portability_mall mounts /usr/lib/jvm/java-8-openjdk-amd64 at /approved-jdk and invokes /approved-jdk/bin/java','plan_sha256':sha(path),'agent_sha256':sha(base/'distributed-observer.jar'),'frozen_ReadEffectHooks_source_sha256':sha(here/'ReadEffectHooks.java'),'proof':'ReadEffectHooks.enter requires actual java.runtime.version AND JDK class hashes to match a listed profile. Version equality is already false. Each proposed C1 deployment is a fresh JVM with RUNTIME initially null. Source declarations do not alter that necessary check.','reason':'Fixed JDK is outside the selected frozen read-forward contract; no new runtime pin, fallback route, model or certified answer added.','first_real_failed_runs_preserved':str(OUT/version/'tool-runs'/api/mode/('query-%03d'%index))}
+    save(dest/'runtime-preflight.json',receipt);print(receipt,flush=True);return
  # Environment runners are experiment scripts from main, not algorithm modules.
  import importlib.util
  own=REPO/'experiments/sockshop-mirrortaint'
@@ -118,7 +129,7 @@ def environment(version,api,mode,index,attempt,addon=False,observer_home=None,so
  original=config.configure
  def configure(root,out,cfg,q,mode,index=None):
   # This verifier precedes the unchanged configuration machinery.
-  setup_receipt={'algorithm':version,'agent_sha256':sha(base/'distributed-observer.jar'),'core_sources':expected,'source_snapshot':str(OUT/'sources'/version),'no_core_agent_contract_changes':True,'task_seal_sha256':sha(OUT/'task-seal.json'),'adapter':'B0 unchanged native/adapter binaries; reviewed DB/RPC source configuration v2'}
+  setup_receipt={'algorithm':version,'agent_sha256':sha(base/'distributed-observer.jar'),'core_sources':expected,'source_snapshot':str(OUT/'sources'/version),'no_core_agent_contract_changes':True,'task_seal_sha256':sha(OUT/'task-seal.json'),'adapter':'B0 unchanged native/adapter binaries; reviewed DB/RPC source configuration v2','configuration_revision':'C1-explicit-source-API'if source_calibrated else'first-high-level-route','source_declaration_calibration_changes_semantics':False}
   save(out/'version-before-business.json',setup_receipt)
   original(root,out,cfg,q,mode,index)
   if mode=='mirrortaint':
@@ -179,6 +190,7 @@ def preparation_failure_state(source):
 def evaluate(version,api,mode,index,evaluation_label="evaluation-frozen-v3",source_calibrated=False):
  here,base,expected=setup(version)
  from infer_distributed_fields import Reconstruction
+ from analysis_status import AnalysisLimit
  import importlib.util
  spec=importlib.util.spec_from_file_location('independent_external_oracle',REPO/'experiments/sockshop-mirrortaint/external_transfer_oracle.py');oracle=importlib.util.module_from_spec(spec);spec.loader.exec_module(oracle)
  home=calibrated_home(version)if source_calibrated else OUT/version;source=home/'tool-runs'/api/mode/('query-%03d'%index);out=source/evaluation_label;out.mkdir()
@@ -186,9 +198,9 @@ def evaluate(version,api,mode,index,evaluation_label="evaluation-frozen-v3",sour
  work=out/'view';(work/'build'/q['role']).mkdir(parents=True);(work/'capture'/q['role']).mkdir(parents=True)
  shutil.copyfile(home/'planning-first'/api/('%03d-plan.json'%index),work/'build'/q['role']/'plan.json')
  (work/'capture'/q['role']/'events.jsonl').symlink_to(source/'capture/events.jsonl')
- g=None;error=None
+ g=None;error=None;error_state='evidence_invalid'
  try:g=Reconstruction(work/'build',work/'capture',[q['role']])
- except Exception as e:error=str(e)
+ except Exception as e:error=str(e);error_state='analysis_limited'if isinstance(e,AnalysisLimit)else'evidence_invalid'
  raw_path=source/'capture/events.jsonl';rows=oracle.raw(raw_path)if raw_path.exists()else[]
  task=next(t for t in load(OUT/'task-seal.json')['entries']if t['id']==api);control=load(OUT/'ae7fe8d/original'/task['application']/('sealed-'+api)/'results.json');run=load(source/'results.json');protocol=load(OUT/'oracle-before-tools.json')
  for before in control['cases']:
@@ -209,7 +221,7 @@ def evaluate(version,api,mode,index,evaluation_label="evaluation-frozen-v3",sour
     except ValueError as e:record['oracle_gap']=str(e)
    if case is None:record.update(state=preparation_failure_state(source),error=run.get('error'))
    elif case['http_status']!=before['http_status']:record.update(state='instrumented_business_failure',error=error)
-   elif error:record.update(state='evidence_invalid',error=error,semantic_limit_or_evidence_failure_needs_diagnosis=True)
+   elif error:record.update(state=error_state,error=error,semantic_limit_or_evidence_failure_needs_diagnosis=True)
    else:
     try:
      a=g.query(case['message'],path,q['role'],boundary=[{'kind':'binding-source'},{'kind':'argument'},{'kind':'http-json','direction':'response','phase':'read'}]);record['answer']=a;record['state']='known_unchecked'if a['known']else'unknown'
@@ -219,9 +231,9 @@ def evaluate(version,api,mode,index,evaluation_label="evaluation-frozen-v3",sour
       actual={(v.get('callee'),v.get('root_frame'),v['seq'],v.get('path'),v['owner'],v['field'],v['version']) for v in a['sources']}
       if a['known']:record['state']='known_correct'if actual==w else'known_wrong'
       record.update(TP=len(actual&w)if a['known']else 0,FP=len(actual-w)if a['known']else 0,FN=len(w-actual)if a['known']else len(w))
-    except Exception as e:record.update(state='evidence_invalid',error=str(e),semantic_limit_or_evidence_failure_needs_diagnosis=True)
+    except Exception as e:record.update(state='analysis_limited'if isinstance(e,AnalysisLimit)else'evidence_invalid',error=str(e),semantic_limit_or_evidence_failure_needs_diagnosis=True)
    records.append(record)
- save(out/'instances.json',records);save(out/'graph-construction.json',{'state':'constructed'if g is not None else'evidence_invalid','error':error,'states':{s:sum(r['state']==s for r in records)for s in {r['state']for r in records}},'raw_events_sha256':sha(raw_path)if raw_path.exists()else None})
+ save(out/'instances.json',records);save(out/'graph-construction.json',{'state':'constructed'if g is not None else error_state,'error':error,'states':{s:sum(r['state']==s for r in records)for s in {r['state']for r in records}},'raw_events_sha256':sha(raw_path)if raw_path.exists()else None})
 
 if __name__=='__main__':
  p=argparse.ArgumentParser();p.add_argument('--version',required=True,choices=['ae7fe8d','78a9534']);p.add_argument('--stage',choices=['plan','query-plan','run','evaluate','source-calibrated-plan'],required=True);p.add_argument('--api');p.add_argument('--mode',default='original');p.add_argument('--index',type=int);p.add_argument('--attempt',default='sealed-original');p.add_argument('--observer-addon',action='store_true');p.add_argument('--observer-home');p.add_argument('--evaluation-label',default='evaluation-frozen-v3');p.add_argument('--source-calibrated',action='store_true');a=p.parse_args()

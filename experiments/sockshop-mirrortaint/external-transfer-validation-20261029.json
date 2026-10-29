@@ -1,0 +1,121 @@
+{
+  "frozen_algorithms": [
+    "ae7fe8d8b9e23d8ce197870ff0069c7f1bee84eb",
+    "78a95343c127fcc5732174b783e9d528b354a9d7"
+  ],
+  "TF_core_agent_contract_changes": false,
+  "new_TF_captures_C1": 132,
+  "runtime_rejections_C1_no_deployment": 84,
+  "all_new_TF_cleanup_returncodes_zero": true,
+  "C1_rejections_have_no_fake_results_or_capture": true,
+  "immutability": {
+    "old_protected_files_unchanged": 2322,
+    "frozen_source_files": {
+      "ae7fe8d": 68,
+      "78a9534": 87
+    },
+    "new_first_matrix_files_unchanged_after_B1": 16862,
+    "TF_agent_sha256": "b20ba71e568672a0a91be3c113b4e6db44686d9967ddb1ca4d5f95c8ca70a45a",
+    "MT_native_sha256": "e4c679206993b45c6727a4ace1d4dcff6df0ded2b80b56b27b8c86741be63fe7",
+    "B0_adapter_sha256": "432867ca4a876915ba976e690710efc5f3bb33edfe20b08375072d89208ab7fd"
+  },
+  "C1_raw_hashes_rechecked_after_scoring": 7248,
+  "oracle_guards": {
+    "all_passed": true,
+    "guards": {
+      "wrong-root": true,
+      "same-object-same-value-second-call": true,
+      "missing-field-version": true,
+      "ambiguous-physical-field": true,
+      "TF-repeated-same-object-read": true,
+      "missing-footer": true,
+      "sticky-invalid-footer": true,
+      "problem-even-with-clean-footer": true,
+      "duplicate-sequence": true,
+      "actual_null_field_retained": true,
+      "empty_list_has_no_elements": true,
+      "handler_HTTP200_not_root_return": true,
+      "normal_failed_wrapper_not_filtered": true,
+      "admin_missing_username_is_preentry_validation": true,
+      "admin_valid_body_failed_RPC_not_filtered": true
+    },
+    "truth_without_labels_or_TF_graph": true,
+    "actual_original_capture_sha256": "95d950d1dca84ca5d822f97e6e695c4010576bb62dd27088a462a563f2aa2a4a",
+    "new_business_targets": 0
+  },
+  "adapter_composition_guards": [
+    {
+      "all_passed": true,
+      "version": "78a9534",
+      "api": "apollo-1",
+      "profile": "execution-dependency",
+      "no_new_sources_adapter_equals_original_choose": true,
+      "changed_keys": [],
+      "meaning": "Checks adapter composition with empty extra declarations; source-calibrated plans intentionally differ when sealed boundaries are supplied. Not a source correctness test."
+    },
+    {
+      "all_passed": true,
+      "version": "78a9534",
+      "api": "mall-swarm-2",
+      "profile": "response-forward",
+      "no_new_sources_adapter_equals_original_choose": true,
+      "changed_keys": [],
+      "meaning": "Checks adapter composition with empty extra declarations; source-calibrated plans intentionally differ when sealed boundaries are supplied. Not a source correctness test."
+    },
+    {
+      "all_passed": true,
+      "version": "78a9534",
+      "api": "mall-swarm-5",
+      "profile": "response-forward",
+      "no_new_sources_adapter_equals_original_choose": true,
+      "changed_keys": [],
+      "meaning": "Checks adapter composition with empty extra declarations; source-calibrated plans intentionally differ when sealed boundaries are supplied. Not a source correctness test."
+    },
+    {
+      "all_passed": true,
+      "version": "ae7fe8d",
+      "api": "apollo-1",
+      "profile": "execution-dependency",
+      "no_new_sources_adapter_equals_original_choose": true,
+      "changed_keys": [],
+      "meaning": "Checks adapter composition with empty extra declarations; source-calibrated plans intentionally differ when sealed boundaries are supplied. Not a source correctness test."
+    },
+    {
+      "all_passed": true,
+      "version": "ae7fe8d",
+      "api": "mall-swarm-2",
+      "profile": "response-forward",
+      "no_new_sources_adapter_equals_original_choose": true,
+      "changed_keys": [],
+      "meaning": "Checks adapter composition with empty extra declarations; source-calibrated plans intentionally differ when sealed boundaries are supplied. Not a source correctness test."
+    },
+    {
+      "all_passed": true,
+      "version": "ae7fe8d",
+      "api": "mall-swarm-5",
+      "profile": "response-forward",
+      "no_new_sources_adapter_equals_original_choose": true,
+      "changed_keys": [],
+      "meaning": "Checks adapter composition with empty extra declarations; source-calibrated plans intentionally differ when sealed boundaries are supplied. Not a source correctness test."
+    }
+  ],
+  "observation_addon_control": {
+    "all_passed": true,
+    "business_rows_equal": 5,
+    "actual_calls": 10,
+    "exceptional_calls_same_business_object": 2,
+    "uncertified_raw_facts_only": true,
+    "native_propagation_modified": false,
+    "native_jar_sha256": "e4c679206993b45c6727a4ace1d4dcff6df0ded2b80b56b27b8c86741be63fe7",
+    "unchanged_B0_capability_sha256": "432867ca4a876915ba976e690710efc5f3bb33edfe20b08375072d89208ab7fd",
+    "addon_sha256": "3575e2ba077641a1b2fcb5a0319399e02e8149e053caf9de3331b40845794e55",
+    "sources": {
+      "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/native-export-v2/NativeBoundaryFactsAgent.java": "14551580456f4de2e1881e58717c9a1390cb633dcad5215237ed50c7649e8ce0",
+      "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/native-export-v2/BoundaryExportFixture.java": "ac40a1f1e5e62080f353d912e4c47839fdb6feb8d0347ecaac2c2f65d2a91806"
+    },
+    "sink_snapshot_completeness": {
+      "True": 5
+    }
+  },
+  "no_costs_or_push": true
+}
