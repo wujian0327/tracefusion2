@@ -1,0 +1,270 @@
+{
+  "algorithm": "c1a4e5ceb60a276cc3651e4cdb413aa29d7f8d5d",
+  "final_agent_sha256": "375cdbeb9b1c3b06df488011cf848e4f614ef4de6dbe29d5e8bdcfd18f66f0fa",
+  "core_files": 96,
+  "all_requested_gates_passed": true,
+  "Mall": {
+    "modes": {
+      "full": {
+        "targets": 103,
+        "states": {
+          "known_correct": 98,
+          "unknown": 5
+        },
+        "positive_correct": 62,
+        "known_empty_correct": 36,
+        "MT_correct_preserved": 88,
+        "MT_positive_preserved": 62,
+        "previous_correct_preserved": 68,
+        "MT_gap": [],
+        "oracle_unavailable_unknown": 5,
+        "joint_gate_passed": true
+      },
+      "selective": {
+        "targets": 103,
+        "states": {
+          "known_correct": 98,
+          "unknown": 5
+        },
+        "positive_correct": 62,
+        "known_empty_correct": 36,
+        "MT_correct_preserved": 88,
+        "MT_positive_preserved": 62,
+        "previous_correct_preserved": 68,
+        "MT_gap": [],
+        "oracle_unavailable_unknown": 5,
+        "joint_gate_passed": true
+      }
+    },
+    "prior68_preserved": true,
+    "joint98_passed": true,
+    "full_selective_states_equal": true,
+    "signature_changes": [],
+    "ownership_ablation": {
+      "full": {
+        "targets": 30,
+        "with_certificate_known": 30,
+        "without_certificate_known": 0
+      },
+      "selective": {
+        "targets": 30,
+        "with_certificate_known": 30,
+        "without_certificate_known": 0
+      }
+    }
+  },
+  "historical62": {
+    "full": {
+      "expected_targets": 431,
+      "actual_targets": 431,
+      "states": {
+        "known_correct": 428,
+        "unknown": 3
+      },
+      "known_answer_exact_rate": 1.0,
+      "answerability": 0.9930394431554525,
+      "baseline_correct_preserved": 368,
+      "baseline_correct_required": 368,
+      "baseline_nonempty_correct_preserved": 337,
+      "baseline_nonempty_correct_required": 337,
+      "old_tf_correct_preserved": 213,
+      "old_tf_correct_required": 213,
+      "union_preserved": 382,
+      "union_required": 382,
+      "union_losses": [],
+      "missing_targets": [],
+      "tp": 397,
+      "fp": 0,
+      "fn_including_unknown": 3,
+      "all_passed": true
+    },
+    "selective": {
+      "expected_targets": 431,
+      "actual_targets": 431,
+      "states": {
+        "known_correct": 428,
+        "unknown": 3
+      },
+      "known_answer_exact_rate": 1.0,
+      "answerability": 0.9930394431554525,
+      "baseline_correct_preserved": 368,
+      "baseline_correct_required": 368,
+      "baseline_nonempty_correct_preserved": 337,
+      "baseline_nonempty_correct_required": 337,
+      "old_tf_correct_preserved": 213,
+      "old_tf_correct_required": 213,
+      "union_preserved": 382,
+      "union_required": 382,
+      "union_losses": [],
+      "missing_targets": [],
+      "tp": 397,
+      "fp": 0,
+      "fn_including_unknown": 3,
+      "all_passed": true
+    }
+  },
+  "fields29": {
+    "all_passed": true,
+    "algorithm": "c1a4e5ceb60a276cc3651e4cdb413aa29d7f8d5d",
+    "queries": 29,
+    "modes": {
+      "full": {
+        "query_families": 29,
+        "targets": 244,
+        "states": {
+          "known_correct": 232,
+          "unknown": 12
+        },
+        "oracle_unavailable": 12,
+        "N/A_requests": 41,
+        "requests": 190
+      },
+      "selective": {
+        "query_families": 29,
+        "targets": 244,
+        "states": {
+          "known_correct": 232,
+          "unknown": 12
+        },
+        "oracle_unavailable": 12,
+        "N/A_requests": 41,
+        "requests": 190
+      }
+    },
+    "changes": [],
+    "business_failures": [],
+    "first_unseen_claim": false,
+    "historical12_missing_oracle_not_promoted": true
+  },
+  "write15": {
+    "full": {
+      "targets": 96,
+      "states": {
+        "known_correct": 96
+      }
+    },
+    "selective": {
+      "targets": 96,
+      "states": {
+        "known_correct": 96
+      }
+    }
+  },
+  "Account40": {
+    "full": {
+      "targets": 40,
+      "known_correct": 40,
+      "known_wrong": 0,
+      "unknown": 0,
+      "known_positive": 4,
+      "known_empty": 36,
+      "historic_MT_correct_present": 36,
+      "historic_MT_correct_preserved": 36,
+      "TP": 4,
+      "FP": 0,
+      "FN": 0
+    },
+    "selective": {
+      "targets": 40,
+      "known_correct": 40,
+      "known_wrong": 0,
+      "unknown": 0,
+      "known_positive": 4,
+      "known_empty": 36,
+      "historic_MT_correct_present": 36,
+      "historic_MT_correct_preserved": 36,
+      "TP": 4,
+      "FP": 0,
+      "FN": 0
+    }
+  },
+  "historical_state_and_source_signature_changes": {
+    "62": [],
+    "29": [],
+    "15": []
+  },
+  "controls": {
+    "full": {
+      "targets": 48,
+      "known_correct": 16,
+      "expected_unknown": 32,
+      "business_and_side_effects_preserved": true,
+      "guards": {
+        "missing-birth": true,
+        "missing-reader": true,
+        "missing-corridor": true,
+        "wrong-call": true,
+        "external-mutable-reference": true,
+        "wrong-return": true,
+        "duplicate-completion": true
+      },
+      "known_positive": 12,
+      "known_empty": 4,
+      "additional_evidence_guards": 24
+    },
+    "selective": {
+      "targets": 48,
+      "known_correct": 16,
+      "expected_unknown": 32,
+      "business_and_side_effects_preserved": true,
+      "guards": {
+        "missing-birth": true,
+        "missing-reader": true,
+        "missing-corridor": true,
+        "wrong-call": true,
+        "external-mutable-reference": true,
+        "wrong-return": true,
+        "duplicate-completion": true
+      },
+      "known_positive": 12,
+      "known_empty": 4,
+      "additional_evidence_guards": 24
+    }
+  },
+  "source_guards": 12,
+  "protected_files_unchanged": {
+    "old_first": 2322,
+    "external_first": 16862,
+    "C1": 7248,
+    "previous_revision": 1746,
+    "communication_mall": 1746,
+    "constructor_mall": 1746
+  },
+  "Agent_equivalence": {
+    "source": {
+      "all_member_bytes_equal": true,
+      "members": 881,
+      "jar_sha256": "4e319c9967cde238b9921501238ba196e35f560edef80d3e9d9d16921f8301d1"
+    },
+    "constructor": {
+      "all_member_bytes_equal": true,
+      "members": 881,
+      "jar_sha256": "b7588bb9574c4d316090ce26464aab082d399614e2091bb2ae1e1d7f7bfc8b70"
+    },
+    "application": {
+      "all_member_bytes_equal": true,
+      "members": 881,
+      "jar_sha256": "9a48eaae271c57111f254ad80e500c8e46cc45507ed4c48c570e8a49adfb5c05"
+    },
+    "final_agent_sha256": "375cdbeb9b1c3b06df488011cf848e4f614ef4de6dbe29d5e8bdcfd18f66f0fa"
+  },
+  "exposed_development_tasks": true,
+  "all40_external_APIs_complete": false,
+  "new_performance_experiments": false,
+  "push_performed": false,
+  "audit_outputs": {
+    "mall": "artifacts/source-locality-effects-20261030/audit-final-mall-03",
+    "historical": "artifacts/source-locality-effects-20261030/audit-final-historical-03",
+    "Account": "artifacts/source-locality-effects-20261030/final-historical-03/account-score-first"
+  },
+  "sha256": {
+    "artifacts/source-locality-effects-20261030/audit-final-mall-03/summary.json": "370c017332cb0584ff5c43f9bbdbed47f430de7a4db28edfe793160c862bce89",
+    "artifacts/source-locality-effects-20261030/audit-final-mall-03/paired/instances.csv": "519f976d4f590429067728bc7a691ec6bf74092bdf22ca8c6c0c7d4c61d9cae1",
+    "artifacts/source-locality-effects-20261030/audit-final-historical-03/summary.json": "734f36716b11ee5293bdd957330d46355e4dabfc2751b27d0c7d9f94c10537f7",
+    "artifacts/source-locality-effects-20261030/final-historical-03/account-score-first/summary.json": "0c7d9584de69d5d9b295853c1a5cbf8d7d9bd990cafcd3759e06df941279dd0d",
+    "artifacts/source-locality-effects-20261030/source-guards-final-03/checks.json": "29d95ac50a3cf95455c4a0bdcca60310e5907e142072eadef0903b0506d6242e",
+    "artifacts/source-locality-effects-20261030/context-escape-reproducer/receipt.json": "32a01bee573cec93419c417b87544da0efb34edbcedef6f000296d0dd15932ee",
+    "artifacts/source-locality-effects-20261030/candidate-code-c1a4e5c.tar.gz": "2ae78e352d51cbbc0104284633d6bdd885d0a5511514adcf29f72443df4fd9b1"
+  },
+  "verified_at_UTC": "2026-10-30T09:48:10.094240+00:00"
+}

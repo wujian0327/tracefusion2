@@ -1,0 +1,108 @@
+{
+  "base_algorithm": "77546243dfc70902d8cee2041ad726a7f7069998",
+  "candidate_algorithm": "c1a4e5ceb60a276cc3651e4cdb413aa29d7f8d5d",
+  "query_scope": "Exposed fixed Mall tasks; not unseen transfer",
+  "core_work": [
+    {
+      "change": "Separate provenance owners from conservative escape/global roots",
+      "reuse_unit": "Value/Frame/shared heap state; transitive unknown effects remain conservative"
+    },
+    {
+      "change": "Consume actual allocation/nonpublication certificates",
+      "reuse_unit": "No field-name propagation or copied answers; original source coordinates unchanged"
+    }
+  ],
+  "public_contract_family": {
+    "name": "Finite default raw-bean/scalar-map decode and closed synchronous return corridor",
+    "classes_pinned": 51,
+    "javap_review_files": 44,
+    "individual_javap_hashes": {
+      "com_fasterxml_jackson_databind_type_TypeFactory.txt": "6ce595e48b39f4fc4f31d0ccead335bed51aaa1b14318af0dcd5ed434e93cac5",
+      "com_fasterxml_jackson_databind_deser_impl_BeanPropertyMap.txt": "ec1aa99b9adf728ba883792d0a9b433316ed4048399d042e194318334d4335d3",
+      "com_fasterxml_jackson_databind_deser_DefaultDeserializationContext$Impl.txt": "4c27e13996b8dc3e8c9a441d9fd1bed0dd56c789919ebcacbe1754f59ffc02c8",
+      "com_fasterxml_jackson_databind_introspect_JacksonAnnotationIntrospector.txt": "afe61c86113ad05f92955968c2987593f07e5acc691ce896f1dcacc17108198a",
+      "com_fasterxml_jackson_databind_ObjectReader.txt": "21049596207d68e762520f7d270872a65fc698297c3915571c6b45c4f9d00144",
+      "com_fasterxml_jackson_databind_module_SimpleDeserializers.txt": "3858f0f1767aa9116a92c05b037d0aecf369d73d0c6c4529e6e2cde2d4868516",
+      "feign_ReflectiveFeign$FeignInvocationHandler.txt": "766d6a635d0d9d24a2a746291baa1a5d2794651ccb04439762d4e571cfe83eef",
+      "com_fasterxml_jackson_databind_deser_std_UntypedObjectDeserializer$Vanilla.txt": "c1af4f885240eab4556b9aec6990a929377e93c24cfcc94af194b28ce77c183e",
+      "com_fasterxml_jackson_databind_deser_std_NumberDeserializers$LongDeserializer.txt": "f3b24e16af50190068b57647b75014ccec1f25326a23fa7b99c23234d79aa400",
+      "com_fasterxml_jackson_databind_deser_BeanDeserializer.txt": "7714949ae5c3833e0ba3c02194a740cb44483185f9f074cc56250e174a6d42a4",
+      "org_springframework_http_converter_json_SpringHandlerInstantiator.txt": "f470370163b4b6592f445369741b5a0021a3904aa57dd5662f81ee004d98997f",
+      "com_fasterxml_jackson_databind_type_SimpleType.txt": "6a5c295afd4ec2e3c7a7261d6639b38a3411aee2e497f27b6c141e96465c31cf",
+      "com_fasterxml_jackson_databind_introspect_SimpleMixInResolver.txt": "8b185adaabe44d4ecd97a7122d6414dc4385038fd617ee0c0df4b1b43df28069",
+      "org_springframework_http_converter_json_AbstractJackson2HttpMessageConverter.txt": "94a696fe81f4dd45041fa035cf23b11431f729d15c47a9106bdc10f1d956c226",
+      "com_fasterxml_jackson_datatype_jdk8_Jdk8TypeModifier.txt": "89aec4c66b6310737ef117f7c65df08f4a5b19c7a891d47e3368b31d19833585",
+      "com_fasterxml_jackson_databind_module_SimpleKeyDeserializers.txt": "48c866ec3bb5d36c5209fdad9ceec89204da7feabe1d37d629c626af616f375c",
+      "org_springframework_web_client_HttpMessageConverterExtractor.txt": "c0454423a87b8a5e2edf686e78b794eb8769696b4a29b6edd57bf6c4569ddbc2",
+      "feign_Util.txt": "0aded88d60a4b15fbe1a87628054f368011149bd104e60507c1d764ac670cf98",
+      "com_fasterxml_jackson_databind_deser_BeanDeserializerBase.txt": "af71a3a8ebada141264a779d18a6fbc70249269e785c195fcd6b8bf24b0dce98",
+      "com_fasterxml_jackson_databind_type_TypeBindings.txt": "e33a817af775c223cb480b1f77691ef003b2c321589be036178e27dfdce3f66f",
+      "com_fasterxml_jackson_databind_cfg_DeserializerFactoryConfig.txt": "42482e4403cd75cc771aa0e6b50829d9ab384fbc9bac6ab831c1342875ae9557",
+      "com_fasterxml_jackson_datatype_jdk8_Jdk8Deserializers.txt": "4440442956936d82c9a9b6b6b24be52b28d8e51f456f7e895b07f19bbd457128",
+      "org_springframework_cloud_openfeign_FeignCachingInvocationHandlerFactory.txt": "a63d2a110e5006b0641d1ffb45ca84ebadd486d39cbbf45f5b88fec407cd383f",
+      "feign_AsyncResponseHandler.txt": "76a0491b37aefe77e4c538b7abfcddbacbce1daa2db9969fafd5145ab9ac212f",
+      "org_springframework_cloud_openfeign_FeignCachingInvocationHandlerFactory$1.txt": "37529372504179d2585580fe37d46fdb9f6b74e29cfe58778cda8447bca575fd",
+      "feign_optionals_OptionalDecoder.txt": "43b8e3f7cb66f84e0235d7c9f696bb6592108abd198b58f0d45f0a4400e3e745",
+      "com_fasterxml_jackson_databind_deser_Deserializers$Base.txt": "dfd343bc63b097e31a9ea33a7288169d4e8550ead4e9f143b888b2ac709cadc6",
+      "com_fasterxml_jackson_core_JsonFactory.txt": "f561140c412f400deade09a86a5fdaa521934064eb41411d6c7d26259600970c",
+      "org_springframework_cache_interceptor_CacheInterceptor.txt": "65c0470940f03b1e793c21b59381cff992d15dc622654e2a60306c52fb5550ee",
+      "com_fasterxml_jackson_databind_deser_std_StdValueInstantiator.txt": "c2b84d9415154f6bd5d959e55fdf918452dbccfaea875b1a71b33cc4f0deb369",
+      "org_springframework_cloud_openfeign_support_ResponseEntityDecoder.txt": "243a93cc20fd4f8f04d28428dad6943cc6455e40b503c45fc6cec319f833b392",
+      "com_fasterxml_jackson_databind_introspect_AnnotatedMethod.txt": "8ee84b2b22675dc63822ceec6b48bf9b0c079352c70eb4cb5c6d62807b94af4c",
+      "feign_SynchronousMethodHandler.txt": "eb93b3a7f470f23bc1d6756dc2f542a12677ed37ae928d66ffe6a81bea16e906",
+      "com_fasterxml_jackson_module_paramnames_ParameterNamesAnnotationIntrospector.txt": "83584d9f8180499c9bbae2c261af0fbe5c8626ca817472a34906c62d2bfd3b1d",
+      "org_springframework_cache_interceptor_CacheAspectSupport.txt": "245f90752a6b1bfbabbd53ac36b8c94592e532a2f78440ef6d6502344161e0d3",
+      "com_fasterxml_jackson_datatype_jsr310_JavaTimeModule$1.txt": "77ff86140ea8d14d1cf016e985e8e9d5703075a1268f8649be426d38ac3222d4",
+      "com_fasterxml_jackson_databind_cfg_HandlerInstantiator.txt": "e97da2036ded39940db0d25fda7a7d43ca61866b01a8d280702ce7a3f85819bf",
+      "com_fasterxml_jackson_databind_DeserializationConfig.txt": "862130d43548e90e124e83be9d8549b26b6505aa80870e7faae2d79c542944f5",
+      "org_springframework_cloud_openfeign_support_SpringDecoder.txt": "a32ae988f7aa1158c3b92d4d0244e465aee0aaaf6bfe0c8b51f3bfb912ecdac9",
+      "com_fasterxml_jackson_databind_deser_std_StringDeserializer.txt": "94e954a5c4a02150434970ede08d0c593e75bddef9f316798543f786aa31a9dd",
+      "com_fasterxml_jackson_databind_deser_std_UntypedObjectDeserializer.txt": "18c53f871f94b346a45b2f27b9fba6a480d3379aec1753064297aab8788f75e4",
+      "com_fasterxml_jackson_databind_deser_impl_MethodProperty.txt": "af33badaecc843a490f99a829fb4c351756bee258a8f9c562292e1ad9713e1b5",
+      "com_fasterxml_jackson_databind_deser_BeanDeserializerFactory.txt": "8796bc02f61a3daab576c6dd4970f26840893deb51530bc40e2c16b1d94743b3",
+      "com_fasterxml_jackson_databind_introspect_AnnotationIntrospectorPair.txt": "da46ea9a5d5fa15a6a801bb45e8d26fd07d36dd66b6569d1238879e1e34518e0"
+    },
+    "conditions": [
+      "raw bean: direct Object parent, no interfaces/annotations, default constructor and pure setters",
+      "no bindings/value/type handlers; actual type and property factories checked",
+      "all relevant resolver types including Number; mixins disjoint from complete type hierarchy",
+      "actual handler entrypoints completely armed; execution denies private certificate",
+      "fresh closed mutable object graph and exact source/client completion identity",
+      "no publication by unreviewed return wrapper or cache operation"
+    ],
+    "new_JDK_runtime_registrations": 0
+  },
+  "logging_readonly_models_added": [],
+  "business_field_rules_added": [],
+  "per_query_manual_profile_selection": false,
+  "work_not_quantified": {
+    "human_hours": null,
+    "reason": "No contemporaneous time log; class/file counts are artifact scale, not labor estimates"
+  },
+  "development_negative_control": {
+    "unsafe_candidate": "93c77c9",
+    "confirmed_reproducer": "controls-22-adversarial-confirmed",
+    "same_fixture_after_fix": "controls-28-mixin-scope",
+    "unchanged_values_or_observed_versions_not_used_as_nonmutation_proof": true
+  },
+  "result_categories_separate": [
+    "plan attachment",
+    "actual observed contract execution",
+    "independently correct answer requiring certificate"
+  ],
+  "limitations": [
+    "fixed decoder state during operation; no arbitrary live reconfiguration",
+    "reflection/native, shared concurrency, arbitrary class redefinition excluded",
+    "raw DTO and flat scalar map only",
+    "source call-return fields; no complete wire-byte claim"
+  ],
+  "performance_experiments": false,
+  "final_business_results": {
+    "Mall_correct_each_mode": 98,
+    "new_positive_answers_each_mode": 30,
+    "required_previous_answers_preserved": true,
+    "historical_all_passed": true,
+    "Account40_each_mode": 40
+  },
+  "actual_reuse_scope": "Member and administrator login share the same default decoder/return protocol; only administrator30 answers require the new certificate in the offline ablation. These are exposed old entries, not unseen or cross-application generalization."
+}
