@@ -3,18 +3,18 @@ from plan_service_observations import callee
 from plan_collection_service import analyze
 from query_observation_planner import require
 from analysis_status import AnalysisLimit
-from plan_constructor_effects import assignment_effects,constructor_start
+from plan_constructor_effects import assignment_effects,constructor_start,initialization_chain
 from pathlib import Path
 import json,re
 
 
 def augment_calls(plan,model,sources):
     from plan_execution_kernel import constructor_writes
-    methods={};targets={};opaque={};visiting=set();lambdas={};constructor_starts={};constructors=dict(plan['execution_kernel']['constructors'])
+    methods={};targets={};opaque={};visiting=set();lambdas={};constructor_starts={};constructor_chains={};constructors=dict(plan['execution_kernel']['constructors'])
     from plan_foundation_values import enum_proofs,attach as attach_foundations
     enums,unproved_enums=enum_proofs(model)
     supported={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,87,89,96,100,104,132,167,178,180,181,182,183,184,185,187,191,192,198,199,186,189,190,50,83}|set(range(21,26))|set(range(54,59))|set(range(153,167))|set(range(172,178))
-    supported|={107,135,148}  # Finite double multiply, int-to-double and exact signed LCMP.
+    supported|={107,135,148,193}  # Includes observed JVM reference type tests.
     def subtype(child,parent,seen=None):
         if child==parent:return True
         seen=set() if seen is None else seen
@@ -48,7 +48,8 @@ def augment_calls(plan,model,sources):
             if ins['op']==183 and ins['name']=='<init>':
                 call=callee(ins)
                 if key in constructor_starts and ins['index']==constructor_starts[key]-1:continue
-                if call=='java/util/ArrayList.<init>()V':constructors[call]={}
+                if call in constructor_chains:constructors[call]={'kind':'frame-chain','start_pc':constructor_chains[call]['start_pc']}
+                elif call=='java/util/ArrayList.<init>()V':constructors[call]={}
                 elif call=='java/lang/StringBuilder.<init>()V':constructors[call]={'kind':'string-builder'}
                 elif call in ('java/util/Date.<init>()V','java/util/Date.<init>(J)V'):constructors[call]={'kind':'date-constructor'}
                 elif call=='org/springframework/http/HttpEntity.<init>(Ljava/lang/Object;Lorg/springframework/util/MultiValueMap;)V':
@@ -66,9 +67,16 @@ def augment_calls(plan,model,sources):
                             constructors[call]={'kind':'assignments','fields':fields}
                             if any('field' in value for value in fields.values()):constructors[call]['input_projections']=True
                         except ValueError as assignment_error:
-                            try:constructor_starts[call]=constructor_start(model['methods'][call])
+                            try:
+                                chain=initialization_chain(model,call)
+                                for member,spec in chain.items():
+                                    body=model['methods'][member]
+                                    require(all(i['op']in supported for i in body['instructions']),'Constructor body opcode unsupported: '+member)
+                                    require(not re.search(r'\[[ZBCSIJFD]|\[\[',body['desc']),'Constructor array kind unsupported')
+                                    init=model['methods'].get(body['owner']+'.<clinit>()V');require(init is None or all(i['op']in (0,177)for i in init['instructions']),'Constructor class initialization unsupported')
+                                for member,spec in chain.items():
+                                    constructor_starts[member]=spec['start_pc'];constructor_chains[member]=spec;constructors[member]={'kind':'frame-chain','start_pc':spec['start_pc']}
                             except ValueError as frame_error:raise ValueError(str(assignment_error)+'; '+str(frame_error)) from frame_error
-                            constructors[call]={'kind':'frame','start_pc':constructor_starts[call]}
                     except ValueError as error:
                         constructors[call]={'kind':'opaque','reason':str(error)};opaque[call]=str(error)
         analyze(m,allow_loops=True)
@@ -93,8 +101,12 @@ def augment_calls(plan,model,sources):
                 else:opaque.setdefault(implementation,'Lambda implementation bytecode missing')
                 continue
             if ins['op']==183 and ins['name']=='<init>':
+                if key in constructor_starts and ins['index']==constructor_starts[key]-1:
+                    parent=constructor_chains.get(key,{}).get('callee')
+                    if parent and parent!='java/lang/Object.<init>()V':visit(parent)
+                    continue
                 call=callee(ins)
-                if constructors.get(call,{}).get('kind')=='frame':visit(call)
+                if constructors.get(call,{}).get('kind')in ('frame','frame-chain'):visit(call)
                 continue
             if ins['op'] not in (182,183,184,185):continue
             call=callee(ins)
@@ -135,10 +147,10 @@ def augment_calls(plan,model,sources):
                   'field_writes':sorted({i['owner']+'.'+i['name'] for i in m['instructions'] if i['op']==181}),
                   'call_sites':[key+'@'+str(i['index']) for i in m['instructions'] if i['op'] in (182,183,184,185)],
                   'exceptions':m['exception_handlers'],'meaning':'Candidate effects only; actual object/alias/write versions are interpreted, never assumed pure.'} for key,m in methods.items()}
-    plan['algorithm']='execution-dependency-v8-finite-library-conversions'
-    plan['frame_methods']=sorted(methods);plan['binding_callsites']=sorted(key+'@'+str(i['index']) for key,m in methods.items() for i in m['instructions'] if i['op'] in (182,183,184,185) and (i['name']!='<init>' or constructors.get(callee(i),{}).get('kind')=='frame'))
+    plan['algorithm']='execution-dependency-v9-restricted-constructor-chains'
+    plan['frame_methods']=sorted(methods);plan['binding_callsites']=sorted(key+'@'+str(i['index']) for key,m in methods.items() for i in m['instructions'] if i['op'] in (182,183,184,185) and (i['name']!='<init>' or constructors.get(callee(i),{}).get('kind')in ('frame','frame-chain')))
     plan['selected_read_sites']=[key+'@'+str(i['index']) for key,m in methods.items() for i in m['instructions'] if i['op']==180]
-    plan['execution_kernel'].update(callback_lifecycle_version=2,constructor_lifecycle=True,scalar_builders=True,static_field_evidence=True,call_depth_limit=64,object_birth_sites=births,version=8,library_contracts=json.loads((Path(__file__).parent/'constructor-library-contracts-20261020.json').read_text()),constructor_starts=constructor_starts,methods=methods,public_contracts=True,lambda_sites=lambdas,
+    plan['execution_kernel'].update(callback_lifecycle_version=2,constructor_lifecycle=True,constructor_chain_protocol=1,constructor_chains=constructor_chains,scalar_builders=True,static_field_evidence=True,call_depth_limit=64,object_birth_sites=births,version=8,library_contracts=json.loads((Path(__file__).parent/'constructor-library-contracts-20261020.json').read_text()),constructor_starts=constructor_starts,methods=methods,public_contracts=True,lambda_sites=lambdas,
         class_literals={i['constant']:model['classes'][i['constant'][1:-1]]['sha256'] for m in methods.values() for i in m['instructions'] if i['op']==18 and i.get('constant_type')=='Type'},
         runtime_profiles=json.loads((Path(__file__).parent/'kernel-contract-runtimes-20261020.json').read_text())['profiles'],call_targets=targets,opaque_methods=opaque,constructors=constructors,effects=effects,
         class_parents={o:{'super':c.get('super'),'interfaces':c.get('interfaces',[])} for o,c in model['classes'].items()},

@@ -52,6 +52,16 @@ def attach(plan,model,enums,rejected):
         if cl['super']!='java/lang/Object':continue
         defaults[key]={'pc':1,'class_sha256':cl['sha256'],'fields':[{'field':owner+'.'+f['name'],'descriptor':f['desc']}for f in cl['fields']if not f['access']&8]}
     cfg['default_initializers']=defaults
-    plan['snapshot_fields']=sorted(set(plan['snapshot_fields'])|{f['field']for v in defaults.values()for f in v['fields']}|{f['field']for e in enums.values()for fields in e.get('literal_fields',{}).values()for f in fields})
+    for root in cfg.get('constructor_chains',{}):
+        key=root;seen=set()
+        while cfg['constructor_chains'][key]['callee']!='java/lang/Object.<init>()V':
+            require(key not in seen,'Constructor initialization cycle');seen.add(key);key=cfg['constructor_chains'][key]['callee']
+        runtime=model['methods'][root]['owner'];owner=runtime;fields=[]
+        while owner!='java/lang/Object':
+            require(owner in model['classes'],'Initialization hierarchy bytecode absent');cl=model['classes'][owner]
+            fields.extend({'field':owner+'.'+f['name'],'descriptor':f['desc']}for f in cl['fields']if not f['access']&8);owner=cl['super']
+        terminal=model['methods'][key]['owner'];spec=defaults.setdefault(key,{'pc':cfg['constructor_chains'][key]['pc'],'class_sha256':model['classes'][terminal]['sha256'],'fields':[]})
+        spec.setdefault('runtime_classes',{})[runtime]={'class_sha256':model['classes'][runtime]['sha256'],'fields':fields}
+    plan['snapshot_fields']=sorted(set(plan['snapshot_fields'])|{f['field']for v in defaults.values()for f in v['fields']}|{f['field']for v in defaults.values()for t in v.get('runtime_classes',{}).values()for f in t['fields']}|{f['field']for e in enums.values()for fields in e.get('literal_fields',{}).values()for f in fields})
     from plan_scalar_projection import attach as scalar_projection
     return scalar_projection(plan,model)

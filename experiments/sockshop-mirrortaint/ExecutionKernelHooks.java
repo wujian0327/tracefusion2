@@ -50,6 +50,11 @@ public final class ExecutionKernelHooks implements Opcodes {
     static long constructorCounter;
     static boolean extended(){return enabled()&&Boolean.TRUE.equals(((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("constructor_lifecycle"));}
     static Map instruction(String key,int pc){return (Map)((List)((Map)((Map)((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("methods")).get(key)).get("instructions")).get(pc);}
+    static void constructorFrame(Map row,String method,Object receiver){
+        if(!enabled()||CONSTRUCTORS.get().isEmpty())return;Map cfg=(Map)PlannedServiceAgent.plan.get("execution_kernel"),chains=(Map)cfg.getOrDefault("constructor_chains",Collections.emptyMap());if(!chains.containsKey(method))return;Map start=CONSTRUCTORS.get().peek();String key=(String)start.get("callee");Set seen=new HashSet();
+        while(chains.containsKey(key)&&seen.add(key)){if(key.equals(method)){row.put("constructor_id",start.get("constructor_id"));row.put("constructor_outer_method",start.get("callee"));row.put("constructor_outer_frame",start.get("frame"));row.put("constructor_runtime_type",receiver.getClass().getName().replace('.','/'));return;}key=(String)((Map)chains.get(key)).get("callee");}
+        row.put("constructor_unscoped",true);
+    }
     static void args(InsnList h,Type[] types,int[] slots){h.add(new LdcInsnNode(types.length));h.add(new TypeInsnNode(ANEWARRAY,"java/lang/Object"));for(int j=0;j<types.length;j++){h.add(new InsnNode(DUP));h.add(new LdcInsnNode(j));h.add(new VarInsnNode(types[j].getOpcode(ILOAD),slots[j]));PlannedServiceAgent.box(h,types[j]);h.add(new InsnNode(AASTORE));}}
     static boolean instrument(MethodNode method,String key,List<AbstractInsnNode> code){
         boolean birth=false;
@@ -71,6 +76,7 @@ public final class ExecutionKernelHooks implements Opcodes {
         boolean changed=birth;
         for(int pc=0;pc<code.size();pc++){
             AbstractInsnNode n=code.get(pc);
+            if(contracts()&&n instanceof TypeInsnNode&&n.getOpcode()==INSTANCEOF){int value=method.maxLocals++;InsnList before=new InsnList(),after=new InsnList();before.add(new InsnNode(DUP));before.add(new VarInsnNode(ASTORE,value));after.add(new InsnNode(DUP));after.add(new VarInsnNode(ALOAD,value));after.add(new LdcInsnNode(Type.getObjectType(((TypeInsnNode)n).desc)));after.add(new LdcInsnNode(key));after.add(new LdcInsnNode(pc));after.add(new MethodInsnNode(INVOKESTATIC,R,"typeTest","(ILjava/lang/Object;Ljava/lang/Class;Ljava/lang/String;I)V",false));method.instructions.insertBefore(n,before);method.instructions.insert(n,after);changed=true;continue;}
             if(extended()&&n instanceof FieldInsnNode&&n.getOpcode()==GETSTATIC){
                 Type t=Type.getType(((FieldInsnNode)n).desc);InsnList h=new InsnList();h.add(new InsnNode(t.getSize()==2?DUP2:DUP));PlannedServiceAgent.box(h,t);h.add(new LdcInsnNode(key));h.add(new LdcInsnNode(pc));h.add(new MethodInsnNode(INVOKESTATIC,R,"staticRead","(Ljava/lang/Object;Ljava/lang/String;I)V",false));method.instructions.insert(n,h);changed=true;continue;
             }
@@ -108,6 +114,11 @@ public final class ExecutionKernelHooks implements Opcodes {
         Map<String,Object> r=new LinkedHashMap<>();r.put("java_runtime_version",System.getProperty("java.runtime.version"));Map<String,String> hashes=new TreeMap<>();
         for(String name:PINNED)hashes.put(name,JdkContractProbe.hash(name));if(contracts()||probeExtended)hashes.putAll(JdkContractProbe.hashes());r.put("class_sha256",hashes);return r;
     }
+    public static void typeTest(int result,Object input,Class<?> target,String method,int pc){synchronized(PlannedServiceAgent.Recorder.class){try{
+        if(result!=(input!=null&&target.isInstance(input)?1:0))throw new IllegalStateException("JVM type test contradicts actual object/class");Map row=PlannedServiceAgent.Recorder.row();row.put("pc",pc);row.put("method",method);row.put("input",PlannedServiceAgent.Recorder.value(input));row.put("target",target.getName().replace('.','/'));row.put("target_class",PlannedServiceAgent.Recorder.id(target));row.put("target_sha256",classHash(target));row.put("target_bootstrap",target.getClassLoader()==null);row.put("result",result);List nodes=new ArrayList();Set<Class<?>> seen=Collections.newSetFromMap(new IdentityHashMap<Class<?>,Boolean>());Deque<Class<?>> todo=new ArrayDeque<>();if(input!=null)todo.push(input.getClass());
+        while(!todo.isEmpty()){Class<?> type=todo.pop();if(!seen.add(type))continue;Map node=new LinkedHashMap();node.put("id",PlannedServiceAgent.Recorder.id(type));node.put("name",type.getName().replace('.','/'));node.put("bootstrap",type.getClassLoader()==null);node.put("array",type.isArray());node.put("class_sha256",type.isArray()?null:classHash(type));List parents=new ArrayList();if(type.getSuperclass()!=null){parents.add(PlannedServiceAgent.Recorder.id(type.getSuperclass()));todo.push(type.getSuperclass());}for(Class<?> p:type.getInterfaces()){parents.add(PlannedServiceAgent.Recorder.id(p));todo.push(p);}node.put("parents",parents);nodes.add(node);}
+        row.put("actual_class",input==null?null:PlannedServiceAgent.Recorder.id(input.getClass()));row.put("actual_type",input==null?null:input.getClass().getName().replace('.','/'));row.put("hierarchy",nodes);PlannedServiceAgent.Recorder.emit("execution-type-test",row);
+    }catch(Exception error){throw new IllegalStateException(error);}}}
     public static void defaultBirth(Object object,String ctor){FoundationValueHooks.defaults(object,ctor);}
     static void enter()throws Exception{FoundationValueHooks.runtime();if(!runtimeEmitted){PlannedServiceAgent.Recorder.emit("execution-runtime",runtime());runtimeEmitted=true;}}
     static Map libraryValues()throws Exception{Map result=new LinkedHashMap();result.put("java_runtime_version",System.getProperty("java.runtime.version"));result.put("class_sha256",JdkContractProbe.selected(new String[]{"java/util/HashMap","java/util/LinkedHashMap","java/lang/Integer","java/util/UUID"}));return result;}

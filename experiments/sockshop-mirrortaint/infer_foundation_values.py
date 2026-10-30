@@ -25,9 +25,16 @@ def default_facts(cfg,rows,starts):
         spec=cfg.get('default_initializers',{}).get(fact['constructor']);require(spec and spec['class_sha256']==fact['class_sha256'],'Default initializer/hash differs')
         candidates=[r for r in starts if r['constructor_id']==fact['constructor_id']]
         require(len(candidates)==1,'Default constructor start absent/ambiguous');start=candidates[0]
-        require(start['callee']==fact['constructor'] and start['frame']==fact['caller_frame'] and start['pc']==fact['pc'] and start['seq']<fact['seq'],'Default constructor occurrence/caller differs')
+        chain=cfg.get('constructor_chains',{});key=start['callee'];members=set()
+        while key in chain and key not in members:members.add(key);key=chain[key]['callee']
+        require((start['callee']==fact['constructor']or fact['constructor']in members) and start['frame']==fact['caller_frame'] and start['pc']==fact['pc'] and start['seq']<fact['seq'],'Default constructor occurrence/caller differs')
+        if start['callee'] in chain:
+            frames=[r for r in rows if r['kind']=='enter' and r['frame']==fact.get('frame')]
+            require(len(frames)==1 and frames[0]['method']==fact['constructor'] and frames[0]['receiver']==fact['object'] and frames[0].get('constructor_id')==start['constructor_id'] and frames[0]['seq']<fact['seq'],'Default initialized constructor Frame differs')
         require(fact['constructor_id']not in result and fact['object']not in owners,'Default allocation occurrence/object repeated');owners.add(fact['object'])
-        fields=fact['fields'];require([(f['field'],f['descriptor'])for f in fields]==[(f['field'],f['descriptor'])for f in spec['fields']],'Default field coverage differs')
+        fields=fact['fields'];runtime=spec.get('runtime_classes',{}).get(fact.get('runtime_type'))
+        if spec.get('runtime_classes'):require(runtime and runtime['class_sha256']==fact.get('runtime_class_sha256'),'Default runtime hierarchy/hash differs')
+        require([(f['field'],f['descriptor'])for f in fields]==[(f['field'],f['descriptor'])for f in (runtime or spec)['fields']],'Default field coverage differs')
         for f in fields:
             require(f['owner']==fact['object'] and f['version']==0,'Default owner/version differs');v=f['observed'];desc=f['descriptor'];value=v.get('value','@missing')
             if desc.startswith(('L','[')):require(value is None and v.get('object')is None,'Reference default is not null')

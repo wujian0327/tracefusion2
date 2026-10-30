@@ -41,7 +41,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
                     if(!initialized&&n instanceof MethodInsnNode){MethodInsnNode c=(MethodInsnNode)n;if(c.getOpcode()==INVOKESPECIAL&&c.name.equals("<init>")&&(c.owner.equals(owner)||c.owner.equals(cls.superName))){initialized=true;entry=n;continue;}}
                     if(!initialized)continue;
                     if(n instanceof FieldInsnNode) {
-                        FieldInsnNode f=(FieldInsnNode)n;String field=f.owner+"."+f.name;
+                        FieldInsnNode f=(FieldInsnNode)n;String field=canonicalField(f);
                         boolean write=f.getOpcode()==PUTFIELD,read=!boundary&&f.getOpcode()==GETFIELD&&(full||((List)plan.getOrDefault("selected_read_sites",Collections.emptyList())).contains(site));
                         if((write&&(tracked.contains(field)||full))||read){field(m,f,site,write,full||read||field.equals(plan.get("target"))||ExecutionKernelHooks.enabled());changed=true;}
                     }
@@ -94,17 +94,18 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
         return a==null?"java/lang/Object":a;
     }
     static void branch(InsnList h,String site,boolean taken){h.add(new LdcInsnNode(site));h.add(new InsnNode(taken?ICONST_1:ICONST_0));h.add(new MethodInsnNode(INVOKESTATIC,R,"branch","(Ljava/lang/String;Z)V",false));}
+    static String canonicalField(FieldInsnNode f){return (String)((Map)plan.getOrDefault("field_declarations",Collections.emptyMap())).getOrDefault(f.owner+"."+f.name+":"+f.desc,f.owner+"."+f.name);}
     static void field(MethodNode m,FieldInsnNode f,String site,boolean write,boolean log) {
         Type t=Type.getType(f.desc);int object=m.maxLocals++,value=m.maxLocals;m.maxLocals+=t.getSize();InsnList a=new InsnList(),b=new InsnList();
         if(write){a.add(new VarInsnNode(t.getOpcode(ISTORE),value));a.add(new VarInsnNode(ASTORE,object));a.add(new VarInsnNode(ALOAD,object));a.add(new VarInsnNode(t.getOpcode(ILOAD),value));}
         else{a.add(new InsnNode(DUP));a.add(new VarInsnNode(ASTORE,object));b.add(new InsnNode(t.getSize()==2?DUP2:DUP));b.add(new VarInsnNode(t.getOpcode(ISTORE),value));}
-        InsnList event=new InsnList();event.add(new VarInsnNode(ALOAD,object));event.add(new LdcInsnNode(f.owner+"."+f.name));event.add(new VarInsnNode(t.getOpcode(ILOAD),value));box(event,t);event.add(new LdcInsnNode(site));event.add(new InsnNode(write?ICONST_1:ICONST_0));event.add(new InsnNode(log?ICONST_1:ICONST_0));event.add(new MethodInsnNode(INVOKESTATIC,R,"field","(Ljava/lang/Object;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;ZZ)V",false));
-        if(write&&ExecutionKernelHooks.applicationCandidate(site,f.owner+"."+f.name)!=null){
-            LabelNode observe=new LabelNode(),done=new LabelNode();b.add(new VarInsnNode(ALOAD,object));b.add(new LdcInsnNode(site));b.add(new LdcInsnNode(f.owner+"."+f.name));b.add(new MethodInsnNode(INVOKESTATIC,"ExecutionKernelHooks","versionOnly","(Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;)Z",false));b.add(new JumpInsnNode(IFEQ,observe));
-            b.add(new VarInsnNode(ALOAD,object));b.add(new LdcInsnNode(f.owner+"."+f.name));b.add(new LdcInsnNode(site));b.add(new MethodInsnNode(INVOKESTATIC,R,"fieldVersionRecord","(Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;)V",false));b.add(new JumpInsnNode(GOTO,done));b.add(observe);b.add(event);b.add(done);
-        }else if(write&&ExecutionKernelHooks.closureCandidate(site,f.owner+"."+f.name)){
-            LabelNode observe=new LabelNode(),done=new LabelNode();b.add(new LdcInsnNode(site));b.add(new LdcInsnNode(f.owner+"."+f.name));b.add(new MethodInsnNode(INVOKESTATIC,"ExecutionKernelHooks","omitWrite","(Ljava/lang/String;Ljava/lang/String;)Z",false));b.add(new JumpInsnNode(IFEQ,observe));
-            b.add(new VarInsnNode(ALOAD,object));b.add(new LdcInsnNode(f.owner+"."+f.name));b.add(new LdcInsnNode(site));b.add(new MethodInsnNode(INVOKESTATIC,R,"fieldVersion","(Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;)V",false));b.add(new JumpInsnNode(GOTO,done));b.add(observe);b.add(event);b.add(done);
+        InsnList event=new InsnList();event.add(new VarInsnNode(ALOAD,object));event.add(new LdcInsnNode(canonicalField(f)));event.add(new VarInsnNode(t.getOpcode(ILOAD),value));box(event,t);event.add(new LdcInsnNode(site));event.add(new InsnNode(write?ICONST_1:ICONST_0));event.add(new InsnNode(log?ICONST_1:ICONST_0));event.add(new MethodInsnNode(INVOKESTATIC,R,"field","(Ljava/lang/Object;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;ZZ)V",false));
+        if(write&&ExecutionKernelHooks.applicationCandidate(site,canonicalField(f))!=null){
+            LabelNode observe=new LabelNode(),done=new LabelNode();b.add(new VarInsnNode(ALOAD,object));b.add(new LdcInsnNode(site));b.add(new LdcInsnNode(canonicalField(f)));b.add(new MethodInsnNode(INVOKESTATIC,"ExecutionKernelHooks","versionOnly","(Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;)Z",false));b.add(new JumpInsnNode(IFEQ,observe));
+            b.add(new VarInsnNode(ALOAD,object));b.add(new LdcInsnNode(canonicalField(f)));b.add(new LdcInsnNode(site));b.add(new MethodInsnNode(INVOKESTATIC,R,"fieldVersionRecord","(Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;)V",false));b.add(new JumpInsnNode(GOTO,done));b.add(observe);b.add(event);b.add(done);
+        }else if(write&&ExecutionKernelHooks.closureCandidate(site,canonicalField(f))){
+            LabelNode observe=new LabelNode(),done=new LabelNode();b.add(new LdcInsnNode(site));b.add(new LdcInsnNode(canonicalField(f)));b.add(new MethodInsnNode(INVOKESTATIC,"ExecutionKernelHooks","omitWrite","(Ljava/lang/String;Ljava/lang/String;)Z",false));b.add(new JumpInsnNode(IFEQ,observe));
+            b.add(new VarInsnNode(ALOAD,object));b.add(new LdcInsnNode(canonicalField(f)));b.add(new LdcInsnNode(site));b.add(new MethodInsnNode(INVOKESTATIC,R,"fieldVersion","(Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;)V",false));b.add(new JumpInsnNode(GOTO,done));b.add(observe);b.add(event);b.add(done);
         }else b.add(event);
         m.instructions.insertBefore(f,a);m.instructions.insert(f,b);
     }
@@ -146,6 +147,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
         }
         public static synchronized Object enter(String method,Object self,Object[] args){MonitorSafety.Scope scope=MonitorSafety.open(method);if(scope.failed)return scope;try{
             Frame f=new Frame();f.id="f"+(++framesCounter);f.method=method;scope.frame=f;Map<String,Object> r=row();r.put("parent",r.get("frame"));r.put("frame",f.id);r.put("method",method);r.put("receiver",id(self));r.put("callsite",PENDING.get());PENDING.remove();List<Object> vs=new ArrayList<>();for(Object a:args)vs.add(value(a));r.put("args",vs);ExecutionKernelHooks.callbackSite(r);AsyncTaskHooks.frame(r);
+            ExecutionKernelHooks.constructorFrame(r,method,self);
             if(method.equals(plan.get("entry")))try{r.put("trace_id",Class.forName("org.slf4j.MDC",false,Thread.currentThread().getContextClassLoader()).getMethod("get",String.class).invoke(null,"X-B3-TraceId"));}catch(Exception ignored){}
             if(method.equals(plan.get("entry"))&&"identity-return".equals(plan.get("profile"))){Object a=args[((Number)plan.get("input_argument")).intValue()];if(a==null||!a.getClass().getName().replace('.','/').equals(plan.get("input_owner")))throw new IllegalStateException("Runtime input DTO differs");r.put("input_object",id(a));r.put("input_fields",snapshot(a,true));Set<String> users=ACTIVE.computeIfAbsent(id(a),k->new HashSet<>());if(!users.isEmpty())throw new IllegalStateException("Shared active input DTO");users.add(f.id);f.locked.add(id(a));}
             if(method.equals(plan.get("producer_method"))) {

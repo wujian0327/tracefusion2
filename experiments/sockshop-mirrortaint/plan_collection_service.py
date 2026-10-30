@@ -19,9 +19,20 @@ def direct_accessors(model):
         if m['access']&8:continue
         c = m['instructions']
         if not descriptors(m['desc']) and len(c) == 3 and c[0].get('var') == 0 and c[0]['op'] == 25 and c[1]['op'] == 180 and 172 <= c[2]['op'] <= 176:
-            getters[key] = {'field': field(c[1]), 'descriptor': c[1]['desc']}
+            getters[key] = {'field': field(c[1]), 'descriptor': c[1]['desc'],'implementation':key}
         if len(descriptors(m['desc']))==1 and len(c) == 4 and c[0] == {'index': 0, 'op': 25, 'var': 0} and c[1].get('var') == 1 and c[2]['op'] == 181 and c[3]['op'] == 177:
-            setters[key] = {'field': field(c[2]), 'descriptor': c[2]['desc']}
+            setters[key] = {'field': field(c[2]), 'descriptor': c[2]['desc'],'implementation':key}
+    for method in model['methods'].values():
+        for ins in method['instructions']:
+            if ins['op']not in (182,183,185):continue
+            owner=ins['owner'];suffix='.'+ins['name']+ins['desc'];seen=set()
+            while owner in model['classes']and owner not in seen:
+                seen.add(owner);key=owner+suffix
+                if key in model['methods']:
+                    for table in (getters,setters):
+                        if key in table:table.setdefault(callee(ins),dict(table[key]))
+                    break
+                owner=model['classes'][owner]['super']
     return getters, setters
 
 
@@ -70,6 +81,7 @@ def analyze(method, allow_loops=False):
         elif op == 180: pop(); push()
         elif op == 181: pop(); pop()
         elif op == 192: v = pop(); stack.append(v)
+        elif op == 193 and allow_loops:pop();push()
         elif allow_loops and op in (189,190): pop(); push()
         elif allow_loops and op == 50: pop(); pop(); push()
         elif allow_loops and op == 83: pop(); pop(); pop()

@@ -85,6 +85,7 @@ def augment(model,plan=None):
     if plan is None:plan={'profile':'transport-boundary','entry':None,'frame_methods':[],'producer_method':None,'writer_method':None,'reduction':{},'snapshot_fields':[],'full_snapshot_fields':[],'contracts':[]}
     plan=dict(plan);fields=sorted({p['field'] for ps in schema.values() for p in ps})
     plan.update(class_sha256={o:c['sha256'] for o,c in model['classes'].items()},json_schema=schema,json_rejected_properties=rejected)
+    if model.get('_field_declarations'):plan['field_declarations']=model['_field_declarations']
     plan['snapshot_fields']=sorted(set(plan['snapshot_fields'])|set(fields));plan['full_snapshot_fields']=fields
     plan['transport_contracts']=['Default Jackson properties backed by verified direct getters/public fields; custom property serializers/mixins/naming strategies excluded.',
         'Nested known DTOs and ordered collections; unknown object shapes are not assigned fabricated origins.',

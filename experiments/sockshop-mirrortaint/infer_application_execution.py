@@ -86,7 +86,7 @@ def infer_application(plan,rows,worker_request=None):
             births[row['object']]=row['seq']
         defaults=default_facts(cfg,relevant,[r for r in relevant if r['kind']=='execution-constructor-enter'])
         active_defaults={};decimal_values={}
-        methods=cfg['methods'];events=[r for r in relevant if r['kind'] in ('enter','exit','abort','collection-call-enter','collection-call-exit','collection-call-throw','execution-direct-dispatch','execution-constructor-enter','execution-constructed','execution-constructor-throw','execution-static-read','execution-lambda','execution-class-literal','execution-array','execution-array-throw','collection-catch','branch','read','write','write-version') and (r['kind'] not in ('read','write','write-version','branch') or r['site'].rsplit('@',1)[0] in methods)]
+        methods=cfg['methods'];events=[r for r in relevant if r['kind'] in ('enter','exit','abort','collection-call-enter','collection-call-exit','collection-call-throw','execution-direct-dispatch','execution-constructor-enter','execution-constructed','execution-constructor-throw','execution-static-read','execution-lambda','execution-class-literal','execution-array','execution-array-throw','execution-type-test','collection-catch','branch','read','write','write-version') and (r['kind'] not in ('read','write','write-version','branch') or r['site'].rsplit('@',1)[0] in methods)]
         writes=[r for r in relevant if r['kind']in ('write','write-version')];providers=defaultdict(list)
         for row in relevant:
             if row['kind'] in ('binding-source','binding-input'):
@@ -155,11 +155,23 @@ def infer_application(plan,rows,worker_request=None):
                 if len(matches)==1:same_value(matches[0]['observed'],f['observed']);return Value(f['observed'])
             return origin(f,before)
         def register_defaults(ctor_start,receiver,completed=None):
-            if not cfg.get('default_initializers',{}).get(ctor_start['callee']):return
+            if not cfg.get('default_initializers',{}).get(ctor_start['callee']) and ctor_start['callee']not in cfg.get('constructor_chains',{}):return
             fact=defaults.get(ctor_start['constructor_id']);require(fact is not None,'Required allocation default witness absent')
             require(fact['object']==identity(receiver),'Default witness wrong allocation object')
             if completed:require(fact['seq']<completed['seq'],'Default witness after constructor completion')
             prior=active_defaults.setdefault(fact['object'],fact);require(prior==fact,'Default allocation witness rebound')
+        def execute_constructor(key,args,receiver,start):
+            spec=cfg['constructor_chains'][key];parent=spec['callee']
+            if parent!='java/lang/Object.<init>()V':
+                delegated=[args[e['argument']]if 'argument'in e else Value({'value':e['constant'],'object':None}if e['constant']is None else {'value':e['constant']})for e in spec['arguments']]
+                _,error=execute_constructor(parent,delegated,receiver,start)
+                if error is not None:return None,error
+            begin=take('enter',check_frame=False,check_pc=False)
+            require(begin['method']==key and begin['parent']==start['frame'] and begin.get('constructor_id')==start['constructor_id'] and begin.get('constructor_outer_method')==start['callee'] and begin.get('constructor_outer_frame')==start['frame'],'Constructor chain Frame/occurrence differs')
+            require(begin.get('constructor_runtime_type')==start['callee'].split('.')[0],'Constructor runtime allocation type differs')
+            bind(receiver,{'object':begin['receiver']})
+            if parent=='java/lang/Object.<init>()V':register_defaults(start,receiver)
+            return execute(begin,args,receiver)
         def write_field(w,v):
             if w['kind']=='write-version':
                 state.field_write(coordinate(w),Value(unknown=True));field_seq[coordinate(w)]=w['seq'];return
@@ -414,6 +426,22 @@ def infer_application(plan,rows,worker_request=None):
                         if write['kind']=='write':bind(value,write['observed'])
                         write_field(write,value)
                     elif op==192:pass  # Exact runtime invocation/schema checks retain the object identity.
+                    elif op==193:
+                        value=pop();event=take('execution-type-test');bind(value,event['input']);require(event['target']==ins['type'] and event['method']==entry,'Reference type-test target/site differs');nodes=event['hierarchy'];ids={n['id']for n in nodes};require(len(ids)==len(nodes)and all(set(n['parents'])<=ids for n in nodes),'Type-test hierarchy incomplete/ambiguous')
+                        target=event['target'];expected=plan['class_sha256'].get(target,runtime[0]['class_sha256'].get(target))
+                        if expected:require(event['target_sha256']==expected,'Type-test target implementation differs')
+                        else:require(event['target_bootstrap']and target in ('java/util/List','java/lang/Object','java/lang/Cloneable','java/io/Serializable'),'Unmodeled reference type-test target')
+                        for node in nodes:
+                            expected=plan['class_sha256'].get(node['name'],runtime[0]['class_sha256'].get(node['name']))
+                            if expected:require(node['class_sha256']==expected,'Type-test value hierarchy implementation differs')
+                        by_id={n['id']:n for n in nodes};todo=[event['actual_class']]if nodes else [];reachable=set()
+                        while todo:
+                            current=todo.pop();require(current in by_id,'Type-test actual class absent')
+                            if current in reachable:continue
+                            reachable.add(current);todo.extend(by_id[current]['parents'])
+                        require(reachable==ids and (not nodes or nodes[0]['id']==event['actual_class']and nodes[0]['name']==event['actual_type']),'Type-test hierarchy is not that of the actual object')
+                        require(bool(nodes)==(event['input'].get('object')is not None),'Null type-test hierarchy differs');require(event['result']in (0,1)and event['result']==int(event['target_class']in ids),'Type test contradicts object hierarchy')
+                        fr.stack.append(value.project({'value':event['result']}))
                     elif op in (96,100,104):
                         b,a=pop(),pop();require('value' in a.observed and 'value' in b.observed,'Execution integer operands absent')
                         x,y=a.observed['value'],b.observed['value'];n=x+y if op==96 else x-y if op==100 else x*y
@@ -442,7 +470,9 @@ def infer_application(plan,rows,worker_request=None):
                                 ctor_start=take('execution-constructor-enter');require(ctor_start['callee']==key and ctor_start['method']==entry and len(args)==len(ctor_start['args']),'Constructor begin callee/arity differs')
                                 for desc,a,b in zip(descriptors(ins['desc']),args,ctor_start['args']):bind_argument(a,b,desc)
                             child_error=None
-                            if effect.get('kind')=='frame':
+                            if effect.get('kind')=='frame-chain':
+                                _,child_error=execute_constructor(key,args,recv,ctor_start)
+                            elif effect.get('kind')=='frame':
                                 begin=take('enter',check_frame=False);require(begin['method']==key and begin['parent']==fr.invocation and begin['callsite']==entry+'@'+str(fr.pc),'Constructor Frame binding differs')
                                 bind(recv,{'object':begin['receiver']});register_defaults(ctor_start,recv);_,child_error=execute(begin,args,recv)
                             elif effect.get('input_projections'):
@@ -503,7 +533,7 @@ def infer_application(plan,rows,worker_request=None):
                                 if fact['valid'] and fact['body'].get('value','non-null') is None:http_entities[owner]=Value(fact['body'])
                             elif effect.get('kind')=='local-map':
                                 library_values(event.get('library_values'));require(event.get('collection')==[],'New HashMap not empty');maps[owner]={'epoch':0,'values':{},'local':True}
-                            elif effect.get('kind')!='frame':
+                            elif effect.get('kind')not in ('frame','frame-chain'):
                                 fields=effect['fields'] if effect.get('kind')=='assignments' else {name:{'argument':index} for name,index in effect.items()}
                                 for name,expression in fields.items():
                                     if 'field' in expression:
@@ -930,11 +960,13 @@ def infer_application(plan,rows,worker_request=None):
                             elif key in plan['response_binding']['source_calls']:
                                 v=Value(observed)  # Source leaves must still match concrete boundary fields later.
                             elif key in plan['collection_getters']:
+                                if plan['collection_getters'][key].get('implementation'):require(call.get('accessor_implementation')==plan['collection_getters'][key]['implementation'],'Accessor actual implementation witness differs')
                                 f=call.get('getter');require(f and f['field']==plan['collection_getters'][key]['field'],'Execution getter evidence absent')
                                 same_value(f['observed'],observed)
                                 v=lookup(f,call['seq']) if 'value' in observed or 'date_epoch_ms' in observed else Value(observed)
                                 if 'date_epoch_ms' in observed:heap_refs[f['owner']].add(observed['object'])
                             elif key in plan['collection_setters']:
+                                if plan['collection_setters'][key].get('implementation'):require(call.get('accessor_implementation')==plan['collection_setters'][key]['implementation'],'Accessor actual implementation witness differs')
                                 name=plan['collection_setters'][key]['field'];matching=[w for w in writes if w['owner']==identity(recv) and w['field']==name and call['seq']<w['seq']<ret['seq']]
                                 require(len(matching)==1,'Execution setter version missing');w=matching[0]
                                 if w['kind']=='write':bind(args[0],w['observed'])

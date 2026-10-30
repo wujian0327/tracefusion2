@@ -108,7 +108,7 @@ def freeze():
     # Complete semantic core snapshot, not just the two modified planners.
     previous=load(ROOT/'artifacts/account-semantics-20261028/final-candidate-01/algorithm-freeze.json')['sources']
     sources={str(Path(f).relative_to(ROOT)):sha(Path(f))for f in previous}
-    for name in ('plan_applicability.py','direct-dispatch-contracts-20261029.json','plan_communication_identity.py','communication-identity-contracts-20261029.json','plan_literal_enums.py'):
+    for name in ('plan_applicability.py','direct-dispatch-contracts-20261029.json','plan_communication_identity.py','communication-identity-contracts-20261029.json','plan_literal_enums.py','plan_field_identity.py'):
         sources[str((HERE/name).relative_to(ROOT))]=sha(HERE/name)
     receipt={'sources':sources,'agent_sha256':sha(BASE/'distributed-observer.jar'),'meaning':'Development checkpoint before business capture; source/contract hashes define this candidate, separate from all first/C1 captures.'}
     receipt['planning_inputs']={str(p.relative_to(HOME)):sha(p)for folder in ('planning-first','metadata')for p in (HOME/folder).rglob('*.json')}

@@ -21,6 +21,8 @@ def specialize_transport(plan, *, scope=True, fields=True):
     return plan
 
 def choose(model,query,*,deployment=None):
+    from plan_field_identity import canonical_model
+    model=canonical_model(model)
     from plan_applicability import declared_sources,check
     args=(model,query['entry'],query['target'],query['path']);failures={};legacy=kernel=None
     sources=declared_sources(query)

@@ -56,3 +56,40 @@ def constructor_start(method):
     c=method['instructions']
     require(len(c)>=3 and c[0]['op']==25 and c[0].get('var')==0 and c[1]['op']==183 and callee(c[1])=='java/lang/Object.<init>()V','Constructor Frame currently requires direct empty Object initialization')
     return 2
+
+
+def initialization_prefix(model,key):
+    """Only pure this/argument/literal loading before an exact this/super call.
+
+    The JVM receiver is not observable yet. The prefix is interpreted from the
+    original bytecode; actual initialized Frames must confirm its argument
+    bindings and the common outer constructor occurrence.
+    """
+    method=model['methods'][key];owner=method['owner'];slots={};slot=1;stack=[]
+    require(method['name']=='<init>' and not method['access']&(8|32|256|1024),'Unsupported constructor kind')
+    for index,desc in enumerate(descriptors(method['desc'])):slots[slot]=(index,desc);slot+=2 if desc in ('J','D')else 1
+    for ins in method['instructions']:
+        op=ins['op']
+        if 21<=op<=25:
+            if ins['var']==0:require(op==25,'Invalid uninitialized receiver load');stack.append({'self':True})
+            else:
+                arg,desc=slots[ins['var']];require(op==({'J':22,'F':23,'D':24}.get(desc,25 if desc.startswith(('L','['))else 21)),'Constructor argument load type differs');stack.append({'argument':arg})
+        elif op==1:stack.append({'constant':None})
+        elif 2<=op<=8:stack.append({'constant':op-3})
+        elif 9<=op<=15:stack.append({'constant':op-9 if op<11 else float(op-11 if op<14 else op-14)})
+        elif op in (16,17,18):require(ins.get('constant_type')!='Type','Preinitialization Class literal unsupported');stack.append({'constant':ins.get('operand',ins.get('constant'))})
+        elif op==183 and ins['name']=='<init>':
+            count=len(descriptors(ins['desc']));require(len(stack)==count+1 and stack[0]=={'self':True},'Preinitialization constructor receiver/stack differs')
+            require(ins['owner']in (owner,model['classes'][owner]['super']),'Initialization must call this or direct superclass')
+            require(all(not(h['start']<=ins['index']<h['end'])for h in method['exception_handlers']),'Preinitialization handler unsupported')
+            call=callee(ins);require(call=='java/lang/Object.<init>()V'or call in model['methods'],'Constructor superclass bytecode absent')
+            return {'pc':ins['index'],'start_pc':ins['index']+1,'callee':call,'arguments':stack[1:]}
+        else:raise ValueError('Preinitialization side effect/operation unsupported at '+key+'@'+str(ins['index']))
+    raise ValueError('Constructor initialization call absent: '+key)
+
+
+def initialization_chain(model,key,active=None):
+    active=set()if active is None else active;require(key not in active,'Recursive constructor initialization')
+    spec=initialization_prefix(model,key);result={key:spec}
+    if spec['callee']!='java/lang/Object.<init>()V':result.update(initialization_chain(model,spec['callee'],active|{key}))
+    return result
