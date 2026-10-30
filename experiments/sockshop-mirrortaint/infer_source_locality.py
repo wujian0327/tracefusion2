@@ -71,5 +71,6 @@ def validate(plan,rows):
   require(dec['cache_scope']==any(x.startswith('org/springframework/cache/interceptor/CacheAspectSupport.')for x in dec['corridor']),'Ownership cache scope rebound')
   if dec['cache_scope']:
    cache=[r for r in family if r['kind']=='locality-cache'];require(len(cache)==1 and cache[0]['empty']and cache[0]['seq']<read['seq'],'Ownership cache publication not excluded')
+   witness=cache[0];require(witness['class']is None and witness['class_sha256']is None or witness['class']=='java/util/Collections$EmptyList'and any(p['class_sha256'].get(witness['class'])==witness['class_sha256']for p in plan['execution_kernel']['runtime_profiles']),'Ownership cache emptiness implementation unproved')
   result[start['call_id']]={'objects':graph,'body':end['body'],'seq':end['seq'],'births':{k:born[k]['seq']for k in graph},'ownership_id':oid}
  return result

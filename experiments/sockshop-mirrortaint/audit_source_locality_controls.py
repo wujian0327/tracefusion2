@@ -46,7 +46,7 @@ def audit(root,out):
   for n in (13,14):
    frames={r['frame']for r in rows if r['kind']=='enter'and r['method']==plan['entry']and r['args'][0].get('value')==n}
    require(sum(not r['valid']and bool(r['reason'])for r in ends if r['caller_frame']in frames)==2)
-  for n,valid in ((15,True),(16,False)):
+  for n,valid in ((15,True),(16,False),(17,False)):
    frames={r['frame']for r in rows if r['kind']=='enter'and r['method']==plan['entry']and r['args'][0].get('value')==n}
    require(sum(r['valid']==valid for r in ends if r['caller_frame']in frames)==2)
   constants=[]
