@@ -1,0 +1,16 @@
+{
+  "input_seal_sha256": "1e24d0313083b7973d5d06e8a817ed2f002887658c1e663701791b2686063739",
+  "same_input_truth_boundary_as": "constructor-chain-effects-20261030/final-mall-01",
+  "controls": [
+    "fresh and sealed default decode graph",
+    "unrelated context/cache/storage modifications",
+    "direct target argument opaque",
+    "nested wrapper escape",
+    "static/global publication",
+    "opaque callback with captured alias",
+    "same-value target overwrite creates version and new dependencies",
+    "fresh but unproved decoder remains unknown",
+    "incomplete birth/corridor/configuration/closing evidence rejected"
+  ],
+  "truth": "Original independent Mall oracle; control literals/input field coordinates separately defined; runtime localness witnesses never define source truth"
+}

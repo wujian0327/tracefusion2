@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "meaning": "Finite default bean plus scalar-map decoder and closed Feign return corridor; never a source definition or logging readonly contract",
+  "class_sha256": {
+    "com/fasterxml/jackson/databind/deser/std/UntypedObjectDeserializer$Vanilla": "7f29f930529488b8ec01a5afd072347616c459f22ff767c0e22358563d3eed91",
+    "com/fasterxml/jackson/databind/deser/BeanDeserializer": "06efec13fad79e6466b0e223fcffdc847fd8945b00f8c1fb989533a524d10ae8",
+    "com/fasterxml/jackson/databind/deser/std/StdValueInstantiator": "62d52cea62516a810c02a58a00313d71c8fa58d95f749b9ce7008b15070de4da",
+    "com/fasterxml/jackson/databind/ObjectReader": "9eacf7f8a5e11474e1f7f303d96adc5748b2da1e5c133dba1a507b34cd07dd96",
+    "org/springframework/cloud/openfeign/support/SpringDecoder": "e283af65214f7e3a8bec782b74a08cdd692c980e8fa0ad2d16e4ccfa4dddb573",
+    "org/springframework/cloud/openfeign/support/ResponseEntityDecoder": "bb9d2b38849144144f7a35edec45c2b55c66ffeec72c8886d42875365a8e3a5d",
+    "org/springframework/cloud/openfeign/FeignCachingInvocationHandlerFactory$1": "a8c662705745d9d59aca7f47e86450879a86bcd44898f684337e14f1d05f574f",
+    "org/springframework/http/converter/json/AbstractJackson2HttpMessageConverter": "d55eb7985c38e364775684ffd0eca58cf5c64ecf442b6d78c2750300c5edc44b",
+    "feign/SynchronousMethodHandler": "d0559b44a7ec7a54d1ba377acccb22c8cc6f930e0c0694850d8dce381bd50e6a",
+    "feign/ReflectiveFeign$FeignInvocationHandler": "56a0f7ddb31cbfe42c9fc2d54175980f5d0f26d601744649597f4f40f6672b96",
+    "feign/optionals/OptionalDecoder": "60eef45377b240d7ee9ca8a565151fc53eaf348ab7621fe4bce0031ccb10e9a8",
+    "org/springframework/cache/interceptor/CacheAspectSupport": "5ac4083d091f29697c9c34b4c59cd5822f763ea6663d49343af363fcd513c903",
+    "org/springframework/cache/interceptor/CacheInterceptor": "992568058a03c07db3510c1c6028025f063f371ee804e40c54fe43e701820dc6",
+    "com/fasterxml/jackson/core/JsonFactory": "24e0b96aa571af8be087f4deb7002a3cb26ccac471c32bc03c18529610b51fbd",
+    "com/fasterxml/jackson/databind/deser/BeanDeserializerBase": "2f32dc396c5b6b84be9a971478f7a56c02746eb773f7046d6127b6df9959194e",
+    "com/fasterxml/jackson/databind/deser/DefaultDeserializationContext$Impl": "773a5b9262d21bbc8820063301f72d53b6a3be0a9c4b60bf47ddbde1f4c47425",
+    "com/fasterxml/jackson/databind/deser/BeanDeserializerFactory": "2a0c5fbd07335535f3d99dfa98714fdfde6b8ef9c2510758b9f54b7f52138242",
+    "com/fasterxml/jackson/databind/deser/impl/MethodProperty": "d1956b9a360cec2ba01d538ecf37dfdea3cf0bb620fd5fa3369d52caa2c15c95",
+    "com/fasterxml/jackson/databind/deser/std/StringDeserializer": "bd37a62b2c13686442444234b48b12c99bfd105a96102615e7d18de52c9e6aea",
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$LongDeserializer": "467dc11c4f1c66f529f0847a3fdd9e2ee2758b5e7a002cef917a22f3c941d17f",
+    "org/springframework/cloud/openfeign/FeignCachingInvocationHandlerFactory": "2220f8fa261b35a26af295d957a7adb55d249568b93fdd23f05255572256fa9f",
+    "org/springframework/web/client/HttpMessageConverterExtractor": "83f2d658638585ae5bda412204bda94c03ea2a33418580e629d316c9cbb55289",
+    "feign/AsyncResponseHandler": "aee307d82650b42126ebc021f027c4e555aa5d90be990ca6162bf537d5d7487a",
+    "feign/Util": "8aa9a53300a9cebe7bb41cb8ee7db0f11ebad03378700bdc5562ab1d5f1bfa3d",
+    "com/fasterxml/jackson/databind/ObjectMapper": "46a402c06d4e579014ad56ec64ff590461215a32e404c6acfda0a0b095d996b5",
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$IntegerDeserializer": "48d4995baf194f10d2fc64918202abc869a602ab1888086ac6de151f52e8ede9",
+    "com/fasterxml/jackson/databind/deser/std/NumberDeserializers$BooleanDeserializer": "ea258a523707736a7ef5044f3e6e088188b980f8248131de24f9a65fd21771b6",
+    "com/fasterxml/jackson/databind/deser/impl/NullsConstantProvider": "e70719f3bcb39b6cf6640980e444188ebdee4a95cc514e8c1d0eaffb4ca9c1a6",
+    "com/fasterxml/jackson/databind/MappingJsonFactory": "0badecfbae6a38e927b5b7e2882005969d6cca1d1c89b4e95fb153f5b3a96979",
+    "com/fasterxml/jackson/databind/introspect/AnnotatedConstructor": "dc3ff1a1a82777b8053f9a5e6e67f7a78bc5ae39adc91fdda61d6ec72b0eef2a",
+    "com/fasterxml/jackson/databind/deser/std/StdKeyDeserializers": "41337ae87b3b0beaf9fba114e536bb92c990cfa28cbd76710d96698d836e36b2",
+    "com/fasterxml/jackson/datatype/jdk8/Jdk8Deserializers": "c8e1b68aab0300e40929f2cb99ec9354ca5499ca05ef192dcf3dc572486abbe7",
+    "com/fasterxml/jackson/module/paramnames/ParameterNamesAnnotationIntrospector": "e6828b1ceef97ab3bb57a7fffc8e2920559cc68f5689444002956ae9d5945d36",
+    "com/fasterxml/jackson/databind/module/SimpleDeserializers": "f505c92d87138e6ae21b850eb69ffb82829168c22c138a01c4b4c0254acc48d2",
+    "com/fasterxml/jackson/databind/module/SimpleKeyDeserializers": "959660beaf4f00b7ed29c1c7ac91fa59f6fe793befd8be1e58cf676ce0f39702",
+    "com/fasterxml/jackson/databind/deser/Deserializers$Base": "9714ddd05cb8e28e5b57eca9a63ea45e637e3f376ced6626bb79499098aaacfc",
+    "com/fasterxml/jackson/databind/introspect/JacksonAnnotationIntrospector": "1e3d15aae6d7e0bad2f406c023731dce3c37054aab14a917f2e5419f790c01c6",
+    "com/fasterxml/jackson/databind/introspect/AnnotationIntrospectorPair": "7e198087bb7bae384253cc399596cc6f9dc2d04b5ed01c4ab4b2b8e62e8bc363",
+    "com/fasterxml/jackson/datatype/jsr310/JavaTimeModule$1": "3879bd9d88c4fc32409ff16cb21ff764e0076c2f23af7cab9f2ccbbfdb9a1bbc"
+  },
+  "constraints": [
+    "fresh birth at actual default constructor and map allocation",
+    "default exact mapper/reader/bean/property/untyped decoders",
+    "no object IDs/injectables/type handlers/callback setters",
+    "known return stack with empty actual cache operation set",
+    "all mutable graph nodes born in that decoder and never exposed before source completion",
+    "ordinary heap semantics; unsupported reflection/native/concurrent mutation retains existing boundary"
+  ],
+  "return_methods": {
+    "org/springframework/http/converter/json/AbstractJackson2HttpMessageConverter": [
+      "readJavaType",
+      "read"
+    ],
+    "org/springframework/web/client/HttpMessageConverterExtractor": [
+      "extractData"
+    ],
+    "org/springframework/cloud/openfeign/support/SpringDecoder": [
+      "decode"
+    ],
+    "org/springframework/cloud/openfeign/support/ResponseEntityDecoder": [
+      "decode"
+    ],
+    "feign/optionals/OptionalDecoder": [
+      "decode"
+    ],
+    "feign/AsyncResponseHandler": [
+      "decode",
+      "handleResponse"
+    ],
+    "feign/SynchronousMethodHandler": [
+      "invoke",
+      "executeAndDecode"
+    ],
+    "feign/ReflectiveFeign$FeignInvocationHandler": [
+      "invoke"
+    ],
+    "org/springframework/cache/interceptor/CacheAspectSupport": [
+      "execute",
+      "invokeOperation"
+    ],
+    "org/springframework/cache/interceptor/CacheInterceptor": [
+      "invoke",
+      "lambda$invoke$0"
+    ],
+    "org/springframework/cloud/openfeign/FeignCachingInvocationHandlerFactory": [
+      "lambda$create$1"
+    ],
+    "org/springframework/cloud/openfeign/FeignCachingInvocationHandlerFactory$1": [
+      "proceed"
+    ]
+  }
+}

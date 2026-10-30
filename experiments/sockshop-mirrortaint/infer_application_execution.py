@@ -13,6 +13,8 @@ def infer_application(plan,rows,worker_request=None):
     from infer_async_protocol import validate_async_protocol
     async_audit=validate_async_protocol(plan,rows)
     cfg=plan['execution_kernel']
+    from infer_source_locality import validate as validate_locality
+    ownership_certificates=validate_locality(plan,rows)
     dispatch_facts=[r for r in rows if r['kind']=='execution-direct-dispatch']
     if dispatch_facts:
         contract=cfg.get('direct_dispatch_contract');framework=[r for r in rows if r['kind']=='direct-dispatch-framework']
@@ -95,7 +97,10 @@ def infer_application(plan,rows,worker_request=None):
         request_builders={};request_entities={};resources={};decoded_types={};decoded_fields={};decoded_seq={};http_entities={};response_entities={};class_literals={};date_values={};calendars={};environment_facts=[];builders={};opaque_calls=[];async_results={};future_states={};async_transfers=[];maps={}
         fr=None;method=None;code=None;entry=None;field_seq={};poisoned_at={};frame_audits=[]
         execution_budget=worker_request['budget'] if worker_request else {'steps':0}
-        nonlocal_owners={f['owner'] for rows_ in providers.values() for _,_,f in rows_}
+        provenance_owners={f['owner'] for rows_ in providers.values() for _,_,f in rows_}
+        # Provenance does not establish publication. Without a verified birth
+        # and return-island certificate retain the former conservative default.
+        nonlocal_owners=set(provenance_owners);source_ownership={}
         nonlocal_owners.update(v.get('object') for v in root['args'] if 'value' not in v and v.get('object'))
         if root.get('receiver'):nonlocal_owners.add(root['receiver'])
         heap_refs=defaultdict(set);opaque_frames=[];unproved_statics=[];depth=0;transport_effects=[]
@@ -188,6 +193,7 @@ def infer_application(plan,rows,worker_request=None):
                 owner=todo.pop()
                 if owner is None or owner in seen:continue
                 seen.add(owner);nonlocal_owners.add(owner);todo.extend(heap_refs.get(owner,()))
+                if owner in source_ownership:source_ownership[owner].update(local=False,reason='published-through-reachable-store')
                 for (o,_,_),v in state.fields.items():
                     if o==owner and 'value' not in v.observed:todo.append(identity(v))
                 if owner in state.arrays:todo.extend(identity(v) for v in state.arrays[owner]['elements'] if 'value' not in v.observed)
@@ -216,7 +222,10 @@ def infer_application(plan,rows,worker_request=None):
                 if owner in state.containers:
                     state.containers[owner].escaped=True
                     todo.extend(identity(v) for v in state.containers[owner].elements if 'value' not in v.observed)
-            for owner in affected:poisoned_at[owner]=seq
+            for owner in affected:
+                poisoned_at[owner]=seq
+                if owner in source_ownership:
+                    source_ownership[owner].update(local=False,reason='reachable-by-opaque-effect');nonlocal_owners.add(owner)
             state.poisoned.update(affected)
         def take(kind,check_frame=True,check_pc=True):
             nonlocal pos
@@ -958,6 +967,14 @@ def infer_application(plan,rows,worker_request=None):
                                 else:
                                     poison(([recv] if recv else [])+args,ret['seq']);opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':ret['seq'],'completion':'unsupported-save-effects','reason':proof.get('reason')})
                             elif key in plan['response_binding']['source_calls']:
+                                certificate=ownership_certificates.get(call['call_id'])
+                                if certificate:
+                                    for owner,node in certificate['objects'].items():
+                                        nonlocal_owners.discard(owner)
+                                        source_ownership[owner]={'ownership_id':certificate['ownership_id'],'local':True,'provenance_owner':owner in provenance_owners}
+                                        if poisoned_at.get(owner,-1)<certificate['births'][owner]:
+                                            poisoned_at.pop(owner,None);state.poisoned.discard(owner)
+                                        heap_refs[owner].update(node['references'])
                                 v=Value(observed)  # Source leaves must still match concrete boundary fields later.
                             elif key in plan['collection_getters']:
                                 if plan['collection_getters'][key].get('implementation'):require(call.get('accessor_implementation')==plan['collection_getters'][key]['implementation'],'Accessor actual implementation witness differs')
@@ -1182,5 +1199,5 @@ def infer_application(plan,rows,worker_request=None):
                 if not(protection and barrier<=protection[0]<ret['seq']):value=Value(f['observed'],unknown=True)
             bind(value,f['observed'])
             results.append({'root_frame':root['frame'],'seq':ret['seq'],'path':f['path'],**f,'known':not value.unknown,'origins':[list(x) for x in sorted(value.origins,key=str)],'selectors':[list(x) for x in sorted(value.selectors,key=str)]})
-        audits.append({'frame':root['frame'],'completion':'normal','steps':total_steps,'frames':frame_audits,'answers':len(ret['fields']),'poisoned_objects':len(poisoned_at),'opaque_frames':opaque_frames,'opaque_calls':opaque_calls,'environment_facts':environment_facts,'async_transfers':async_transfers,'steps_including_tasks':execution_budget['steps']})
+        audits.append({'frame':root['frame'],'completion':'normal','steps':total_steps,'frames':frame_audits,'answers':len(ret['fields']),'poisoned_objects':len(poisoned_at),'source_ownership':source_ownership,'opaque_frames':opaque_frames,'opaque_calls':opaque_calls,'environment_facts':environment_facts,'async_transfers':async_transfers,'steps_including_tasks':execution_budget['steps']})
     return {'answers':results,'roots':audits,'evidence_policy':cfg['evidence_policy'],'async_protocol':async_audit}

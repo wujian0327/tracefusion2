@@ -168,4 +168,5 @@ def augment_calls(plan,model,sources):
             plan['execution_kernel']['conversion_contracts']={'version':1,'methods':[conversion],'summary_class_sha256':contract['summary_class_sha256']}
             plan['execution_kernel']['request_entity_contracts']=contract
     from plan_feign_effects import attach as attach_feign_effects
-    return attach_feign_effects(attach_foundations(plan,model,enums,unproved_enums),model)
+    from plan_source_locality import attach as attach_locality
+    return attach_locality(attach_feign_effects(attach_foundations(plan,model,enums,unproved_enums),model),model)

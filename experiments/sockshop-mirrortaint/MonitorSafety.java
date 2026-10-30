@@ -20,6 +20,7 @@ public final class MonitorSafety implements Opcodes {
             add(ExecutionKernelHooks.CONSTRUCTORS);add(FeignEffectHooks.CALLERS);add(FeignEffectHooks.WORKERS);add(SaveEffectHooks.ACTIVE);add(ConversionContractHooks.ACTIVE);add(AsyncTaskHooks.ACTIVE);
             add(SpringTransportAgent.Transport.RPC);add(SpringTransportAgent.Transport.SPANS);add(SpringTransportAgent.Transport.ASYNC);add(SpringTransportAgent.Transport.DECODER);
             add(SpringTransportAgent.Communication.ACTIVE);
+            add(SourceLocalityHooks.ACTIVE);
         }
         void add(ThreadLocal x){slots.add(new Slot(x));}
         void restore(){for(Slot s:slots)try{s.restore();}catch(Throwable e){failureMarker("state-restore",e);}}
@@ -52,7 +53,7 @@ public final class MonitorSafety implements Opcodes {
     // Only monitor-owned static calls injected by our transformers are wrapped.
     // The original business invocation (including its Throwable) stays outside.
     static final Set<String> OWNERS=new HashSet<>(Arrays.asList("PlannedServiceAgent$Recorder","CollectionServiceHooks","ExecutionKernelHooks","FeignEffectHooks","DocumentDateHooks","ResponseBindingHooks","ReadEffectHooks","ConversionContractHooks","SaveEffectHooks","TemporalDateHooks","UuidProjectionHooks","AsyncTaskHooks","FrameworkCallHooks","RequestEntityHooks","SourceEvidenceHooks","SpringTransportAgent$Transport"));
-    static {OWNERS.add("SpringTransportAgent$DirectDispatchHooks");OWNERS.add("SpringTransportAgent$Communication");}
+    static {OWNERS.add("SpringTransportAgent$DirectDispatchHooks");OWNERS.add("SpringTransportAgent$Communication");OWNERS.add("SourceLocalityHooks");}
     static void instrument(ClassNode owner){
         Map<String,String> wrappers=new LinkedHashMap<>();List<MethodNode> generated=new ArrayList<>();
         for(MethodNode method:new ArrayList<MethodNode>(owner.methods))for(AbstractInsnNode node:method.instructions.toArray()){

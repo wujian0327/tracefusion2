@@ -58,6 +58,9 @@ public final class ExecutionKernelHooks implements Opcodes {
     static void args(InsnList h,Type[] types,int[] slots){h.add(new LdcInsnNode(types.length));h.add(new TypeInsnNode(ANEWARRAY,"java/lang/Object"));for(int j=0;j<types.length;j++){h.add(new InsnNode(DUP));h.add(new LdcInsnNode(j));h.add(new VarInsnNode(types[j].getOpcode(ILOAD),slots[j]));PlannedServiceAgent.box(h,types[j]);h.add(new InsnNode(AASTORE));}}
     static boolean instrument(MethodNode method,String key,List<AbstractInsnNode> code){
         boolean birth=false;
+        if(SourceLocalityHooks.config()!=null&&key.endsWith(".<init>()V")&&((Map)SourceLocalityHooks.config().get("beans")).containsKey(key.split("\\.")[0])){
+            InsnList x=new InsnList();x.add(new VarInsnNode(ALOAD,0));x.add(new LdcInsnNode("default-bean"));x.add(new MethodInsnNode(INVOKESTATIC,"SourceLocalityHooks","birth","(Ljava/lang/Object;Ljava/lang/String;)V",false));method.instructions.insert(code.get(1),x);birth=true;
+        }
         if(enabled()){
             Map sites=(Map)((Map)PlannedServiceAgent.plan.get("execution_kernel")).getOrDefault("object_birth_sites",Collections.emptyMap());
             if(sites.containsKey(key)){
@@ -149,7 +152,7 @@ public final class ExecutionKernelHooks implements Opcodes {
         Deque<Map<String,Object>> pending=CollectionServiceHooks.CALLS.get();if(pending.isEmpty())return;
         Map<String,Object> top=pending.peek(),current=PlannedServiceAgent.Recorder.row();
         if(Objects.equals(top.get("frame"),current.get("frame"))&&Objects.equals(top.get("callee"),call)){
-            pending.pop();current.put("pc",top.get("pc"));current.put("call_id",top.get("call_id"));current.put("exception_type",error.getClass().getName());current.put("exception",PlannedServiceAgent.Recorder.value(error));try{FeignEffectHooks.complete(top,error,current);FoundationValueHooks.complete(top,null,error,current);}catch(Exception failure){throw new IllegalStateException(failure);}closureCompletion(top,current);AsyncTaskHooks.completed(top,null,error,current);PlannedServiceAgent.Recorder.emit("collection-call-throw",current);
+            pending.pop();current.put("pc",top.get("pc"));current.put("call_id",top.get("call_id"));current.put("exception_type",error.getClass().getName());current.put("exception",PlannedServiceAgent.Recorder.value(error));try{FeignEffectHooks.complete(top,error,current);SourceLocalityHooks.complete(top,null,error,current);FoundationValueHooks.complete(top,null,error,current);}catch(Exception failure){throw new IllegalStateException(failure);}closureCompletion(top,current);AsyncTaskHooks.completed(top,null,error,current);PlannedServiceAgent.Recorder.emit("collection-call-throw",current);
         }
     }
     static boolean probeExtended;

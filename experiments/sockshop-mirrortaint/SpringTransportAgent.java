@@ -149,6 +149,11 @@ public static final class DirectDispatchHooks implements Opcodes {
 
     public static void premain(String args,Instrumentation i)throws Exception{PlannedServiceAgent.premain(args,i);Transport.start();i.addTransformer(new SpringTransportAgent());}
     public byte[] transform(final ClassLoader loader,String owner,Class<?> prior,ProtectionDomain domain,byte[] bytes){
+        byte[] base=transformBase(loader,owner,prior,domain,bytes);
+        if(SourceLocalityInstrumentation.owns(owner))try{return SourceLocalityInstrumentation.transform(loader,owner,bytes,base==null?bytes:base);}catch(Throwable e){PlannedServiceAgent.Recorder.problem("locality-transform:"+owner+":"+e);return base;}
+        return base;
+    }
+    byte[] transformBase(final ClassLoader loader,String owner,Class<?> prior,ProtectionDomain domain,byte[] bytes){
         if(Communication.owns(owner)){
             try{return Communication.transform(loader,owner,bytes);}catch(Throwable failure){PlannedServiceAgent.Recorder.problem("communication-transform:"+owner+":"+failure);return null;}
         }
