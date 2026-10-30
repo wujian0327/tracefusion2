@@ -15,24 +15,26 @@ def signature(record):
     return collections.Counter((v[0],v[3],v[5],v[6])for v in record.get('expected',[]))
 
 def run(home,out):
-    out.mkdir(parents=True,exist_ok=False);audit_mall(home,out/'paired')
+    out.mkdir(parents=True,exist_ok=False);audit_mall(home,out/'reference8168')
     before={(r['mode'],r['api'],r['case'],r['path']):r for r in load(PARENT/'audit-final-mall-02/instances.json')}
+    before_full={(r['mode'],r['api'],r['case'],r['path']):r for p in (PARENT/'final-mall-02/evaluation').glob('*/*/*/instances.json') for r in load(p)}
+    assert set(before_full)==set(before)
     # Path components are API / mode / query; no dependency on directory order.
     current=[r for p in sorted((home/'evaluation').glob('*/*/*/instances.json'))for r in load(p)]
     after={(r['mode'],r['api'],r['case'],r['path']):r for r in current}
     assert set(after)==set(before)and len(after)==206
-    paired=load(out/'paired/instances.json');modes={};changes=[];signature_changes=[]
+    paired=load(out/'reference8168/instances.json');modes={};changes=[];signature_changes=[]
     for r in paired:
         k=(r['mode'],r['api'],r['case'],r['path']);old=before[k]
         r['previous_TF_state']=old['state']
         if old['state']!=r['state']:changes.append({'key':k,'before':old['state'],'after':r['state']})
-        if old['state']=='known_correct'and signature(old)!=signature(after[k]):signature_changes.append(k)
-    summary=load(out/'paired/summary.json')
+        if old['state']=='known_correct'and signature(before_full[k])!=signature(after[k]):signature_changes.append(k)
+    summary=load(out/'reference8168/summary.json')
     for mode,s in summary['modes'].items():
         selected=[r for r in paired if r['mode']==mode]
         s['previous_correct_preserved']=sum(r['previous_TF_state']=='known_correct'and r['state']=='known_correct'for r in selected)
         unresolved=[r for r in selected if r['api']=='mall-swarm-5'and r['path']=='/data']
-        assert len(unresolved)==5 and all(r['state']=='unknown'for r in unresolved)
+        assert len(unresolved)==5 and all(r['state']=='unknown'and r.get('oracle_adequate')is False and r.get('oracle_gap')for r in unresolved)
         s['oracle_unavailable_unknown']=len(unresolved)
         s['joint_gate_passed']=s['MT_correct_preserved']==88 and s['previous_correct_preserved']==68 and s['states'].get('known_correct',0)>=98 and not s['states'].get('known_wrong',0)
         modes[mode]=s
@@ -50,6 +52,9 @@ def run(home,out):
                 assert target['positive']and target.get('expected')
                 for v in target['expected']:
                     matches=[r for r in lost if (r['source_seq'],r['source_owner'],r['source_field'],r['source_version'])==(v[2],v[4],v[5],v[6])]
+                    if not matches and target['state']=='known_correct':
+                        diagnostics.append({'mode':mode,'index':index,'case':target['case'],'path':target['path'],'tool_state':target['state'],'independent_expected_source':v,'diagnostic_only':True,'first_loss':None})
+                        continue
                     assert len(matches)==1,(mode,index,target['case'],matches)
                     diagnostics.append({'mode':mode,'index':index,'case':target['case'],'path':target['path'],'tool_state':target['state'],'independent_expected_source':v,'diagnostic_only':True,**matches[0]})
     assert len(diagnostics)==60
@@ -61,10 +66,13 @@ def run(home,out):
         for p,h in files.items():assert sha(base/p)==h,p
         protected[label]=len(files)
     summary.update(modes=modes,previous_reference='59dbdf8 communication final-mall-02:68/103',state_changes=changes,retained_source_signature_changes=signature_changes,positive_first_loss_targets=len(diagnostics),protected_files_unchanged=protected,joint98_gate_passed=all(s['joint_gate_passed']for s in modes.values()),prior68_answers_preserved=all(s['previous_correct_preserved']==68 for s in modes.values())and not signature_changes)
+    (out/'paired').mkdir()
     save(out/'paired/instances.json',paired)
     import csv
     with(out/'paired/instances.csv').open('w',newline='')as f:
         fields=['api','mode','query_index','case','path','state','positive','TP','FP','FN','previous_TF_state','MT_state','MT_positive','MT_correct_preserved','error','oracle_gap'];w=csv.DictWriter(f,fieldnames=fields,extrasaction='ignore',lineterminator='\n');w.writeheader();w.writerows(paired)
+    save(out/'paired/summary.json',summary);save(out/'paired/state-changes.json',changes)
+    save(out/'captures-manifest.json',load(out/'reference8168/captures-manifest.json'))
     save(out/'positive-target-first-loss.json',diagnostics);save(out/'summary.json',summary)
     assert summary['prior68_answers_preserved']and summary['full_selective_states_equal']and not signature_changes
     print({m:{k:v for k,v in s.items()if k!='MT_gap'}for m,s in modes.items()},flush=True)

@@ -1,0 +1,39 @@
+{
+  "before_core_changes": true,
+  "time": "2026-10-30T00:56:43.394934+00:00",
+  "base_commit": "72f2aa4ff710dcac66210c05cab60f294954a77a",
+  "protected": {
+    "artifacts/communication-identity-revision-20261029/audit-final-mall-02/summary.json": "2891fc57d61e79c3c67b862e3e8354f36844b7b595a76dc353d22a5f0f7a6a89",
+    "artifacts/communication-identity-revision-20261029/audit-final-mall-02/captures-manifest.json": "c9e2401c8cb830a300fbafdf3efde9136e160149931e4e551710adba5f13bb4e",
+    "artifacts/communication-identity-revision-20261029/audit-final-historical-02/summary.json": "f76f7dbb881fa1a65aec776f6cd9d7963d8cc5c99c2d941103c8a3b2e0a7bdac",
+    "artifacts/communication-identity-revision-20261029/final-historical-02/account-score-first/summary.json": "74fe85f045a5c340954935440a7a67eff9597e8e25093f0b64706d5a6c3268c9",
+    "artifacts/communication-identity-revision-20261029/all-admin-target-loss-02/summary.json": "9221a24f7cb72e7b1cc5173a8b0785bb24acc1a66a679c9e69858285bd5023bf"
+  },
+  "scope": [
+    "generic restricted constructor inheritance chain with initialized-receiver safety",
+    "field/container effects and conservative unknown-global or escaped effects",
+    "targeted controls and30positive diagnostics, then freeze Mall103 and historical62+29+15+Account40"
+  ],
+  "Mall": {
+    "fixed_targets": 103,
+    "preserve_current_known": 68,
+    "preserve_MT_correct": 88,
+    "joint_required": 98,
+    "remaining_positive": 30,
+    "oracle_unavailable_unknown_required": 5,
+    "inputs_boundaries_oracle": "Same final-mall-02 protocol, task-seal and independent oracle; development regression only"
+  },
+  "controls": [
+    "base parameter writes",
+    "child overwrite, defaults and inherited/hiding fields",
+    "constructor exception and original handler/finally",
+    "publishing this or opaque callbacks",
+    "unrelated RPC source remains known only for completely explained local effects",
+    "exact allocation identity and field versions",
+    "missing constructor/parent completion and wrong instance guards"
+  ],
+  "no_performance": true,
+  "no_push": true,
+  "Station": "Keep403, no authenticated retry",
+  "all40_external_APIs_retained": true
+}

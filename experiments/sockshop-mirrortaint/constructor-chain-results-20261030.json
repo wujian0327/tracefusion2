@@ -1,0 +1,243 @@
+{
+  "algorithm_commit": "77546243dfc70902d8cee2041ad726a7f7069998",
+  "report_at": "2026-10-30T02:15:23.926559+00:00",
+  "core_file_count": 91,
+  "agent_sha256": "74c53eb499d083ed371d5c1544dcd411fd0e2d9ea0dadff4f0e1de19eb1e680e",
+  "source_archive_sha256": "02d4612f22bf8c2a4d3d12a6e4d8be90cb1bea30a94c684084b1b1c11673086d",
+  "constructor_semantics_controls_passed": true,
+  "historical_preservation_passed": true,
+  "joint98_gate_passed": false,
+  "Mall": {
+    "modes": {
+      "full": {
+        "targets": 103,
+        "states": {
+          "known_correct": 68,
+          "unknown": 35
+        },
+        "positive_correct": 32,
+        "known_empty_correct": 36,
+        "MT_correct_preserved": 58,
+        "MT_positive_preserved": 32,
+        "previous_correct_preserved": 68,
+        "oracle_unavailable_unknown": 5,
+        "joint_gate_passed": false
+      },
+      "selective": {
+        "targets": 103,
+        "states": {
+          "known_correct": 68,
+          "unknown": 35
+        },
+        "positive_correct": 32,
+        "known_empty_correct": 36,
+        "MT_correct_preserved": 58,
+        "MT_positive_preserved": 32,
+        "previous_correct_preserved": 68,
+        "oracle_unavailable_unknown": 5,
+        "joint_gate_passed": false
+      }
+    },
+    "fresh_deployments": 42,
+    "previous68_preserved": true,
+    "full_selective_states_equal": true,
+    "state_changes": [],
+    "source_signature_changes": [],
+    "new_correct_instances": 0,
+    "first_loss_targets_checked": 60,
+    "first_loss": {
+      "method": "com/macro/mall/service/impl/UmsAdminServiceImpl.insertLoginLog(Ljava/lang/String;)V",
+      "instruction_index": 20,
+      "callee": "org/springframework/web/context/request/RequestContextHolder.getRequestAttributes()Lorg/springframework/web/context/request/RequestAttributes;"
+    },
+    "handler_and_sink_scope": "Previous obligations remain separate; no full40/API/sink acceptance claim"
+  },
+  "historical": {
+    "62": {
+      "full": {
+        "expected_targets": 431,
+        "actual_targets": 431,
+        "states": {
+          "known_correct": 428,
+          "unknown": 3
+        },
+        "known_answer_exact_rate": 1.0,
+        "answerability": 0.9930394431554525,
+        "baseline_correct_preserved": 368,
+        "baseline_correct_required": 368,
+        "baseline_nonempty_correct_preserved": 337,
+        "baseline_nonempty_correct_required": 337,
+        "old_tf_correct_preserved": 213,
+        "old_tf_correct_required": 213,
+        "union_preserved": 382,
+        "union_required": 382,
+        "union_losses": [],
+        "missing_targets": [],
+        "tp": 397,
+        "fp": 0,
+        "fn_including_unknown": 3,
+        "all_passed": true
+      },
+      "selective": {
+        "expected_targets": 431,
+        "actual_targets": 431,
+        "states": {
+          "known_correct": 428,
+          "unknown": 3
+        },
+        "known_answer_exact_rate": 1.0,
+        "answerability": 0.9930394431554525,
+        "baseline_correct_preserved": 368,
+        "baseline_correct_required": 368,
+        "baseline_nonempty_correct_preserved": 337,
+        "baseline_nonempty_correct_required": 337,
+        "old_tf_correct_preserved": 213,
+        "old_tf_correct_required": 213,
+        "union_preserved": 382,
+        "union_required": 382,
+        "union_losses": [],
+        "missing_targets": [],
+        "tp": 397,
+        "fp": 0,
+        "fn_including_unknown": 3,
+        "all_passed": true
+      }
+    },
+    "29": {
+      "full": {
+        "query_families": 29,
+        "targets": 244,
+        "states": {
+          "known_correct": 232,
+          "unknown": 12
+        },
+        "oracle_unavailable": 12,
+        "N/A_requests": 41,
+        "requests": 190
+      },
+      "selective": {
+        "query_families": 29,
+        "targets": 244,
+        "states": {
+          "known_correct": 232,
+          "unknown": 12
+        },
+        "oracle_unavailable": 12,
+        "N/A_requests": 41,
+        "requests": 190
+      }
+    },
+    "15": {
+      "full": {
+        "targets": 96,
+        "states": {
+          "known_correct": 96
+        }
+      },
+      "selective": {
+        "targets": 96,
+        "states": {
+          "known_correct": 96
+        }
+      }
+    },
+    "Account40": {
+      "full": {
+        "targets": 40,
+        "known_correct": 40,
+        "known_wrong": 0,
+        "unknown": 0,
+        "known_positive": 4,
+        "known_empty": 36,
+        "historic_MT_correct_present": 36,
+        "historic_MT_correct_preserved": 36,
+        "TP": 4,
+        "FP": 0,
+        "FN": 0
+      },
+      "selective": {
+        "targets": 40,
+        "known_correct": 40,
+        "known_wrong": 0,
+        "unknown": 0,
+        "known_positive": 4,
+        "known_empty": 36,
+        "historic_MT_correct_present": 36,
+        "historic_MT_correct_preserved": 36,
+        "TP": 4,
+        "FP": 0,
+        "FN": 0
+      }
+    },
+    "state_and_signature_changes": {
+      "62": [],
+      "29": [],
+      "15": []
+    },
+    "fresh_Agent_deployments": true
+  },
+  "constructor_controls": {
+    "full": {
+      "targets": 30,
+      "known_correct": 26,
+      "known_positive": 20,
+      "known_empty": 6,
+      "necessary_unknown": 4,
+      "evidence_guards": 13,
+      "business_equal": true,
+      "diagnostic_guards": true
+    },
+    "selective": {
+      "targets": 30,
+      "known_correct": 26,
+      "known_positive": 20,
+      "known_empty": 6,
+      "necessary_unknown": 4,
+      "evidence_guards": 13,
+      "business_equal": true,
+      "diagnostic_guards": true
+    }
+  },
+  "other_checks": {
+    "unit_checks": 24,
+    "application": {
+      "per_mode_known": 26,
+      "per_mode_unknown": 8,
+      "per_mode_exception_roots": 2,
+      "evidence_guards_per_mode": 6
+    },
+    "reliability_business_cases_per_mode": 27,
+    "reliability_parent_checks_per_mode": 5,
+    "collection_known_per_mode": 10,
+    "source_guards": 12,
+    "all_protected_first_files": {
+      "old_first": 2322,
+      "external_first": 16862,
+      "C1": 7248,
+      "previous_revision": 1746,
+      "communication_mall": 1746
+    },
+    "frozen_core_unchanged": true,
+    "jar_members_equal": {
+      "all_entries_equal": true,
+      "entries": 877,
+      "different_entry_content": [],
+      "different_timestamp_entries": 877,
+      "meaning": "Archive files differ; all member bytes, including manifests, are equal."
+    }
+  },
+  "audit_failure_preserved": "audit-final-mall-01: missing derived output directory; fix and audit-final-mall-02, no raw replacement or recapture",
+  "artifact_root": "artifacts/constructor-chain-effects-20261030",
+  "audit_driver_sha256": {
+    "experiments/sockshop-mirrortaint/audit_constructor_chain_revision.py": "40cb7ccbc3bd8d46785b467ca9bb1ca1a96ad900021662b6f1a6366bd892b3d8",
+    "experiments/sockshop-mirrortaint/audit_communication_identity_revision.py": "d5138ca458d33c5ed82a60b2e895ea8b32f8b27ac0a2df60250f25c809eeebed",
+    "experiments/sockshop-mirrortaint/audit_plan_applicability_revision.py": "bf3ff98990ec4f94ca78cba4fda734564dcb40f3a60cf1b97fd538d89f58fbbb",
+    "experiments/sockshop-mirrortaint/diagnose_source_loss.py": "fba2c7763e3b79d6579eff8a0a82bf5ef6d8c7855942dd389a2c0b2f2b20d98d"
+  },
+  "current_protocol_sha256": "daac4f3d562e6107b0adc54d839a8895a512cab8ad14c2c499b9ba8f8e49c4ff",
+  "no_performance": true,
+  "no_push": true,
+  "all40_completed": false,
+  "new_unseen_query_claim": false,
+  "Station": "Preserve403, no authenticated retry"
+}

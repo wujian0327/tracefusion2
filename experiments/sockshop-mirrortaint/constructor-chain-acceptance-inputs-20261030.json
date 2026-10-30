@@ -1,0 +1,78 @@
+{
+  "Mall_task_seal_sha256": "1e24d0313083b7973d5d06e8a817ed2f002887658c1e663701791b2686063739",
+  "old68_answers": "artifacts/communication-identity-revision-20261029/audit-final-mall-02/instances.json",
+  "MT88_reference": "artifacts/external-frozen-transfer-20261029/audit-C1-reviewed-02/instances.json",
+  "five_unresolved_cases": [
+    {
+      "api": "mall-swarm-5",
+      "mode": "full",
+      "query_index": 1,
+      "case": "input-00",
+      "path": "/data",
+      "oracle_adequate": false,
+      "state": "unknown",
+      "oracle_gap": "Independent logical rule unresolved",
+      "previous_TF_state": "unknown",
+      "MT_state": "known_unchecked",
+      "MT_positive": null,
+      "MT_correct_preserved": false
+    },
+    {
+      "api": "mall-swarm-5",
+      "mode": "full",
+      "query_index": 1,
+      "case": "input-01",
+      "path": "/data",
+      "oracle_adequate": false,
+      "state": "unknown",
+      "oracle_gap": "Independent logical rule unresolved",
+      "previous_TF_state": "unknown",
+      "MT_state": "known_unchecked",
+      "MT_positive": null,
+      "MT_correct_preserved": false
+    },
+    {
+      "api": "mall-swarm-5",
+      "mode": "full",
+      "query_index": 1,
+      "case": "input-02",
+      "path": "/data",
+      "oracle_adequate": false,
+      "state": "unknown",
+      "oracle_gap": "Independent logical rule unresolved",
+      "previous_TF_state": "unknown",
+      "MT_state": "known_unchecked",
+      "MT_positive": null,
+      "MT_correct_preserved": false
+    },
+    {
+      "api": "mall-swarm-5",
+      "mode": "full",
+      "query_index": 1,
+      "case": "input-03",
+      "path": "/data",
+      "oracle_adequate": false,
+      "state": "unknown",
+      "oracle_gap": "Independent logical rule unresolved",
+      "previous_TF_state": "unknown",
+      "MT_state": "known_unchecked",
+      "MT_positive": null,
+      "MT_correct_preserved": false
+    },
+    {
+      "api": "mall-swarm-5",
+      "mode": "full",
+      "query_index": 1,
+      "case": "input-05",
+      "path": "/data",
+      "oracle_adequate": false,
+      "state": "unknown",
+      "oracle_gap": "Independent logical rule unresolved",
+      "previous_TF_state": "unknown",
+      "MT_state": "known_unchecked",
+      "MT_positive": null,
+      "MT_correct_preserved": false
+    }
+  ],
+  "control_numeric_and_string_values": "Use equal-valued distinct field instances, long extrema, overwrite constants, repeated roots and original exceptions; source truth specified by argument position/field, not inferred graph."
+}

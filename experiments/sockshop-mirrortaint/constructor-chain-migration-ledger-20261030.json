@@ -1,0 +1,87 @@
+{
+  "algorithm_commit": "77546243dfc70902d8cee2041ad726a7f7069998",
+  "migration_level": "core semantics extension; exposed development tasks",
+  "new_framework_contracts": 0,
+  "new_JDK_whitelist_entries": 0,
+  "query_specific_source_formulas": 0,
+  "changes": [
+    {
+      "mechanism": "restricted constructor frames",
+      "basis": "original initialization prefixes, actual args, initialized receiver, common allocation and occurrence",
+      "reusable_scope": "supported this/super chain and modeled body instructions"
+    },
+    {
+      "mechanism": "declaring field identity and inherited accessor dispatch",
+      "basis": "JVM field declaration lookup and actual method implementation witness",
+      "reusable_scope": "execution state; general inherited response JSON projection was not added"
+    },
+    {
+      "mechanism": "INSTANCEOF",
+      "basis": "native result, input object, target Class and actual class hierarchy",
+      "reusable_scope": "supported target types with runtime evidence"
+    }
+  ],
+  "planned_constructor_methods": [
+    "com/macro/mall/model/UmsAdminExample$Criteria.<init>()V",
+    "com/macro/mall/model/UmsAdminExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;)V",
+    "com/macro/mall/model/UmsAdminExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;)V",
+    "com/macro/mall/model/UmsAdminExample$GeneratedCriteria.<init>()V",
+    "com/macro/mall/model/UmsAdminExample.<init>()V"
+  ],
+  "actually_observed_constructor_methods": [
+    "com/macro/mall/model/UmsAdminExample$Criteria.<init>()V",
+    "com/macro/mall/model/UmsAdminExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;)V",
+    "com/macro/mall/model/UmsAdminExample$Criterion.<init>(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;)V",
+    "com/macro/mall/model/UmsAdminExample$GeneratedCriteria.<init>()V",
+    "com/macro/mall/model/UmsAdminExample.<init>()V"
+  ],
+  "independently_new_correct_Mall_instances": 0,
+  "preserved_Mall_instances_per_mode": 68,
+  "remaining_MT_positive_instances_per_mode": 30,
+  "truth_unavailable_targets_per_mode": 5,
+  "next_effect_review": {
+    "extracted_classes": {
+      "org/apache/catalina/connector/RequestFacade": {
+        "sha256": "f87e9af769c162fbac76a76dc65084698486e962d97fb9af4bdff696e48c2c17",
+        "library": "BOOT-INF/lib/tomcat-embed-core-9.0.63.jar"
+      },
+      "org/apache/catalina/connector/Request": {
+        "sha256": "b1659e18a7a2663603518aa68046cd06f021c4ef29a4983be0d9022ccda0436d",
+        "library": "BOOT-INF/lib/tomcat-embed-core-9.0.63.jar"
+      },
+      "org/apache/ibatis/binding/MapperProxy": {
+        "sha256": "29a0e6a0783c2d6b68c51f43e9bc9874e1a16e073b0d7b439eef2b6a88f9b039",
+        "library": "BOOT-INF/lib/mybatis-3.5.9.jar"
+      },
+      "org/apache/ibatis/binding/MapperMethod": {
+        "sha256": "9cde97f7820fa121382b9e060df6b971aaac7a578bb460ba18ab699c52194a60",
+        "library": "BOOT-INF/lib/mybatis-3.5.9.jar"
+      },
+      "org/mybatis/spring/SqlSessionTemplate": {
+        "sha256": "3b694ecef12d9e01eaa543848a21eac821a170b4a891f45e9270745596cbdc87",
+        "library": "BOOT-INF/lib/mybatis-spring-2.0.7.jar"
+      },
+      "org/springframework/web/context/request/RequestContextHolder": {
+        "sha256": "a832d13ba59404712ecf0f709acddbce6eac44fdf4e3b2296740c5b596e1997e",
+        "library": "BOOT-INF/lib/spring-web-5.3.20.jar"
+      },
+      "org/springframework/web/context/request/ServletRequestAttributes": {
+        "sha256": "8d15f200189da2fee00ef8c00cfe8a152f73b27006e75b0ab55fb0a88a72ec86",
+        "library": "BOOT-INF/lib/spring-web-5.3.20.jar"
+      },
+      "org/springframework/core/NamedThreadLocal": {
+        "sha256": "a89a140653f04d9277563ff3cd0377722da46b658b8554b9e39491341c755bb4",
+        "library": "BOOT-INF/lib/spring-core-5.3.20.jar"
+      },
+      "org/springframework/core/NamedInheritableThreadLocal": {
+        "sha256": "3209c08660e2e58e2e2ea074d1ea31c50286dad71649688a9526d4af46611284",
+        "library": "BOOT-INF/lib/spring-core-5.3.20.jar"
+      }
+    },
+    "exact_runtime_contract_certified": false,
+    "role": "bytecode review of relevant methods, not runtime purity proof; no claimed human-hour measurements"
+  },
+  "first_loss_targets_checked": 60,
+  "new_unseen_query_claim": false,
+  "no_performance": true
+}
