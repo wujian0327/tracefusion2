@@ -1,0 +1,53 @@
+{
+  "algorithm": "c1a4e5ceb60a276cc3651e4cdb413aa29d7f8d5d",
+  "pool_APIs": 5,
+  "selected_APIs": 2,
+  "all40_retained": true,
+  "complete40_acceptance": false,
+  "apis": [
+    {
+      "api": "ZLT-MP-1",
+      "planning_status": "conditional",
+      "original_requests": 6,
+      "actual_positive_targets": 6,
+      "nonempty_requests": 5
+    },
+    {
+      "api": "ZLT-MP-4",
+      "planning_status": "conditional",
+      "original_requests": 6,
+      "actual_positive_targets": 9,
+      "nonempty_requests": 6
+    }
+  ],
+  "states": {
+    "full": {
+      "unknown": 15
+    },
+    "selective": {
+      "unknown": 15
+    },
+    "mirrortaint": {
+      "evidence_invalid": 15
+    }
+  },
+  "oracle_adequate": {
+    "full": 0,
+    "selective": 0,
+    "mirrortaint": 0
+  },
+  "correct_answers": {
+    "full": 0,
+    "selective": 0,
+    "mirrortaint": 0
+  },
+  "full_relationship_metrics": "not scored: paired source/oracle or baseline export missing",
+  "review_scope": "Stricter raw call pairing after first audit; earlier derived audit preserved. No core, declarations, inputs or captures changed.",
+  "deployment_count": 8,
+  "selected_query_requests": 48,
+  "all_HTTP_200_and_original_equivalent": true,
+  "target_bound_each_TF_mode": 15,
+  "core_agent_contract_changes": 0,
+  "first_raw_files_unchanged": 380,
+  "source_caller_first_block": "I2L opcode133 makes both source caller application methods opaque; unscoped-only source facts retained."
+}

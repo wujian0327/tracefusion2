@@ -1,0 +1,16 @@
+api,case,path,full,selective,mirrortaint,certified_relative_gap
+ZLT-MP-1,input-00,/data/0/clientId,unknown,unknown,evidence_invalid,unresolved_oracle_export_gap
+ZLT-MP-1,input-01,/data/0/clientId,unknown,unknown,evidence_invalid,unresolved_oracle_export_gap
+ZLT-MP-1,input-01,/data/1/clientId,unknown,unknown,evidence_invalid,unresolved_oracle_export_gap
+ZLT-MP-1,input-02,/data/0/clientId,unknown,unknown,evidence_invalid,unresolved_oracle_export_gap
+ZLT-MP-1,input-03,/data/0/clientId,unknown,unknown,evidence_invalid,unresolved_oracle_export_gap
+ZLT-MP-1,input-04,/data/0/clientId,unknown,unknown,evidence_invalid,unresolved_oracle_export_gap
+ZLT-MP-4,input-00,/data/0/username,unknown,unknown,evidence_invalid,unresolved_oracle_export_gap
+ZLT-MP-4,input-01,/data/0/username,unknown,unknown,evidence_invalid,unresolved_oracle_export_gap
+ZLT-MP-4,input-01,/data/1/username,unknown,unknown,evidence_invalid,unresolved_oracle_export_gap
+ZLT-MP-4,input-02,/data/0/username,unknown,unknown,evidence_invalid,unresolved_oracle_export_gap
+ZLT-MP-4,input-03,/data/0/username,unknown,unknown,evidence_invalid,unresolved_oracle_export_gap
+ZLT-MP-4,input-03,/data/1/username,unknown,unknown,evidence_invalid,unresolved_oracle_export_gap
+ZLT-MP-4,input-04,/data/0/username,unknown,unknown,evidence_invalid,unresolved_oracle_export_gap
+ZLT-MP-4,input-05,/data/0/username,unknown,unknown,evidence_invalid,unresolved_oracle_export_gap
+ZLT-MP-4,input-05,/data/1/username,unknown,unknown,evidence_invalid,unresolved_oracle_export_gap

@@ -1,0 +1,21 @@
+{
+  "algorithm": "c1a4e5ceb60a276cc3651e4cdb413aa29d7f8d5d",
+  "core_files_verified": 96,
+  "agent_sha256": "375cdbeb9b1c3b06df488011cf848e4f614ef4de6dbe29d5e8bdcfd18f66f0fa",
+  "native_MT_sha256": "e4c679206993b45c6727a4ace1d4dcff6df0ded2b80b56b27b8c86741be63fe7",
+  "files": {
+    "artifacts/frozen-zlt-reuse-20261030/candidate-pool-before-planning.json": "13a9c52a7c7b7a3846cb3bd53b0f97fc818823da910cdcffbbe17bc7a958941c",
+    "artifacts/frozen-zlt-reuse-20261030/task-seal.json": "745c6c8998d944664f8ee158dae9ff2a6d8c06f5f17f0486bf640ba021868cb7",
+    "artifacts/frozen-zlt-reuse-20261030/oracle-before-tools.json": "dd515dcc15709e1372d94e8cedf4e674be4eb951e40f42418570bf6f8c5bccc3",
+    "artifacts/frozen-zlt-reuse-20261030/driver-seal-before-business.json": "8d1bd0f2db0520e53493c3f9ec34ffe8a078fb3138ea6aa7a189777c114b93e7",
+    "artifacts/frozen-locality-cost-20261030/protocol-before-calibration.json": "a5f964c7f81d3755dede7fe480555026c11af2e7ae2fcef26fbb4b9b6d10bab3",
+    "artifacts/frozen-locality-cost-20261030/protocol-client-amendment-before-calibration.json": "1da726d54dae108b859264e974848f15e668fb8e3e7495ac13f50d51d9f52786",
+    "artifacts/frozen-locality-cost-20261030/formal-order-before-measurement.json": "22fb01e4899dbb2f44b6c1577b2fc684309ff63b8b71df47b8c0110e08e941d1",
+    "artifacts/frozen-locality-cost-20261030/common-task-calibration-final.json": "b5eaa595479dee434f2d162155c8b0387502ecb93f660bdab0f5a02c4edb3aff",
+    "artifacts/frozen-locality-cost-20261030/experiment-code-before-formal.json": "699416e8f84220de0420eeca9fc37e9c9e420151cb6f45d4401c6074c8c182d3",
+    "artifacts/frozen-locality-cost-20261030/common-files-before-formal.json": "9c409055f427a306ae98d97a8766ca920092890e5a307e577f6af3f4ff158bb6",
+    "artifacts/frozen-locality-cost-20261030/offline-single-pass-amendment-before-runs.json": "4ac383408baa8125e68ca819a77d58377ba28ce45b473d72e33928c22c299829"
+  },
+  "reuse_audit_core_agent_contract_changes": 0,
+  "formal_cost_status": "Measurements still running; final results separate."
+}
