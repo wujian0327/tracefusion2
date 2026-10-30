@@ -14,6 +14,8 @@ def attach(plan,model):
  for key,birth in cfg.get('decoder_birth_sites',{}).items():
   owner=key.split('.')[0];fields=[f for f in model['classes'][owner]['fields']if not f['access']&8]
   if model['classes'][owner]['super']!='java/lang/Object'or any(f['desc']not in ('J','I','Z','Ljava/lang/String;','Ljava/lang/Object;')for f in fields):continue
+  cls=model['classes'][owner]
+  if cls.get('interfaces')or cls.get('annotations')or any(f.get('annotations')for f in fields)or any(m.get('annotations')for k,m in model['methods'].items()if k.startswith(owner+'.')):continue
   m=model['methods'][key]
   if [i['op']for i in m['instructions']]!=[25,183,177]:continue
   props=plan['json_schema'].get(owner,[])

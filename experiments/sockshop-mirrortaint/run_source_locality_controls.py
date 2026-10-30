@@ -24,8 +24,9 @@ def run(out):
   dest=out/mode;dest.mkdir();command([java,'-javaagent:'+str(b/'distributed-observer.jar'),'-Dservice.plan='+str(b/'fixture/plan.json'),'-Dservice.events='+str(dest/'events.jsonl'),'-Dservice.mode='+mode,'-cp',cp,'SourceLocalityFixture'],dest/'stdout.log');assert json.loads(next(x for x in (dest/'stdout.log').read_text().splitlines()if x.startswith('[{')))==expected
   rows=[json.loads(s)for s in(dest/'events.jsonl').read_text().splitlines()];problems=[r for r in rows if r['kind']=='problem'];assert not problems,problems;answers=infer_execution(plan,rows)['answers'];checks=[]
   for case in expected:
-   ret=next(r for r in rows if r['kind']=='binding-return'and r['message']==case['message']);answer=next(a for a in answers if a['root_frame']==ret['frame']);want=case['mode']in(0,4,9,12,15);assert answer['known']==want,(mode,case,answer,[r for r in rows if r['kind']=='locality-end'])
-   if want:
+   ret=next(r for r in rows if r['kind']=='binding-return'and r['message']==case['message']);answer=next(a for a in answers if a['root_frame']==ret['frame']);want=case['mode']in(0,4,9,12,15,18,20,22);assert answer['known']==want,(mode,case,answer,[r for r in rows if r['kind']=='locality-end'])
+   if want and case['mode']==18:assert not answer['origins']
+   elif want:
     source_row=next(r for r in rows if r['kind']=='binding-source'and r['message']==case['message']);i=next(i for i,f in enumerate(source_row['fields'])if f['field']=='SourceLocalityFixture$Result.message');truth=set()if case['mode']==4 else{('field',source_row['seq'],i)};assert set(map(tuple,answer['origins']))==truth,(case,answer,truth)
    checks.append({'mode':case['mode'],'known':answer['known'],'actual':answer['origins']})
   guards={}

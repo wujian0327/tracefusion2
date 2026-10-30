@@ -24,7 +24,7 @@ def validate(plan,rows):
   readers=[r for r in family if r['kind']=='locality-reader'];decoded=[r for r in family if r['kind']=='locality-decoded'];returns=[r for r in family if r['kind']=='locality-client-return'];births=[r for r in family if r['kind']=='locality-birth']
   require(len(readers)==len(decoded)==len(returns)==end['readers']==end['returns']==1 and readers[0]['eligible']and decoded[0]['valid'],'Ownership necessary decoder/return witness absent')
   read,dec,ret=readers[0],decoded[0],returns[0];require(read['seq']<dec['seq']<ret['seq']<end['seq']and dec['body']==ret['body']==end['body']==finishes[0]['result']['object'],'Ownership returned object differs')
-  require(all(dec.get(k)==end.get(k)for k in ('objects','corridor','reader_configuration','properties','object_token','caller_bottom','proxy_type','cache_scope','cache_operations_empty')),'Ownership graph/configuration/corridor rebound')
+  require(all(dec.get(k)==end.get(k)for k in ('objects','corridor','reader_configuration','properties','property_lookup_consistent','handler_uses','object_token','caller_bottom','proxy_type','cache_scope','cache_operations_empty')),'Ownership graph/configuration/corridor rebound')
   born={r['object']:r for r in births};require(len(born)==len(births),'Ownership object birth repeated')
   graph={o['owner']:o for o in dec['objects']};require(len(graph)==len(dec['objects'])and end['body']in graph,'Ownership graph missing/repeated root')
   sources=[r for r in rows if r['kind']=='binding-source'and r.get('source_call_id')==start['call_id']]
@@ -48,7 +48,7 @@ def validate(plan,rows):
   factories=[r for r in family if r['kind']=='locality-factory-config']
   fc=conf.get('factory_configuration')
   require(len(factories)==1 and fc and all(factories[0].get(k)==v for k,v in fc.items())and factories[0]['seq']<read['seq'],'Ownership factory configuration absent/rebound')
-  used={'boolean','int','long','double','float','java/lang/Object','java/lang/String','java/lang/Long','java/lang/Integer','java/lang/Boolean','java/lang/Double','java/lang/Float','java/util/Map','java/util/List','java/util/LinkedHashMap','java/util/ArrayList',read['bean']}
+  used={'boolean','int','long','double','float','java/lang/Object','java/lang/Number','java/lang/String','java/lang/Long','java/lang/Integer','java/lang/Boolean','java/lang/Double','java/lang/Float','java/util/Map','java/util/List','java/util/LinkedHashMap','java/util/ArrayList',read['bean']}
   require(set(fc['used_types'])==used and fc['_modifiers']==fc['_abstractTypeResolvers']==[],'Ownership factory scope/callback differs')
   allowed={
    '_additionalDeserializers':{'com/fasterxml/jackson/databind/module/SimpleDeserializers':'exact-map-no-used-type','com/fasterxml/jackson/datatype/jdk8/Jdk8Deserializers':'no-reference-type'},
@@ -60,13 +60,24 @@ def validate(plan,rows):
     if callback['rule']=='exact-map-no-used-type':require(not set(callback['mapped_types'])&used,'Ownership custom decoder matches used type')
   introspectors=conf.get('introspectors',[])
   require(introspectors and all(c in ('com/fasterxml/jackson/databind/introspect/JacksonAnnotationIntrospector','com/fasterxml/jackson/databind/introspect/AnnotationIntrospectorPair','com/fasterxml/jackson/module/paramnames/ParameterNamesAnnotationIntrospector')and c in framework for c in introspectors),'Ownership annotation callback not proved')
+  mix=conf.get('mixin_configuration',{});critical={'java/lang/Object','java/lang/String','java/lang/Number','java/lang/Long','java/lang/Integer','java/lang/Boolean','java/lang/Double','java/lang/Float','java/util/Map','java/util/List','java/util/LinkedHashMap','java/util/HashMap','java/util/AbstractMap','java/util/ArrayList','java/util/AbstractList','java/util/AbstractCollection','java/util/Collection','java/lang/Iterable','java/lang/Comparable','java/lang/CharSequence','java/lang/Cloneable','java/io/Serializable','java/util/RandomAccess','long','int','boolean','double','float',read['bean']}
+  require(conf.get('annotation_free')is True and mix.get('overrides','missing')is None and set(mix.get('critical_types',[]))==critical and mix.get('local_count')==len(mix.get('mappings',[]))and all(m['target']not in critical for m in mix.get('mappings',[])),'Ownership annotation/mixin handler not proved')
+  handler=mix.get('handler_instantiator')
+  if handler is not None:
+   cls=handler['class'];require(cls=='org/springframework/http/converter/json/SpringHandlerInstantiator'and handler['class_sha256']==pins[cls]and cls in framework and 'com/fasterxml/jackson/databind/cfg/HandlerInstantiator'in framework,'Ownership handler entrypoints not armed')
+  require(dec.get('handler_uses')==0 and not any(r['kind']=='locality-handler-use'for r in family),'Ownership handler was actually executed')
+  root_type=conf.get('root_type_configuration',{});require(root_type=={'class':'com/fasterxml/jackson/databind/type/SimpleType','binding_count':0,'value_handler':None,'type_handler':None}and root_type['class']in framework,'Ownership root type handlers/bindings not proved')
+  type_factory=conf.get('type_factory_configuration',{});tc=type_factory.get('class')
+  require(tc=='com/fasterxml/jackson/databind/type/TypeFactory'and type_factory['class_sha256']==pins[tc]and tc in framework and isinstance(type_factory.get('modifiers'),list),'Ownership type factory not proved')
+  require(all(m['class']=='com/fasterxml/jackson/datatype/jdk8/Jdk8TypeModifier'and m['class_sha256']==pins[m['class']]and m['class']in framework for m in type_factory.get('modifiers',[])),'Ownership type modifier not proved')
+  require(dec.get('property_lookup_consistent')is True,'Ownership actual property lookup not proved')
   fields={f['field']:f['descriptor']for f in cfg['beans'][read['bean']]['fields']};properties=dec.get('properties',[])
   require(len(properties)==len(fields)and {p['field']:p['descriptor']for p in properties}==fields,'Ownership physical setter coverage differs')
   for p in properties:
    suffix={'J':'NumberDeserializers$LongDeserializer','I':'NumberDeserializers$IntegerDeserializer','Z':'NumberDeserializers$BooleanDeserializer','Ljava/lang/String;':'StringDeserializer','Ljava/lang/Object;':'UntypedObjectDeserializer$Vanilla'}[p['descriptor']]
    require(p['decoder']=='com/fasterxml/jackson/databind/deser/std/'+suffix and p['decoder']in framework and p['null_provider']in(p['decoder'],'com/fasterxml/jackson/databind/deser/impl/NullsConstantProvider'),'Ownership property decoder/null callback differs')
    require(plan['collection_setters'].get(p['setter'],{}).get('field')==p['field']and p['type_handler']is None and p['injectable']is None,'Ownership property callback/assignment proof differs')
-  for owner in (conf['reader_class'],conf['context_class'],conf['factory_class'],'com/fasterxml/jackson/databind/deser/BeanDeserializer','com/fasterxml/jackson/databind/deser/std/UntypedObjectDeserializer$Vanilla'):
+  for owner in (conf['reader_class'],conf['context_class'],conf['factory_class'],'com/fasterxml/jackson/databind/deser/BeanDeserializer','com/fasterxml/jackson/databind/deser/impl/BeanPropertyMap','com/fasterxml/jackson/databind/introspect/AnnotatedMethod','com/fasterxml/jackson/databind/deser/std/UntypedObjectDeserializer','com/fasterxml/jackson/databind/deser/std/UntypedObjectDeserializer$Vanilla'):
    require(owner in framework,'Ownership actual decoder instrumentation absent')
   require(dec['cache_scope']==any(x.startswith('org/springframework/cache/interceptor/CacheAspectSupport.')for x in dec['corridor']),'Ownership cache scope rebound')
   if dec['cache_scope']:

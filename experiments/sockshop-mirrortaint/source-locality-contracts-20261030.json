@@ -40,7 +40,19 @@
     "com/fasterxml/jackson/databind/deser/Deserializers$Base": "9714ddd05cb8e28e5b57eca9a63ea45e637e3f376ced6626bb79499098aaacfc",
     "com/fasterxml/jackson/databind/introspect/JacksonAnnotationIntrospector": "1e3d15aae6d7e0bad2f406c023731dce3c37054aab14a917f2e5419f790c01c6",
     "com/fasterxml/jackson/databind/introspect/AnnotationIntrospectorPair": "7e198087bb7bae384253cc399596cc6f9dc2d04b5ed01c4ab4b2b8e62e8bc363",
-    "com/fasterxml/jackson/datatype/jsr310/JavaTimeModule$1": "3879bd9d88c4fc32409ff16cb21ff764e0076c2f23af7cab9f2ccbbfdb9a1bbc"
+    "com/fasterxml/jackson/datatype/jsr310/JavaTimeModule$1": "3879bd9d88c4fc32409ff16cb21ff764e0076c2f23af7cab9f2ccbbfdb9a1bbc",
+    "com/fasterxml/jackson/databind/deser/std/UntypedObjectDeserializer": "8f37490220ff90d20a67fccfdb4f39b5786a1d7dbd5d98ffbfd8f44ef1201b15",
+    "com/fasterxml/jackson/databind/type/TypeFactory": "d4516195d07cbccd08219d7eaa1d27af2ed51e4c04552d62b5683cb9e917b739",
+    "com/fasterxml/jackson/databind/deser/impl/BeanPropertyMap": "a87c810b5ebc40e752f83559f8b84ec5f3b7324bcb097e9f4a243d077e4051e5",
+    "com/fasterxml/jackson/databind/introspect/AnnotatedMethod": "f4640f5c6de0c5ba27d4d8e713b7ff8724b09136e4ae80de51741cff55d3c97b",
+    "com/fasterxml/jackson/databind/cfg/DeserializerFactoryConfig": "4075e2394189c7aa5791190ecc3ca5cc50adcaad4d9ebc2ca3e3b0b343038ddd",
+    "com/fasterxml/jackson/databind/DeserializationConfig": "9f1293bd8cce511dc1e7beb198d016f098df6ae768810739cc4f2fb42e0ed4ac",
+    "com/fasterxml/jackson/datatype/jdk8/Jdk8TypeModifier": "a26ce54d4f2fec6f4a0d22f21674ae54578069b6abc73ca8fb21f6a0d518abb0",
+    "com/fasterxml/jackson/databind/type/SimpleType": "ee096f4fc4af43f347140f573f3eee1ff2e4adcaef58064ccdd13ba41e764d10",
+    "com/fasterxml/jackson/databind/type/TypeBindings": "a528f63daf6d305c9eaa7ec96af5cdb53e58d95008d9ac2e96d1e6f81cfabc0e",
+    "com/fasterxml/jackson/databind/introspect/SimpleMixInResolver": "15198a315f014f03bd720969cc53774a7e907c22c64de15ed0da44f353d59e67",
+    "com/fasterxml/jackson/databind/cfg/HandlerInstantiator": "41a44c97fbb766c6f62b46eb0bdf87b348109cd052651ff42720c51850bc08c6",
+    "org/springframework/http/converter/json/SpringHandlerInstantiator": "45cc95b6d4af0d1f59efb584beb099140da1667b6c7003c52e3cbf83ba31ef4e"
   },
   "constraints": [
     "fresh birth at actual default constructor and map allocation",
