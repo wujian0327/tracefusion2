@@ -1,0 +1,28 @@
+{
+  "backup_directory": "artifacts/backups/frozen-reuse-common-cost-20261030",
+  "manifest_sha256": "38cd4f51a260bb79fd156f306d76f689ff7d0c60475d0f8128925605b35dc6d0",
+  "algorithm_reference": "c1a4e5ceb60a276cc3651e4cdb413aa29d7f8d5d",
+  "source_base_commit": "385ff07b7ad6996205ed8c7526e746ff2d0e45bd",
+  "archives": {
+    "complete-batch-and-counterexample.tar.gz": {
+      "sha256": "3f85f595f42ac54c7fb8ed8fb8c481d36d84e1403d8d1aa0871d08f11aefe9f0",
+      "bytes": 1226822370,
+      "gzip_crc_verified": true
+    },
+    "docker-images.tar.gz": {
+      "sha256": "4d5198a9f313197f39a3ae933c107bc38d673986f75f8c052632f72c91ba8cd5",
+      "bytes": 1138129722,
+      "gzip_crc_verified": true
+    },
+    "jdk8-runtime.tar.gz": {
+      "sha256": "b2b03f1ef7c40f7abc64e80ea26b4cb2e3b752ee0655f5c04251508102b15e10",
+      "bytes": 63963206,
+      "gzip_crc_verified": true
+    }
+  },
+  "docker_image_count": 6,
+  "exact_reference_files": 126,
+  "all_archives_crc_checked": true,
+  "scope": "Complete NEW reuse/cost batch and strict confirmed counterexample/final guards; previous unrelated historical capture batches remain in their preserved directories, not repackaged. Runtime container writable layers are not exported; public dependency images plus original jars/SQL/request/DB/capture facts are included.",
+  "raw_capture_files_not_modified": true
+}

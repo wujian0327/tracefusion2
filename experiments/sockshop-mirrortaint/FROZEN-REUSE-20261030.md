@@ -75,3 +75,5 @@ MT两个入口均出现 `unmodeled snapshot type java.lang.Class`；problem及�
 主目录 `artifacts/frozen-zlt-reuse-20261030/`：候选池、输入及逻辑规则在运行前封存；全部原版及工具日志、独立数据库事实、逐请求输出、初始与严格审计、逐实例配对和模式澄清均保留。证书复核位于 `artifacts/frozen-locality-cost-20261030/certificate-review/`，24类严格扰动另存 `certificate-strict-recheck/`。小型[结果](frozen-zlt-reuse-results-20261030.json)、[配对CSV](frozen-zlt-reuse-paired-20261030.csv)随Git保存。
 
 完整工件的归档与哈希另见本批备份清单；不把Git中的小型摘要当作完整工件。算法保持c1a4e5c，实验源码、配置和评分哈希分别留存，push由用户完成。同版本正式成本见独立报告，不由这批未认证目标推导成本优势。
+
+本批备份已完成：`artifacts/backups/frozen-reuse-common-cost-20261030/`。完整本轮工件／严格反例归档约1.23GB，六个实际镜像归档约1.14GB；两份归档及JDK包均通过gzip CRC检查，SHA256见[备份清单](frozen-backup-receipt-20261030.json)。归档保留历史首次目录，不删除或覆盖原始失败；其他历史批次未重复打包。

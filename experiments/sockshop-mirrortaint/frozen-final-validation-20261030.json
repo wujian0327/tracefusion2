@@ -1,0 +1,23 @@
+{
+  "all_passed": true,
+  "frozen_core_files": 96,
+  "experiment_and_common_inputs_unchanged": true,
+  "reuse_first_files_unchanged": 380,
+  "confirmed_counterexample_and_final_guard_files_unchanged": 832,
+  "formal_deployments": 20,
+  "formal_requests": 3600,
+  "resource_summaries_exact": 20,
+  "same_images_all_modes": true,
+  "files_hashed": {
+    "cost": 3464,
+    "reuse": 412
+  },
+  "driver_sha256": "27732d86c2f5b2447b713a3053ff37ff6f3fe45ee2e83dbc1ef612865d897df5",
+  "normal_offline_processes": 15,
+  "normal_answer_signatures_preserved": true,
+  "formal_each_tool_positive_correct": 900,
+  "all40_retained": true,
+  "complete40_accepted": false,
+  "new_core_agent_contract_jdk_registrations": 0,
+  "algorithm_reference": "c1a4e5ceb60a276cc3651e4cdb413aa29d7f8d5d"
+}
