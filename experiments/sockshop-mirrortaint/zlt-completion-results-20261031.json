@@ -1,0 +1,155 @@
+{
+  "receipts": [
+    {
+      "api": "ZLT-MP-1",
+      "mode": "full",
+      "requests": 6,
+      "business_equal": true,
+      "selected_task_equal": true,
+      "protocol": {
+        "calls": 0,
+        "facts": 0
+      },
+      "error": null,
+      "raw_sha256": "88bce42941f2b17f1c822877305f51c860478df586f1fd0ad48c1ec91c29309f",
+      "source_fields": 5,
+      "interpreted_source_call_protocol": {
+        "calls": 6,
+        "paired": true,
+        "empty_return_still_has_call": true
+      },
+      "legacy_protocol_counter_scope": "The inherited opaque-caller scanner counts only source-observation events, not these interpreted collection-call events."
+    },
+    {
+      "api": "ZLT-MP-1",
+      "mode": "selective",
+      "requests": 6,
+      "business_equal": true,
+      "selected_task_equal": true,
+      "protocol": {
+        "calls": 0,
+        "facts": 0
+      },
+      "error": null,
+      "raw_sha256": "8d6d3e1a788659f523bbb3ae22ec3f3a6fc90c05d70e006a4e0dd1bcef846005",
+      "source_fields": 5,
+      "interpreted_source_call_protocol": {
+        "calls": 6,
+        "paired": true,
+        "empty_return_still_has_call": true
+      },
+      "legacy_protocol_counter_scope": "The inherited opaque-caller scanner counts only source-observation events, not these interpreted collection-call events."
+    },
+    {
+      "api": "ZLT-MP-1",
+      "mode": "mirrortaint",
+      "requests": 6,
+      "business_equal": true,
+      "selected_task_equal": true,
+      "protocol": {
+        "calls": 6,
+        "normal": 6,
+        "exceptional": 0,
+        "paired": true
+      },
+      "error": null,
+      "raw_sha256": "646030d29c4b95cb23226790d76def659610e3fed019512ea4a5bcb323a06a2f",
+      "source_fields": 6
+    },
+    {
+      "api": "ZLT-MP-4",
+      "mode": "full",
+      "requests": 6,
+      "business_equal": true,
+      "selected_task_equal": true,
+      "protocol": {
+        "calls": 0,
+        "facts": 0,
+        "interpreted_callers": false
+      },
+      "error": null,
+      "raw_sha256": "97a897d29ad7e5263e92f54d2a7410a7e143172dad7469b69422fc08d88d0370",
+      "source_fields": 6,
+      "interpreted_source_call_protocol": {
+        "calls": 6,
+        "paired": true,
+        "empty_return_still_has_call": true
+      },
+      "legacy_protocol_counter_scope": "The inherited opaque-caller scanner counts only source-observation events, not these interpreted collection-call events."
+    },
+    {
+      "api": "ZLT-MP-4",
+      "mode": "selective",
+      "requests": 6,
+      "business_equal": true,
+      "selected_task_equal": true,
+      "protocol": {
+        "calls": 0,
+        "facts": 0,
+        "interpreted_callers": false
+      },
+      "error": null,
+      "raw_sha256": "f19889ad0ceef5c5faa572553f156625285a24f1adba6fe9f2246ce2996d579d",
+      "source_fields": 6,
+      "interpreted_source_call_protocol": {
+        "calls": 6,
+        "paired": true,
+        "empty_return_still_has_call": true
+      },
+      "legacy_protocol_counter_scope": "The inherited opaque-caller scanner counts only source-observation events, not these interpreted collection-call events."
+    },
+    {
+      "api": "ZLT-MP-4",
+      "mode": "mirrortaint",
+      "requests": 6,
+      "business_equal": true,
+      "selected_task_equal": true,
+      "protocol": {
+        "calls": 6,
+        "normal": 6,
+        "exceptional": 0,
+        "paired": true
+      },
+      "error": null,
+      "raw_sha256": "26ca7fa615c8da5c82c460c74303be7bbdaa90eb0814177ef28302c4edf9fa79",
+      "source_fields": 6
+    }
+  ],
+  "states": {
+    "full": {
+      "known_correct": 15
+    },
+    "selective": {
+      "known_correct": 15
+    },
+    "mirrortaint": {
+      "known_correct": 15
+    }
+  },
+  "adequate_oracles": {
+    "full": 15,
+    "selective": 15,
+    "mirrortaint": 15
+  },
+  "guards": {
+    "ZLT-MP-1-missing-tag": true,
+    "ZLT-MP-1-missing-completion": true,
+    "ZLT-MP-1-wrong-object": true,
+    "ZLT-MP-1-ambiguous-source": true,
+    "ZLT-MP-1-problem": true,
+    "ZLT-MP-4-missing-tag": true,
+    "ZLT-MP-4-missing-completion": true,
+    "ZLT-MP-4-wrong-object": true,
+    "ZLT-MP-4-ambiguous-source": true,
+    "ZLT-MP-4-problem": true
+  },
+  "candidate_commit": "7e4ad0b900a64871259a5fac008968128cc5ec28",
+  "reference": "c1a4e5c",
+  "positive_correct_per_mode": 15,
+  "new_TF_deployments": 4,
+  "MT": "Original B2.2/native capture reuse, unchanged binary/task/input/independent rules; not a new MT deployment",
+  "exposed_development_regression": true,
+  "unseen_transfer_evidence": false,
+  "agent_sha256": "83b7df309642e0c17b25629c16b22d61681eec886fc752a8146aacd9ee2789d8",
+  "gate_passed": true
+}
