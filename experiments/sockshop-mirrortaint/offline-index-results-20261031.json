@@ -1,0 +1,2173 @@
+{
+  "reference": "c1a4e5ceb60a276cc3651e4cdb413aa29d7f8d5d",
+  "shared_optimization_commits": [
+    "278896a",
+    "2609d70"
+  ],
+  "source_freeze": "/home/wujian/tracefusion2/artifacts/offline-zlt-revision-20261031/offline-index-v2-source-freeze.json",
+  "no_semantics_or_agent_change_in_cost_snapshot": true,
+  "fresh_processes": 30,
+  "complete_captures": 15,
+  "paired_targets_per_version": 2700,
+  "known_states_and_normalized_origins_equal": true,
+  "medians": {
+    "full-old": {
+      "process_wall_seconds": 33.9501276910305,
+      "process_cpu_seconds": 33.94152700000001,
+      "core_seconds": 25.71606484008953,
+      "VmHWM_KiB": 284584,
+      "phases": {
+        "decode_complete_capture": 0.5111262581776828,
+        "graph_reconstruction_including_required_locality_validation": 25.678956256015226,
+        "query_restore": 0.037346469005569816,
+        "export": 0.00596653507091105,
+        "independent_score_and_signature_check": 7.563120919978246
+      }
+    },
+    "full-indexed": {
+      "process_wall_seconds": 1.9680955850053579,
+      "process_cpu_seconds": 1.966457000000037,
+      "core_seconds": 1.16758763208054,
+      "VmHWM_KiB": 289424,
+      "phases": {
+        "decode": 0.5073677639011294,
+        "reconstruction": 1.1315956921316683,
+        "query": 0.03610946098342538,
+        "export": 0.005704918876290321,
+        "independent_score": 0.019228067016229033
+      }
+    },
+    "selective-old": {
+      "process_wall_seconds": 31.692044724943116,
+      "process_cpu_seconds": 31.673027000000005,
+      "core_seconds": 24.327300066128373,
+      "VmHWM_KiB": 271724,
+      "phases": {
+        "decode_complete_capture": 0.47583569400012493,
+        "graph_reconstruction_including_required_locality_validation": 24.297807184047997,
+        "query_restore": 0.029107301961630583,
+        "export": 0.005739550804719329,
+        "independent_score_and_signature_check": 6.456631495850161
+      }
+    },
+    "selective-indexed": {
+      "process_wall_seconds": 1.828204968944192,
+      "process_cpu_seconds": 1.827476999999989,
+      "core_seconds": 1.0709026330150664,
+      "VmHWM_KiB": 276060,
+      "phases": {
+        "decode": 0.4745839759707451,
+        "reconstruction": 1.0417599389329553,
+        "query": 0.02914269408211112,
+        "export": 0.005758611019700766,
+        "independent_score": 0.01787761691957712
+      }
+    },
+    "mirrortaint-old": {
+      "process_wall_seconds": 0.18740907404571772,
+      "process_cpu_seconds": 0.18689399999995926,
+      "core_seconds": 0.036650572903454304,
+      "VmHWM_KiB": 47088,
+      "phases": {
+        "decode_validate_bind": 0.041992855025455356,
+        "native_tag_decode": 0.036650572903454304,
+        "export": 0.0025996488984674215,
+        "independent_score": 0.015934002120047808
+      }
+    },
+    "mirrortaint-indexed": {
+      "process_wall_seconds": 0.1866134451702237,
+      "process_cpu_seconds": 0.18606799999996282,
+      "core_seconds": 0.0367748960852623,
+      "VmHWM_KiB": 47216,
+      "phases": {
+        "decode_validate_bind": 0.04219940002076328,
+        "native_tag_decode": 0.0367748960852623,
+        "export": 0.002751072868704796,
+        "independent_score": 0.016116376966238022
+      }
+    }
+  },
+  "paired": {
+    "full": {
+      "process_wall_seconds": {
+        "median_change_percent": -94.18877041703169,
+        "ratio_range": [
+          0.05651027158366025,
+          0.05919246539292832
+        ]
+      },
+      "process_cpu_seconds": {
+        "median_change_percent": -94.19102329969016,
+        "ratio_range": [
+          0.056502938126502,
+          0.05918352553411055
+        ]
+      },
+      "core_seconds": {
+        "median_change_percent": -95.45969556640581,
+        "ratio_range": [
+          0.0439909086216136,
+          0.0462597915898028
+        ]
+      },
+      "VmHWM_KiB": {
+        "median_change_percent": 1.697628375247473,
+        "ratio_range": [
+          1.016065555336913,
+          1.0184425077312342
+        ]
+      }
+    },
+    "selective": {
+      "process_wall_seconds": {
+        "median_change_percent": -94.18948687516826,
+        "ratio_range": [
+          0.05598779866418747,
+          0.05931758286345959
+        ]
+      },
+      "process_cpu_seconds": {
+        "median_change_percent": -94.18994101504596,
+        "ratio_range": [
+          0.055795844913640494,
+          0.05932536423005085
+        ]
+      },
+      "core_seconds": {
+        "median_change_percent": -95.58702967858767,
+        "ratio_range": [
+          0.042167045413227515,
+          0.04507648191577374
+        ]
+      },
+      "VmHWM_KiB": {
+        "median_change_percent": 1.6104102571651513,
+        "ratio_range": [
+          1.0153302927762249,
+          1.0169643777519255
+        ]
+      }
+    },
+    "mirrortaint": {
+      "process_wall_seconds": {
+        "median_change_percent": 0.7187899778715146,
+        "ratio_range": [
+          0.9663908097165865,
+          1.0238534536540695
+        ]
+      },
+      "process_cpu_seconds": {
+        "median_change_percent": 0.795389048984374,
+        "ratio_range": [
+          0.9662958971192852,
+          1.023898748108005
+        ]
+      },
+      "core_seconds": {
+        "median_change_percent": 0.9602354117144163,
+        "ratio_range": [
+          0.89333809042612,
+          1.038425332875404
+        ]
+      },
+      "VmHWM_KiB": {
+        "median_change_percent": 0.3912229971083425,
+        "ratio_range": [
+          0.9999152685985426,
+          1.0083382966051222
+        ]
+      }
+    },
+    "indexed-selective/full": {
+      "process_wall_seconds": {
+        "median_change_percent": -8.460400029441296,
+        "ratio_range": [
+          0.9127618712537672,
+          0.9609425901746433
+        ]
+      },
+      "process_cpu_seconds": {
+        "median_change_percent": -8.607048873215051,
+        "ratio_range": [
+          0.9125941352740234,
+          0.9608983437237301
+        ]
+      },
+      "core_seconds": {
+        "median_change_percent": -9.58742675531823,
+        "ratio_range": [
+          0.8879928050041247,
+          0.9534283370184886
+        ]
+      },
+      "VmHWM_KiB": {
+        "median_change_percent": -4.650616396705177,
+        "ratio_range": [
+          0.9525202892949816,
+          0.9553182365228458
+        ]
+      }
+    }
+  },
+  "profiles_diagnostic_only": {
+    "profiles-before/full": {
+      "calls": 51389199,
+      "profiler_seconds": 32.15430735900002,
+      "functions": [
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<built-in method builtins.exec>",
+          "calls": 126,
+          "self_seconds": 0.001129089,
+          "cumulative_seconds": 38.63397397
+        },
+        {
+          "file": "measure_frozen_common_offline.py",
+          "line": 1,
+          "name": "<module>",
+          "calls": 1,
+          "self_seconds": 0.063903931,
+          "cumulative_seconds": 38.633954669000005
+        },
+        {
+          "file": "measure_frozen_common_offline.py",
+          "line": 14,
+          "name": "tf_worker",
+          "calls": 1,
+          "self_seconds": 0.0042801490000000005,
+          "cumulative_seconds": 38.490007048
+        },
+        {
+          "file": "infer_distributed_fields.py",
+          "line": 26,
+          "name": "__init__",
+          "calls": 1,
+          "self_seconds": 0.11857344500000001,
+          "cumulative_seconds": 29.878852398000003
+        },
+        {
+          "file": "infer_distributed_fields.py",
+          "line": 179,
+          "name": "executions",
+          "calls": 1,
+          "self_seconds": 0.0012785840000000001,
+          "cumulative_seconds": 27.642298111000002
+        },
+        {
+          "file": "infer_execution_kernel.py",
+          "line": 23,
+          "name": "infer_execution",
+          "calls": 1,
+          "self_seconds": 0.00036706900000000003,
+          "cumulative_seconds": 27.640326036
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 10,
+          "name": "infer_application",
+          "calls": 1,
+          "self_seconds": 0.06406459,
+          "cumulative_seconds": 27.626516612000003
+        },
+        {
+          "file": "infer_source_locality.py",
+          "line": 4,
+          "name": "validate",
+          "calls": 1,
+          "self_seconds": 0.05535007300000001,
+          "cumulative_seconds": 21.843571152000003
+        },
+        {
+          "file": "infer_source_locality.py",
+          "line": 19,
+          "name": "<listcomp>",
+          "calls": 540,
+          "self_seconds": 4.142999833,
+          "cumulative_seconds": 6.750170997000001
+        },
+        {
+          "file": "infer_source_locality.py",
+          "line": 20,
+          "name": "<listcomp>",
+          "calls": 540,
+          "self_seconds": 6.594726580000001,
+          "cumulative_seconds": 6.594726580000001
+        },
+        {
+          "file": "external_transfer_oracle.py",
+          "line": 54,
+          "name": "tf_expected",
+          "calls": 180,
+          "self_seconds": 3.93114393,
+          "cumulative_seconds": 5.892807021
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<method 'get' of 'dict' objects>",
+          "calls": 48619231,
+          "self_seconds": 4.097376223,
+          "cumulative_seconds": 4.097376223
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 77,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 1.326753306,
+          "cumulative_seconds": 2.481635434
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 72,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 2.112615184,
+          "cumulative_seconds": 2.152954648
+        },
+        {
+          "file": "infer_source_locality.py",
+          "line": 30,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 1.9747575270000002,
+          "cumulative_seconds": 1.988614864
+        },
+        {
+          "file": "infer_response_binding.py",
+          "line": 105,
+          "name": "bind_outputs",
+          "calls": 1,
+          "self_seconds": 0.006109996,
+          "cumulative_seconds": 1.8815096230000001
+        },
+        {
+          "file": "external_transfer_oracle.py",
+          "line": 63,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 1.8658502200000002,
+          "cumulative_seconds": 1.8739266470000002
+        },
+        {
+          "file": "infer_response_binding.py",
+          "line": 112,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 1.8493347130000002,
+          "cumulative_seconds": 1.8493347130000002
+        },
+        {
+          "file": "measure_frozen_common_offline.py",
+          "line": 28,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 1.842343953,
+          "cumulative_seconds": 1.848846669
+        },
+        {
+          "file": "external_transfer_oracle.py",
+          "line": 5,
+          "name": "raw",
+          "calls": 1,
+          "self_seconds": 0.002968998,
+          "cumulative_seconds": 0.6341459730000001
+        },
+        {
+          "file": "__init__.py",
+          "line": 299,
+          "name": "loads",
+          "calls": 60611,
+          "self_seconds": 0.026387567,
+          "cumulative_seconds": 0.585822199
+        },
+        {
+          "file": "decoder.py",
+          "line": 332,
+          "name": "decode",
+          "calls": 60611,
+          "self_seconds": 0.12401548500000001,
+          "cumulative_seconds": 0.55150318
+        },
+        {
+          "file": "external_transfer_oracle.py",
+          "line": 5,
+          "name": "<listcomp>",
+          "calls": 1,
+          "self_seconds": 0.017601928000000003,
+          "cumulative_seconds": 0.515524636
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 322,
+          "name": "execute",
+          "calls": 2520,
+          "self_seconds": 0.16917905600000002,
+          "cumulative_seconds": 0.40160254500000003
+        },
+        {
+          "file": "decoder.py",
+          "line": 343,
+          "name": "raw_decode",
+          "calls": 60611,
+          "self_seconds": 0.39406384,
+          "cumulative_seconds": 0.39406384
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<method 'update' of 'set' objects>",
+          "calls": 2341,
+          "self_seconds": 0.0013578680000000001,
+          "cumulative_seconds": 0.34375903
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 76,
+          "name": "<genexpr>",
+          "calls": 5040,
+          "self_seconds": 0.20751523900000002,
+          "cumulative_seconds": 0.342092186
+        },
+        {
+          "file": "infer_execution_closure.py",
+          "line": 55,
+          "name": "validate",
+          "calls": 1,
+          "self_seconds": 0.017635643,
+          "cumulative_seconds": 0.13930202800000002
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 1022,
+          "name": "_find_and_load",
+          "calls": 137,
+          "self_seconds": 0.000348352,
+          "cumulative_seconds": 0.11509545700000001
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 987,
+          "name": "_find_and_load_unlocked",
+          "calls": 137,
+          "self_seconds": 0.00019243300000000002,
+          "cumulative_seconds": 0.11476553
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 664,
+          "name": "_load_unlocked",
+          "calls": 131,
+          "self_seconds": 0.000293219,
+          "cumulative_seconds": 0.113052281
+        },
+        {
+          "file": "<frozen importlib._bootstrap_external>",
+          "line": 877,
+          "name": "exec_module",
+          "calls": 104,
+          "self_seconds": 0.000169936,
+          "cumulative_seconds": 0.112202673
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 233,
+          "name": "_call_with_frames_removed",
+          "calls": 199,
+          "self_seconds": 0.000100023,
+          "cumulative_seconds": 0.10803705000000001
+        },
+        {
+          "file": "run_planned_service.py",
+          "line": 22,
+          "name": "load",
+          "calls": 3,
+          "self_seconds": 1.7551000000000002e-05,
+          "cumulative_seconds": 0.08450368200000001
+        },
+        {
+          "file": "infer_execution_closure.py",
+          "line": 6,
+          "name": "validate_application_writes",
+          "calls": 1,
+          "self_seconds": 0.027160464000000002,
+          "cumulative_seconds": 0.08206086600000001
+        },
+        {
+          "file": "pathlib.py",
+          "line": 1129,
+          "name": "read_text",
+          "calls": 5,
+          "self_seconds": 2.6561000000000002e-05,
+          "cumulative_seconds": 0.078049542
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<method 'read' of '_io.TextIOWrapper' objects>",
+          "calls": 5,
+          "self_seconds": 0.036746926,
+          "cumulative_seconds": 0.077031151
+        },
+        {
+          "file": "<frozen importlib._bootstrap_external>",
+          "line": 950,
+          "name": "get_code",
+          "calls": 104,
+          "self_seconds": 0.000545522,
+          "cumulative_seconds": 0.071468956
+        },
+        {
+          "file": "run_frozen_locality_cost.py",
+          "line": 1,
+          "name": "<module>",
+          "calls": 1,
+          "self_seconds": 3.7371000000000005e-05,
+          "cumulative_seconds": 0.06557436300000001
+        },
+        {
+          "file": "transport_context.py",
+          "line": 20,
+          "name": "validate_protocol",
+          "calls": 1,
+          "self_seconds": 0.014286581000000001,
+          "cumulative_seconds": 0.065220103
+        }
+      ]
+    },
+    "profiles-before/selective": {
+      "calls": 46941626,
+      "profiler_seconds": 30.906457019000033,
+      "functions": [
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<built-in method builtins.exec>",
+          "calls": 126,
+          "self_seconds": 0.001149711,
+          "cumulative_seconds": 36.482846497000004
+        },
+        {
+          "file": "measure_frozen_common_offline.py",
+          "line": 1,
+          "name": "<module>",
+          "calls": 1,
+          "self_seconds": 0.006319044,
+          "cumulative_seconds": 36.482841887
+        },
+        {
+          "file": "measure_frozen_common_offline.py",
+          "line": 14,
+          "name": "tf_worker",
+          "calls": 1,
+          "self_seconds": 0.004321134,
+          "cumulative_seconds": 36.437966424
+        },
+        {
+          "file": "infer_distributed_fields.py",
+          "line": 26,
+          "name": "__init__",
+          "calls": 1,
+          "self_seconds": 0.033110445,
+          "cumulative_seconds": 28.652807212000003
+        },
+        {
+          "file": "infer_distributed_fields.py",
+          "line": 179,
+          "name": "executions",
+          "calls": 1,
+          "self_seconds": 0.0014130590000000001,
+          "cumulative_seconds": 26.614841935
+        },
+        {
+          "file": "infer_execution_kernel.py",
+          "line": 23,
+          "name": "infer_execution",
+          "calls": 1,
+          "self_seconds": 0.0004531,
+          "cumulative_seconds": 26.612722067
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 10,
+          "name": "infer_application",
+          "calls": 1,
+          "self_seconds": 0.064621828,
+          "cumulative_seconds": 26.611655783000003
+        },
+        {
+          "file": "infer_source_locality.py",
+          "line": 4,
+          "name": "validate",
+          "calls": 1,
+          "self_seconds": 0.046587585,
+          "cumulative_seconds": 18.918424258
+        },
+        {
+          "file": "infer_source_locality.py",
+          "line": 19,
+          "name": "<listcomp>",
+          "calls": 540,
+          "self_seconds": 3.406349994,
+          "cumulative_seconds": 6.070203577
+        },
+        {
+          "file": "infer_source_locality.py",
+          "line": 20,
+          "name": "<listcomp>",
+          "calls": 540,
+          "self_seconds": 5.583949774000001,
+          "cumulative_seconds": 5.583949774000001
+        },
+        {
+          "file": "external_transfer_oracle.py",
+          "line": 54,
+          "name": "tf_expected",
+          "calls": 180,
+          "self_seconds": 3.563539301,
+          "cumulative_seconds": 5.4315927550000005
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<method 'get' of 'dict' objects>",
+          "calls": 44320111,
+          "self_seconds": 4.248488266,
+          "cumulative_seconds": 4.248488266
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 77,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 1.268144726,
+          "cumulative_seconds": 2.4008039620000003
+        },
+        {
+          "file": "infer_execution_closure.py",
+          "line": 55,
+          "name": "validate",
+          "calls": 1,
+          "self_seconds": 0.016364017,
+          "cumulative_seconds": 2.276184381
+        },
+        {
+          "file": "infer_execution_closure.py",
+          "line": 6,
+          "name": "validate_application_writes",
+          "calls": 1,
+          "self_seconds": 0.038129291,
+          "cumulative_seconds": 2.222788137
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 72,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 1.8889955290000002,
+          "cumulative_seconds": 1.940451914
+        },
+        {
+          "file": "infer_execution_closure.py",
+          "line": 46,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 1.8199112810000002,
+          "cumulative_seconds": 1.8199112810000002
+        },
+        {
+          "file": "infer_response_binding.py",
+          "line": 105,
+          "name": "bind_outputs",
+          "calls": 1,
+          "self_seconds": 0.005817396000000001,
+          "cumulative_seconds": 1.733159058
+        },
+        {
+          "file": "external_transfer_oracle.py",
+          "line": 63,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 1.6997908650000002,
+          "cumulative_seconds": 1.708476726
+        },
+        {
+          "file": "infer_response_binding.py",
+          "line": 112,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 1.7045537810000002,
+          "cumulative_seconds": 1.7045537810000002
+        },
+        {
+          "file": "measure_frozen_common_offline.py",
+          "line": 28,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 1.6711431760000002,
+          "cumulative_seconds": 1.6765251870000002
+        },
+        {
+          "file": "infer_source_locality.py",
+          "line": 30,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 1.656046187,
+          "cumulative_seconds": 1.670409269
+        },
+        {
+          "file": "external_transfer_oracle.py",
+          "line": 5,
+          "name": "raw",
+          "calls": 1,
+          "self_seconds": 0.002830673,
+          "cumulative_seconds": 0.536648706
+        },
+        {
+          "file": "external_transfer_oracle.py",
+          "line": 5,
+          "name": "<listcomp>",
+          "calls": 1,
+          "self_seconds": 0.014683163,
+          "cumulative_seconds": 0.43254637700000004
+        },
+        {
+          "file": "__init__.py",
+          "line": 299,
+          "name": "loads",
+          "calls": 54671,
+          "self_seconds": 0.02251858,
+          "cumulative_seconds": 0.425664341
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 322,
+          "name": "execute",
+          "calls": 2520,
+          "self_seconds": 0.173659887,
+          "cumulative_seconds": 0.408150255
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<method 'update' of 'set' objects>",
+          "calls": 2341,
+          "self_seconds": 0.001327065,
+          "cumulative_seconds": 0.404447626
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 76,
+          "name": "<genexpr>",
+          "calls": 5040,
+          "self_seconds": 0.235345613,
+          "cumulative_seconds": 0.402810995
+        },
+        {
+          "file": "decoder.py",
+          "line": 332,
+          "name": "decode",
+          "calls": 54671,
+          "self_seconds": 0.043911240000000004,
+          "cumulative_seconds": 0.39630320900000005
+        },
+        {
+          "file": "decoder.py",
+          "line": 343,
+          "name": "raw_decode",
+          "calls": 54671,
+          "self_seconds": 0.32405347500000004,
+          "cumulative_seconds": 0.32405347500000004
+        },
+        {
+          "file": "infer_execution_closure.py",
+          "line": 42,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 0.28832946200000004,
+          "cumulative_seconds": 0.288371412
+        },
+        {
+          "file": "infer_response_binding.py",
+          "line": 10,
+          "name": "sources",
+          "calls": 1,
+          "self_seconds": 0.10600925500000001,
+          "cumulative_seconds": 0.114474553
+        },
+        {
+          "file": "pathlib.py",
+          "line": 1129,
+          "name": "read_text",
+          "calls": 5,
+          "self_seconds": 3.0892e-05,
+          "cumulative_seconds": 0.07979794300000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<method 'read' of '_io.TextIOWrapper' objects>",
+          "calls": 5,
+          "self_seconds": 0.040343251000000004,
+          "cumulative_seconds": 0.06923093300000001
+        },
+        {
+          "file": "transport_context.py",
+          "line": 20,
+          "name": "validate_protocol",
+          "calls": 1,
+          "self_seconds": 0.011928393,
+          "cumulative_seconds": 0.057121878
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 168,
+          "name": "execute_constructor",
+          "calls": 900,
+          "self_seconds": 0.005117417,
+          "cumulative_seconds": 0.047957562
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 1022,
+          "name": "_find_and_load",
+          "calls": 137,
+          "self_seconds": 0.00037981,
+          "cumulative_seconds": 0.044395111
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 987,
+          "name": "_find_and_load_unlocked",
+          "calls": 137,
+          "self_seconds": 0.00017730300000000002,
+          "cumulative_seconds": 0.044008672000000006
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 141,
+          "name": "lookup",
+          "calls": 2880,
+          "self_seconds": 0.0041265040000000005,
+          "cumulative_seconds": 0.042584336
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 664,
+          "name": "_load_unlocked",
+          "calls": 131,
+          "self_seconds": 0.00026731700000000004,
+          "cumulative_seconds": 0.042254005000000004
+        }
+      ]
+    },
+    "profiles-before/mirrortaint": {
+      "calls": 679470,
+      "profiler_seconds": 0.27648475800000005,
+      "functions": [
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<built-in method builtins.exec>",
+          "calls": 126,
+          "self_seconds": 0.000951091,
+          "cumulative_seconds": 0.27658483100000003
+        },
+        {
+          "file": "measure_frozen_common_offline.py",
+          "line": 1,
+          "name": "<module>",
+          "calls": 1,
+          "self_seconds": 3.0581000000000004e-05,
+          "cumulative_seconds": 0.27657659100000004
+        },
+        {
+          "file": "measure_frozen_common_offline.py",
+          "line": 37,
+          "name": "mt_worker",
+          "calls": 1,
+          "self_seconds": 0.00268605,
+          "cumulative_seconds": 0.23738191
+        },
+        {
+          "file": "audit_frozen_transfer_cost.py",
+          "line": 43,
+          "name": "mt_offline",
+          "calls": 1,
+          "self_seconds": 0.005722233,
+          "cumulative_seconds": 0.22863201900000002
+        },
+        {
+          "file": "run_mirror_capability_probe.py",
+          "line": 33,
+          "name": "native_answer",
+          "calls": 180,
+          "self_seconds": 0.021030878000000003,
+          "cumulative_seconds": 0.06070306600000001
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 1022,
+          "name": "_find_and_load",
+          "calls": 138,
+          "self_seconds": 0.000277867,
+          "cumulative_seconds": 0.057599181000000006
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 987,
+          "name": "_find_and_load_unlocked",
+          "calls": 138,
+          "self_seconds": 0.000158004,
+          "cumulative_seconds": 0.05749043
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 664,
+          "name": "_load_unlocked",
+          "calls": 132,
+          "self_seconds": 0.000267696,
+          "cumulative_seconds": 0.05658819700000001
+        },
+        {
+          "file": "<frozen importlib._bootstrap_external>",
+          "line": 877,
+          "name": "exec_module",
+          "calls": 104,
+          "self_seconds": 0.00011903200000000001,
+          "cumulative_seconds": 0.056352572000000004
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 233,
+          "name": "_call_with_frames_removed",
+          "calls": 176,
+          "self_seconds": 6.7224e-05,
+          "cumulative_seconds": 0.055154095
+        },
+        {
+          "file": "run_mirror_capability_probe.py",
+          "line": 15,
+          "name": "read_events",
+          "calls": 1,
+          "self_seconds": 0.0006155010000000001,
+          "cumulative_seconds": 0.049346153000000004
+        },
+        {
+          "file": "__init__.py",
+          "line": 299,
+          "name": "loads",
+          "calls": 3977,
+          "self_seconds": 0.002132279,
+          "cumulative_seconds": 0.035760248
+        },
+        {
+          "file": "run_frozen_locality_cost.py",
+          "line": 1,
+          "name": "<module>",
+          "calls": 1,
+          "self_seconds": 2.5462e-05,
+          "cumulative_seconds": 0.030388741
+        },
+        {
+          "file": "decoder.py",
+          "line": 332,
+          "name": "decode",
+          "calls": 3977,
+          "self_seconds": 0.0026636060000000002,
+          "cumulative_seconds": 0.030214866000000003
+        },
+        {
+          "file": "decoder.py",
+          "line": 343,
+          "name": "raw_decode",
+          "calls": 3977,
+          "self_seconds": 0.025605447,
+          "cumulative_seconds": 0.025605447
+        },
+        {
+          "file": "run_frozen_zlt_reuse.py",
+          "line": 9,
+          "name": "save",
+          "calls": 4,
+          "self_seconds": 3.753e-05,
+          "cumulative_seconds": 0.024765032000000003
+        },
+        {
+          "file": "__init__.py",
+          "line": 183,
+          "name": "dumps",
+          "calls": 4,
+          "self_seconds": 9.8522e-05,
+          "cumulative_seconds": 0.023963746
+        },
+        {
+          "file": "encoder.py",
+          "line": 182,
+          "name": "encode",
+          "calls": 4,
+          "self_seconds": 0.0016687660000000001,
+          "cumulative_seconds": 0.023857254
+        },
+        {
+          "file": "<frozen importlib._bootstrap_external>",
+          "line": 950,
+          "name": "get_code",
+          "calls": 104,
+          "self_seconds": 0.000373271,
+          "cumulative_seconds": 0.022646427
+        },
+        {
+          "file": "encoder.py",
+          "line": 413,
+          "name": "_iterencode",
+          "calls": 27054,
+          "self_seconds": 0.0037876740000000004,
+          "cumulative_seconds": 0.021955231000000002
+        },
+        {
+          "file": "audit_frozen_transfer_cost.py",
+          "line": 64,
+          "name": "<dictcomp>",
+          "calls": 1,
+          "self_seconds": 0.0006132640000000001,
+          "cumulative_seconds": 0.021334515000000002
+        },
+        {
+          "file": "external_transfer_oracle.py",
+          "line": 36,
+          "name": "native_expected",
+          "calls": 180,
+          "self_seconds": 0.00047331,
+          "cumulative_seconds": 0.017135848000000002
+        },
+        {
+          "file": "encoder.py",
+          "line": 277,
+          "name": "_iterencode_list",
+          "calls": 35466,
+          "self_seconds": 0.007077209,
+          "cumulative_seconds": 0.01663658
+        },
+        {
+          "file": "external_transfer_oracle.py",
+          "line": 39,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 0.012465700000000001,
+          "cumulative_seconds": 0.016147697000000003
+        },
+        {
+          "file": "run_mirror_capability_probe.py",
+          "line": 1,
+          "name": "<module>",
+          "calls": 1,
+          "self_seconds": 8.77e-06,
+          "cumulative_seconds": 0.015258977000000002
+        },
+        {
+          "file": "request.py",
+          "line": 1,
+          "name": "<module>",
+          "calls": 1,
+          "self_seconds": 3.1121e-05,
+          "cumulative_seconds": 0.014403297
+        },
+        {
+          "file": "encoder.py",
+          "line": 333,
+          "name": "_iterencode_dict",
+          "calls": 50360,
+          "self_seconds": 0.008763414,
+          "cumulative_seconds": 0.014074752000000001
+        },
+        {
+          "file": "run_mirror_capability_probe.py",
+          "line": 29,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 0.013833598,
+          "cumulative_seconds": 0.013833598
+        },
+        {
+          "file": "<frozen importlib._bootstrap_external>",
+          "line": 942,
+          "name": "source_to_code",
+          "calls": 9,
+          "self_seconds": 8.63e-06,
+          "cumulative_seconds": 0.012550185
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<built-in method builtins.compile>",
+          "calls": 9,
+          "self_seconds": 0.012534685,
+          "cumulative_seconds": 0.012534685
+        },
+        {
+          "file": "run_mirror_capability_probe.py",
+          "line": 34,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 0.009719093,
+          "cumulative_seconds": 0.011285036
+        },
+        {
+          "file": "re.py",
+          "line": 288,
+          "name": "_compile",
+          "calls": 5680,
+          "self_seconds": 0.00147823,
+          "cumulative_seconds": 0.011243407
+        },
+        {
+          "file": "run_response_binding_revision.py",
+          "line": 1,
+          "name": "<module>",
+          "calls": 1,
+          "self_seconds": 2.565e-05,
+          "cumulative_seconds": 0.011143093000000001
+        },
+        {
+          "file": "audit_frozen_transfer_cost.py",
+          "line": 52,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 0.009486283,
+          "cumulative_seconds": 0.011017429
+        },
+        {
+          "file": "client.py",
+          "line": 1,
+          "name": "<module>",
+          "calls": 1,
+          "self_seconds": 1.9581e-05,
+          "cumulative_seconds": 0.010532909
+        },
+        {
+          "file": "run_mirror_capability_probe.py",
+          "line": 16,
+          "name": "<listcomp>",
+          "calls": 1,
+          "self_seconds": 0.00021968600000000002,
+          "cumulative_seconds": 0.010002338000000001
+        },
+        {
+          "file": "run_mirror_capability_probe.py",
+          "line": 22,
+          "name": "<listcomp>",
+          "calls": 1,
+          "self_seconds": 0.000239477,
+          "cumulative_seconds": 0.009113187
+        },
+        {
+          "file": "run_mirror_capability_probe.py",
+          "line": 62,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 0.009050305,
+          "cumulative_seconds": 0.009050305
+        },
+        {
+          "file": "sre_compile.py",
+          "line": 783,
+          "name": "compile",
+          "calls": 68,
+          "self_seconds": 0.00015798300000000002,
+          "cumulative_seconds": 0.009029339
+        },
+        {
+          "file": "re.py",
+          "line": 249,
+          "name": "compile",
+          "calls": 76,
+          "self_seconds": 2.0942e-05,
+          "cumulative_seconds": 0.009028022
+        }
+      ]
+    },
+    "profiles-after/full": {
+      "calls": 3831986,
+      "profiler_seconds": 2.3037478749999987,
+      "functions": [
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<built-in method builtins.exec>",
+          "calls": 126,
+          "self_seconds": 0.001152014,
+          "cumulative_seconds": 2.349073647
+        },
+        {
+          "file": "run_offline_index_revision.py",
+          "line": 1,
+          "name": "<module>",
+          "calls": 1,
+          "self_seconds": 0.006162040000000001,
+          "cumulative_seconds": 2.349068677
+        },
+        {
+          "file": "run_offline_index_revision.py",
+          "line": 10,
+          "name": "worker",
+          "calls": 1,
+          "self_seconds": 0.00110611,
+          "cumulative_seconds": 2.303425389
+        },
+        {
+          "file": "infer_distributed_fields.py",
+          "line": 26,
+          "name": "__init__",
+          "calls": 1,
+          "self_seconds": 0.12568463300000002,
+          "cumulative_seconds": 1.5819527740000001
+        },
+        {
+          "file": "infer_distributed_fields.py",
+          "line": 179,
+          "name": "executions",
+          "calls": 1,
+          "self_seconds": 0.001465602,
+          "cumulative_seconds": 1.1566641720000002
+        },
+        {
+          "file": "infer_execution_kernel.py",
+          "line": 23,
+          "name": "infer_execution",
+          "calls": 1,
+          "self_seconds": 0.005374072000000001,
+          "cumulative_seconds": 1.1544941130000002
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 10,
+          "name": "infer_application",
+          "calls": 1,
+          "self_seconds": 0.19186117200000002,
+          "cumulative_seconds": 1.148559778
+        },
+        {
+          "file": "external_transfer_oracle.py",
+          "line": 5,
+          "name": "raw",
+          "calls": 1,
+          "self_seconds": 0.003413517,
+          "cumulative_seconds": 0.556160804
+        },
+        {
+          "file": "external_transfer_oracle.py",
+          "line": 5,
+          "name": "<listcomp>",
+          "calls": 1,
+          "self_seconds": 0.017164500000000003,
+          "cumulative_seconds": 0.463517738
+        },
+        {
+          "file": "__init__.py",
+          "line": 299,
+          "name": "loads",
+          "calls": 60611,
+          "self_seconds": 0.025029054000000002,
+          "cumulative_seconds": 0.452978088
+        },
+        {
+          "file": "decoder.py",
+          "line": 332,
+          "name": "decode",
+          "calls": 60611,
+          "self_seconds": 0.11398991000000001,
+          "cumulative_seconds": 0.42049186000000005
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 329,
+          "name": "execute",
+          "calls": 2520,
+          "self_seconds": 0.162343384,
+          "cumulative_seconds": 0.392680882
+        },
+        {
+          "file": "decoder.py",
+          "line": 343,
+          "name": "raw_decode",
+          "calls": 60611,
+          "self_seconds": 0.27649956200000003,
+          "cumulative_seconds": 0.27649956200000003
+        },
+        {
+          "file": "infer_execution_closure.py",
+          "line": 55,
+          "name": "validate",
+          "calls": 1,
+          "self_seconds": 0.01999366,
+          "cumulative_seconds": 0.24156053100000002
+        },
+        {
+          "file": "infer_execution_closure.py",
+          "line": 6,
+          "name": "validate_application_writes",
+          "calls": 1,
+          "self_seconds": 0.116493524,
+          "cumulative_seconds": 0.17798639600000002
+        },
+        {
+          "file": "infer_source_locality.py",
+          "line": 5,
+          "name": "validate",
+          "calls": 1,
+          "self_seconds": 0.062188219,
+          "cumulative_seconds": 0.080799276
+        },
+        {
+          "file": "transport_context.py",
+          "line": 20,
+          "name": "validate_protocol",
+          "calls": 1,
+          "self_seconds": 0.015859038000000002,
+          "cumulative_seconds": 0.071785022
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<method 'get' of 'dict' objects>",
+          "calls": 812745,
+          "self_seconds": 0.056257501,
+          "cumulative_seconds": 0.056257501
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<built-in method builtins.sum>",
+          "calls": 3,
+          "self_seconds": 0.007294447000000001,
+          "cumulative_seconds": 0.054809695000000005
+        },
+        {
+          "file": "pathlib.py",
+          "line": 1129,
+          "name": "read_text",
+          "calls": 5,
+          "self_seconds": 2.8611e-05,
+          "cumulative_seconds": 0.05300462500000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<method 'read' of '_io.TextIOWrapper' objects>",
+          "calls": 5,
+          "self_seconds": 0.021447847000000003,
+          "cumulative_seconds": 0.052733229000000006
+        },
+        {
+          "file": "infer_distributed_fields.py",
+          "line": 225,
+          "name": "query",
+          "calls": 180,
+          "self_seconds": 0.000839654,
+          "cumulative_seconds": 0.047934961000000005
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<built-in method builtins.any>",
+          "calls": 1297,
+          "self_seconds": 0.00677725,
+          "cumulative_seconds": 0.047682992
+        },
+        {
+          "file": "transport_context.py",
+          "line": 61,
+          "name": "validate_message_identity",
+          "calls": 1,
+          "self_seconds": 0.039014637000000005,
+          "cumulative_seconds": 0.04704801
+        },
+        {
+          "file": "infer_response_binding.py",
+          "line": 105,
+          "name": "bind_outputs",
+          "calls": 1,
+          "self_seconds": 0.016571127,
+          "cumulative_seconds": 0.046332614
+        },
+        {
+          "file": "infer_response_binding.py",
+          "line": 10,
+          "name": "sources",
+          "calls": 1,
+          "self_seconds": 0.037890076,
+          "cumulative_seconds": 0.046165149
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 175,
+          "name": "execute_constructor",
+          "calls": 900,
+          "self_seconds": 0.004633585,
+          "cumulative_seconds": 0.045661815
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 1022,
+          "name": "_find_and_load",
+          "calls": 137,
+          "self_seconds": 0.0006152050000000001,
+          "cumulative_seconds": 0.044731056000000005
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 987,
+          "name": "_find_and_load_unlocked",
+          "calls": 137,
+          "self_seconds": 0.000184305,
+          "cumulative_seconds": 0.044411351
+        },
+        {
+          "file": "external_transfer_oracle.py",
+          "line": 32,
+          "name": "require_complete_raw_capture",
+          "calls": 1,
+          "self_seconds": 0.001069934,
+          "cumulative_seconds": 0.043296155
+        },
+        {
+          "file": "infer_distributed_fields.py",
+          "line": 228,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 0.043024088,
+          "cumulative_seconds": 0.043024088
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 148,
+          "name": "lookup",
+          "calls": 2880,
+          "self_seconds": 0.003971967,
+          "cumulative_seconds": 0.042925238000000004
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 664,
+          "name": "_load_unlocked",
+          "calls": 131,
+          "self_seconds": 0.000262759,
+          "cumulative_seconds": 0.042772202
+        },
+        {
+          "file": "<frozen importlib._bootstrap_external>",
+          "line": 877,
+          "name": "exec_module",
+          "calls": 104,
+          "self_seconds": 0.000125955,
+          "cumulative_seconds": 0.042331735
+        },
+        {
+          "file": "run_frozen_zlt_reuse.py",
+          "line": 9,
+          "name": "save",
+          "calls": 3,
+          "self_seconds": 2.5790000000000002e-05,
+          "cumulative_seconds": 0.040941482
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 233,
+          "name": "_call_with_frames_removed",
+          "calls": 165,
+          "self_seconds": 5.7050000000000004e-05,
+          "cumulative_seconds": 0.040265205000000005
+        },
+        {
+          "file": "__init__.py",
+          "line": 183,
+          "name": "dumps",
+          "calls": 3,
+          "self_seconds": 0.00010930400000000001,
+          "cumulative_seconds": 0.040157843000000006
+        },
+        {
+          "file": "encoder.py",
+          "line": 182,
+          "name": "encode",
+          "calls": 3,
+          "self_seconds": 0.002525734,
+          "cumulative_seconds": 0.040042839000000004
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<method 'splitlines' of 'str' objects>",
+          "calls": 1,
+          "self_seconds": 0.039260773000000006,
+          "cumulative_seconds": 0.039260773000000006
+        },
+        {
+          "file": "encoder.py",
+          "line": 413,
+          "name": "_iterencode",
+          "calls": 42364,
+          "self_seconds": 0.005335168,
+          "cumulative_seconds": 0.037221329000000004
+        }
+      ]
+    },
+    "profiles-after/selective": {
+      "calls": 3630386,
+      "profiler_seconds": 4.675016321000017,
+      "functions": [
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<built-in method builtins.exec>",
+          "calls": 126,
+          "self_seconds": 0.001081245,
+          "cumulative_seconds": 4.718823014000001
+        },
+        {
+          "file": "run_offline_index_revision.py",
+          "line": 1,
+          "name": "<module>",
+          "calls": 1,
+          "self_seconds": 0.064998862,
+          "cumulative_seconds": 4.718816814
+        },
+        {
+          "file": "run_offline_index_revision.py",
+          "line": 10,
+          "name": "worker",
+          "calls": 1,
+          "self_seconds": 0.001005334,
+          "cumulative_seconds": 4.614248643000001
+        },
+        {
+          "file": "infer_distributed_fields.py",
+          "line": 26,
+          "name": "__init__",
+          "calls": 1,
+          "self_seconds": 0.039900199000000004,
+          "cumulative_seconds": 3.855989671
+        },
+        {
+          "file": "infer_distributed_fields.py",
+          "line": 179,
+          "name": "executions",
+          "calls": 1,
+          "self_seconds": 0.0014980500000000001,
+          "cumulative_seconds": 3.4613565380000004
+        },
+        {
+          "file": "infer_execution_kernel.py",
+          "line": 23,
+          "name": "infer_execution",
+          "calls": 1,
+          "self_seconds": 0.004623955,
+          "cumulative_seconds": 3.4591598080000003
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 10,
+          "name": "infer_application",
+          "calls": 1,
+          "self_seconds": 0.17127081900000002,
+          "cumulative_seconds": 3.4539474300000004
+        },
+        {
+          "file": "infer_execution_closure.py",
+          "line": 55,
+          "name": "validate",
+          "calls": 1,
+          "self_seconds": 0.019181557000000002,
+          "cumulative_seconds": 2.60681821
+        },
+        {
+          "file": "infer_execution_closure.py",
+          "line": 6,
+          "name": "validate_application_writes",
+          "calls": 1,
+          "self_seconds": 0.02774857,
+          "cumulative_seconds": 2.5435282000000003
+        },
+        {
+          "file": "infer_execution_closure.py",
+          "line": 46,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 2.121352113,
+          "cumulative_seconds": 2.121352113
+        },
+        {
+          "file": "external_transfer_oracle.py",
+          "line": 5,
+          "name": "raw",
+          "calls": 1,
+          "self_seconds": 0.0032824340000000003,
+          "cumulative_seconds": 0.5260348
+        },
+        {
+          "file": "__init__.py",
+          "line": 299,
+          "name": "loads",
+          "calls": 54671,
+          "self_seconds": 0.021987637,
+          "cumulative_seconds": 0.508381049
+        },
+        {
+          "file": "decoder.py",
+          "line": 332,
+          "name": "decode",
+          "calls": 54671,
+          "self_seconds": 0.057354948,
+          "cumulative_seconds": 0.479857772
+        },
+        {
+          "file": "external_transfer_oracle.py",
+          "line": 5,
+          "name": "<listcomp>",
+          "calls": 1,
+          "self_seconds": 0.015057533000000001,
+          "cumulative_seconds": 0.436157316
+        },
+        {
+          "file": "decoder.py",
+          "line": 343,
+          "name": "raw_decode",
+          "calls": 54671,
+          "self_seconds": 0.396013537,
+          "cumulative_seconds": 0.396013537
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 329,
+          "name": "execute",
+          "calls": 2520,
+          "self_seconds": 0.163026777,
+          "cumulative_seconds": 0.388607815
+        },
+        {
+          "file": "infer_execution_closure.py",
+          "line": 42,
+          "name": "<listcomp>",
+          "calls": 180,
+          "self_seconds": 0.33436448700000004,
+          "cumulative_seconds": 0.334414298
+        },
+        {
+          "file": "infer_response_binding.py",
+          "line": 10,
+          "name": "sources",
+          "calls": 1,
+          "self_seconds": 0.11995127900000001,
+          "cumulative_seconds": 0.12858835600000001
+        },
+        {
+          "file": "run_planned_service.py",
+          "line": 22,
+          "name": "load",
+          "calls": 3,
+          "self_seconds": 1.4860000000000002e-05,
+          "cumulative_seconds": 0.081201548
+        },
+        {
+          "file": "infer_source_locality.py",
+          "line": 5,
+          "name": "validate",
+          "calls": 1,
+          "self_seconds": 0.05539728,
+          "cumulative_seconds": 0.07251546
+        },
+        {
+          "file": "transport_context.py",
+          "line": 20,
+          "name": "validate_protocol",
+          "calls": 1,
+          "self_seconds": 0.014576699,
+          "cumulative_seconds": 0.066833681
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<method 'get' of 'dict' objects>",
+          "calls": 778545,
+          "self_seconds": 0.05428547,
+          "cumulative_seconds": 0.05428547
+        },
+        {
+          "file": "pathlib.py",
+          "line": 1129,
+          "name": "read_text",
+          "calls": 5,
+          "self_seconds": 2.8232e-05,
+          "cumulative_seconds": 0.052113595000000006
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<method 'read' of '_io.TextIOWrapper' objects>",
+          "calls": 5,
+          "self_seconds": 0.020546335000000002,
+          "cumulative_seconds": 0.051849208
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<built-in method builtins.sum>",
+          "calls": 3,
+          "self_seconds": 0.006264207000000001,
+          "cumulative_seconds": 0.046456077000000005
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 1022,
+          "name": "_find_and_load",
+          "calls": 137,
+          "self_seconds": 0.000608614,
+          "cumulative_seconds": 0.04488839
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 175,
+          "name": "execute_constructor",
+          "calls": 900,
+          "self_seconds": 0.003981686,
+          "cumulative_seconds": 0.04464311
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 987,
+          "name": "_find_and_load_unlocked",
+          "calls": 137,
+          "self_seconds": 0.00018408400000000002,
+          "cumulative_seconds": 0.044566835000000006
+        },
+        {
+          "file": "transport_context.py",
+          "line": 61,
+          "name": "validate_message_identity",
+          "calls": 1,
+          "self_seconds": 0.035958246,
+          "cumulative_seconds": 0.043932330000000006
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 664,
+          "name": "_load_unlocked",
+          "calls": 131,
+          "self_seconds": 0.00025942500000000003,
+          "cumulative_seconds": 0.042874734000000005
+        },
+        {
+          "file": "<frozen importlib._bootstrap_external>",
+          "line": 877,
+          "name": "exec_module",
+          "calls": 104,
+          "self_seconds": 0.000123315,
+          "cumulative_seconds": 0.042421974
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<built-in method builtins.any>",
+          "calls": 1297,
+          "self_seconds": 0.006167535,
+          "cumulative_seconds": 0.042269799000000004
+        },
+        {
+          "file": "run_frozen_zlt_reuse.py",
+          "line": 9,
+          "name": "save",
+          "calls": 3,
+          "self_seconds": 2.6640000000000002e-05,
+          "cumulative_seconds": 0.042249708000000004
+        },
+        {
+          "file": "__init__.py",
+          "line": 183,
+          "name": "dumps",
+          "calls": 3,
+          "self_seconds": 0.000144804,
+          "cumulative_seconds": 0.041440102
+        },
+        {
+          "file": "encoder.py",
+          "line": 182,
+          "name": "encode",
+          "calls": 3,
+          "self_seconds": 0.002528283,
+          "cumulative_seconds": 0.041290048
+        },
+        {
+          "file": "infer_response_binding.py",
+          "line": 105,
+          "name": "bind_outputs",
+          "calls": 1,
+          "self_seconds": 0.015565037,
+          "cumulative_seconds": 0.041021904000000005
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 233,
+          "name": "_call_with_frames_removed",
+          "calls": 165,
+          "self_seconds": 5.8692000000000007e-05,
+          "cumulative_seconds": 0.040362486
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 148,
+          "name": "lookup",
+          "calls": 2880,
+          "self_seconds": 0.004053466,
+          "cumulative_seconds": 0.039800816
+        },
+        {
+          "file": "infer_distributed_fields.py",
+          "line": 225,
+          "name": "query",
+          "calls": 180,
+          "self_seconds": 0.000786433,
+          "cumulative_seconds": 0.039443487
+        },
+        {
+          "file": "external_transfer_oracle.py",
+          "line": 32,
+          "name": "require_complete_raw_capture",
+          "calls": 1,
+          "self_seconds": 0.0009850730000000002,
+          "cumulative_seconds": 0.039231313000000004
+        }
+      ]
+    },
+    "profiles-final-selective": {
+      "calls": 3653782,
+      "profiler_seconds": 2.3240681990000036,
+      "functions": [
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<built-in method builtins.exec>",
+          "calls": 126,
+          "self_seconds": 0.001149985,
+          "cumulative_seconds": 2.365737363
+        },
+        {
+          "file": "run_offline_index_revision.py",
+          "line": 1,
+          "name": "<module>",
+          "calls": 1,
+          "self_seconds": 0.006671762,
+          "cumulative_seconds": 2.3657328630000003
+        },
+        {
+          "file": "run_offline_index_revision.py",
+          "line": 10,
+          "name": "worker",
+          "calls": 1,
+          "self_seconds": 0.001080129,
+          "cumulative_seconds": 2.318294433
+        },
+        {
+          "file": "infer_distributed_fields.py",
+          "line": 26,
+          "name": "__init__",
+          "calls": 1,
+          "self_seconds": 0.037442718,
+          "cumulative_seconds": 1.53036138
+        },
+        {
+          "file": "infer_distributed_fields.py",
+          "line": 179,
+          "name": "executions",
+          "calls": 1,
+          "self_seconds": 0.001316651,
+          "cumulative_seconds": 1.151739255
+        },
+        {
+          "file": "infer_execution_kernel.py",
+          "line": 23,
+          "name": "infer_execution",
+          "calls": 1,
+          "self_seconds": 0.004906052,
+          "cumulative_seconds": 1.14971996
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 10,
+          "name": "infer_application",
+          "calls": 1,
+          "self_seconds": 0.18027437300000002,
+          "cumulative_seconds": 1.144129992
+        },
+        {
+          "file": "external_transfer_oracle.py",
+          "line": 5,
+          "name": "raw",
+          "calls": 1,
+          "self_seconds": 0.002779353,
+          "cumulative_seconds": 0.6383574710000001
+        },
+        {
+          "file": "external_transfer_oracle.py",
+          "line": 5,
+          "name": "<listcomp>",
+          "calls": 1,
+          "self_seconds": 0.018090916000000002,
+          "cumulative_seconds": 0.514232636
+        },
+        {
+          "file": "__init__.py",
+          "line": 299,
+          "name": "loads",
+          "calls": 54671,
+          "self_seconds": 0.024557863000000003,
+          "cumulative_seconds": 0.50315642
+        },
+        {
+          "file": "decoder.py",
+          "line": 332,
+          "name": "decode",
+          "calls": 54671,
+          "self_seconds": 0.060164516,
+          "cumulative_seconds": 0.471066474
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 329,
+          "name": "execute",
+          "calls": 2520,
+          "self_seconds": 0.175147147,
+          "cumulative_seconds": 0.42592943400000005
+        },
+        {
+          "file": "decoder.py",
+          "line": 343,
+          "name": "raw_decode",
+          "calls": 54671,
+          "self_seconds": 0.378619268,
+          "cumulative_seconds": 0.378619268
+        },
+        {
+          "file": "infer_execution_closure.py",
+          "line": 59,
+          "name": "validate",
+          "calls": 1,
+          "self_seconds": 0.017608177000000003,
+          "cumulative_seconds": 0.24295360000000002
+        },
+        {
+          "file": "infer_execution_closure.py",
+          "line": 6,
+          "name": "validate_application_writes",
+          "calls": 1,
+          "self_seconds": 0.134910989,
+          "cumulative_seconds": 0.18779288200000002
+        },
+        {
+          "file": "infer_response_binding.py",
+          "line": 10,
+          "name": "sources",
+          "calls": 1,
+          "self_seconds": 0.11834949900000001,
+          "cumulative_seconds": 0.12743642500000002
+        },
+        {
+          "file": "pathlib.py",
+          "line": 1129,
+          "name": "read_text",
+          "calls": 5,
+          "self_seconds": 2.629e-05,
+          "cumulative_seconds": 0.08239157300000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<method 'read' of '_io.TextIOWrapper' objects>",
+          "calls": 5,
+          "self_seconds": 0.029204044000000002,
+          "cumulative_seconds": 0.08215522900000001
+        },
+        {
+          "file": "infer_source_locality.py",
+          "line": 5,
+          "name": "validate",
+          "calls": 1,
+          "self_seconds": 0.056163659000000005,
+          "cumulative_seconds": 0.07451161
+        },
+        {
+          "file": "transport_context.py",
+          "line": 20,
+          "name": "validate_protocol",
+          "calls": 1,
+          "self_seconds": 0.013278983000000001,
+          "cumulative_seconds": 0.062875974
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<method 'get' of 'dict' objects>",
+          "calls": 786645,
+          "self_seconds": 0.056884132000000004,
+          "cumulative_seconds": 0.056884132000000004
+        },
+        {
+          "file": "codecs.py",
+          "line": 319,
+          "name": "decode",
+          "calls": 5,
+          "self_seconds": 2.784e-05,
+          "cumulative_seconds": 0.052951185000000005
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<built-in method _codecs.utf_8_decode>",
+          "calls": 5,
+          "self_seconds": 0.052923345000000004,
+          "cumulative_seconds": 0.052923345000000004
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 175,
+          "name": "execute_constructor",
+          "calls": 900,
+          "self_seconds": 0.004803784,
+          "cumulative_seconds": 0.048692282
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 148,
+          "name": "lookup",
+          "calls": 2880,
+          "self_seconds": 0.0044515760000000005,
+          "cumulative_seconds": 0.047532606000000005
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 1022,
+          "name": "_find_and_load",
+          "calls": 137,
+          "self_seconds": 0.000644562,
+          "cumulative_seconds": 0.046323274000000005
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 987,
+          "name": "_find_and_load_unlocked",
+          "calls": 137,
+          "self_seconds": 0.00018278600000000002,
+          "cumulative_seconds": 0.045950218
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<built-in method builtins.sum>",
+          "calls": 3,
+          "self_seconds": 0.006158458,
+          "cumulative_seconds": 0.045623312000000006
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 664,
+          "name": "_load_unlocked",
+          "calls": 131,
+          "self_seconds": 0.000284946,
+          "cumulative_seconds": 0.044255646
+        },
+        {
+          "file": "<frozen importlib._bootstrap_external>",
+          "line": 877,
+          "name": "exec_module",
+          "calls": 104,
+          "self_seconds": 0.00012402500000000002,
+          "cumulative_seconds": 0.043700394000000004
+        },
+        {
+          "file": "run_frozen_zlt_reuse.py",
+          "line": 9,
+          "name": "save",
+          "calls": 3,
+          "self_seconds": 2.79e-05,
+          "cumulative_seconds": 0.042020489
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<method 'splitlines' of 'str' objects>",
+          "calls": 1,
+          "self_seconds": 0.041755341,
+          "cumulative_seconds": 0.041755341
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 233,
+          "name": "_call_with_frames_removed",
+          "calls": 165,
+          "self_seconds": 6.0540000000000007e-05,
+          "cumulative_seconds": 0.041517486
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "name": "<built-in method builtins.any>",
+          "calls": 1297,
+          "self_seconds": 0.00621876,
+          "cumulative_seconds": 0.041382117
+        },
+        {
+          "file": "__init__.py",
+          "line": 183,
+          "name": "dumps",
+          "calls": 3,
+          "self_seconds": 0.000112492,
+          "cumulative_seconds": 0.041301842000000005
+        },
+        {
+          "file": "transport_context.py",
+          "line": 61,
+          "name": "validate_message_identity",
+          "calls": 1,
+          "self_seconds": 0.033429117,
+          "cumulative_seconds": 0.041295202
+        },
+        {
+          "file": "encoder.py",
+          "line": 182,
+          "name": "encode",
+          "calls": 3,
+          "self_seconds": 0.0025141620000000003,
+          "cumulative_seconds": 0.041183849
+        },
+        {
+          "file": "infer_application_execution.py",
+          "line": 134,
+          "name": "origin",
+          "calls": 2160,
+          "self_seconds": 0.006893038000000001,
+          "cumulative_seconds": 0.041172281000000005
+        },
+        {
+          "file": "infer_distributed_fields.py",
+          "line": 225,
+          "name": "query",
+          "calls": 180,
+          "self_seconds": 0.000882416,
+          "cumulative_seconds": 0.040580381000000006
+        },
+        {
+          "file": "infer_response_binding.py",
+          "line": 105,
+          "name": "bind_outputs",
+          "calls": 1,
+          "self_seconds": 0.014208267,
+          "cumulative_seconds": 0.038369305
+        }
+      ]
+    }
+  },
+  "online_metrics_unchanged": true,
+  "captures": "Original five rounds; new offline reconstruction only"
+}

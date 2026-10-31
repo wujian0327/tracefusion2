@@ -1,0 +1,267 @@
+{
+  "development_regression": true,
+  "same_two_tasks": true,
+  "all40_retained": true,
+  "no_new_framework_contract": true,
+  "receipts": [
+    {
+      "api": "ZLT-MP-1",
+      "mode": "full",
+      "requests": 6,
+      "business_equal": true,
+      "selected_task_equal": true,
+      "protocol": {
+        "calls": 0,
+        "facts": 0
+      },
+      "error": null,
+      "raw_sha256": "15f263679fa9dfcc3c077c74956f26b32daac0315dd9e1a08d19a3a15cd46bdb",
+      "source_fields": 5
+    },
+    {
+      "api": "ZLT-MP-1",
+      "mode": "selective",
+      "requests": 6,
+      "business_equal": true,
+      "selected_task_equal": true,
+      "protocol": {
+        "calls": 0,
+        "facts": 0
+      },
+      "error": null,
+      "raw_sha256": "7663a813d19473bc11a00e650ec3578bbcc85ae6fb27b16ce7f62e021ffa233b",
+      "source_fields": 5
+    },
+    {
+      "api": "ZLT-MP-1",
+      "mode": "mirrortaint",
+      "requests": 6,
+      "business_equal": true,
+      "selected_task_equal": true,
+      "protocol": {
+        "calls": 6,
+        "normal": 6,
+        "exceptional": 0,
+        "paired": true
+      },
+      "error": null,
+      "raw_sha256": "646030d29c4b95cb23226790d76def659610e3fed019512ea4a5bcb323a06a2f",
+      "source_fields": 6
+    },
+    {
+      "api": "ZLT-MP-4",
+      "mode": "full",
+      "requests": 6,
+      "business_equal": true,
+      "selected_task_equal": true,
+      "protocol": {
+        "calls": 6,
+        "facts": 6,
+        "interpreted_callers": false
+      },
+      "error": null,
+      "raw_sha256": "2f76b0f74ee19c9214fa0110baa31a87d9c330191cc3e647f3ba569a27479cfa",
+      "source_fields": 6
+    },
+    {
+      "api": "ZLT-MP-4",
+      "mode": "selective",
+      "requests": 6,
+      "business_equal": true,
+      "selected_task_equal": true,
+      "protocol": {
+        "calls": 6,
+        "facts": 6,
+        "interpreted_callers": false
+      },
+      "error": null,
+      "raw_sha256": "9b2da09195a8757c7da7e53265b7c14bbdd79da02fd75cc394a873969899200d",
+      "source_fields": 6
+    },
+    {
+      "api": "ZLT-MP-4",
+      "mode": "mirrortaint",
+      "requests": 6,
+      "business_equal": true,
+      "selected_task_equal": true,
+      "protocol": {
+        "calls": 6,
+        "normal": 6,
+        "exceptional": 0,
+        "paired": true
+      },
+      "error": null,
+      "raw_sha256": "26ca7fa615c8da5c82c460c74303be7bbdaa90eb0814177ef28302c4edf9fa79",
+      "source_fields": 6
+    }
+  ],
+  "states": {
+    "full": {
+      "unknown": 15
+    },
+    "selective": {
+      "unknown": 15
+    },
+    "mirrortaint": {
+      "known_correct": 15
+    }
+  },
+  "adequate_oracles": {
+    "full": 15,
+    "selective": 15,
+    "mirrortaint": 15
+  },
+  "guards": {
+    "ZLT-MP-1-missing-tag": true,
+    "ZLT-MP-1-missing-completion": true,
+    "ZLT-MP-1-wrong-object": true,
+    "ZLT-MP-1-ambiguous-source": true,
+    "ZLT-MP-1-problem": true,
+    "ZLT-MP-4-missing-tag": true,
+    "ZLT-MP-4-missing-completion": true,
+    "ZLT-MP-4-wrong-object": true,
+    "ZLT-MP-4-ambiguous-source": true,
+    "ZLT-MP-4-problem": true
+  },
+  "api_mode_details": [
+    {
+      "api": "ZLT-MP-1",
+      "mode": "full",
+      "targets": 6,
+      "business_exact_equal": true,
+      "target_bound": 6,
+      "source_paired": 6,
+      "oracle_adequate": 6,
+      "states": {
+        "unknown": 6
+      }
+    },
+    {
+      "api": "ZLT-MP-1",
+      "mode": "selective",
+      "targets": 6,
+      "business_exact_equal": true,
+      "target_bound": 6,
+      "source_paired": 6,
+      "oracle_adequate": 6,
+      "states": {
+        "unknown": 6
+      }
+    },
+    {
+      "api": "ZLT-MP-1",
+      "mode": "mirrortaint",
+      "targets": 6,
+      "business_exact_equal": true,
+      "target_bound": 6,
+      "source_paired": 6,
+      "oracle_adequate": 6,
+      "states": {
+        "known_correct": 6
+      }
+    },
+    {
+      "api": "ZLT-MP-4",
+      "mode": "full",
+      "targets": 9,
+      "business_exact_equal": true,
+      "target_bound": 9,
+      "source_paired": 9,
+      "oracle_adequate": 9,
+      "states": {
+        "unknown": 9
+      }
+    },
+    {
+      "api": "ZLT-MP-4",
+      "mode": "selective",
+      "targets": 9,
+      "business_exact_equal": true,
+      "target_bound": 9,
+      "source_paired": 9,
+      "oracle_adequate": 9,
+      "states": {
+        "unknown": 9
+      }
+    },
+    {
+      "api": "ZLT-MP-4",
+      "mode": "mirrortaint",
+      "targets": 9,
+      "business_exact_equal": true,
+      "target_bound": 9,
+      "source_paired": 9,
+      "oracle_adequate": 9,
+      "states": {
+        "known_correct": 9
+      }
+    }
+  ],
+  "storage": [
+    {
+      "api": "ZLT-MP-1",
+      "mode": "full",
+      "database_bytes_equal": true,
+      "sha256": "37b1c2151ada1a0d36db35e707d249a1b5340dd308afd04f671987e0e367d793"
+    },
+    {
+      "api": "ZLT-MP-1",
+      "mode": "selective",
+      "database_bytes_equal": true,
+      "sha256": "37b1c2151ada1a0d36db35e707d249a1b5340dd308afd04f671987e0e367d793"
+    },
+    {
+      "api": "ZLT-MP-1",
+      "mode": "mirrortaint",
+      "database_bytes_equal": true,
+      "sha256": "37b1c2151ada1a0d36db35e707d249a1b5340dd308afd04f671987e0e367d793"
+    },
+    {
+      "api": "ZLT-MP-4",
+      "mode": "full",
+      "database_bytes_equal": true,
+      "sha256": "e6d77f6b28c68789c4261e590f8ffc0544ac987d214a2177d4ed9bdb26315afd"
+    },
+    {
+      "api": "ZLT-MP-4",
+      "mode": "selective",
+      "database_bytes_equal": true,
+      "sha256": "e6d77f6b28c68789c4261e590f8ffc0544ac987d214a2177d4ed9bdb26315afd"
+    },
+    {
+      "api": "ZLT-MP-4",
+      "mode": "mirrortaint",
+      "database_bytes_equal": true,
+      "sha256": "e6d77f6b28c68789c4261e590f8ffc0544ac987d214a2177d4ed9bdb26315afd"
+    }
+  ],
+  "ObjectMapper_witness": [
+    {
+      "api": "ZLT-MP-1",
+      "kind": "native-library-definition",
+      "class": "com/fasterxml/jackson/databind/ObjectMapper",
+      "sha256": "46a402c06d4e579014ad56ec64ff590461215a32e404c6acfda0a0b095d996b5",
+      "loader": "org.springframework.boot.loader.LaunchedURLClassLoader@1188e820",
+      "source": "jar:file:/app.jar!/BOOT-INF/lib/jackson-databind-2.13.4.jar!/"
+    },
+    {
+      "api": "ZLT-MP-4",
+      "kind": "native-library-definition",
+      "class": "com/fasterxml/jackson/databind/ObjectMapper",
+      "sha256": "46a402c06d4e579014ad56ec64ff590461215a32e404c6acfda0a0b095d996b5",
+      "loader": "org.springframework.boot.loader.LaunchedURLClassLoader@1188e820",
+      "source": "jar:file:/app.jar!/BOOT-INF/lib/jackson-databind-2.13.4.jar!/"
+    }
+  ],
+  "TF_candidate": "ed77220a455ec66ef389b651317566b26260d3e9",
+  "TF_agent_sha256": "8ea319b9f27398fd9563a33c861c1e9be17689053f3196397cf6291f70ee6747",
+  "MT_adapter_commit": "9989d7a",
+  "MT_adapter_sha256": "7004ba2d87b687301110013f6b2369fcbbd2522e5fbb5f88517fc8655dec31d5",
+  "native_MT_sha256": "e4c679206993b45c6727a4ace1d4dcff6df0ded2b80b56b27b8c86741be63fe7",
+  "prior_failures_preserved": true,
+  "new_TF_online_deployments": 4,
+  "original_online_deployments": 2,
+  "final_MT_online_deployments": 2,
+  "TF_captures_reused_for_exporter_corrections": true,
+  "no_performance_experiment": true
+}
