@@ -107,16 +107,20 @@ def bind_outputs(graph,role):
     if not config:return
     rows=graph.rows[role];enters={r['frame']:r for r in rows if r['kind']=='enter' and r['method']==graph.plans[role]['entry']}
     returns=[r for r in rows if r['kind']=='binding-return']
+    ends_by_frame={};returns_by_message={}
+    for r in rows:
+        if r['kind']=='exit':ends_by_frame.setdefault(r['frame'],[]).append(r)
+    for r in returns:returns_by_message.setdefault(r.get('message'),[]).append(r)
     for ret in returns:
         require(ret['frame'] in enters,'Return witness does not belong to configured entry')
-        ends=[r for r in rows if r['kind']=='exit' and r['frame']==ret['frame']]
+        ends=ends_by_frame.get(ret['frame'],[])
         require(len(ends)==1 and ends[0]['result']==ret['result'],'Root return witness/result disagree')
     for key,event in graph.json:
         if key[0]!=role or event['direction']!='response' or event['phase']!='write':continue
         node=graph.nodes[key]
         if not matches(config['path'],node['path']):continue
         candidates=[]
-        for ret in returns:
+        for ret in returns_by_message.get(event['message'],[]):
             if ret.get('message')!=event['message'] or ret['seq']>=event['seq']:continue
             for f in ret['fields']:
                 if config['root_prefix']+f['path']==node['path'] and (f['owner'],f['field'],f['version'])==(node['owner'],node['field'],node['version']):

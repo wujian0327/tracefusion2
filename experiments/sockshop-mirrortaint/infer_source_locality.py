@@ -1,10 +1,19 @@
 """Validate ownership certificates without adding/changing provenance origins."""
 from query_observation_planner import require
+from collections import defaultdict
 
 def validate(plan,rows):
  cfg=plan['execution_kernel'].get('source_locality')
  if not cfg:return {}
  pins=cfg['class_sha256'];framework={}
+ # Index raw occurrences for THIS invocation only; never cache authentication.
+ families=defaultdict(list);calls_by_id=defaultdict(list);finishes_by_id=defaultdict(list);sources_by_id=defaultdict(list)
+ for row in rows:
+  families[row.get('ownership_id')].append(row)
+  kind=row['kind']
+  if kind=='collection-call-enter':calls_by_id[row['call_id']].append(row)
+  elif kind in('collection-call-exit','collection-call-throw'):finishes_by_id[row['call_id']].append(row)
+  elif kind=='binding-source':sources_by_id[row.get('source_call_id')].append(row)
  for r in rows:
   if r['kind']=='locality-framework':
    require(pins.get(r['class'])==r['class_sha256'],'Ownership runtime class differs');framework[r['class']]=r
@@ -16,8 +25,8 @@ def validate(plan,rows):
    require(r['ownership_id']in begins and r['ownership_id']not in ends,'Ownership completion absent/repeated');ends[r['ownership_id']]=r
  require(set(begins)==set(ends),'Ownership capture did not close')
  for oid,start in begins.items():
-  end=ends[oid];family=[r for r in rows if r.get('ownership_id')==oid];require(start['seq']<end['seq']and all(r['call_id']==start['call_id']and r['caller_frame']==start['caller_frame']and r['thread']==start['thread']for r in family),'Ownership caller/call binding differs')
-  calls=[r for r in rows if r['kind']=='collection-call-enter'and r['call_id']==start['call_id']];finishes=[r for r in rows if r['kind']in ('collection-call-exit','collection-call-throw')and r['call_id']==start['call_id']]
+  end=ends[oid];family=families[oid];require(start['seq']<end['seq']and all(r['call_id']==start['call_id']and r['caller_frame']==start['caller_frame']and r['thread']==start['thread']for r in family),'Ownership caller/call binding differs')
+  calls=calls_by_id[start['call_id']];finishes=finishes_by_id[start['call_id']]
   require(len(calls)==len(finishes)==1 and calls[0]['seq']<start['seq']<end['seq']<finishes[0]['seq']and calls[0]['frame']==start['caller_frame']and calls[0]['callee']==start['callee'],'Ownership source call interval differs')
   require(start['callee']in plan['response_binding']['source_calls']and end['source_callee']==start['callee'],'Ownership is not a declared source')
   if not end['valid']:continue
@@ -27,7 +36,7 @@ def validate(plan,rows):
   require(all(dec.get(k)==end.get(k)for k in ('objects','corridor','reader_configuration','properties','property_lookup_consistent','handler_uses','object_token','caller_bottom','proxy_type','cache_scope','cache_operations_empty')),'Ownership graph/configuration/corridor rebound')
   born={r['object']:r for r in births};require(len(born)==len(births),'Ownership object birth repeated')
   graph={o['owner']:o for o in dec['objects']};require(len(graph)==len(dec['objects'])and end['body']in graph,'Ownership graph missing/repeated root')
-  sources=[r for r in rows if r['kind']=='binding-source'and r.get('source_call_id')==start['call_id']]
+  sources=sources_by_id[start['call_id']]
   require(len(sources)==1 and all(f['owner']in graph for f in sources[0]['fields']),'Ownership omits actual source-field owners')
   for owner,obj in graph.items():
    require(owner in born and read['seq']<born[owner]['seq']<dec['seq']and born[owner]['type']==obj['type'],'Ownership graph allocation coverage differs')

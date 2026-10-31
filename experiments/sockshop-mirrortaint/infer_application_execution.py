@@ -66,15 +66,22 @@ def infer_application(plan,rows,worker_request=None):
     results=[];audits=[]
     all_enters={r['frame']:r for r in rows if r['kind']=='enter'}
     require(len(all_enters)==sum(r['kind']=='enter' for r in rows),'Application invocation frame ID reused')
+    by_frame=defaultdict(list);children=defaultdict(list);completions=defaultdict(list)
+    for index,row in enumerate(rows):
+        by_frame[row.get('frame')].append((index,row))
+        if row['kind']=='enter':children[row.get('parent')].append(row['frame'])
+        elif row['kind']in('exit','abort'):completions[row.get('frame')].append(row)
     roots=[r for r in rows if r['kind']=='enter' and (r['frame']==worker_request['frame'] if worker_request else r['method']==plan['entry'])]
     if worker_request:require(len(roots)==1,'Worker replay frame missing/ambiguous')
     for root in roots:
-        ends=[r for r in rows if r['kind'] in ('exit','abort') and r.get('frame')==root['frame']];require(len(ends)==1,'Application root completion differs');end=ends[0]
-        family={root['frame']}
-        changed=True
-        while changed:
-            before=len(family);family.update(k for k,r in all_enters.items() if r.get('parent') in family);changed=len(family)!=before
-        relevant=[r for r in rows if r.get('frame') in family and root['seq']<=r['seq']<=end['seq']]
+        ends=completions[root['frame']];require(len(ends)==1,'Application root completion differs');end=ends[0]
+        family=set();todo=[root['frame']]
+        while todo:
+            child=todo.pop()
+            if child not in family:family.add(child);todo.extend(children.get(child,()))
+        # Preserve capture order, including duplicates. Do not sort by seq or
+        # hide malformed ordering in a damaged capture.
+        relevant=[r for _,r in sorted((item for f in family for item in by_frame[f]),key=lambda item:item[0]) if root['seq']<=r['seq']<=end['seq']]
         if any(r['kind']=='enter' and r['method']==plan['entry'] and r['frame']!=root['frame'] for r in relevant):
             raise AnalysisLimit('entry-reentry','Nested query-entry invocation is not a separately supported root boundary')
         births={}

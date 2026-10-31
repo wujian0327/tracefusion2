@@ -51,16 +51,27 @@ def native_expected(rows,root,r,path):
  if not all(k in f for k in ('owner','field','version')):raise ValueError('Raw field instance coordinate incomplete')
  return [[source['call'],source['ordinal'],f['path'],f['owner'],f['field'],f['version']]]
 
-def tf_expected(rows,ret,r,path):
+class RawFactIndex:
+ """Capture-local raw facts only. No propagation, graph queries or predictions."""
+ def __init__(self,rows):
+  self.rows=rows;self.children={};self.sources={};self.returns={}
+  for i,s in enumerate(rows):
+   if s['kind']=='enter':self.children.setdefault(s.get('parent'),[]).append(s['frame'])
+   elif s['kind']=='binding-source':self.sources.setdefault(s.get('frame'),[]).append((i,s))
+   elif s['kind']=='binding-return':self.returns.setdefault(s.get('message'),[]).append(s)
+ def source_family(self,frame):
+  frames=set();todo=[frame]
+  while todo:
+   f=todo.pop()
+   if f not in frames:frames.add(f);todo.extend(self.children.get(f,()))
+  return [s for _,s in sorted((item for f in frames for item in self.sources.get(f,())),key=lambda item:item[0])]
+
+def tf_expected(rows,ret,r,path,raw_index=None):
  if r['kind']=='constant':return []
  if r['kind']not in ('rpc-field','repository-field'):raise ValueError('Independent logical rule unresolved')
- frames={ret['frame']}
- changed=True
- while changed:
-  changed=False
-  for s in rows:
-   if s['kind']=='enter'and s.get('parent')in frames and s.get('frame')not in frames:frames.add(s['frame']);changed=True
- sources=[s for s in rows if s['kind']=='binding-source'and s.get('frame')in frames]
+ index=raw_index if raw_index is not None else RawFactIndex(rows)
+ if index.rows is not rows:raise ValueError('Raw fact index belongs to another capture')
+ sources=index.source_family(ret['frame'])
  if r['kind']=='repository-field':sources=[s for s in sources if 'AppNamespaceRepository.findByAppIdAndName'in s.get('callee','')]
  elif r['api'].startswith('mall-'):sources=[s for s in sources if 'AuthService.getAccessToken'in s.get('callee','')]
  elif r['api']=='apollo-1':sources=[s for s in sources if 'RestTemplate.exchange'in s.get('callee','')and any(f.get('field','').startswith('com/ctrip/framework/apollo/common/dto/NamespaceDTO.')for f in s['fields'])]
