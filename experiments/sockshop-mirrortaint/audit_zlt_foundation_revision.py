@@ -50,14 +50,15 @@ def audit(home,out):
      view=out/(api+'-native-view');view.mkdir();(view/'role').symlink_to((folder/'capture').resolve(),target_is_directory=True);native=read_events(view,'role');protocol=validate_native(native)
     else:
      oracle.require_complete_raw_capture(rows);protocol=validate_observation(plan,rows);b=out/(api+'-'+mode)/'build'/q['role'];b.mkdir(parents=True);(b/'plan.json').write_bytes((home/'planning-first'/api/'000-plan.json').read_bytes());c=b.parents[1]/'capture'/q['role'];c.mkdir(parents=True);(c/'events.jsonl').symlink_to(raw_path.resolve());graph=Reconstruction(b.parents[1]/'build',b.parents[1]/'capture',[q['role']])
-   except Exception as e:error=str(e)
+   except Exception as e:error=type(e).__name__+': '+str(e)
    business_equal=all(c['http_status']==before[c['case']]['http_status']and c['response']==before[c['case']]['response']for c in cases)
-   receipts.append({'api':api,'mode':mode,'requests':len(cases),'business_equal':business_equal,'protocol':protocol,'error':error,'raw_sha256':sha(raw_path),'source_fields':sum(r['kind']in('binding-source','source')and(r.get('callee')or r.get('call'))==q['oracle']['source']for r in rows)})
+   receipts.append({'api':api,'mode':mode,'requests':len(cases),'business_equal':business_equal,'selected_task_equal':all(c['http_status']==before[c['case']]['http_status']and leaves(c)==leaves(before[c['case']])for c in cases),'protocol':protocol,'error':error,'raw_sha256':sha(raw_path),'source_fields':sum(r['kind']in('binding-source','source')and(r.get('callee')or r.get('call'))==q['oracle']['source']for r in rows)})
    for case in cases:
     for path,value in leaves(before[case['case']]):
      r={'api':api,'mode':mode,'case':case['case'],'path':path,'positive':True,'business_equal':case['response']==before[case['case']]['response']and case['http_status']==200,'target_bound':False,'source_paired':False,'oracle_adequate':False,'state':'evidence_invalid'if error else'unknown','error':error}
+     r['selected_task_equal']=case['http_status']==before[case['case']]['http_status']and leaves(case)==leaves(before[case['case']])
      try:
-      require(r['business_equal'],'Business response differs')
+      require(r['selected_task_equal'],'Selected declared task response differs')
       if mode=='mirrortaint':
        targets=[s for s in rows if s['kind']=='target'and s['context'].get('message')==case['message']];require(len(targets)==1,'Actual native target/root absent/ambiguous');target=targets[0]
        wire=[f for e in [json.loads(s)for s in(folder/'capture/instances.jsonl').read_text().splitlines()]if e['kind']=='http-json'and e.get('direction')=='response'and e.get('phase')=='write'and e.get('message')==case['message']for f in e['fields']]
@@ -97,7 +98,7 @@ def audit(home,out):
  summary={'development_regression':True,'same_two_tasks':True,'all40_retained':True,'no_new_framework_contract':True,'receipts':receipts,'states':{m:dict(collections.Counter(r['state']for r in records if r['mode']==m))for m in('full','selective','mirrortaint')},'adequate_oracles':{m:sum(r['oracle_adequate']for r in records if r['mode']==m)for m in('full','selective','mirrortaint')},'guards':guards}
  save(out/'instances.json',records);save(out/'summary.json',summary)
  with(out/'instances.csv').open('w')as f:
-  w=csv.DictWriter(f,fieldnames=['api','mode','case','path','business_equal','target_bound','source_paired','oracle_adequate','state','error','gap'],extrasaction='ignore');w.writeheader();w.writerows(records)
+  w=csv.DictWriter(f,fieldnames=['api','mode','case','path','business_equal','selected_task_equal','target_bound','source_paired','oracle_adequate','state','error','gap'],extrasaction='ignore');w.writeheader();w.writerows(records)
  print(summary)
 
 if __name__=='__main__':
