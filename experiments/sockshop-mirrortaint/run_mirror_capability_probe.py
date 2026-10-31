@@ -18,6 +18,9 @@ def read_events(capture,role):
     assert sum(r['kind']=='closed' for r in rows)==1
     problems=[r for r in rows if r['kind']=='problem']
     if problems:raise ValueError('Native export invalid: '+str(problems[:3]))
+    if any(r['kind']=='export-start'for r in rows):
+        from native_source_protocol import validate
+        validate(rows)
     from transport_context import validate_protocol
     wire=[json.loads(s) for s in (capture/role/'instances.jsonl').read_text().splitlines()]
     assert [r['seq'] for r in wire]==list(range(1,len(wire)+1))

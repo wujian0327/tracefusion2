@@ -29,6 +29,7 @@ public final class MirrorCapabilityAgent implements ClassFileTransformer, Opcode
         entry=c.get("entry").getAsString(); prefix=c.get("prefix").getAsString();
         for(JsonElement s:c.getAsJsonArray("source_calls"))sources.add(s.getAsString());
         log=Paths.get(System.getProperty("capability.events"));
+        Map<String,Object> version=new LinkedHashMap<String,Object>();version.put("protocol",2);emit("export-start",version);
         inst.addTransformer(new MirrorCapabilityAgent());
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable(){public void run(){emit("closed",new LinkedHashMap<String,Object>());}}));
     }
@@ -167,7 +168,7 @@ public final class MirrorCapabilityAgent implements ClassFileTransformer, Opcode
             int ordinal=counter.incrementAndGet();String label="capability/"+ROOT.get()+"/"+ordinal;
             // Native public API creates source labels. No expected origin list is consulted.
             TaintTagger.tagDbQueryResult("capability",label,value);
-            Map<String,Object> r=new LinkedHashMap<String,Object>();r.put("call",call);r.put("ordinal",ordinal);r.put("label",label);SourceToken token=SOURCE_CALLS.get().peek();if(token!=null&&token.callee.equals(call)){r.put("source_call_id",token.id);r.put("caller_method",token.caller);r.put("instrumented_instruction_index",token.pc);}
+            Map<String,Object> r=new LinkedHashMap<String,Object>();r.put("call",call);r.put("ordinal",ordinal);r.put("label",label);SourceToken token=SOURCE_CALLS.get().peek();if(token!=null&&token.callee.equals(call)){r.put("source_call_id",token.id);r.put("caller_method",token.caller);r.put("instrumented_instruction_index",token.pc);r.put("result_identity",identity(value));}
             ATOMIC_SOURCE.set(label);try{r.put("fields",snapshot(value));}finally{ATOMIC_SOURCE.remove();}emit("source",r);
         }catch(Throwable t){problem(t);}finally{ATOMIC_SOURCE.remove();if(borrowed)ROOT.remove();}
     }
