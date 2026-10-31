@@ -45,3 +45,5 @@
 共享优化提交`278896a`与`2609d70`；成本使用独立`indexed-repository-v2`快照，仅六个文件相对旧源码不同（其中一份新增实验worker）。算法修订和实验源码另锁哈希。
 
 工件：`artifacts/offline-zlt-revision-20261031/`。原3464份成本及412份ZLT工件哈希复核不变。函数统计、原始pstats、两次正式复算、严格保护、源码快照及失败尝试均保留。小型[逐轮CSV](offline-index-rounds-20261031.csv)和[结果快照](offline-index-results-20261031.json)随Git；完整数据与备份以本轮清单为准。push由用户完成。
+
+备份已完成：[本轮清单](offline-zlt-backup-receipt-20261031.json)。新增完整工件包69,120,001字节，SHA256 `106202503fb75f582c3a8dbbc1919131a8f80cb3164183aca0a3ce7e74b063e9`；6283份真实文件在归档前后哈希一致。原完整捕获、六个镜像与JDK沿用旧备份，三个旧包的SHA256和gzip CRC本轮均重新验证；恢复时两批备份共同使用。

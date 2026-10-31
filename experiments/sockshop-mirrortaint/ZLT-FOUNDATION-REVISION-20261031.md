@@ -46,3 +46,5 @@ MT只增加有限Class导出元数据（名称、primitive/array、component、l
 迁移修改按层分开：I2L为基础语义；独立source observation为采集/完整性协议；原始事实索引为共享离线优化；Class表示、调用导出、启动和私有JSON打包为MT适配器；评分/驱动修正单独锁哈希。无新JDK登记、公共框架契约或业务字段传播规则。
 
 工件：`artifacts/offline-zlt-revision-20261031/`。正式TF/original在`final-zlt-03`，最终MT在`final-zlt-MT-isolated-01`；最终评分为`zlt-audit-B22-01`。小型[逐实例CSV](zlt-foundation-paired-20261031.csv)和[结果快照](zlt-foundation-results-20261031.json)随Git，包含各阶段与二进制哈希。TF源码候选及702文件锁定记录保留；后续仅MT适配器/打包及独立评分有单列变更，不把它们混称新TF部署。没有性能实验或push。完整数据与依赖备份见本轮备份清单。
+
+备份已完成：[本轮清单](offline-zlt-backup-receipt-20261031.json)。新增完整工件包69,120,001字节，SHA256 `106202503fb75f582c3a8dbbc1919131a8f80cb3164183aca0a3ce7e74b063e9`；6283份真实文件在归档前后哈希一致。原完整捕获、六个镜像与JDK沿用旧备份，三个旧包的SHA256和gzip CRC本轮均重新验证；恢复时两批备份共同使用。

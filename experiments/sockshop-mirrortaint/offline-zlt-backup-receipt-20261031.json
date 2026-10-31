@@ -37,5 +37,12 @@
   "new_additional_inputs": 0,
   "native_MT_unchanged": true,
   "all_new_files_unchanged_during_backup": true,
-  "scope": "New raw captures, all failed/intermediate audits, profiles, full offline reruns and source snapshots; original complete captures, Docker images and JDK retained in verified prior backup. Restore old digest-indexed inputs together with this archive."
+  "scope": "New raw captures, all failed/intermediate audits, profiles, full offline reruns and source snapshots; original complete captures, Docker images and JDK retained in verified prior backup. Restore old digest-indexed inputs together with this archive.",
+  "actual_image_ids": [
+    "sha256:2481edb3016c3749e400daea78a7d2a9d288286105bac729d63adfef95e8534d",
+    "sha256:5107333e08a87b836d48ff7528b1e84b9c86781cc9f1748bbc1b8c42a870d933",
+    "sha256:938169b118c773c6721bbf701c3a64be9e4f7c0b4c5315bb328466e1c49274fa",
+    "sha256:efeab1ce0ab9219386bc7138b8389149a9b7849e868632ca09340e4039a58982"
+  ],
+  "all_actual_images_in_verified_prior_archive": true
 }
