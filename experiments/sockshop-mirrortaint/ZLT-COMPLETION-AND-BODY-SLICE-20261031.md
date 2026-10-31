@@ -69,3 +69,5 @@ Mall `/data/expiresIn` 开发试点 full/selective 各 5/5 正来源匹配。五
 主目录为 `artifacts/zlt-completion-slice-20261031/`，最终新部署在 `final-candidate-01/`；最终审计为 `audit-final-zlt-02/`、`audit-final-mall-01/`、`audit-final-historical-01/`。Agent SHA256：`83b7df309642e0c17b25629c16b22d61681eec886fc752a8146aacd9ee2789d8`。冻结108项核心源码，最终SQL／局部性／顺序回调／收缩控制与业务Agent的891个class字节逐项相同，JAR打包字节不强称相同。小型[验收快照](zlt-body-capability-results-20261031.json)及[ZLT逐实例表](zlt-completion-paired-20261031.csv)随Git保存。
 
 两任务成本协议及40次正式新部署单独位于 `artifacts/zlt-body-cost-20261031/`，结果见[同版本成本报告](ZLT-BODY-COMMON-COST-20261031.md)。没有新增应用、Gson 或 sink。完整工件与镜像另行备份；不 push。
+
+本批完整工件和21个实际镜像已备份至`artifacts/backups/zlt-body-completion-20261031/`；工件约3.48GB、镜像约2.08GB，另含核对过的JDK包。三份压缩包均通过gzip CRC，SHA256见[备份回执](zlt-body-backup-receipt-20261031.json)。原始失败和捕获未删除，其他历史批次仍保留原目录及既有备份。

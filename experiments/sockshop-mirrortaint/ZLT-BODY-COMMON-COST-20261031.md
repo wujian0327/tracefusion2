@@ -169,3 +169,5 @@ Mall业务组为admin/auth/portal，整部署另计MySQL、Redis、Mongo、Rabbi
 宿主机仍有四个非实验容器，未操作，不宣称独占物理机。CPU、p95和离线时间的结论以五轮配对范围为限。
 
 Orders的整批full/selective字节差异集中在未配对／共享记录，可配对测量字节仅减少约0.21%。未配对部分可能包含准备、启动及无法归属的稳态内部观测，不能全部解释成准备成本，也不能把整批57.74%直接称为稳态查询观测收益。
+
+本批完整工件和21个实际镜像已备份至`artifacts/backups/zlt-body-completion-20261031/`；工件约3.48GB、镜像约2.08GB，另含核对过的JDK包。三份压缩包均通过gzip CRC，SHA256见[备份回执](zlt-body-backup-receipt-20261031.json)。原始失败和捕获未删除，其他历史批次仍保留原目录及既有备份。

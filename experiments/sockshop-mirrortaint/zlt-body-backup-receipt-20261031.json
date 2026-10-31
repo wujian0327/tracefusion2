@@ -1,0 +1,53 @@
+{
+  "algorithm": "7e4ad0b900a64871259a5fac008968128cc5ec28",
+  "repository_commit": "7a6a02cc1549be1aee0d984d78cd305dcc3b9f00",
+  "archives": {
+    "complete-current-batch.tar.gz": {
+      "bytes": 3481450803,
+      "sha256": "1c64fb9c75ec44680915a856f9e85f53a28bcd6da889abb2c0869995d73de2df",
+      "gzip_crc_verified": true
+    },
+    "docker-images.tar.gz": {
+      "bytes": 2077418293,
+      "sha256": "2f1baaaf8f2e866e90c7bffd60c88483b09b9a91e34e8006a571f4919732f535",
+      "gzip_crc_verified": true
+    },
+    "jdk8-runtime.tar.gz": {
+      "bytes": 63963206,
+      "sha256": "b2b03f1ef7c40f7abc64e80ea26b4cb2e3b752ee0655f5c04251508102b15e10",
+      "gzip_crc_verified": true
+    }
+  },
+  "actual_image_ids": [
+    "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+    "sha256:113ae8a6646ae04145f869ff71cf2f885762ce79832ea1f923e34ee29bf7efda",
+    "sha256:196601f91030425db810fa57104b041e414b9b963923ad574e74700c3ea8213e",
+    "sha256:2481edb3016c3749e400daea78a7d2a9d288286105bac729d63adfef95e8534d",
+    "sha256:4f2c23055dcdcd18d14df338e305effa4679620588686e1a3bdcb1684189125f",
+    "sha256:4fc533e8180ac3805582d3b2a9f8008d54d346211894d6131d92a82d17ee5458",
+    "sha256:5107333e08a87b836d48ff7528b1e84b9c86781cc9f1748bbc1b8c42a870d933",
+    "sha256:7478e572c34ea56b2e8f1162def78243612ccbe4450223c702115fb46be07f01",
+    "sha256:76f0de7a12acaa2bdbda36d1b7ddd0ec42204e9c0f4e8c59c329f07336cfa2dc",
+    "sha256:7cf806ab696534b81de5e0b05599a8c3071110ae9b69991589e09dd5168c7f9b",
+    "sha256:8275c5b9181b2311feccd32f2efe865e9207a52a19e0f69939e5576c6f76dc1c",
+    "sha256:8cdcbee37f622c52f2b8a572577c4aa94daed06ffe8c3292c93141ed50bef248",
+    "sha256:91aac24c0349fef416bd83aef3968028d9b79cd61b8dba630081f76bb35bba1c",
+    "sha256:938169b118c773c6721bbf701c3a64be9e4f7c0b4c5315bb328466e1c49274fa",
+    "sha256:ab8af7050996d310b5a7a9b7eb0fc9bad9d6add5dc13130146f857fbe122ce8c",
+    "sha256:b54402ef78a55ccb3dfbb719669c6740f682621f04cee62ae1f6359fb3b13ee4",
+    "sha256:ba24e52ab4ac674b0d46a14c1193e30e55f8bb751bc7af6bf65ff7472995bb6b",
+    "sha256:c004737361182d3cd7f38e6d9ce4a44f2a349b8dc996834e2cba0defcd0cb522",
+    "sha256:dbd58ca16d23330a501071afd94414b4eca73e3d0f64cff9ccdceb464d807052",
+    "sha256:efeab1ce0ab9219386bc7138b8389149a9b7849e868632ca09340e4039a58982",
+    "sha256:f76f959b2a4947330df7b5878e81dc268f19f3fa4cef9d1ac8a992d2776eab73"
+  ],
+  "reference_files": 863,
+  "reused_original_MT_runs": [
+    "artifacts/offline-zlt-revision-20261031/final-zlt-03/runs/ZLT-MP-1/original",
+    "artifacts/offline-zlt-revision-20261031/final-zlt-MT-isolated-01/runs/ZLT-MP-1/mirrortaint",
+    "artifacts/offline-zlt-revision-20261031/final-zlt-03/runs/ZLT-MP-4/original",
+    "artifacts/offline-zlt-revision-20261031/final-zlt-MT-isolated-01/runs/ZLT-MP-4/mirrortaint"
+  ],
+  "scope": "Complete NEW batch, exact mounted artifact files, reused ZLT original/MT runs and permanent strict locality counterexamples. Prior unrelated historical batches remain separately preserved/backed up; no deletion or overwrite.",
+  "restore": "Absolute experiment links can be restored under the original workspace or remapped using reference-input-index.json. No arbitrary private home or credential trees copied."
+}
