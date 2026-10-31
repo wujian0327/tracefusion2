@@ -9,8 +9,8 @@ from run_query_planner import JARS
 import isolate_agent_jackson as isolation
 
 
-def build(out,base):
-    prior=ROOT/'artifacts/baseline-capability-20261020/mirror-build-09'
+def build(out,base,prior=None):
+    prior=Path(prior) if prior is not None else ROOT/'artifacts/baseline-capability-20261020/mirror-build-09'
     out.mkdir(parents=True,exist_ok=False)
     shutil.copytree(prior/'adapter',out/'adapter')
     original=load(prior/'build.json');native=Path(original['native_jar']);assert sha(native)==original['native_sha256']
@@ -45,4 +45,4 @@ def build(out,base):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--base',type=Path,required=True);a=p.parse_args();build(a.out.resolve(),a.base.resolve())
+    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--base',type=Path,required=True);p.add_argument('--prior',type=Path,help='Unisolated new exporter build; default preserves historical B0 build');a=p.parse_args();build(a.out.resolve(),a.base.resolve(),a.prior.resolve()if a.prior else None)

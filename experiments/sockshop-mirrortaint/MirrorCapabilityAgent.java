@@ -93,7 +93,7 @@ public final class MirrorCapabilityAgent implements ClassFileTransformer, Opcode
     }
     static synchronized void emit(String kind,Map<String,Object> row){
         try{row.put("kind",kind);row.put("seq",++seq);row.put("thread",Thread.currentThread().getId());row.put("root",ROOT.get());row.put("native_available",TaintHeap.available());
-            row.put("context","closed".equals(kind)?Collections.emptyMap():MirrorCapabilityTransport.currentContext());
+            row.put("context",("closed".equals(kind)||"export-start".equals(kind))?Collections.emptyMap():MirrorCapabilityTransport.currentContext());
             Files.write(log,(new GsonBuilder().serializeNulls().create().toJson(row)+"\n").getBytes(StandardCharsets.UTF_8),StandardOpenOption.CREATE,StandardOpenOption.APPEND);
         }catch(Throwable t){System.err.println("MT_CAPABILITY_FATAL "+t);}
     }
