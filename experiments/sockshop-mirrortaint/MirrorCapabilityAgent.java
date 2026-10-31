@@ -19,7 +19,9 @@ public final class MirrorCapabilityAgent implements ClassFileTransformer, Opcode
     static final ThreadLocal<String> ATOMIC_SOURCE = new ThreadLocal<String>();
     static final java.util.concurrent.ConcurrentHashMap<String,String> REQUEST_ROOTS=new java.util.concurrent.ConcurrentHashMap<String,String>();
     static final java.util.concurrent.ConcurrentHashMap<String,java.util.concurrent.atomic.AtomicInteger> COUNTS=new java.util.concurrent.ConcurrentHashMap<String,java.util.concurrent.atomic.AtomicInteger>();
-    static long seq;
+    static long seq, sourceIds;
+    static final ThreadLocal<Deque<SourceToken>> SOURCE_CALLS=ThreadLocal.withInitial(ArrayDeque::new);
+    static class SourceToken {long id;String caller,callee;int pc;boolean closed;}
     static Path log;
     public static void premain(String arg, Instrumentation inst) throws Exception {
         if("transport".equals(arg)){MirrorCapabilityTransport.premain(arg,inst);return;}
@@ -74,11 +76,18 @@ public final class MirrorCapabilityAgent implements ClassFileTransformer, Opcode
                     }
                     if(!sources.contains(key))continue;
                     Type r=Type.getReturnType(i.desc);if(r.getSort()!=Type.OBJECT&&r.getSort()!=Type.ARRAY)throw new IllegalStateException("non-reference source "+key);
-                    InsnList h=new InsnList();h.add(new InsnNode(DUP));pushString(h,key);h.add(new MethodInsnNode(INVOKESTATIC,"MirrorCapabilityAgent","source","(Ljava/lang/Object;Ljava/lang/String;)V",false));m.instructions.insert(n,h);changed=true;
+                    int pc=0;for(AbstractInsnNode x:original){if(x==n)break;if(x.getOpcode()>=0)pc++;}
+                    Type[] types=Type.getArgumentTypes(i.desc);int[] slots=new int[types.length];InsnList before=new InsnList(),after=new InsnList();
+                    for(int j=types.length-1;j>=0;j--){slots[j]=m.maxLocals;m.maxLocals+=types[j].getSize();before.add(new VarInsnNode(types[j].getOpcode(ISTORE),slots[j]));}
+                    int receiver=-1;if(i.getOpcode()!=INVOKESTATIC){receiver=m.maxLocals++;before.add(new VarInsnNode(ASTORE,receiver));}
+                    pushString(before,owner+"."+m.name+m.desc);before.add(new LdcInsnNode(pc));pushString(before,key);before.add(receiver<0?new InsnNode(ACONST_NULL):new VarInsnNode(ALOAD,receiver));before.add(new LdcInsnNode(types.length));before.add(new TypeInsnNode(ANEWARRAY,"java/lang/Object"));
+                    for(int j=0;j<types.length;j++){before.add(new InsnNode(DUP));before.add(new LdcInsnNode(j));before.add(new VarInsnNode(types[j].getOpcode(ILOAD),slots[j]));box(before,types[j]);before.add(new InsnNode(AASTORE));}
+                    before.add(new MethodInsnNode(INVOKESTATIC,"MirrorCapabilityAgent","sourceBegin","(Ljava/lang/String;ILjava/lang/String;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;",false));int token=m.maxLocals++;before.add(new VarInsnNode(ASTORE,token));if(receiver>=0)before.add(new VarInsnNode(ALOAD,receiver));for(int j=0;j<types.length;j++)before.add(new VarInsnNode(types[j].getOpcode(ILOAD),slots[j]));
+                    LabelNode start=new LabelNode(),end=new LabelNode(),handler=new LabelNode(),done=new LabelNode();before.add(start);after.add(end);int result=m.maxLocals++;after.add(new VarInsnNode(ASTORE,result));after.add(new VarInsnNode(ALOAD,result));pushString(after,key);after.add(new MethodInsnNode(INVOKESTATIC,"MirrorCapabilityAgent","source","(Ljava/lang/Object;Ljava/lang/String;)V",false));after.add(new VarInsnNode(ALOAD,token));after.add(new VarInsnNode(ALOAD,result));after.add(new InsnNode(ACONST_NULL));after.add(new MethodInsnNode(INVOKESTATIC,"MirrorCapabilityAgent","sourceEnd","(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V",false));after.add(new VarInsnNode(ALOAD,result));after.add(new JumpInsnNode(GOTO,done));after.add(handler);int error=m.maxLocals++;after.add(new VarInsnNode(ASTORE,error));after.add(new VarInsnNode(ALOAD,token));after.add(new InsnNode(ACONST_NULL));after.add(new VarInsnNode(ALOAD,error));after.add(new MethodInsnNode(INVOKESTATIC,"MirrorCapabilityAgent","sourceEnd","(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V",false));after.add(new VarInsnNode(ALOAD,error));after.add(new InsnNode(ATHROW));after.add(done);m.tryCatchBlocks.add(0,new TryCatchBlockNode(start,end,handler,"java/lang/Throwable"));m.instructions.insertBefore(n,before);m.instructions.insert(n,after);changed=true;
                 }
             }
             if(!changed)return null;
-            ClassWriter w=new ClassWriter(ClassWriter.COMPUTE_MAXS);c.accept(w);return w.toByteArray();
+            ClassWriter w=new ClassWriter(ClassWriter.COMPUTE_MAXS|ClassWriter.COMPUTE_FRAMES){protected String getCommonSuperClass(String a,String b){try{Class<?> x=Class.forName(a.replace('/','.'),false,loader),y=Class.forName(b.replace('/','.'),false,loader);if(x.isAssignableFrom(y))return a;if(y.isAssignableFrom(x))return b;if(x.isInterface()||y.isInterface())return "java/lang/Object";do{x=x.getSuperclass();}while(!x.isAssignableFrom(y));return x.getName().replace('.','/');}catch(ClassNotFoundException e){throw new IllegalStateException("Cannot verify source-call handler frame types",e);}}};c.accept(w);return w.toByteArray();
         }catch(Throwable t){Map<String,Object> e=new LinkedHashMap<String,Object>();e.put("class",owner);e.put("error",t.toString());emit("problem",e);return null;}
     }
     static synchronized void emit(String kind,Map<String,Object> row){
@@ -93,6 +102,14 @@ public final class MirrorCapabilityAgent implements ClassFileTransformer, Opcode
     static Object jsonValue(Object x){if(x==null||x instanceof Number||x instanceof Boolean||x instanceof String)return x;if(x instanceof Date)return ((Date)x).getTime();return String.valueOf(x);}
     static void walk(Object value,Object parent,Field field,String path,List<Object> result,IdentityHashMap<Object,Boolean> active,int depth)throws Exception{
         if(depth>18||result.size()>20000)throw new IllegalStateException("snapshot bound");
+        if(value instanceof Class){
+            Class<?> type=(Class<?>)value;Map<String,Object> f=new LinkedHashMap<String,Object>();
+            f.put("path",path);f.put("metadata_only",true);f.put("tag_present",false);f.put("native_ids",Collections.emptyList());
+            Map<String,Object> metadata=new LinkedHashMap<String,Object>();metadata.put("binary_name",type.getName());metadata.put("primitive",type.isPrimitive());metadata.put("array",type.isArray());metadata.put("component_name",type.isArray()?type.getComponentType().getName():null);
+            ClassLoader loader=type.getClassLoader();metadata.put("loader_identity",loader==null?"bootstrap":Integer.toHexString(System.identityHashCode(loader)));f.put("class_metadata",metadata);
+            if(field!=null)f.putAll(MirrorCapabilityTransport.fieldCoordinate(parent,field.getDeclaringClass().getName().replace('.','/')+"."+field.getName()));
+            result.add(f);return;
+        }
         if(leaf(value)){
             Map<String,Object> f=new LinkedHashMap<String,Object>();f.put("path",path);f.put("value",jsonValue(value));
             if(value instanceof UUID&&ATOMIC_SOURCE.get()!=null){
@@ -135,6 +152,13 @@ public final class MirrorCapabilityAgent implements ClassFileTransformer, Opcode
         }catch(Throwable t){problem(t);}
     }
     static void problem(Throwable t){Map<String,Object> r=new LinkedHashMap<String,Object>();r.put("error",t.toString());emit("problem",r);}
+    static String identity(Object value){synchronized(MirrorCapabilityTransport.Evidence.class){return MirrorCapabilityTransport.Evidence.id(value);}}
+    public static Object sourceBegin(String caller,int pc,String callee,Object receiver,Object[] args){
+        try{if(ROOT.get()==null)return null;SourceToken token=new SourceToken();synchronized(MirrorCapabilityAgent.class){token.id=++sourceIds;}token.caller=caller;token.pc=pc;token.callee=callee;SOURCE_CALLS.get().push(token);Map<String,Object> r=new LinkedHashMap<String,Object>();r.put("source_call_id",token.id);r.put("caller_method",caller);r.put("instrumented_instruction_index",pc);r.put("callee",callee);r.put("receiver_identity",receiver==null?null:identity(receiver));List<Object> fields=new ArrayList<Object>();for(Object a:args)fields.add(snapshot(a));r.put("arguments",fields);emit("source-call-enter",r);return token;}catch(Throwable t){problem(t);return null;}
+    }
+    public static void sourceEnd(Object handle,Object value,Throwable error){
+        try{if(!(handle instanceof SourceToken))return;SourceToken token=(SourceToken)handle;if(token.closed)return;if(SOURCE_CALLS.get().peek()!=token)throw new IllegalStateException("Source completion order differs");Map<String,Object> r=new LinkedHashMap<String,Object>();r.put("source_call_id",token.id);r.put("caller_method",token.caller);r.put("instrumented_instruction_index",token.pc);r.put("callee",token.callee);r.put("exception_identity",error==null?null:identity(error));r.put("result_identity",value==null?null:identity(value));emit(error==null?"source-call-exit":"source-call-throw",r);token.closed=true;SOURCE_CALLS.get().pop();}catch(Throwable t){problem(t);}
+    }
     public static void source(Object value,String call){
         boolean borrowed=false;
         try{
@@ -143,7 +167,7 @@ public final class MirrorCapabilityAgent implements ClassFileTransformer, Opcode
             int ordinal=counter.incrementAndGet();String label="capability/"+ROOT.get()+"/"+ordinal;
             // Native public API creates source labels. No expected origin list is consulted.
             TaintTagger.tagDbQueryResult("capability",label,value);
-            Map<String,Object> r=new LinkedHashMap<String,Object>();r.put("call",call);r.put("ordinal",ordinal);r.put("label",label);
+            Map<String,Object> r=new LinkedHashMap<String,Object>();r.put("call",call);r.put("ordinal",ordinal);r.put("label",label);SourceToken token=SOURCE_CALLS.get().peek();if(token!=null&&token.callee.equals(call)){r.put("source_call_id",token.id);r.put("caller_method",token.caller);r.put("instrumented_instruction_index",token.pc);}
             ATOMIC_SOURCE.set(label);try{r.put("fields",snapshot(value));}finally{ATOMIC_SOURCE.remove();}emit("source",r);
         }catch(Throwable t){problem(t);}finally{ATOMIC_SOURCE.remove();if(borrowed)ROOT.remove();}
     }
