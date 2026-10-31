@@ -3,6 +3,7 @@ from query_observation_planner import require
 
 
 def validate(rows):
+    require(not any(r['kind']=='problem'for r in rows),'Failed native source export')
     headers=[r for r in rows if r['kind']=='export-start']
     require(len(headers)==1 and headers[0].get('protocol')==2,'B2 export protocol missing/ambiguous')
     calls={};ends={};facts={};pending={}
