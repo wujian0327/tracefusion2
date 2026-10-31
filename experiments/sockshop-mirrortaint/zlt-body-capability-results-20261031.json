@@ -1,0 +1,162 @@
+{
+  "passed": true,
+  "algorithm": "7e4ad0b900a64871259a5fac008968128cc5ec28",
+  "agent_sha256": "83b7df309642e0c17b25629c16b22d61681eec886fc752a8146aacd9ee2789d8",
+  "ZLT": {
+    "full": {
+      "known_correct": 15
+    },
+    "selective": {
+      "known_correct": 15
+    },
+    "mirrortaint": {
+      "known_correct": 15
+    }
+  },
+  "Mall": {
+    "full": {
+      "states": {
+        "known_correct": 98,
+        "unknown": 5
+      },
+      "positive_correct": 62,
+      "known_empty_correct": 36,
+      "MT_correct_preserved": 88,
+      "MT_positive_preserved": 62
+    },
+    "selective": {
+      "states": {
+        "known_correct": 98,
+        "unknown": 5
+      },
+      "positive_correct": 62,
+      "known_empty_correct": 36,
+      "MT_correct_preserved": 88,
+      "MT_positive_preserved": 62
+    }
+  },
+  "Account": {
+    "full": {
+      "targets": 40,
+      "known_correct": 40,
+      "known_wrong": 0,
+      "unknown": 0,
+      "known_positive": 4,
+      "known_empty": 36,
+      "historic_MT_correct_present": 36,
+      "historic_MT_correct_preserved": 36,
+      "TP": 4,
+      "FP": 0,
+      "FN": 0
+    },
+    "selective": {
+      "targets": 40,
+      "known_correct": 40,
+      "known_wrong": 0,
+      "unknown": 0,
+      "known_positive": 4,
+      "known_empty": 36,
+      "historic_MT_correct_present": 36,
+      "historic_MT_correct_preserved": 36,
+      "TP": 4,
+      "FP": 0,
+      "FN": 0
+    }
+  },
+  "historical62": {
+    "full": {
+      "expected_targets": 431,
+      "actual_targets": 431,
+      "states": {
+        "known_correct": 428,
+        "unknown": 3
+      },
+      "known_answer_exact_rate": 1.0,
+      "answerability": 0.9930394431554525,
+      "baseline_correct_preserved": 368,
+      "baseline_correct_required": 368,
+      "baseline_nonempty_correct_preserved": 337,
+      "baseline_nonempty_correct_required": 337,
+      "old_tf_correct_preserved": 213,
+      "old_tf_correct_required": 213,
+      "union_preserved": 382,
+      "union_required": 382,
+      "union_losses": [],
+      "missing_targets": [],
+      "tp": 397,
+      "fp": 0,
+      "fn_including_unknown": 3,
+      "all_passed": true
+    },
+    "selective": {
+      "expected_targets": 431,
+      "actual_targets": 431,
+      "states": {
+        "known_correct": 428,
+        "unknown": 3
+      },
+      "known_answer_exact_rate": 1.0,
+      "answerability": 0.9930394431554525,
+      "baseline_correct_preserved": 368,
+      "baseline_correct_required": 368,
+      "baseline_nonempty_correct_preserved": 337,
+      "baseline_nonempty_correct_required": 337,
+      "old_tf_correct_preserved": 213,
+      "old_tf_correct_required": 213,
+      "union_preserved": 382,
+      "union_required": 382,
+      "union_losses": [],
+      "missing_targets": [],
+      "tp": 397,
+      "fp": 0,
+      "fn_including_unknown": 3,
+      "all_passed": true
+    }
+  },
+  "fields29": {
+    "full": {
+      "query_families": 29,
+      "targets": 244,
+      "states": {
+        "known_correct": 232,
+        "unknown": 12
+      },
+      "oracle_unavailable": 12,
+      "N/A_requests": 41,
+      "requests": 190
+    },
+    "selective": {
+      "query_families": 29,
+      "targets": 244,
+      "states": {
+        "known_correct": 232,
+        "unknown": 12
+      },
+      "oracle_unavailable": 12,
+      "N/A_requests": 41,
+      "requests": 190
+    }
+  },
+  "write15": {
+    "full": {
+      "targets": 96,
+      "states": {
+        "known_correct": 96
+      }
+    },
+    "selective": {
+      "targets": 96,
+      "states": {
+        "known_correct": 96
+      }
+    }
+  },
+  "all_prior_states_and_logical_signatures_preserved": true,
+  "separate_cohorts_not_overall_accuracy": true,
+  "audits": {
+    "artifacts/zlt-completion-slice-20261031/audit-final-historical-01/summary.json": "97609c17e7a3ac5d4f0c788f9679025619920d4cb476dd0d864835d2d1e492ac",
+    "artifacts/zlt-completion-slice-20261031/audit-final-mall-01/summary.json": "9233d6a3244c6d1b93a3750b6c1d2c0db6cd6f7f1d73a2ef22a174b7d22e5611",
+    "artifacts/zlt-completion-slice-20261031/audit-final-zlt-02/summary.json": "22c97f26c2977544d44ca873560fcbd0c247410469d97b2881fdfeeac9e5fed0",
+    "artifacts/zlt-completion-slice-20261031/final-control-class-equivalence.json": "84c7a027afd81b78b8a59c3668e078954c16ae7c76fff6c8e945cfa32752ee36"
+  }
+}

@@ -152,6 +152,7 @@ def offline_worker(home,trial,out,task,mode):
     report=mt.evaluate(trial,home/'orders-build','mirrortaint'if mode=='mirrortaint'else'tracefusion',result_out=out)
     s=load(out/'offline.json');assert report['summary']['queries']==report['summary']['exact']and not report['summary']['unknown']
     phases=s['phases_seconds'];save(out/'summary.json',{'targets':report['summary']['queries'],'correct':report['summary']['exact'],
+        'positive':sum(bool(q['expected_source_keys'])for q in report['queries']),
         'core_seconds':phases['graph_reconstruction']+phases['query_or_native_origin_restore'],'phases_seconds':phases,
         'VmHWM_KiB':s['peak_rss_bytes']/1024})
 
@@ -169,12 +170,14 @@ def trial(home,name,task,mode,warm,measure,body_off=False):
     verify()
     if task=='mall':
         runner=install_mall()
+        old_spec=runner.spec
         if body_off:
-            old=runner.spec
             def spec(out,policy):
-                cfg=old(out,policy);cfg['services']['admin']['command'].insert(1,'-Dservice.body.observation=false');return cfg
+                cfg=old_spec(out,policy);cfg['services']['admin']['command'].insert(1,'-Dservice.body.observation=false');return cfg
             runner.spec=spec
-        result=runner.trial(home,name,mode,warm,measure);assert result['state']=='captured'and result['requests']==result['business_passed']and result['cleanup_returncode']==0
+        try:result=runner.trial(home,name,mode,warm,measure)
+        finally:runner.spec=old_spec
+        assert result['state']=='captured'and result['requests']==result['business_passed']and result['cleanup_returncode']==0
         if mode!='original':fresh(home,home/name,task,mode)
     else:
         cost,_=install_orders(home)
@@ -191,13 +194,32 @@ def calibrate(home):
     for mode in('full','selective','mirrortaint'):
         args=argparse.Namespace(out=home/('cal-orders-'+mode),build=home/'orders-build',bundle=home/'orders-mt-adapter',
             correctness=ROOT/'artifacts/desktop-portable-acceptance',mode='mirrortaint'if mode=='mirrortaint'else'tracefusion',observation_policy=mode if mode!='mirrortaint'else'selective')
-        runner.run(args);assert load(args.out/'calibration.json')['passed']
-    trial(home,'cal-orders-original','orders','original',4,8)
+        if (args.out/'calibration.json').exists():assert load(args.out/'calibration.json')['passed']
+        else:runner.run(args)
+        assert load(args.out/'calibration.json')['passed']
+    import run_sockshop_cost as cost
+    class BusinessOnlySampler:
+        """No resource cost measurements in short correctness calibration."""
+        def __init__(self,containers,interval,path,**kwargs):self.path=path
+        def __enter__(self):
+            save(self.path.parent/'resource-calibration-scope.json',{'resource_sampling':False,'scope':'Business/source/target correctness only; incidental request timestamps not performance results'})
+            return self
+        def __exit__(self,*args):pass
+        def summary(self,*args):return {}
+    original_sampler=cost.Sampler;cost.Sampler=BusinessOnlySampler
+    try:
+        prior=home/'cal-orders-original/sockshop/run.json'
+        if prior.exists():
+            r=load(prior);assert r['status']=='business-passed'and len(r['cases'])==24 and all(c['business_passed']for c in r['cases'])
+            save(prior.parent.parent/'business-calibration-receipt.json',{'business_requests':24,'all_passed':True,'raw_run_sha256':sha(prior),
+                'sampling_failure_preserved':True,'note':'Existing requests completed before the short resource-window error. Accept business facts only, do not certify missing resource measurements or overwrite failure.'})
+        else:trial(home,'cal-orders-original','orders','original',4,8)
     # Mall original/TF/MT use identical input, source return boundary and wire
     # target; scoring always derives physical coordinates in that same JVM.
-    for mode in('original','full','selective','mirrortaint'):
-        trial(home,'cal-mall-'+mode,'mall',mode,4,8)
-    trial(home,'cal-mall-selective-without-body-cut','mall','selective',4,8,body_off=True)
+        for mode in('original','full','selective','mirrortaint'):
+            trial(home,'cal-mall-'+mode,'mall',mode,4,8)
+        trial(home,'cal-mall-selective-without-body-cut','mall','selective',4,8,body_off=True)
+    finally:cost.Sampler=original_sampler
     save(home/'calibration-business-and-source.json',{'passed':True,'Orders':'24-task original common calibration per instrumented arm including parallel trace/span protection',
         'Mall':'24 requests per arm; source coordinates and target bound in own JVM; additional selective no-cut control',
         'dependency_calibration':'Required separate receipt before formal run; export success alone is not dependency equivalence'})
