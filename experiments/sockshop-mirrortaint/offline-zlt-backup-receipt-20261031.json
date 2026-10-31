@@ -1,0 +1,41 @@
+{
+  "backup_directory": "artifacts/backups/offline-zlt-revision-20261031",
+  "new_archive": {
+    "name": "offline-zlt-complete.tar.gz",
+    "sha256": "106202503fb75f582c3a8dbbc1919131a8f80cb3164183aca0a3ce7e74b063e9",
+    "bytes": 69120001,
+    "gzip_crc_verified": true
+  },
+  "artifact_files": 6283,
+  "manifest_sha256": "6ab092496ac92f594f56e8dfd633560139c509e11acf4fec4bd6259d3cf0508e",
+  "source_commit": "c9a8d343bacce3710cc62d721fc68b35a6d31ce7",
+  "prior_backup_required_for_original_Mall_captures_and_images": "artifacts/backups/frozen-reuse-common-cost-20261030",
+  "prior_archives_reverified": {
+    "complete-batch-and-counterexample.tar.gz": {
+      "sha256": "3f85f595f42ac54c7fb8ed8fb8c481d36d84e1403d8d1aa0871d08f11aefe9f0",
+      "bytes": 1226822370,
+      "gzip_crc_verified": true,
+      "sha256_rechecked": true,
+      "CRC_rechecked": true
+    },
+    "docker-images.tar.gz": {
+      "sha256": "4d5198a9f313197f39a3ae933c107bc38d673986f75f8c052632f72c91ba8cd5",
+      "bytes": 1138129722,
+      "gzip_crc_verified": true,
+      "sha256_rechecked": true,
+      "CRC_rechecked": true
+    },
+    "jdk8-runtime.tar.gz": {
+      "sha256": "b2b03f1ef7c40f7abc64e80ea26b4cb2e3b752ee0655f5c04251508102b15e10",
+      "bytes": 63963206,
+      "gzip_crc_verified": true,
+      "sha256_rechecked": true,
+      "CRC_rechecked": true
+    }
+  },
+  "mounted_file_references": 29,
+  "new_additional_inputs": 0,
+  "native_MT_unchanged": true,
+  "all_new_files_unchanged_during_backup": true,
+  "scope": "New raw captures, all failed/intermediate audits, profiles, full offline reruns and source snapshots; original complete captures, Docker images and JDK retained in verified prior backup. Restore old digest-indexed inputs together with this archive."
+}
