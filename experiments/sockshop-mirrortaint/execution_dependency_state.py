@@ -77,3 +77,10 @@ class State:
 def combine(observed, values):
     return Value(observed, frozenset(x for v in values for x in v.origins),
                  frozenset(x for v in values for x in v.selectors), any(v.unknown for v in values))
+
+
+def i2l(value):
+    """JVM signed 32-bit widening; no allocation/boxed-identity propagation."""
+    n=value.observed.get('value')
+    require(type(n)is int and -2**31<=n<2**31,'I2L requires an exact signed JVM int')
+    return Value({'value':n},value.origins,value.selectors,value.unknown)

@@ -34,6 +34,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
                 List<AbstractInsnNode> code=new ArrayList<>();for(AbstractInsnNode n:m.instructions.toArray())if(n.getOpcode()>=0)code.add(n);
                 if(CollectionServiceHooks.instrument(m,key,code))changed=true;
                 if(ExecutionKernelHooks.instrument(m,key,code))changed=true;
+                if(SourceObservationHooks.instrument(m,key,code))changed=true;
                 if(ResponseBindingHooks.instrument(m,key,code))changed=true;
                 boolean initialized=!m.name.equals("<init>");AbstractInsnNode entry=null;
                 for(int i=0;i<code.size();i++) {

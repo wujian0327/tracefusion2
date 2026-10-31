@@ -49,7 +49,7 @@ def infer_execution(plan,rows):
         for index,desc in enumerate(descriptors(method['desc'])):
             fr.locals[slots]=Value(root['args'][index],unknown=True);slots+=2 if desc in ('J','D') else 1
         relevant=[r for r in rows if r.get('frame')==root['frame'] and root['seq']<r['seq']<end['seq']]
-        events=[r for r in relevant if r['kind'] in ('collection-call-enter','collection-call-exit','execution-constructed','read','write','branch')
+        events=[r for r in relevant if r['kind'] in ('collection-call-enter','collection-call-exit','execution-constructed','execution-i2l','read','write','branch')
                 and (r['kind'] not in ('read','write','branch') or r['site'].startswith(entry+'@'))]
         # Constructor field writes execute in the root frame but have constructor
         # sites. They are consumed by exact constructor assignment semantics.
@@ -111,6 +111,11 @@ def infer_execution(plan,rows):
             elif op==1:fr.stack.append(Value({'value':None,'object':None}))
             elif 2<=op<=8:fr.stack.append(Value({'value':op-3}))
             elif op in (16,17,18):fr.stack.append(Value({'value':ins.get('operand',ins.get('constant'))}))
+            elif op==133:
+                from execution_dependency_state import i2l
+                value=pop();converted=i2l(value);event=take('execution-i2l')
+                require(event['method']==entry and event['input']==value.observed['value']and event['result']==converted.observed['value'],'I2L JVM value/widening differs')
+                fr.stack.append(converted)
             elif op==89:require(fr.stack,'Execution empty DUP');fr.stack.append(fr.stack[-1])
             elif op==87:pop()
             elif op==132:

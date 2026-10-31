@@ -109,7 +109,7 @@ public final class ResponseBindingHooks implements Opcodes {
             Map invocation=CollectionServiceHooks.CALLS.get().peek();boolean paired=invocation!=null&&call.equals(invocation.get("callee"))&&Objects.equals(r.get("frame"),invocation.get("frame"));
             if(((Number)binding().get("source_occurrence_protocol")).intValue()>=2)paired=paired&&Objects.equals(site,invocation.get("method")+"@"+invocation.get("pc"));
             r.put("source_callsite",site);
-            r.put("source_call_id",paired?invocation.get("call_id"):null);r.put("source_caller_method",paired?invocation.get("method"):null);r.put("source_pc",paired?invocation.get("pc"):null);r.put("source_scope",paired?"planned-call":"unscoped-fact-only");
+            r.put("source_call_id",paired?invocation.get("call_id"):null);r.put("source_caller_method",paired?invocation.get("method"):null);r.put("source_pc",paired?invocation.get("pc"):null);r.put("source_scope",paired?"planned-call":"unscoped-fact-only");if(!paired&&SourceObservationHooks.bind(r,site,call))r.put("source_result",PlannedServiceAgent.Recorder.value(value));
         }
         emit(kind,r);
     }

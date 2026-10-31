@@ -4,6 +4,7 @@ import org.objectweb.asm.tree.*;
 
 /** Additional concrete evidence only. No provenance or expected-source code. */
 public final class ExecutionKernelHooks implements Opcodes {
+    public static void intToLong(long result,int input,String method,int pc){synchronized(PlannedServiceAgent.Recorder.class){Map r=PlannedServiceAgent.Recorder.row();r.put("method",method);r.put("pc",pc);r.put("input",input);r.put("result",result);PlannedServiceAgent.Recorder.emit("execution-i2l",r);}}
     static final String R="ExecutionKernelHooks";
     static boolean runtimeEmitted;
     static final String[] PINNED={"java/util/ArrayList","java/util/ArrayList$Itr","java/util/Arrays$ArrayList","java/util/Iterator"};
@@ -79,6 +80,7 @@ public final class ExecutionKernelHooks implements Opcodes {
         boolean changed=birth;
         for(int pc=0;pc<code.size();pc++){
             AbstractInsnNode n=code.get(pc);
+            if(n.getOpcode()==I2L&&((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("i2l_evidence")!=null){int input=method.maxLocals++;InsnList before=new InsnList(),after=new InsnList();before.add(new InsnNode(DUP));before.add(new VarInsnNode(ISTORE,input));after.add(new InsnNode(DUP2));after.add(new VarInsnNode(ILOAD,input));after.add(new LdcInsnNode(key));after.add(new LdcInsnNode(pc));after.add(new MethodInsnNode(INVOKESTATIC,R,"intToLong","(JILjava/lang/String;I)V",false));method.instructions.insertBefore(n,before);method.instructions.insert(n,after);changed=true;continue;}
             if(contracts()&&n instanceof TypeInsnNode&&n.getOpcode()==INSTANCEOF){int value=method.maxLocals++;InsnList before=new InsnList(),after=new InsnList();before.add(new InsnNode(DUP));before.add(new VarInsnNode(ASTORE,value));after.add(new InsnNode(DUP));after.add(new VarInsnNode(ALOAD,value));after.add(new LdcInsnNode(Type.getObjectType(((TypeInsnNode)n).desc)));after.add(new LdcInsnNode(key));after.add(new LdcInsnNode(pc));after.add(new MethodInsnNode(INVOKESTATIC,R,"typeTest","(ILjava/lang/Object;Ljava/lang/Class;Ljava/lang/String;I)V",false));method.instructions.insertBefore(n,before);method.instructions.insert(n,after);changed=true;continue;}
             if(extended()&&n instanceof FieldInsnNode&&n.getOpcode()==GETSTATIC){
                 Type t=Type.getType(((FieldInsnNode)n).desc);InsnList h=new InsnList();h.add(new InsnNode(t.getSize()==2?DUP2:DUP));PlannedServiceAgent.box(h,t);h.add(new LdcInsnNode(key));h.add(new LdcInsnNode(pc));h.add(new MethodInsnNode(INVOKESTATIC,R,"staticRead","(Ljava/lang/Object;Ljava/lang/String;I)V",false));method.instructions.insert(n,h);changed=true;continue;

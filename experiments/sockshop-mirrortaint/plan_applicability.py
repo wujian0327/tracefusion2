@@ -53,8 +53,10 @@ def check(plan, model, query, deployment=None):
                 if ins['op'] not in (182, 183, 184, 185) or callee(ins) != source:
                     continue
                 site = key + '@' + str(ins['index'])
-                covered = key in observed_methods and (not cfg or site in binding_sites)
-                sites.append({'site': site, 'caller_planned': key in observed_methods, 'call_instrumented': covered})
+                interpreted = key in observed_methods
+                observation = site in plan.get('source_observation',{}).get('sites',{})
+                covered = interpreted and (not cfg or site in binding_sites) or observation
+                sites.append({'site': site, 'caller_planned': interpreted, 'observation_only':observation, 'call_instrumented': covered})
         coverage.append({'callee': source, 'sites': sites,
                          'has_observable_callsite': any(s['call_instrumented'] for s in sites),
                          'runtime_obligation': 'Match actual caller Frame, call-id, receiver/implementation, completion, and source field/object/version; declaration alone is not evidence.'})

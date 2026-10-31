@@ -12,6 +12,8 @@ def infer_application(plan,rows,worker_request=None):
     validate_date_runtime(plan,rows)
     from infer_async_protocol import validate_async_protocol
     async_audit=validate_async_protocol(plan,rows)
+    from infer_source_observation import validate as validate_observation
+    validate_observation(plan,rows)
     cfg=plan['execution_kernel']
     from infer_source_locality import validate as validate_locality
     ownership_certificates=validate_locality(plan,rows)
@@ -95,7 +97,7 @@ def infer_application(plan,rows,worker_request=None):
             births[row['object']]=row['seq']
         defaults=default_facts(cfg,relevant,[r for r in relevant if r['kind']=='execution-constructor-enter'])
         active_defaults={};decimal_values={}
-        methods=cfg['methods'];events=[r for r in relevant if r['kind'] in ('enter','exit','abort','collection-call-enter','collection-call-exit','collection-call-throw','execution-direct-dispatch','execution-constructor-enter','execution-constructed','execution-constructor-throw','execution-static-read','execution-lambda','execution-class-literal','execution-array','execution-array-throw','execution-type-test','collection-catch','branch','read','write','write-version') and (r['kind'] not in ('read','write','write-version','branch') or r['site'].rsplit('@',1)[0] in methods)]
+        methods=cfg['methods'];events=[r for r in relevant if r['kind'] in ('enter','exit','abort','collection-call-enter','collection-call-exit','collection-call-throw','execution-direct-dispatch','execution-constructor-enter','execution-constructed','execution-constructor-throw','execution-static-read','execution-lambda','execution-class-literal','execution-array','execution-array-throw','execution-type-test','execution-i2l','collection-catch','branch','read','write','write-version') and (r['kind'] not in ('read','write','write-version','branch') or r['site'].rsplit('@',1)[0] in methods)]
         writes=[r for r in relevant if r['kind']in ('write','write-version')];providers=defaultdict(list)
         for row in relevant:
             if row['kind'] in ('binding-source','binding-input'):
@@ -136,7 +138,7 @@ def infer_application(plan,rows,worker_request=None):
             if len(candidates)!=1:return Value(f['observed'],unknown=True)
             source_row=candidates[0][0]
             if source_row['kind']=='binding-source'and plan['response_binding'].get('source_occurrence_protocol',0)>=1:
-                if source_row.get('source_call_id')is None:return Value(f['observed'],unknown=True)
+                if source_row.get('source_call_id')is None or source_row.get('source_scope')=='observation-only-call':return Value(f['observed'],unknown=True)
                 starts=[r for r in relevant if r['kind']=='collection-call-enter'and r.get('call_id')==source_row['source_call_id']]
                 finishes=[r for r in relevant if r['kind']=='collection-call-exit'and r.get('call_id')==source_row['source_call_id']]
                 require(len(starts)==len(finishes)==1,'Declared source call pair absent/ambiguous')
@@ -462,6 +464,11 @@ def infer_application(plan,rows,worker_request=None):
                         b,a=pop(),pop();require('value' in a.observed and 'value' in b.observed,'Execution integer operands absent')
                         x,y=a.observed['value'],b.observed['value'];n=x+y if op==96 else x-y if op==100 else x*y
                         fr.stack.append(combine({'value':(n+2**31)%2**32-2**31},[a,b]))
+                    elif op==133:
+                        from execution_dependency_state import i2l
+                        value=pop();converted=i2l(value);event=take('execution-i2l')
+                        require(event['method']==entry and event['input']==value.observed['value']and event['result']==converted.observed['value'],'I2L JVM value/widening differs')
+                        fr.stack.append(converted)
                     elif op==135:
                         value=pop();n=value.observed.get('value')
                         require(type(n) is int and -2**31<=n<2**31,'I2D requires an actual JVM int')
