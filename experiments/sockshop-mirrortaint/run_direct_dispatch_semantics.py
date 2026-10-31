@@ -33,14 +33,14 @@ def run(out,agent):
         command([java,'-javaagent:'+str(agent),'-Dfixture.observe=true','-Dservice.plan='+str(b/'fixture/plan.json'),'-Dservice.mode='+mode,'-Dservice.events='+str(cap/'fixture/events.jsonl'),'-cp',classpath,'DirectDispatchFixture'],cap/'stdout.txt')
         actual=json.loads((cap/'stdout.txt').read_text().splitlines()[-1]);assert actual==baseline
         rows=[json.loads(s)for s in (cap/'fixture/events.jsonl').read_text().splitlines()];assert not any(r['kind']=='problem'for r in rows)
-        g=Reconstruction(b,cap,['fixture']);checks=[]
+        replay=infer_execution(plan,rows);checks=[]
         for c in actual:
             if c['status']=='exceptional':assert c['same_exception'];continue
-            answer=g.query(c['message'],'/text','fixture',boundary=[{'kind':'binding-source'},{'kind':'argument'}]);expected_known=c['mode']==0
+            ret=next(r for r in rows if r['kind']=='binding-return'and r.get('message')==c['message']);answer=next(a for a in replay['answers']if a['root_frame']==ret['frame']and a['path']=='/text');expected_known=c['mode']==0
             assert answer['known']==expected_known,(mode,c['mode'],answer['known'])
             if expected_known:
                 source=next(r for r in rows if r['kind']=='binding-source'and r.get('message')==c['message']);f=next(f for f in source['fields']if f['field']=='DirectDispatchFixture$Box.text')
-                assert {(s['seq'],s['owner'],s['field'],s['version'])for s in answer['sources']}=={(source['seq'],f['owner'],f['field'],f['version'])}
+                index=source['fields'].index(f);assert set(map(tuple,answer['origins']))=={('field',source['seq'],index)}
             checks.append({'mode':c['mode'],'known':answer['known']})
         guards={}
         for name in ('wrong-call','wrong-target','wrong-class','nonempty-chain','wrong-argument','duplicate-proof','missing-proof','missing-framework','wrong-source-call','missing-source','ambiguous-source'):
@@ -63,7 +63,7 @@ def run(out,agent):
             except ValueError:pass
             guards[name]=True
         reports[mode]={'business_same':True,'known_positive':sum(c['known']for c in checks),'unknown':sum(not c['known']for c in checks),'same_business_exception':2,'guards':guards,'checks':checks}
-    save(out/'results.json',{'all_passed':True,'modes':reports});print({m:{k:v for k,v in x.items()if k!='checks'}for m,x in reports.items()},flush=True)
+    save(out/'results.json',{'all_passed':True,'scope':'Invocation-only proxy/source control; no synthetic HTTP evidence','modes':reports});print({m:{k:v for k,v in x.items()if k!='checks'}for m,x in reports.items()},flush=True)
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--agent',type=Path,required=True);a=p.parse_args();run(a.out.resolve(),a.agent.resolve())

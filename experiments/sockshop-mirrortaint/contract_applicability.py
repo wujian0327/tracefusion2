@@ -13,6 +13,7 @@ def library_inventory(jar):
     names.update(json.loads((HERE/'direct-dispatch-contracts-20261029.json').read_text())['class_sha256'])
     names.update(json.loads((HERE/'communication-identity-contracts-20261029.json').read_text())['class_sha256'])
     names.update(json.loads((HERE/'source-locality-contracts-20261030.json').read_text())['class_sha256'])
+    names.update(json.loads((HERE/'sql-result-locality-contracts-20261031.json').read_text())['class_sha256'])
     found={};providers={};jars={}
     def scan(z,label):
         entries=set(z.namelist())

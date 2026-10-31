@@ -151,6 +151,7 @@ public static final class DirectDispatchHooks implements Opcodes {
     public byte[] transform(final ClassLoader loader,String owner,Class<?> prior,ProtectionDomain domain,byte[] bytes){
         byte[] base=transformBase(loader,owner,prior,domain,bytes);
         if(SourceLocalityInstrumentation.owns(owner))try{return SourceLocalityInstrumentation.transform(loader,owner,bytes,base==null?bytes:base);}catch(Throwable e){PlannedServiceAgent.Recorder.problem("locality-transform:"+owner+":"+e);return base;}
+        if(SqlResultLocalityHooks.owns(owner))try{return SqlResultLocalityInstrumentation.transform(loader,owner,bytes,base==null?bytes:base);}catch(Throwable e){PlannedServiceAgent.Recorder.problem("sql-locality-transform:"+owner+":"+e);return base;}
         return base;
     }
     byte[] transformBase(final ClassLoader loader,String owner,Class<?> prior,ProtectionDomain domain,byte[] bytes){

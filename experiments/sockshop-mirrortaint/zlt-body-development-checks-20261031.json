@@ -1,0 +1,78 @@
+{
+  "reference": "c1a4e5c",
+  "development_base": "e99b8b2",
+  "not_final_acceptance": true,
+  "controls": [
+    {
+      "path": "artifacts/zlt-completion-slice-20261031/page-controls-01/results.json",
+      "sha256": "52a63509d416fb06359211b9c9ebe227657034e537b0fb6db0788fe2d28e79dd",
+      "result_file": true
+    },
+    {
+      "path": "artifacts/zlt-completion-slice-20261031/proxy-controls-02/results.json",
+      "sha256": "6c89fd436b862d0fbf0d29bc58a86cc9e59a61a001d24da5f8a25082c640e38e",
+      "result_file": true
+    },
+    {
+      "path": "artifacts/zlt-completion-slice-20261031/sequence-controls-04/results.json",
+      "sha256": "5aaef8f578145470dc2ea8b8aa6633d76789c7a35f4a1c0b5f848a3425f2ca26",
+      "result_file": true
+    },
+    {
+      "path": "artifacts/zlt-completion-slice-20261031/long-controls-02/results.json",
+      "sha256": "38a47a709959534309f8dec76db609157d4a62ad56227dc1dfe9836b13174e2e",
+      "result_file": true
+    },
+    {
+      "path": "artifacts/zlt-completion-slice-20261031/sql-controls-06/results.json",
+      "sha256": "ebd4290efc52375ff3497b62c52dfa33deb6b395ef108d12e39e2442cfae98a1",
+      "result_file": true
+    },
+    {
+      "path": "artifacts/zlt-completion-slice-20261031/body-controls-02/results.json",
+      "sha256": "55106e266dfaca97a5a02ce3c2d5026441115530aad6250f3cfcdaf97638e696",
+      "result_file": true
+    },
+    {
+      "path": "artifacts/zlt-completion-slice-20261031/locality-sequence-controls-01/results.json",
+      "sha256": "a1c6d6da919476c85ecdd39e7e959a29b5282b96f49433d4fcd04881e3a6ae19",
+      "result_file": true
+    },
+    {
+      "path": "artifacts/zlt-completion-slice-20261031/reliability-controls-01/checks.json",
+      "sha256": "13b8a19e07bebcdf44314bc0c1e0f5211c02e90a6d1ab1f7f29b1079c75122f4",
+      "result_file": true
+    },
+    {
+      "path": "artifacts/zlt-completion-slice-20261031/application-controls-01/results.json",
+      "sha256": "f676506c890e4812d22f57191af5da46f17d590955a728b11a6ae3e791e8cdce",
+      "result_file": true
+    },
+    {
+      "path": "artifacts/zlt-completion-slice-20261031/audit-client-pilot-02/results.json",
+      "sha256": "ccf7597ae55af1a31fc86bf75db8a04f0856c6a31eac4e2afac59b86c83ac0d8",
+      "result_file": true
+    },
+    {
+      "path": "artifacts/zlt-completion-slice-20261031/audit-user-pilot-03/results.json",
+      "sha256": "7cfc49ac6a6e35fe8e1cef813acdbeef8ed80b5380b6f7168bd986e0ec4271ef",
+      "result_file": true
+    }
+  ],
+  "ZLT_pilots": "Client full6/6 and User full9/9 in separate development builds; final common candidate both modes required",
+  "Mall_pilot": {
+    "per_mode_positive_correct": 5,
+    "path": "/data/expiresIn",
+    "actual_selective_eligible_calls": 5,
+    "full_events": 2220,
+    "selective_events": 2000,
+    "new_body_field_reads_omitted": 25,
+    "warning": "Raw deployment counts include existing full/selective policy differences; not new body-only cost attribution or performance."
+  },
+  "unit_checks": 31,
+  "remaining": [
+    "same-candidate final business retention",
+    "two-task same-version calibration and cost after gates",
+    "reports and backup"
+  ]
+}

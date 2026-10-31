@@ -17,6 +17,12 @@ def infer_application(plan,rows,worker_request=None):
     cfg=plan['execution_kernel']
     from infer_source_locality import validate as validate_locality
     ownership_certificates=validate_locality(plan,rows)
+    from infer_sql_result_locality import validate as validate_sql_locality
+    sql_certificates=validate_sql_locality(plan,rows)
+    require(not(set(ownership_certificates)&set(sql_certificates)),"Source has conflicting ownership protocols")
+    ownership_certificates.update(sql_certificates)
+    from infer_body_observation import validate as validate_body_observation
+    body_cuts=validate_body_observation(plan,rows,ownership_certificates)
     dispatch_facts=[r for r in rows if r['kind']=='execution-direct-dispatch']
     if dispatch_facts:
         contract=cfg.get('direct_dispatch_contract');framework=[r for r in rows if r['kind']=='direct-dispatch-framework']
@@ -33,6 +39,7 @@ def infer_application(plan,rows,worker_request=None):
     if cfg.get('request_entity_contracts') and cfg['request_entity_contracts'].get('version')!=2:raise AnalysisLimit('typed-decoder-version','Old candidate decoder evidence requires its frozen interpreter; source/default write roles are missing')
     runtime=[r for r in rows if r['kind']=='execution-runtime']
     require(len(runtime)==1 and any(all(runtime[0][k]==p[k] for k in ('java_runtime_version','class_sha256')) for p in cfg['runtime_profiles']),'Application runtime pin differs')
+    sequence_enabled=bool(cfg.get('sequence_values'))and any(p['java_runtime_version']==runtime[0]['java_runtime_version']for p in cfg.get('sequence_values',{}).get('profiles',[]))
     def request_hashes(actual):
         contract=cfg['request_entity_contracts']
         return actual in [contract['class_sha256'], *contract.get('class_sha256_profiles',[])]
@@ -103,7 +110,7 @@ def infer_application(plan,rows,worker_request=None):
             if row['kind'] in ('binding-source','binding-input'):
                 for index,f in enumerate(row['fields']):providers[coordinate(f)].append((row,index,f))
         state=State(Frame(root['frame']));preserved_fields={};literal_enum_fields={};pos=1;allocation_count=0;total_steps=0;branch_count=0
-        request_builders={};request_entities={};resources={};decoded_types={};decoded_fields={};decoded_seq={};http_entities={};response_entities={};class_literals={};date_values={};calendars={};environment_facts=[];builders={};opaque_calls=[];async_results={};future_states={};async_transfers=[];maps={}
+        request_builders={};request_entities={};resources={};decoded_types={};decoded_fields={};decoded_seq={};http_entities={};response_entities={};class_literals={};date_values={};calendars={};environment_facts=[];builders={};opaque_calls=[];async_results={};future_states={};async_transfers=[];maps={};sequence_pipes={};sequence_collectors={}
         fr=None;method=None;code=None;entry=None;field_seq={};poisoned_at={};frame_audits=[]
         execution_budget=worker_request['budget'] if worker_request else {'steps':0}
         provenance_owners={f['owner'] for rows_ in providers.values() for _,_,f in rows_}
@@ -334,6 +341,10 @@ def infer_application(plan,rows,worker_request=None):
             depth+=1
             saved=(fr,method,code,entry)
             entry=begin['method'];method=methods[entry];code=method['instructions'];fr=Frame(begin['frame']);fr.pc=cfg.get('constructor_starts',{}).get(entry,0);slot=0
+            if method['access']&8 and method['owner']in cfg.get('initialized_lambda_owners',[]):
+                markers=[r for r in rows if r['kind']=='execution-initialized-class'and r.get('class')==method['owner']]
+                require(len(markers)==1 and markers[0]['class_sha256']==plan['class_sha256'][method['owner']],'Static callback initialization absent/ambiguous')
+                if markers[0]['seq']>=root['seq']:raise AnalysisLimit('class-initialization-during-root','Static callback class initializer not modeled within root')
             if not method['access']&8:fr.locals[0]=receiver;slot=1
             require(len(args)==len(begin['args']),'Application argument count differs')
             for index,desc in enumerate(descriptors(method['desc'])):
@@ -362,6 +373,11 @@ def infer_application(plan,rows,worker_request=None):
                         fr.locals[ins['var']]=previous.project({'value':n})
                     elif op==186:
                         captured=[pop() for _ in descriptors(ins['desc'])][::-1];event=take('execution-lambda');require(event['instruction']==ins and event['site']==entry+'@'+str(fr.pc),'Lambda bootstrap/implementation evidence differs')
+                        implementation_owner=ins['bootstrap_args'][1]['handle'].split('.')[0]
+                        if implementation_owner in cfg.get('initialized_lambda_owners',[]):
+                            initialized=event.get('initialized_implementation');require(initialized and initialized.get('class')==implementation_owner and initialized.get('class_sha256')==plan['class_sha256'][implementation_owner],'Lambda owner initialization proof absent/different')
+                            markers=[r for r in rows if r['kind']=='execution-initialized-class'and r.get('class_object')==initialized.get('class_object')];require(len(markers)==1 and markers[0]==initialized,'Lambda initialization occurrence missing/ambiguous')
+                            if initialized['seq']>=root['seq']:raise AnalysisLimit('class-initialization-during-root','Synthetic callback owner initialized within root; initialization effects not modeled')
                         require(len(captured)==len(event['captures']),'Lambda capture arity differs')
                         for value,observed in zip(captured,event['captures']):bind(value,observed)
                         observed=event['lambda'];owner=observed.get('object');require(owner is not None and '$$Lambda$' in event['lambda_type'],'Lambda actual instance absent')
@@ -580,6 +596,13 @@ def infer_application(plan,rows,worker_request=None):
                             builder_was_poisoned=identity(recv) in poisoned_at if recv is not None else False
                             child_value=None;child_error=None;filter_selection=None;filter_executed=False;filter_selectors=frozenset()
                             stream=state.streams.get(identity(recv)) if recv is not None else None
+                            sequence_replay=None;sequence_kind='for-each'if sequence_enabled and key=='java/util/List.forEach(Ljava/util/function/Consumer;)V'else'collect-to-list'if sequence_enabled and key=='java/util/stream/Stream.collect(Ljava/util/stream/Collector;)Ljava/lang/Object;'and recv is not None and identity(recv)in sequence_pipes else None
+                            if sequence_kind and call.get('sequence_start',{}).get('valid')and (sequence_kind!='collect-to-list'or identity(args[0])not in poisoned_at):
+                                from infer_sequence_callbacks import replay
+                                if sequence_kind=='collect-to-list':require(identity(args[0])in sequence_collectors and call.get('sequence_start',{}).get('collector')==identity(args[0])and call['sequence_start'].get('collector_configuration')==sequence_collectors[identity(args[0])],'Unplanned/modified collector identity')
+                                sequence_replay=replay(sequence_kind,call,args,recv,cfg,runtime[0],state,sequence_pipes,take,execute,identity,actual,container,methods,fr.invocation,entry+'@'+str(fr.pc),lambda:pos<len(events)and events[pos]['kind']=='enter')
+                                if sequence_replay:child_error=sequence_replay['error']
+
                             if key=='java/util/stream/Stream.findFirst()Ljava/util/Optional;' and stream and len(stream)==3:
                                 owner,epoch,predicate=stream;c=state.containers[owner];require(c.epoch==epoch,'Filter source container changed')
                                 declaration,captured=state.lambdas.get(identity(predicate),(None,None));implementation=declaration['bootstrap_args'][1] if declaration else None
@@ -616,6 +639,7 @@ def infer_application(plan,rows,worker_request=None):
                                     candidate=actual_owner+suffix
                                     if candidate in permitted:expected_impl=candidate;break
                                     actual_owner=cfg['class_parents'].get(actual_owner,{}).get('super')
+                            if call['call_id']in body_cuts:expected_impl=None
                             async_submission=task_by_call.get(call['call_id'])
                             if async_submission:expected_impl=None
                             callback=None
@@ -705,7 +729,11 @@ def infer_application(plan,rows,worker_request=None):
                             require(child_error is None,'Exceptional child has normal caller completion')
                             ret=take('collection-call-exit');require(ret['call_id']==call['call_id'],'Application completion instance differs');observed=complete(call,ret);v=Value(observed,unknown=True)
                             invocation=Call(str(call['seq']),fr.pc,recv,args,'normal')
-                            if async_submission:
+                            if sequence_replay:
+                                from infer_sequence_callbacks import transfer
+                                v=transfer(sequence_replay,call,ret,observed,cfg,runtime[0],state,actual)
+                                if sequence_kind=='collect-to-list':sequence_pipes.pop(identity(recv),None)
+                            elif async_submission:
                                 captured=[];borrowed=[]
                                 for index,arg in enumerate(args):
                                     kind=call.get('argument_types',[None]*len(args))[index]
@@ -981,6 +1009,10 @@ def infer_application(plan,rows,worker_request=None):
                                 else:
                                     poison(([recv] if recv else [])+args,ret['seq']);opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':ret['seq'],'completion':'unsupported-save-effects','reason':proof.get('reason')})
                             elif key in plan['response_binding']['source_calls']:
+                                if key in cfg.get('sql_result_locality',{}).get('sources',[]):
+                                    # Opaque SQL may retain its parameters, independently of
+                                    # whether its newly allocated result has a certificate.
+                                    for parameter in ([recv]if recv else[])+args:escape(parameter)
                                 certificate=ownership_certificates.get(call['call_id'])
                                 if certificate:
                                     for owner,node in certificate['objects'].items():
@@ -1002,10 +1034,22 @@ def infer_application(plan,rows,worker_request=None):
                                 require(len(matching)==1,'Execution setter version missing');w=matching[0]
                                 if w['kind']=='write':bind(args[0],w['observed'])
                                 write_field(w,args[0]);v=Value(observed)
+                            elif key in ('java/util/stream/Stream.map(Ljava/util/function/Function;)Ljava/util/stream/Stream;','java/util/stream/Stream.filter(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;')and identity(recv)in sequence_pipes:
+                                from infer_sequence_callbacks import validate_fact
+                                proof=ret.get('sequence_contract');validate_fact(cfg,runtime[0],proof,'pipeline-stage');prior=sequence_pipes[identity(recv)];stages=prior['stages']+[{'operation':'map'if'.map('in key else'filter','callback':identity(args[0])}]
+                                require(proof['source']==prior['owner']and proof['stages']==stages,'Pipeline stage association differs');sequence_pipes[observed['object']]={'owner':prior['owner'],'stages':stages};v=Value(observed)
+                                heap_refs[observed['object']].update((prior['owner'],identity(args[0])))
+                                if '.filter('in key and identity(recv)in state.streams and len(state.streams[identity(recv)])==2:
+                                    owner,epoch=state.streams.pop(identity(recv));state.streams[observed['object']]=(owner,epoch,args[0])
+                            elif key=='java/util/stream/Collectors.toList()Ljava/util/stream/Collector;'and sequence_enabled:
+                                from infer_sequence_callbacks import validate_fact
+                                proof=ret.get('sequence_contract');validate_fact(cfg,runtime[0],proof,'to-list-collector');require(proof['collector']==observed.get('object'),'Collector differs');sequence_collectors[observed['object']]=proof['collector_configuration'];v=Value(observed)
                             elif key in ('java/util/Collection.stream()Ljava/util/stream/Stream;','java/util/List.stream()Ljava/util/stream/Stream;'):
                                 fact=ret.get('contract');require(fact and fact['kind']=='list-stream' and fact['valid'] and ret['result_type']=='java.util.stream.ReferencePipeline$Head','Sequential stream contract absent/invalid');c=container(call)
                                 require(fact['source']==c.owner and fact['epoch']==c.epoch and fact['elements']==call['collection'],'Stream source identity/stage differs')
                                 require(observed['object'] not in state.streams,'Stream instance reused');state.streams[observed['object']]=(c.owner,c.epoch);v=Value(observed)
+                                if sequence_enabled:
+                                    sequence_pipes[observed['object']]={'owner':c.owner,'stages':[]};heap_refs[observed['object']].add(c.owner)
                             elif key=='java/util/stream/Stream.filter(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;' and identity(recv) in state.streams:
                                 fact=ret.get('contract');require(fact and fact['kind']=='stream-filter' and fact['valid'],'Filter contract missing/invalid')
                                 owner,epoch=state.streams.pop(identity(recv));require(fact['source']==owner and fact['epoch']==epoch and fact['predicate']==identity(args[0]),'Filter source/predicate instance differs')
@@ -1092,6 +1136,15 @@ def infer_application(plan,rows,worker_request=None):
                                     require(ret['result_type']=='[Ljava.lang.String;'and owner not in state.arrays and owner not in nonlocal_owners and array['version']==0 and array['element_versions']==[0]*len(expected)and array['component']=='java.lang.String'and [x.get('value')for x in array['elements']]==expected,'Split fresh array/contents differs')
                                     values=[Value(x,recv.origins,recv.selectors|args[0].origins|args[0].selectors,recv.unknown or args[0].unknown)for x in array['elements']]
                                     state.arrays[owner]={'elements':values,'version':0,'versions':[0]*len(values)};v=Value(observed)
+                            elif key in ('java/lang/Long.valueOf(J)Ljava/lang/Long;','java/lang/Long.longValue()J','java/util/Collections.emptyList()Ljava/util/List;')and cfg.get('sequence_values')and any(p['java_runtime_version']==runtime[0]['java_runtime_version']for p in cfg['sequence_values']['profiles']):
+                                fact=ret.get('sequence_value');require(fact and fact['callee']==key,'Sequence value proof absent')
+                                require(any(p['java_runtime_version']==runtime[0]['java_runtime_version']==fact['java_runtime_version']and all(p['class_sha256'].get(k)==v for k,v in fact['class_sha256'].items())for p in cfg['sequence_values']['profiles']),'Sequence immutable value runtime differs')
+                                require(set(fact['class_sha256'])=={'java/lang/Long','java/util/Collections','java/util/Collections$EmptyList'},'Sequence value class pins incomplete')
+                                if key.startswith('java/util/Collections.'):
+                                    require(ret['result_type']=='java.util.Collections$EmptyList','Empty list implementation differs');state.containers[observed['object']]=Container(observed['object'],[],0,False);v=Value(observed)
+                                else:
+                                    operand=args[0]if args else recv;require(type(operand.observed.get('value'))is int and -2**63<=operand.observed['value']<2**63,'Long value not exact signed64')
+                                    require((ret['result_type']=='java.lang.Long')if args else(call['receiver_type']=='java.lang.Long'),'Long boxing/unboxing implementation differs');same_value(operand.observed,observed);v=operand.project(observed)
                             elif key=='java/lang/Integer.intValue()I' and cfg.get('library_values'):
                                 library_values(ret.get('library_values'));require(call['receiver_type']=='java.lang.Integer','Unboxing implementation differs');same_value(recv.observed,observed);v=recv.project(observed)
                             elif ins['owner'] in ('java/util/Map','java/util/HashMap') and ins['name'] in ('get','put') and cfg.get('library_values') and identity(recv) in maps and identity(recv) not in poisoned_at and identity(recv) not in nonlocal_owners:

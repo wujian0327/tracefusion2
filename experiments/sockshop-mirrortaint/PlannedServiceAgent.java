@@ -32,6 +32,9 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
             for(MethodNode m:cls.methods) {
                 if((m.access&(ACC_ABSTRACT|ACC_NATIVE))!=0)continue;String key=owner+"."+m.name+m.desc;
                 List<AbstractInsnNode> code=new ArrayList<>();for(AbstractInsnNode n:m.instructions.toArray())if(n.getOpcode()>=0)code.add(n);
+                if(m.name.equals("<clinit>")&&ExecutionKernelHooks.enabled()&&((List)((Map)plan.get("execution_kernel")).getOrDefault("initialized_lambda_owners",Collections.emptyList())).contains(owner)){
+                    for(AbstractInsnNode n:code)if(n.getOpcode()==RETURN){InsnList init=new InsnList();init.add(new LdcInsnNode(Type.getObjectType(owner)));init.add(new MethodInsnNode(INVOKESTATIC,"ExecutionKernelHooks","classInitialized","(Ljava/lang/Class;)V",false));m.instructions.insertBefore(n,init);changed=true;}
+                }
                 if(CollectionServiceHooks.instrument(m,key,code))changed=true;
                 if(ExecutionKernelHooks.instrument(m,key,code))changed=true;
                 if(SourceObservationHooks.instrument(m,key,code))changed=true;
@@ -107,6 +110,8 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
         }else if(write&&ExecutionKernelHooks.closureCandidate(site,canonicalField(f))){
             LabelNode observe=new LabelNode(),done=new LabelNode();b.add(new LdcInsnNode(site));b.add(new LdcInsnNode(canonicalField(f)));b.add(new MethodInsnNode(INVOKESTATIC,"ExecutionKernelHooks","omitWrite","(Ljava/lang/String;Ljava/lang/String;)Z",false));b.add(new JumpInsnNode(IFEQ,observe));
             b.add(new VarInsnNode(ALOAD,object));b.add(new LdcInsnNode(canonicalField(f)));b.add(new LdcInsnNode(site));b.add(new MethodInsnNode(INVOKESTATIC,R,"fieldVersion","(Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;)V",false));b.add(new JumpInsnNode(GOTO,done));b.add(observe);b.add(event);b.add(done);
+        }else if(!write&&BodyObservationHooks.config()!=null){
+            LabelNode done=new LabelNode();b.add(new VarInsnNode(ALOAD,object));b.add(new LdcInsnNode(canonicalField(f)));b.add(new LdcInsnNode(site));b.add(new MethodInsnNode(INVOKESTATIC,"BodyObservationHooks","omitRead","(Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;)Z",false));b.add(new JumpInsnNode(IFNE,done));b.add(event);b.add(done);
         }else b.add(event);
         m.instructions.insertBefore(f,a);m.instructions.insert(f,b);
     }
@@ -173,7 +178,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
             if(!STACK.get().isEmpty()&&log){Map<String,Object> r=row();r.put("owner",id(o));r.put("field",field);r.put("version",version);r.put("observed",value(v));r.put("site",site);emit(write?"write":"read",r);}}
         public static synchronized void fieldVersion(Object o,String field,String site){fieldHooks++;String key=id(o)+":"+field;VERSIONS.put(key,VERSIONS.getOrDefault(key,0)+1);if(ACTIVE.containsKey(id(o))&&!ACTIVE.get(id(o)).isEmpty()){problem("Source mutated within read-only reduction epoch");throw new IllegalStateException("Source mutation");}ExecutionKernelHooks.elidedWrite(site,field);}
         public static synchronized void fieldVersionRecord(Object o,String field,String site){if(!ExecutionKernelHooks.versionOnly(o,site,field))throw new IllegalStateException("Uncertified application write-value omission");fieldHooks++;String key=id(o)+":"+field;int version=VERSIONS.getOrDefault(key,0)+1;VERSIONS.put(key,version);if(ACTIVE.containsKey(id(o))&&!ACTIVE.get(id(o)).isEmpty()){problem("Source mutated within read-only reduction epoch");throw new IllegalStateException("Source mutation");}Map<String,Object> r=row();r.put("owner",id(o));r.put("field",field);r.put("version",version);r.put("site",site);emit("write-version",r);}
-        public static synchronized void branch(String site,boolean taken){branches++;if(!STACK.get().isEmpty()){Map<String,Object> r=row();r.put("site",site);r.put("taken",taken);emit("branch",r);}}
+        public static synchronized void branch(String site,boolean taken){branches++;if(BodyObservationHooks.omitBranch())return;if(!STACK.get().isEmpty()){Map<String,Object> r=row();r.put("site",site);r.put("taken",taken);emit("branch",r);}}
         public static synchronized void sumStart(Object s){Map<String,Object> r=row();r.put("parallel",((java.util.stream.DoubleStream)s).isParallel());emit("sum-enter",r);}
         public static synchronized void sumEnd(double d){Map<String,Object> r=row();r.put("value",d);emit("sum-exit",r);}
         public static synchronized void transformed(String owner){CHECKED_CLASSES.add(owner);Map<String,Object> r=row();r.put("class",owner);emit("class",r);}
@@ -188,7 +193,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
                 throw new IllegalArgumentException("Live object in event metadata: "+type);
             }finally{seen.remove(value);}
         }
-        static synchronized void emit(String kind,Map<String,Object> r){try{if(Diagnostic.enabled){r.put("diagnostic_monotonic_ns",System.nanoTime());r.put("diagnostic_thread_cpu_ns",Diagnostic.threads.getCurrentThreadCpuTime());if(kind.equals("start"))Diagnostic.start();if(kind.equals("enter"))Diagnostic.active=true;}safeEvent(r,new IdentityHashMap<Object,Boolean>(),0);if(++seq>1000000)throw new IllegalStateException("Event bound");r.put("seq",seq);r.put("kind",kind);r.put("thread",Thread.currentThread().getId());output.write(JSON.writeValueAsString(r));output.newLine();
+        static synchronized void emit(String kind,Map<String,Object> r){try{BodyObservationHooks.observe(kind,r);if(Diagnostic.enabled){r.put("diagnostic_monotonic_ns",System.nanoTime());r.put("diagnostic_thread_cpu_ns",Diagnostic.threads.getCurrentThreadCpuTime());if(kind.equals("start"))Diagnostic.start();if(kind.equals("enter"))Diagnostic.active=true;}safeEvent(r,new IdentityHashMap<Object,Boolean>(),0);if(++seq>1000000)throw new IllegalStateException("Event bound");r.put("seq",seq);r.put("kind",kind);r.put("thread",Thread.currentThread().getId());output.write(JSON.writeValueAsString(r));output.newLine();
             // BufferedWriter is bounded (8 KiB chars); the encoder is bounded
             // too. Keep every event in order, but avoid a flush/syscall per
             // instruction while all instrumented workers share this monitor.

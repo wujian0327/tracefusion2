@@ -7,6 +7,8 @@ public final class ExecutionKernelHooks implements Opcodes {
     public static void intToLong(long result,int input,String method,int pc){synchronized(PlannedServiceAgent.Recorder.class){Map r=PlannedServiceAgent.Recorder.row();r.put("method",method);r.put("pc",pc);r.put("input",input);r.put("result",result);PlannedServiceAgent.Recorder.emit("execution-i2l",r);}}
     static final String R="ExecutionKernelHooks";
     static boolean runtimeEmitted;
+    static final IdentityHashMap<Class,Map> INITIALIZED=new IdentityHashMap<>();
+    public static void classInitialized(Class type)throws Exception{synchronized(PlannedServiceAgent.Recorder.class){Map r=PlannedServiceAgent.Recorder.row();r.put("class",type.getName().replace('.','/'));r.put("class_object",PlannedServiceAgent.Recorder.id(type));String owner=type.getName().replace('.','/');if(!PlannedServiceAgent.Recorder.CHECKED_CLASSES.contains(owner)||!PlannedServiceAgent.hashes.containsKey(owner))throw new IllegalStateException("Initialization class was not hash-checked by transformer");r.put("class_sha256",PlannedServiceAgent.hashes.get(owner));PlannedServiceAgent.Recorder.emit("execution-initialized-class",r);INITIALIZED.put(type,r);}}
     static final String[] PINNED={"java/util/ArrayList","java/util/ArrayList$Itr","java/util/Arrays$ArrayList","java/util/Iterator"};
     static boolean enabled(){return "execution-dependency".equals(PlannedServiceAgent.plan.get("profile"));}
     static boolean method(String key){return enabled()&&(((Map)PlannedServiceAgent.plan.get("execution_kernel")).containsKey("methods")?((Map)((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("methods")).containsKey(key):key.equals(PlannedServiceAgent.plan.get("entry")));}
@@ -92,7 +94,7 @@ public final class ExecutionKernelHooks implements Opcodes {
                 InvokeDynamicInsnNode call=(InvokeDynamicInsnNode)n;Type[] types=Type.getArgumentTypes(call.desc);int[] slots=new int[types.length];InsnList before=new InsnList(),after=new InsnList();
                 for(int j=types.length-1;j>=0;j--){slots[j]=method.maxLocals;method.maxLocals+=types[j].getSize();before.add(new VarInsnNode(types[j].getOpcode(ISTORE),slots[j]));}
                 for(int j=0;j<types.length;j++)before.add(new VarInsnNode(types[j].getOpcode(ILOAD),slots[j]));
-                after.add(new InsnNode(DUP));after.add(new LdcInsnNode(key));after.add(new LdcInsnNode(pc));args(after,types,slots);after.add(new MethodInsnNode(INVOKESTATIC,R,"lambda","(Ljava/lang/Object;Ljava/lang/String;I[Ljava/lang/Object;)V",false));
+                after.add(new InsnNode(DUP));after.add(new LdcInsnNode(key));after.add(new LdcInsnNode(pc));args(after,types,slots);after.add(new LdcInsnNode(Type.getObjectType(((Handle)((InvokeDynamicInsnNode)n).bsmArgs[1]).getOwner())));after.add(new MethodInsnNode(INVOKESTATIC,R,"lambda","(Ljava/lang/Object;Ljava/lang/String;I[Ljava/lang/Object;Ljava/lang/Class;)V",false));
                 method.instructions.insertBefore(n,before);method.instructions.insert(n,after);changed=true;continue;
             }
             if(contracts()&&Arrays.asList(ANEWARRAY,AALOAD,AASTORE,ARRAYLENGTH).contains(n.getOpcode())){
@@ -154,15 +156,19 @@ public final class ExecutionKernelHooks implements Opcodes {
         Deque<Map<String,Object>> pending=CollectionServiceHooks.CALLS.get();if(pending.isEmpty())return;
         Map<String,Object> top=pending.peek(),current=PlannedServiceAgent.Recorder.row();
         if(Objects.equals(top.get("frame"),current.get("frame"))&&Objects.equals(top.get("callee"),call)){
-            pending.pop();current.put("pc",top.get("pc"));current.put("call_id",top.get("call_id"));current.put("exception_type",error.getClass().getName());current.put("exception",PlannedServiceAgent.Recorder.value(error));try{FeignEffectHooks.complete(top,error,current);SourceLocalityHooks.complete(top,null,error,current);FoundationValueHooks.complete(top,null,error,current);}catch(Exception failure){throw new IllegalStateException(failure);}closureCompletion(top,current);AsyncTaskHooks.completed(top,null,error,current);PlannedServiceAgent.Recorder.emit("collection-call-throw",current);
+            pending.pop();current.put("pc",top.get("pc"));current.put("call_id",top.get("call_id"));current.put("exception_type",error.getClass().getName());current.put("exception",PlannedServiceAgent.Recorder.value(error));try{FeignEffectHooks.complete(top,error,current);SourceLocalityHooks.complete(top,null,error,current);SqlResultLocalityHooks.complete(top,null,error,current);FoundationValueHooks.complete(top,null,error,current);SequenceKernelHooks.complete(top,null,error,current);}catch(Exception failure){throw new IllegalStateException(failure);}closureCompletion(top,current);AsyncTaskHooks.completed(top,null,error,current);PlannedServiceAgent.Recorder.emit("collection-call-throw",current);
         }
     }
     static boolean probeExtended;
-    public static void lambda(Object lambda,String key,int pc,Object[] captured){synchronized(PlannedServiceAgent.Recorder.class){
-        Map r=PlannedServiceAgent.Recorder.row();r.put("pc",pc);r.put("site",key+"@"+pc);r.put("lambda",PlannedServiceAgent.Recorder.value(lambda));r.put("lambda_type",lambda.getClass().getName());r.put("instruction",instruction(key,pc));List vs=new ArrayList();for(Object a:captured)vs.add(PlannedServiceAgent.Recorder.value(a));r.put("captures",vs);PlannedServiceAgent.Recorder.emit("execution-lambda",r);
+    public static void lambda(Object lambda,String key,int pc,Object[] captured,Class implementation){synchronized(PlannedServiceAgent.Recorder.class){
+        Map r=PlannedServiceAgent.Recorder.row();if(INITIALIZED.containsKey(implementation))r.put("initialized_implementation",INITIALIZED.get(implementation));r.put("pc",pc);r.put("site",key+"@"+pc);r.put("lambda",PlannedServiceAgent.Recorder.value(lambda));r.put("lambda_type",lambda.getClass().getName());r.put("instruction",instruction(key,pc));List vs=new ArrayList();for(Object a:captured)vs.add(PlannedServiceAgent.Recorder.value(a));r.put("captures",vs);PlannedServiceAgent.Recorder.emit("execution-lambda",r);
     }}
     static void libraryEnd(Map start,Object result,Map row)throws Exception{if(!contracts())return;
         String valueCall=(String)start.get("callee");
+        if(Arrays.asList("java/lang/Long.valueOf(J)Ljava/lang/Long;","java/lang/Long.longValue()J","java/util/Collections.emptyList()Ljava/util/List;").contains(valueCall)){
+            Map cfg=(Map)((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("sequence_values");
+            if(cfg!=null){Map pins=new TreeMap();for(String name:new String[]{"java/lang/Long","java/util/Collections","java/util/Collections$EmptyList"})pins.put(name,JdkContractProbe.hash(name));Map proof=new LinkedHashMap();proof.put("callee",valueCall);proof.put("java_runtime_version",System.getProperty("java.runtime.version"));proof.put("class_sha256",pins);row.put("sequence_value",proof);}
+        }
         if(Arrays.asList("java/lang/String.length()I","java/lang/String.split(Ljava/lang/String;)[Ljava/lang/String;","java/util/UUID.toString()Ljava/lang/String;","java/lang/Integer.parseInt(Ljava/lang/String;)I").contains(valueCall)){
             Class type=valueCall.startsWith("java/lang/String.")?String.class:valueCall.startsWith("java/util/UUID.")?UUID.class:Integer.class;Map proof=new LinkedHashMap();proof.put("class_sha256",classHash(type));proof.put("class",type.getName().replace('.','/'));proof.put("callee",valueCall);row.put("finite_value_contract",proof);
             if(valueCall.contains(".split("))proof.put("array",arrayRow("split",(Object[])result,-1,((Number)start.get("pc")).intValue()));

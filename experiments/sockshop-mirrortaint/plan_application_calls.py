@@ -10,7 +10,7 @@ import json,re
 
 def augment_calls(plan,model,sources):
     from plan_execution_kernel import constructor_writes
-    methods={};targets={};opaque={};visiting=set();lambdas={};constructor_starts={};constructor_chains={};constructors=dict(plan['execution_kernel']['constructors'])
+    methods={};targets={};opaque={};visiting=set();lambdas={};initialized_lambdas=set();constructor_starts={};constructor_chains={};constructors=dict(plan['execution_kernel']['constructors'])
     from plan_foundation_values import enum_proofs,attach as attach_foundations
     enums,unproved_enums=enum_proofs(model)
     supported={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,87,89,96,100,104,132,167,178,180,181,182,183,184,185,187,191,192,198,199,186,189,190,50,83}|set(range(21,26))|set(range(54,59))|set(range(153,167))|set(range(172,178))
@@ -30,7 +30,10 @@ def augment_calls(plan,model,sources):
         require(not model['classes'][m['owner']]['access']&512,'Interface default method dispatch unsupported')
         initializer=model['methods'].get(m['owner']+'.<clinit>()V')
         if m['access']&8 and m['owner']!=model['methods'][plan['entry']]['owner']:
-            require(initializer is None or all(x['op'] in (0,177) for x in initializer['instructions']) or m['owner'] in enums,'Foreign application static initialization unsupported')
+            ordinary=initializer is None or all(x['op'] in (0,177) for x in initializer['instructions']) or m['owner'] in enums
+            instance_owner=m['access']&4096 and any(body['owner']==m['owner']and not body['access']&8 for body in methods.values())
+            require(ordinary or instance_owner,'Foreign application static initialization unsupported')
+            if not ordinary:initialized_lambdas.add(m['owner'])
         require(not m['access']&32,'Synchronized application methods unsupported')
         require(not re.search(r'\[[ZBCSIJFD]|\[\[',m['desc']),'Primitive/multidimensional array parameters unsupported')
         for ins in m['instructions']:
@@ -43,7 +46,9 @@ def augment_calls(plan,model,sources):
                 bs=ins.get('bootstrap_args',[]);require(ins.get('bootstrap')=='java/lang/invoke/LambdaMetafactory.metafactory' and len(bs)==3 and isinstance(bs[1],dict) and bs[1].get('tag') in (5,6,7),'Lambda bootstrap/handle unsupported')
                 sam={'get':('Ljava/util/function/Supplier;','()Ljava/lang/Object;'),
                      'test':('Ljava/util/function/Predicate;','(Ljava/lang/Object;)Z'),
-                     'run':('Ljava/lang/Runnable;','()V')}
+                     'run':('Ljava/lang/Runnable;','()V'),
+                     'apply':('Ljava/util/function/Function;','(Ljava/lang/Object;)Ljava/lang/Object;'),
+                     'accept':('Ljava/util/function/Consumer;','(Ljava/lang/Object;)V')}
                 require(ins['name'] in sam and (ins['desc'].split(')')[1],bs[0])==sam[ins['name']],'Lambda SAM unsupported')
             if ins['op']==183 and ins['name']=='<init>':
                 call=callee(ins)
@@ -148,6 +153,17 @@ def augment_calls(plan,model,sources):
                   'call_sites':[key+'@'+str(i['index']) for i in m['instructions'] if i['op'] in (182,183,184,185)],
                   'exceptions':m['exception_handlers'],'meaning':'Candidate effects only; actual object/alias/write versions are interpreted, never assumed pure.'} for key,m in methods.items()}
     plan['algorithm']='execution-dependency-v9-restricted-constructor-chains'
+    # An accessor used as a SAM body now has an actual Frame. Its ordinary
+    # invocation sites must also name that implementation, not discard it as opaque.
+    for caller,body in methods.items():
+        for ins in body['instructions']:
+            if ins['op']not in (182,183,184,185):continue
+            call=callee(ins);access=plan['collection_getters'].get(call)or plan['collection_setters'].get(call)
+            if access:
+                eligible=[key for key in candidates(ins)if key in methods]
+                inherited=access.get('implementation')
+                if inherited in methods and inherited not in eligible:eligible.append(inherited)
+                if eligible:targets[caller+'@'+str(ins['index'])]=eligible
     plan['frame_methods']=sorted(methods);plan['binding_callsites']=sorted(key+'@'+str(i['index']) for key,m in methods.items() for i in m['instructions'] if i['op'] in (182,183,184,185) and (i['name']!='<init>' or constructors.get(callee(i),{}).get('kind')in ('frame','frame-chain')))
     plan['selected_read_sites']=[key+'@'+str(i['index']) for key,m in methods.items() for i in m['instructions'] if i['op']==180]
     plan['execution_kernel'].update(callback_lifecycle_version=2,constructor_lifecycle=True,constructor_chain_protocol=1,constructor_chains=constructor_chains,scalar_builders=True,static_field_evidence=True,call_depth_limit=64,object_birth_sites=births,version=8,library_contracts=json.loads((Path(__file__).parent/'constructor-library-contracts-20261020.json').read_text()),constructor_starts=constructor_starts,methods=methods,public_contracts=True,lambda_sites=lambdas,
@@ -159,6 +175,8 @@ def augment_calls(plan,model,sources):
     plan['contracts']+=['Finite application call graph including cycles; actual distinct invocation frames are depth/step bounded, with analysis_limited on exhaustion.',
         'Static read/write sets are candidates, not purity claims; opaque calls poison possibly reachable nonlocal/escaped state.',
         'Offline/static budget exhaustion is analysis_limited, never business N/A or automatically evidence_invalid.']
+    plan['execution_kernel']['initialized_lambda_owners']=sorted(initialized_lambdas)
+    plan['execution_kernel']['sequence_values']=json.loads((Path(__file__).parent/'kernel-sequence-values-20261031.json').read_text())
     plan['execution_kernel']['library_values']=json.loads((Path(__file__).parent/'library-value-runtimes-20261022.json').read_text())
     conversion='edu/fudan/common/util/JsonUtils.conveterObject(Ljava/lang/Object;Ljava/lang/Class;)Ljava/lang/Object;'
     if conversion in model['methods'] and any(i['op']in (182,183,184,185)and callee(i)==conversion for m in methods.values()for i in m['instructions']):
@@ -168,5 +186,7 @@ def augment_calls(plan,model,sources):
             plan['execution_kernel']['conversion_contracts']={'version':1,'methods':[conversion],'summary_class_sha256':contract['summary_class_sha256']}
             plan['execution_kernel']['request_entity_contracts']=contract
     from plan_feign_effects import attach as attach_feign_effects
+    from plan_sql_result_locality import attach as attach_sql_locality
+    attach_sql_locality(plan,model)
     from plan_source_locality import attach as attach_locality
     return attach_locality(attach_feign_effects(attach_foundations(plan,model,enums,unproved_enums),model),model)

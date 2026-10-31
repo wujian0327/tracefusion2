@@ -19,7 +19,7 @@ from isolate_agent_jackson import agent_class, symbolic_types, OLD
 
 def build(out,inputs):
     out.mkdir(parents=True,exist_ok=False);tools=out/'tools';tools.mkdir()
-    sources=[HERE/n for n in ('QueryObservationAgent.java','QueryBytecodeModel.java','PlannedServiceAgent.java','MonitorSafety.java','SourceLocalityHooks.java','SourceLocalityInstrumentation.java','SourceObservationHooks.java','CollectionServiceHooks.java','ConversionContractHooks.java','ExecutionKernelHooks.java','FoundationValueHooks.java','ScalarProjectionHooks.java','DocumentDateHooks.java','ListenerRegistryHooks.java','FeignEffectHooks.java','FeignProtocolInstrumentation.java','AsyncTaskHooks.java','FrameworkCallHooks.java','RequestEntityHooks.java','SaveEffectHooks.java','TemporalDateHooks.java','UuidProjectionHooks.java','ResponseBindingHooks.java','ReadEffectHooks.java','JdkContractProbe.java','SourceEvidenceHooks.java','SpringTransportAgent.java','W3CTraceContext.java')]
+    sources=[HERE/n for n in ('QueryObservationAgent.java','QueryBytecodeModel.java','PlannedServiceAgent.java','MonitorSafety.java','SourceLocalityHooks.java','SourceLocalityInstrumentation.java','SourceObservationHooks.java','SequenceKernelHooks.java','BodyObservationHooks.java','SqlResultLocalityHooks.java','SqlResultLocalityInstrumentation.java','CollectionServiceHooks.java','ConversionContractHooks.java','ExecutionKernelHooks.java','FoundationValueHooks.java','ScalarProjectionHooks.java','DocumentDateHooks.java','ListenerRegistryHooks.java','FeignEffectHooks.java','FeignProtocolInstrumentation.java','AsyncTaskHooks.java','FrameworkCallHooks.java','RequestEntityHooks.java','SaveEffectHooks.java','TemporalDateHooks.java','UuidProjectionHooks.java','ResponseBindingHooks.java','ReadEffectHooks.java','JdkContractProbe.java','SourceEvidenceHooks.java','SpringTransportAgent.java','W3CTraceContext.java')]
     sources.append(HERE/'BusinessJackson.java')
     # JDK 8 has no --release option; its own platform is already Java 8.
     compiler_version,target=java8_target()
@@ -27,7 +27,7 @@ def build(out,inputs):
     jar=out/'distributed-observer.jar'
     with ZipFile(jar,'w',ZIP_DEFLATED) as z:
         z.writestr('META-INF/MANIFEST.MF','Manifest-Version: 1.0\nPremain-Class: SpringTransportAgent\n\n')
-        for prefix in ('PlannedServiceAgent','MonitorSafety','SourceLocalityHooks','SourceLocalityInstrumentation','SourceObservationHooks','CollectionServiceHooks','ConversionContractHooks','ExecutionKernelHooks','FoundationValueHooks','ScalarProjectionHooks','DocumentDateHooks','ListenerRegistryHooks','FeignEffectHooks','FeignProtocolInstrumentation','AsyncTaskHooks','FrameworkCallHooks','RequestEntityHooks','SaveEffectHooks','TemporalDateHooks','UuidProjectionHooks','ResponseBindingHooks','ReadEffectHooks','JdkContractProbe','SourceEvidenceHooks','SpringTransportAgent','W3CTraceContext'):
+        for prefix in ('PlannedServiceAgent','MonitorSafety','SourceLocalityHooks','SourceLocalityInstrumentation','SourceObservationHooks','SequenceKernelHooks','BodyObservationHooks','SqlResultLocalityHooks','SqlResultLocalityInstrumentation','CollectionServiceHooks','ConversionContractHooks','ExecutionKernelHooks','FoundationValueHooks','ScalarProjectionHooks','DocumentDateHooks','ListenerRegistryHooks','FeignEffectHooks','FeignProtocolInstrumentation','AsyncTaskHooks','FrameworkCallHooks','RequestEntityHooks','SaveEffectHooks','TemporalDateHooks','UuidProjectionHooks','ResponseBindingHooks','ReadEffectHooks','JdkContractProbe','SourceEvidenceHooks','SpringTransportAgent','W3CTraceContext'):
             for f in tools.glob(prefix+'*.class'):
                 name,data=agent_class(f.name,f.read_bytes());z.writestr(name,data)
         for f in tools.glob('BusinessJackson*.class'):z.writestr(f.name,f.read_bytes())
@@ -54,8 +54,8 @@ def build(out,inputs):
             for n in z.namelist():
                 if n.startswith('BOOT-INF/lib/') and n.endswith('.jar'):
                     with ZipFile(BytesIO(z.read(n))) as dz:
-                        for target in config.get('targets',[]):
-                            requested=target.rsplit('.',1)[0].replace('.','/')+'.class'
+                        for requested_owner in sorted({t.rsplit('.',1)[0].replace('.','/')for t in config.get('targets',[])}|set(config.get('bytecode_dependencies',[]))):
+                            requested=requested_owner+'.class'
                             if requested in dz.namelist():
                                 f=app/requested;f.parent.mkdir(parents=True,exist_ok=True);f.write_bytes(dz.read(requested));extra[requested]={'jar_entry':n,'sha256':sha(f)}
         command(['java','-cp',str(tools)+':'+cp,'QueryBytecodeModel',str(app),str(dest/'model.json')],dest/'model.log')
@@ -105,6 +105,7 @@ def build(out,inputs):
     manifest['jackson_isolation']='Internal JSON relocated to tracefusion.internal.jackson; business inspection has no Jackson type linkage'
     for name in ('plan_source_locality.py','infer_source_locality.py','source-locality-contracts-20261030.json','plan_field_identity.py','plan_communication_identity.py','communication-identity-contracts-20261029.json','plan_literal_enums.py','plan_foundation_values.py','foundation-value-contracts-20261028.json','infer_foundation_values.py','plan_feign_effects.py','feign-input-effect-contracts-20261028.json','mongo2-provided-id-contracts-20261028.json','plan_scalar_projection.py','scalar-projection-contracts-20261028.json','infer_scalar_projection.py','document-date-effects-20261028.json','infer_listener_registry.py','infer_feign_effects.py'):manifest['sources'][str(HERE/name)]=sha(HERE/name)
     for name in ('plan_source_locality.py','infer_source_locality.py','source-locality-contracts-20261030.json'):manifest['sources'][str(HERE/name)]=sha(HERE/name)
+    for name in ('plan_sql_result_locality.py','infer_sql_result_locality.py','sql-result-locality-contracts-20261031.json','infer_sequence_callbacks.py','kernel-sequence-values-20261031.json','plan_body_observation.py','infer_body_observation.py'):manifest['sources'][str(HERE/name)]=sha(HERE/name)
     manifest['builder_sha256']=sha(Path(__file__));save(out/'build.json',manifest)
 
 

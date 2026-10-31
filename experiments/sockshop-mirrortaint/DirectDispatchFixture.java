@@ -24,7 +24,7 @@ public class DirectDispatchFixture {
             Map row=new LinkedHashMap();row.put("mode",mode);row.put("message",context.fields().get("message"));row.put("callback",((org.springframework.cglib.proxy.Factory)fixture.service).getCallback(0).getClass().getName());
             try{
                 Box value=fixture.root(mode);row.put("response",value.text);row.put("status","normal");
-                if(observe){ResponseBindingHooks.verifySerialization(value,mapper);Map wire=context.fields();wire.put("uri","fixture:direct-dispatch");wire.put("direction","response");wire.put("phase","write");wire.put("fields",SpringTransportAgent.Transport.snapshot(value));synchronized(PlannedServiceAgent.Recorder.class){PlannedServiceAgent.Recorder.emit("http-json",wire);}}
+                if(observe)ResponseBindingHooks.verifySerialization(value,mapper); // Invocation-only control; no synthetic HTTP identity.
             }catch(IllegalArgumentException original){row.put("status","exceptional");row.put("same_exception",original==ERROR);}
             finally{if(observe)SpringTransportAgent.Transport.ASYNC.remove();}
             results.add(row);

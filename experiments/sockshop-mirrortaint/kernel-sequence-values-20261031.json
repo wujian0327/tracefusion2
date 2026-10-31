@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "profiles": [
+    {
+      "java_runtime_version": "1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01",
+      "class_sha256": {
+        "java/lang/Long": "4517bff2b32ee7476692c4309c4ce7bdc31c66ac197015d5b453b57b2e742bf8",
+        "java/util/Collections": "a21a5d1c7dff95bf0998529307a85e5a163d12a99892f35e8b1d719bdfb969ac",
+        "java/util/Collections$EmptyList": "4966d807da35072cf21d5a3db85878c194271ba7394e74105e69c3a127860dfc",
+        "java/util/stream/Collectors": "3e089842e13705eb2bf5962894bf6ccdbc90cf6e6283f31b5340825dc18fac90",
+        "java/util/stream/Collectors$CollectorImpl": "080bab2f03cd54776a780bc54b0a1523426ab1dbf6d9a2b54426be56b7e6b052",
+        "java/util/stream/ReferencePipeline$3": "144f914edf8927fa49b333aa7fd35affc5abfafd28a453c20dd56938ca8da507",
+        "java/util/stream/ReferencePipeline$2": "d4b909ba6dd604bb90e639223344d7747568a5e257c10958271b1ab9b88a3ff5",
+        "java/util/ArrayList": "0976edaa24bd7790c9778c846ef4c4cdfe396242cb1e298cd190454083366199",
+        "java/util/stream/ReferencePipeline": "74a4db28e91e555969bc9f5c7391768befcff2167c682056ac2f0b9b2c30bbcf",
+        "java/util/stream/ReferencePipeline$Head": "5a17bbea9d5c189762b6dff5112f2d887c47385bac3ce46505f0bf2ca16f915c",
+        "java/util/stream/AbstractPipeline": "4240179b01468c850f0eaed3763d97740ef381589927f39c1f029ac81c571b81",
+        "java/util/stream/ReduceOps": "e74598ab52b9d6a0aea9581757bdefe5182bc60751286b505fc62a45675431f1",
+        "java/util/stream/ReduceOps$3": "1d055446a2ebba285988634d0d39f3bf923e14d98979e16b70a2df401b400999",
+        "java/util/stream/ReduceOps$3ReducingSink": "63210b6222253860fb85df82a6c7bd658cf9246f65f543f005932a324e286d3e",
+        "java/util/stream/ReferencePipeline$3$1": "a24233ff2ca411a750f3f01bb6a24534df994e98479e0bf6973604381b3c0e85",
+        "java/util/stream/ReferencePipeline$2$1": "acb780dfa23d1a0205175aabbb2d9e411282ab8ebaaff7f4c75f5eda30b0abf4",
+        "java/util/stream/Sink$ChainedReference": "5d73cf1c1639010fcb83d0c5c433552b1166846c2618bb102a826afb48c7d8ca",
+        "java/util/stream/PipelineHelper": "1083a2ea34ced198d66c8d2fb90c82c86fd415baad5db3f1c072078f75fac231"
+      }
+    }
+  ],
+  "scope": "Exact immutable Long boxing and Collections.emptyList; exact sequential map/filter/toList/forEach callback execution; original source boundaries and conservative unsupported effects retained"
+}
