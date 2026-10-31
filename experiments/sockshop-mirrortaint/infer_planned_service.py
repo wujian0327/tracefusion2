@@ -22,6 +22,9 @@ def evaluate(e,fields,summed=None):
     if op=='sum':return summed
     if op=='convert':
         v=evaluate(e['arg'],fields,summed)
+        if e['opcode']==133:
+            from execution_dependency_state import i2l,Value
+            return i2l(Value({'value':v})).observed['value']
         if e['opcode'] in (134,137,144):return f32(v)
         if e['opcode'] in (135,138,141):return float(v)
         raise ValueError('Unmodeled conversion')
