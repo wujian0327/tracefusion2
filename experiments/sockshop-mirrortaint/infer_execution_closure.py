@@ -27,7 +27,11 @@ def validate_application_writes(plan,rows):
             if frame in roots:return frame
             seen.add(frame);frame=enters[frame].get('parent')
         return None
-    version_evidence=defaultdict(list)
+    version_evidence=defaultdict(list);returns_by_frame=defaultdict(list);writes_by_field=defaultdict(list);calls_by_target=defaultdict(list)
+    for call in calls:calls_by_target[(call['frame'],call['callee'],call['receiver'].get('object'))].append(call)
+    for event in rows:
+        if event['kind']=='binding-return':returns_by_frame[event['frame']].append(event)
+        elif event['kind']in ('write','write-version'):writes_by_field[(event['owner'],event['field'])].append(event)
     for event in rows:
         if event['kind']in ('write','write-version','read'):version_evidence[(event['owner'],event['field'])].append((event['seq'],event['version']))
         elif event['kind']in ('binding-input','binding-source','binding-return','http-json'):
@@ -39,15 +43,15 @@ def validate_application_writes(plan,rows):
         require(root_of(r['frame'])is not None,'Application write outside query root')
         if p['kind']=='frame':require(enters[r['frame']]['method']==p['method'],'Application write Frame differs')
         else:
-            matches=[a for a in calls if a['frame']==r['frame']and a['callee']==p['method']and a['receiver'].get('object')==r['owner']and a['call_id']in ends and a['seq']<r['seq']<ends[a['call_id']]['seq']]
+            matches=[a for a in calls_by_target[(r['frame'],p['method'],r['owner'])] if a['call_id']in ends and a['seq']<r['seq']<ends[a['call_id']]['seq']]
             require(len(matches)==1,'Application setter call/owner missing or ambiguous')
         root=root_of(r['frame']);versions=version_evidence[(r['owner'],r['field'])];position=bisect_left(versions,(r['seq'],-1))
         if position and versions[position-1][0]>=enters[root]['seq']:require(r['version']==versions[position-1][1]+1,'Application write counter does not follow observed version')
-        returns=[a for a in rows if a['kind']=='binding-return'and a['frame']==root]
+        returns=returns_by_frame[root]
         for ret in returns:
             final=[f['version']for f in ret['fields']if f['owner']==r['owner']and f['field']==r['field']]
             if final:
-                writes=[w for w in rows if w['kind']in ('write','write-version')and w['owner']==r['owner']and w['field']==r['field']and enters[root]['seq']<w['seq']<ret['seq']]
+                writes=[w for w in writes_by_field[(r['owner'],r['field'])]if enters[root]['seq']<w['seq']<ret['seq']]
                 require(writes and set(final)=={max(writes,key=lambda w:w['seq'])['version']},'Application final write version differs')
     return len(observations)
 
