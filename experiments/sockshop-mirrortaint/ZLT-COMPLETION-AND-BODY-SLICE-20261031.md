@@ -53,7 +53,7 @@ Mall `/data/expiresIn` 开发试点 full/selective 各 5/5 正来源匹配。五
 
 ## 正在完成的验收与工件
 
-全部使用同一候选的新Agent、新容器及独立数据卷，未将旧捕获复算称作新部署。各集合分别统计，不合成总体正确率：
+全部使用同一候选的新Agent和本批新容器／数据卷，未将旧TF捕获复算称作新部署。历史驱动按工作组建立新依赖环境，组内可复用依赖服务并按原协议重建相关准备数据；不称每个字段查询都有全新整库。各集合分别统计，不合成总体正确率：
 
 | 集合，每模式分别统计 | full | selective | 保留边界 |
 | --- | --- | --- | --- |
@@ -68,4 +68,4 @@ Mall `/data/expiresIn` 开发试点 full/selective 各 5/5 正来源匹配。五
 
 主目录为 `artifacts/zlt-completion-slice-20261031/`，最终新部署在 `final-candidate-01/`；最终审计为 `audit-final-zlt-02/`、`audit-final-mall-01/`、`audit-final-historical-01/`。Agent SHA256：`83b7df309642e0c17b25629c16b22d61681eec886fc752a8146aacd9ee2789d8`。冻结108项核心源码，最终SQL／局部性／顺序回调／收缩控制与业务Agent的891个class字节逐项相同，JAR打包字节不强称相同。小型[验收快照](zlt-body-capability-results-20261031.json)及[ZLT逐实例表](zlt-completion-paired-20261031.csv)随Git保存。
 
-两任务成本协议单独位于 `artifacts/zlt-body-cost-20261031/`，待能力门槛通过和共同任务校准后执行。没有新增应用、Gson 或 sink。完整工件与镜像另行备份；不 push。
+两任务成本协议及40次正式新部署单独位于 `artifacts/zlt-body-cost-20261031/`，结果见[同版本成本报告](ZLT-BODY-COMMON-COST-20261031.md)。没有新增应用、Gson 或 sink。完整工件与镜像另行备份；不 push。
