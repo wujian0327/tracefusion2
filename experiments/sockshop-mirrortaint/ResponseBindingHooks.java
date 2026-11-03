@@ -10,8 +10,8 @@ public final class ResponseBindingHooks implements Opcodes {
         Map policy=(Map)PlannedServiceAgent.plan.get("map_wrapper_observation");if(policy==null)return;
         boolean needed=false;for(Object raw:((Map)policy.get("candidates")).values())for(Object item:(List)raw)if(cls.name.equals(((Map)item).get("class")))needed=true;if(!needed)return;
         Map m=new LinkedHashMap();m.put("super",cls.superName);boolean eligible=(cls.visibleAnnotations==null||cls.visibleAnnotations.isEmpty())&&(cls.invisibleAnnotations==null||cls.invisibleAnnotations.isEmpty())&&(cls.interfaces==null||cls.interfaces.isEmpty());
-        for(FieldNode f:cls.fields)if((f.access&ACC_STATIC)==0)eligible=false;
-        for(MethodNode method:cls.methods)if(((List)((Map)policy.get("contract")).get("read_methods")).contains(method.name))eligible=false;
+        for(FieldNode f:cls.fields)if((f.access&ACC_STATIC)==0||(f.visibleAnnotations!=null&&!f.visibleAnnotations.isEmpty())||(f.invisibleAnnotations!=null&&!f.invisibleAnnotations.isEmpty()))eligible=false;
+        for(MethodNode method:cls.methods)if(((List)((Map)policy.get("contract")).get("read_methods")).contains(method.name)||(method.visibleAnnotations!=null&&!method.visibleAnnotations.isEmpty())||(method.invisibleAnnotations!=null&&!method.invisibleAnnotations.isEmpty()))eligible=false;
         m.put("eligible",eligible);Map<String,Map> group=WRAPPER_CLASSES.get(loader);if(group==null){group=new java.util.concurrent.ConcurrentHashMap<>();WRAPPER_CLASSES.put(loader,group);}group.put(cls.name,m);
         Map fact=PlannedServiceAgent.Recorder.row();fact.put("class",cls.name);fact.put("class_sha256",PlannedServiceAgent.hashes.get(cls.name));fact.put("loader",PlannedServiceAgent.Recorder.id(loader));PlannedServiceAgent.Recorder.emit("map-wrapper-class",fact);
     }

@@ -6,12 +6,14 @@ public class MapWrapperFixture {
     public static class BadGet extends Wrapper {static int hits;public Object get(Object k){hits++;throw new IllegalArgumentException("get must not run");}}
     public static class BadKeys extends Wrapper {static int hits;public Set<String> keySet(){hits++;throw new IllegalArgumentException("keys must not run");}}
     public static class Stateful extends Wrapper {Object hidden=new Object();}
+    public static class Annotated extends Wrapper {@Deprecated public Object customGetter(){throw new AssertionError("unknown getter");}}
+    public static class Interfaces extends Wrapper implements Runnable {public void run(){throw new AssertionError("unknown callback");}}
     static final IllegalArgumentException ERROR=new IllegalArgumentException("business");
     static int finished;
     public static Wrapper root(int kind){return perform(kind);}
     public static Wrapper perform(int kind){try{
         if(kind==5)throw ERROR;
-        Wrapper w=kind==2?new BadGet():kind==3?new BadKeys():kind==4?new Stateful():kind==1?new Child():new Wrapper();
+        Wrapper w=kind==2?new BadGet():kind==3?new BadKeys():kind==4?new Stateful():kind==6?new Annotated():kind==7?new Interfaces():kind==1?new Child():new Wrapper();
         w.put("data",new DTO(kind==1?null:"same"));w.put("nested",Arrays.asList(new DTO("same"),new DTO("same"),null));w.put("nil",null);return w;
     }finally{finished++;}}
     static String content(Object v){if(v==null)return "null";if(v instanceof DTO)return "{\"text\":"+content(((DTO)v).text)+"}";

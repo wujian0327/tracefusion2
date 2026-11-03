@@ -10,8 +10,8 @@ def attach(plan,model):
         chain=[];owner=name;seen=set()
         while owner in classes and owner not in seen:
             seen.add(owner);c=classes[owner]
-            if c.get('annotations')or c.get('interfaces')or any(not f['access']&8 for f in c['fields']):break
-            if any(m['owner']==owner and m['name']in contract['read_methods']for m in model['methods'].values()):break
+            if c.get('annotations')or c.get('interfaces')or any(not f['access']&8 or f.get('annotations')for f in c['fields']):break
+            if any(m['owner']==owner and(m['name']in contract['read_methods']or m.get('annotations'))for m in model['methods'].values()):break
             chain.append({'class':owner,'class_sha256':c['sha256'],'super':c['super']})
             owner=c['super']
             if owner=='java/util/HashMap':candidates[name]=chain;break

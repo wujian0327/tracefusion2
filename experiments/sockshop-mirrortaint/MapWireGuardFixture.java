@@ -5,7 +5,7 @@ public class MapWireGuardFixture {
  static class BadList extends ArrayList<Object>{static int hits;public Iterator<Object> iterator(){hits++;throw new IllegalStateException("unknown iterator");}public Object get(int i){hits++;throw new IllegalStateException("unknown get");}}
  public static void main(String[] args)throws Exception{
   ObjectMapper mapper=new ObjectMapper();int rejected=0;
-  for(MapWrapperFixture.Wrapper w:Arrays.asList(new MapWrapperFixture.BadGet(),new MapWrapperFixture.BadKeys())){
+  for(MapWrapperFixture.Wrapper w:Arrays.asList(new MapWrapperFixture.BadGet(),new MapWrapperFixture.BadKeys(),new MapWrapperFixture.Annotated(),new MapWrapperFixture.Interfaces(),new MapWrapperFixture.Stateful())){
    w.put("data",null);
    try{ResponseBindingHooks.checkPath(w,mapper,new String[]{"data"},0);throw new AssertionError();}catch(IllegalStateException expected){rejected++;}
    try{SpringTransportAgent.Transport.snapshot(w,true);throw new AssertionError();}catch(IllegalStateException expected){rejected++;}

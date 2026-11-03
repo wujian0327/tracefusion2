@@ -21,14 +21,14 @@ def run(out):
     # This control tests physical return snapshots, not communication or origin.
     plan.pop('communication_identity',None);save(out/'plan.json',plan);save(out/'route.json',route)
     cp=':'.join(map(str,[classes,b/'distributed-observer.jar',*JARS]));results=[]
-    for case in range(6):
+    for case in range(8):
         base=command([java,'-cp',cp,'MapWrapperFixture',str(case)],out/('original-%d.log'%case)).stdout.splitlines()[-1]
         for mode in('full','selective'):
             d=out/('%s-%d'%(mode,case));d.mkdir()
             actual=command([java,'-javaagent:'+str(b/'distributed-observer.jar'),'-Dservice.plan='+str(out/'plan.json'),'-Dservice.events='+str(d/'events.jsonl'),'-Dservice.mode='+mode,'-cp',cp,'MapWrapperFixture',str(case)],d/'stdout.log').stdout.splitlines()[-1]
             assert json.loads(base)==json.loads(actual)
             rows=[json.loads(x)for x in(d/'events.jsonl').read_text().splitlines()];bad=any(r['kind']=='problem'for r in rows)
-            assert bad==(case in(2,3,4)),(mode,case)
+            assert bad==(case in(2,3,4,6,7)),(mode,case)
             if case in(0,1):
                 validate(plan,rows);ret=next(r for r in rows if r['kind']=='binding-return');assert any(f['path']=='/data/text'for f in ret['fields']);assert ret['map_wrappers']
                 repeated=[f for f in ret['fields']if f['path']in('/nested/0/text','/nested/1/text')]
@@ -55,7 +55,7 @@ def run(out):
     for mode in('full','selective'):
         d=out/('wire-'+mode);d.mkdir()
         r=command([java,'-javaagent:'+str(b/'distributed-observer.jar'),'-Dservice.plan='+str(out/'plan.json'),'-Dservice.events='+str(d/'events.jsonl'),'-Dservice.mode='+mode,'-cp',cp,'MapWireGuardFixture'],d/'stdout.log')
-        witness=json.loads(r.stdout.splitlines()[-1]);assert witness['rejected']==8 and witness['get_hits']==witness['key_hits']==witness['list_hits']==0 and witness['key_view_unchanged'];wire.append({'mode':mode,**witness})
+        witness=json.loads(r.stdout.splitlines()[-1]);assert witness['rejected']==17 and witness['get_hits']==witness['key_hits']==witness['list_hits']==0 and witness['key_view_unchanged'];wire.append({'mode':mode,**witness})
     save(out/'results.json',{'agent_sha256':sha(b/'distributed-observer.jar'),'cases':results,'wire_guards':wire,'scope':'Observation/binding only, never counted as source accuracy.'});print('Map wrapper controls passed',flush=True)
 
 
