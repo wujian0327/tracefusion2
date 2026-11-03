@@ -101,6 +101,10 @@ def attach(plan):
             target=callee(ins)
             if target not in cfg['call_targets'].get(caller+'@'+str(ins['index']),[]):continue
             if not continuation_closed(caller,ins['index']):continue
+            from plan_constructor_prefix_guard import eligible
+            if not eligible(plan,caller,ins['index'],
+                            {key for key,p in forward.items()if p==proof},
+                            {'caller':source_method,'pc':source_pc,'callee':source}):continue
             candidates[caller+'@'+str(ins['index'])]={'callee':target,
                 'implementation':target,'caller':caller,'pc':ins['index'],
                 'reason':'Root returns the same source object; all caller continuations only forward references. Runtime must establish an unexposed source island disjoint from receiver/arguments. Callee keeps arbitrary effects.',

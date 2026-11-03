@@ -20,6 +20,12 @@ def obligations(plan):
     # Existing source snapshots are intentionally restricted to their original
     # field universe. The closure cannot move or introduce a source boundary.
     original=set(plan['response_binding']['source_fields'])
+    # Conversion consumes its independently observed input projection. Until
+    # that public contract declares smaller input demands, retain the original
+    # source-field universe, including fields declared by different DTO types.
+    if cfg.get('conversion_contracts') or plan.get('json_conversion_methods'):
+        for field in original:
+            required.add(field);reasons.setdefault(field,set()).add('complete finite conversion input projection')
     properties={p['field']:p for props in plan['response_graph_schema'].values() for p in props}
     omit={field:properties[field]['descriptor'] for field in sorted(original-required)
           if field in properties and properties[field]['descriptor'] in SCALARS}

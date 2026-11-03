@@ -34,14 +34,14 @@ def run(out,source_root=None):
     b=out/'build';build(b,{'fixture':{'jar':str(jar),'targets':['FutureStateObservationFixture$Result.message']}})
     cp=':'.join(map(str,[classes,b/'distributed-observer.jar',*deps,*JARS]))
     results={}
-    for entry in ('root','containerFuture','forward','guarded'):
+    for entry in ('root','containerFuture','forward','guarded','exceptionFuture','dynamicGuard'):
         plan,route=choose(load(b/'fixture/model.json'),{'entry':'FutureStateObservationFixture.'+entry+'(I)LFutureStateObservationFixture$Result;',
             'target':'FutureStateObservationFixture$Result.message','path':'/message',
             'source_calls':['FutureStateObservationFixture$API.fetch()LFutureStateObservationFixture$Result;']},
             deployment=load(actual/'artifacts/zlt-completion-slice-20261031/final-candidate-01/mall/deployment-environment.json'))
         plan.pop('communication_identity',None)
         directory=out/entry;directory.mkdir();save(directory/'plan.json',plan);save(directory/'route.json',route)
-        prop=['-Dfixture.'+entry+'=true']if entry in ('containerFuture','forward','guarded')else[]
+        prop=['-Dfixture.'+entry+'=true']if entry in ('containerFuture','forward','guarded','exceptionFuture','dynamicGuard')else[]
         baseline=json.loads(command([java,*prop,'-cp',cp,'FutureStateObservationFixture'],directory/'baseline.log').stdout.splitlines()[-1])
         modes={};captures={}
         for mode in ('full','selective'):
@@ -59,13 +59,13 @@ def run(out,source_root=None):
                 ret=next(r for r in rows if r['kind']=='binding-return'and r['message']==case['message'])
                 answer=next(a for a in answers if a['root_frame']==ret['frame'])
                 if answer['known']:
-                    if entry in ('root','containerFuture')or entry=='guarded'and case['mode']==1:assert answer['origins']==[]
+                    if entry in ('root','containerFuture')or entry in ('guarded','dynamicGuard')and case['mode']==1 or entry=='exceptionFuture'and case['mode']==1:assert answer['origins']==[]
                     else:
                         source_row=next(r for r in rows if r['kind']=='binding-source'and r.get('message')==case['message'])
                         index=next(i for i,f in enumerate(source_row['fields'])if f['field']=='FutureStateObservationFixture$Result.message')
                         assert set(map(tuple,answer['origins']))=={('field',source_row['seq'],index)}
-                if not source_root:assert answer['known']==(entry!='guarded'or case['mode']not in (3,7)),(entry,mode,case,answer)
-                expected.append({'case':case['mode'],'known':answer['known'],'positive':entry not in ('root','containerFuture')and not(entry=='guarded'and case['mode']==1)})
+                if not source_root:assert answer['known']==((entry!='guarded'or case['mode']not in (3,7,8))and(entry!='dynamicGuard'or case['mode']not in (2,3,4,7))),(entry,mode,case,answer)
+                expected.append({'case':case['mode'],'known':answer['known'],'positive':entry not in ('root','containerFuture')and not(entry in ('guarded','exceptionFuture','dynamicGuard')and case['mode']==1)})
             cuts=sum(bool(r.get('body_observation',{}).get('selected'))for r in rows)
             omissions=sum(sum(r.get('target_observation',{}).get('scalar_fields',{}).values())for r in rows)
             modes[mode]={'business_equal':True,'answers':expected,'known':sum(a['known']for a in answers),
@@ -73,9 +73,9 @@ def run(out,source_root=None):
                          'bytes':(cap/'events.jsonl').stat().st_size,'capture_sha256':sha(cap/'events.jsonl')}
         guards={}
         if not source_root:
-            assert modes['full']['known']==modes['selective']['known']==(6 if entry=='guarded'else 2)
-            if entry in ('root','containerFuture'):assert modes['selective']['body_cuts']==0,'Later field/container read did not fall back before omission'
-            else:assert modes['selective']['body_cuts']==(3 if entry=='guarded'else 2)
+            assert modes['full']['known']==modes['selective']['known']==(6 if entry=='guarded'else 4 if entry=='dynamicGuard'else 2)
+            if entry in ('root','containerFuture','exceptionFuture'):assert modes['selective']['body_cuts']==0,'Later field/container read did not fall back before omission'
+            else:assert modes['selective']['body_cuts']==(0 if entry=='guarded'else 3 if entry=='dynamicGuard'else 2)
             assert modes['selective']['scalar_values_omitted']>0
             assert modes['selective']['bytes']<modes['full']['bytes']
             for fault in ('missing-proof','wrong-policy','necessary-field','full-omission','missing-source','sticky-invalid'):
@@ -93,7 +93,7 @@ def run(out,source_root=None):
         results[entry]={'modes':modes,'guards':guards,
                         'reference_full_selective_equal':modes['full']['answers']==modes['selective']['answers']}
         save(out/'progress.json',results)
-    save(out/'results.json',{'implementation':'frozen-reference'if source_root else'development',
+    save(out/'results.json',{'implementation':('isolated-prototype'if 'prefix-variant-source'in str(source_root)else'frozen-reference')if source_root else'development',
                            'agent_sha256':sha(b/'distributed-observer.jar'),'source_fixture_sha256':sha(source),'entries':results})
     print(json.dumps(results))
 
