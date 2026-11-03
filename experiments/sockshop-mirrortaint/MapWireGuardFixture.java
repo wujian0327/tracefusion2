@@ -20,6 +20,10 @@ public class MapWireGuardFixture {
   try{SpringTransportAgent.Transport.snapshot(nested,true);throw new AssertionError();}catch(IllegalStateException expected){rejected++;}
   try{ResponseBindingHooks.checkPath(nested,mapper,new String[]{"data","0"},0);throw new AssertionError();}catch(IllegalStateException expected){rejected++;}
   if(MapWrapperFixture.BadGet.hits!=0||MapWrapperFixture.BadKeys.hits!=0||BadList.hits!=0)throw new AssertionError("application override executed");
-  System.out.println("{\"rejected\":"+rejected+",\"get_hits\":0,\"key_hits\":0,\"list_hits\":0,\"key_view_unchanged\":true}");
+  W3CTraceContext context=W3CTraceContext.parse("00-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-1111111111111111-01",null);SpringTransportAgent.Transport.ASYNC.set(context);
+  Object token;try{token=SpringTransportAgent.Transport.writeStart(good,null);if(token==null)throw new AssertionError("ordinary handler output rejected");SpringTransportAgent.Transport.writeEnd(token,good);}finally{SpringTransportAgent.Transport.ASYNC.remove();}
+  if(!ResponseBindingHooks.RETURN_MESSAGES.isEmpty())throw new AssertionError("unbound output manufactured query binding");
+  if(SpringTransportAgent.Transport.TARGET_MAPS.get()!=null)throw new AssertionError("output scope leaked");
+  System.out.println("{\"rejected\":"+rejected+",\"get_hits\":0,\"key_hits\":0,\"list_hits\":0,\"key_view_unchanged\":true,\"unbound_output_observed\":true}");
  }
 }

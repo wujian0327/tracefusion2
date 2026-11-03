@@ -20,7 +20,8 @@ def run(out):
         deployment=load(ROOT/'artifacts/target-closure-revision-20261103/external-first-01/deployment-environment.json'))
     # This control tests physical return snapshots, not communication or origin.
     plan.pop('communication_identity',None);save(out/'plan.json',plan);save(out/'route.json',route)
-    cp=':'.join(map(str,[classes,b/'distributed-observer.jar',*JARS]));results=[]
+    context_libs=sorted((ROOT/'artifacts/zlt-completion-slice-20261031/locality-sequence-controls-01/libs').glob('*.jar'))
+    cp=':'.join(map(str,[classes,b/'distributed-observer.jar',*JARS,*context_libs]));results=[]
     for case in range(8):
         base=command([java,'-cp',cp,'MapWrapperFixture',str(case)],out/('original-%d.log'%case)).stdout.splitlines()[-1]
         for mode in('full','selective'):

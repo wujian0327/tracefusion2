@@ -20,10 +20,12 @@ def prepare(out,build,calibrated=False):
     for q in qs:
         target,path=q['target'].split('@');p,route=choose(model,{'entry':q['entry'],'target':target,'path':path,'source_calls':q['source_calls']},deployment=load(out/'deployment-environment.json'))
         dest=out/'plans'/q['id'];dest.mkdir(parents=True);save(dest/'plan.json',p);save(dest/'route.json',route);save(dest/'result.json',{'state':'conditional','scope':'No answer asserted by planning.'})
-    save(out/'protocol-before-runs.json',{'reference':'130858947f3eabc1dbee8693f11c926f37f289e9','Agent':sha(build/'distributed-observer.jar'),
+    version=load(build.parent/'algorithm-freeze.json')['commit']if(build.parent/'algorithm-freeze.json').exists()else subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+    save(out/'protocol-before-runs.json',{'reference':'130858947f3eabc1dbee8693f11c926f37f289e9','candidate_commit':version,'Agent':sha(build/'distributed-observer.jar'),
       'configuration':'C2 explicit actual mapper for BOTH tools'if calibrated else'C1 original five source declarations unchanged',
       'source_rules':'Same original identity-preserving mapper-return rule, never TF graph/native labels as truth.','calibrated':calibrated,
-      'no_dynamic_code':True,'old_first_immutable':True})
+      'no_dynamic_code':True,'old_first_immutable':True,'driver_sha256':sha(Path(__file__)),
+      'clock_business_check':'After requests, before disposable DB removal: independently read original table IDs/create_time, compare each returned unqueried createTime to its own DB. This is not a source oracle or cross-JVM input identity.'})
 
 
 def install(out,build):
@@ -31,11 +33,22 @@ def install(out,build):
     driver.OUT=out;driver.BASE=build
     def verify():
         assert sha(build/'distributed-observer.jar')==load(out/'protocol-before-runs.json')['Agent']
-        return {'commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()}
+        version=load(build.parent/'algorithm-freeze.json')['commit']if(build.parent/'algorithm-freeze.json').exists()else load(out/'protocol-before-runs.json').get('candidate_commit','development-source-hash-checkpoint')
+        return {'commit':version}
     driver.verify=verify;original=driver.attach
     def attach(*args,**kwargs):
         original(*args,**kwargs);dest=args[1];r=load(dest/'binary-receipt.json');r['core_agent_contract_changes']=True;r['reference']='1308589';save(dest/'binary-receipt.json',r)
     driver.attach=attach
+    from sockshop import Deployment
+    previous=Deployment.diagnostics
+    def diagnostics(self):
+        previous(self)
+        if str(self.out).startswith(str(out/'runs')):
+            tables=[('sys_dept','dept_id'),('sys_dict_data','dict_code'),('sys_config','config_id'),('sys_post','post_id')]
+            sql=' UNION ALL '.join("SELECT '%s' AS table_name,CAST(%s AS CHAR) AS id,DATE_FORMAT(create_time,'%%Y-%%m-%%d %%H:%%i:%%s') AS createTime FROM %s"%(t,key,t)for t,key in tables)
+            r=self.compose('exec','-T','mysql','mysql','-uroot','-ptf2-disposable-fixture','--batch','-D','ry-cloud','-e',sql,check=False)
+            (self.out/'independent-db-times.tsv').write_text((r.stdout or'')+(r.stderr or''));save(self.out/'independent-db-times-receipt.json',{'returncode':r.returncode,'SQL':sql,'source_truth':False})
+    Deployment.diagnostics=diagnostics
     return driver,verify
 
 
