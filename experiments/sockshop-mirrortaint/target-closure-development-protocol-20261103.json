@@ -1,0 +1,61 @@
+{
+  "created_utc": "2026-11-03T02:05:08.401675+00:00",
+  "reference": "7e4ad0b900a64871259a5fac008968128cc5ec28",
+  "start_head": "74c11c760823a51a90751bf04a065d65eba67276",
+  "core_freeze_file": "artifacts/zlt-completion-slice-20261031/final-candidate-01/historical/algorithm-freeze.json",
+  "core_freeze_sha256": "6adb2d3fe7292453d7ce9a541079ff77a20d2de69417e1ccf61944bfcde7f4de",
+  "scope": "Seal external candidates before core changes; development only existing Mall/ZLT; freeze before new-query planning/execution; all first failures immutable. No push.",
+  "new_apps": [
+    {
+      "app": "RuoYi-Cloud",
+      "repository": "https://github.com/yangzongzhuan/RuoYi-Cloud",
+      "branch": "springboot2",
+      "commit": "86527f4da8448a11630ea8dcd03a585cdd6565c6"
+    },
+    {
+      "app": "TeaStore",
+      "repository": "https://github.com/DescartesResearch/TeaStore",
+      "commit": "34b37f7e7be433ce72d5f9455e66922a13116749",
+      "bounded_preflight": "Java11/Tomcat, no large framework adaptation"
+    }
+  ],
+  "forbidden": [
+    "new external query TF trial planning before algorithm freeze",
+    "change source boundaries",
+    "success-based candidate replacement",
+    "Gson/dynamicPrincipal/new sink development",
+    "performance win assumption",
+    "old captures described as new deployments"
+  ],
+  "hard_gates": {
+    "Mall": 98,
+    "historic_MT_Mall": 88,
+    "ZLT_positive": 15,
+    "Account": 40,
+    "old62_known": 428,
+    "old29_known": 232,
+    "write15_known": 96
+  },
+  "targeted_guards": [
+    "direct/indirect/global/container/lambda publication",
+    "same-value overwrite",
+    "future global/container/selection reads",
+    "exception fallback",
+    "guard false collects full before omission",
+    "SQL earlier callback leaves mapping factory/handler/global state",
+    "sticky invalidity and same-object leak"
+  ],
+  "cost_tasks_before_results": [
+    "Mall expiresIn",
+    "ZLT Client clientId",
+    "ZLT User username",
+    "Orders total"
+  ],
+  "cost_primary": "Report each task. Internal success requires BOTH complete-batch protocol bytes and offline CPU lower; online businessCPU/p95 median ratios <=1.05, and no paired-round ratio >1.10. Majority uses >half all preselected applicable tasks, not requests. Report each metric/range even if criterion fails.",
+  "cost_secondary": [
+    "offline wall/current-exec VmHWM",
+    "attributable measurement bytes",
+    "static plan including model load, excluding JAR extraction/build/start"
+  ],
+  "cost_design": "5 rounds independent deployments, randomized within round, warm30s measure60s 2rps concurrency<=2; correctness includes warmup; identical necessary checks, shared engineering and format. MT only on common independently correct calibrated tasks. No summing single-query deployments as multigoal."
+}

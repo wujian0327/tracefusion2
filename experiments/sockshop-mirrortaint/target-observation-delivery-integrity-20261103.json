@@ -1,0 +1,56 @@
+{
+  "algorithm": "130858947f3eabc1dbee8693f11c926f37f289e9",
+  "reference": "7e4ad0b900a64871259a5fac008968128cc5ec28",
+  "passed": true,
+  "core_sources": 111,
+  "builder_unchanged": true,
+  "public_contracts_unchanged": 23,
+  "cost_locked_files": 10,
+  "first_external_files_unchanged": 1774,
+  "same_Mall_capture_files_unchanged": 1746,
+  "formal_deployments": 80,
+  "resource_summaries_exact": 80,
+  "pinned_image_and_limit_specs_equal_within_task": true,
+  "same_business_JAR_hashes_all_80_trials": {
+    "mall": {
+      "admin": "52679d0e8caeddfcdc115dbbdb4bd9eb744a3f644451dcacc2e215609c57fd28",
+      "portal": "a1508acb8d2a80d43c47fd1b18ea49b3c7c9c384149813dcdc1ade05270acf09",
+      "auth": "f151d7bdf97f33e6437e6c2f95ef0fe8cccb9f94a76f6c8ac9df977b8d65ee9b"
+    },
+    "zlt-client": {
+      "zlt-user": "3c1cc2a0c891ba21dbc0839f68aeae86c72d7a4af2834e93e3af10e1f400095c",
+      "zlt-uaa": "94bec7756cb051e01ec84e7c033c392ce56bd5bb42b02dd5540f421977be0d55"
+    },
+    "zlt-user": {
+      "zlt-user": "3c1cc2a0c891ba21dbc0839f68aeae86c72d7a4af2834e93e3af10e1f400095c",
+      "zlt-uaa": "94bec7756cb051e01ec84e7c033c392ce56bd5bb42b02dd5540f421977be0d55"
+    },
+    "orders": {
+      "carts": "ab0d2da1937c219d649766dd3ba84945c4e2063ac9bff6839993f9dc3d8a548b",
+      "orders": "8a2cb87b9bedf79c7ad407fcd72bc74c6c1241ef67ae967de59f1ec5f5873a2b",
+      "shipping": "5704afeeca3c34e10873b15b5aeaf25cbe8326772382631ff4e579d5fa358890"
+    }
+  },
+  "all_common_task_sources_correct": true,
+  "internal_joint_tasks_passed": 4,
+  "external_first_summary_sha256": "030dcf9cad52b4ebcc07fb36631e99f14fb32ea8078aa33ac42ba679fb1198a7",
+  "external_selected_original_targets": 141,
+  "delivery_sources": {
+    "TARGET-OBSERVATION-ALGORITHM-20261103.md": "95b17f1de425fa3b112433844be7e33f00d849d34c25cd62c37ae8a90a3f18a8",
+    "TARGET-OBSERVATION-DEVELOPMENT-20261103.md": "5245e8ec74f7e771360b5e7f36797d9f16aea5a41b45f5b0caba00ca11187547",
+    "FROZEN-EXTERNAL-FIRST-20261103.md": "aa25b72d28e79fcc49e20c2ee272d1fc65801127b4dceb2e1b1b190e7c485ebf",
+    "TARGET-OBSERVATION-COMMON-COST-20261103.md": "99b1905f0c9e3cc06300fc88a118f9e79ff240464531cc9e38e5d3bb002f2079",
+    "run_target_closure_cost.py": "49da7ea58bd990f927e980e5505dc389910ec778eed7e00e16897988ed89d359",
+    "audit_target_closure_cost.py": "f4b0d673153719ebf085e50eec62bb715e2efe2f7536e1bdcafd287d02bf13ae",
+    "audit_target_closure_delivery.py": "1cc14ba947f35df01635dce3827ffa8c569526dea3662fae3a752a4373c7f886",
+    "run_target_external_first.py": "5d3739e4fe9ba18f7c98e0ecf87c110d9405ebdb808d37a37d23120085ee2896",
+    "audit_target_external_first.py": "3c6348b469ef4f1e59305af99c1f01296b1ce281e20200d7b87454b152d36b83",
+    "write_target_closure_reports.py": "98c628ae0d8ef78b837a6090047c2485a22cec011ba563801ea0c9f92a504eb9",
+    "backup_target_closure_revision.py": "bb2010c665155e6037dde9ae1e4e0d247ec0185904a7ae9419ae7b839a825933",
+    "prepare_target_closure_guarded_final.py": "adf307f85aa75d18987a4d23cb4738dba87c075d7f4dcc2d18a6282e15168647",
+    "replay_target_compatible.py": "1b62079a1247fe9505fa756dc910538821af92aa211e7cc8e8a3944e6e052240"
+  },
+  "unrelated_container_list_unchanged": true,
+  "provenance": "First candidate full business pass plus compatible same-Agent/same-plan reuse and four changed plans in both modes re-collected. Formal costs and external first runs are new deployments.",
+  "no_push": true
+}

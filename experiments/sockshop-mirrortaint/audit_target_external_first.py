@@ -2,6 +2,7 @@
 import argparse
 import csv
 import json
+import datetime
 from pathlib import Path
 from collections import Counter
 from run_planned_service import ROOT,load,save,sha
@@ -32,6 +33,29 @@ def unresolved_output_obligations(case,pattern):
         result.append({'kind':'original_business_failure_or_handler_output','http_status':case['http_status'],
             'state':'outside_selected_normal_field_scope','reason':'Preserved separately, not counted as answered or business N/A.'})
     return result
+
+
+def business_comparison(app,left,right):
+    """Initialization clocks differ between disposable JVM/DB deployments.
+
+    This is a task-response comparison, never a source oracle. Preserve raw
+    whole-response equality and the separately unverified clock fields.
+    """
+    clocks=[]
+    def equal(a,b,path=''):
+        if type(a)is not type(b):return False
+        if isinstance(a,dict):return a.keys()==b.keys()and all(equal(a[k],b[k],path+'/'+k)for k in a)
+        if isinstance(a,list):return len(a)==len(b)and all(equal(x,y,path+'/'+str(i))for i,(x,y)in enumerate(zip(a,b)))
+        if a==b:return True
+        if app=='ruoyi'and path.endswith('/createTime')and isinstance(a,str)and isinstance(b,str):
+            try:datetime.datetime.strptime(a,'%Y-%m-%d %H:%M:%S');datetime.datetime.strptime(b,'%Y-%m-%d %H:%M:%S')
+            except ValueError:return False
+            clocks.append(path);return True
+        return False
+    task_equal=equal(left,right)
+    return {'task_response_equal_except_original_SQL_initialization_clock':task_equal,
+            'whole_response_equal':left==right,'clock_fields_not_cross_JVM_compared':clocks,
+            'clock_fields_not_source_truth':True}
 
 
 def audit(out):
@@ -79,10 +103,15 @@ def audit(out):
                        'TP':None,'FP':None,'FN':None}
                     own=[c for c in actual if c['case']==case['case']]
                     if own:
-                        c=own[0];r['business_equal']=c['http_status']==case['http_status']and c['response']==case['response']
+                        c=own[0];comparison=business_comparison(app,case['response'],c['response'])
+                        r['business_comparison']=comparison
+                        r['business_equal']=c['http_status']==case['http_status']and comparison['task_response_equal_except_original_SQL_initialization_clock']
                         # New generated IDs/clocks can differ; no such mismatch
                         # can silently establish this missing generation oracle.
-                        if not r['business_equal']:r.update(state='instrumented_business_difference',reason='Original and tool execution differ; raw outputs retained, not excluded.')
+                        if not r['business_equal']:
+                            if qid=='tea-6':
+                                r.update(state='generated_state_unpaired',reason='Original and tool generated IDs differ. Original ran all APIs sequentially; per-query tool deployments have no paired generator state or generated-write oracle. Difference retained, not attributed to instrumentation.')
+                            else:r.update(state='instrumented_response_difference_unattributed',reason='Original and tool execution differ; raw outputs retained; causation not established.')
                         elif error:r['state']='evidence_invalid'
                         else:
                             try:
@@ -122,7 +151,8 @@ def audit(out):
                     tool_records.append(r);records.append(r)
                 api['tools'][mode]={'states':dict(Counter(r['state']for r in tool_records)),
                     'oracle_adequate':sum(r['oracle_adequate']for r in tool_records),
-                    'business_equal_requests':sum(c['http_status']==o['http_status']and c['response']==o['response']for c,o in zip(actual,expected_cases)),
+                    'business_equal_requests':sum(c['http_status']==o['http_status']and business_comparison(app,o['response'],c['response'])['task_response_equal_except_original_SQL_initialization_clock']for c,o in zip(actual,expected_cases)),
+                    'whole_response_equal_requests':sum(c['http_status']==o['http_status']and c['response']==o['response']for c,o in zip(actual,expected_cases)),
                     'captured_requests':len(actual),'first_state':initial,'failure':error,
                     'raw_sources':sum(s.get('kind')in('source','binding-source')for s in rows)}
             apis.append(api)

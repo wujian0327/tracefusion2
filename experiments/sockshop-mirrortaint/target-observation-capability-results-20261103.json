@@ -1,0 +1,482 @@
+{
+  "reference": "7e4ad0b900a64871259a5fac008968128cc5ec28",
+  "algorithm": "130858947f3eabc1dbee8693f11c926f37f289e9",
+  "agent_sha256": "1075d49ca6741a6e5280b9c32903871efd75e2663a694f01a08a5218f07c8a13",
+  "capability_gate": {
+    "passed": true,
+    "final_candidate": "130858947f3eabc1dbee8693f11c926f37f289e9",
+    "Mall_known": 98,
+    "Mall_MT_preserved": 88,
+    "ZLT_positive_per_mode": 15,
+    "Account": 40,
+    "old62": 428,
+    "old29": 232,
+    "write15": 96,
+    "new_apps_not_yet_planned": true,
+    "validation": "Normal final-code reconstruction and independent oracle scoring. Reused first captures stay in their original directories, changed plans newly collected."
+  },
+  "targeted_controls": {
+    "root": {
+      "modes": {
+        "full": {
+          "business_equal": true,
+          "answers": [
+            {
+              "case": 0,
+              "known": true,
+              "positive": false
+            },
+            {
+              "case": 1,
+              "known": true,
+              "positive": false
+            }
+          ],
+          "known": 2,
+          "body_cuts": 0,
+          "scalar_values_omitted": 0,
+          "events": 117,
+          "bytes": 84498,
+          "capture_sha256": "4409cd1f33f483a0fbe56ca9a4baf785405e4da0ee5fc9e541705d1d06b94671"
+        },
+        "selective": {
+          "business_equal": true,
+          "answers": [
+            {
+              "case": 0,
+              "known": true,
+              "positive": false
+            },
+            {
+              "case": 1,
+              "known": true,
+              "positive": false
+            }
+          ],
+          "known": 2,
+          "body_cuts": 0,
+          "scalar_values_omitted": 4,
+          "events": 117,
+          "bytes": 82095,
+          "capture_sha256": "aab18686f84f14a6af88cd34ed8da2d780549933df21ee4870f7abec81a282a1"
+        }
+      },
+      "guards": {
+        "missing-proof": true,
+        "wrong-policy": true,
+        "necessary-field": true,
+        "full-omission": true,
+        "missing-source": true,
+        "sticky-invalid": true
+      }
+    },
+    "containerFuture": {
+      "modes": {
+        "full": {
+          "business_equal": true,
+          "answers": [
+            {
+              "case": 0,
+              "known": true,
+              "positive": false
+            },
+            {
+              "case": 1,
+              "known": true,
+              "positive": false
+            }
+          ],
+          "known": 2,
+          "body_cuts": 0,
+          "scalar_values_omitted": 0,
+          "events": 127,
+          "bytes": 87967,
+          "capture_sha256": "567c951862c8afb71d692cb9784377cc61f9d340ba13bd1190dc9df0b67bb5a9"
+        },
+        "selective": {
+          "business_equal": true,
+          "answers": [
+            {
+              "case": 0,
+              "known": true,
+              "positive": false
+            },
+            {
+              "case": 1,
+              "known": true,
+              "positive": false
+            }
+          ],
+          "known": 2,
+          "body_cuts": 0,
+          "scalar_values_omitted": 4,
+          "events": 127,
+          "bytes": 85564,
+          "capture_sha256": "3e7340573a30b45c1952b15889569c0780299b0defeadd62627ea504ad68c308"
+        }
+      },
+      "guards": {
+        "missing-proof": true,
+        "wrong-policy": true,
+        "necessary-field": true,
+        "full-omission": true,
+        "missing-source": true,
+        "sticky-invalid": true
+      }
+    },
+    "forward": {
+      "modes": {
+        "full": {
+          "business_equal": true,
+          "answers": [
+            {
+              "case": 0,
+              "known": true,
+              "positive": true
+            },
+            {
+              "case": 1,
+              "known": true,
+              "positive": true
+            }
+          ],
+          "known": 2,
+          "body_cuts": 0,
+          "scalar_values_omitted": 0,
+          "events": 109,
+          "bytes": 82552,
+          "capture_sha256": "aaac5a0a2647664c9118f43a5bcb7805e8079a5cc4992f35745544122dfbfb57"
+        },
+        "selective": {
+          "business_equal": true,
+          "answers": [
+            {
+              "case": 0,
+              "known": true,
+              "positive": true
+            },
+            {
+              "case": 1,
+              "known": true,
+              "positive": true
+            }
+          ],
+          "known": 2,
+          "body_cuts": 2,
+          "scalar_values_omitted": 4,
+          "events": 107,
+          "bytes": 79882,
+          "capture_sha256": "254894d0708b644678e1fda6dfe66bcb7d58b648dcf46581e92345d33de64c37"
+        }
+      },
+      "guards": {
+        "missing-proof": true,
+        "wrong-policy": true,
+        "necessary-field": true,
+        "full-omission": true,
+        "missing-source": true,
+        "sticky-invalid": true
+      }
+    },
+    "guarded": {
+      "modes": {
+        "full": {
+          "business_equal": true,
+          "answers": [
+            {
+              "case": 0,
+              "known": true,
+              "positive": true
+            },
+            {
+              "case": 1,
+              "known": true,
+              "positive": false
+            },
+            {
+              "case": 2,
+              "known": true,
+              "positive": true
+            },
+            {
+              "case": 3,
+              "known": false,
+              "positive": true
+            },
+            {
+              "case": 4,
+              "known": true,
+              "positive": true
+            },
+            {
+              "case": 5,
+              "known": true,
+              "positive": true
+            },
+            {
+              "case": 6,
+              "known": true,
+              "positive": true
+            },
+            {
+              "case": 7,
+              "known": false,
+              "positive": true
+            },
+            {
+              "case": 8,
+              "known": false,
+              "positive": true
+            }
+          ],
+          "known": 6,
+          "body_cuts": 0,
+          "scalar_values_omitted": 0,
+          "events": 398,
+          "bytes": 337236,
+          "capture_sha256": "726bebe4f86ebbc6dbd71e3a78a50e93c21a431b32fe1dfbd28e149a4532b93f"
+        },
+        "selective": {
+          "business_equal": true,
+          "answers": [
+            {
+              "case": 0,
+              "known": true,
+              "positive": true
+            },
+            {
+              "case": 1,
+              "known": true,
+              "positive": false
+            },
+            {
+              "case": 2,
+              "known": true,
+              "positive": true
+            },
+            {
+              "case": 3,
+              "known": false,
+              "positive": true
+            },
+            {
+              "case": 4,
+              "known": true,
+              "positive": true
+            },
+            {
+              "case": 5,
+              "known": true,
+              "positive": true
+            },
+            {
+              "case": 6,
+              "known": true,
+              "positive": true
+            },
+            {
+              "case": 7,
+              "known": false,
+              "positive": true
+            },
+            {
+              "case": 8,
+              "known": false,
+              "positive": true
+            }
+          ],
+          "known": 6,
+          "body_cuts": 0,
+          "scalar_values_omitted": 20,
+          "events": 397,
+          "bytes": 324883,
+          "capture_sha256": "804932c26f6fc8683048bd7f06063abd460dd85614c67cd3d00d87a6f8379e54"
+        }
+      },
+      "guards": {
+        "missing-proof": true,
+        "wrong-policy": true,
+        "necessary-field": true,
+        "full-omission": true,
+        "missing-source": true,
+        "sticky-invalid": true
+      }
+    },
+    "exceptionFuture": {
+      "modes": {
+        "full": {
+          "business_equal": true,
+          "answers": [
+            {
+              "case": 0,
+              "known": true,
+              "positive": true
+            },
+            {
+              "case": 1,
+              "known": true,
+              "positive": false
+            }
+          ],
+          "known": 2,
+          "body_cuts": 0,
+          "scalar_values_omitted": 0,
+          "events": 120,
+          "bytes": 84728,
+          "capture_sha256": "876542adc19c50a2bab47ba2e9b1f4c195de87911900a78c8997d28ec9df51ae"
+        },
+        "selective": {
+          "business_equal": true,
+          "answers": [
+            {
+              "case": 0,
+              "known": true,
+              "positive": true
+            },
+            {
+              "case": 1,
+              "known": true,
+              "positive": false
+            }
+          ],
+          "known": 2,
+          "body_cuts": 0,
+          "scalar_values_omitted": 4,
+          "events": 120,
+          "bytes": 82325,
+          "capture_sha256": "3dff42c86879e60e81bca7fd4ea7bc838f8996e6477cdf91220d5739a98edc5d"
+        }
+      },
+      "guards": {
+        "missing-proof": true,
+        "wrong-policy": true,
+        "necessary-field": true,
+        "full-omission": true,
+        "missing-source": true,
+        "sticky-invalid": true
+      }
+    },
+    "dynamicGuard": {
+      "modes": {
+        "full": {
+          "business_equal": true,
+          "answers": [
+            {
+              "case": 0,
+              "known": true,
+              "positive": true
+            },
+            {
+              "case": 1,
+              "known": true,
+              "positive": false
+            },
+            {
+              "case": 2,
+              "known": false,
+              "positive": true
+            },
+            {
+              "case": 3,
+              "known": false,
+              "positive": true
+            },
+            {
+              "case": 4,
+              "known": false,
+              "positive": true
+            },
+            {
+              "case": 5,
+              "known": true,
+              "positive": true
+            },
+            {
+              "case": 6,
+              "known": true,
+              "positive": true
+            },
+            {
+              "case": 7,
+              "known": false,
+              "positive": true
+            }
+          ],
+          "known": 4,
+          "body_cuts": 0,
+          "scalar_values_omitted": 0,
+          "events": 364,
+          "bytes": 309908,
+          "capture_sha256": "582ea7bc3e6ad41a809c86b3ebe0ae5e4d8522cd09be210b819290aa7816d04d"
+        },
+        "selective": {
+          "business_equal": true,
+          "answers": [
+            {
+              "case": 0,
+              "known": true,
+              "positive": true
+            },
+            {
+              "case": 1,
+              "known": true,
+              "positive": false
+            },
+            {
+              "case": 2,
+              "known": false,
+              "positive": true
+            },
+            {
+              "case": 3,
+              "known": false,
+              "positive": true
+            },
+            {
+              "case": 4,
+              "known": false,
+              "positive": true
+            },
+            {
+              "case": 5,
+              "known": true,
+              "positive": true
+            },
+            {
+              "case": 6,
+              "known": true,
+              "positive": true
+            },
+            {
+              "case": 7,
+              "known": false,
+              "positive": true
+            }
+          ],
+          "known": 4,
+          "body_cuts": 3,
+          "scalar_values_omitted": 22,
+          "events": 357,
+          "bytes": 295378,
+          "capture_sha256": "155f09787c416359015cc094075a9d64dd39c40275dca3104be0a9fddb434b36"
+        }
+      },
+      "guards": {
+        "missing-proof": true,
+        "wrong-policy": true,
+        "necessary-field": true,
+        "full-omission": true,
+        "missing-source": true,
+        "sticky-invalid": true
+      }
+    }
+  },
+  "permanent_counterexamples": [
+    "future-reference-03",
+    "constructor-prefix-reference-02",
+    "sql-preallocation-controls-04"
+  ],
+  "artifact_root": "artifacts/target-closure-revision-20261103",
+  "controls_Agent_sha256": "3b4674a839255fefbad5b0809af755cbc207eef4c8366b0a7bfafe49ed110b2a",
+  "controls_Agent_all_class_bytes_equal": true
+}

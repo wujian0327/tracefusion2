@@ -1,0 +1,618 @@
+{
+  "APIs": [
+    {
+      "query": "ruoyi-1",
+      "application": "ruoyi",
+      "selected_original_targets": 5,
+      "original_requests": 6,
+      "no_selected_target_requests": 1,
+      "normal_source_boundary": [
+        "com/ruoyi/system/mapper/SysDeptMapper.selectDeptById(Ljava/lang/Long;)Lcom/ruoyi/system/api/domain/SysDept;"
+      ],
+      "tools": {
+        "full": {
+          "states": {
+            "evidence_invalid": 5
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 6,
+          "whole_response_equal_requests": 1,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+          "raw_sources": 5
+        },
+        "selective": {
+          "states": {
+            "evidence_invalid": 5
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 6,
+          "whole_response_equal_requests": 1,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+          "raw_sources": 5
+        },
+        "mirrortaint": {
+          "states": {
+            "known_correct": 5
+          },
+          "oracle_adequate": 5,
+          "business_equal_requests": 6,
+          "whole_response_equal_requests": 1,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": null,
+          "raw_sources": 11
+        }
+      },
+      "additional_output_obligations": [
+        {
+          "case": 5,
+          "kind": "original_business_failure_or_handler_output",
+          "http_status": 200,
+          "state": "outside_selected_normal_field_scope",
+          "reason": "Preserved separately, not counted as answered or business N/A."
+        }
+      ]
+    },
+    {
+      "query": "ruoyi-2",
+      "application": "ruoyi",
+      "selected_original_targets": 43,
+      "original_requests": 6,
+      "no_selected_target_requests": 0,
+      "normal_source_boundary": [
+        "com/ruoyi/system/mapper/SysDeptMapper.selectDeptList(Lcom/ruoyi/system/api/domain/SysDept;)Ljava/util/List;"
+      ],
+      "tools": {
+        "full": {
+          "states": {
+            "evidence_invalid": 43
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 6,
+          "whole_response_equal_requests": 0,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+          "raw_sources": 6
+        },
+        "selective": {
+          "states": {
+            "evidence_invalid": 43
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 6,
+          "whole_response_equal_requests": 0,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+          "raw_sources": 6
+        },
+        "mirrortaint": {
+          "states": {
+            "known_correct": 43
+          },
+          "oracle_adequate": 43,
+          "business_equal_requests": 6,
+          "whole_response_equal_requests": 0,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": null,
+          "raw_sources": 12
+        }
+      },
+      "additional_output_obligations": []
+    },
+    {
+      "query": "ruoyi-3",
+      "application": "ruoyi",
+      "selected_original_targets": 12,
+      "original_requests": 6,
+      "no_selected_target_requests": 1,
+      "normal_source_boundary": [
+        "com/ruoyi/system/mapper/SysDictDataMapper.selectDictDataByType(Ljava/lang/String;)Ljava/util/List;",
+        "org/springframework/data/redis/core/ValueOperations.get(Ljava/lang/Object;)Ljava/lang/Object;"
+      ],
+      "tools": {
+        "full": {
+          "states": {
+            "evidence_invalid": 12
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 6,
+          "whole_response_equal_requests": 1,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+          "raw_sources": 6
+        },
+        "selective": {
+          "states": {
+            "evidence_invalid": 12
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 6,
+          "whole_response_equal_requests": 1,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+          "raw_sources": 6
+        },
+        "mirrortaint": {
+          "states": {
+            "known_correct": 12
+          },
+          "oracle_adequate": 12,
+          "business_equal_requests": 6,
+          "whole_response_equal_requests": 1,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": null,
+          "raw_sources": 13
+        }
+      },
+      "additional_output_obligations": []
+    },
+    {
+      "query": "ruoyi-4",
+      "application": "ruoyi",
+      "selected_original_targets": 5,
+      "original_requests": 6,
+      "no_selected_target_requests": 1,
+      "normal_source_boundary": [
+        "com/ruoyi/system/mapper/SysConfigMapper.selectConfigById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysConfig;"
+      ],
+      "tools": {
+        "full": {
+          "states": {
+            "evidence_invalid": 5
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 6,
+          "whole_response_equal_requests": 1,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+          "raw_sources": 0
+        },
+        "selective": {
+          "states": {
+            "evidence_invalid": 5
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 6,
+          "whole_response_equal_requests": 1,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+          "raw_sources": 0
+        },
+        "mirrortaint": {
+          "states": {
+            "oracle_or_target_unavailable": 5
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 6,
+          "whole_response_equal_requests": 1,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": null,
+          "raw_sources": 6
+        }
+      },
+      "additional_output_obligations": []
+    },
+    {
+      "query": "ruoyi-5",
+      "application": "ruoyi",
+      "selected_original_targets": 24,
+      "original_requests": 6,
+      "no_selected_target_requests": 0,
+      "normal_source_boundary": [
+        "com/ruoyi/system/mapper/SysPostMapper.selectPostAll()Ljava/util/List;"
+      ],
+      "tools": {
+        "full": {
+          "states": {
+            "evidence_invalid": 24
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 6,
+          "whole_response_equal_requests": 0,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+          "raw_sources": 6
+        },
+        "selective": {
+          "states": {
+            "evidence_invalid": 24
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 6,
+          "whole_response_equal_requests": 0,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+          "raw_sources": 6
+        },
+        "mirrortaint": {
+          "states": {
+            "known_correct": 24
+          },
+          "oracle_adequate": 24,
+          "business_equal_requests": 6,
+          "whole_response_equal_requests": 0,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": null,
+          "raw_sources": 6
+        }
+      },
+      "additional_output_obligations": []
+    },
+    {
+      "query": "ruoyi-6",
+      "application": "ruoyi",
+      "selected_original_targets": 6,
+      "original_requests": 6,
+      "no_selected_target_requests": 0,
+      "normal_source_boundary": [
+        "com/ruoyi/system/mapper/SysDeptMapper.selectDeptById(Ljava/lang/Long;)Lcom/ruoyi/system/api/domain/SysDept;",
+        "com/ruoyi/system/mapper/SysDeptMapper.checkDeptNameUnique(Ljava/lang/String;Ljava/lang/Long;)Lcom/ruoyi/system/api/domain/SysDept;"
+      ],
+      "tools": {
+        "full": {
+          "states": {
+            "target_binding_unsupported": 6
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 0,
+          "whole_response_equal_requests": 0,
+          "captured_requests": 0,
+          "first_state": "target_binding_unsupported",
+          "failure": "Dynamic AjaxResult Map leaf /code, not an actual declared Java field. If the frozen query interface cannot express it, keep target_binding_unsupported; do not fabricate a field.",
+          "raw_sources": 0
+        },
+        "selective": {
+          "states": {
+            "target_binding_unsupported": 6
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 0,
+          "whole_response_equal_requests": 0,
+          "captured_requests": 0,
+          "first_state": "target_binding_unsupported",
+          "failure": "Dynamic AjaxResult Map leaf /code, not an actual declared Java field. If the frozen query interface cannot express it, keep target_binding_unsupported; do not fabricate a field.",
+          "raw_sources": 0
+        },
+        "mirrortaint": {
+          "states": {
+            "known_correct": 6
+          },
+          "oracle_adequate": 6,
+          "business_equal_requests": 6,
+          "whole_response_equal_requests": 6,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": null,
+          "raw_sources": 18
+        }
+      },
+      "additional_output_obligations": []
+    },
+    {
+      "query": "tea-1",
+      "application": "teastore",
+      "selected_original_targets": 9,
+      "original_requests": 6,
+      "no_selected_target_requests": 1,
+      "normal_source_boundary": [
+        "jakarta/persistence/EntityManager.find(Ljava/lang/Class;Ljava/lang/Object;)Ljava/lang/Object;",
+        "jakarta/persistence/TypedQuery.getResultList()Ljava/util/List;"
+      ],
+      "tools": {
+        "full": {
+          "states": {
+            "runtime_contract_rejected": 9
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 0,
+          "whole_response_equal_requests": 0,
+          "captured_requests": 0,
+          "first_state": "runtime_contract_rejected",
+          "failure": "Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.",
+          "raw_sources": 0
+        },
+        "selective": {
+          "states": {
+            "runtime_contract_rejected": 9
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 0,
+          "whole_response_equal_requests": 0,
+          "captured_requests": 0,
+          "first_state": "runtime_contract_rejected",
+          "failure": "Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.",
+          "raw_sources": 0
+        },
+        "mirrortaint": {
+          "states": {
+            "oracle_or_target_unavailable": 9
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 6,
+          "whole_response_equal_requests": 6,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": "",
+          "raw_sources": 0
+        }
+      },
+      "additional_output_obligations": []
+    },
+    {
+      "query": "tea-2",
+      "application": "teastore",
+      "selected_original_targets": 9,
+      "original_requests": 6,
+      "no_selected_target_requests": 1,
+      "normal_source_boundary": [
+        "jakarta/persistence/EntityManager.find(Ljava/lang/Class;Ljava/lang/Object;)Ljava/lang/Object;",
+        "jakarta/persistence/TypedQuery.getResultList()Ljava/util/List;"
+      ],
+      "tools": {
+        "full": {
+          "states": {
+            "runtime_contract_rejected": 9
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 0,
+          "whole_response_equal_requests": 0,
+          "captured_requests": 0,
+          "first_state": "runtime_contract_rejected",
+          "failure": "Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.",
+          "raw_sources": 0
+        },
+        "selective": {
+          "states": {
+            "runtime_contract_rejected": 9
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 0,
+          "whole_response_equal_requests": 0,
+          "captured_requests": 0,
+          "first_state": "runtime_contract_rejected",
+          "failure": "Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.",
+          "raw_sources": 0
+        },
+        "mirrortaint": {
+          "states": {
+            "oracle_or_target_unavailable": 9
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 6,
+          "whole_response_equal_requests": 6,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": "",
+          "raw_sources": 0
+        }
+      },
+      "additional_output_obligations": []
+    },
+    {
+      "query": "tea-3",
+      "application": "teastore",
+      "selected_original_targets": 5,
+      "original_requests": 6,
+      "no_selected_target_requests": 1,
+      "normal_source_boundary": [
+        "jakarta/persistence/TypedQuery.getResultList()Ljava/util/List;"
+      ],
+      "tools": {
+        "full": {
+          "states": {
+            "runtime_contract_rejected": 5
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 0,
+          "whole_response_equal_requests": 0,
+          "captured_requests": 0,
+          "first_state": "runtime_contract_rejected",
+          "failure": "Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.",
+          "raw_sources": 0
+        },
+        "selective": {
+          "states": {
+            "runtime_contract_rejected": 5
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 0,
+          "whole_response_equal_requests": 0,
+          "captured_requests": 0,
+          "first_state": "runtime_contract_rejected",
+          "failure": "Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.",
+          "raw_sources": 0
+        },
+        "mirrortaint": {
+          "states": {
+            "oracle_or_target_unavailable": 5
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 6,
+          "whole_response_equal_requests": 6,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": "",
+          "raw_sources": 0
+        }
+      },
+      "additional_output_obligations": [
+        {
+          "case": 4,
+          "kind": "original_business_failure_or_handler_output",
+          "http_status": 404,
+          "state": "outside_selected_normal_field_scope",
+          "reason": "Preserved separately, not counted as answered or business N/A."
+        }
+      ]
+    },
+    {
+      "query": "tea-4",
+      "application": "teastore",
+      "selected_original_targets": 5,
+      "original_requests": 6,
+      "no_selected_target_requests": 1,
+      "normal_source_boundary": [
+        "jakarta/persistence/EntityManager.find(Ljava/lang/Class;Ljava/lang/Object;)Ljava/lang/Object;",
+        "jakarta/persistence/TypedQuery.getResultList()Ljava/util/List;"
+      ],
+      "tools": {
+        "full": {
+          "states": {
+            "runtime_contract_rejected": 5
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 0,
+          "whole_response_equal_requests": 0,
+          "captured_requests": 0,
+          "first_state": "runtime_contract_rejected",
+          "failure": "Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.",
+          "raw_sources": 0
+        },
+        "selective": {
+          "states": {
+            "runtime_contract_rejected": 5
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 0,
+          "whole_response_equal_requests": 0,
+          "captured_requests": 0,
+          "first_state": "runtime_contract_rejected",
+          "failure": "Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.",
+          "raw_sources": 0
+        },
+        "mirrortaint": {
+          "states": {
+            "oracle_or_target_unavailable": 5
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 6,
+          "whole_response_equal_requests": 6,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": "",
+          "raw_sources": 0
+        }
+      },
+      "additional_output_obligations": []
+    },
+    {
+      "query": "tea-5",
+      "application": "teastore",
+      "selected_original_targets": 12,
+      "original_requests": 6,
+      "no_selected_target_requests": 1,
+      "normal_source_boundary": [
+        "jakarta/persistence/TypedQuery.getResultList()Ljava/util/List;"
+      ],
+      "tools": {
+        "full": {
+          "states": {
+            "runtime_contract_rejected": 12
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 0,
+          "whole_response_equal_requests": 0,
+          "captured_requests": 0,
+          "first_state": "runtime_contract_rejected",
+          "failure": "Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.",
+          "raw_sources": 0
+        },
+        "selective": {
+          "states": {
+            "runtime_contract_rejected": 12
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 0,
+          "whole_response_equal_requests": 0,
+          "captured_requests": 0,
+          "first_state": "runtime_contract_rejected",
+          "failure": "Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.",
+          "raw_sources": 0
+        },
+        "mirrortaint": {
+          "states": {
+            "oracle_or_target_unavailable": 12
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 6,
+          "whole_response_equal_requests": 6,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": "",
+          "raw_sources": 0
+        }
+      },
+      "additional_output_obligations": []
+    },
+    {
+      "query": "tea-6",
+      "application": "teastore",
+      "selected_original_targets": 6,
+      "original_requests": 6,
+      "no_selected_target_requests": 0,
+      "normal_source_boundary": [
+        "jakarta/persistence/EntityManager.find(Ljava/lang/Class;Ljava/lang/Object;)Ljava/lang/Object;"
+      ],
+      "tools": {
+        "full": {
+          "states": {
+            "runtime_contract_rejected": 6
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 0,
+          "whole_response_equal_requests": 0,
+          "captured_requests": 0,
+          "first_state": "runtime_contract_rejected",
+          "failure": "Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.",
+          "raw_sources": 0
+        },
+        "selective": {
+          "states": {
+            "runtime_contract_rejected": 6
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 0,
+          "whole_response_equal_requests": 0,
+          "captured_requests": 0,
+          "first_state": "runtime_contract_rejected",
+          "failure": "Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.",
+          "raw_sources": 0
+        },
+        "mirrortaint": {
+          "states": {
+            "generated_state_unpaired": 6
+          },
+          "oracle_adequate": 0,
+          "business_equal_requests": 0,
+          "whole_response_equal_requests": 0,
+          "captured_requests": 6,
+          "first_state": "captured",
+          "failure": "",
+          "raw_sources": 0
+        }
+      },
+      "additional_output_obligations": []
+    }
+  ],
+  "candidate": "130858947f3eabc1dbee8693f11c926f37f289e9",
+  "all40_still_retained": true,
+  "new_core_or_contracts": false,
+  "third_party_blind": false,
+  "scope": "12 sealed query families; complete old40 API experiment remains unfinished. Missing physical facts never supplied by labels/graphs or equal values."
+}

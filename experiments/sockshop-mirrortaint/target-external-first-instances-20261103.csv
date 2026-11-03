@@ -1,0 +1,424 @@
+application,query,mode,case,path,state,business_equal,target_bound,source_call_complete,oracle_adequate,positive,TP,FP,FN,reason
+ruoyi,ruoyi-1,full,0,/data/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-1,full,1,/data/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-1,full,2,/data/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-1,full,3,/data/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-1,full,4,/data/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-1,selective,0,/data/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-1,selective,1,/data/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-1,selective,2,/data/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-1,selective,3,/data/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-1,selective,4,/data/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-1,mirrortaint,0,/data/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-1,mirrortaint,1,/data/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-1,mirrortaint,2,/data/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-1,mirrortaint,3,/data/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-1,mirrortaint,4,/data/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,full,0,/data/0/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,0,/data/1/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,0,/data/2/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,0,/data/3/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,1,/data/0/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,1,/data/1/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,1,/data/2/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,1,/data/3/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,1,/data/4/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,1,/data/5/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,1,/data/6/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,2,/data/0/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,2,/data/1/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,2,/data/2/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,2,/data/3/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,2,/data/4/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,2,/data/5/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,2,/data/6/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,2,/data/7/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,2,/data/8/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,3,/data/0/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,3,/data/1/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,3,/data/2/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,3,/data/3/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,3,/data/4/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,3,/data/5/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,3,/data/6/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,3,/data/7/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,3,/data/8/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,4,/data/0/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,4,/data/1/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,4,/data/2/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,4,/data/3/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,4,/data/4/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,4,/data/5/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,4,/data/6/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,4,/data/7/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,4,/data/8/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,4,/data/9/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,5,/data/0/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,5,/data/1/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,5,/data/2/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,full,5,/data/3/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,0,/data/0/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,0,/data/1/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,0,/data/2/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,0,/data/3/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,1,/data/0/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,1,/data/1/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,1,/data/2/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,1,/data/3/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,1,/data/4/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,1,/data/5/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,1,/data/6/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,2,/data/0/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,2,/data/1/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,2,/data/2/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,2,/data/3/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,2,/data/4/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,2,/data/5/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,2,/data/6/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,2,/data/7/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,2,/data/8/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,3,/data/0/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,3,/data/1/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,3,/data/2/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,3,/data/3/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,3,/data/4/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,3,/data/5/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,3,/data/6/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,3,/data/7/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,3,/data/8/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,4,/data/0/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,4,/data/1/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,4,/data/2/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,4,/data/3/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,4,/data/4/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,4,/data/5/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,4,/data/6/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,4,/data/7/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,4,/data/8/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,4,/data/9/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,5,/data/0/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,5,/data/1/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,5,/data/2/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,selective,5,/data/3/deptName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-2,mirrortaint,0,/data/0/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,0,/data/1/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,0,/data/2/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,0,/data/3/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,1,/data/0/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,1,/data/1/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,1,/data/2/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,1,/data/3/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,1,/data/4/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,1,/data/5/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,1,/data/6/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,2,/data/0/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,2,/data/1/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,2,/data/2/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,2,/data/3/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,2,/data/4/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,2,/data/5/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,2,/data/6/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,2,/data/7/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,2,/data/8/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,3,/data/0/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,3,/data/1/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,3,/data/2/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,3,/data/3/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,3,/data/4/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,3,/data/5/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,3,/data/6/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,3,/data/7/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,3,/data/8/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,4,/data/0/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,4,/data/1/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,4,/data/2/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,4,/data/3/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,4,/data/4/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,4,/data/5/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,4,/data/6/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,4,/data/7/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,4,/data/8/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,4,/data/9/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,5,/data/0/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,5,/data/1/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,5,/data/2/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-2,mirrortaint,5,/data/3/deptName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-3,full,0,/data/0/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,full,0,/data/1/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,full,0,/data/2/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,full,1,/data/0/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,full,1,/data/1/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,full,2,/data/0/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,full,2,/data/1/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,full,2,/data/2/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,full,3,/data/0/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,full,3,/data/1/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,full,5,/data/0/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,full,5,/data/1/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,selective,0,/data/0/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,selective,0,/data/1/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,selective,0,/data/2/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,selective,1,/data/0/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,selective,1,/data/1/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,selective,2,/data/0/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,selective,2,/data/1/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,selective,2,/data/2/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,selective,3,/data/0/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,selective,3,/data/1/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,selective,5,/data/0/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,selective,5,/data/1/dictLabel,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-3,mirrortaint,0,/data/0/dictLabel,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-3,mirrortaint,0,/data/1/dictLabel,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-3,mirrortaint,0,/data/2/dictLabel,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-3,mirrortaint,1,/data/0/dictLabel,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-3,mirrortaint,1,/data/1/dictLabel,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-3,mirrortaint,2,/data/0/dictLabel,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-3,mirrortaint,2,/data/1/dictLabel,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-3,mirrortaint,2,/data/2/dictLabel,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-3,mirrortaint,3,/data/0/dictLabel,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-3,mirrortaint,3,/data/1/dictLabel,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-3,mirrortaint,5,/data/0/dictLabel,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-3,mirrortaint,5,/data/1/dictLabel,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-4,full,0,/data/configValue,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-4,full,1,/data/configValue,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-4,full,2,/data/configValue,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-4,full,3,/data/configValue,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-4,full,4,/data/configValue,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-4,selective,0,/data/configValue,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-4,selective,1,/data/configValue,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-4,selective,2,/data/configValue,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-4,selective,3,/data/configValue,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-4,selective,4,/data/configValue,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-4,mirrortaint,0,/data/configValue,oracle_or_target_unavailable,True,True,False,False,,,,,Declared actual source field absent/ambiguous
+ruoyi,ruoyi-4,mirrortaint,1,/data/configValue,oracle_or_target_unavailable,True,True,False,False,,,,,Declared actual source field absent/ambiguous
+ruoyi,ruoyi-4,mirrortaint,2,/data/configValue,oracle_or_target_unavailable,True,True,False,False,,,,,Declared actual source field absent/ambiguous
+ruoyi,ruoyi-4,mirrortaint,3,/data/configValue,oracle_or_target_unavailable,True,True,False,False,,,,,Declared actual source field absent/ambiguous
+ruoyi,ruoyi-4,mirrortaint,4,/data/configValue,oracle_or_target_unavailable,True,True,False,False,,,,,Declared actual source field absent/ambiguous
+ruoyi,ruoyi-5,full,0,/data/0/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,0,/data/1/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,0,/data/2/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,0,/data/3/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,1,/data/0/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,1,/data/1/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,1,/data/2/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,1,/data/3/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,2,/data/0/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,2,/data/1/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,2,/data/2/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,2,/data/3/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,3,/data/0/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,3,/data/1/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,3,/data/2/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,3,/data/3/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,4,/data/0/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,4,/data/1/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,4,/data/2/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,4,/data/3/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,5,/data/0/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,5,/data/1/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,5,/data/2/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,full,5,/data/3/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,0,/data/0/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,0,/data/1/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,0,/data/2/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,0,/data/3/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,1,/data/0/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,1,/data/1/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,1,/data/2/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,1,/data/3/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,2,/data/0/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,2,/data/1/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,2,/data/2/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,2,/data/3/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,3,/data/0/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,3,/data/1/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,3,/data/2/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,3,/data/3/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,4,/data/0/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,4,/data/1/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,4,/data/2/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,4,/data/3/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,5,/data/0/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,5,/data/1/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,5,/data/2/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,selective,5,/data/3/postName,evidence_invalid,True,False,False,False,,,,,Raw capture incomplete or explicitly invalid; do not use it to certify instance truth
+ruoyi,ruoyi-5,mirrortaint,0,/data/0/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,0,/data/1/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,0,/data/2/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,0,/data/3/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,1,/data/0/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,1,/data/1/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,1,/data/2/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,1,/data/3/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,2,/data/0/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,2,/data/1/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,2,/data/2/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,2,/data/3/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,3,/data/0/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,3,/data/1/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,3,/data/2/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,3,/data/3/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,4,/data/0/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,4,/data/1/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,4,/data/2/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,4,/data/3/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,5,/data/0/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,5,/data/1/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,5,/data/2/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-5,mirrortaint,5,/data/3/postName,known_correct,True,True,True,True,True,1,0,0,
+ruoyi,ruoyi-6,full,0,/code,target_binding_unsupported,,False,False,False,,,,,"Dynamic AjaxResult Map leaf /code, not an actual declared Java field. If the frozen query interface cannot express it, keep target_binding_unsupported; do not fabricate a field."
+ruoyi,ruoyi-6,full,1,/code,target_binding_unsupported,,False,False,False,,,,,"Dynamic AjaxResult Map leaf /code, not an actual declared Java field. If the frozen query interface cannot express it, keep target_binding_unsupported; do not fabricate a field."
+ruoyi,ruoyi-6,full,2,/code,target_binding_unsupported,,False,False,False,,,,,"Dynamic AjaxResult Map leaf /code, not an actual declared Java field. If the frozen query interface cannot express it, keep target_binding_unsupported; do not fabricate a field."
+ruoyi,ruoyi-6,full,3,/code,target_binding_unsupported,,False,False,False,,,,,"Dynamic AjaxResult Map leaf /code, not an actual declared Java field. If the frozen query interface cannot express it, keep target_binding_unsupported; do not fabricate a field."
+ruoyi,ruoyi-6,full,4,/code,target_binding_unsupported,,False,False,False,,,,,"Dynamic AjaxResult Map leaf /code, not an actual declared Java field. If the frozen query interface cannot express it, keep target_binding_unsupported; do not fabricate a field."
+ruoyi,ruoyi-6,full,5,/code,target_binding_unsupported,,False,False,False,,,,,"Dynamic AjaxResult Map leaf /code, not an actual declared Java field. If the frozen query interface cannot express it, keep target_binding_unsupported; do not fabricate a field."
+ruoyi,ruoyi-6,selective,0,/code,target_binding_unsupported,,False,False,False,,,,,"Dynamic AjaxResult Map leaf /code, not an actual declared Java field. If the frozen query interface cannot express it, keep target_binding_unsupported; do not fabricate a field."
+ruoyi,ruoyi-6,selective,1,/code,target_binding_unsupported,,False,False,False,,,,,"Dynamic AjaxResult Map leaf /code, not an actual declared Java field. If the frozen query interface cannot express it, keep target_binding_unsupported; do not fabricate a field."
+ruoyi,ruoyi-6,selective,2,/code,target_binding_unsupported,,False,False,False,,,,,"Dynamic AjaxResult Map leaf /code, not an actual declared Java field. If the frozen query interface cannot express it, keep target_binding_unsupported; do not fabricate a field."
+ruoyi,ruoyi-6,selective,3,/code,target_binding_unsupported,,False,False,False,,,,,"Dynamic AjaxResult Map leaf /code, not an actual declared Java field. If the frozen query interface cannot express it, keep target_binding_unsupported; do not fabricate a field."
+ruoyi,ruoyi-6,selective,4,/code,target_binding_unsupported,,False,False,False,,,,,"Dynamic AjaxResult Map leaf /code, not an actual declared Java field. If the frozen query interface cannot express it, keep target_binding_unsupported; do not fabricate a field."
+ruoyi,ruoyi-6,selective,5,/code,target_binding_unsupported,,False,False,False,,,,,"Dynamic AjaxResult Map leaf /code, not an actual declared Java field. If the frozen query interface cannot express it, keep target_binding_unsupported; do not fabricate a field."
+ruoyi,ruoyi-6,mirrortaint,0,/code,known_correct,True,True,True,True,False,0,0,0,
+ruoyi,ruoyi-6,mirrortaint,1,/code,known_correct,True,True,True,True,False,0,0,0,
+ruoyi,ruoyi-6,mirrortaint,2,/code,known_correct,True,True,True,True,False,0,0,0,
+ruoyi,ruoyi-6,mirrortaint,3,/code,known_correct,True,True,True,True,False,0,0,0,
+ruoyi,ruoyi-6,mirrortaint,4,/code,known_correct,True,True,True,True,False,0,0,0,
+ruoyi,ruoyi-6,mirrortaint,5,/code,known_correct,True,True,True,True,False,0,0,0,
+teastore,tea-1,full,0,/0/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-1,full,0,/1/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-1,full,1,/0/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-1,full,2,/0/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-1,full,2,/1/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-1,full,3,/0/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-1,full,3,/1/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-1,full,5,/0/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-1,full,5,/1/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-1,selective,0,/0/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-1,selective,0,/1/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-1,selective,1,/0/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-1,selective,2,/0/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-1,selective,2,/1/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-1,selective,3,/0/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-1,selective,3,/1/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-1,selective,5,/0/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-1,selective,5,/1/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-1,mirrortaint,0,/0/name,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-1,mirrortaint,0,/1/name,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-1,mirrortaint,1,/0/name,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-1,mirrortaint,2,/0/name,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-1,mirrortaint,2,/1/name,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-1,mirrortaint,3,/0/name,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-1,mirrortaint,3,/1/name,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-1,mirrortaint,5,/0/name,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-1,mirrortaint,5,/1/name,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-2,full,0,/0/listPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-2,full,0,/1/listPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-2,full,1,/0/listPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-2,full,2,/0/listPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-2,full,2,/1/listPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-2,full,3,/0/listPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-2,full,3,/1/listPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-2,full,5,/0/listPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-2,full,5,/1/listPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-2,selective,0,/0/listPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-2,selective,0,/1/listPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-2,selective,1,/0/listPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-2,selective,2,/0/listPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-2,selective,2,/1/listPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-2,selective,3,/0/listPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-2,selective,3,/1/listPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-2,selective,5,/0/listPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-2,selective,5,/1/listPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-2,mirrortaint,0,/0/listPriceInCents,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-2,mirrortaint,0,/1/listPriceInCents,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-2,mirrortaint,1,/0/listPriceInCents,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-2,mirrortaint,2,/0/listPriceInCents,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-2,mirrortaint,2,/1/listPriceInCents,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-2,mirrortaint,3,/0/listPriceInCents,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-2,mirrortaint,3,/1/listPriceInCents,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-2,mirrortaint,5,/0/listPriceInCents,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-2,mirrortaint,5,/1/listPriceInCents,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-3,full,0,/realName,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-3,full,1,/realName,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-3,full,2,/realName,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-3,full,3,/realName,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-3,full,5,/realName,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-3,selective,0,/realName,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-3,selective,1,/realName,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-3,selective,2,/realName,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-3,selective,3,/realName,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-3,selective,5,/realName,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-3,mirrortaint,0,/realName,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-3,mirrortaint,1,/realName,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-3,mirrortaint,2,/realName,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-3,mirrortaint,3,/realName,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-3,mirrortaint,5,/realName,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-4,full,0,/0/totalPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-4,full,1,/0/totalPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-4,full,2,/0/totalPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-4,full,3,/0/totalPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-4,full,5,/0/totalPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-4,selective,0,/0/totalPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-4,selective,1,/0/totalPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-4,selective,2,/0/totalPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-4,selective,3,/0/totalPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-4,selective,5,/0/totalPriceInCents,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-4,mirrortaint,0,/0/totalPriceInCents,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-4,mirrortaint,1,/0/totalPriceInCents,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-4,mirrortaint,2,/0/totalPriceInCents,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-4,mirrortaint,3,/0/totalPriceInCents,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-4,mirrortaint,5,/0/totalPriceInCents,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-5,full,0,/0/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,full,0,/1/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,full,1,/0/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,full,1,/1/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,full,2,/0/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,full,2,/1/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,full,2,/2/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,full,2,/3/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,full,3,/0/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,full,3,/1/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,full,5,/0/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,full,5,/1/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,selective,0,/0/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,selective,0,/1/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,selective,1,/0/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,selective,1,/1/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,selective,2,/0/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,selective,2,/1/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,selective,2,/2/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,selective,2,/3/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,selective,3,/0/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,selective,3,/1/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,selective,5,/0/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,selective,5,/1/name,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-5,mirrortaint,0,/0/name,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-5,mirrortaint,0,/1/name,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-5,mirrortaint,1,/0/name,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-5,mirrortaint,1,/1/name,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-5,mirrortaint,2,/0/name,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-5,mirrortaint,2,/1/name,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-5,mirrortaint,2,/2/name,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-5,mirrortaint,2,/3/name,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-5,mirrortaint,3,/0/name,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-5,mirrortaint,3,/1/name,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-5,mirrortaint,5,/0/name,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-5,mirrortaint,5,/1/name,oracle_or_target_unavailable,True,False,False,False,,,,,Raw target root missing/ambiguous
+teastore,tea-6,full,0,/,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-6,full,1,/,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-6,full,2,/,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-6,full,3,/,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-6,full,4,/,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-6,full,5,/,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-6,selective,0,/,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-6,selective,1,/,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-6,selective,2,/,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-6,selective,3,/,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-6,selective,4,/,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-6,selective,5,/,runtime_contract_rejected,,False,False,False,,,,,Independent Java 11 control preserved business but frozen offline runtime check rejected: Application runtime pin differs.
+teastore,tea-6,mirrortaint,0,/,generated_state_unpaired,False,False,False,False,,,,,"Original and tool generated IDs differ. Original ran all APIs sequentially; per-query tool deployments have no paired generator state or generated-write oracle. Difference retained, not attributed to instrumentation."
+teastore,tea-6,mirrortaint,1,/,generated_state_unpaired,False,False,False,False,,,,,"Original and tool generated IDs differ. Original ran all APIs sequentially; per-query tool deployments have no paired generator state or generated-write oracle. Difference retained, not attributed to instrumentation."
+teastore,tea-6,mirrortaint,2,/,generated_state_unpaired,False,False,False,False,,,,,"Original and tool generated IDs differ. Original ran all APIs sequentially; per-query tool deployments have no paired generator state or generated-write oracle. Difference retained, not attributed to instrumentation."
+teastore,tea-6,mirrortaint,3,/,generated_state_unpaired,False,False,False,False,,,,,"Original and tool generated IDs differ. Original ran all APIs sequentially; per-query tool deployments have no paired generator state or generated-write oracle. Difference retained, not attributed to instrumentation."
+teastore,tea-6,mirrortaint,4,/,generated_state_unpaired,False,False,False,False,,,,,"Original and tool generated IDs differ. Original ran all APIs sequentially; per-query tool deployments have no paired generator state or generated-write oracle. Difference retained, not attributed to instrumentation."
+teastore,tea-6,mirrortaint,5,/,generated_state_unpaired,False,False,False,False,,,,,"Original and tool generated IDs differ. Original ran all APIs sequentially; per-query tool deployments have no paired generator state or generated-write oracle. Difference retained, not attributed to instrumentation."

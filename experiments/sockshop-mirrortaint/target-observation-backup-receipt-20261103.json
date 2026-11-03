@@ -1,0 +1,49 @@
+{
+  "algorithm": "130858947f3eabc1dbee8693f11c926f37f289e9",
+  "core_unchanged": true,
+  "files": {
+    "batch-artifacts.tar.gz": {
+      "bytes": 3961600779,
+      "sha256": "6de9dad82ff9a8d59903ffd22e33b4139df555e0e20298f34f422dbe31186ad1"
+    },
+    "actual-images.tar.gz": {
+      "bytes": 2386169551,
+      "sha256": "b98e40193f36cbd05654370a87b2a6e0b1abee5a4ef6f71c69586c866271bb74"
+    },
+    "delivery-final-addendum.tar.gz": {
+      "bytes": 230863,
+      "sha256": "042b50263eba21809d8844e53546161a18e03e53301691546b5af4dafaf44624"
+    }
+  },
+  "gzip_CRC_passed": true,
+  "images": 24,
+  "symlinks_not_dereferenced": true,
+  "external_references": "/home/wujian/tracefusion2/artifacts/backups/target-closure-20261103/external-reference-list.json",
+  "unavailable_image_references": [],
+  "old_dependency_backup": "artifacts/backups/zlt-body-completion-20261031; original JDK/native/dependencies and earlier first captures remain separate immutable references.",
+  "scope": "Main archive: complete batch tree at backup start, including failures and original captures. Final delivery04 and final report/source/result copies are in delivery-final-addendum.tar.gz. Historical external dependency references remain separate; not an off-machine backup.",
+  "push": false,
+  "final_delivery_addendum": {
+    "integrity": "delivery-integrity-04",
+    "report_and_small_result_files": [
+      "FROZEN-EXTERNAL-FIRST-20261103.md",
+      "TARGET-OBSERVATION-ALGORITHM-20261103.md",
+      "TARGET-OBSERVATION-COMMON-COST-20261103.md",
+      "TARGET-OBSERVATION-DEVELOPMENT-20261103.md",
+      "target-closure-cost-protocol-20261103.json",
+      "target-closure-development-protocol-20261103.json",
+      "target-closure-external-seal-20261103.json",
+      "target-closure-external-seal-v1-20261103.json",
+      "target-closure-external-seal-v2-20261103.json",
+      "target-closure-external-seal-v3-20261103.json",
+      "target-closure-original-build-receipt-20261103.json",
+      "target-external-first-instances-20261103.csv",
+      "target-external-first-results-20261103.json",
+      "target-observation-capability-results-20261103.json",
+      "target-observation-cost-results-20261103.json",
+      "target-observation-cost-rounds-20261103.csv",
+      "target-observation-delivery-integrity-20261103.json"
+    ],
+    "scope": "Final reports clarify artifact sealing chronology and relative-full online criterion. Adds identical original JAR checks across all 80 trials. No algorithm, first scores or formal measurements changed after main archive."
+  }
+}

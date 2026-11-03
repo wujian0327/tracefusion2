@@ -1,0 +1,880 @@
+{
+  "algorithm": "130858947f3eabc1dbee8693f11c926f37f289e9",
+  "reference": "7e4ad0b900a64871259a5fac008968128cc5ec28",
+  "agent_sha256": "1075d49ca6741a6e5280b9c32903871efd75e2663a694f01a08a5218f07c8a13",
+  "core_sources": {
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/QueryObservationAgent.java": "3f48ead5b09077c8ba8568da0037619c01636766e56f2d8d186e517fb1b99ff4",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/QueryBytecodeModel.java": "194f7710c0b77f69caa644209a037f5476595f5c91af9daabaddf70cae12546f",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/PlannedServiceAgent.java": "61d43317bcf7f6b72520c1fcf335369b84a94afa4ec02de3f844a1265d2c31a4",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/MonitorSafety.java": "4050fb91cbdfeb8e45345004380b5c2aee9ec2d5e82d2c2de14700a468589107",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/SourceLocalityHooks.java": "9d78293ee62cbdc57fcb6a6e4077a9a08c88bdd24d8828bbf5849d526270f45c",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/SourceLocalityInstrumentation.java": "a3428cb58f0785fc9f88d48367e6bcb9356abea0c001072dd5aeef0e6f648693",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/SourceObservationHooks.java": "659d80e8c804d0676be0ef0a60cebac04ef05c93d8aab44d3faa0736b07d41e6",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/SequenceKernelHooks.java": "d3dcce92c64e49674ea3d3b42099d4a5b3ffceac2cd5619c260d6b0accbd0311",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/BodyObservationHooks.java": "7371a3687f1889915a0451d95e7244c57960964b9571dd4769303ce4637274e4",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/SqlResultLocalityHooks.java": "2cb6482798a57ed7c44e36396e0132ca1755615339daa5c40c96006cea263b29",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/SqlResultLocalityInstrumentation.java": "8dadba7edb4129a8e79ee05d28192b710f6dd17d85fdc9e7dc5187d313442713",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/CollectionServiceHooks.java": "fea30c6f8ac3c11de8823174f42a321ff9031118901d35316f4fe7b9622e76d0",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/ConversionContractHooks.java": "8d32e6acce22d07d60cfd4ead8f104ffe757151534416943f0596198e5a8827e",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/ExecutionKernelHooks.java": "8401d47101fe6285faaa5e12e0d484a4465517d5445aa988686550d2a1a5393c",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/FoundationValueHooks.java": "82fa2ac76ffc3dafd3f5d791950dc7d6a6388e267c6df44348c180f2b3e25caa",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/ScalarProjectionHooks.java": "da37f308347c1d514c23ffb551e7ae5d974a9782364b2a48e1648b6708da2f16",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/DocumentDateHooks.java": "ca433b72fd85039bcbd9cfac3cac170a01f732a22a9394b22684a7b918898e1e",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/ListenerRegistryHooks.java": "a4745806244f55a1b670d15fac814a4158fb83e341fe415af9df3026452d394b",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/FeignEffectHooks.java": "5e75d302d149f5b1266d7c4ae486cc6ff6a5d5f96ad66feb9764b7823a990581",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/FeignProtocolInstrumentation.java": "9bf42633ec64f867a51a231ac84a1c9cb03fb3277f457303947e48ab258bd969",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/AsyncTaskHooks.java": "c6d68d062230dcf60c1e3fb631b02c513a65db562f53f13e84a9bbbcc0fc5d93",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/FrameworkCallHooks.java": "878eda2f2c2f05a582973ee878de94a84d2f559f47e2c91f1796a21433e11b9d",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/RequestEntityHooks.java": "5108b79bf2542bb4e1214684e4a3104c06acb91102176b8504bc794f11eedf1a",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/SaveEffectHooks.java": "1e6c07e92cc43b310ff9de5cd63c20525ec28a5e3ffc822b4d189e4fd00757e1",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/TemporalDateHooks.java": "290d233fd53d63ad28bb7949f296c16676db8db57c977923a994e2a4345f69ce",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/UuidProjectionHooks.java": "4a195d890bf678275f351a76e7d83107a85f06373c393cfc194e1a599cf36660",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/ResponseBindingHooks.java": "8b467c0ef66a34015fdf9a3db7541038d983cc259b5046092ba913377beca3eb",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/ReadEffectHooks.java": "96fbc630810b0c5c23ebb1005b0c484e1b5a11e0085779140f29b60277b98935",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/JdkContractProbe.java": "61fb8470c0c6da1fbb6ff19c03086ee2906fe3060b5bf97c7197022a64826760",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/SourceEvidenceHooks.java": "d0971e620c95fe5e2232c199747c16796b26d752ed033e8080a85b97d9b2fa1c",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/SpringTransportAgent.java": "35a7344495fe6f70e5455c52adf6ec010dd702a7607869d17604b564b1a3ecca",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/W3CTraceContext.java": "23ea705e55cc2a5f13aa01a982917d685915371f2e2b1f8f480ce8cdd0f5651f",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/BusinessJackson.java": "9c9569052c6008647ab8bab63304a6dd2740aa250804569c9baf858a020fa0e1",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/experiment_environment.py": "91c2609c43a99e18d3aa9e4a1fb113ade860b8ec4fa86133a6823f35eb501e96",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_distributed_fields.py": "7bb3d8ed5c7cb8ca1c3958f00b930371f6e77da478681e65523f2c7627acc229",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_service_observations.py": "b4b641a63bb5bf2f6a06e6ff8b83d8923aced0796b40db8aaeeb57718a255fe0",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_collection_service.py": "f9cf513d6e4046a6e8a5df10eee32da4379e55d0bbe0a85f43b5b407ec261206",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/query_observation_planner.py": "1d7ba77430c902ca00259a7a4ad3bf3bb955fe91f8a885d5efc7f9500b56a30d",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_planned_service.py": "4b3353140b82f93b380a315ba2f7503bfb5d7f7744723990a1e57bdacbacefa2",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_distributed_fields.py": "ab2e404407f032e7c6d0eb34efcf6665739cb2c9bdbdbdbbb61fbedfd26c9bc2",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/transport_context.py": "02a4a06b0ac434d2fdc6c7c253ff1b5f86f80cf70ecf46a17df038ded6fd1b2f",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/run_distributed_paths.py": "05cc20245405d3952a7df780d919190022792b5eccf27a91cc05cb54afcec854",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/evaluate_distributed_paths.py": "ba3faf14ee024839644d3f0c229e69f997bafc45f7132a72d18c08d095deff88",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/audit_distributed_paths.py": "6226c32ecb8197c2066473d3e7a50bfbe993aef9192b30554f00b738138c753a",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_collection_service.py": "96ad71f2ab01c54c16c70842d1654d20ab3cd6c35d78af6f71af7aa588a68bfe",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_response_binding.py": "7027915adb3105e957e1bc9b93ee29dae1dd1364229e47a027e7b93e67e8e8c7",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_response_binding.py": "a689cc1406502d009a2001e73ef5c67f711175e18063d7f7c6db76a13ebd4fd3",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_read_effects.py": "df2a656176b888f8ad7523a72ba83a8b54875d592434432871e50842ab035d6a",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/read-forward-runtimes-20261020.json": "1fca4ceccb7c396f61dedc5da2bd1b166b65fff5e9d07f9f3b4da00731c9ee08",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_execution_kernel.py": "5c1d1bdde5edc2b254cf614d187e57493d86211706a063a0df4f092072ba50aa",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_execution_kernel.py": "279273241143fda21f550f4095f492dba06916f366aa9f1b5ec8c5caea99f74c",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/execution_dependency_state.py": "f142b363027e9259186a853ceefbf36049e8af8948eef8624a427ecedfe1b04b",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/execution-kernel-runtimes-20261020.json": "d904d2ab91dd8881a78e465448ee61bd0b628cb6b88e984c10b0796abec7381a",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/analysis_status.py": "4223472df2350906c1463577d5f82e0157745531a676289823325cff19ab0d49",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_application_calls.py": "051775698bab3960e60585733e6552f0c040887027fb97458ec49375b7cb5f94",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_application_execution.py": "08cc6609b69601a07f8f7ff7c9942e570f3b848836b481f091c5fea4ce50c72a",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/kernel-contract-runtimes-20261020.json": "9c9bfc030daf327102da957dc8b54c7db6ef6ebc9a0f104a22c1fc37d2414706",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_constructor_effects.py": "147723070e59574ba4166effa688f583b6d08d24bd7b4f95cfb160738ca343f4",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/constructor-library-contracts-20261020.json": "636a225c97f57ba597a0ed49afed4b335406a22b1622f20ad03f448e438d579e",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/framework-wrapper-contracts-20261020.json": "242e0f1f2c01fa51c4a9a941b4ae7943d558ec4ec001af114558c56732c28ae1",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_date_projection.py": "59bcd215d86ea728523f55c7dcbdfcf17079b1e693cb2a3b3710fa6e3cd41722",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/date-runtime-contracts-20261020.json": "407e4bb5049d0879b7298208fe32ae98d97880c0cf587455762f58250282c33c",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_date_projection.py": "6653961e8dc4c827e100b01879f942b31a6fee2054fe1edc5bb7114d2e5b54e9",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/async-task-contracts-20261021.json": "2df60b7e1d06a7fb3eda3e076a1f63ec9bc97820f068c5300d1da5a80756a617",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_async_protocol.py": "b4fc6dd5a3568deee8ae1b1647c813ab9784101c314c17d339b7b16553922230",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_async_dependencies.py": "212a0985dffa1f76668fb1ff82b96bd7e8539e75f96423336baa741637c27a27",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/request-entity-contracts-20261021.json": "d1059c1cbb2ddfebac10e7c615e4a09ab441d0700ace4a2a2d470b2ed548dc94",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/save-effect-contracts-20261021.json": "d7a5f50485995f326254b596bd1048c3c49f434f573f21038dc04749d111eac1",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/date-effects-contracts-20261021.json": "985edda4ce92038d8f47961c28d134fff3f6d748c9d898eeaa5d7d1d31349052",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/save-provided-id-contracts-20261023.json": "29e94787b96d3c8290a2166e20ec288119a94ad3fab9390884db560b178d2c56",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/contract_applicability.py": "6cf9913c7a217ed450073a9fbd995584bbd9726bf01b54ece8ba7d97424e7b30",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/contract_obligations.py": "4d275d9d5e21217e002fba46a67acbbb0411084946d85eb7b158d3bb5a06b579",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/finite_string_values.py": "f543563545142dbdc6cd2b9d99ecd06613ecfca37abf437c7a959ab0aeaec3cf",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_capability_policy.py": "db10ab4359890e1438eac966a89d09242de0a94eb018ba95b2d2f4fcd934d56c",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_execution_closure.py": "d62271ee0471352fee287c87443878d4db1008b62625d91ea5c96e793f7878e0",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_execution_closure.py": "5d73f2dc426a42c4c796ae49b7d8e5ab8ed5cfee694da231c6eeac03324dd8b8",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/library-value-runtimes-20261022.json": "ba9edefb5007e025a7801e365d8ee04ae6ee87d2cda15934d83b65c9b2ca377c",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plain-conversion-contracts-20261022.json": "10c450f81032b9941095a5c86b0cc9c68a90df47b863ae3eafb765fadc392cd4",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_uuid_projection.py": "343efa11edf0454c2e3d651d922ce27516a4543a01930009c9b001726f6ed227",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_uuid_projection.py": "8f28be5b461bda9f390e0c14d1c89be48aec2df5554b8ea39ecfd08115f03642",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/uuid-projection-contracts-20261022.json": "a4115df072a092edab9d5ced6df8ca0e17c37ec4861aea0bf60e9edf141b0921",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/isolate_agent_jackson.py": "018d68e0840c14c44367c526e31ef86d8889c906c932ebf9c4f3c879257235e2",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_source_locality.py": "0c32466485158eabdbc17883d8d697d4511e8be74e338226535cdb44ba65a1ec",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_source_locality.py": "68618ef31670cece1b8b80fc23cabcbcbe147e53f3e1f572fc232bbd37c0cbe3",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/source-locality-contracts-20261030.json": "d66c175843e70e7901052d02abf3d92f3f0e0ce3d11bceb413a0f4a29dee4f59",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_field_identity.py": "7f9778ae04d3d38710e02df8dcbbf7b27b6becddfc815a4a4003adcc4214a451",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_communication_identity.py": "f13773bcc7afcc13f583713c4f313a078bddb22b36be97592f6126bbec70e973",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/communication-identity-contracts-20261029.json": "257c80eb1c3ae1ed1cc7e8a3d5dcb900e84e808207379852d2e650c632c67d4a",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_literal_enums.py": "41fdb78f3c82da3feb826f87830f8492bf4b091277f0bb0e963109e3045e282f",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_foundation_values.py": "78bcf2ea5bd8df13fdc8dd7c6e3071b441debb74e3fe98a4f0c337e22a238197",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/foundation-value-contracts-20261028.json": "511240763e1fcc1bb3f4d556513df74e6786628b8f3e6d01d06da46921d705a3",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_foundation_values.py": "41ea76f470849041eae548804666c13c82ca28a1cf3ebcd4b7962e0e10e5d861",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_feign_effects.py": "6fa410224ae66cd360c4e79feb36a8a6a54b48b25b661594919d150148627861",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/feign-input-effect-contracts-20261028.json": "ed336e1a18d481cc665c3d4c49ea6b046bb16a944d9d5681ae4c3f7df93fbe85",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/mongo2-provided-id-contracts-20261028.json": "4c13de798a4d2384895433c64c6cefa5b7c9cd6fab47cd3c9a6f7c2ee3ffb964",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_scalar_projection.py": "98e7c086ebbe05a9692fca2b7828c7941311cf93094c0ebf3ecd5c4fe060416f",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/scalar-projection-contracts-20261028.json": "1bdcdd875b25aa39b97f4d96b462fc8087fbcd68091b0e8cc2295d68a77dbe0f",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_scalar_projection.py": "85e4ad4c260a72b42c58a9c978c8a73fca119a6a938f165b7a9fefa07a8e8c5c",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/document-date-effects-20261028.json": "b5b1843d8ff6ed9d4eb0726504ffaff7e3f3b16a12b45f09951a6e0d679c1eb6",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_listener_registry.py": "06730897bc03848cb49d71319578b1f929d57adab6aac6d4314a8c25747c554b",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_feign_effects.py": "0d8415284515add3df82c13b5bc2ebd2aa1f836e76cd85c3d475eab7e502555d",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_sql_result_locality.py": "07960a61cf752f4011838a6b64b96c943ab20c126767d7cac73185ba60c37dff",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_sql_result_locality.py": "0d12bd2045493e1f48e6b7e3eaf8c6f16f010b1314649198d315503070536548",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/sql-result-locality-contracts-20261031.json": "cd583202d693ea6f8e5d09cb6c196e8c3ebd7fbaffb922eb38f5e67a758ad2d3",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_sequence_callbacks.py": "e3904fcf378236a30fe27344607c5e80aa2d900978cb0bc20953dc36321ac7e0",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/kernel-sequence-values-20261031.json": "36646501cd4ae4a54bee9983526b1cd2eb791cd6c4b3f373e634db5319884076",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_body_observation.py": "6165fdf675236a2c82bcf325076235b56167fc0c9d21205f4d36e1e66003c26f",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_body_observation.py": "13911ddb471eb0ef39eef61ec080f58b9d8d0a2f472f438e1435fde845d8f2b9",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_target_observation.py": "fda4c57b38af93a5fb8e5317e19ebdac7078de49c115fc43adc99164f574961d",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_target_observation.py": "1be0178c85dcfd3df017415badf338501819913575940171f780274e5150d760",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_constructor_prefix_guard.py": "18a616170cb811dc084c280c38fe2516cadfc3109d63cbd2274c49427995b749"
+  },
+  "tasks": {
+    "orders": {
+      "query": {
+        "role": "orders",
+        "entry": "works/weave/socks/orders/controllers/OrdersController.newOrder(Lworks/weave/socks/orders/resources/NewOrderResource;)Lworks/weave/socks/orders/entities/CustomerOrder;",
+        "target": "works/weave/socks/orders/entities/CustomerOrder.total",
+        "path": "/total"
+      },
+      "profile": "mapped-reduction",
+      "source": "Actual Carts response/write quantity and unitPrice fields, original fixed task; not DB history",
+      "planner": "Existing plan_service then augment; selected before any calibration or timed result, not legacy saved plan bytes"
+    },
+    "mall": {
+      "path": "/data/expiresIn",
+      "source": "Actual AuthService.getAccessToken call return field, unchanged boundary",
+      "plan_sha256": "5c7b271c025b39b20660392d07361605f0d7c5300962dff66d2c68f57e3cc322"
+    },
+    "zlt-client": {
+      "api": "ZLT-MP-1",
+      "query": {
+        "id": "ZLT-MP-1",
+        "application": "ZLT-MP",
+        "role": "zlt-uaa",
+        "entry": "com/central/oauth/controller/ClientController.list(Ljava/util/Map;)Lcom/central/common/model/PageResult;",
+        "return_generic": "com.central.common.model.PageResult<com.central.oauth.model.Client>",
+        "class_annotations": [
+          {
+            "annotation": "org.springframework.web.bind.annotation.RestController",
+            "value": ""
+          },
+          {
+            "annotation": "org.springframework.web.bind.annotation.RequestMapping",
+            "value": [
+              "/clients"
+            ],
+            "path": [],
+            "method": [],
+            "name": ""
+          }
+        ],
+        "method_annotations": [
+          {
+            "annotation": "org.springframework.web.bind.annotation.GetMapping",
+            "value": [
+              "/list"
+            ],
+            "path": [],
+            "name": ""
+          }
+        ],
+        "return_targets": [
+          {
+            "path": "/data/*/clientId",
+            "target": "com/central/oauth/model/Client.clientId"
+          }
+        ],
+        "target_selection_basis": "Actual uninstrumented JAR JavaBeans reflection; NOT the TF serializer schema or planner acceptance",
+        "effect_sink_candidates": [],
+        "read_source_candidates": [
+          {
+            "callee": "com/central/oauth/mapper/ClientMapper.findList(Lcom/baomidou/mybatisplus/extension/plugins/pagination/Page;Ljava/util/Map;)Ljava/util/List;",
+            "basis": "Actual original mapper DB-read return, not service/helper parameter."
+          }
+        ],
+        "sources": "Root entry arguments, actual DB read returns and actual RPC read returns; retain concrete message/call/object/field/version coordinates. Helper arguments are not new sources.",
+        "parameters": [
+          {
+            "type": "java.util.Map",
+            "descriptor": "Ljava/util/Map;",
+            "leaf": false,
+            "properties": [
+              {
+                "property": "empty",
+                "getter": "java.util.Map.isEmpty",
+                "type": "boolean",
+                "generic_type": "boolean",
+                "descriptor": "Z",
+                "annotations": [],
+                "field": null
+              }
+            ],
+            "annotations": [
+              {
+                "annotation": "org.springframework.web.bind.annotation.RequestParam",
+                "value": "",
+                "name": "",
+                "required": true
+              }
+            ]
+          }
+        ],
+        "sink_scope": "All actual scalar/null method-return leaves plus persistence/message call arguments. Void methods retain side-effect obligations. Unexpressible sinks are target_binding_unsupported, never business N/A.",
+        "metadata_sha256": "a08337550765c47109cca4dedfa2f11bf91fa8fcc22e85af62f16c83641761e8",
+        "model_sha256": "2a97ccabb1964fced66940c2bde6e960f0f9cb3fe05e73e9ec3b59a564c8c43b",
+        "input_rule": "Six fixed structures: normal; same value distinct instance; repeat/overwrite; empty list/map; validation/exception/absent auth; normal after failure. Concrete bodies and fixture DB frozen before each first tool run.",
+        "oracle_rule": "Review original code and raw input/database/message facts; source coordinate witnesses may be shared, no TF graph or MT tags determine expected dependencies. Unknown truth remains oracle_unavailable; no value-based instance matching.",
+        "data_dependency": "Actual data operands only; selection/control evidence separate. Constant known results have empty data source only with an independently verified execution.",
+        "selected": true,
+        "selection_reason": "Previously nonempty original list response; distinct untested controller entry; fixed ascending API order.",
+        "inputs": [
+          {
+            "case": "input-00",
+            "path": "/clients/list?page=1&limit=1"
+          },
+          {
+            "case": "input-01",
+            "path": "/clients/list?page=1&limit=2"
+          },
+          {
+            "case": "input-02",
+            "path": "/clients/list?page=2&limit=1"
+          },
+          {
+            "case": "input-03",
+            "path": "/clients/list?page=2&limit=2"
+          },
+          {
+            "case": "input-04",
+            "path": "/clients/list?page=3&limit=1"
+          },
+          {
+            "case": "input-05",
+            "path": "/clients/list?page=3&limit=2"
+          }
+        ],
+        "oracle": {
+          "source": "com/central/oauth/mapper/ClientMapper.findList(Lcom/baomidou/mybatisplus/extension/plugins/pagination/Page;Ljava/util/Map;)Ljava/util/List;",
+          "rule": "For each returned data element, the selected scalar is copied from the unique mapper return occurrence. Match original SQL primary key and value; source identity must additionally have raw call/ordinal/object/field/version. JSON values alone never certify instance origin. No implicit selection dependencies.",
+          "positive": true,
+          "sql_table": "oauth_client_details",
+          "column": "client_id",
+          "source_path": "/*/clientId"
+        }
+      },
+      "source": "com/central/oauth/mapper/ClientMapper.findList(Lcom/baomidou/mybatisplus/extension/plugins/pagination/Page;Ljava/util/Map;)Ljava/util/List;",
+      "plan_sha256": "03aa7e25cadda9d4618ad4aeac6dea3add35df4cb6bba6b95350e29f4abf2ae6",
+      "input": "Cycle original six page/limit templates, including empty pages; actual targets remain in denominator. No new pagination contract.",
+      "MT_adapter": "Original isolated B2.2 and unchanged native JAR; formal inclusion only after new per-JVM calibration."
+    },
+    "zlt-user": {
+      "api": "ZLT-MP-4",
+      "query": {
+        "id": "ZLT-MP-4",
+        "application": "ZLT-MP",
+        "role": "zlt-user",
+        "entry": "com/central/user/controller/SysUserController.findUsers(Ljava/util/Map;)Lcom/central/common/model/PageResult;",
+        "return_generic": "com.central.common.model.PageResult<com.central.common.model.SysUser>",
+        "class_annotations": [
+          {
+            "annotation": "org.springframework.web.bind.annotation.RestController",
+            "value": ""
+          }
+        ],
+        "method_annotations": [
+          {
+            "annotation": "org.springframework.web.bind.annotation.GetMapping",
+            "value": [
+              "/users"
+            ],
+            "path": [],
+            "name": ""
+          }
+        ],
+        "return_targets": [
+          {
+            "path": "/data/*/username",
+            "target": "com/central/common/model/SysUser.username"
+          }
+        ],
+        "target_selection_basis": "Actual uninstrumented JAR JavaBeans reflection; NOT the TF serializer schema or planner acceptance",
+        "effect_sink_candidates": [],
+        "read_source_candidates": [
+          {
+            "callee": "com/central/user/mapper/SysUserMapper.findList(Lcom/baomidou/mybatisplus/extension/plugins/pagination/Page;Ljava/util/Map;)Ljava/util/List;",
+            "basis": "Actual original mapper DB-read return, not service/helper parameter."
+          }
+        ],
+        "sources": "Root entry arguments, actual DB read returns and actual RPC read returns; retain concrete message/call/object/field/version coordinates. Helper arguments are not new sources.",
+        "parameters": [
+          {
+            "type": "java.util.Map",
+            "descriptor": "Ljava/util/Map;",
+            "leaf": false,
+            "properties": [
+              {
+                "property": "empty",
+                "getter": "java.util.Map.isEmpty",
+                "type": "boolean",
+                "generic_type": "boolean",
+                "descriptor": "Z",
+                "annotations": [],
+                "field": null
+              }
+            ],
+            "annotations": [
+              {
+                "annotation": "org.springframework.web.bind.annotation.RequestParam",
+                "value": "",
+                "name": "",
+                "required": true
+              }
+            ]
+          }
+        ],
+        "sink_scope": "All actual scalar/null method-return leaves plus persistence/message call arguments. Void methods retain side-effect obligations. Unexpressible sinks are target_binding_unsupported, never business N/A.",
+        "metadata_sha256": "178e71ae643fd81dbd276a46b488751369feedadceec3931ce970603c4e46a4e",
+        "model_sha256": "c14eaababe79f2dfc6a1a086871655026f7532eab47bd785829d81a6cd87ef1a",
+        "input_rule": "Six fixed structures: normal; same value distinct instance; repeat/overwrite; empty list/map; validation/exception/absent auth; normal after failure. Concrete bodies and fixture DB frozen before each first tool run.",
+        "oracle_rule": "Review original code and raw input/database/message facts; source coordinate witnesses may be shared, no TF graph or MT tags determine expected dependencies. Unknown truth remains oracle_unavailable; no value-based instance matching.",
+        "data_dependency": "Actual data operands only; selection/control evidence separate. Constant known results have empty data source only with an independently verified execution.",
+        "selected": true,
+        "selection_reason": "Previously nonempty original list response; distinct untested controller entry; fixed ascending API order.",
+        "inputs": [
+          {
+            "case": "input-00",
+            "path": "/users?page=1&limit=1"
+          },
+          {
+            "case": "input-01",
+            "path": "/users?page=1&limit=2"
+          },
+          {
+            "case": "input-02",
+            "path": "/users?page=2&limit=1"
+          },
+          {
+            "case": "input-03",
+            "path": "/users?page=2&limit=2"
+          },
+          {
+            "case": "input-04",
+            "path": "/users?page=3&limit=1"
+          },
+          {
+            "case": "input-05",
+            "path": "/users?page=3&limit=2"
+          }
+        ],
+        "oracle": {
+          "source": "com/central/user/mapper/SysUserMapper.findList(Lcom/baomidou/mybatisplus/extension/plugins/pagination/Page;Ljava/util/Map;)Ljava/util/List;",
+          "rule": "For each returned data element, the selected scalar is copied from the unique mapper return occurrence. Match original SQL primary key and value; source identity must additionally have raw call/ordinal/object/field/version. JSON values alone never certify instance origin. No implicit selection dependencies.",
+          "positive": true,
+          "sql_table": "sys_user",
+          "column": "username",
+          "source_path": "/*/username"
+        }
+      },
+      "source": "com/central/user/mapper/SysUserMapper.findList(Lcom/baomidou/mybatisplus/extension/plugins/pagination/Page;Ljava/util/Map;)Ljava/util/List;",
+      "plan_sha256": "f44f7cbbee5e4fe880e990bd8c49a186450154428fe35d2999fc87ce26cfa169",
+      "input": "Cycle original six page/limit templates, including empty pages; actual targets remain in denominator. No new pagination contract.",
+      "MT_adapter": "Original isolated B2.2 and unchanged native JAR; formal inclusion only after new per-JVM calibration."
+    }
+  },
+  "jobs": [
+    {
+      "round": 1,
+      "task": "mall",
+      "mode": "full"
+    },
+    {
+      "round": 1,
+      "task": "mall",
+      "mode": "selective"
+    },
+    {
+      "round": 1,
+      "task": "mall",
+      "mode": "mirrortaint"
+    },
+    {
+      "round": 1,
+      "task": "mall",
+      "mode": "original"
+    },
+    {
+      "round": 1,
+      "task": "zlt-client",
+      "mode": "mirrortaint"
+    },
+    {
+      "round": 1,
+      "task": "zlt-client",
+      "mode": "selective"
+    },
+    {
+      "round": 1,
+      "task": "zlt-client",
+      "mode": "original"
+    },
+    {
+      "round": 1,
+      "task": "zlt-client",
+      "mode": "full"
+    },
+    {
+      "round": 1,
+      "task": "zlt-user",
+      "mode": "mirrortaint"
+    },
+    {
+      "round": 1,
+      "task": "zlt-user",
+      "mode": "full"
+    },
+    {
+      "round": 1,
+      "task": "zlt-user",
+      "mode": "selective"
+    },
+    {
+      "round": 1,
+      "task": "zlt-user",
+      "mode": "original"
+    },
+    {
+      "round": 1,
+      "task": "orders",
+      "mode": "selective"
+    },
+    {
+      "round": 1,
+      "task": "orders",
+      "mode": "full"
+    },
+    {
+      "round": 1,
+      "task": "orders",
+      "mode": "mirrortaint"
+    },
+    {
+      "round": 1,
+      "task": "orders",
+      "mode": "original"
+    },
+    {
+      "round": 2,
+      "task": "mall",
+      "mode": "selective"
+    },
+    {
+      "round": 2,
+      "task": "mall",
+      "mode": "original"
+    },
+    {
+      "round": 2,
+      "task": "mall",
+      "mode": "mirrortaint"
+    },
+    {
+      "round": 2,
+      "task": "mall",
+      "mode": "full"
+    },
+    {
+      "round": 2,
+      "task": "zlt-client",
+      "mode": "original"
+    },
+    {
+      "round": 2,
+      "task": "zlt-client",
+      "mode": "mirrortaint"
+    },
+    {
+      "round": 2,
+      "task": "zlt-client",
+      "mode": "full"
+    },
+    {
+      "round": 2,
+      "task": "zlt-client",
+      "mode": "selective"
+    },
+    {
+      "round": 2,
+      "task": "zlt-user",
+      "mode": "mirrortaint"
+    },
+    {
+      "round": 2,
+      "task": "zlt-user",
+      "mode": "original"
+    },
+    {
+      "round": 2,
+      "task": "zlt-user",
+      "mode": "full"
+    },
+    {
+      "round": 2,
+      "task": "zlt-user",
+      "mode": "selective"
+    },
+    {
+      "round": 2,
+      "task": "orders",
+      "mode": "mirrortaint"
+    },
+    {
+      "round": 2,
+      "task": "orders",
+      "mode": "original"
+    },
+    {
+      "round": 2,
+      "task": "orders",
+      "mode": "selective"
+    },
+    {
+      "round": 2,
+      "task": "orders",
+      "mode": "full"
+    },
+    {
+      "round": 3,
+      "task": "mall",
+      "mode": "selective"
+    },
+    {
+      "round": 3,
+      "task": "mall",
+      "mode": "full"
+    },
+    {
+      "round": 3,
+      "task": "mall",
+      "mode": "mirrortaint"
+    },
+    {
+      "round": 3,
+      "task": "mall",
+      "mode": "original"
+    },
+    {
+      "round": 3,
+      "task": "zlt-client",
+      "mode": "original"
+    },
+    {
+      "round": 3,
+      "task": "zlt-client",
+      "mode": "mirrortaint"
+    },
+    {
+      "round": 3,
+      "task": "zlt-client",
+      "mode": "selective"
+    },
+    {
+      "round": 3,
+      "task": "zlt-client",
+      "mode": "full"
+    },
+    {
+      "round": 3,
+      "task": "zlt-user",
+      "mode": "selective"
+    },
+    {
+      "round": 3,
+      "task": "zlt-user",
+      "mode": "mirrortaint"
+    },
+    {
+      "round": 3,
+      "task": "zlt-user",
+      "mode": "original"
+    },
+    {
+      "round": 3,
+      "task": "zlt-user",
+      "mode": "full"
+    },
+    {
+      "round": 3,
+      "task": "orders",
+      "mode": "full"
+    },
+    {
+      "round": 3,
+      "task": "orders",
+      "mode": "mirrortaint"
+    },
+    {
+      "round": 3,
+      "task": "orders",
+      "mode": "original"
+    },
+    {
+      "round": 3,
+      "task": "orders",
+      "mode": "selective"
+    },
+    {
+      "round": 4,
+      "task": "mall",
+      "mode": "full"
+    },
+    {
+      "round": 4,
+      "task": "mall",
+      "mode": "selective"
+    },
+    {
+      "round": 4,
+      "task": "mall",
+      "mode": "original"
+    },
+    {
+      "round": 4,
+      "task": "mall",
+      "mode": "mirrortaint"
+    },
+    {
+      "round": 4,
+      "task": "zlt-client",
+      "mode": "mirrortaint"
+    },
+    {
+      "round": 4,
+      "task": "zlt-client",
+      "mode": "original"
+    },
+    {
+      "round": 4,
+      "task": "zlt-client",
+      "mode": "full"
+    },
+    {
+      "round": 4,
+      "task": "zlt-client",
+      "mode": "selective"
+    },
+    {
+      "round": 4,
+      "task": "zlt-user",
+      "mode": "selective"
+    },
+    {
+      "round": 4,
+      "task": "zlt-user",
+      "mode": "mirrortaint"
+    },
+    {
+      "round": 4,
+      "task": "zlt-user",
+      "mode": "full"
+    },
+    {
+      "round": 4,
+      "task": "zlt-user",
+      "mode": "original"
+    },
+    {
+      "round": 4,
+      "task": "orders",
+      "mode": "selective"
+    },
+    {
+      "round": 4,
+      "task": "orders",
+      "mode": "full"
+    },
+    {
+      "round": 4,
+      "task": "orders",
+      "mode": "original"
+    },
+    {
+      "round": 4,
+      "task": "orders",
+      "mode": "mirrortaint"
+    },
+    {
+      "round": 5,
+      "task": "mall",
+      "mode": "mirrortaint"
+    },
+    {
+      "round": 5,
+      "task": "mall",
+      "mode": "full"
+    },
+    {
+      "round": 5,
+      "task": "mall",
+      "mode": "selective"
+    },
+    {
+      "round": 5,
+      "task": "mall",
+      "mode": "original"
+    },
+    {
+      "round": 5,
+      "task": "zlt-client",
+      "mode": "mirrortaint"
+    },
+    {
+      "round": 5,
+      "task": "zlt-client",
+      "mode": "original"
+    },
+    {
+      "round": 5,
+      "task": "zlt-client",
+      "mode": "selective"
+    },
+    {
+      "round": 5,
+      "task": "zlt-client",
+      "mode": "full"
+    },
+    {
+      "round": 5,
+      "task": "zlt-user",
+      "mode": "mirrortaint"
+    },
+    {
+      "round": 5,
+      "task": "zlt-user",
+      "mode": "original"
+    },
+    {
+      "round": 5,
+      "task": "zlt-user",
+      "mode": "selective"
+    },
+    {
+      "round": 5,
+      "task": "zlt-user",
+      "mode": "full"
+    },
+    {
+      "round": 5,
+      "task": "orders",
+      "mode": "full"
+    },
+    {
+      "round": 5,
+      "task": "orders",
+      "mode": "selective"
+    },
+    {
+      "round": 5,
+      "task": "orders",
+      "mode": "original"
+    },
+    {
+      "round": 5,
+      "task": "orders",
+      "mode": "mirrortaint"
+    }
+  ],
+  "warmup_seconds": 30,
+  "measure_seconds": 60,
+  "rate": 2,
+  "concurrency": 2,
+  "sampler_seconds": 2,
+  "JVM": "-Xms32m -Xmx256m -XX:ParallelGCThreads=1 -XX:CICompilerCount=2 -Djava.security.egd=file:/dev/urandom -Dspring.zipkin.enabled=false",
+  "business_limits": "1CPU/768MiB each JVM; databases and queue limits fixed within task",
+  "gate": "ZLT15, Mall98, Account40 and historical answers/states/signatures before any timed workload",
+  "same_dependencies_within_task": true,
+  "MT": "Fixed native propagation, separately sealed adapters; only formally included after independent task and dependency calibration",
+  "body_off": "One short selective control, same Agent/plan, real runtime flag; not a formal 5-round arm",
+  "locality_off": "Full capture, precision ablation only; not a same-answer cheap configuration",
+  "offline": "One normal pass, required internal certificate checks retained; fresh-exec, raw-fact oracle index, scoring/export separated",
+  "no_timed_work_during_development": true,
+  "drivers": {
+    "experiments/sockshop-mirrortaint/run_target_closure_cost.py": "49da7ea58bd990f927e980e5505dc389910ec778eed7e00e16897988ed89d359"
+  },
+  "unchanged_Orders_mapper_witness": {
+    "original": "/home/wujian/tracefusion2/artifacts/zlt-body-cost-20261031/orders-library-witness/library-witness.jar",
+    "sha256": "630ebf983e9a1bb24b874b10b83c3d651ef6ee8fd7d824273aece3285c294a48"
+  },
+  "metric_protocol_before_core": {
+    "created_utc": "2026-11-03T02:05:08.401675+00:00",
+    "reference": "7e4ad0b900a64871259a5fac008968128cc5ec28",
+    "start_head": "74c11c760823a51a90751bf04a065d65eba67276",
+    "core_freeze_file": "artifacts/zlt-completion-slice-20261031/final-candidate-01/historical/algorithm-freeze.json",
+    "core_freeze_sha256": "6adb2d3fe7292453d7ce9a541079ff77a20d2de69417e1ccf61944bfcde7f4de",
+    "scope": "Seal external candidates before core changes; development only existing Mall/ZLT; freeze before new-query planning/execution; all first failures immutable. No push.",
+    "new_apps": [
+      {
+        "app": "RuoYi-Cloud",
+        "repository": "https://github.com/yangzongzhuan/RuoYi-Cloud",
+        "branch": "springboot2",
+        "commit": "86527f4da8448a11630ea8dcd03a585cdd6565c6"
+      },
+      {
+        "app": "TeaStore",
+        "repository": "https://github.com/DescartesResearch/TeaStore",
+        "commit": "34b37f7e7be433ce72d5f9455e66922a13116749",
+        "bounded_preflight": "Java11/Tomcat, no large framework adaptation"
+      }
+    ],
+    "forbidden": [
+      "new external query TF trial planning before algorithm freeze",
+      "change source boundaries",
+      "success-based candidate replacement",
+      "Gson/dynamicPrincipal/new sink development",
+      "performance win assumption",
+      "old captures described as new deployments"
+    ],
+    "hard_gates": {
+      "Mall": 98,
+      "historic_MT_Mall": 88,
+      "ZLT_positive": 15,
+      "Account": 40,
+      "old62_known": 428,
+      "old29_known": 232,
+      "write15_known": 96
+    },
+    "targeted_guards": [
+      "direct/indirect/global/container/lambda publication",
+      "same-value overwrite",
+      "future global/container/selection reads",
+      "exception fallback",
+      "guard false collects full before omission",
+      "SQL earlier callback leaves mapping factory/handler/global state",
+      "sticky invalidity and same-object leak"
+    ],
+    "cost_tasks_before_results": [
+      "Mall expiresIn",
+      "ZLT Client clientId",
+      "ZLT User username",
+      "Orders total"
+    ],
+    "cost_primary": "Report each task. Internal success requires BOTH complete-batch protocol bytes and offline CPU lower; online businessCPU/p95 median ratios <=1.05, and no paired-round ratio >1.10. Majority uses >half all preselected applicable tasks, not requests. Report each metric/range even if criterion fails.",
+    "cost_secondary": [
+      "offline wall/current-exec VmHWM",
+      "attributable measurement bytes",
+      "static plan including model load, excluding JAR extraction/build/start"
+    ],
+    "cost_design": "5 rounds independent deployments, randomized within round, warm30s measure60s 2rps concurrency<=2; correctness includes warmup; identical necessary checks, shared engineering and format. MT only on common independently correct calibrated tasks. No summing single-query deployments as multigoal."
+  },
+  "unchanged_helpers": {
+    "run_zlt_body_cost.py": "4d511daaa71aa6e06d9afe6dad8f08a4003c074ba5142fd36076a54d188bf6ef",
+    "run_frozen_locality_cost.py": "333db418554d611e0dca76f286a7b97460adea85b81682d213559982e54a9c97"
+  },
+  "deployments_planned": 80,
+  "majority_unit": "Four preselected query tasks, not requests. Rejected/not-common-correct tasks remain in coverage and cannot be wins.",
+  "strata": {
+    "unified_execution": [
+      "mall",
+      "zlt-client",
+      "zlt-user"
+    ],
+    "existing_specialized": [
+      "orders"
+    ]
+  },
+  "primary_criterion": "Both complete-batch protocol bytes and normal offline CPU lower; online business CPU and p95 median ratios <=1.05 and every paired round ratio <=1.10. Report individual metrics even if this joint criterion fails.",
+  "independent_ablation": "Short selective projection on/off, same Agent/plan/body policy and checks; event/byte/node/allocation counts, no speed inference from short windows.",
+  "memory": "Current exec /proc/self/status VmHWM; original ru_maxrss retained only as a diagnostic, not used as exec memory.",
+  "external_gate": "New-app first matrix completed unchanged before formal costs; per-task original/TF/MT business, source and target calibration required.",
+  "business_comparison": {
+    "Mall": "Mask freshly issued token/refreshToken; verify expiresIn against original 86400-second configuration and each request duration before normalizing clock rounding. Retain keys/types, code/message/tokenHead and exact login-log insert count. Per-JVM target/source value equality remains exact.",
+    "ZLT": "Full JSON equality per original page/limit template across original and instrumented arms. Physical source truth is scored separately, never by these equal values.",
+    "Orders": "Existing frozen original common-task calibration and independent total/source rules; generated IDs are not cross-JVM matched."
+  }
+}
