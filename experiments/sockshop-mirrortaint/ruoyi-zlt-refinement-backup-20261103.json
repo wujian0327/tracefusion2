@@ -1,0 +1,22 @@
+{
+  "candidate": "d69f54a32193d8cadc4de86d199ab266082239ca",
+  "files": {
+    "batch-artifacts.tar.gz": {
+      "bytes": 2692049243,
+      "sha256": "f4fd9c012a0a0c2dd73bcf2118980731b6cb214c22c859bcbea6f6c4360f28ed"
+    },
+    "actual-images.tar.gz": {
+      "bytes": 2049513399,
+      "sha256": "cbd9959df39c9d9f40447c693e1b80498c37d4271f47c0fa4b4d4fc3d0134b8b"
+    }
+  },
+  "gzip_CRC_passed": true,
+  "unique_images": 22,
+  "unique_image_references": 25,
+  "unavailable_attempt_references": [],
+  "symlinks_dereferenced": false,
+  "external_reference_list": "/home/wujian/tracefusion2/artifacts/backups/ruoyi-zlt-refinement-20261103/external-references.json",
+  "previous_dependency_and_capture_backup": "artifacts/backups/target-closure-20261103; earlier JDK/native/dependency backups remain separate.",
+  "scope": "Complete current revision including failed and superseded captures, final fresh captures, old-capture replay and source bundle. Local backup, not off-machine replication.",
+  "no_push": true
+}

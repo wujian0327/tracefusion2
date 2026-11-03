@@ -1,0 +1,212 @@
+{
+  "candidate": "d69f54a32193d8cadc4de86d199ab266082239ca",
+  "agent_sha256": "e6eda80c4b881649f33409dfb552bb0af3be7ddd11ae8b1b320cc1979be22ecb",
+  "core_sources": 114,
+  "builder_unchanged": true,
+  "original_public_contracts_unchanged": 23,
+  "old_first_files_unchanged": 1774,
+  "old_Mall_files_unchanged": 1746,
+  "old_reports_and_delivery_sources_unchanged": 13,
+  "old_strict_guard_result_files_unchanged": 7,
+  "timed_Python_and_model_files_unchanged": 82,
+  "complete_old_captures_unchanged": true,
+  "full_internal_state_and_selection_replay_passed": true,
+  "superseded_Account_damaged_captures_still_rejected": 20,
+  "required_guard_results_preserved": true,
+  "final_business_capability_passed": true,
+  "new_RuoYi_source_certifications": 0,
+  "capability_groups": {
+    "Mall": {
+      "full": {
+        "targets": 103,
+        "states": {
+          "known_correct": 98,
+          "unknown": 5
+        },
+        "positive_correct": 62,
+        "known_empty_correct": 36,
+        "MT_correct_preserved": 88,
+        "MT_positive_preserved": 62
+      },
+      "selective": {
+        "targets": 103,
+        "states": {
+          "known_correct": 98,
+          "unknown": 5
+        },
+        "positive_correct": 62,
+        "known_empty_correct": 36,
+        "MT_correct_preserved": 88,
+        "MT_positive_preserved": 62
+      }
+    },
+    "Account": {
+      "full": {
+        "targets": 40,
+        "known_correct": 40,
+        "known_wrong": 0,
+        "unknown": 0,
+        "known_positive": 4,
+        "known_empty": 36,
+        "historic_MT_correct_present": 36,
+        "historic_MT_correct_preserved": 36,
+        "TP": 4,
+        "FP": 0,
+        "FN": 0
+      },
+      "selective": {
+        "targets": 40,
+        "known_correct": 40,
+        "known_wrong": 0,
+        "unknown": 0,
+        "known_positive": 4,
+        "known_empty": 36,
+        "historic_MT_correct_present": 36,
+        "historic_MT_correct_preserved": 36,
+        "TP": 4,
+        "FP": 0,
+        "FN": 0
+      }
+    },
+    "ZLT": {
+      "full": {
+        "known_correct": 15
+      },
+      "selective": {
+        "known_correct": 15
+      },
+      "mirrortaint": {
+        "known_correct": 15
+      }
+    },
+    "historical62": {
+      "full": {
+        "expected_targets": 431,
+        "actual_targets": 431,
+        "states": {
+          "known_correct": 428,
+          "unknown": 3
+        },
+        "baseline_correct_preserved": 368,
+        "old_tf_correct_preserved": 213,
+        "tp": 397,
+        "fp": 0,
+        "fn_including_unknown": 3
+      },
+      "selective": {
+        "expected_targets": 431,
+        "actual_targets": 431,
+        "states": {
+          "known_correct": 428,
+          "unknown": 3
+        },
+        "baseline_correct_preserved": 368,
+        "old_tf_correct_preserved": 213,
+        "tp": 397,
+        "fp": 0,
+        "fn_including_unknown": 3
+      }
+    },
+    "fields29": {
+      "full": {
+        "query_families": 29,
+        "targets": 244,
+        "states": {
+          "known_correct": 232,
+          "unknown": 12
+        },
+        "oracle_unavailable": 12,
+        "N/A_requests": 41,
+        "requests": 190
+      },
+      "selective": {
+        "query_families": 29,
+        "targets": 244,
+        "states": {
+          "known_correct": 232,
+          "unknown": 12
+        },
+        "oracle_unavailable": 12,
+        "N/A_requests": 41,
+        "requests": 190
+      }
+    },
+    "writes15": {
+      "full": {
+        "targets": 96,
+        "states": {
+          "known_correct": 96
+        }
+      },
+      "selective": {
+        "targets": 96,
+        "states": {
+          "known_correct": 96
+        }
+      }
+    }
+  },
+  "historical_state_and_signature_changes": {
+    "62": [],
+    "29": [],
+    "writes15": [],
+    "Mall98": false
+  },
+  "RuoYi_C1": {
+    "states": {
+      "full": {
+        "evidence_invalid": 89
+      },
+      "selective": {
+        "evidence_invalid": 89
+      }
+    },
+    "facts": {
+      "full": {
+        "target_bound": 89,
+        "capture_integrity_valid": 0,
+        "declared_source_paired": 72,
+        "raw_identity_rule_matches": 72,
+        "oracle_adequate": 0
+      },
+      "selective": {
+        "target_bound": 89,
+        "capture_integrity_valid": 0,
+        "declared_source_paired": 72,
+        "raw_identity_rule_matches": 72,
+        "oracle_adequate": 0
+      }
+    },
+    "scope": "Exposed five-query return tasks; independent identity-copy source rule. Physical facts do not certify answers on damaged captures. C2 mapper calibration remains separate."
+  },
+  "RuoYi_C2": {
+    "states": {
+      "full": {
+        "evidence_invalid": 5
+      },
+      "selective": {
+        "evidence_invalid": 5
+      }
+    },
+    "facts": {
+      "full": {
+        "target_bound": 5,
+        "capture_integrity_valid": 0,
+        "declared_source_paired": 5,
+        "raw_identity_rule_matches": 5,
+        "oracle_adequate": 0
+      },
+      "selective": {
+        "target_bound": 5,
+        "capture_integrity_valid": 0,
+        "declared_source_paired": 5,
+        "raw_identity_rule_matches": 5,
+        "oracle_adequate": 0
+      }
+    },
+    "scope": "Exposed five-query return tasks; independent identity-copy source rule. Physical facts do not certify answers on damaged captures. C2 mapper calibration remains separate."
+  },
+  "capture_provenance": "New final-TF-Agent business deployments; offline costs reuse original complete captures. Native C1 and compatible same-configuration C2 captures reused explicitly.",
+  "no_online_cost_rewrite": true,
+  "no_push": true
+}

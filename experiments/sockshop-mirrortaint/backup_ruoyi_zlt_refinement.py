@@ -15,8 +15,9 @@ def run(home,final,out):
     source=home/'final-source-bundle';source.mkdir(exist_ok=False)
     for p in freeze['sources']:
         path=Path(p);shutil.copyfile(path,source/path.name)
-    for pattern in('run_*ruoyi*.py','audit_*ruoyi*.py','*zlt*benchmark*.py','audit_*index*.py','audit_zlt_selection_replay.py','backup_ruoyi_zlt_refinement.py'):
-        for p in HERE.glob(pattern):shutil.copyfile(p,source/p.name)
+    for p in HERE.iterdir():
+        if p.is_file()and p.suffix in('.py','.java','.json','.md','.csv'):
+            shutil.copyfile(p,source/p.name)
     save(source/'manifest.json',{p.name:sha(p)for p in source.iterdir()if p.is_file()})
     data=out/'batch-artifacts.tar.gz'
     with tarfile.open(data,'w:gz',dereference=False,compresslevel=2)as archive:

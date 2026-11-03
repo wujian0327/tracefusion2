@@ -1,0 +1,201 @@
+{
+  "reference": "130858947f3eabc1dbee8693f11c926f37f289e9",
+  "index_commit": "d2c651c",
+  "paired_capture_results": {
+    "full": {
+      "wall_seconds": {
+        "reference_median": 14.11005308991298,
+        "indexed_median": 2.076673747971654,
+        "paired_change_percent": -85.14462972981991,
+        "ratio_range": [
+          0.1452225022108688,
+          0.1489114003654191
+        ]
+      },
+      "CPU_seconds": {
+        "reference_median": 14.107128999999997,
+        "indexed_median": 2.0758299999999994,
+        "paired_change_percent": -85.1467117960905,
+        "ratio_range": [
+          0.14519940206889526,
+          0.1488920988778984
+        ]
+      },
+      "VmHWM_KiB": {
+        "reference_median": 292100,
+        "indexed_median": 292096,
+        "paired_change_percent": -0.00547967724701115,
+        "ratio_range": [
+          0.9997398151318042,
+          1.0005069395919821
+        ]
+      },
+      "core_CPU": {
+        "reference_median": 13.338194798000005,
+        "indexed_median": 1.3128650149999974,
+        "paired_change_percent": -90.08422551057895,
+        "ratio_range": [
+          0.09631553284221098,
+          0.10008652904065936
+        ]
+      },
+      "phases": {
+        "decode_complete_capture": {
+          "reference": 0.508889356162399,
+          "indexed": 0.5118129609618336
+        },
+        "reconstruction_with_required_certificates": {
+          "reference": 13.280823986977339,
+          "indexed": 1.2556690010242164
+        },
+        "independent_raw_fact_index_and_pairing": {
+          "reference": 0.10249717999249697,
+          "indexed": 0.1024955918546766
+        },
+        "query": {
+          "reference": 0.058636792935431004,
+          "indexed": 0.058190634008497
+        },
+        "export": {
+          "reference": 0.00839706091210246,
+          "indexed": 0.008513173088431358
+        },
+        "independent_score_raw_index": {
+          "reference": 0.0023931150790303946,
+          "indexed": 0.0026708811055868864
+        }
+      }
+    },
+    "selective": {
+      "wall_seconds": {
+        "reference_median": 12.577707344898954,
+        "indexed_median": 1.7679203019943088,
+        "paired_change_percent": -86.01852181192334,
+        "ratio_range": [
+          0.13775139148255988,
+          0.1440752328281209
+        ]
+      },
+      "CPU_seconds": {
+        "reference_median": 12.574958,
+        "indexed_median": 1.767290999999999,
+        "paired_change_percent": -86.02109844024926,
+        "ratio_range": [
+          0.13773502087974723,
+          0.14403143510070754
+        ]
+      },
+      "VmHWM_KiB": {
+        "reference_median": 247268,
+        "indexed_median": 247084,
+        "paired_change_percent": -0.08087343307723316,
+        "ratio_range": [
+          0.9985127707727126,
+          0.9997087708511981
+        ]
+      },
+      "core_CPU": {
+        "reference_median": 11.882602538000015,
+        "indexed_median": 1.0775850829999998,
+        "paired_change_percent": -90.98868960591248,
+        "ratio_range": [
+          0.08845518064044464,
+          0.09312250465235761
+        ]
+      },
+      "phases": {
+        "decode_complete_capture": {
+          "reference": 0.45744467503391206,
+          "indexed": 0.4550619220826775
+        },
+        "reconstruction_with_required_certificates": {
+          "reference": 11.879614257020876,
+          "indexed": 1.0727513970341533
+        },
+        "independent_raw_fact_index_and_pairing": {
+          "reference": 0.025093950796872377,
+          "indexed": 0.02578263613395393
+        },
+        "query": {
+          "reference": 0.005602566991001368,
+          "indexed": 0.005582727026194334
+        },
+        "export": {
+          "reference": 0.008486422942951322,
+          "indexed": 0.008331359829753637
+        },
+        "independent_score_raw_index": {
+          "reference": 0.0017469499725848436,
+          "indexed": 0.001637456938624382
+        }
+      }
+    },
+    "mirrortaint": {
+      "wall_seconds": {
+        "reference_median": 0.2184783190023154,
+        "indexed_median": 0.22397381509654224,
+        "paired_change_percent": 2.040022669129171,
+        "ratio_range": [
+          1.0082429473483832,
+          1.0262790996202413
+        ]
+      },
+      "CPU_seconds": {
+        "reference_median": 0.21799999999999997,
+        "indexed_median": 0.22366300000000083,
+        "paired_change_percent": 1.6050893296547297,
+        "ratio_range": [
+          1.0086675762560013,
+          1.0266409496366908
+        ]
+      },
+      "VmHWM_KiB": {
+        "reference_median": 62704,
+        "indexed_median": 62796,
+        "paired_change_percent": 0.140350877192974,
+        "ratio_range": [
+          0.9975219214639726,
+          1.0024897854954036
+        ]
+      },
+      "core_CPU": {
+        "reference_median": 0.07772551600000022,
+        "indexed_median": 0.08296338099999999,
+        "paired_change_percent": 2.310487011057183,
+        "ratio_range": [
+          1.0036549773436017,
+          1.0727497572834443
+        ]
+      },
+      "phases": {
+        "decode_complete_capture": {
+          "reference": 0.046931028133258224,
+          "indexed": 0.047766125993803144
+        },
+        "required_source_protocol": {
+          "reference": 0.000747347017750144,
+          "indexed": 0.0007722778245806694
+        },
+        "independent_raw_fact_index_and_pairing": {
+          "reference": 0.0006931349635124207,
+          "indexed": 0.0006530049722641706
+        },
+        "native_tag_decode": {
+          "reference": 0.07833068305626512,
+          "indexed": 0.08360355207696557
+        },
+        "export": {
+          "reference": 0.004560984205454588,
+          "indexed": 0.004497212124988437
+        },
+        "independent_score_raw_index": {
+          "reference": 0.0024823469575494528,
+          "indexed": 0.002424824982881546
+        }
+      }
+    }
+  },
+  "answers_and_raw_scores_unchanged": true,
+  "internal_complete_results_unchanged": true,
+  "original_online_capture_not_new_deployment": true
+}
