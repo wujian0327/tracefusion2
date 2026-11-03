@@ -31,6 +31,8 @@ def run(out):
             assert bad==(case in(2,3,4)),(mode,case)
             if case in(0,1):
                 validate(plan,rows);ret=next(r for r in rows if r['kind']=='binding-return');assert any(f['path']=='/data/text'for f in ret['fields']);assert ret['map_wrappers']
+                repeated=[f for f in ret['fields']if f['path']in('/nested/0/text','/nested/1/text')]
+                assert len(repeated)==2 and repeated[0]['owner']!=repeated[1]['owner']and all(f['observed']['value']=='same'for f in repeated)
                 guards=[]
                 for fault in('missing','hash','owner','runtime','duplicate','shape','loader','missing-class','duplicate-class'):
                     altered=copy.deepcopy(rows);r=next(r for r in altered if r['kind']=='binding-return');p=r['map_wrappers'][0]
@@ -48,7 +50,13 @@ def run(out):
                     else:raise AssertionError(fault)
                 save(d/'guards.json',guards)
             results.append({'mode':mode,'case':case,'business_equal':True,'invalid':bad,'binding_return':sum(r['kind']=='binding-return'for r in rows)})
-    save(out/'results.json',{'agent_sha256':sha(b/'distributed-observer.jar'),'cases':results,'scope':'Observation/binding only, never counted as source accuracy.'});print('Map wrapper controls passed',flush=True)
+    command([java[:-4]+'javac','-cp',cp,'-d',str(classes),str(HERE/'MapWireGuardFixture.java')],out/'wire-compile.log')
+    wire=[]
+    for mode in('full','selective'):
+        d=out/('wire-'+mode);d.mkdir()
+        r=command([java,'-javaagent:'+str(b/'distributed-observer.jar'),'-Dservice.plan='+str(out/'plan.json'),'-Dservice.events='+str(d/'events.jsonl'),'-Dservice.mode='+mode,'-cp',cp,'MapWireGuardFixture'],d/'stdout.log')
+        witness=json.loads(r.stdout.splitlines()[-1]);assert witness['rejected']==8 and witness['get_hits']==witness['key_hits']==witness['list_hits']==0 and witness['key_view_unchanged'];wire.append({'mode':mode,**witness})
+    save(out/'results.json',{'agent_sha256':sha(b/'distributed-observer.jar'),'cases':results,'wire_guards':wire,'scope':'Observation/binding only, never counted as source accuracy.'});print('Map wrapper controls passed',flush=True)
 
 
 if __name__=='__main__':

@@ -9,7 +9,7 @@ public final class ResponseBindingHooks implements Opcodes {
     static synchronized void registerClass(ClassNode cls,ClassLoader loader){
         Map policy=(Map)PlannedServiceAgent.plan.get("map_wrapper_observation");if(policy==null)return;
         boolean needed=false;for(Object raw:((Map)policy.get("candidates")).values())for(Object item:(List)raw)if(cls.name.equals(((Map)item).get("class")))needed=true;if(!needed)return;
-        Map m=new LinkedHashMap();m.put("super",cls.superName);boolean eligible=(cls.visibleAnnotations==null||cls.visibleAnnotations.isEmpty())&&(cls.invisibleAnnotations==null||cls.invisibleAnnotations.isEmpty());
+        Map m=new LinkedHashMap();m.put("super",cls.superName);boolean eligible=(cls.visibleAnnotations==null||cls.visibleAnnotations.isEmpty())&&(cls.invisibleAnnotations==null||cls.invisibleAnnotations.isEmpty())&&(cls.interfaces==null||cls.interfaces.isEmpty());
         for(FieldNode f:cls.fields)if((f.access&ACC_STATIC)==0)eligible=false;
         for(MethodNode method:cls.methods)if(((List)((Map)policy.get("contract")).get("read_methods")).contains(method.name))eligible=false;
         m.put("eligible",eligible);Map<String,Map> group=WRAPPER_CLASSES.get(loader);if(group==null){group=new java.util.concurrent.ConcurrentHashMap<>();WRAPPER_CLASSES.put(loader,group);}group.put(cls.name,m);
@@ -216,7 +216,7 @@ public final class ResponseBindingHooks implements Opcodes {
     static void abort()throws Exception{if(enabled()&&ReadEffectHooks.enabled())ReadEffectHooks.abort();}
     static void enter(Object[] args)throws Exception{if(!enabled())return;TemporalDateHooks.enter();UuidProjectionHooks.enter();if(ExecutionKernelHooks.enabled())ExecutionKernelHooks.enter();if(ReadEffectHooks.enabled())ReadEffectHooks.enter();for(int i=0;i<args.length;i++){if(!((List)binding().get("source_arguments")).contains(i))continue;Map r=row();r.put("argument",i);SnapshotPolicy policy=new SnapshotPolicy(r,null,true);r.put("fields",sourceSnapshot(args[i],policy));emit("binding-input",r);}}
     static void rememberReturn(String message){MonitorSafety.rememberReturn(message);RETURN_MESSAGES.add(message);}
-    static void exit(Object result)throws Exception{if(!enabled())return;if(ReadEffectHooks.enabled())ReadEffectHooks.exit(result);Map r=row();if(r.get("message")!=null)rememberReturn((String)r.get("message"));r.put("result",PlannedServiceAgent.Recorder.value(result));List<Map> wrappers=new ArrayList<>();r.put("fields",snapshot(result,true,null,wrappers));if(PlannedServiceAgent.plan.get("map_wrapper_observation")!=null)r.put("map_wrappers",wrappers);emit("binding-return",r);}
+    static void exit(Object result)throws Exception{if(!enabled())return;if(ReadEffectHooks.enabled())ReadEffectHooks.exit(result);Map r=row();if(r.get("message")!=null)rememberReturn((String)r.get("message"));r.put("result",PlannedServiceAgent.Recorder.value(result));List<Map> wrappers=new ArrayList<>();r.put("fields",snapshot(result,true,null,wrappers));if(PlannedServiceAgent.plan.get("map_wrapper_observation")!=null){r.put("map_wrappers",wrappers);r.put("map_wrapper_count",wrappers.size());}emit("binding-return",r);}
     static Object member(Object object,String name)throws Exception{for(Class c=object.getClass();c!=null;c=c.getSuperclass())try{Field f=c.getDeclaredField(name);f.setAccessible(true);return f.get(object);}catch(NoSuchFieldException e){}throw new IllegalStateException("Serializer structure unsupported: "+name);}
     static void serializer(Object serializer,Object value)throws Exception{
         if(serializer==null)return;String name=serializer.getClass().getName();
@@ -240,7 +240,7 @@ public final class ResponseBindingHooks implements Opcodes {
         if(!enabled())return;
         synchronized(PlannedServiceAgent.Recorder.class){if(!RETURN_MESSAGES.contains(row().get("message")))return;}
         String[] target=((String)binding().get("path")).split("/");boolean applicable=false;
-        for(Object raw:SpringTransportAgent.Transport.snapshot(body)){String[] actual=((String)((Map)raw).get("path")).split("/");if(actual.length!=target.length)continue;boolean equal=true;for(int i=0;i<actual.length;i++)if(!target[i].equals(actual[i])&&!(target[i].equals("*")&&actual[i].matches("[0-9]+")))equal=false;if(equal)applicable=true;}
+        for(Object raw:SpringTransportAgent.Transport.snapshot(body,true)){String[] actual=((String)((Map)raw).get("path")).split("/");if(actual.length!=target.length)continue;boolean equal=true;for(int i=0;i<actual.length;i++)if(!target[i].equals(actual[i])&&!(target[i].equals("*")&&actual[i].matches("[0-9]+")))equal=false;if(equal)applicable=true;}
         if(!applicable)return;
         BusinessJackson.mapper(mapper);
         Object actual=mapper;
@@ -248,11 +248,14 @@ public final class ResponseBindingHooks implements Opcodes {
         checkPath(body,actual,((String)binding().get("path")).substring(1).split("/"),0);
     }
     static void checkPath(Object value,Object mapper,String[] path,int index)throws Exception{
+        List<Map.Entry> wrapperValues=null;
+        if(value instanceof Map&&value.getClass()!=HashMap.class&&value.getClass()!=LinkedHashMap.class){List<Map> proofs=new ArrayList<>();mapWrapper(value,true,proofs);wrapperValues=wrapperEntries(value,proofs);}
+        if(value instanceof List&&!Arrays.asList("java.util.ArrayList","java.util.Arrays$ArrayList","java.util.Collections$SingletonList","java.util.Collections$EmptyList").contains(value.getClass().getName()))throw new IllegalStateException("Unmodeled binding List type");
         if(value!=null&&UuidProjectionHooks.config()!=null&&BusinessJackson.call(mapper,"findMixInClassFor",value.getClass())!=null)throw new IllegalStateException("UUID path mix-in unsupported");
         if(value==null)return;serializer(BusinessJackson.call(BusinessJackson.call(mapper,"getSerializerProviderInstance"),"findValueSerializer",value.getClass()),value);
         if(index==path.length){ScalarProjectionHooks.serialization(value,mapper);if(UuidProjectionHooks.uuid(value))UuidProjectionHooks.serialization((java.util.UUID)value,mapper);if(TemporalDateHooks.date(value))TemporalDateHooks.serialization((java.util.Date)value,mapper);return;}String part=path[index].replace("~1","/").replace("~0","~");
         if(value instanceof List){if(part.equals("*")){for(Object x:(List)value)checkPath(x,mapper,path,index+1);}else{int at=Integer.parseInt(part);if(at<((List)value).size())checkPath(((List)value).get(at),mapper,path,index+1);}return;}
-        if(value instanceof Map){Object key=BusinessJackson.call(BusinessJackson.call(mapper,"getSerializerProviderInstance"),"findKeySerializer",BusinessJackson.call(mapper,"constructType",String.class),null);if(!key.getClass().getName().equals("com.fasterxml.jackson.databind.ser.std.StdKeySerializers$StringKeySerializer"))throw new IllegalStateException("Custom map-key serializer");if(((Map)value).containsKey(part))checkPath(((Map)value).get(part),mapper,path,index+1);return;}
+        if(value instanceof Map){Object key=BusinessJackson.call(BusinessJackson.call(mapper,"getSerializerProviderInstance"),"findKeySerializer",BusinessJackson.call(mapper,"constructType",String.class),null);if(!key.getClass().getName().equals("com.fasterxml.jackson.databind.ser.std.StdKeySerializers$StringKeySerializer"))throw new IllegalStateException("Custom map-key serializer");if(wrapperValues!=null){for(Map.Entry e:wrapperValues)if(part.equals(e.getKey()))checkPath(e.getValue(),mapper,path,index+1);}else if(((Map)value).containsKey(part))checkPath(((Map)value).get(part),mapper,path,index+1);return;}
         if(BusinessJackson.call(mapper,"findMixInClassFor",value.getClass())!=null)throw new IllegalStateException("Serialization mix-in unsupported");
         Object ser=BusinessJackson.call(BusinessJackson.call(mapper,"getSerializerProviderInstance"),"findValueSerializer",value.getClass());
         if(!BusinessJackson.exact(ser,"ser.BeanSerializer")||member(ser,"_propertyFilterId")!=null||member(ser,"_anyGetterWriter")!=null)throw new IllegalStateException("Unmodeled bean serializer effects");

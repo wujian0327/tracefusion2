@@ -6,12 +6,12 @@ HOME=ROOT/'artifacts/ruoyi-zlt-refinement-20261103'
 OLD=ROOT/'artifacts/target-closure-revision-20261103/common-cost-01'
 
 
-def worker(trial,out,mode,engine):
+def worker(trial,out,mode,engine,lock_path):
     # Other normal reconstruction, certificate and scoring code is SHARED.
     # The reference arm loads the exact 1308589 application interpreter.
-    lock=load(HOME/'offline-benchmark-lock.json')
+    lock=load(lock_path)
     for p,h in lock['sources'].items():assert sha(Path(p))==h,p
-    if engine=='reference':
+    if engine=='reference'and mode!='mirrortaint':
         path=HOME/'reference-core/infer_application_execution.py'
         assert sha(path)==lock['reference_application_sha256']
         spec=importlib.util.spec_from_file_location('infer_application_execution',path)
@@ -28,7 +28,8 @@ def run(out):
     source_names=load(HOME/'protocol-before-change.json')['reference_sources']
     sources={p:sha(Path(p))for p in source_names}
     for n in('plan_map_wrapper.py','infer_map_wrapper.py','map-wrapper-contracts-20261103.json',Path(__file__).name):sources[str(HERE/n)]=sha(HERE/n)
-    save(HOME/'offline-benchmark-lock.json',{'sources':sources,'reference_application_sha256':sha(HOME/'reference-core/infer_application_execution.py'),
+    lock_path=out/'source-lock-before-timing.json'
+    save(lock_path,{'sources':sources,'reference_application_sha256':sha(HOME/'reference-core/infer_application_execution.py'),
       'commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
       'scope':'Shared candidate normal flow, exact old application interpreter versus indexed application interpreter. No source/plan/event filtering or online changes.'})
     cpu=min(os.sched_getaffinity(0));rows=[]
@@ -42,7 +43,7 @@ def run(out):
         files=sorted((trial/'capture').glob('*.jsonl'));before={str(p):sha(p)for p in files}
         t=time.perf_counter();a=resource.getrusage(resource.RUSAGE_CHILDREN)
         with dest.with_suffix('.log').open('w')as log:
-            p=subprocess.run(['taskset','-c',str(cpu),sys.executable,__file__,'worker','--trial',str(trial),'--out',str(dest),'--mode',job['mode'],'--engine',job['engine']],stdout=log,stderr=subprocess.STDOUT)
+            p=subprocess.run(['taskset','-c',str(cpu),sys.executable,__file__,'worker','--trial',str(trial),'--out',str(dest),'--mode',job['mode'],'--engine',job['engine'],'--lock',str(lock_path)],stdout=log,stderr=subprocess.STDOUT)
         b=resource.getrusage(resource.RUSAGE_CHILDREN);wall=time.perf_counter()-t
         assert p.returncode==0,(job,p.returncode)
         assert before=={str(p):sha(p)for p in files}
@@ -56,10 +57,10 @@ def run(out):
             a=out/('%02d-%s-reference'%(i,mode));b=out/('%02d-%s-indexed'%(i,mode))
             assert load(a/'answers.json')==load(b/'answers.json'),'Status/source/selection evidence changed'
             assert load(a/'scores.json')==load(b/'scores.json'),'Independent raw-source coordinates changed'
-    save(out/'summary.json',{'complete':True,'all_answers_sources_selections_equal':True,'all_complete_capture_hashes_unchanged':True,'rows':rows})
+    save(out/'summary.json',{'complete':True,'all_public_answers_and_raw_scores_equal':True,'internal_selectors':'Verify separately with audit_zlt_selection_replay.py; public query answers do not expose selectors.','all_complete_capture_hashes_unchanged':True,'rows':rows})
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('stage',choices=['run','worker']);p.add_argument('--out',type=Path,required=True);p.add_argument('--trial',type=Path);p.add_argument('--mode');p.add_argument('--engine');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('stage',choices=['run','worker']);p.add_argument('--out',type=Path,required=True);p.add_argument('--trial',type=Path);p.add_argument('--mode');p.add_argument('--engine');p.add_argument('--lock',type=Path);a=p.parse_args()
     if a.stage=='run':run(a.out.resolve())
-    else:worker(a.trial.resolve(),a.out.resolve(),a.mode,a.engine)
+    else:worker(a.trial.resolve(),a.out.resolve(),a.mode,a.engine,a.lock.resolve())

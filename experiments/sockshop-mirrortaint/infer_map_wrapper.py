@@ -5,6 +5,7 @@ from collections import defaultdict
 
 def validate(plan,rows):
     policy=plan.get('map_wrapper_observation')
+    require(not policy or policy.get('version')==2,'Old Map wrapper observation requires its frozen interpreter')
     classes=defaultdict(list)
     for event in rows:
         if event['kind']=='map-wrapper-class':classes[(event.get('class'),event.get('loader'))].append(event)
@@ -14,6 +15,7 @@ def validate(plan,rows):
         if not policy:
             require(not proofs,'Undeclared Map wrapper observation');continue
         require('map_wrappers'in row and isinstance(proofs,list),'Map wrapper witnesses missing')
+        require(type(row.get('map_wrapper_count'))is int and row['map_wrapper_count']==len(proofs),'Map wrapper completion count differs')
         owners=set()
         for fact in proofs:
             require(fact['owner']not in owners,'Repeated Map wrapper identity');owners.add(fact['owner'])
