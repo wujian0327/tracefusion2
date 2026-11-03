@@ -1,0 +1,416 @@
+{
+  "created_utc": "2026-11-03T02:27:29.088902+00:00",
+  "reference": "7e4ad0b900a64871259a5fac008968128cc5ec28",
+  "selection": "Fixed official revisions, six families/app in order below. Inventory all endpoint-source files; select read forwarding, collection/selection and effects across >=3 endpoint classes. Other inventory methods not selected because this batch is bounded; never replace failures by successful methods.",
+  "disclosure": "Source/dependency/environment review permitted and performed; no third-party blind claim. No TF plan or run on these tasks before new algorithm freeze.",
+  "tasks": {
+    "ruoyi": [
+      {
+        "id": "ruoyi-1",
+        "entry": "com/ruoyi/system/controller/SysDeptController.getInfo(Ljava/lang/Long;)Lcom/ruoyi/common/core/web/domain/AjaxResult;",
+        "http": "GET /dept/{deptId}",
+        "target": "com/ruoyi/system/api/domain/SysDept.deptName@/data/deptName",
+        "source_calls": [
+          "com/ruoyi/system/mapper/SysDeptMapper.selectDeptById(Ljava/lang/Long;)Lcom/ruoyi/system/api/domain/SysDept;"
+        ],
+        "inputs": [
+          100,
+          101,
+          102,
+          103,
+          100,
+          999999
+        ],
+        "independent_rule": "Normal data.deptName copies the concrete selectDeptById return field. Data-scope reads select control only. Null data is a separate null-field target, not an element.",
+        "structure": "forwarding + data-scope check",
+        "initial_status": "sealed_not_trial_planned"
+      },
+      {
+        "id": "ruoyi-2",
+        "entry": "com/ruoyi/system/controller/SysDeptController.excludeChild(Ljava/lang/Long;)Lcom/ruoyi/common/core/web/domain/AjaxResult;",
+        "http": "GET /dept/list/exclude/{deptId}",
+        "target": "com/ruoyi/system/api/domain/SysDept.deptName@/data/*/deptName",
+        "source_calls": [
+          "com/ruoyi/system/mapper/SysDeptMapper.selectDeptList(Lcom/ruoyi/system/api/domain/SysDept;)Ljava/util/List;"
+        ],
+        "inputs": [
+          101,
+          102,
+          103,
+          104,
+          999999,
+          101
+        ],
+        "independent_rule": "Each surviving element name copies its own mapper row field; removeIf changes membership, not the name source. Repeated names must keep different row coordinates.",
+        "structure": "collection selection + lambda",
+        "initial_status": "sealed_not_trial_planned"
+      },
+      {
+        "id": "ruoyi-3",
+        "entry": "com/ruoyi/system/controller/SysDictDataController.dictType(Ljava/lang/String;)Lcom/ruoyi/common/core/web/domain/AjaxResult;",
+        "http": "GET /dict/data/type/{dictType}",
+        "target": "com/ruoyi/system/api/domain/SysDictData.dictLabel@/data/*/dictLabel",
+        "source_calls": [
+          "com/ruoyi/system/mapper/SysDictDataMapper.selectDictDataByType(Ljava/lang/String;)Ljava/util/List;",
+          "org/springframework/data/redis/core/ValueOperations.get(Ljava/lang/Object;)Ljava/lang/Object;"
+        ],
+        "inputs": [
+          "sys_user_sex",
+          "sys_normal_disable",
+          "sys_user_sex",
+          "sys_job_status",
+          "tf_missing",
+          "sys_normal_disable"
+        ],
+        "independent_rule": "Actual mapper or Redis read occurrence supplies each label. A cache hit is not attributed to an earlier absent mapper occurrence. Empty list has no member targets.",
+        "structure": "collection + cache hit/miss",
+        "initial_status": "sealed_not_trial_planned"
+      },
+      {
+        "id": "ruoyi-4",
+        "entry": "com/ruoyi/system/controller/SysConfigController.getInfo(Ljava/lang/Long;)Lcom/ruoyi/common/core/web/domain/AjaxResult;",
+        "http": "GET /config/{configId}",
+        "target": "com/ruoyi/system/domain/SysConfig.configValue@/data/configValue",
+        "source_calls": [
+          "com/ruoyi/system/mapper/SysConfigMapper.selectConfigById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysConfig;"
+        ],
+        "inputs": [
+          1,
+          2,
+          3,
+          4,
+          1,
+          999999
+        ],
+        "independent_rule": "Value copies the concrete mapper return field. Missing record leaves null data; no value-based matching.",
+        "structure": "simple forwarding",
+        "initial_status": "sealed_not_trial_planned"
+      },
+      {
+        "id": "ruoyi-5",
+        "entry": "com/ruoyi/system/controller/SysPostController.optionselect()Lcom/ruoyi/common/core/web/domain/AjaxResult;",
+        "http": "GET /post/optionselect",
+        "target": "com/ruoyi/system/domain/SysPost.postName@/data/*/postName",
+        "source_calls": [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostAll()Ljava/util/List;"
+        ],
+        "inputs": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ],
+        "independent_rule": "Each postName is its actual selectPostAll row field; deliberately equal names on distinct rows cannot merge. Six requests have fresh method/source occurrences.",
+        "structure": "nonempty collection",
+        "initial_status": "sealed_not_trial_planned"
+      },
+      {
+        "id": "ruoyi-6",
+        "entry": "com/ruoyi/system/controller/SysDeptController.add(Lcom/ruoyi/system/api/domain/SysDept;)Lcom/ruoyi/common/core/web/domain/AjaxResult;",
+        "http": "POST /dept",
+        "target": "com/ruoyi/common/core/web/domain/AjaxResult.code@/code",
+        "source_calls": [
+          "com/ruoyi/system/mapper/SysDeptMapper.selectDeptById(Ljava/lang/Long;)Lcom/ruoyi/system/api/domain/SysDept;",
+          "com/ruoyi/system/mapper/SysDeptMapper.checkDeptNameUnique(Ljava/lang/String;Ljava/lang/Long;)Lcom/ruoyi/system/api/domain/SysDept;"
+        ],
+        "inputs": [
+          {
+            "parentId": 100,
+            "deptName": "tf_dept_0",
+            "orderNum": 0,
+            "status": "0"
+          },
+          {
+            "parentId": 100,
+            "deptName": "tf_dept_1",
+            "orderNum": 1,
+            "status": "0"
+          },
+          {
+            "parentId": 100,
+            "deptName": "tf_dept_2",
+            "orderNum": 2,
+            "status": "0"
+          },
+          {
+            "parentId": 100,
+            "deptName": "tf_dept_3",
+            "orderNum": 3,
+            "status": "0"
+          },
+          {
+            "parentId": 100,
+            "deptName": "tf_dept_4",
+            "orderNum": 4,
+            "status": "0"
+          },
+          {
+            "parentId": 100,
+            "deptName": "tf_dept_5",
+            "orderNum": 5,
+            "status": "0"
+          }
+        ],
+        "independent_rule": "On successful insert toAjax returns constant success code with empty data origins; row count and uniqueness affect selection. Save/logging effects remain obligations, not read-only summaries.",
+        "structure": "writes + multiple reads + logging",
+        "initial_status": "sealed_not_trial_planned",
+        "target_representation": "Dynamic AjaxResult Map leaf /code, not an actual declared Java field. If the frozen query interface cannot express it, keep target_binding_unsupported; do not fabricate a field."
+      }
+    ],
+    "teastore": [
+      {
+        "id": "tea-1",
+        "entry": "tools/descartes/teastore/persistence/rest/ProductEndpoint.listAllForCategory(Ljava/lang/Long;Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/util/List;",
+        "http": "GET /rest/products/category/{category}?start={start}&max={max}",
+        "target": "tools/descartes/teastore/entities/Product.name@/*/name",
+        "source_calls": [
+          "jakarta/persistence/EntityManager.find(Ljava/lang/Class;Ljava/lang/Object;)Ljava/lang/Object;",
+          "jakarta/persistence/TypedQuery.getResultList()Ljava/util/List;"
+        ],
+        "inputs": [
+          {
+            "category": 1,
+            "start": 0,
+            "max": 2
+          },
+          {
+            "category": 1,
+            "start": 1,
+            "max": 2
+          },
+          {
+            "category": 2,
+            "start": 0,
+            "max": 2
+          },
+          {
+            "category": 1,
+            "start": 0,
+            "max": 4
+          },
+          {
+            "category": 999999,
+            "start": 0,
+            "max": 2
+          },
+          {
+            "category": 1,
+            "start": 0,
+            "max": 2
+          }
+        ],
+        "independent_rule": "The copy constructor preserves each selected PersistenceProduct.name field from the concrete TypedQuery row. Category find supplies selection, not product name.",
+        "structure": "copy + collection + multiple reads",
+        "initial_status": "sealed_not_trial_planned"
+      },
+      {
+        "id": "tea-2",
+        "entry": "tools/descartes/teastore/persistence/rest/ProductEndpoint.listAllForCategory(Ljava/lang/Long;Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/util/List;",
+        "http": "GET /rest/products/category/{category}?start={start}&max={max}",
+        "target": "tools/descartes/teastore/entities/Product.listPriceInCents@/*/listPriceInCents",
+        "source_calls": [
+          "jakarta/persistence/EntityManager.find(Ljava/lang/Class;Ljava/lang/Object;)Ljava/lang/Object;",
+          "jakarta/persistence/TypedQuery.getResultList()Ljava/util/List;"
+        ],
+        "inputs": [
+          {
+            "category": 1,
+            "start": 0,
+            "max": 2
+          },
+          {
+            "category": 1,
+            "start": 1,
+            "max": 2
+          },
+          {
+            "category": 2,
+            "start": 0,
+            "max": 2
+          },
+          {
+            "category": 1,
+            "start": 0,
+            "max": 4
+          },
+          {
+            "category": 999999,
+            "start": 0,
+            "max": 2
+          },
+          {
+            "category": 1,
+            "start": 0,
+            "max": 2
+          }
+        ],
+        "independent_rule": "Price copies its own concrete selected row. Equal prices remain separate sources.",
+        "structure": "collection different target field",
+        "initial_status": "sealed_not_trial_planned"
+      },
+      {
+        "id": "tea-3",
+        "entry": "tools/descartes/teastore/persistence/rest/UserEndpoint.findById(Ljava/lang/String;)Ljakarta/ws/rs/core/Response;",
+        "http": "GET /rest/users/name/{name}",
+        "target": "tools/descartes/teastore/entities/User.realName@/realName",
+        "source_calls": [
+          "jakarta/persistence/TypedQuery.getResultList()Ljava/util/List;"
+        ],
+        "inputs": [
+          "tf_user_1",
+          "tf_user_2",
+          "tf_user_3",
+          "tf_user_1",
+          "tf_missing",
+          "tf_user_2"
+        ],
+        "independent_rule": "Repository maps its concrete matching PersistenceUser row into User; final copy preserves that realName. Missing user 404 is not a successful field.",
+        "structure": "single-row forwarding + copies",
+        "initial_status": "sealed_not_trial_planned"
+      },
+      {
+        "id": "tea-4",
+        "entry": "tools/descartes/teastore/persistence/rest/OrderEndpoint.listAllForUser(Ljava/lang/Long;Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/util/List;",
+        "http": "GET /rest/orders/user/{user}?start={start}&max={max}",
+        "target": "tools/descartes/teastore/entities/Order.totalPriceInCents@/*/totalPriceInCents",
+        "source_calls": [
+          "jakarta/persistence/EntityManager.find(Ljava/lang/Class;Ljava/lang/Object;)Ljava/lang/Object;",
+          "jakarta/persistence/TypedQuery.getResultList()Ljava/util/List;"
+        ],
+        "inputs": [
+          {
+            "user": 1,
+            "start": 0,
+            "max": 2
+          },
+          {
+            "user": 2,
+            "start": 0,
+            "max": 2
+          },
+          {
+            "user": 3,
+            "start": 0,
+            "max": 2
+          },
+          {
+            "user": 1,
+            "start": 0,
+            "max": 2
+          },
+          {
+            "user": 999999,
+            "start": 0,
+            "max": 2
+          },
+          {
+            "user": 2,
+            "start": 0,
+            "max": 2
+          }
+        ],
+        "independent_rule": "Each totalPriceInCents copies the selected PersistenceOrder field, not a newly recomputed product sum; user find determines selection.",
+        "structure": "multi-read collection",
+        "initial_status": "sealed_not_trial_planned"
+      },
+      {
+        "id": "tea-5",
+        "entry": "tools/descartes/teastore/registryclient/util/AbstractCRUDEndpoint.listAll(Ljava/lang/Integer;Ljava/lang/Integer;)Ljava/util/List;",
+        "http": "GET /rest/categories?start={start}&max={max}",
+        "target": "tools/descartes/teastore/entities/Category.name@/*/name",
+        "source_calls": [
+          "jakarta/persistence/TypedQuery.getResultList()Ljava/util/List;"
+        ],
+        "inputs": [
+          {
+            "start": 0,
+            "max": 2
+          },
+          {
+            "start": 1,
+            "max": 2
+          },
+          {
+            "start": 0,
+            "max": 4
+          },
+          {
+            "start": 2,
+            "max": 2
+          },
+          {
+            "start": 999999,
+            "max": 2
+          },
+          {
+            "start": 0,
+            "max": 2
+          }
+        ],
+        "independent_rule": "Inherited route dispatches to CategoryEndpoint; each copied category name uses its concrete query row. Runtime generic dispatch must be bound, not guessed.",
+        "structure": "inheritance + collection",
+        "initial_status": "sealed_not_trial_planned"
+      },
+      {
+        "id": "tea-6",
+        "entry": "tools/descartes/teastore/registryclient/util/AbstractCRUDEndpoint.create(Ljava/lang/Object;)Ljakarta/ws/rs/core/Response;",
+        "http": "POST /rest/products",
+        "target": "generated product ID response scalar",
+        "source_calls": [
+          "jakarta/persistence/EntityManager.find(Ljava/lang/Class;Ljava/lang/Object;)Ljava/lang/Object;"
+        ],
+        "inputs": [
+          {
+            "categoryId": 1,
+            "name": "tf_product_0",
+            "description": "repeat",
+            "listPriceInCents": 1200
+          },
+          {
+            "categoryId": 1,
+            "name": "tf_product_1",
+            "description": "repeat",
+            "listPriceInCents": 1200
+          },
+          {
+            "categoryId": 1,
+            "name": "tf_product_2",
+            "description": "repeat",
+            "listPriceInCents": 1200
+          },
+          {
+            "categoryId": 1,
+            "name": "tf_product_3",
+            "description": "repeat",
+            "listPriceInCents": 1200
+          },
+          {
+            "categoryId": 1,
+            "name": "tf_product_4",
+            "description": "repeat",
+            "listPriceInCents": 1200
+          },
+          {
+            "categoryId": 1,
+            "name": "tf_product_5",
+            "description": "repeat",
+            "listPriceInCents": 1200
+          }
+        ],
+        "independent_rule": "Generated identifier has no declared root/read data source; generation requires actual generated-ID write fact. Preserve oracle-unavailable if not observed; persisted input fields are separate sink obligations.",
+        "structure": "write + generated result",
+        "initial_status": "sealed_not_trial_planned"
+      }
+    ]
+  },
+  "fixture": "Isolated original SQL/schema + six input cases. Seed nonempty rows, at least two distinct rows with equal selected values. Save every fixture diff and hash before original runs. Public application authentication only; no signing-material reads or invented admin JWT.",
+  "oracle": "Logical copy/constant/selection rules above fixed before tools. Each JVM needs actual source-call start/completion and field/owner/version/target projection. DB values verify content but cannot supply missing physical coordinates. Labels/TF inference never generate truth.",
+  "compatibility": "RuoYi host OpenJDK8u504; TeaStore JDK11/Tomcat10.0.27 official Dockerfile. Independent control probes allowed; no query compatibility trial planning. Missing model/runtime/transport => report unsupported, no registration or framework adaptation.",
+  "first_execution": "After algorithm freeze only. Original, TF full/selective, applicable fixed MT. Keep complete pool statuses and unchanged logical source boundaries. Handler leaves and save/message sinks separately inventoried, not automatically counted as field success.",
+  "previous_seal_sha256": "a4cdaed9e459915207aea4b39af3e7ab8ee6e901beac16c3667efec5b74b0e51",
+  "clarification_before_core_or_tools": "TeaStore User source has realName, not firstName; protocol transcription corrected before any TF planning/run. Initial seal retained.",
+  "coordinate_clarification_before_any_external_TF_plan": "Original SysConfig import is com.ruoyi.system.domain.SysConfig. Correct the bytecode coordinate only; same fixed GET /config/{id}, configValue, inputs, mapper method and logical rule. Earlier v1/v2 retained. This clarification is after core development and before any TF/MT external planning/run; disclose this protocol timing limitation.",
+  "full_seal_sha256": "f53633d4a5f7c35d1d812f047c7119114739e1ff58d82ba7b39a4bc8a2089f95"
+}

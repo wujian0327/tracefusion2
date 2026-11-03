@@ -106,6 +106,8 @@ def build(out,inputs):
     for name in ('plan_source_locality.py','infer_source_locality.py','source-locality-contracts-20261030.json','plan_field_identity.py','plan_communication_identity.py','communication-identity-contracts-20261029.json','plan_literal_enums.py','plan_foundation_values.py','foundation-value-contracts-20261028.json','infer_foundation_values.py','plan_feign_effects.py','feign-input-effect-contracts-20261028.json','mongo2-provided-id-contracts-20261028.json','plan_scalar_projection.py','scalar-projection-contracts-20261028.json','infer_scalar_projection.py','document-date-effects-20261028.json','infer_listener_registry.py','infer_feign_effects.py'):manifest['sources'][str(HERE/name)]=sha(HERE/name)
     for name in ('plan_source_locality.py','infer_source_locality.py','source-locality-contracts-20261030.json'):manifest['sources'][str(HERE/name)]=sha(HERE/name)
     for name in ('plan_sql_result_locality.py','infer_sql_result_locality.py','sql-result-locality-contracts-20261031.json','infer_sequence_callbacks.py','kernel-sequence-values-20261031.json','plan_body_observation.py','infer_body_observation.py'):manifest['sources'][str(HERE/name)]=sha(HERE/name)
+    for name in ('plan_target_observation.py','infer_target_observation.py'):
+        manifest['sources'][str(HERE/name)]=sha(HERE/name)
     manifest['builder_sha256']=sha(Path(__file__));save(out/'build.json',manifest)
 
 

@@ -54,6 +54,42 @@ def attach(plan):
     source_method,source_pc,source=proof[0]
     source_type=source.split(')')[1]
     if source_type!='L'+plan['target'].rsplit('.',1)[0]+';':return
+    def forwarding_suffix(key,pc):
+        """A cut may not destroy state used by a later target computation.
+
+        The first bounded rule permits only reference forwarding after the
+        summarized call, including its callers. Everything else collects full
+        BEFORE entering that call. Root-object identity alone is insufficient.
+        """
+        method=methods[key];code=method['instructions'];seen=set();work=[pc+1]
+        if method.get('exception_handlers'):return False
+        while work:
+            at=work.pop()
+            if at in seen:continue
+            if at>=len(code):return False
+            seen.add(at);ins=code[at];op=ins['op']
+            if op==176:continue
+            if op==167:
+                if ins['target']<=at:return False
+                work.append(ins['target']);continue
+            if op not in (0,25,58,87,89,192):return False
+            work.append(at+1)
+        return bool(seen)
+    def reaches(key,destination,seen=frozenset()):
+        if key==destination:return True
+        if key in seen:return False
+        return any(reaches(target,destination,seen|{key}) for ins in methods[key]['instructions']
+                   for target in cfg['call_targets'].get(key+'@'+str(ins['index']),[])
+                   if target in forward and forward[target]==proof)
+    def continuation_closed(caller,pc):
+        if not forwarding_suffix(caller,pc):return False
+        for key,value in forward.items():
+            if value!=proof or key==caller:continue
+            for ins in methods[key]['instructions']:
+                if any(reaches(target,caller) for target in cfg['call_targets'].get(key+'@'+str(ins['index']),[])
+                       if target in forward and forward[target]==proof):
+                    if not forwarding_suffix(key,ins['index']):return False
+        return True
     candidates={}
     for caller,result in list(forward.items()):
         if result!=proof:continue
@@ -64,11 +100,13 @@ def attach(plan):
             if ins['op']==184 and ins['owner']!=methods[caller]['owner']:continue
             target=callee(ins)
             if target not in cfg['call_targets'].get(caller+'@'+str(ins['index']),[]):continue
+            if not continuation_closed(caller,ins['index']):continue
             candidates[caller+'@'+str(ins['index'])]={'callee':target,
                 'implementation':target,'caller':caller,'pc':ins['index'],
-                'reason':'Root returns the same source object. Runtime must establish an unexposed source island disjoint from receiver/arguments. Callee keeps arbitrary effects.'}
+                'reason':'Root returns the same source object; all caller continuations only forward references. Runtime must establish an unexposed source island disjoint from receiver/arguments. Callee keeps arbitrary effects.',
+                'continuation':'Reference-only suffix in the candidate caller and every forwarding ancestor; otherwise full collection before invocation.'}
     if candidates:
-        cfg['body_observation']={'version':1,'enabled':True,
+        cfg['body_observation']={'version':2,'enabled':True,
             'source':{'caller':source_method,'pc':source_pc,'callee':source},
             'forwarding_methods':sorted(key for key,p in forward.items() if p==proof),
             'candidates':candidates,

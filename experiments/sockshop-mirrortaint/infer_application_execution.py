@@ -15,6 +15,8 @@ def infer_application(plan,rows,worker_request=None):
     from infer_source_observation import validate as validate_observation
     validate_observation(plan,rows)
     cfg=plan['execution_kernel']
+    from infer_target_observation import validate as validate_target_observation
+    validate_target_observation(plan,rows)
     from infer_source_locality import validate as validate_locality
     ownership_certificates=validate_locality(plan,rows)
     from infer_sql_result_locality import validate as validate_sql_locality

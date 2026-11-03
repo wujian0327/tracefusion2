@@ -78,6 +78,8 @@ def choose(model,query,*,deployment=None):
         attach_execution_closure(plan,model)
         from plan_body_observation import attach as attach_body_observation
         attach_body_observation(plan)
+        from plan_target_observation import attach as attach_target_observation
+        attach_target_observation(plan)
     from plan_communication_identity import attach as attach_communication_identity
     attach_communication_identity(plan,model)
     plan['preexecution_applicability']=check(plan,model,query,deployment)

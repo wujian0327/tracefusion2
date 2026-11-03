@@ -64,39 +64,82 @@ public final class ResponseBindingHooks implements Opcodes {
         for(int j=0;j<ts.length;j++){out.add(new InsnNode(DUP));out.add(new LdcInsnNode(j));out.add(new VarInsnNode(ts[j].getOpcode(ILOAD),slots[j]));PlannedServiceAgent.box(out,ts[j]);out.add(new InsnNode(AASTORE));}
     }
     static boolean active(){return enabled()&&!PlannedServiceAgent.Recorder.STACK.get().isEmpty();}
-    static List<Map> snapshot(Object obj,boolean target)throws Exception{
-        List<Map> result=new ArrayList<>();walk(obj,"",null,result,new IdentityHashMap<Object,Boolean>(),0,target);return result;
+    // Value demands are independent of reference/effect obligations. This
+    // context never suppresses a call, write counter, alias or contract hook.
+    static final class SnapshotPolicy {
+        Map policy,proof;boolean selected;
+        SnapshotPolicy(Map witness,String call,boolean input){
+            policy=(Map)PlannedServiceAgent.plan.get("target_observation_closure");
+            if(policy==null)return;
+            Deque<PlannedServiceAgent.Recorder.Frame> stack=PlannedServiceAgent.Recorder.STACK.get();
+            boolean rooted=!stack.isEmpty()&&stack.peekLast().method.equals(PlannedServiceAgent.plan.get("entry"));
+            boolean scoped=input&&rooted&&stack.peek().method.equals(PlannedServiceAgent.plan.get("entry"));
+            if(!input&&rooted&&!CollectionServiceHooks.CALLS.get().isEmpty()){
+                Map actual=CollectionServiceHooks.CALLS.get().peek();
+                scoped=Objects.equals(actual.get("frame"),stack.peek().id)&&Objects.equals(actual.get("callee"),call)
+                    &&((Map)((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("methods")).containsKey(actual.get("method"));
+            }
+            selected=rooted&&scoped&&!PlannedServiceAgent.Recorder.captureInvalid&&"selective".equals(PlannedServiceAgent.mode)
+                &&Boolean.TRUE.equals(policy.get("enabled"))&&!System.getProperty("service.target.observation","true").equals("false");
+            proof=new LinkedHashMap();proof.put("version",1);proof.put("policy_sha256",policy.get("sha256"));proof.put("selected",selected);
+            proof.put("scalar_fields",new TreeMap());proof.put("container_values",new TreeMap());witness.put("target_observation",proof);
+        }
+        void count(String kind,String field){Map counts=(Map)proof.get(kind);counts.put(field,((Number)counts.getOrDefault(field,0)).intValue()+1);}
+        boolean scalar(Map property){
+            String field=(String)property.get("field");
+            if(!selected||!Objects.equals(((Map)policy.get("omittable_scalar_fields")).get(field),property.get("descriptor")))return false;
+            count("scalar_fields",field);return true;
+        }
+        boolean member(String anchor,String path,Object value){
+            if(!selected||anchor==null||!((Map)policy.get("container_values")).containsKey(anchor))return false;
+            if(value!=null&&!Arrays.asList(String.class,Integer.class,Long.class,Boolean.class,Double.class,Float.class,Short.class,Byte.class,Character.class).contains(value.getClass()))return false;
+            String target=(String)binding().get("path");int slash=path.lastIndexOf('/');
+            // A differently positioned instance is ordinary ineligibility:
+            // collect all its values BEFORE any cut at that location.
+            if(slash<0||!path.substring(0,slash).equals(target.substring(0,target.lastIndexOf('/'))))return false;
+            if(path.equals(target))return false;
+            count("container_values",anchor);return true;
+        }
     }
-    static void leaf(Object owner,String field,Object value,String path,String anchor,List<Map> result,boolean target){
+    static List<Map> snapshot(Object obj,boolean target)throws Exception{
+        return snapshot(obj,target,null);
+    }
+    static List<Map> snapshot(Object obj,boolean target,SnapshotPolicy policy)throws Exception{
+        List<Map> result=new ArrayList<>();walk(obj,"",null,result,new IdentityHashMap<Object,Boolean>(),0,target,policy);return result;
+    }
+    static void leaf(Object owner,String field,Object value,String path,String anchor,List<Map> result,boolean target,SnapshotPolicy policy){
         List wanted=target?Collections.singletonList(binding().get("target")):(List)binding().get("source_fields");
         boolean dynamic=target&&Boolean.TRUE.equals(binding().get("runtime_container_path"))&&field.startsWith("@")&&path.equals(binding().get("path"));
         if(!dynamic&&!wanted.contains(anchor==null?field:anchor))return;
+        if(!target&&policy!=null&&field.startsWith("@map:")&&policy.member(anchor,path,value))return;
         Map r=new LinkedHashMap();r.put("path",path);r.put("owner",PlannedServiceAgent.Recorder.id(owner));r.put("field",field);
         r.put("version",field.startsWith("@")?CollectionServiceHooks.epoch(owner):PlannedServiceAgent.Recorder.VERSIONS.getOrDefault(PlannedServiceAgent.Recorder.id(owner)+":"+field,0));
         r.put("observed",PlannedServiceAgent.Recorder.value(value));if(anchor!=null)r.put("schema_field",anchor);result.add(r);
     }
-    static void walk(Object o,String path,String anchor,List<Map> result,IdentityHashMap<Object,Boolean> seen,int depth,boolean target)throws Exception{
+    static void walk(Object o,String path,String anchor,List<Map> result,IdentityHashMap<Object,Boolean> seen,int depth,boolean target,SnapshotPolicy policy)throws Exception{
         if(o==null||SpringTransportAgent.Transport.primitive(o)||o.getClass().getName().equals("org.springframework.http.HttpHeaders"))return;
         if(depth>12||result.size()>10000)throw new IllegalStateException("Binding snapshot bound");
         if(seen.put(o,true)!=null)throw new IllegalStateException("Binding object cycle");
         try{
             if(o instanceof List){if(!Arrays.asList("java.util.ArrayList","java.util.Arrays$ArrayList","java.util.Collections$SingletonList","java.util.Collections$EmptyList").contains(o.getClass().getName()))throw new IllegalStateException("Unmodeled binding List type");
                 if(sourceCapture)CollectionServiceHooks.received(o);
-                int i=0;for(Object x:(List)o){String p=path+"/"+i;if(SpringTransportAgent.Transport.primitive(x)&&anchor!=null)leaf(o,"@list:"+i,x,p,anchor,result,target);else walk(x,p,anchor,result,seen,depth+1,target);i++;}return;}
+                int i=0;for(Object x:(List)o){String p=path+"/"+i;if(SpringTransportAgent.Transport.primitive(x)&&anchor!=null)leaf(o,"@list:"+i,x,p,anchor,result,target,policy);else walk(x,p,anchor,result,seen,depth+1,target,policy);i++;}return;}
             if(o instanceof Map){if(o.getClass()!=HashMap.class&&o.getClass()!=LinkedHashMap.class)throw new IllegalStateException("Unmodeled binding Map type");
                 if(sourceCapture)CollectionServiceHooks.received(o);
                 for(Object k:((Map)o).keySet()){if(!(k instanceof String))throw new IllegalStateException("Non-string binding key");Object v=((Map)o).get(k);String p=path+"/"+SpringTransportAgent.Transport.escape((String)k);
-                    if(SpringTransportAgent.Transport.primitive(v)&&anchor!=null)leaf(o,"@map:"+k,v,p,anchor,result,target);else walk(v,p,anchor,result,seen,depth+1,target);}return;}
+                    if(SpringTransportAgent.Transport.primitive(v)&&anchor!=null)leaf(o,"@map:"+k,v,p,anchor,result,target,policy);else walk(v,p,anchor,result,seen,depth+1,target,policy);}return;}
             Map schema=(Map)PlannedServiceAgent.plan.get("response_graph_schema");List<Map> props=(List<Map>)schema.get(o.getClass().getName().replace('.','/'));if(props==null)return;
             if(!PlannedServiceAgent.Recorder.CHECKED_CLASSES.contains(o.getClass().getName().replace('.','/')))throw new IllegalStateException("Binding DTO was loaded without frozen-class instrumentation check");
-            for(Map p:props){String field=(String)p.get("field");Field f=o.getClass().getDeclaredField(field.substring(field.lastIndexOf('.')+1));f.setAccessible(true);Object value=f.get(o);String next=path+"/"+SpringTransportAgent.Transport.escape((String)p.get("property"));
-                if(SpringTransportAgent.Transport.primitive(value))leaf(o,field,value,next,null,result,target);else walk(value,next,field,result,seen,depth+1,target);}
+            for(Map p:props){String field=(String)p.get("field");if(!target&&policy!=null&&policy.scalar(p))continue;Field f=o.getClass().getDeclaredField(field.substring(field.lastIndexOf('.')+1));f.setAccessible(true);Object value=f.get(o);String next=path+"/"+SpringTransportAgent.Transport.escape((String)p.get("property"));
+                if(SpringTransportAgent.Transport.primitive(value))leaf(o,field,value,next,null,result,target,policy);else walk(value,next,field,result,seen,depth+1,target,policy);}
         }finally{seen.remove(o);}
     }
     static List<Map> sourceSnapshot(Object value)throws Exception{boolean old=sourceCapture;sourceCapture=true;try{return snapshot(value,false);}finally{sourceCapture=old;}}
+    static List<Map> sourceSnapshot(Object value,SnapshotPolicy policy)throws Exception{boolean old=sourceCapture;sourceCapture=true;try{return snapshot(value,false,policy);}finally{sourceCapture=old;}}
     static void mark(String kind,String call,Object value)throws Exception{mark(kind,call,value,null);}
     static void mark(String kind,String call,Object value,String site)throws Exception{
-        List<Map> fields;try{fields=kind.equals("binding-source")?sourceSnapshot(value):snapshot(value,false);}
+        Map projection=new LinkedHashMap();SnapshotPolicy policy=new SnapshotPolicy(projection,call,false);
+        List<Map> fields;try{fields=kind.equals("binding-source")?sourceSnapshot(value,policy):snapshot(value,false,policy);}
         catch(IllegalStateException unsupported){
             if(!ExecutionKernelHooks.enabled()||!kind.startsWith("binding-opaque")||!"Unmodeled binding Map type".equals(unsupported.getMessage()))throw unsupported;
             // Diagnostic snapshots cannot turn an unsupported callback value
@@ -104,7 +147,7 @@ public final class ResponseBindingHooks implements Opcodes {
             // the original invocation and reachable effects as opaque.
             Map r=row();r.put("callee",call);r.put("fields",Collections.emptyList());r.put("opaque_identity",PlannedServiceAgent.Recorder.value(value));r.put("snapshot_unsupported",unsupported.getMessage());emit(kind,r);return;
         }
-        if(fields.isEmpty())return;Map r=row();r.put("callee",call);r.put("fields",fields);
+        if(fields.isEmpty()&&(policy.proof==null||((Map)policy.proof.get("scalar_fields")).isEmpty()&&((Map)policy.proof.get("container_values")).isEmpty()))return;Map r=row();r.put("callee",call);r.put("fields",fields);r.putAll(projection);
         if(kind.equals("binding-source")&&ExecutionKernelHooks.enabled()&&binding().get("source_occurrence_protocol")!=null){
             Map invocation=CollectionServiceHooks.CALLS.get().peek();boolean paired=invocation!=null&&call.equals(invocation.get("callee"))&&Objects.equals(r.get("frame"),invocation.get("frame"));
             if(((Number)binding().get("source_occurrence_protocol")).intValue()>=2)paired=paired&&Objects.equals(site,invocation.get("method")+"@"+invocation.get("pc"));
@@ -123,7 +166,7 @@ public final class ResponseBindingHooks implements Opcodes {
     }catch(Throwable e){PlannedServiceAgent.Recorder.problem("binding-after:"+e);throw new IllegalStateException(e);}}}
     public static void exceptional(String call,Object recv,Object[] args,Throwable error){synchronized(PlannedServiceAgent.Recorder.class){if(!active())return;try{if(ExecutionKernelHooks.enabled()){SaveEffectHooks.exceptional(call,error);ExecutionKernelHooks.exceptional(call,error);}else if(ReadEffectHooks.enabled())ReadEffectHooks.exceptional(call,recv,args,error);}catch(Throwable e){PlannedServiceAgent.Recorder.problem("binding-exceptional:"+e);throw new IllegalStateException(e);}}}
     static void abort()throws Exception{if(enabled()&&ReadEffectHooks.enabled())ReadEffectHooks.abort();}
-    static void enter(Object[] args)throws Exception{if(!enabled())return;TemporalDateHooks.enter();UuidProjectionHooks.enter();if(ExecutionKernelHooks.enabled())ExecutionKernelHooks.enter();if(ReadEffectHooks.enabled())ReadEffectHooks.enter();for(int i=0;i<args.length;i++){if(!((List)binding().get("source_arguments")).contains(i))continue;Map r=row();r.put("argument",i);r.put("fields",sourceSnapshot(args[i]));emit("binding-input",r);}}
+    static void enter(Object[] args)throws Exception{if(!enabled())return;TemporalDateHooks.enter();UuidProjectionHooks.enter();if(ExecutionKernelHooks.enabled())ExecutionKernelHooks.enter();if(ReadEffectHooks.enabled())ReadEffectHooks.enter();for(int i=0;i<args.length;i++){if(!((List)binding().get("source_arguments")).contains(i))continue;Map r=row();r.put("argument",i);SnapshotPolicy policy=new SnapshotPolicy(r,null,true);r.put("fields",sourceSnapshot(args[i],policy));emit("binding-input",r);}}
     static void rememberReturn(String message){MonitorSafety.rememberReturn(message);RETURN_MESSAGES.add(message);}
     static void exit(Object result)throws Exception{if(!enabled())return;if(ReadEffectHooks.enabled())ReadEffectHooks.exit(result);Map r=row();if(r.get("message")!=null)rememberReturn((String)r.get("message"));r.put("result",PlannedServiceAgent.Recorder.value(result));r.put("fields",snapshot(result,true));emit("binding-return",r);}
     static Object member(Object object,String name)throws Exception{for(Class c=object.getClass();c!=null;c=c.getSuperclass())try{Field f=c.getDeclaredField(name);f.setAccessible(true);return f.get(object);}catch(NoSuchFieldException e){}throw new IllegalStateException("Serializer structure unsupported: "+name);}

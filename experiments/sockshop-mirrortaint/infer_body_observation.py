@@ -31,7 +31,14 @@ def validate(plan,rows,certificates):
         require(not any('body_observation_call'in r or r.get('body_observation',{}).get('selected') for r in rows),
                 'Actual body omissions have no authentication plan')
         return set()
-    require(cfg['version']==1,'Body observation protocol differs')
+    require(cfg['version'] in (1,2),'Body observation protocol differs')
+    if cfg['version']==2:
+        import copy
+        from plan_body_observation import attach
+        checked=copy.deepcopy(plan);checked['execution_kernel'].pop('body_observation')
+        attach(checked)
+        require(checked['execution_kernel'].get('body_observation')==cfg,
+                'Body cut future-state/continuation proof differs')
     starts=[r for r in rows if r['kind']=='start'];footers=[r for r in rows if r['kind']=='metrics']
     require(len(starts)==len(footers)==1 and not footers[0].get('capture_invalid')
             and not any(r['kind']=='problem' for r in rows),'Body observation needs a complete valid capture')
