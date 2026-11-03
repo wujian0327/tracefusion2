@@ -6,6 +6,10 @@ from audit_zlt_foundation_revision import audit
 
 
 def run(root,out):
+    # Experiment entry points historically pass either the candidate directory
+    # or its zlt child. Normalize only this documented layout, before scoring.
+    if (root/'task-seal.json').exists() and (root.parent/'final-protocol-before-business.json').exists():
+        root=root.parent
     out.mkdir(parents=True,exist_ok=False)
     audit(root/'zlt',out/'independent-score')
     summary=load(out/'independent-score/summary.json')
@@ -41,6 +45,10 @@ def run(root,out):
         MT='Original B2.2/native capture reuse, unchanged binary/task/input/independent rules; not a new MT deployment',
         exposed_development_regression=True,unseen_transfer_evidence=False,
         agent_sha256=protocol['agent_sha256'],gate_passed=True)
+    if (root/'capture-reuse-receipt.json').exists():
+        summary.update(reference='7e4ad0b',no_new_framework_contract=True,public_models_added=False,
+            new_TF_deployments=0,capture_provenance=load(root/'capture-reuse-receipt.json'),
+            final_code_normal_reconstruction_rescored=True)
     save(out/'summary.json',summary)
     (out/'instances.csv').write_bytes((out/'independent-score/instances.csv').read_bytes())
     print({k:summary[k] for k in ('candidate_commit','states','positive_correct_per_mode','gate_passed')})

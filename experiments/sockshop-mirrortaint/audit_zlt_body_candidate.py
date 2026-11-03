@@ -22,6 +22,9 @@ def mall(root,out):
     summary.update(reference='c1a4e5c, 98 known/5 oracle-unavailable unknown',
         all_98_states_and_logical_signatures_preserved=True,joint98_gate_passed=True,
         exposed_development_regression=True)
+    if (root/'capture-reuse-receipt.json').exists():
+        summary.update(fresh_deployments=0,captures_reused_from=load(root/'capture-reuse-receipt.json')['first_candidate'],
+            final_code_normal_reconstruction_rescored=True,reference='7e4ad0b capability set; original C1 logical signature comparator retained')
     save(out/'summary.json',summary)
 
 
@@ -31,6 +34,10 @@ def historical(root,out):
     summary=load(out/'summary.json');account=load(root/'historical/account-score-first/summary.json')
     save(out/'account-summary.json',account)
     summary['Account40']=account
+    if (root/'capture-reuse-receipt.json').exists():
+        receipt=load(root/'capture-reuse-receipt.json')
+        summary.update(fresh_Agent_deployments=False,capture_provenance=receipt,
+            changed_plan_new_deployments=2*sum(len(v)for v in receipt['changed_query_ids'].values()))
     save(out/'summary.json',summary)
 
 
