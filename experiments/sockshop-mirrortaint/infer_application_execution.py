@@ -74,6 +74,14 @@ def infer_application(plan,rows,worker_request=None):
             elif row['kind'] in ('execution-constructed','execution-constructor-throw'):
                 stack=constructor_pending[row['thread']];require(stack,'Constructor completion without entry');start=stack.pop();require(all(start[k]==row[k] for k in ('constructor_id','frame','pc')),'Constructor completion identity/caller differs')
         require(not any(constructor_pending.values()),'Constructor lifecycle incomplete')
+    # Capture-local candidate lists preserve input order, duplicates and ambiguity.
+    initialized_by_class=defaultdict(list);initialized_by_object=defaultdict(list)
+    for marker in rows:
+        if marker['kind']!='execution-initialized-class':continue
+        for value in (marker.get('class'),marker.get('class_object')):
+            require(value is None or isinstance(value,str),'Initialization coordinate must be a string')
+        initialized_by_class[marker.get('class')].append(marker)
+        initialized_by_object[marker.get('class_object')].append(marker)
     results=[];audits=[]
     all_enters={r['frame']:r for r in rows if r['kind']=='enter'}
     require(len(all_enters)==sum(r['kind']=='enter' for r in rows),'Application invocation frame ID reused')
@@ -344,7 +352,7 @@ def infer_application(plan,rows,worker_request=None):
             saved=(fr,method,code,entry)
             entry=begin['method'];method=methods[entry];code=method['instructions'];fr=Frame(begin['frame']);fr.pc=cfg.get('constructor_starts',{}).get(entry,0);slot=0
             if method['access']&8 and method['owner']in cfg.get('initialized_lambda_owners',[]):
-                markers=[r for r in rows if r['kind']=='execution-initialized-class'and r.get('class')==method['owner']]
+                markers=initialized_by_class.get(method['owner'],[])
                 require(len(markers)==1 and markers[0]['class_sha256']==plan['class_sha256'][method['owner']],'Static callback initialization absent/ambiguous')
                 if markers[0]['seq']>=root['seq']:raise AnalysisLimit('class-initialization-during-root','Static callback class initializer not modeled within root')
             if not method['access']&8:fr.locals[0]=receiver;slot=1
@@ -378,7 +386,7 @@ def infer_application(plan,rows,worker_request=None):
                         implementation_owner=ins['bootstrap_args'][1]['handle'].split('.')[0]
                         if implementation_owner in cfg.get('initialized_lambda_owners',[]):
                             initialized=event.get('initialized_implementation');require(initialized and initialized.get('class')==implementation_owner and initialized.get('class_sha256')==plan['class_sha256'][implementation_owner],'Lambda owner initialization proof absent/different')
-                            markers=[r for r in rows if r['kind']=='execution-initialized-class'and r.get('class_object')==initialized.get('class_object')];require(len(markers)==1 and markers[0]==initialized,'Lambda initialization occurrence missing/ambiguous')
+                            markers=initialized_by_object.get(initialized.get('class_object'),[]);require(len(markers)==1 and markers[0]==initialized,'Lambda initialization occurrence missing/ambiguous')
                             if initialized['seq']>=root['seq']:raise AnalysisLimit('class-initialization-during-root','Synthetic callback owner initialized within root; initialization effects not modeled')
                         require(len(captured)==len(event['captures']),'Lambda capture arity differs')
                         for value,observed in zip(captured,event['captures']):bind(value,observed)
