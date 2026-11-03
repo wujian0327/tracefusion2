@@ -108,6 +108,8 @@ def build(out,inputs):
     for name in ('plan_sql_result_locality.py','infer_sql_result_locality.py','sql-result-locality-contracts-20261031.json','infer_sequence_callbacks.py','kernel-sequence-values-20261031.json','plan_body_observation.py','infer_body_observation.py'):manifest['sources'][str(HERE/name)]=sha(HERE/name)
     for name in ('plan_target_observation.py','infer_target_observation.py','plan_constructor_prefix_guard.py'):
         manifest['sources'][str(HERE/name)]=sha(HERE/name)
+    for name in ('plan_map_wrapper.py','infer_map_wrapper.py','map-wrapper-contracts-20261103.json'):
+        manifest['sources'][str(HERE/name)]=sha(HERE/name)
     manifest['builder_sha256']=sha(Path(__file__));save(out/'build.json',manifest)
 
 

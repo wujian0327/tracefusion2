@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "scope": "Target-return snapshots only; HashMap inheritance with no instance state/annotations/read-view overrides. No source freshness/effect or propagation contract.",
+  "read_methods": [
+    "get",
+    "getOrDefault",
+    "keySet",
+    "entrySet",
+    "values",
+    "size",
+    "isEmpty",
+    "containsKey",
+    "containsValue",
+    "forEach",
+    "hashCode",
+    "equals",
+    "toString"
+  ],
+  "profiles": [
+    {
+      "java_runtime_version": "1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01",
+      "class_sha256": {
+        "java/lang/String": "969d15cf90e6cc029cd231abf9573f9f4d441c97e5f9062f8dbb5465719b8569",
+        "java/util/AbstractMap": "68f46819ce6609f8c95b474af81d1967ab1ea621cf508c14e1752536eb817a49",
+        "java/util/HashMap": "1c051649321f843d1ac7dcff1075bf4fa93e132ee95c969bfb41dbc33376f8f9",
+        "java/util/HashMap$HashIterator": "b78edae013bb6399ad7520548d1bcc1eb0f10d09a950d99fd4ab01572f4c544d",
+        "java/util/HashMap$KeyIterator": "6efa0ae20917a1b1bfc29a7818dbe6e89221ef9f91bc214dc3890b65153b4386",
+        "java/util/HashMap$KeySet": "325c573b459ca772d5a85d5877fd73661927fdd51e876077427f16135626155e",
+        "java/util/HashMap$Node": "0de0dd543f4f1a81e19cb76b8807e1338d1de0e204ce5edc944b3f8d149367d2"
+      }
+    }
+  ],
+  "review": "Readonly HashMap.table/size/modCount and exact HashMap$Node.key/value/next. Same bucket/next order as JDK key iterator. No wrapper get/keySet/iterator or lazy cached-view creation. Exact String keys and ordinary Node only; TreeNode, access-order LinkedHashMap subclasses, extra instance state/annotations and read/view overrides rejected. No source freshness or no-effect claim."
+}

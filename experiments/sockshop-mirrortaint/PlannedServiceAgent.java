@@ -28,7 +28,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
         if(!hashes.containsKey(owner))return null;
         try {
             if(!Recorder.hash(bytes).equals(hashes.get(owner)))throw new IllegalStateException("Frozen class changed: "+owner);
-            ClassNode cls=new ClassNode(ASM9);new ClassReader(bytes).accept(cls,ClassReader.EXPAND_FRAMES);boolean changed=false;
+            ClassNode cls=new ClassNode(ASM9);new ClassReader(bytes).accept(cls,ClassReader.EXPAND_FRAMES);ResponseBindingHooks.registerClass(cls,loader);boolean changed=false;
             for(MethodNode m:cls.methods) {
                 if((m.access&(ACC_ABSTRACT|ACC_NATIVE))!=0)continue;String key=owner+"."+m.name+m.desc;
                 List<AbstractInsnNode> code=new ArrayList<>();for(AbstractInsnNode n:m.instructions.toArray())if(n.getOpcode()>=0)code.add(n);

@@ -5,6 +5,49 @@ import org.objectweb.asm.tree.*;
 
 /** Root-to-wire identity witnesses and explicitly admitted pre-output sources. */
 public final class ResponseBindingHooks implements Opcodes {
+    static final Map<ClassLoader,Map<String,Map>> WRAPPER_CLASSES=Collections.synchronizedMap(new IdentityHashMap<ClassLoader,Map<String,Map>>());
+    static synchronized void registerClass(ClassNode cls,ClassLoader loader){
+        Map policy=(Map)PlannedServiceAgent.plan.get("map_wrapper_observation");if(policy==null)return;
+        boolean needed=false;for(Object raw:((Map)policy.get("candidates")).values())for(Object item:(List)raw)if(cls.name.equals(((Map)item).get("class")))needed=true;if(!needed)return;
+        Map m=new LinkedHashMap();m.put("super",cls.superName);boolean eligible=(cls.visibleAnnotations==null||cls.visibleAnnotations.isEmpty())&&(cls.invisibleAnnotations==null||cls.invisibleAnnotations.isEmpty());
+        for(FieldNode f:cls.fields)if((f.access&ACC_STATIC)==0)eligible=false;
+        for(MethodNode method:cls.methods)if(((List)((Map)policy.get("contract")).get("read_methods")).contains(method.name))eligible=false;
+        m.put("eligible",eligible);Map<String,Map> group=WRAPPER_CLASSES.get(loader);if(group==null){group=new java.util.concurrent.ConcurrentHashMap<>();WRAPPER_CLASSES.put(loader,group);}group.put(cls.name,m);
+        Map fact=PlannedServiceAgent.Recorder.row();fact.put("class",cls.name);fact.put("class_sha256",PlannedServiceAgent.hashes.get(cls.name));fact.put("loader",PlannedServiceAgent.Recorder.id(loader));PlannedServiceAgent.Recorder.emit("map-wrapper-class",fact);
+    }
+    static void mapWrapper(Object value,boolean target,List<Map> proofs)throws Exception{
+        if(value.getClass()==HashMap.class||value.getClass()==LinkedHashMap.class)return;
+        Map policy=(Map)PlannedServiceAgent.plan.get("map_wrapper_observation");
+        String type=value.getClass().getName().replace('.','/');
+        if(!target||proofs==null||policy==null||!((Map)policy.get("candidates")).containsKey(type))throw new IllegalStateException("Unmodeled binding Map type");
+        List<Map> chain=(List<Map>)((Map)policy.get("candidates")).get(type);Class<?> actual=value.getClass();List loaders=new ArrayList();
+        for(Map expected:chain){String owner=actual.getName().replace('.','/');Map<String,Map> group=WRAPPER_CLASSES.get(actual.getClassLoader());Map checked=group==null?null:group.get(owner);
+            if(!owner.equals(expected.get("class"))||!PlannedServiceAgent.Recorder.CHECKED_CLASSES.contains(owner)||checked==null||!Boolean.TRUE.equals(checked.get("eligible"))||!Objects.equals(checked.get("super"),expected.get("super")))throw new IllegalStateException("Map wrapper frozen hierarchy/read dispatch differs");
+            loaders.add(PlannedServiceAgent.Recorder.id(actual.getClassLoader()));actual=actual.getSuperclass();
+        }
+        if(actual!=HashMap.class)throw new IllegalStateException("Map wrapper base differs");
+        Map contract=(Map)policy.get("contract"),runtime=new LinkedHashMap();runtime.put("java_runtime_version",System.getProperty("java.runtime.version"));Map hashes=new TreeMap();
+        for(Object name:((Map)((Map)((List)contract.get("profiles")).get(0)).get("class_sha256")).keySet())hashes.put(name,JdkContractProbe.hash((String)name));
+        runtime.put("class_sha256",hashes);if(!((List)contract.get("profiles")).contains(runtime))throw new IllegalStateException("Map wrapper JDK implementation differs");
+        String id=PlannedServiceAgent.Recorder.id(value);for(Map previous:proofs)if(id.equals(previous.get("owner")))return;
+        Map fact=new LinkedHashMap();fact.put("owner",id);fact.put("class",type);fact.put("chain",chain);fact.put("loaders",loaders);fact.put("runtime",runtime);fact.put("methods",contract.get("read_methods"));proofs.add(fact);
+    }
+    static List<Map.Entry> wrapperEntries(Object value,List<Map> proofs)throws Exception{
+        // Never invoke a wrapper's get/keySet/iterator, including lazy JDK view
+        // creation. Read only the pinned HashMap/Node representation.
+        Field table=HashMap.class.getDeclaredField("table"),size=HashMap.class.getDeclaredField("size"),mod=HashMap.class.getDeclaredField("modCount");table.setAccessible(true);size.setAccessible(true);mod.setAccessible(true);
+        int count=(Integer)size.get(value),version=(Integer)mod.get(value);if(count<0||count>10000)throw new IllegalStateException("Wrapper size bound");
+        Class<?> nodeType=Class.forName("java.util.HashMap$Node",false,null);Field key=nodeType.getDeclaredField("key"),val=nodeType.getDeclaredField("value"),next=nodeType.getDeclaredField("next");key.setAccessible(true);val.setAccessible(true);next.setAccessible(true);
+        List<Map.Entry> entries=new ArrayList<>();IdentityHashMap<Object,Boolean> nodes=new IdentityHashMap<>();Object[] buckets=(Object[])table.get(value);
+        if(buckets!=null)for(Object first:buckets)for(Object node=first;node!=null;node=next.get(node)){
+            if(node.getClass()!=nodeType||nodes.put(node,true)!=null||entries.size()>=count)throw new IllegalStateException("Unsupported wrapper Node shape");
+            Object k=key.get(node);if(k==null||k.getClass()!=String.class)throw new IllegalStateException("Non-string binding key");
+            entries.add(new AbstractMap.SimpleImmutableEntry(k,val.get(node)));
+        }
+        if(entries.size()!=count||count!=(Integer)size.get(value)||version!=(Integer)mod.get(value))throw new IllegalStateException("Wrapper changed during snapshot");
+        String id=PlannedServiceAgent.Recorder.id(value);for(Map fact:proofs)if(id.equals(fact.get("owner"))){fact.put("size",count);fact.put("mod_count",version);fact.put("entries",entries.size());}
+        return entries;
+    }
     static final String R="ResponseBindingHooks";
     static boolean sourceCapture=false;
     static final Set<String> RETURN_MESSAGES=new HashSet<>();
@@ -105,7 +148,10 @@ public final class ResponseBindingHooks implements Opcodes {
         return snapshot(obj,target,null);
     }
     static List<Map> snapshot(Object obj,boolean target,SnapshotPolicy policy)throws Exception{
-        List<Map> result=new ArrayList<>();walk(obj,"",null,result,new IdentityHashMap<Object,Boolean>(),0,target,policy);return result;
+        return snapshot(obj,target,policy,null);
+    }
+    static List<Map> snapshot(Object obj,boolean target,SnapshotPolicy policy,List<Map> wrappers)throws Exception{
+        List<Map> result=new ArrayList<>();walk(obj,"",null,result,new IdentityHashMap<Object,Boolean>(),0,target,policy,wrappers);return result;
     }
     static void leaf(Object owner,String field,Object value,String path,String anchor,List<Map> result,boolean target,SnapshotPolicy policy){
         List wanted=target?Collections.singletonList(binding().get("target")):(List)binding().get("source_fields");
@@ -116,22 +162,24 @@ public final class ResponseBindingHooks implements Opcodes {
         r.put("version",field.startsWith("@")?CollectionServiceHooks.epoch(owner):PlannedServiceAgent.Recorder.VERSIONS.getOrDefault(PlannedServiceAgent.Recorder.id(owner)+":"+field,0));
         r.put("observed",PlannedServiceAgent.Recorder.value(value));if(anchor!=null)r.put("schema_field",anchor);result.add(r);
     }
-    static void walk(Object o,String path,String anchor,List<Map> result,IdentityHashMap<Object,Boolean> seen,int depth,boolean target,SnapshotPolicy policy)throws Exception{
+    static void walk(Object o,String path,String anchor,List<Map> result,IdentityHashMap<Object,Boolean> seen,int depth,boolean target,SnapshotPolicy policy,List<Map> wrappers)throws Exception{
         if(o==null||SpringTransportAgent.Transport.primitive(o)||o.getClass().getName().equals("org.springframework.http.HttpHeaders"))return;
         if(depth>12||result.size()>10000)throw new IllegalStateException("Binding snapshot bound");
         if(seen.put(o,true)!=null)throw new IllegalStateException("Binding object cycle");
         try{
             if(o instanceof List){if(!Arrays.asList("java.util.ArrayList","java.util.Arrays$ArrayList","java.util.Collections$SingletonList","java.util.Collections$EmptyList").contains(o.getClass().getName()))throw new IllegalStateException("Unmodeled binding List type");
                 if(sourceCapture)CollectionServiceHooks.received(o);
-                int i=0;for(Object x:(List)o){String p=path+"/"+i;if(SpringTransportAgent.Transport.primitive(x)&&anchor!=null)leaf(o,"@list:"+i,x,p,anchor,result,target,policy);else walk(x,p,anchor,result,seen,depth+1,target,policy);i++;}return;}
-            if(o instanceof Map){if(o.getClass()!=HashMap.class&&o.getClass()!=LinkedHashMap.class)throw new IllegalStateException("Unmodeled binding Map type");
+                int i=0;for(Object x:(List)o){String p=path+"/"+i;if(SpringTransportAgent.Transport.primitive(x)&&anchor!=null)leaf(o,"@list:"+i,x,p,anchor,result,target,policy);else walk(x,p,anchor,result,seen,depth+1,target,policy,wrappers);i++;}return;}
+            if(o instanceof Map){mapWrapper(o,target,wrappers);
                 if(sourceCapture)CollectionServiceHooks.received(o);
-                for(Object k:((Map)o).keySet()){if(!(k instanceof String))throw new IllegalStateException("Non-string binding key");Object v=((Map)o).get(k);String p=path+"/"+SpringTransportAgent.Transport.escape((String)k);
-                    if(SpringTransportAgent.Transport.primitive(v)&&anchor!=null)leaf(o,"@map:"+k,v,p,anchor,result,target,policy);else walk(v,p,anchor,result,seen,depth+1,target,policy);}return;}
+                List<Map.Entry> actual=new ArrayList<>();if(o.getClass()!=HashMap.class&&o.getClass()!=LinkedHashMap.class)actual=wrapperEntries(o,wrappers);
+                else for(Object k:((Map)o).keySet()){if(!(k instanceof String))throw new IllegalStateException("Non-string binding key");actual.add(new AbstractMap.SimpleImmutableEntry(k,((Map)o).get(k)));}
+                for(Map.Entry pair:actual){Object k=pair.getKey(),v=pair.getValue();String p=path+"/"+SpringTransportAgent.Transport.escape((String)k);
+                    if(SpringTransportAgent.Transport.primitive(v)&&anchor!=null)leaf(o,"@map:"+k,v,p,anchor,result,target,policy);else walk(v,p,anchor,result,seen,depth+1,target,policy,wrappers);}return;}
             Map schema=(Map)PlannedServiceAgent.plan.get("response_graph_schema");List<Map> props=(List<Map>)schema.get(o.getClass().getName().replace('.','/'));if(props==null)return;
             if(!PlannedServiceAgent.Recorder.CHECKED_CLASSES.contains(o.getClass().getName().replace('.','/')))throw new IllegalStateException("Binding DTO was loaded without frozen-class instrumentation check");
             for(Map p:props){String field=(String)p.get("field");if(!target&&policy!=null&&policy.scalar(p))continue;Field f=o.getClass().getDeclaredField(field.substring(field.lastIndexOf('.')+1));f.setAccessible(true);Object value=f.get(o);String next=path+"/"+SpringTransportAgent.Transport.escape((String)p.get("property"));
-                if(SpringTransportAgent.Transport.primitive(value))leaf(o,field,value,next,null,result,target,policy);else walk(value,next,field,result,seen,depth+1,target,policy);}
+                if(SpringTransportAgent.Transport.primitive(value))leaf(o,field,value,next,null,result,target,policy);else walk(value,next,field,result,seen,depth+1,target,policy,wrappers);}
         }finally{seen.remove(o);}
     }
     static List<Map> sourceSnapshot(Object value)throws Exception{boolean old=sourceCapture;sourceCapture=true;try{return snapshot(value,false);}finally{sourceCapture=old;}}
@@ -168,7 +216,7 @@ public final class ResponseBindingHooks implements Opcodes {
     static void abort()throws Exception{if(enabled()&&ReadEffectHooks.enabled())ReadEffectHooks.abort();}
     static void enter(Object[] args)throws Exception{if(!enabled())return;TemporalDateHooks.enter();UuidProjectionHooks.enter();if(ExecutionKernelHooks.enabled())ExecutionKernelHooks.enter();if(ReadEffectHooks.enabled())ReadEffectHooks.enter();for(int i=0;i<args.length;i++){if(!((List)binding().get("source_arguments")).contains(i))continue;Map r=row();r.put("argument",i);SnapshotPolicy policy=new SnapshotPolicy(r,null,true);r.put("fields",sourceSnapshot(args[i],policy));emit("binding-input",r);}}
     static void rememberReturn(String message){MonitorSafety.rememberReturn(message);RETURN_MESSAGES.add(message);}
-    static void exit(Object result)throws Exception{if(!enabled())return;if(ReadEffectHooks.enabled())ReadEffectHooks.exit(result);Map r=row();if(r.get("message")!=null)rememberReturn((String)r.get("message"));r.put("result",PlannedServiceAgent.Recorder.value(result));r.put("fields",snapshot(result,true));emit("binding-return",r);}
+    static void exit(Object result)throws Exception{if(!enabled())return;if(ReadEffectHooks.enabled())ReadEffectHooks.exit(result);Map r=row();if(r.get("message")!=null)rememberReturn((String)r.get("message"));r.put("result",PlannedServiceAgent.Recorder.value(result));List<Map> wrappers=new ArrayList<>();r.put("fields",snapshot(result,true,null,wrappers));if(PlannedServiceAgent.plan.get("map_wrapper_observation")!=null)r.put("map_wrappers",wrappers);emit("binding-return",r);}
     static Object member(Object object,String name)throws Exception{for(Class c=object.getClass();c!=null;c=c.getSuperclass())try{Field f=c.getDeclaredField(name);f.setAccessible(true);return f.get(object);}catch(NoSuchFieldException e){}throw new IllegalStateException("Serializer structure unsupported: "+name);}
     static void serializer(Object serializer,Object value)throws Exception{
         if(serializer==null)return;String name=serializer.getClass().getName();

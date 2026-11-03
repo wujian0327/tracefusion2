@@ -42,6 +42,8 @@ class Reconstruction:
             # Retain every candidate. Duplicate returns are not resolved by
             # insertion order, including equal-message duplicates.
             self.root_return_messages[role]=returns
+            from infer_map_wrapper import validate as validate_map_wrapper
+            validate_map_wrapper(plan,rows)
             from infer_date_projection import validate_date_serialization
             validate_date_serialization(plan,rows)
             from infer_scalar_projection import validate as validate_scalar_projection

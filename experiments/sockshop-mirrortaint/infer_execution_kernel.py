@@ -21,6 +21,8 @@ def same_value(expected,actual):
 
 
 def infer_execution(plan,rows):
+    from infer_map_wrapper import validate as validate_map_wrapper
+    validate_map_wrapper(plan,rows)
     if plan['execution_kernel']['version']>=2:
         from infer_application_execution import infer_application
         return infer_application(plan,rows)

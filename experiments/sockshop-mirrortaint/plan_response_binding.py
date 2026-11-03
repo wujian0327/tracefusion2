@@ -22,7 +22,8 @@ def pure_constructor(method):
 def plan_response(model, entry, target, response_path, source_calls=None, read_forward_contracts=False, execution_kernel=False, application_calls=False):
     if execution_kernel:
         from plan_execution_kernel import plan_execution
-        return plan_execution(model, entry, target, response_path, source_calls, application_calls)
+        from plan_map_wrapper import attach
+        return attach(plan_execution(model, entry, target, response_path, source_calls, application_calls),model)
     require(entry in model['methods'],'Entry method absent: '+entry)
     target=any_target(model,target);owner,name=target.rsplit('.',1)
     row=next(f for f in model['classes'][owner]['fields'] if f['name']==name)
@@ -134,4 +135,5 @@ def plan_response(model, entry, target, response_path, source_calls=None, read_f
             'meaning':'Accepted target binding; end-to-end answer remains conditional on required sources and call effects.'}
     from plan_date_projection import attach_date_projection
     from plan_uuid_projection import attach_uuid_projection
-    return attach_uuid_projection(attach_date_projection(plan,model),model)
+    from plan_map_wrapper import attach
+    return attach(attach_uuid_projection(attach_date_projection(plan,model),model),model)
