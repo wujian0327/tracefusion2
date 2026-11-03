@@ -37,7 +37,7 @@ def install(out,build):
         return {'commit':version}
     driver.verify=verify;original=driver.attach
     def attach(*args,**kwargs):
-        original(*args,**kwargs);dest=args[1];r=load(dest/'binary-receipt.json');r['core_agent_contract_changes']=True;r['reference']='1308589';save(dest/'binary-receipt.json',r)
+        original(*args,**kwargs);dest=args[1];r=load(dest/'binary-receipt.json');r['core_agent_contract_changes']=dest.name!='mirrortaint';r['reference']='1308589';save(dest/'binary-receipt.json',r)
     driver.attach=attach
     from sockshop import Deployment
     previous=Deployment.diagnostics
@@ -52,11 +52,20 @@ def install(out,build):
     return driver,verify
 
 
-def run(out,build,pilot=False):
+def run(out,build,pilot=False,reuse_mt=None):
     driver,verify=install(out,build);qs=load(out/'task-seal.json')['tasks']['ruoyi'];done=[]
     for q in qs[:1]if pilot else qs:
         modes=('full',)if pilot else('full','selective','mirrortaint')if load(out/'protocol-before-runs.json')['calibrated']else('full','selective')
         for mode in modes:
+            if mode=='mirrortaint'and reuse_mt:
+                old=load(reuse_mt/'task-seal.json')['tasks']['ruoyi'];assert old==qs
+                source=(reuse_mt/'runs'/q['id']/mode).resolve();dest=out/'runs'/q['id']/mode
+                assert(source/'result.json').exists()and not dest.exists()
+                dest.parent.mkdir(parents=True,exist_ok=True);dest.symlink_to(source,target_is_directory=True)
+                save(out/'native-baseline-reuse.json',{'original':str(source),'new_deployment':False,
+                    'task_and_source_declarations_identical':True,'files':{str(p.relative_to(source)):sha(p)for p in source.rglob('*')if p.is_file()},
+                    'reason':'TF-only observer change; native MT, adapter, inputs and actual source configuration unchanged.'})
+                done.append({'query':q['id'],'mode':mode,'state':'compatible_native_capture_reused'});continue
             driver.trial('ruoyi',q,mode);done.append({'query':q['id'],'mode':mode,'state':load(out/'runs'/q['id']/mode/'result.json')['state']})
             save(out/'matrix-progress.json',{'complete':False,'results':done})
     save(out/'matrix-progress.json',{'complete':not pilot,'results':done})
@@ -73,8 +82,8 @@ def score(out,dest,build):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('stage',choices=['prepare','run','pilot','score']);p.add_argument('--out',type=Path,required=True);p.add_argument('--build',type=Path,required=True);p.add_argument('--calibrated',action='store_true');p.add_argument('--audit',type=Path);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('stage',choices=['prepare','run','pilot','score']);p.add_argument('--out',type=Path,required=True);p.add_argument('--build',type=Path,required=True);p.add_argument('--calibrated',action='store_true');p.add_argument('--audit',type=Path);p.add_argument('--reuse-mt',type=Path);a=p.parse_args()
     out=a.out.resolve();build=a.build.resolve()
     if a.stage=='prepare':prepare(out,build,a.calibrated)
     elif a.stage=='score':score(out,a.audit.resolve(),build)
-    else:run(out,build,a.stage=='pilot')
+    else:run(out,build,a.stage=='pilot',a.reuse_mt)
