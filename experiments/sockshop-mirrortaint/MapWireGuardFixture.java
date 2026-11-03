@@ -24,6 +24,14 @@ public class MapWireGuardFixture {
   Object token;try{token=SpringTransportAgent.Transport.writeStart(good,null);if(token==null)throw new AssertionError("ordinary handler output rejected");SpringTransportAgent.Transport.writeEnd(token,good);}finally{SpringTransportAgent.Transport.ASYNC.remove();}
   if(!ResponseBindingHooks.RETURN_MESSAGES.isEmpty())throw new AssertionError("unbound output manufactured query binding");
   if(SpringTransportAgent.Transport.TARGET_MAPS.get()!=null)throw new AssertionError("output scope leaked");
-  System.out.println("{\"rejected\":"+rejected+",\"get_hits\":0,\"key_hits\":0,\"list_hits\":0,\"key_view_unchanged\":true,\"unbound_output_observed\":true}");
+  Object permission=PlannedServiceAgent.plan.remove("map_wrapper_observation");
+  try{
+   Map output=new LinkedHashMap();output.put("direction","response");
+   if(SpringTransportAgent.Transport.outputSnapshotScope(output))throw new AssertionError("wrapper rules leaked into ordinary output");
+   Map ordinary=new LinkedHashMap();ordinary.put("roles",new HashSet(Arrays.asList("user","admin")));
+   SpringTransportAgent.Transport.snapshot(ordinary,SpringTransportAgent.Transport.outputSnapshotScope(output));
+  }finally{PlannedServiceAgent.plan.put("map_wrapper_observation",permission);}
+  if(SpringTransportAgent.Transport.TARGET_MAPS.get()!=null)throw new AssertionError("ordinary scope leaked");
+  System.out.println("{\"rejected\":"+rejected+",\"get_hits\":0,\"key_hits\":0,\"list_hits\":0,\"key_view_unchanged\":true,\"unbound_output_observed\":true,\"ordinary_output_scope_preserved\":true}");
  }
 }

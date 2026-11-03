@@ -279,7 +279,7 @@ public static final class DirectDispatchHooks implements Opcodes {
         // Readonly output observation is independent of query certification.
         // Handler outputs have no binding-return but can use the same finite
         // wrapper representation. Request/source snapshots remain ineligible.
-        static boolean outputSnapshotScope(Map context){return "response".equals(context.get("direction"));}
+        static boolean outputSnapshotScope(Map context){return "response".equals(context.get("direction"))&&PlannedServiceAgent.plan.get("map_wrapper_observation")!=null;}
         static List<Object> conversionSnapshot(Object root)throws Exception{List<Object> r=new ArrayList<>();walk(root,"",r,new IdentityHashMap<>(),0,"@conversion");return r;}
         static String escape(String s){return s.replace("~","~0").replace("/","~1");}
         static void element(Object container,String field,Object value,String path,String anchor,List<Object> result){Map<String,Object> v=new LinkedHashMap<>();v.put("path",path);synchronized(PlannedServiceAgent.Recorder.class){v.put("owner",PlannedServiceAgent.Recorder.id(container));v.put("field",field);v.put("version",CollectionServiceHooks.epoch(container));v.put("observed",PlannedServiceAgent.Recorder.value(value));}v.put("descriptor","Ljava/lang/Object;");v.put("schema_field",anchor);result.add(v);}
