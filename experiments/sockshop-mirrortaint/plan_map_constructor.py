@@ -4,6 +4,7 @@ This preserves existing dependencies only. It does not manufacture Map entries
 or sources, and is not a general constructor/read-only summary.
 """
 from plan_collection_service import analyze
+from analysis_status import AnalysisLimit
 from plan_service_observations import callee
 from query_observation_planner import require
 
@@ -51,6 +52,7 @@ def attach(plan,model):
     for key,effect in list(cfg['constructors'].items()):
         if effect.get('kind')!='opaque'or key not in model['methods']:continue
         try:proof=prove(model,key,policy['candidates'])
+        except AnalysisLimit:raise
         except (ValueError,KeyError):continue
         cfg['constructors'][key]=proof;helpers.update(proof['helpers'].values())
     cfg['initialized_effect_owners']=sorted(helpers)
