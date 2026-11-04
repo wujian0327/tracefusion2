@@ -6,7 +6,7 @@ from infer_distributed_fields import Reconstruction
 
 
 def audit(home,out):
-    out.mkdir(parents=True,exist_ok=False);freeze=load(home/'algorithm-freeze.json')
+    out.mkdir(parents=True,exist_ok=False);freeze=load(home/('final-code-freeze.json'if(home/'final-code-freeze.json').exists()else'algorithm-freeze.json'))
     for name,digest in freeze['sources'].items():assert sha(Path(name))==digest,name
     before=load(home/'protocol-before-change.json')
     for name,digest in before['old_captures'].items():assert sha(ROOT/name)==digest,name
@@ -36,7 +36,7 @@ def audit(home,out):
         digest,name=line.split('  ',1);p=older/'external-first-01/runs'/Path(name).relative_to('/work');assert sha(p)==digest,p;protected+=1
     retained=load(older/'final-compatibility-pass-02/audit-mall/captures-manifest.json')['files']
     for name,digest in retained.items():assert sha(older/'final-candidate-02/mall'/name)==digest,name
-    summary={'candidate':freeze['commit'],'Agent_SHA256':freeze['Agent_SHA256'],'core_sources':len(freeze['sources']),
+    summary={'candidate':freeze['commit'],'Agent_SHA256':freeze['Agent_SHA256'],'online_Agent_code_commit':freeze.get('online_Agent_code_commit',freeze['commit']),'compatible_changes':freeze.get('compatible_changes'),'core_sources':len(freeze['sources']),
       'C1':{m:{'states':dict(collections.Counter(r['state']for r in paired if r['mode']==m)),
            'targets':sum(r['mode']==m for r in paired)}for m in('full','selective')},
       'C2':load(home/'facts-final-C2/summary.json'),

@@ -1,0 +1,17 @@
+{
+  "reference": "d69f54a32193d8cadc4de86d199ab266082239ca",
+  "created_utc": "2026-11-04T07:45:39.932617+00:00",
+  "entry": "ruoyi-1 department detail first; expand exposed remaining queries only after a positive source answer",
+  "source_and_inputs": "Original C1 unchanged; SysConfig C2 separate; dictionary source List separate; no code target expansion",
+  "gates": [
+    "distinct actual handler/request/message before omission",
+    "all query-owned outputs/child exchanges retained",
+    "missing/mispaired query evidence rejected; sticky invalid batches remain invalid"
+  ],
+  "old_captures": {
+    "artifacts/ruoyi-zlt-refinement-20261103/final-attempt-05/ruoyi-C1/runs/ruoyi-1/full/capture/events.jsonl": "04709a41f628d59d0353ed26e0fb731b7b12c799040b51e1c0af68a031fd10ff",
+    "artifacts/ruoyi-zlt-refinement-20261103/final-attempt-05/ruoyi-C1/plans/ruoyi-1/plan.json": "b0a28d1817766c6db26e9328543ee638ea994bb27d9d753ca21801697995163f"
+  },
+  "no_performance": true,
+  "push": false
+}

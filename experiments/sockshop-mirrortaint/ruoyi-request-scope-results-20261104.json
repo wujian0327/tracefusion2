@@ -1,0 +1,1874 @@
+{
+  "candidate": "e8311fd78453efa5cf66311682e93bd0d3e708fc",
+  "Agent_SHA256": "d8d01198720251bb6a08f51c126b32558ee0ec1a7b4e9159069f03e9738f518b",
+  "online_Agent_code_commit": "9ebb239817acf7a90ef7b90f4715594447edafed",
+  "compatible_changes": {
+    "only_changed_core_source": [
+      "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/plan_map_constructor.py"
+    ],
+    "Agent_SHA256_unchanged": true,
+    "plans": {
+      "budget_limit_propagation_fixed_after_initial_freeze": true,
+      "plans": [
+        {
+          "configuration": "C1",
+          "query": "ruoyi-1",
+          "plan_sha256": "7710ff8f5ae5d317de4432404538a7c059fa2dedc2371d36bb1896bd2cf45f5f",
+          "identical_for_both_modes": true
+        },
+        {
+          "configuration": "C1",
+          "query": "ruoyi-2",
+          "plan_sha256": "84dc399720a6ae09121510dc4f5e610553f864b4e87acb7b2ed4d23679dad6a5",
+          "identical_for_both_modes": true
+        },
+        {
+          "configuration": "C1",
+          "query": "ruoyi-3",
+          "plan_sha256": "528e370985bc3d04a4fb1df904b5254a521031bff5af8fe86ff317c2c78f0f10",
+          "identical_for_both_modes": true
+        },
+        {
+          "configuration": "C1",
+          "query": "ruoyi-4",
+          "plan_sha256": "6fe59ca9db3383d2c65c5f3de0d6fc95750faf1124db5ab3bc47e38addfd7f9e",
+          "identical_for_both_modes": true
+        },
+        {
+          "configuration": "C1",
+          "query": "ruoyi-5",
+          "plan_sha256": "d9737ba3e7f429b118a233fd3cb926d505273887841b433eb3952186148a836d",
+          "identical_for_both_modes": true
+        },
+        {
+          "configuration": "C2",
+          "query": "ruoyi-4",
+          "plan_sha256": "7df00f60b60925ae3ba2e9cc53326e67a68a9a4a7ddb1f9c5f40ffa6156a93f4",
+          "identical_for_both_modes": true
+        }
+      ],
+      "Agent_or_observation_changed": false,
+      "new_deployments_for_this_patch": 0,
+      "qualification": "Same Agent and byte-identical plans; source status correction only on proof-budget exhaustion, absent from these tasks."
+    },
+    "new_online_deployments_for_patch": 0
+  },
+  "core_sources": 119,
+  "C1": {
+    "full": {
+      "states": {
+        "known_correct": 29,
+        "validation_rejected": 43,
+        "evidence_invalid": 12,
+        "unknown": 5
+      },
+      "targets": 89
+    },
+    "selective": {
+      "states": {
+        "known_correct": 29,
+        "validation_rejected": 43,
+        "evidence_invalid": 12,
+        "unknown": 5
+      },
+      "targets": 89
+    }
+  },
+  "C2": {
+    "states": {
+      "full": {
+        "known_correct": 5
+      },
+      "selective": {
+        "known_correct": 5
+      }
+    },
+    "facts": {
+      "full": {
+        "target_bound": 5,
+        "capture_integrity_valid": 5,
+        "declared_source_paired": 5,
+        "raw_identity_rule_matches": 5,
+        "oracle_adequate": 5
+      },
+      "selective": {
+        "target_bound": 5,
+        "capture_integrity_valid": 5,
+        "declared_source_paired": 5,
+        "raw_identity_rule_matches": 5,
+        "oracle_adequate": 5
+      }
+    },
+    "scope": "Exposed five-query return tasks; independent identity-copy source rule. Physical facts do not certify answers on damaged captures. C2 mapper calibration remains separate."
+  },
+  "old_RuoYi_invalid_batches_still_rejected": 10,
+  "older_first_files_unchanged": 1774,
+  "older_Mall_files_unchanged": 1746,
+  "scope_controls": {
+    "agent_sha256": "d8d01198720251bb6a08f51c126b32558ee0ec1a7b4e9159069f03e9738f518b",
+    "cases": [
+      {
+        "mode": "full",
+        "variant": "normal",
+        "business_equal": true,
+        "observer_extra_set_iterations": 0,
+        "excluded": 2,
+        "invalid": false,
+        "state_clean": true,
+        "whole_capture_rejection_checked": false,
+        "sticky_after_removing_problem_copy": false
+      },
+      {
+        "mode": "selective",
+        "variant": "normal",
+        "business_equal": true,
+        "observer_extra_set_iterations": 0,
+        "excluded": 2,
+        "invalid": false,
+        "state_clean": true,
+        "whole_capture_rejection_checked": false,
+        "sticky_after_removing_problem_copy": false
+      },
+      {
+        "mode": "full",
+        "variant": "formal-bad",
+        "business_equal": true,
+        "observer_extra_set_iterations": 0,
+        "excluded": 0,
+        "invalid": true,
+        "state_clean": true,
+        "whole_capture_rejection_checked": true,
+        "sticky_after_removing_problem_copy": true
+      },
+      {
+        "mode": "selective",
+        "variant": "formal-bad",
+        "business_equal": true,
+        "observer_extra_set_iterations": 0,
+        "excluded": 0,
+        "invalid": true,
+        "state_clean": true,
+        "whole_capture_rejection_checked": true,
+        "sticky_after_removing_problem_copy": true
+      },
+      {
+        "mode": "full",
+        "variant": "parented",
+        "business_equal": true,
+        "observer_extra_set_iterations": 0,
+        "excluded": 0,
+        "invalid": true,
+        "state_clean": true,
+        "whole_capture_rejection_checked": true,
+        "sticky_after_removing_problem_copy": true
+      },
+      {
+        "mode": "selective",
+        "variant": "parented",
+        "business_equal": true,
+        "observer_extra_set_iterations": 0,
+        "excluded": 0,
+        "invalid": true,
+        "state_clean": true,
+        "whole_capture_rejection_checked": true,
+        "sticky_after_removing_problem_copy": true
+      },
+      {
+        "mode": "full",
+        "variant": "unverified",
+        "business_equal": true,
+        "observer_extra_set_iterations": 0,
+        "excluded": 0,
+        "invalid": false,
+        "state_clean": true,
+        "whole_capture_rejection_checked": false,
+        "sticky_after_removing_problem_copy": false
+      },
+      {
+        "mode": "selective",
+        "variant": "unverified",
+        "business_equal": true,
+        "observer_extra_set_iterations": 0,
+        "excluded": 0,
+        "invalid": false,
+        "state_clean": true,
+        "whole_capture_rejection_checked": false,
+        "sticky_after_removing_problem_copy": false
+      },
+      {
+        "mode": "full",
+        "variant": "plain",
+        "business_equal": true,
+        "observer_extra_set_iterations": 0,
+        "excluded": 0,
+        "invalid": false,
+        "state_clean": true,
+        "whole_capture_rejection_checked": false,
+        "sticky_after_removing_problem_copy": false
+      },
+      {
+        "mode": "selective",
+        "variant": "plain",
+        "business_equal": true,
+        "observer_extra_set_iterations": 0,
+        "excluded": 0,
+        "invalid": false,
+        "state_clean": true,
+        "whole_capture_rejection_checked": false,
+        "sticky_after_removing_problem_copy": false
+      },
+      {
+        "mode": "full",
+        "variant": "plain-prep",
+        "business_equal": true,
+        "observer_extra_set_iterations": 0,
+        "excluded": 0,
+        "invalid": true,
+        "state_clean": true,
+        "whole_capture_rejection_checked": true,
+        "sticky_after_removing_problem_copy": true
+      },
+      {
+        "mode": "selective",
+        "variant": "plain-prep",
+        "business_equal": true,
+        "observer_extra_set_iterations": 0,
+        "excluded": 0,
+        "invalid": true,
+        "state_clean": true,
+        "whole_capture_rejection_checked": true,
+        "sticky_after_removing_problem_copy": true
+      }
+    ],
+    "scope": "Observation ownership and failure isolation; not a source accuracy experiment."
+  },
+  "constructor_controls": {
+    "agent_sha256": "d8d01198720251bb6a08f51c126b32558ee0ec1a7b4e9159069f03e9738f518b",
+    "modes": {
+      "full": {
+        "business_equal": true,
+        "cases": [
+          {
+            "case": 0,
+            "known": true
+          },
+          {
+            "case": 1,
+            "known": false
+          },
+          {
+            "case": 2,
+            "known": false
+          },
+          {
+            "case": 3,
+            "known": true
+          }
+        ],
+        "guards": [
+          "proof-missing",
+          "class-hash",
+          "wrapper-owner",
+          "initializer-foreign",
+          "initializer-missing"
+        ]
+      },
+      "selective": {
+        "business_equal": true,
+        "cases": [
+          {
+            "case": 0,
+            "known": true
+          },
+          {
+            "case": 1,
+            "known": false
+          },
+          {
+            "case": 2,
+            "known": false
+          },
+          {
+            "case": 3,
+            "known": true
+          }
+        ],
+        "guards": [
+          "proof-missing",
+          "class-hash",
+          "wrapper-owner",
+          "initializer-foreign",
+          "initializer-missing"
+        ]
+      }
+    },
+    "late_initialization": [
+      {
+        "mode": "full",
+        "first_root_unknown": true,
+        "later_qualified_root_known": true,
+        "complete_valid_capture": true
+      },
+      {
+        "mode": "selective",
+        "first_root_unknown": true,
+        "later_qualified_root_known": true,
+        "complete_valid_capture": true
+      }
+    ]
+  },
+  "scope_guards": {
+    "checks": [
+      {
+        "mode": "full",
+        "fault": "coverage",
+        "state": "rejected",
+        "reason": "Root instrumentation coverage missing/ambiguous"
+      },
+      {
+        "mode": "full",
+        "fault": "framework",
+        "state": "rejected",
+        "reason": "MVC framework evidence missing/ambiguous"
+      },
+      {
+        "mode": "full",
+        "fault": "dispatch-end",
+        "state": "rejected",
+        "reason": "Dispatch completion missing"
+      },
+      {
+        "mode": "full",
+        "fault": "duplicate-dispatch",
+        "state": "rejected",
+        "reason": "Duplicate dispatch identity"
+      },
+      {
+        "mode": "full",
+        "fault": "root-missing",
+        "state": "rejected",
+        "reason": "Query root entry/association missing or foreign"
+      },
+      {
+        "mode": "full",
+        "fault": "root-message",
+        "state": "rejected",
+        "reason": "W3C invocation key differs from trace/span"
+      },
+      {
+        "mode": "full",
+        "fault": "root-dispatch",
+        "state": "rejected",
+        "reason": "Query root lacks its actual dispatch"
+      },
+      {
+        "mode": "full",
+        "fault": "excluded-carrier",
+        "state": "rejected",
+        "reason": "Excluded output completion missing/foreign"
+      },
+      {
+        "mode": "full",
+        "fault": "excluded-message",
+        "state": "rejected",
+        "reason": "Excluded output belongs to another dispatch"
+      },
+      {
+        "mode": "full",
+        "fault": "excluded-completion",
+        "state": "rejected",
+        "reason": "Excluded output completion missing/foreign"
+      },
+      {
+        "mode": "full",
+        "fault": "excluded-duplicate",
+        "state": "rejected",
+        "reason": "Duplicate excluded output"
+      },
+      {
+        "mode": "full",
+        "fault": "parented",
+        "state": "rejected",
+        "reason": "Unproved independent response"
+      },
+      {
+        "mode": "full",
+        "fault": "async",
+        "state": "rejected",
+        "reason": "Excluded response lacks verified synchronous lifecycle state"
+      },
+      {
+        "mode": "full",
+        "fault": "formal-exclusion",
+        "state": "rejected",
+        "reason": "Excluded output interval/completion differs"
+      },
+      {
+        "mode": "full",
+        "fault": "source-call",
+        "state": "rejected",
+        "reason": "Declared source call pair absent/ambiguous"
+      },
+      {
+        "mode": "full",
+        "fault": "source-missing",
+        "state": "unknown",
+        "reason": null
+      },
+      {
+        "mode": "full",
+        "fault": "target-missing",
+        "state": "unknown",
+        "reason": null
+      },
+      {
+        "mode": "full",
+        "fault": "sticky",
+        "state": "rejected",
+        "reason": "Collector problem"
+      },
+      {
+        "mode": "selective",
+        "fault": "coverage",
+        "state": "rejected",
+        "reason": "Root instrumentation coverage missing/ambiguous"
+      },
+      {
+        "mode": "selective",
+        "fault": "framework",
+        "state": "rejected",
+        "reason": "MVC framework evidence missing/ambiguous"
+      },
+      {
+        "mode": "selective",
+        "fault": "dispatch-end",
+        "state": "rejected",
+        "reason": "Dispatch completion missing"
+      },
+      {
+        "mode": "selective",
+        "fault": "duplicate-dispatch",
+        "state": "rejected",
+        "reason": "Duplicate dispatch identity"
+      },
+      {
+        "mode": "selective",
+        "fault": "root-missing",
+        "state": "rejected",
+        "reason": "Query root entry/association missing or foreign"
+      },
+      {
+        "mode": "selective",
+        "fault": "root-message",
+        "state": "rejected",
+        "reason": "W3C invocation key differs from trace/span"
+      },
+      {
+        "mode": "selective",
+        "fault": "root-dispatch",
+        "state": "rejected",
+        "reason": "Query root lacks its actual dispatch"
+      },
+      {
+        "mode": "selective",
+        "fault": "excluded-carrier",
+        "state": "rejected",
+        "reason": "Excluded output completion missing/foreign"
+      },
+      {
+        "mode": "selective",
+        "fault": "excluded-message",
+        "state": "rejected",
+        "reason": "Excluded output belongs to another dispatch"
+      },
+      {
+        "mode": "selective",
+        "fault": "excluded-completion",
+        "state": "rejected",
+        "reason": "Excluded output completion missing/foreign"
+      },
+      {
+        "mode": "selective",
+        "fault": "excluded-duplicate",
+        "state": "rejected",
+        "reason": "Duplicate excluded output"
+      },
+      {
+        "mode": "selective",
+        "fault": "parented",
+        "state": "rejected",
+        "reason": "Unproved independent response"
+      },
+      {
+        "mode": "selective",
+        "fault": "async",
+        "state": "rejected",
+        "reason": "Excluded response lacks verified synchronous lifecycle state"
+      },
+      {
+        "mode": "selective",
+        "fault": "formal-exclusion",
+        "state": "rejected",
+        "reason": "Excluded output interval/completion differs"
+      },
+      {
+        "mode": "selective",
+        "fault": "source-call",
+        "state": "rejected",
+        "reason": "Declared source call pair absent/ambiguous"
+      },
+      {
+        "mode": "selective",
+        "fault": "source-missing",
+        "state": "unknown",
+        "reason": null
+      },
+      {
+        "mode": "selective",
+        "fault": "target-missing",
+        "state": "unknown",
+        "reason": null
+      },
+      {
+        "mode": "selective",
+        "fault": "sticky",
+        "state": "rejected",
+        "reason": "Collector problem"
+      }
+    ],
+    "original_hashes": {
+      "full": "67bec21872fbfa5e7befc8b615f78c878bbf9b1ba3cdcf6e10f34e1258746984",
+      "selective": "1fd9a407af9dc761ba0c64b59339525edfe8089f1bb6677c5f8aae33965990f7"
+    },
+    "scope": "Derived fault copies; no new business samples."
+  },
+  "old_captures": {
+    "/home/wujian/tracefusion2/artifacts/ruoyi-zlt-refinement-20261103/final-attempt-05/ruoyi-C1/runs/ruoyi-1/full/capture/events.jsonl": "04709a41f628d59d0353ed26e0fb731b7b12c799040b51e1c0af68a031fd10ff",
+    "/home/wujian/tracefusion2/artifacts/ruoyi-zlt-refinement-20261103/final-attempt-05/ruoyi-C1/runs/ruoyi-1/selective/capture/events.jsonl": "af848122b2d5a443cee95e2b08ef93999d7196f843afef6cb4911e35460daa16",
+    "/home/wujian/tracefusion2/artifacts/ruoyi-zlt-refinement-20261103/final-attempt-05/ruoyi-C1/runs/ruoyi-2/full/capture/events.jsonl": "c9b9aa3b634169a675abeba25c5c6f2486a354118095669768cee885c7f419ce",
+    "/home/wujian/tracefusion2/artifacts/ruoyi-zlt-refinement-20261103/final-attempt-05/ruoyi-C1/runs/ruoyi-2/selective/capture/events.jsonl": "3640e33790d0a645164a6fda7f136b7374460adcfc2e328ada08490569c80eb2",
+    "/home/wujian/tracefusion2/artifacts/ruoyi-zlt-refinement-20261103/final-attempt-05/ruoyi-C1/runs/ruoyi-3/full/capture/events.jsonl": "eefad50ced699dc7db16a7b8afd6e5eadaec1cb4237607e379d36ef8d7f66700",
+    "/home/wujian/tracefusion2/artifacts/ruoyi-zlt-refinement-20261103/final-attempt-05/ruoyi-C1/runs/ruoyi-3/selective/capture/events.jsonl": "f3f2bd902858ab825210d11efd7e559398895d03a4f1586458271164fdcd47aa",
+    "/home/wujian/tracefusion2/artifacts/ruoyi-zlt-refinement-20261103/final-attempt-05/ruoyi-C1/runs/ruoyi-4/full/capture/events.jsonl": "d5832d2fa9ec06bb0c51b5e25f36be5afe01d0f7931be3d1742da5c4fd7d8bec",
+    "/home/wujian/tracefusion2/artifacts/ruoyi-zlt-refinement-20261103/final-attempt-05/ruoyi-C1/runs/ruoyi-4/selective/capture/events.jsonl": "122be8e0aa68d87f6c887f18d6c137ebc7618db15191309c32d34de6be7c3f15",
+    "/home/wujian/tracefusion2/artifacts/ruoyi-zlt-refinement-20261103/final-attempt-05/ruoyi-C1/runs/ruoyi-5/full/capture/events.jsonl": "6e1f4d8e2c241fb361d10de676dbcca63b0cb38831d30d3747f41fdd08ebf737",
+    "/home/wujian/tracefusion2/artifacts/ruoyi-zlt-refinement-20261103/final-attempt-05/ruoyi-C1/runs/ruoyi-5/selective/capture/events.jsonl": "7049d886837699ae40b13e27af49468650defd8954431c928fca73dc968d14fe"
+  },
+  "no_performance": true,
+  "historical_full_deployments_repeated": false,
+  "scope": "Exposed RuoYi return tasks; C1/C2 separate; no claim of all-application support.",
+  "C1_full_selective_state_and_logical_source_equal": true,
+  "C2_full_selective_state_and_logical_source_equal": true,
+  "reference_MT_C1": {
+    "known_correct": 84,
+    "oracle_or_target_unavailable": 5,
+    "correct_preserved_per_TF_mode": 29,
+    "correct_not_yet_preserved_per_TF_mode": 55,
+    "MT_new_deployments_this_round": 0
+  },
+  "all_known_C1_and_C2_answers_positive": true,
+  "queries": {
+    "ruoyi-1": {
+      "full": {
+        "known_correct": 5
+      },
+      "selective": {
+        "known_correct": 5
+      }
+    },
+    "ruoyi-2": {
+      "full": {
+        "validation_rejected": 43
+      },
+      "selective": {
+        "validation_rejected": 43
+      }
+    },
+    "ruoyi-3": {
+      "full": {
+        "evidence_invalid": 12
+      },
+      "selective": {
+        "evidence_invalid": 12
+      }
+    },
+    "ruoyi-4": {
+      "full": {
+        "unknown": 5
+      },
+      "selective": {
+        "unknown": 5
+      }
+    },
+    "ruoyi-5": {
+      "full": {
+        "known_correct": 24
+      },
+      "selective": {
+        "known_correct": 24
+      }
+    }
+  },
+  "business_receipts": [
+    {
+      "query": "ruoyi-1",
+      "mode": "full",
+      "business_requests": 6,
+      "business_preserved": 6,
+      "closed": true,
+      "raw_no_problem": true,
+      "integrity_and_reconstruction_validated": true,
+      "first_problem": null,
+      "problem_count": 0,
+      "root_returns": 5,
+      "semantic_error_type": null,
+      "semantic_error": null,
+      "own_DB_clock_checks": [
+        {
+          "id": "100",
+          "wire": "2026-11-04 09:10:37",
+          "DB": "2026-11-04 09:10:37",
+          "equal": true
+        },
+        {
+          "id": "101",
+          "wire": "2026-11-04 09:10:37",
+          "DB": "2026-11-04 09:10:37",
+          "equal": true
+        },
+        {
+          "id": "102",
+          "wire": "2026-11-04 09:10:37",
+          "DB": "2026-11-04 09:10:37",
+          "equal": true
+        },
+        {
+          "id": "103",
+          "wire": "2026-11-04 09:10:37",
+          "DB": "2026-11-04 09:10:37",
+          "equal": true
+        },
+        {
+          "id": "100",
+          "wire": "2026-11-04 09:10:37",
+          "DB": "2026-11-04 09:10:37",
+          "equal": true
+        }
+      ],
+      "own_DB_clock_all_equal": true,
+      "original_capture_sha256": "67bec21872fbfa5e7befc8b615f78c878bbf9b1ba3cdcf6e10f34e1258746984"
+    },
+    {
+      "query": "ruoyi-1",
+      "mode": "selective",
+      "business_requests": 6,
+      "business_preserved": 6,
+      "closed": true,
+      "raw_no_problem": true,
+      "integrity_and_reconstruction_validated": true,
+      "first_problem": null,
+      "problem_count": 0,
+      "root_returns": 5,
+      "semantic_error_type": null,
+      "semantic_error": null,
+      "own_DB_clock_checks": [
+        {
+          "id": "100",
+          "wire": "2026-11-04 09:11:25",
+          "DB": "2026-11-04 09:11:25",
+          "equal": true
+        },
+        {
+          "id": "101",
+          "wire": "2026-11-04 09:11:25",
+          "DB": "2026-11-04 09:11:25",
+          "equal": true
+        },
+        {
+          "id": "102",
+          "wire": "2026-11-04 09:11:25",
+          "DB": "2026-11-04 09:11:25",
+          "equal": true
+        },
+        {
+          "id": "103",
+          "wire": "2026-11-04 09:11:25",
+          "DB": "2026-11-04 09:11:25",
+          "equal": true
+        },
+        {
+          "id": "100",
+          "wire": "2026-11-04 09:11:25",
+          "DB": "2026-11-04 09:11:25",
+          "equal": true
+        }
+      ],
+      "own_DB_clock_all_equal": true,
+      "original_capture_sha256": "1fd9a407af9dc761ba0c64b59339525edfe8089f1bb6677c5f8aae33965990f7"
+    },
+    {
+      "query": "ruoyi-2",
+      "mode": "full",
+      "business_requests": 6,
+      "business_preserved": 6,
+      "closed": true,
+      "raw_no_problem": true,
+      "integrity_and_reconstruction_validated": false,
+      "first_problem": null,
+      "problem_count": 0,
+      "root_returns": 6,
+      "semantic_error_type": "validation_rejected",
+      "semantic_error": "Execution list method unsupported: java/util/List.removeIf(Ljava/util/function/Predicate;)Z",
+      "own_DB_clock_checks": [
+        {
+          "id": "100",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "102",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "108",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "109",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "100",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "101",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "103",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "104",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "105",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "106",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "107",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "100",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "101",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "102",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "104",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "105",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "106",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "107",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "108",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "109",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "100",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "101",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "102",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "103",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "105",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "106",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "107",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "108",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "109",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "100",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "101",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "102",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "103",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "104",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "105",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "106",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "107",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "108",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "109",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "100",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "102",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "108",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        },
+        {
+          "id": "109",
+          "wire": "2026-11-04 09:12:13",
+          "DB": "2026-11-04 09:12:13",
+          "equal": true
+        }
+      ],
+      "own_DB_clock_all_equal": true,
+      "original_capture_sha256": "3e15d87e99e86c6b8c3d0a1fcc6349a269ee03d31a9d3b69413336dfa1be7243"
+    },
+    {
+      "query": "ruoyi-2",
+      "mode": "selective",
+      "business_requests": 6,
+      "business_preserved": 6,
+      "closed": true,
+      "raw_no_problem": true,
+      "integrity_and_reconstruction_validated": false,
+      "first_problem": null,
+      "problem_count": 0,
+      "root_returns": 6,
+      "semantic_error_type": "validation_rejected",
+      "semantic_error": "Execution list method unsupported: java/util/List.removeIf(Ljava/util/function/Predicate;)Z",
+      "own_DB_clock_checks": [
+        {
+          "id": "100",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "102",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "108",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "109",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "100",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "101",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "103",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "104",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "105",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "106",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "107",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "100",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "101",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "102",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "104",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "105",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "106",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "107",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "108",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "109",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "100",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "101",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "102",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "103",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "105",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "106",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "107",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "108",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "109",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "100",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "101",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "102",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "103",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "104",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "105",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "106",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "107",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "108",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "109",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "100",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "102",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "108",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        },
+        {
+          "id": "109",
+          "wire": "2026-11-04 09:13:01",
+          "DB": "2026-11-04 09:13:01",
+          "equal": true
+        }
+      ],
+      "own_DB_clock_all_equal": true,
+      "original_capture_sha256": "491367038d0e6ffd31a8f4c5bb12bc025a99f8b38a60f37e59473d0b5cbbaa10"
+    },
+    {
+      "query": "ruoyi-3",
+      "mode": "full",
+      "business_requests": 6,
+      "business_preserved": 6,
+      "closed": true,
+      "raw_no_problem": false,
+      "integrity_and_reconstruction_validated": false,
+      "first_problem": {
+        "frame": "f83",
+        "message": "binding-after:java.lang.IllegalStateException: Unmodeled binding List type",
+        "seq": 1412,
+        "kind": "problem",
+        "thread": 83
+      },
+      "problem_count": 20,
+      "root_returns": 6,
+      "semantic_error_type": "evidence_invalid",
+      "semantic_error": "Collector problem",
+      "own_DB_clock_checks": [
+        {
+          "id": "1",
+          "wire": "2026-11-04 09:13:50",
+          "DB": "2026-11-04 09:13:50",
+          "equal": true
+        },
+        {
+          "id": "2",
+          "wire": "2026-11-04 09:13:50",
+          "DB": "2026-11-04 09:13:50",
+          "equal": true
+        },
+        {
+          "id": "3",
+          "wire": "2026-11-04 09:13:50",
+          "DB": "2026-11-04 09:13:50",
+          "equal": true
+        },
+        {
+          "id": "6",
+          "wire": "2026-11-04 09:13:50",
+          "DB": "2026-11-04 09:13:50",
+          "equal": true
+        },
+        {
+          "id": "7",
+          "wire": "2026-11-04 09:13:50",
+          "DB": "2026-11-04 09:13:50",
+          "equal": true
+        },
+        {
+          "id": "1",
+          "wire": "2026-11-04 09:13:50",
+          "DB": "2026-11-04 09:13:50",
+          "equal": true
+        },
+        {
+          "id": "2",
+          "wire": "2026-11-04 09:13:50",
+          "DB": "2026-11-04 09:13:50",
+          "equal": true
+        },
+        {
+          "id": "3",
+          "wire": "2026-11-04 09:13:50",
+          "DB": "2026-11-04 09:13:50",
+          "equal": true
+        },
+        {
+          "id": "8",
+          "wire": "2026-11-04 09:13:50",
+          "DB": "2026-11-04 09:13:50",
+          "equal": true
+        },
+        {
+          "id": "9",
+          "wire": "2026-11-04 09:13:50",
+          "DB": "2026-11-04 09:13:50",
+          "equal": true
+        },
+        {
+          "id": "6",
+          "wire": "2026-11-04 09:13:50",
+          "DB": "2026-11-04 09:13:50",
+          "equal": true
+        },
+        {
+          "id": "7",
+          "wire": "2026-11-04 09:13:50",
+          "DB": "2026-11-04 09:13:50",
+          "equal": true
+        }
+      ],
+      "own_DB_clock_all_equal": true,
+      "original_capture_sha256": "4236f12cb8666fc9ce90ef7f1d006ceeaac50fdb985034be92869f5d195f1dbf"
+    },
+    {
+      "query": "ruoyi-3",
+      "mode": "selective",
+      "business_requests": 6,
+      "business_preserved": 6,
+      "closed": true,
+      "raw_no_problem": false,
+      "integrity_and_reconstruction_validated": false,
+      "first_problem": {
+        "frame": "f83",
+        "message": "binding-after:java.lang.IllegalStateException: Unmodeled binding List type",
+        "seq": 847,
+        "kind": "problem",
+        "thread": 83
+      },
+      "problem_count": 20,
+      "root_returns": 6,
+      "semantic_error_type": "evidence_invalid",
+      "semantic_error": "Collector problem",
+      "own_DB_clock_checks": [
+        {
+          "id": "1",
+          "wire": "2026-11-04 09:14:38",
+          "DB": "2026-11-04 09:14:38",
+          "equal": true
+        },
+        {
+          "id": "2",
+          "wire": "2026-11-04 09:14:38",
+          "DB": "2026-11-04 09:14:38",
+          "equal": true
+        },
+        {
+          "id": "3",
+          "wire": "2026-11-04 09:14:38",
+          "DB": "2026-11-04 09:14:38",
+          "equal": true
+        },
+        {
+          "id": "6",
+          "wire": "2026-11-04 09:14:38",
+          "DB": "2026-11-04 09:14:38",
+          "equal": true
+        },
+        {
+          "id": "7",
+          "wire": "2026-11-04 09:14:38",
+          "DB": "2026-11-04 09:14:38",
+          "equal": true
+        },
+        {
+          "id": "1",
+          "wire": "2026-11-04 09:14:38",
+          "DB": "2026-11-04 09:14:38",
+          "equal": true
+        },
+        {
+          "id": "2",
+          "wire": "2026-11-04 09:14:38",
+          "DB": "2026-11-04 09:14:38",
+          "equal": true
+        },
+        {
+          "id": "3",
+          "wire": "2026-11-04 09:14:38",
+          "DB": "2026-11-04 09:14:38",
+          "equal": true
+        },
+        {
+          "id": "8",
+          "wire": "2026-11-04 09:14:38",
+          "DB": "2026-11-04 09:14:38",
+          "equal": true
+        },
+        {
+          "id": "9",
+          "wire": "2026-11-04 09:14:38",
+          "DB": "2026-11-04 09:14:38",
+          "equal": true
+        },
+        {
+          "id": "6",
+          "wire": "2026-11-04 09:14:38",
+          "DB": "2026-11-04 09:14:38",
+          "equal": true
+        },
+        {
+          "id": "7",
+          "wire": "2026-11-04 09:14:38",
+          "DB": "2026-11-04 09:14:38",
+          "equal": true
+        }
+      ],
+      "own_DB_clock_all_equal": true,
+      "original_capture_sha256": "de5e645c368b1d0c372497cdf9c4366eaa0301334c3e5c9280153b3823c8ed45"
+    },
+    {
+      "query": "ruoyi-4",
+      "mode": "full",
+      "business_requests": 6,
+      "business_preserved": 6,
+      "closed": true,
+      "raw_no_problem": true,
+      "integrity_and_reconstruction_validated": true,
+      "first_problem": null,
+      "problem_count": 0,
+      "root_returns": 6,
+      "semantic_error_type": null,
+      "semantic_error": null,
+      "own_DB_clock_checks": [
+        {
+          "id": "1",
+          "wire": "2026-11-04 09:15:26",
+          "DB": "2026-11-04 09:15:26",
+          "equal": true
+        },
+        {
+          "id": "2",
+          "wire": "2026-11-04 09:15:26",
+          "DB": "2026-11-04 09:15:26",
+          "equal": true
+        },
+        {
+          "id": "3",
+          "wire": "2026-11-04 09:15:26",
+          "DB": "2026-11-04 09:15:26",
+          "equal": true
+        },
+        {
+          "id": "4",
+          "wire": "2026-11-04 09:15:26",
+          "DB": "2026-11-04 09:15:26",
+          "equal": true
+        },
+        {
+          "id": "1",
+          "wire": "2026-11-04 09:15:26",
+          "DB": "2026-11-04 09:15:26",
+          "equal": true
+        }
+      ],
+      "own_DB_clock_all_equal": true,
+      "original_capture_sha256": "f583c884256f8626c1d8b3b3051c940704d7d353bd3fdc2fe2d309ec64404339"
+    },
+    {
+      "query": "ruoyi-4",
+      "mode": "selective",
+      "business_requests": 6,
+      "business_preserved": 6,
+      "closed": true,
+      "raw_no_problem": true,
+      "integrity_and_reconstruction_validated": true,
+      "first_problem": null,
+      "problem_count": 0,
+      "root_returns": 6,
+      "semantic_error_type": null,
+      "semantic_error": null,
+      "own_DB_clock_checks": [
+        {
+          "id": "1",
+          "wire": "2026-11-04 09:16:14",
+          "DB": "2026-11-04 09:16:14",
+          "equal": true
+        },
+        {
+          "id": "2",
+          "wire": "2026-11-04 09:16:14",
+          "DB": "2026-11-04 09:16:14",
+          "equal": true
+        },
+        {
+          "id": "3",
+          "wire": "2026-11-04 09:16:14",
+          "DB": "2026-11-04 09:16:14",
+          "equal": true
+        },
+        {
+          "id": "4",
+          "wire": "2026-11-04 09:16:14",
+          "DB": "2026-11-04 09:16:14",
+          "equal": true
+        },
+        {
+          "id": "1",
+          "wire": "2026-11-04 09:16:14",
+          "DB": "2026-11-04 09:16:14",
+          "equal": true
+        }
+      ],
+      "own_DB_clock_all_equal": true,
+      "original_capture_sha256": "1a8e8602db64e1e4e2d6c403c323a71b14182b37694e9e05fd6be16aece77dfd"
+    },
+    {
+      "query": "ruoyi-5",
+      "mode": "full",
+      "business_requests": 6,
+      "business_preserved": 6,
+      "closed": true,
+      "raw_no_problem": true,
+      "integrity_and_reconstruction_validated": true,
+      "first_problem": null,
+      "problem_count": 0,
+      "root_returns": 6,
+      "semantic_error_type": null,
+      "semantic_error": null,
+      "own_DB_clock_checks": [
+        {
+          "id": "1",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "2",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "3",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "4",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "1",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "2",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "3",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "4",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "1",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "2",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "3",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "4",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "1",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "2",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "3",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "4",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "1",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "2",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "3",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "4",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "1",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "2",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "3",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        },
+        {
+          "id": "4",
+          "wire": "2026-11-04 09:17:01",
+          "DB": "2026-11-04 09:17:01",
+          "equal": true
+        }
+      ],
+      "own_DB_clock_all_equal": true,
+      "original_capture_sha256": "4dad4a9d3ca46b37d98433870dd1643592d07a88d1aeb4b6445c5ee0e44cd6a1"
+    },
+    {
+      "query": "ruoyi-5",
+      "mode": "selective",
+      "business_requests": 6,
+      "business_preserved": 6,
+      "closed": true,
+      "raw_no_problem": true,
+      "integrity_and_reconstruction_validated": true,
+      "first_problem": null,
+      "problem_count": 0,
+      "root_returns": 6,
+      "semantic_error_type": null,
+      "semantic_error": null,
+      "own_DB_clock_checks": [
+        {
+          "id": "1",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "2",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "3",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "4",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "1",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "2",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "3",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "4",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "1",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "2",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "3",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "4",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "1",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "2",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "3",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "4",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "1",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "2",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "3",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "4",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "1",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "2",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "3",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        },
+        {
+          "id": "4",
+          "wire": "2026-11-04 09:17:49",
+          "DB": "2026-11-04 09:17:49",
+          "equal": true
+        }
+      ],
+      "own_DB_clock_all_equal": true,
+      "original_capture_sha256": "480bea26d2161e346bf1ec38582ea56d3cbbc6c4f68c559cb617fc4ccdfb75f0"
+    }
+  ]
+}
