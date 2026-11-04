@@ -61,6 +61,6 @@ def validate(plan,rows):
         require(d is not None and all(r.get(k)==d.get(k)for k in fields),'Excluded output belongs to another dispatch')
         require(all(end.get(k)==r.get(k)for k in fields+('carrier_object','query_output_scope'))and d['seq']<r['seq']<end['seq']<ends[d['dispatch_id']]['seq'],'Excluded output interval/completion differs')
         require(cov[0]['seq']<r['seq']and r.get('parent_span_id')is None and r.get('query_output_scope')=='independent-unparented-handler','Unproved independent response')
-        require(r.get('synchronous')is True and ends[d['dispatch_id']].get('synchronous')is True,'Excluded response is not synchronous')
+        require(r.get('web_type')=='org/springframework/web/context/request/async/StandardServletAsyncWebRequest'and r.get('synchronous')is True and ends[d['dispatch_id']].get('synchronous')is True,'Excluded response lacks verified synchronous lifecycle state')
         require(r['message']not in messages and not any(x['message']==r['message']and x['handler_method']==plan['entry']for x in dispatch.values()),'Query-owned output was excluded')
         require(not any(x.get('message')==r['message']and x['kind']in('binding-return','http-rpc-enter')for x in rows),'Required query/RPC output excluded')

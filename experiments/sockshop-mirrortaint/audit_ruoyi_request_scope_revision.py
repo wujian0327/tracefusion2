@@ -41,7 +41,7 @@ def audit(home,out):
            'targets':sum(r['mode']==m for r in paired)}for m in('full','selective')},
       'C2':load(home/'facts-final-C2/summary.json'),
       'old_RuoYi_invalid_batches_still_rejected':len(rejected),'older_first_files_unchanged':protected,'older_Mall_files_unchanged':len(retained),
-      'scope_controls':load(home/'scope-controls-04/results.json'),'constructor_controls':load(home/'map-constructor-controls-04/results.json'),
+      'scope_controls':load(home/('scope-controls-05'if(home/'scope-controls-05/results.json').exists()else'scope-controls-04')/'results.json'),'constructor_controls':load(home/'map-constructor-controls-04/results.json'),
       'scope_guards':load(home/'final-guards/results.json'),'old_captures':old_files,
       'no_performance':True,'historical_full_deployments_repeated':False,'scope':'Exposed RuoYi return tasks; C1/C2 separate; no claim of all-application support.'}
     save(out/'summary.json',summary);save(out/'paired.json',paired)

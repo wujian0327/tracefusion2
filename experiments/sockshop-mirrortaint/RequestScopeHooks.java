@@ -26,13 +26,13 @@ public final class RequestScopeHooks implements Opcodes {
  static boolean synchronous(Scope s)throws Exception{if(s.web.getClass().getName().replace('.','/').equals(ASYNC)){
   Object state=field(s.web,ASYNC,"state");checked(state.getClass(),ASYNC+"$State");checked(s.response.getClass(),ASYNC+"$LifecycleHttpServletResponse");
   return field(s.web,ASYNC,"asyncContext")==null&&((Enum)state).name().equals("NEW");
- }return true;}
+ }return false;}
  static void coverage(String owner){if(config()==null||!owner.equals(config().get("entry_class")))return;
   if(!PlannedServiceAgent.frames.contains(config().get("entry")))throw new IllegalStateException("Query root entry is not instrumented");
   covered=true;Map r=new LinkedHashMap();r.put("entry",config().get("entry"));r.put("class",owner);r.put("class_sha256",PlannedServiceAgent.hashes.get(owner));emit("query-scope-coverage",r);
  }
  public static Object begin(Object handler,Object web){synchronized(PlannedServiceAgent.Recorder.class){Scope s=new Scope();s.before=new ArrayDeque<>(ACTIVE.get());try{
-  if(!handler.getClass().getName().replace('.','/').equals(INVOKER)||!Arrays.asList("org.springframework.web.context.request.ServletWebRequest",ASYNC.replace('/','.')).contains(web.getClass().getName())){s.closed=true;return s;}
+  if(!handler.getClass().getName().replace('.','/').equals(INVOKER)||!web.getClass().getName().equals(ASYNC.replace('/','.'))){s.closed=true;return s;}
   checked(handler.getClass(),INVOKER);checked(handler.getClass(),"org/springframework/web/method/support/InvocableHandlerMethod");checked(web.getClass(),"org/springframework/web/context/request/ServletWebRequest");
   Method method=(Method)field(handler,HANDLER,"method"),bridged=(Method)field(handler,HANDLER,"bridgedMethod");Object bean=field(handler,HANDLER,"bean");
   if(!method.equals(bridged)||bean instanceof String)throw new IllegalStateException("Unresolved/bridged MVC handler");

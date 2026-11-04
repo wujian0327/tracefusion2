@@ -26,17 +26,32 @@ def run(out,agent):
     plan,route=choose(model,{'entry':'RequestScopeFixture.query(LRequestScopeFixture$DTO;)LRequestScopeFixture$Wrap;','target':'RequestScopeFixture$DTO.text','path':'/data/text'},deployment=load(ROOT/'artifacts/target-closure-revision-20261103/external-first-01/deployment-environment.json'))
     save(out/'plan.json',plan);save(out/'route.json',route);assert plan.get('query_request_scope')
     result=[]
-    for variant in('normal','formal-bad','parented','unverified'):
+    for variant in('normal','formal-bad','parented','unverified','plain','plain-prep'):
         baseline=json.loads(command([java,'-cp',cp,'RequestScopeFixture',variant],out/('baseline-'+variant+'.log')).stdout.splitlines()[-1])
         for mode in('full','selective'):
             cap=out/(mode+'-'+variant);cap.mkdir()
             actual=json.loads(command([java,'-javaagent:'+str(agent),'-Dfixture.observe=true','-Dservice.plan='+str(out/'plan.json'),'-Dservice.mode='+mode,'-Dservice.events='+str(cap/'events.jsonl'),'-cp',cp,'RequestScopeFixture',variant],cap/'stdout.log').stdout.splitlines()[-1]);assert actual==baseline,(variant,mode,actual,baseline)
             rows=[json.loads(x)for x in(cap/'events.jsonl').read_text().splitlines()];bad=any(r['kind']=='problem'for r in rows)
-            assert bad==(variant in('formal-bad','parented')),(mode,variant,[r for r in rows if r['kind']=='problem'])
+            assert bad==(variant in('formal-bad','parented','plain-prep')),(mode,variant,[r for r in rows if r['kind']=='problem'])
             excluded=[r for r in rows if r['kind']=='query-scope-output-excluded']
             assert len(excluded)==(2 if variant=='normal'else 0),(variant,excluded)
             if not bad:validate(plan,rows)
-            result.append({'mode':mode,'variant':variant,'business_equal':True,'observer_extra_set_iterations':0,'excluded':len(excluded),'invalid':bad,'state_clean':True})
+            from infer_distributed_fields import Reconstruction
+            (cap/'build/role').mkdir(parents=True);(cap/'capture/role').mkdir(parents=True)
+            (cap/'build/role/plan.json').write_bytes((out/'plan.json').read_bytes());(cap/'capture/role/events.jsonl').symlink_to((cap/'events.jsonl').resolve())
+            try:Reconstruction(cap/'build',cap/'capture',['role'])
+            except ValueError as e:assert bad and str(e)=='Collector problem',str(e)
+            else:assert not bad
+            if bad:
+                assert next(r for r in rows if r['kind']=='metrics')['capture_invalid']is True
+                # Removing problem in a DERIVED copy cannot erase sticky failure.
+                altered=[r.copy()for r in rows if r['kind']!='problem']
+                for seq,r in enumerate(altered,1):r['seq']=seq
+                (cap/'capture/role/events.jsonl').unlink();(cap/'capture/role/events.jsonl').write_text(''.join(json.dumps(r)+'\n'for r in altered))
+                try:Reconstruction(cap/'build',cap/'capture',['role'])
+                except ValueError as e:assert str(e)=='Collector problem'
+                else:raise AssertionError('Sticky failure disappeared')
+            result.append({'mode':mode,'variant':variant,'business_equal':True,'observer_extra_set_iterations':0,'excluded':len(excluded),'invalid':bad,'state_clean':True,'whole_capture_rejection_checked':bad,'sticky_after_removing_problem_copy':bad})
     save(out/'results.json',{'agent_sha256':sha(agent),'cases':result,'scope':'Observation ownership and failure isolation; not a source accuracy experiment.'})
     print(result,flush=True)
 
