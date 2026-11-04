@@ -36,6 +36,8 @@ class Reconstruction:
             require(rows[0]['plan_sha256']==hashlib.sha256((build/role/'plan.json').read_bytes()).hexdigest(),'Frozen plan differs')
             if any(r.get('transport_protocol')=='w3c-trace-context' for r in rows):validate_protocol(rows,plan.get('communication_identity',{}).get('version',1),plan.get('communication_identity'))
             self.rows[role]=rows;self.plans[role]=plan
+            from infer_request_scope import validate as validate_request_scope
+            validate_request_scope(plan,rows)
             returns=defaultdict(list)
             for row in rows:
                 if row['kind']=='binding-return':returns[row['frame']].append(row.get('message'))

@@ -17,6 +17,7 @@ public class DirectDispatchFixture {
         boolean observe=Boolean.getBoolean("fixture.observe");ObjectMapper mapper=new ObjectMapper();List<Map> results=new ArrayList<>();
         for(int i=0;i<8;i++){
             int mode=i%4;ProxyFactory factory=new ProxyFactory(new Target());factory.setProxyTargetClass(true);
+            if(Boolean.getBoolean("fixture.expose"))factory.addAdvice(org.springframework.aop.interceptor.ExposeInvocationInterceptor.INSTANCE);
             if(mode==3)factory.addAdvice((MethodInterceptor)invocation->{Box b=(Box)invocation.proceed();b.text="SAME";return b;});
             DirectDispatchFixture fixture=new DirectDispatchFixture();fixture.service=(Service)factory.getProxy();
             W3CTraceContext context=W3CTraceContext.server("00-33333333333333333333333333333333-"+String.format("%016x",i+1)+"-01","fixture=dispatch");

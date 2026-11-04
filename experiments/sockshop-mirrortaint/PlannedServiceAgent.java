@@ -29,10 +29,12 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
         try {
             if(!Recorder.hash(bytes).equals(hashes.get(owner)))throw new IllegalStateException("Frozen class changed: "+owner);
             ClassNode cls=new ClassNode(ASM9);new ClassReader(bytes).accept(cls,ClassReader.EXPAND_FRAMES);ResponseBindingHooks.registerClass(cls,loader);boolean changed=false;
+            List effectOwners=ExecutionKernelHooks.enabled()?(List)((Map)plan.get("execution_kernel")).getOrDefault("initialized_effect_owners",Collections.emptyList()):Collections.emptyList();
+            if(effectOwners.contains(owner)&&cls.methods.stream().noneMatch(m->m.name.equals("<clinit>"))){MethodNode init=new MethodNode(ACC_STATIC,"<clinit>","()V",null,null);init.instructions.add(new InsnNode(RETURN));cls.methods.add(init);}
             for(MethodNode m:cls.methods) {
                 if((m.access&(ACC_ABSTRACT|ACC_NATIVE))!=0)continue;String key=owner+"."+m.name+m.desc;
                 List<AbstractInsnNode> code=new ArrayList<>();for(AbstractInsnNode n:m.instructions.toArray())if(n.getOpcode()>=0)code.add(n);
-                if(m.name.equals("<clinit>")&&ExecutionKernelHooks.enabled()&&((List)((Map)plan.get("execution_kernel")).getOrDefault("initialized_lambda_owners",Collections.emptyList())).contains(owner)){
+                if(m.name.equals("<clinit>")&&ExecutionKernelHooks.enabled()&&(((List)((Map)plan.get("execution_kernel")).getOrDefault("initialized_lambda_owners",Collections.emptyList())).contains(owner)||effectOwners.contains(owner))){
                     for(AbstractInsnNode n:code)if(n.getOpcode()==RETURN){InsnList init=new InsnList();init.add(new LdcInsnNode(Type.getObjectType(owner)));init.add(new MethodInsnNode(INVOKESTATIC,"ExecutionKernelHooks","classInitialized","(Ljava/lang/Class;)V",false));m.instructions.insertBefore(n,init);changed=true;}
                 }
                 if(CollectionServiceHooks.instrument(m,key,code))changed=true;
@@ -70,7 +72,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
                     m.instructions.add(end);m.instructions.add(handler);int error=m.maxLocals++;m.instructions.add(new VarInsnNode(ASTORE,error));m.instructions.add(new VarInsnNode(ALOAD,scope));m.instructions.add(new MethodInsnNode(INVOKESTATIC,R,"abort","(Ljava/lang/Object;)V",false));m.instructions.add(new VarInsnNode(ALOAD,error));m.instructions.add(new InsnNode(ATHROW));m.tryCatchBlocks.add(new TryCatchBlockNode(start,end,handler,"java/lang/Throwable"));changed=true;
                 }
             }
-            MonitorSafety.instrument(cls);Recorder.transformed(owner);
+            MonitorSafety.instrument(cls);Recorder.transformed(owner);RequestScopeHooks.coverage(owner);
             if(!changed)return null;
             ClassWriter w=new ClassWriter(ClassWriter.COMPUTE_MAXS|ClassWriter.COMPUTE_FRAMES){protected String getCommonSuperClass(String a,String b){return commonType(loader,a,b);}};cls.accept(w);return w.toByteArray();
         }catch(Throwable e){Recorder.problem("transform:"+owner+":"+e);return null;}
@@ -161,7 +163,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
                 List<Object> inputs=new ArrayList<>();for(Object member:(List<?>)a){if(inputs.size()>=10000)throw new IllegalStateException("Collection bound");if(member==null||!member.getClass().getName().replace('.','/').equals(plan.get("mapper_owner")))throw new IllegalStateException("Runtime mapper DTO differs");Map<String,Object> v=new LinkedHashMap<>();v.put("object",id(member));v.put("fields",snapshot(member,false));inputs.add(v);}
                 f.inputs=inputs;r.put("inputs",inputs);for(Object member:(List<?>)a){String o=id(member);Set<String> users=ACTIVE.computeIfAbsent(o,k->new HashSet<>());if(!users.isEmpty()&&!users.contains(f.id))throw new IllegalStateException("Concurrent shared mapper DTO");users.add(f.id);f.locked.add(o);}
             }
-            MonitorSafety.fault("enter-active",method);STACK.get().push(f);emit("enter",r);MonitorSafety.fault("enter",method);
+            RequestScopeHooks.root(method,f.id);MonitorSafety.fault("enter-active",method);STACK.get().push(f);emit("enter",r);MonitorSafety.fault("enter",method);
             if(method.equals(plan.get("entry")))ResponseBindingHooks.enter(args);
         }catch(Throwable e){MonitorSafety.fatal(e);scope.fail("enter",e);}return scope;}
         public static synchronized void exit(Object result,Object token){finish(token,result,false);}

@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "profiles": [
+    {
+      "class_sha256": {
+        "org/springframework/web/servlet/mvc/method/annotation/ServletInvocableHandlerMethod": "eb81e7e1f3605fb5fdc5260cfca89408d3e3e6b7e343ed1e8fd4fabf35136960",
+        "org/springframework/web/method/support/InvocableHandlerMethod": "f0dc99c242f1e0b7aa341e89047ddf86ef3d2602db3072dea9727de770b99ff9",
+        "org/springframework/web/method/HandlerMethod": "73e82870b475c8d6f8e56f7fbde77dd64f63afb51c77504655a948489739c40c",
+        "org/springframework/web/context/request/ServletWebRequest": "3ee99ff62bd6930e848273268f1671c5f1462299aeb2cbd51b631aa3e94b42e6",
+        "org/springframework/web/context/request/ServletRequestAttributes": "8d15f200189da2fee00ef8c00cfe8a152f73b27006e75b0ab55fb0a88a72ec86",
+        "org/springframework/http/server/ServletServerHttpResponse": "e52eb70d8bf1d4d675f6f074def9af2f8d99262fccf622fab7bf3c431bbad649",
+        "org/springframework/web/context/request/async/StandardServletAsyncWebRequest": "1656622185d436fe884411c4dfb3d06c61e08cf9d64e48356de8f3ccb25d6e11",
+        "org/springframework/web/context/request/async/StandardServletAsyncWebRequest$State": "e79f0106cea3470b7e5a5cf1e6f2ed14ced43432a6e2d09a43c0cff52b7fd28d",
+        "org/springframework/web/context/request/async/StandardServletAsyncWebRequest$LifecycleHttpServletResponse": "7981b54418a22f7968093e17708a469e8bff9095ee4271ee5061dd78b50f6f88"
+      }
+    }
+  ],
+  "scope": "Finite Spring MVC synchronous handler invocation and servlet response identity; no application effect/source summary.",
+  "method": "invokeAndHandle(Lorg/springframework/web/context/request/ServletWebRequest;Lorg/springframework/web/method/support/ModelAndViewContainer;[Ljava/lang/Object;)V",
+  "exclude": "Only an actual completed unparented server request handled by another frozen method, with no query invocation in that message. Retain all application/source/RPC observations and completion metadata."
+}

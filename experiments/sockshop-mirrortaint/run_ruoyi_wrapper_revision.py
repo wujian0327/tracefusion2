@@ -6,7 +6,7 @@ H=ROOT/'artifacts/ruoyi-zlt-refinement-20261103'
 PREVIOUS=ROOT/'artifacts/target-closure-revision-20261103'
 
 
-def prepare(out,build,calibrated=False):
+def prepare(out,build,calibrated=False,inventory=None):
     out.mkdir(parents=True,exist_ok=False)
     protocol=load(PREVIOUS/'external-first-01/task-seal.json');qs=[copy.deepcopy(q)for q in protocol['tasks']['ruoyi']if q['id']!='ruoyi-6']
     if calibrated:
@@ -17,6 +17,8 @@ def prepare(out,build,calibrated=False):
     shutil.copyfile(PREVIOUS/'external-first-01/deployment-environment.json',out/'deployment-environment.json')
     from plan_capability_policy import choose
     model=load(out/'metadata/ruoyi/model.json')
+    if inventory is not None:
+        model['library_inventory']=inventory;save(out/'metadata/ruoyi/model.json',model)
     for q in qs:
         target,path=q['target'].split('@');p,route=choose(model,{'entry':q['entry'],'target':target,'path':path,'source_calls':q['source_calls']},deployment=load(out/'deployment-environment.json'))
         dest=out/'plans'/q['id'];dest.mkdir(parents=True);save(dest/'plan.json',p);save(dest/'route.json',route);save(dest/'result.json',{'state':'conditional','scope':'No answer asserted by planning.'})

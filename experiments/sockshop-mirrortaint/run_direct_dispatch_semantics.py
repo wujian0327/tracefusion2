@@ -10,9 +10,9 @@ from plan_capability_policy import choose
 from infer_distributed_fields import Reconstruction
 from infer_execution_kernel import infer_execution
 
-def run(out,agent):
+def run(out,agent,business_jar=None,expose=False):
     out.mkdir(parents=True,exist_ok=False);classes=out/'classes';classes.mkdir();deps=out/'deps';deps.mkdir()
-    jar=ROOT/'artifacts/external-frozen-transfer-20261029/78a9534/business-jars/mall-portal.jar'
+    jar=business_jar or ROOT/'artifacts/external-frozen-transfer-20261029/78a9534/business-jars/mall-portal.jar'
     with ZipFile(jar)as z:
         for name in z.namelist():
             if name.startswith('BOOT-INF/lib/')and name.endswith('.jar')and any(x in name for x in ('/spring-aop-','/spring-core-','/spring-beans-','/spring-jcl-')):(deps/Path(name).name).write_bytes(z.read(name))
@@ -27,10 +27,10 @@ def run(out,agent):
     environment=load(ROOT/'artifacts/plan-applicability-revision-20261029/deployment-environment.json')
     plan,route=choose(model,query,deployment=environment);save(b/'fixture/plan.json',plan);save(out/'route.json',route)
     java='/usr/lib/jvm/java-8-openjdk-amd64/bin/java';classpath=str(classes)+':'+cp
-    command([java,'-cp',classpath,'DirectDispatchFixture'],out/'baseline.txt');baseline=json.loads((out/'baseline.txt').read_text().splitlines()[-1]);reports={}
+    command([java,*(['-Dfixture.expose=true']if expose else[]),'-cp',classpath,'DirectDispatchFixture'],out/'baseline.txt');baseline=json.loads((out/'baseline.txt').read_text().splitlines()[-1]);reports={}
     for mode in ('full','selective'):
         cap=out/mode;(cap/'fixture').mkdir(parents=True)
-        command([java,'-javaagent:'+str(agent),'-Dfixture.observe=true','-Dservice.plan='+str(b/'fixture/plan.json'),'-Dservice.mode='+mode,'-Dservice.events='+str(cap/'fixture/events.jsonl'),'-cp',classpath,'DirectDispatchFixture'],cap/'stdout.txt')
+        command([java,*(['-Dfixture.expose=true']if expose else[]),'-javaagent:'+str(agent),'-Dfixture.observe=true','-Dservice.plan='+str(b/'fixture/plan.json'),'-Dservice.mode='+mode,'-Dservice.events='+str(cap/'fixture/events.jsonl'),'-cp',classpath,'DirectDispatchFixture'],cap/'stdout.txt')
         actual=json.loads((cap/'stdout.txt').read_text().splitlines()[-1]);assert actual==baseline
         rows=[json.loads(s)for s in (cap/'fixture/events.jsonl').read_text().splitlines()];assert not any(r['kind']=='problem'for r in rows)
         replay=infer_execution(plan,rows);checks=[]
@@ -43,16 +43,17 @@ def run(out,agent):
                 index=source['fields'].index(f);assert set(map(tuple,answer['origins']))=={('field',source['seq'],index)}
             checks.append({'mode':c['mode'],'known':answer['known']})
         guards={}
-        for name in ('wrong-call','wrong-target','wrong-class','nonempty-chain','wrong-argument','duplicate-proof','missing-proof','missing-framework','wrong-source-call','missing-source','ambiguous-source'):
+        for name in ('wrong-call','wrong-target','wrong-class','nonempty-chain','wrong-argument','duplicate-proof','missing-proof','missing-framework','wrong-transparent-chain','wrong-source-call','missing-source','ambiguous-source'):
             altered=copy.deepcopy(rows);fact=next(r for r in altered if r['kind']=='execution-direct-dispatch')
             if name=='wrong-call':fact['call_id']=-1
             elif name=='wrong-target':fact['target']='wrong-object'
             elif name=='wrong-class':fact['target_sha256']='wrong-hash'
-            elif name=='nonempty-chain':fact['empty_chain']=False
+            elif name=='nonempty-chain':fact['empty_chain']=False;fact['transparent_interceptors']=['unknown-advice']
             elif name=='wrong-argument':fact['args']=[{'value':100}]
             elif name=='duplicate-proof':altered.insert(altered.index(fact)+1,copy.deepcopy(fact))
             elif name=='missing-proof':altered.remove(fact)
             elif name=='missing-framework':altered.remove(next(r for r in altered if r['kind']=='direct-dispatch-framework'))
+            elif name=='wrong-transparent-chain':fact['empty_chain']=False;fact['transparent_interceptors']=['unknown-advice']
             elif name=='wrong-source-call':next(r for r in altered if r['kind']=='binding-source')['source_call_id']=-1
             elif name=='missing-source':altered.remove(next(r for r in altered if r['kind']=='binding-source'))
             elif name=='ambiguous-source':
@@ -66,4 +67,4 @@ def run(out,agent):
     save(out/'results.json',{'all_passed':True,'scope':'Invocation-only proxy/source control; no synthetic HTTP evidence','modes':reports});print({m:{k:v for k,v in x.items()if k!='checks'}for m,x in reports.items()},flush=True)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--agent',type=Path,required=True);a=p.parse_args();run(a.out.resolve(),a.agent.resolve())
+    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--agent',type=Path,required=True);p.add_argument('--business-jar',type=Path);p.add_argument('--expose',action='store_true');a=p.parse_args();run(a.out.resolve(),a.agent.resolve(),a.business_jar.resolve()if a.business_jar else None,a.expose)

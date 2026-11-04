@@ -6,7 +6,7 @@ from audit_target_external_first import selected,business_comparison
 from analysis_status import AnalysisLimit
 
 
-def run(home,out):
+def run(home,out,modes=('full','selective')):
     out.mkdir(parents=True,exist_ok=False)
     protocol=load(home/'task-seal.json');original=load(ROOT/'artifacts/target-closure-revision-20261103/ruoyi-original-03/sealed-original-requests/results.json')['cases']
     import external_transfer_oracle as oracle
@@ -16,7 +16,7 @@ def run(home,out):
     results=[];receipts=[]
     for q in protocol['tasks']['ruoyi']:
         path=q['target'].split('@')[1]
-        for mode in('full','selective'):
+        for mode in modes:
             trial=home/'runs'/q['id']/mode;rows=oracle.raw(trial/'capture/events.jsonl');plan=load(home/'plans'/q['id']/'plan.json')
             problems=[r for r in rows if r['kind']=='problem'];footers=[r for r in rows if r['kind']=='metrics']
             complete=[r['seq']for r in rows]==list(range(1,len(rows)+1))and len(footers)==1
@@ -70,8 +70,8 @@ def run(home,out):
                 'semantic_error_type':category,'semantic_error':error,'own_DB_clock_checks':times,'own_DB_clock_all_equal':all(t['equal']for t in times)if times else None,
                 'original_capture_sha256':sha(trial/'capture/events.jsonl')})
     save(out/'instances.json',results);save(out/'receipts.json',receipts)
-    save(out/'summary.json',{'states':{m:dict(collections.Counter(r['state']for r in results if r['mode']==m))for m in('full','selective')},
-        'facts':{m:{k:sum(bool(r[k])for r in results if r['mode']==m)for k in('target_bound','capture_integrity_valid','declared_source_paired','raw_identity_rule_matches','oracle_adequate')}for m in('full','selective')},
+    save(out/'summary.json',{'states':{m:dict(collections.Counter(r['state']for r in results if r['mode']==m))for m in modes},
+        'facts':{m:{k:sum(bool(r[k])for r in results if r['mode']==m)for k in('target_bound','capture_integrity_valid','declared_source_paired','raw_identity_rule_matches','oracle_adequate')}for m in modes},
         'scope':'Exposed five-query return tasks; independent identity-copy source rule. Physical facts do not certify answers on damaged captures. C2 mapper calibration remains separate.'})
     with(out/'instances.csv').open('w')as f:
         fields=list(dict.fromkeys(k for r in results for k in r));w=csv.DictWriter(f,fields,lineterminator='\n');w.writeheader();w.writerows(results)

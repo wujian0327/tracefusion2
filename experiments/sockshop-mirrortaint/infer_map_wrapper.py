@@ -10,7 +10,7 @@ def validate(plan,rows):
     for event in rows:
         if event['kind']=='map-wrapper-class':classes[(event.get('class'),event.get('loader'))].append(event)
     for row in rows:
-        if row['kind']!='binding-return':continue
+        if row['kind']!='binding-return'and not(row['kind']=='execution-constructed'and 'map_constructor_effect'in row):continue
         proofs=row.get('map_wrappers',[])
         if not policy:
             require(not proofs,'Undeclared Map wrapper observation');continue
@@ -29,5 +29,5 @@ def validate(plan,rows):
             require(fact.get('methods')==policy['contract']['read_methods'],'Wrapper read obligations differ')
             require(type(fact.get('size'))is int and 0<=fact['size']<=10000 and fact.get('entries')==fact['size']and type(fact.get('mod_count'))is int,'Wrapper snapshot shape/completion differs')
         desc=policy['declared_return_descriptor'];declared=desc[1:-1]
-        if declared in policy['candidates']and row['result'].get('object')is not None:
+        if row['kind']=='binding-return'and declared in policy['candidates']and row['result'].get('object')is not None:
             require(row['result']['object']in owners,'Root wrapper witness missing/wrong object')

@@ -18,5 +18,35 @@
     "Actual application Frame, target implementation/hash, normal or exceptional completion and return checked",
     "Nonempty advice chains, other target sources, return substitution and missing/ambiguous proof remain opaque/invalid"
   ],
-  "not_a_general_proxy_readonly_model": true
+  "not_a_general_proxy_readonly_model": true,
+  "additional_profiles": [
+    {
+      "version": 1,
+      "class_sha256": {
+        "org/springframework/aop/framework/CglibAopProxy$DynamicAdvisedInterceptor": "57b7ae0a7090c91535d31dade8843174ccabc2d8eb7147ad4f85f218c4bd7a38",
+        "org/springframework/aop/framework/CglibAopProxy": "0fe04cd48dbb92f61d67c4d76eda2f0051756ff5e772311c94f4953ba0ebc780",
+        "org/springframework/aop/framework/AopProxyUtils": "d50c8ea9b55955d1fdea095b7ea07c0b3dff6acf45c65ae17528599947abaea8",
+        "org/springframework/aop/target/SingletonTargetSource": "29b5b1014af2fc40e8f245556339c97842ed404626e32cd7901b683bdbcc9b44",
+        "org/springframework/aop/framework/CglibAopProxy$CglibMethodInvocation": "8fcf556dd15d9d61fb73814dd092aa543f73b42aace19f64bf3c03c943993ef5",
+        "org/springframework/aop/framework/ReflectiveMethodInvocation": "111edefed4deed796640c89133a093781aec5c67eb1f7b8cfeb3ff54530a53a5",
+        "org/springframework/aop/framework/AdvisedSupport": "b0178b86d59e95829949622a3f433f449ad58f11abb844f989cb4ce75efaf8f8",
+        "org/springframework/aop/support/AopUtils": "edc21a0ad144de2423b730974ad4f43d6ffe37950209399f2bc661efeea224f8",
+        "org/springframework/aop/interceptor/ExposeInvocationInterceptor": "7df57e6b0850325a88d0769405821409206f605f5e6d8194853d8c226cfaf171"
+      },
+      "kind": "cglib-zero-interceptor-static-target",
+      "conditions": [
+        "Actual empty interceptor chain of exact DynamicAdvisedInterceptor, non-varargs; direct or empty-chain invocation path, no advice",
+        "Exact SingletonTargetSource; actual target from original getTarget",
+        "Same receiver, method descriptor and actual adapted argument identities",
+        "Actual application Frame, target implementation/hash, normal or exceptional completion and return checked",
+        "Nonempty advice chains, other target sources, return substitution and missing/ambiguous proof remain opaque/invalid",
+        "Alternatively exactly the singleton ExposeInvocationInterceptor: only invocation ThreadLocal push/proceed/finally restore; no other advice, exact INSTANCE identity, actual target Frame/arguments/completion unchanged."
+      ],
+      "not_a_general_proxy_readonly_model": true,
+      "review": "Spring 5.3.39: exact intercept locals 7 target/8 source; empty-chain direct or proceed path, non-varargs adaptation, singleton identity and actual application completion required.",
+      "transparent_interceptors": [
+        "org/springframework/aop/interceptor/ExposeInvocationInterceptor"
+      ]
+    }
+  ]
 }

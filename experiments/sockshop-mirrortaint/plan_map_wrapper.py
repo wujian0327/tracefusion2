@@ -18,4 +18,12 @@ def attach(plan,model):
     desc=model['methods'][plan['entry']]['desc'].split(')')[1]
     if desc[1:-1]in candidates:plan['map_wrapper_observation']={'version':2,'target_only':True,'candidates':candidates,'contract':contract,
         'declared_return_descriptor':desc}
-    return plan
+    if plan.get('map_wrapper_observation'):
+        # This observer walks the actual returned Map, including its keys.
+        # Unlike body-unwrapping adapters, its fields are already root-relative.
+        plan['response_binding']['root_prefix']=''
+        plan['map_wrapper_observation']['physical_paths']='root-relative'
+    from plan_map_constructor import attach as attach_constructors
+    attach_constructors(plan,model)
+    from plan_request_scope import attach as attach_scope
+    return attach_scope(plan,model)

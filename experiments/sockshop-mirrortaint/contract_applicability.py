@@ -10,7 +10,8 @@ def library_inventory(jar):
     for name in ('save-effect-contracts-20261021.json','mongo2-provided-id-contracts-20261028.json','scalar-projection-contracts-20261028.json','save-provided-id-contracts-20261023.json','async-task-contracts-20261021.json','request-entity-contracts-20261021.json','framework-wrapper-contracts-20261020.json'):
         names.update(json.loads((HERE/name).read_text()).get('class_sha256',{}))
     names.update(json.loads((HERE/'feign-input-effect-contracts-20261028.json').read_text())['class_sha256'])
-    names.update(json.loads((HERE/'direct-dispatch-contracts-20261029.json').read_text())['class_sha256'])
+    dispatch=json.loads((HERE/'direct-dispatch-contracts-20261029.json').read_text())
+    for profile in [dispatch,*dispatch.get('additional_profiles',[])]:names.update(profile['class_sha256'])
     names.update(json.loads((HERE/'communication-identity-contracts-20261029.json').read_text())['class_sha256'])
     names.update(json.loads((HERE/'source-locality-contracts-20261030.json').read_text())['class_sha256'])
     names.update(json.loads((HERE/'sql-result-locality-contracts-20261031.json').read_text())['class_sha256'])

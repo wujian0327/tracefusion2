@@ -535,13 +535,13 @@ def infer_application(plan,rows,worker_request=None):
                                     require(allowed and begin['parent']==fr.invocation and not begin['args'],'Constructor projection accessor Frame differs')
                                     _,child_error=execute(begin,[],args[allowed[0]['argument']])
                                     if child_error is not None:break
-                            elif effect.get('kind')=='opaque' and pos<len(events) and events[pos]['kind']=='enter':
+                            elif effect.get('kind')in('opaque','fresh-map-arguments-preserved') and pos<len(events) and events[pos]['kind']=='enter':
                                 finish=next((j for j in range(pos,len(events)) if events[j]['kind'] in ('execution-constructed','execution-constructor-throw') and events[j].get('constructor_id')==ctor_start['constructor_id']),None);opaque_extent(finish)
                             if pos<len(events) and events[pos]['kind']=='execution-constructor-throw':
                                 failure=take('execution-constructor-throw')
                                 if ctor_start:require(failure['constructor_id']==ctor_start['constructor_id'],'Constructor throw ID differs')
                                 if child_error:require(child_error.get('object')==failure['exception']['object'],'Constructor exception identity differs')
-                                elif effect.get('kind')=='opaque':poison(args,failure['seq']);opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':failure['seq'],'completion':'exceptional-constructor'})
+                                elif effect.get('kind')in('opaque','fresh-map-arguments-preserved'):poison(args,failure['seq']);opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':failure['seq'],'completion':'exceptional-constructor'})
                                 else:raise ValueError('Shortcut constructor unexpectedly threw; required effects not explained')
                                 if handle(failure['exception'],failure['exception_type']):continue
                                 take('abort');return None,failure['exception']
@@ -564,6 +564,21 @@ def infer_application(plan,rows,worker_request=None):
                             elif effect.get('kind')=='string-builder':builders[owner]=('',Value({'value':''}))
                             elif effect.get('kind')=='opaque':
                                 opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':event['seq'],'completion':'normal-constructor'})
+                            elif effect.get('kind')=='fresh-map-arguments-preserved':
+                                fact=event.get('map_constructor_effect');require(fact and fact['constructor']==key and fact['class_sha256']==effect['class_sha256'],'Map constructor effect proof absent/differs')
+                                library_values(event.get('library_values'));require(len(event.get('map_wrappers',[]))==1 and event['map_wrappers'][0]['owner']==owner,'Fresh Map wrapper object differs')
+                                proofs=fact['initialized_helpers'];required=set(effect['helpers'].values());valid=True
+                                for helper in required:
+                                    facts=[r for r in proofs if r['class']==helper]
+                                    if not facts:valid=False;continue
+                                    require(len(facts)==1 and facts[0]['class_sha256']==effect['class_sha256'][helper],'Helper initialization hash/identity differs')
+                                    original=[r for r in rows if r['kind']=='execution-initialized-class'and r['seq']==facts[0]['seq']];require(original==facts,'Helper initialization occurrence absent/ambiguous')
+                                    if ctor_start is None or facts[0]['seq']>=root['seq']:valid=False
+                                require(set(r['class']for r in proofs)<=required,'Foreign helper initialization')
+                                if not valid:poison([recv]+args,event['seq'])
+                                # Even an input-preserving wrapper publishes its
+                                # arguments into a new reachable container.
+                                heap_refs.setdefault(owner,set()).update(identity(a)for a in args if a.observed.get('object')and 'value'not in a.observed)
                             elif effect.get('kind')=='async-result':
                                 fact=event.get('async_result');require(fact and len(args)==1 and fact['class_sha256']==plan['async_protocol']['class_sha256']['org/springframework/scheduling/annotation/AsyncResult'] and fact['exception'].get('value','not-null') is None,'AsyncResult constructor witness missing/different')
                                 bind(args[0],fact['payload']);async_results[owner]=args[0]
@@ -635,7 +650,8 @@ def infer_application(plan,rows,worker_request=None):
                             if pos<len(events) and events[pos]['kind']=='execution-direct-dispatch':
                                 dispatch=take('execution-direct-dispatch')
                                 proof=cfg.get('direct_dispatch_contract')
-                                require(proof and dispatch['class_sha256']==proof['class_sha256'] and dispatch['empty_chain'] and dispatch['static_target'],'Direct dispatch contract absent/differs')
+                                require(proof and dispatch['class_sha256']==proof['class_sha256'] and dispatch['static_target'],'Direct dispatch contract absent/differs')
+                                require(dispatch['empty_chain'] and not dispatch.get('transparent_interceptors') or not dispatch['empty_chain'] and proof.get('transparent_interceptors') and dispatch.get('transparent_interceptors')==proof['transparent_interceptors'],'Unproved interceptor effects')
                                 require(dispatch['call_id']==call['call_id'] and dispatch['callee']==key and dispatch['proxy']==identity(recv),'Direct dispatch invocation differs')
                                 require(len(dispatch['args'])==len(call['args']),'Direct dispatch argument count differs')
                                 for desc,a,b in zip(descriptors(ins['desc']),dispatch['args'],call['args']):

@@ -24,7 +24,18 @@ def augment_calls(plan,model,sources):
     def candidates(ins):
         key=callee(ins)
         if ins['op'] in (183,184):return [key] if key in model['methods'] else []
-        return [k for k,m in model['methods'].items() if m['name']==ins['name'] and m['desc']==ins['desc'] and m['instructions'] and subtype(m['owner'],ins['owner'])]
+        result=[k for k,m in model['methods'].items() if m['name']==ins['name'] and m['desc']==ins['desc'] and m['instructions'] and subtype(m['owner'],ins['owner'])]
+        # invokevirtual may name a subclass while the implementation is declared
+        # in its superclass. Runtime dispatch still resolves the actual class.
+        owner=ins['owner'];seen=set()
+        while owner in model['classes']and owner not in seen:
+            seen.add(owner);candidate=owner+'.'+ins['name']+ins['desc']
+            if candidate in model['methods']:
+                body=model['methods'][candidate]
+                if body['instructions']and not body['access']&(8|2)and candidate not in result:result.append(candidate)
+                break
+            owner=model['classes'][owner].get('super')
+        return result
     def validate(key):
         m=model['methods'][key];require(m['instructions'] and not m['access']&(256|1024),'No concrete application bytecode')
         require(not model['classes'][m['owner']]['access']&512,'Interface default method dispatch unsupported')
