@@ -52,7 +52,7 @@ def run(home,out,modes=('full','selective')):
                         ret=returns[0];fields=[f for f in ret['fields']if f['path']==pointer]
                         wire=[f for e in rows if e['kind']=='http-json'and e.get('message')==actual['message']and e.get('direction')=='response'and e.get('phase')=='write'for f in e['fields']if f['path']==pointer]
                         if len(fields)==len(wire)==1:
-                            f=fields[0];r['target_bound']=all(f.get(k)==wire[0].get(k)for k in('owner','field','version'))and f['observed']['value']==value
+                            f=fields[0];r['target_coordinate']={k:f[k]for k in('owner','field','version')};r['target_bound']=all(f.get(k)==wire[0].get(k)for k in('owner','field','version'))and f['observed']['value']==value
                             sources=[s for s in index.source_family(ret['frame'])if s.get('callee')in q['source_calls']]
                             try:
                                 for source in sources:tf_pair(rows,source)
@@ -63,6 +63,7 @@ def run(home,out,modes=('full','selective')):
                                 r['raw_identity_rule_matches']=True;r['oracle_adequate']=valid;r['expected']=wants
                                 if graph is not None and valid:
                                     answer=graph.query(actual['message'],pointer,'role',boundary=[{'kind':'binding-source'},{'kind':'argument'}]);got={(s.get('callee'),s.get('root_frame'),s['seq'],s.get('path'),s['owner'],s['field'],s['version'])for s in answer['sources']}
+                                    r['predicted']=sorted(got,key=str)
                                     r.update(state=('known_correct'if got==set(wants)else'known_wrong')if answer['known']else'unknown',reason=None)
                     results.append(r)
             receipts.append({'query':q['id'],'mode':mode,'business_requests':len(cases),'business_preserved':sum(matched),'closed':complete,'raw_no_problem':valid,'integrity_and_reconstruction_validated':valid and graph is not None,

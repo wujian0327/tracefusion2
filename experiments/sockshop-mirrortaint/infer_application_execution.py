@@ -572,7 +572,7 @@ def infer_application(plan,rows,worker_request=None):
                                     facts=[r for r in proofs if r['class']==helper]
                                     if not facts:valid=False;continue
                                     require(len(facts)==1 and facts[0]['class_sha256']==effect['class_sha256'][helper],'Helper initialization hash/identity differs')
-                                    original=[r for r in rows if r['kind']=='execution-initialized-class'and r['seq']==facts[0]['seq']];require(original==facts,'Helper initialization occurrence absent/ambiguous')
+                                    original=initialized_by_object.get(facts[0].get('class_object'),[]);require(original==facts,'Helper initialization occurrence absent/ambiguous')
                                     if ctor_start is None or facts[0]['seq']>=root['seq']:valid=False
                                 require(set(r['class']for r in proofs)<=required,'Foreign helper initialization')
                                 if not valid:poison([recv]+args,event['seq'])
