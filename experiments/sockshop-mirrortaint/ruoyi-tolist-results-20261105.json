@@ -1,0 +1,1050 @@
+{
+  "algorithm": "5f0c64746e28705d7be5d5d39850ad49272d97d8",
+  "online_algorithm": "9536c316514696069988e9438ab8982f37f2d29b",
+  "whole_graph_pairs_equal": 292,
+  "agent_sha256": "b3aed9effffda968512a7ba4fc28aed40789af19a2340d4b668e5849575322ab",
+  "C1": {
+    "states": {
+      "full": {
+        "known_correct": 80,
+        "unknown": 9
+      },
+      "selective": {
+        "known_correct": 80,
+        "unknown": 9
+      }
+    },
+    "facts": {
+      "full": {
+        "target_bound": 89,
+        "capture_integrity_valid": 89,
+        "declared_source_paired": 84,
+        "raw_identity_rule_matches": 84,
+        "oracle_adequate": 84
+      },
+      "selective": {
+        "target_bound": 89,
+        "capture_integrity_valid": 89,
+        "declared_source_paired": 84,
+        "raw_identity_rule_matches": 84,
+        "oracle_adequate": 84
+      }
+    },
+    "scope": "Exposed five-query return tasks; independent identity-copy source rule. Physical facts do not certify answers on damaged captures. C2 mapper calibration remains separate."
+  },
+  "C2_separate": {
+    "states": {
+      "full": {
+        "known_correct": 5
+      },
+      "selective": {
+        "known_correct": 5
+      }
+    },
+    "facts": {
+      "full": {
+        "target_bound": 5,
+        "capture_integrity_valid": 5,
+        "declared_source_paired": 5,
+        "raw_identity_rule_matches": 5,
+        "oracle_adequate": 5
+      },
+      "selective": {
+        "target_bound": 5,
+        "capture_integrity_valid": 5,
+        "declared_source_paired": 5,
+        "raw_identity_rule_matches": 5,
+        "oracle_adequate": 5
+      }
+    },
+    "scope": "Exposed five-query return tasks; independent identity-copy source rule. Physical facts do not certify answers on damaged captures. C2 mapper calibration remains separate."
+  },
+  "full_selective_states_and_logical_sources_equal": true,
+  "all_C1_correct_answers_positive": true,
+  "cold_department_unknown_per_mode": 4,
+  "C1_config_declaration_unknown_per_mode": 5,
+  "dictionary_actual_copy_calls_per_mode": 5,
+  "capability_acceptance": {
+    "complete": true,
+    "passed": true,
+    "jobs": {
+      "62-orders": {
+        "name": "62-orders",
+        "state": "completed",
+        "utc": "2026-11-05T06:51:47.667759+00:00",
+        "returncode": 0
+      },
+      "62-reads": {
+        "name": "62-reads",
+        "state": "completed",
+        "utc": "2026-11-05T06:44:52.263393+00:00",
+        "returncode": 0
+      },
+      "62-route": {
+        "name": "62-route",
+        "state": "completed",
+        "utc": "2026-11-05T06:49:18.460254+00:00",
+        "returncode": 0
+      },
+      "62-travel": {
+        "name": "62-travel",
+        "state": "completed",
+        "utc": "2026-11-05T06:57:21.886812+00:00",
+        "returncode": 0
+      },
+      "62-cart": {
+        "name": "62-cart",
+        "state": "completed",
+        "utc": "2026-11-05T06:57:28.845264+00:00",
+        "returncode": 0
+      },
+      "29-train": {
+        "name": "29-train",
+        "state": "completed",
+        "utc": "2026-11-05T07:13:43.177145+00:00",
+        "returncode": 0
+      },
+      "62-pair": {
+        "name": "62-pair",
+        "state": "completed",
+        "utc": "2026-11-05T06:57:59.853671+00:00",
+        "returncode": 0
+      },
+      "29-orders": {
+        "name": "29-orders",
+        "state": "completed",
+        "utc": "2026-11-05T07:04:05.000150+00:00",
+        "returncode": 0
+      },
+      "Mall103": {
+        "name": "Mall103",
+        "state": "completed",
+        "utc": "2026-11-05T07:38:33.175810+00:00",
+        "returncode": 0
+      },
+      "15-route": {
+        "name": "15-route",
+        "state": "completed",
+        "utc": "2026-11-05T07:16:12.671750+00:00",
+        "returncode": 0
+      },
+      "15-price": {
+        "name": "15-price",
+        "state": "completed",
+        "utc": "2026-11-05T07:21:15.452748+00:00",
+        "returncode": 0
+      },
+      "Account40": {
+        "name": "Account40",
+        "state": "completed",
+        "utc": "2026-11-05T07:31:24.604095+00:00",
+        "returncode": 0
+      },
+      "ZLT15": {
+        "name": "ZLT15",
+        "state": "completed",
+        "utc": "2026-11-05T07:43:46.638715+00:00",
+        "returncode": 0
+      },
+      "audit-Mall": {
+        "name": "audit-Mall",
+        "state": "completed",
+        "utc": "2026-11-05T07:43:54.905304+00:00",
+        "returncode": 0
+      },
+      "audit-ZLT": {
+        "name": "audit-ZLT",
+        "state": "completed",
+        "utc": "2026-11-05T07:43:55.304466+00:00",
+        "returncode": 0
+      },
+      "audit-historical": {
+        "name": "audit-historical",
+        "state": "completed",
+        "utc": "2026-11-05T07:47:12.652155+00:00",
+        "returncode": 0
+      }
+    },
+    "algorithm": "9536c316514696069988e9438ab8982f37f2d29b",
+    "agent_sha256": "b3aed9effffda968512a7ba4fc28aed40789af19a2340d4b668e5849575322ab",
+    "new_app_first_queries_executed": false,
+    "online_performance_experiment": false
+  },
+  "raw_capture_hashes": {
+    "/home/wujian/tracefusion2/artifacts/ruoyi-tolist-20261105/final-C1/runs/ruoyi-3/full/capture/events.jsonl": "c4923a0a7a369701398141783a0ed97cd0e82298f565ae6b09ac0480c72ed25d",
+    "/home/wujian/tracefusion2/artifacts/ruoyi-tolist-20261105/final-C1/runs/ruoyi-3/selective/capture/events.jsonl": "ebcaed03552ffb6176c21854e028e98b5753410b794b5e0458b8053c5aead8d2"
+  },
+  "no_performance_experiments": true,
+  "no_push": true,
+  "final_offline_historical": {
+    "62": {
+      "full": {
+        "expected_targets": 431,
+        "actual_targets": 431,
+        "states": {
+          "known_correct": 428,
+          "unknown": 3
+        },
+        "known_answer_exact_rate": 1.0,
+        "answerability": 0.9930394431554525,
+        "baseline_correct_preserved": 368,
+        "baseline_correct_required": 368,
+        "baseline_nonempty_correct_preserved": 337,
+        "baseline_nonempty_correct_required": 337,
+        "old_tf_correct_preserved": 213,
+        "old_tf_correct_required": 213,
+        "union_preserved": 382,
+        "union_required": 382,
+        "union_losses": [],
+        "missing_targets": [],
+        "tp": 397,
+        "fp": 0,
+        "fn_including_unknown": 3,
+        "all_passed": true
+      },
+      "selective": {
+        "expected_targets": 431,
+        "actual_targets": 431,
+        "states": {
+          "known_correct": 428,
+          "unknown": 3
+        },
+        "known_answer_exact_rate": 1.0,
+        "answerability": 0.9930394431554525,
+        "baseline_correct_preserved": 368,
+        "baseline_correct_required": 368,
+        "baseline_nonempty_correct_preserved": 337,
+        "baseline_nonempty_correct_required": 337,
+        "old_tf_correct_preserved": 213,
+        "old_tf_correct_required": 213,
+        "union_preserved": 382,
+        "union_required": 382,
+        "union_losses": [],
+        "missing_targets": [],
+        "tp": 397,
+        "fp": 0,
+        "fn_including_unknown": 3,
+        "all_passed": true
+      }
+    },
+    "29": {
+      "full": {
+        "query_families": 29,
+        "targets": 244,
+        "states": {
+          "known_correct": 232,
+          "unknown": 12
+        },
+        "oracle_unavailable": 12,
+        "N/A_requests": 41,
+        "requests": 190
+      },
+      "selective": {
+        "query_families": 29,
+        "targets": 244,
+        "states": {
+          "known_correct": 232,
+          "unknown": 12
+        },
+        "oracle_unavailable": 12,
+        "N/A_requests": 41,
+        "requests": 190
+      }
+    },
+    "15": {
+      "full": {
+        "targets": 96,
+        "states": {
+          "known_correct": 96
+        }
+      },
+      "selective": {
+        "targets": 96,
+        "states": {
+          "known_correct": 96
+        }
+      }
+    },
+    "Account40": {
+      "full": {
+        "targets": 40,
+        "known_correct": 40,
+        "known_wrong": 0,
+        "unknown": 0,
+        "known_positive": 4,
+        "known_empty": 36,
+        "historic_MT_correct_present": 36,
+        "historic_MT_correct_preserved": 36,
+        "TP": 4,
+        "FP": 0,
+        "FN": 0
+      },
+      "selective": {
+        "targets": 40,
+        "known_correct": 40,
+        "known_wrong": 0,
+        "unknown": 0,
+        "known_positive": 4,
+        "known_empty": 36,
+        "historic_MT_correct_present": 36,
+        "historic_MT_correct_preserved": 36,
+        "TP": 4,
+        "FP": 0,
+        "FN": 0
+      }
+    },
+    "historical62_changes": [],
+    "write15_changes": [],
+    "Mall": {
+      "full": {
+        "targets": 103,
+        "states": {
+          "known_correct": 98,
+          "unknown": 5
+        },
+        "positive_correct": 62,
+        "known_empty_correct": 36,
+        "MT_correct_preserved": 88,
+        "MT_positive_preserved": 62,
+        "previous_correct_preserved": 43
+      },
+      "selective": {
+        "targets": 103,
+        "states": {
+          "known_correct": 98,
+          "unknown": 5
+        },
+        "positive_correct": 62,
+        "known_empty_correct": 36,
+        "MT_correct_preserved": 88,
+        "MT_positive_preserved": 62,
+        "previous_correct_preserved": 43
+      }
+    },
+    "ZLT": {
+      "full": {
+        "known_correct": 15
+      },
+      "selective": {
+        "known_correct": 15
+      },
+      "mirrortaint": {
+        "known_correct": 15
+      }
+    },
+    "capture_reuse_receipt": {
+      "first_candidate": "9536c316514696069988e9438ab8982f37f2d29b",
+      "offline_candidate": "5f0c64746e28705d7be5d5d39850ad49272d97d8",
+      "original_capture_root": "/home/wujian/tracefusion2/artifacts/ruoyi-tolist-20261105/final-candidate",
+      "Agent_unchanged": true,
+      "agent_sha256": "b3aed9effffda968512a7ba4fc28aed40789af19a2340d4b668e5849575322ab",
+      "plans_unchanged": true,
+      "changed_query_ids": {},
+      "changed_offline_files": [
+        "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_application_execution.py",
+        "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_json_list_copy.py"
+      ],
+      "no_new_deployments_in_this_view": true,
+      "same_batch_complete_graph_equivalence_required": true
+    }
+  },
+  "scalar_counterexample": {
+    "parent": {
+      "full": {
+        "business_same": true,
+        "checks": [
+          {
+            "known": true,
+            "expected": [
+              [
+                "field",
+                21,
+                0
+              ]
+            ],
+            "predicted": [],
+            "matched": false
+          },
+          {
+            "known": true,
+            "expected": [
+              [
+                "field",
+                46,
+                0
+              ]
+            ],
+            "predicted": [],
+            "matched": false
+          },
+          {
+            "known": true,
+            "expected": [
+              [
+                "field",
+                70,
+                0
+              ]
+            ],
+            "predicted": [],
+            "matched": false
+          }
+        ]
+      },
+      "selective": {
+        "business_same": true,
+        "checks": [
+          {
+            "known": true,
+            "expected": [
+              [
+                "field",
+                21,
+                0
+              ]
+            ],
+            "predicted": [],
+            "matched": false
+          },
+          {
+            "known": true,
+            "expected": [
+              [
+                "field",
+                46,
+                0
+              ]
+            ],
+            "predicted": [],
+            "matched": false
+          },
+          {
+            "known": true,
+            "expected": [
+              [
+                "field",
+                70,
+                0
+              ]
+            ],
+            "predicted": [],
+            "matched": false
+          }
+        ]
+      }
+    },
+    "final_fresh_JVM": {
+      "full": {
+        "business_same": true,
+        "checks": [
+          {
+            "known": true,
+            "expected": [
+              [
+                "field",
+                21,
+                0
+              ]
+            ],
+            "predicted": [
+              [
+                "field",
+                21,
+                0
+              ]
+            ],
+            "matched": true
+          },
+          {
+            "known": true,
+            "expected": [
+              [
+                "field",
+                46,
+                0
+              ]
+            ],
+            "predicted": [
+              [
+                "field",
+                46,
+                0
+              ]
+            ],
+            "matched": true
+          },
+          {
+            "known": true,
+            "expected": [
+              [
+                "field",
+                70,
+                0
+              ]
+            ],
+            "predicted": [
+              [
+                "field",
+                70,
+                0
+              ]
+            ],
+            "matched": true
+          }
+        ]
+      },
+      "selective": {
+        "business_same": true,
+        "checks": [
+          {
+            "known": true,
+            "expected": [
+              [
+                "field",
+                21,
+                0
+              ]
+            ],
+            "predicted": [
+              [
+                "field",
+                21,
+                0
+              ]
+            ],
+            "matched": true
+          },
+          {
+            "known": true,
+            "expected": [
+              [
+                "field",
+                46,
+                0
+              ]
+            ],
+            "predicted": [
+              [
+                "field",
+                46,
+                0
+              ]
+            ],
+            "matched": true
+          },
+          {
+            "known": true,
+            "expected": [
+              [
+                "field",
+                70,
+                0
+              ]
+            ],
+            "predicted": [
+              [
+                "field",
+                70,
+                0
+              ]
+            ],
+            "matched": true
+          }
+        ]
+      }
+    },
+    "isolated_same_capture_fix": [
+      {
+        "mode": "full",
+        "root": "f1",
+        "expected": [
+          [
+            "field",
+            21,
+            0
+          ]
+        ],
+        "predicted": [
+          [
+            "field",
+            21,
+            0
+          ]
+        ],
+        "matched": true
+      },
+      {
+        "mode": "full",
+        "root": "f2",
+        "expected": [
+          [
+            "field",
+            46,
+            0
+          ]
+        ],
+        "predicted": [
+          [
+            "field",
+            46,
+            0
+          ]
+        ],
+        "matched": true
+      },
+      {
+        "mode": "full",
+        "root": "f3",
+        "expected": [
+          [
+            "field",
+            70,
+            0
+          ]
+        ],
+        "predicted": [
+          [
+            "field",
+            70,
+            0
+          ]
+        ],
+        "matched": true
+      },
+      {
+        "mode": "selective",
+        "root": "f1",
+        "expected": [
+          [
+            "field",
+            21,
+            0
+          ]
+        ],
+        "predicted": [
+          [
+            "field",
+            21,
+            0
+          ]
+        ],
+        "matched": true
+      },
+      {
+        "mode": "selective",
+        "root": "f2",
+        "expected": [
+          [
+            "field",
+            46,
+            0
+          ]
+        ],
+        "predicted": [
+          [
+            "field",
+            46,
+            0
+          ]
+        ],
+        "matched": true
+      },
+      {
+        "mode": "selective",
+        "root": "f3",
+        "expected": [
+          [
+            "field",
+            70,
+            0
+          ]
+        ],
+        "predicted": [
+          [
+            "field",
+            70,
+            0
+          ]
+        ],
+        "matched": true
+      }
+    ],
+    "protections": {
+      "checks": [
+        {
+          "mode": "full",
+          "fault": "missing-slot",
+          "state": "unknown",
+          "reason": null
+        },
+        {
+          "mode": "full",
+          "fault": "ambiguous-slot",
+          "state": "unknown",
+          "reason": null
+        },
+        {
+          "mode": "full",
+          "fault": "wrong-slot-version",
+          "state": "rejected",
+          "reason": "JSON source version differs"
+        },
+        {
+          "mode": "full",
+          "fault": "wrong-source-call",
+          "state": "rejected",
+          "reason": "JSON source snapshot/call scope differs"
+        },
+        {
+          "mode": "full",
+          "fault": "missing-call-completion",
+          "state": "rejected",
+          "reason": "Application frame has unfinished calls"
+        },
+        {
+          "mode": "selective",
+          "fault": "missing-slot",
+          "state": "unknown",
+          "reason": null
+        },
+        {
+          "mode": "selective",
+          "fault": "ambiguous-slot",
+          "state": "unknown",
+          "reason": null
+        },
+        {
+          "mode": "selective",
+          "fault": "wrong-slot-version",
+          "state": "rejected",
+          "reason": "JSON source version differs"
+        },
+        {
+          "mode": "selective",
+          "fault": "wrong-source-call",
+          "state": "rejected",
+          "reason": "JSON source snapshot/call scope differs"
+        },
+        {
+          "mode": "selective",
+          "fault": "missing-call-completion",
+          "state": "rejected",
+          "reason": "Application frame has unfinished calls"
+        }
+      ],
+      "original_hashes_unchanged": {
+        "/home/wujian/tracefusion2/artifacts/ruoyi-tolist-20261105/scalar-reproduction-02/full/events.jsonl": "c9ae56d7044208bb5a89afaba82cc1a678a652dbb47568652036cf77d60b6fb3",
+        "/home/wujian/tracefusion2/artifacts/ruoyi-tolist-20261105/scalar-reproduction-02/selective/events.jsonl": "7f5ee55d1d7971b4b39218a870560c429feaa237dc8ff34ef319513dca0598c7"
+      }
+    }
+  },
+  "protections": {
+    "dictionary": {
+      "checks": [
+        {
+          "mode": "full",
+          "fault": "missing-cache",
+          "state": "rejected",
+          "reason": "JSON list actual cache lookup missing/ambiguous"
+        },
+        {
+          "mode": "full",
+          "fault": "duplicate-cache",
+          "state": "rejected",
+          "reason": "Event sequence gap"
+        },
+        {
+          "mode": "full",
+          "fault": "wrong-cache-call",
+          "state": "rejected",
+          "reason": "JSON list actual cache lookup missing/ambiguous"
+        },
+        {
+          "mode": "full",
+          "fault": "wrong-target-class",
+          "state": "rejected",
+          "reason": "JSON list reader lookup/call differs"
+        },
+        {
+          "mode": "full",
+          "fault": "wrong-member-identity",
+          "state": "rejected",
+          "reason": "JSON list members/identity stage differs"
+        },
+        {
+          "mode": "full",
+          "fault": "certificate-ineligible",
+          "state": "unknown",
+          "reason": null
+        },
+        {
+          "mode": "full",
+          "fault": "missing-certificate",
+          "state": "unknown",
+          "reason": null
+        },
+        {
+          "mode": "full",
+          "fault": "missing-source",
+          "state": "unknown",
+          "reason": null
+        },
+        {
+          "mode": "full",
+          "fault": "ambiguous-source",
+          "state": "unknown",
+          "reason": null
+        },
+        {
+          "mode": "full",
+          "fault": "wrong-source-call",
+          "state": "rejected",
+          "reason": "JSON source snapshot/call scope differs"
+        },
+        {
+          "mode": "full",
+          "fault": "wrong-source-version",
+          "state": "unknown",
+          "reason": null
+        },
+        {
+          "mode": "full",
+          "fault": "sticky-invalid",
+          "state": "rejected",
+          "reason": "Collector problem"
+        },
+        {
+          "mode": "selective",
+          "fault": "missing-cache",
+          "state": "rejected",
+          "reason": "JSON list actual cache lookup missing/ambiguous"
+        },
+        {
+          "mode": "selective",
+          "fault": "duplicate-cache",
+          "state": "rejected",
+          "reason": "Event sequence gap"
+        },
+        {
+          "mode": "selective",
+          "fault": "wrong-cache-call",
+          "state": "rejected",
+          "reason": "JSON list actual cache lookup missing/ambiguous"
+        },
+        {
+          "mode": "selective",
+          "fault": "wrong-target-class",
+          "state": "rejected",
+          "reason": "JSON list reader lookup/call differs"
+        },
+        {
+          "mode": "selective",
+          "fault": "wrong-member-identity",
+          "state": "rejected",
+          "reason": "JSON list members/identity stage differs"
+        },
+        {
+          "mode": "selective",
+          "fault": "certificate-ineligible",
+          "state": "unknown",
+          "reason": null
+        },
+        {
+          "mode": "selective",
+          "fault": "missing-certificate",
+          "state": "unknown",
+          "reason": null
+        },
+        {
+          "mode": "selective",
+          "fault": "missing-source",
+          "state": "unknown",
+          "reason": null
+        },
+        {
+          "mode": "selective",
+          "fault": "ambiguous-source",
+          "state": "unknown",
+          "reason": null
+        },
+        {
+          "mode": "selective",
+          "fault": "wrong-source-call",
+          "state": "rejected",
+          "reason": "JSON source snapshot/call scope differs"
+        },
+        {
+          "mode": "selective",
+          "fault": "wrong-source-version",
+          "state": "unknown",
+          "reason": null
+        },
+        {
+          "mode": "selective",
+          "fault": "sticky-invalid",
+          "state": "rejected",
+          "reason": "Collector problem"
+        }
+      ],
+      "original_hashes_unchanged": {
+        "/home/wujian/tracefusion2/artifacts/ruoyi-tolist-20261105/final-C1/runs/ruoyi-3/full/capture/events.jsonl": "c4923a0a7a369701398141783a0ed97cd0e82298f565ae6b09ac0480c72ed25d",
+        "/home/wujian/tracefusion2/artifacts/ruoyi-tolist-20261105/final-C1/runs/ruoyi-3/selective/capture/events.jsonl": "ebcaed03552ffb6176c21854e028e98b5753410b794b5e0458b8053c5aead8d2"
+      }
+    },
+    "existing_source_coordinates": {
+      "all_passed": true,
+      "checks": [
+        {
+          "mode": "full",
+          "fault": "wrong-source-callsite",
+          "path": "/data/refreshToken",
+          "positive_control_known": true,
+          "state": "rejected",
+          "error": "Declared source actual callsite differs",
+          "source_capture_sha256": "0527255fc571ce0780e952caf6aea54a581e233d9fe65641ac05fa280e78be9e"
+        },
+        {
+          "mode": "full",
+          "fault": "wrong-source-call-id",
+          "path": "/data/refreshToken",
+          "positive_control_known": true,
+          "state": "rejected",
+          "error": "Ownership omits actual source-field owners",
+          "source_capture_sha256": "0527255fc571ce0780e952caf6aea54a581e233d9fe65641ac05fa280e78be9e"
+        },
+        {
+          "mode": "full",
+          "fault": "missing-source",
+          "path": "/data/refreshToken",
+          "positive_control_known": true,
+          "state": "rejected",
+          "error": "Ownership omits actual source-field owners",
+          "source_capture_sha256": "0527255fc571ce0780e952caf6aea54a581e233d9fe65641ac05fa280e78be9e"
+        },
+        {
+          "mode": "full",
+          "fault": "ambiguous-source",
+          "path": "/data/refreshToken",
+          "positive_control_known": true,
+          "state": "rejected",
+          "error": "Ownership omits actual source-field owners",
+          "source_capture_sha256": "0527255fc571ce0780e952caf6aea54a581e233d9fe65641ac05fa280e78be9e"
+        },
+        {
+          "mode": "full",
+          "fault": "wrong-source-caller",
+          "path": "/data/refreshToken",
+          "positive_control_known": true,
+          "state": "rejected",
+          "error": "Declared source occurrence coordinates differ",
+          "source_capture_sha256": "0527255fc571ce0780e952caf6aea54a581e233d9fe65641ac05fa280e78be9e"
+        },
+        {
+          "mode": "full",
+          "fault": "missing-source-completion",
+          "path": "/data/refreshToken",
+          "positive_control_known": true,
+          "state": "rejected",
+          "error": "Ownership source call interval differs",
+          "source_capture_sha256": "0527255fc571ce0780e952caf6aea54a581e233d9fe65641ac05fa280e78be9e"
+        },
+        {
+          "mode": "selective",
+          "fault": "wrong-source-callsite",
+          "path": "/data/refreshToken",
+          "positive_control_known": true,
+          "state": "rejected",
+          "error": "Declared source actual callsite differs",
+          "source_capture_sha256": "ff200e504d5fc612f0236ded60c51a00b576daffa79506d8f3d4416a0681c98c"
+        },
+        {
+          "mode": "selective",
+          "fault": "wrong-source-call-id",
+          "path": "/data/refreshToken",
+          "positive_control_known": true,
+          "state": "rejected",
+          "error": "Ownership omits actual source-field owners",
+          "source_capture_sha256": "ff200e504d5fc612f0236ded60c51a00b576daffa79506d8f3d4416a0681c98c"
+        },
+        {
+          "mode": "selective",
+          "fault": "missing-source",
+          "path": "/data/refreshToken",
+          "positive_control_known": true,
+          "state": "rejected",
+          "error": "Ownership omits actual source-field owners",
+          "source_capture_sha256": "ff200e504d5fc612f0236ded60c51a00b576daffa79506d8f3d4416a0681c98c"
+        },
+        {
+          "mode": "selective",
+          "fault": "ambiguous-source",
+          "path": "/data/refreshToken",
+          "positive_control_known": true,
+          "state": "rejected",
+          "error": "Ownership omits actual source-field owners",
+          "source_capture_sha256": "ff200e504d5fc612f0236ded60c51a00b576daffa79506d8f3d4416a0681c98c"
+        },
+        {
+          "mode": "selective",
+          "fault": "wrong-source-caller",
+          "path": "/data/refreshToken",
+          "positive_control_known": true,
+          "state": "rejected",
+          "error": "Declared source occurrence coordinates differ",
+          "source_capture_sha256": "ff200e504d5fc612f0236ded60c51a00b576daffa79506d8f3d4416a0681c98c"
+        },
+        {
+          "mode": "selective",
+          "fault": "missing-source-completion",
+          "path": "/data/refreshToken",
+          "positive_control_known": true,
+          "state": "rejected",
+          "error": "Ownership source call interval differs",
+          "source_capture_sha256": "ff200e504d5fc612f0236ded60c51a00b576daffa79506d8f3d4416a0681c98c"
+        }
+      ],
+      "derived_only": true
+    }
+  },
+  "agent_class_equivalence": {
+    "class_count": 903,
+    "Agent_sha256": "b3aed9effffda968512a7ba4fc28aed40789af19a2340d4b668e5849575322ab",
+    "checks": [
+      {
+        "file": "artifacts/ruoyi-tolist-20261105/build-01/distributed-observer.jar",
+        "same_class_hashes": true
+      },
+      {
+        "file": "artifacts/ruoyi-tolist-20261105/controls-final-02/build/distributed-observer.jar",
+        "same_class_hashes": true
+      },
+      {
+        "file": "artifacts/ruoyi-tolist-20261105/controls-cold-final-02/build/distributed-observer.jar",
+        "same_class_hashes": true
+      }
+    ]
+  },
+  "reliability": {
+    "checks": [
+      {
+        "mode": "full",
+        "business_rows_equal": 27,
+        "parent_scope_checks": 5,
+        "no_residual_state_after_each_root": true,
+        "original_exception_identity_and_finally_preserved": true,
+        "damaged_capture_has_problem_sidecar_and_footer": true
+      },
+      {
+        "mode": "selective",
+        "business_rows_equal": 27,
+        "parent_scope_checks": 5,
+        "no_residual_state_after_each_root": true,
+        "original_exception_identity_and_finally_preserved": true,
+        "damaged_capture_has_problem_sidecar_and_footer": true
+      }
+    ],
+    "fixture": "Independent control only; real Recipient separate",
+    "agent_sha256": "b3aed9effffda968512a7ba4fc28aed40789af19a2340d4b668e5849575322ab"
+  },
+  "artifact_root": "artifacts/ruoyi-tolist-20261105"
+}

@@ -1,0 +1,17 @@
+{
+  "base": "31df57bfefd01f35deb6fea50f9ccfe1cef8dda5",
+  "old_files": {
+    "artifacts/ruoyi-before-advice-20261105/revision-02/algorithm-freeze.json": "e07f4bf85f2343d31d533028a6c5cfb9e67c80014afcaa724f246993934ff75f",
+    "artifacts/ruoyi-before-advice-20261105/revision-02/offline-final-freeze.json": "cf3e88a93dae5c0cd2e83563c96e52a8aa481b13f1d19946618944e2105ba9b2",
+    "artifacts/ruoyi-before-advice-20261105/revision-02/audit-final-03/instances.json": "3e3e408a3378ab10c0755fb96f975abd63f78569d2ca662f1b13ce7a9c60d2b7",
+    "artifacts/ruoyi-before-advice-20261105/revision-02/final-C1/runs/ruoyi-3/full/capture/events.jsonl": "bd3a0606affcddaedf04655e94f7f3f3267e5492f6e2489908ba3480cf9d59d7",
+    "artifacts/ruoyi-before-advice-20261105/revision-02/final-C1/runs/ruoyi-3/selective/capture/events.jsonl": "62d27231bf66e668f11d3a49f99611e1fd3a5b7f66cf41a0e4966d6c42260f57"
+  },
+  "scope": "Dictionary toList finite identity/effects model; keep original source/inputs/12 targets. Cold four department targets remain unknown. No performance or new apps. After positive pilot freeze candidate and run historical capability acceptance.",
+  "pilot": "Original first legal nonempty dictionary input, both modes; expand only after independent actual Redis source matches.",
+  "controls": [
+    "same-type identities, repeated values/different owners, null, empty, conversion-required JSONObject remains opaque",
+    "subclass/custom readers/feature flags remain unsupported",
+    "missing, duplicate, wrong source/call, modified array and sticky invalid protections"
+  ]
+}

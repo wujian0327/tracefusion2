@@ -1,0 +1,44 @@
+{
+  "algorithm": "5f0c64746e28705d7be5d5d39850ad49272d97d8",
+  "online_algorithm": "9536c316514696069988e9438ab8982f37f2d29b",
+  "batch": {
+    "path": "artifacts/backups/ruoyi-tolist-20261105/batch-artifacts.tar.gz",
+    "bytes": 674745866,
+    "sha256": "e23e2558fe78c19aeb6bee5497658add5a659e777deaee0516fedf5b0c7bbf71",
+    "gzip_CRC_passed": true
+  },
+  "files_manifest": "artifacts/backups/ruoyi-tolist-20261105/files-manifest.json",
+  "files_manifest_sha256": "3d91022eca90fcb46edf528b7c1ed886340da42130e756724338eb88e540dd2b",
+  "regular_files": 17033,
+  "reused_verified_images_and_JDK": [
+    {
+      "path": "artifacts/backups/ruoyi-zlt-refinement-20261103/actual-images.tar.gz",
+      "bytes": 2049513399,
+      "sha256": "cbd9959df39c9d9f40447c693e1b80498c37d4271f47c0fa4b4d4fc3d0134b8b",
+      "gzip_CRC_passed": true
+    },
+    {
+      "path": "artifacts/backups/ruoyi-request-scope-20261104/jdk8-runtime.tar.gz",
+      "bytes": 57889824,
+      "sha256": "e3641e13fdfc55d455441f85793b071228ac235758a8e5dc7990d158b6552104",
+      "gzip_CRC_passed": true
+    }
+  ],
+  "actual_image_ids_observed": [
+    "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+    "sha256:113ae8a6646ae04145f869ff71cf2f885762ce79832ea1f923e34ee29bf7efda",
+    "sha256:2481edb3016c3749e400daea78a7d2a9d288286105bac729d63adfef95e8534d",
+    "sha256:5107333e08a87b836d48ff7528b1e84b9c86781cc9f1748bbc1b8c42a870d933",
+    "sha256:7478e572c34ea56b2e8f1162def78243612ccbe4450223c702115fb46be07f01",
+    "sha256:7cf806ab696534b81de5e0b05599a8c3071110ae9b69991589e09dd5168c7f9b",
+    "sha256:91aac24c0349fef416bd83aef3968028d9b79cd61b8dba630081f76bb35bba1c",
+    "sha256:ba24e52ab4ac674b0d46a14c1193e30e55f8bb751bc7af6bf65ff7472995bb6b",
+    "sha256:dbd58ca16d23330a501071afd94414b4eca73e3d0f64cff9ccdceb464d807052",
+    "sha256:efeab1ce0ab9219386bc7138b8389149a9b7849e868632ca09340e4039a58982"
+  ],
+  "image_archive_list": "artifacts/backups/ruoyi-zlt-refinement-20261103/actual-image-ids.json",
+  "symlinks_dereferenced": false,
+  "failures_and_both_semantic_versions_included": true,
+  "local_backup_not_off_machine": true,
+  "no_push": true
+}
