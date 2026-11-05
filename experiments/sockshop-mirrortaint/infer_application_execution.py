@@ -121,7 +121,7 @@ def infer_application(plan,rows,worker_request=None):
                 for index,f in enumerate(row['fields']):providers[coordinate(f)].append((row,index,f))
         state=State(Frame(root['frame']));preserved_fields={};literal_enum_fields={};pos=1;allocation_count=0;total_steps=0;branch_count=0
         request_builders={};request_entities={};resources={};decoded_types={};decoded_fields={};decoded_seq={};http_entities={};response_entities={};class_literals={};date_values={};calendars={};environment_facts=[];builders={};opaque_calls=[];async_results={};future_states={};async_transfers=[];maps={};sequence_pipes={};sequence_collectors={}
-        fr=None;method=None;code=None;entry=None;field_seq={};poisoned_at={};frame_audits=[]
+        fr=None;method=None;code=None;entry=None;field_seq={};poisoned_at={};frame_audits=[];member_choices={}
         execution_budget=worker_request['budget'] if worker_request else {'steps':0}
         provenance_owners={f['owner'] for rows_ in providers.values() for _,_,f in rows_}
         # Provenance does not establish publication. Without a verified birth
@@ -620,6 +620,12 @@ def infer_application(plan,rows,worker_request=None):
                             builder_initial=builders.get(identity(recv)) if recv is not None else None
                             builder_was_poisoned=identity(recv) in poisoned_at if recv is not None else False
                             child_value=None;child_error=None;filter_selection=None;filter_executed=False;filter_selectors=frozenset()
+                            remove_replay=None
+                            from infer_remove_if import KEYS as REMOVE_IF_KEYS
+                            if key in REMOVE_IF_KEYS:
+                                from infer_remove_if import replay as replay_remove
+                                remove_replay=replay_remove(call,args,cfg,state,container,actual,identity,take,execute,methods,fr.invocation,entry+'@'+str(fr.pc),lambda:pos<len(events)and events[pos]['kind']=='enter',poisoned_at)
+                                if remove_replay:child_error=remove_replay['error']
                             stream=state.streams.get(identity(recv)) if recv is not None else None
                             sequence_replay=None;sequence_kind='for-each'if sequence_enabled and key=='java/util/List.forEach(Ljava/util/function/Consumer;)V'else'collect-to-list'if sequence_enabled and key=='java/util/stream/Stream.collect(Ljava/util/stream/Collector;)Ljava/lang/Object;'and recv is not None and identity(recv)in sequence_pipes else None
                             if sequence_kind and call.get('sequence_start',{}).get('valid')and (sequence_kind!='collect-to-list'or identity(args[0])not in poisoned_at):
@@ -742,6 +748,9 @@ def infer_application(plan,rows,worker_request=None):
                                 failure=take('collection-call-throw');require(failure['call_id']==call['call_id'],'Application throw instance differs')
                                 if child_error and child_error.get('object') is not None:require(child_error['object']==failure['exception']['object'],'Application rethrown object differs')
                                 read_only_bounds=False
+                                if remove_replay:
+                                    from infer_remove_if import complete as finish_remove
+                                    finish_remove(remove_replay,call,failure,actual,identity,member_choices);read_only_bounds=True
                                 if key=='org/springframework/util/Assert.isNull(Ljava/lang/Object;Ljava/lang/String;)V' and cfg.get('foundation_values'):
                                     f=call_fact(cfg,failure,'assert-is-null-string',foundation_supported)
                                     if f['valid']:require(not f['null_input'] and failure['exception_type']=='java.lang.IllegalArgumentException','Assert throw contradicts null check');read_only_bounds=True
@@ -755,7 +764,12 @@ def infer_application(plan,rows,worker_request=None):
                             require(child_error is None,'Exceptional child has normal caller completion')
                             ret=take('collection-call-exit');require(ret['call_id']==call['call_id'],'Application completion instance differs');observed=complete(call,ret);v=Value(observed,unknown=True)
                             invocation=Call(str(call['seq']),fr.pc,recv,args,'normal')
-                            if sequence_replay:
+                            if remove_replay:
+                                from infer_remove_if import complete as finish_remove
+                                v=finish_remove(remove_replay,call,ret,actual,identity,member_choices)
+                            elif key in REMOVE_IF_KEYS:
+                                poison([recv]+args,ret['seq']);after=ret.get('collection_after');require(after is not None,'Opaque removeIf post-state missing');c=container(call);c.elements=[Value(x,unknown=True)for x in after];c.epoch=ret['collection_epoch'];c.escaped=True;opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':ret['seq'],'completion':'unmodeled-removeIf-predicate'})
+                            elif sequence_replay:
                                 from infer_sequence_callbacks import transfer
                                 v=transfer(sequence_replay,call,ret,observed,cfg,runtime[0],state,actual)
                                 if sequence_kind=='collect-to-list':sequence_pipes.pop(identity(recv),None)
@@ -1290,6 +1304,8 @@ def infer_application(plan,rows,worker_request=None):
             if 'date_epoch_ms'in f['observed']and f['observed']['object']in poisoned_at:
                 protection=preserved_fields.get(coordinate(f));barrier=max(poisoned_at.get(owner,-1),poisoned_at[f['observed']['object']])
                 if not(protection and barrier<=protection[0]<ret['seq']):value=Value(f['observed'],unknown=True)
+            if owner in member_choices:
+                selected,uncertain=member_choices[owner];value=Value(value.observed,value.origins,value.selectors|selected,value.unknown or uncertain,value.allocation)
             bind(value,f['observed'])
             results.append({'root_frame':root['frame'],'seq':ret['seq'],'path':f['path'],**f,'known':not value.unknown,'origins':[list(x) for x in sorted(value.origins,key=str)],'selectors':[list(x) for x in sorted(value.selectors,key=str)]})
         audits.append({'frame':root['frame'],'completion':'normal','steps':total_steps,'frames':frame_audits,'answers':len(ret['fields']),'poisoned_objects':len(poisoned_at),'source_ownership':source_ownership,'opaque_frames':opaque_frames,'opaque_calls':opaque_calls,'environment_facts':environment_facts,'async_transfers':async_transfers,'steps_including_tasks':execution_budget['steps']})

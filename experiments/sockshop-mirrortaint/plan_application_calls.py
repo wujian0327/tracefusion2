@@ -187,6 +187,7 @@ def augment_calls(plan,model,sources):
         'Static read/write sets are candidates, not purity claims; opaque calls poison possibly reachable nonlocal/escaped state.',
         'Offline/static budget exhaustion is analysis_limited, never business N/A or automatically evidence_invalid.']
     plan['execution_kernel']['initialized_lambda_owners']=sorted(initialized_lambdas)
+    plan['execution_kernel']['remove_if']=json.loads((Path(__file__).parent/'remove-if-contracts-20261105.json').read_text())
     plan['execution_kernel']['sequence_values']=json.loads((Path(__file__).parent/'kernel-sequence-values-20261031.json').read_text())
     plan['execution_kernel']['library_values']=json.loads((Path(__file__).parent/'library-value-runtimes-20261022.json').read_text())
     conversion='edu/fudan/common/util/JsonUtils.conveterObject(Ljava/lang/Object;Ljava/lang/Class;)Ljava/lang/Object;'

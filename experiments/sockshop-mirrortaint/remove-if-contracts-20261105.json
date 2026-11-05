@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "profiles": [
+    {
+      "java_runtime_version": "1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01",
+      "class_sha256": {
+        "java/util/ArrayList": "0976edaa24bd7790c9778c846ef4c4cdfe396242cb1e298cd190454083366199",
+        "java/util/BitSet": "293cef195bba4785ce90c15cb1ed803598c612cd97a5e01f7a8cbc8c77f78e5d",
+        "java/util/Objects": "87baac44a4d67fe3f63061c2e3dd6e1ce33e8adb2283a27d675323821da7b578"
+      }
+    }
+  ],
+  "semantics": "JDK8 ArrayList deferred compaction; actual predicate frames in index order; exceptions preserve predicate effects and uncommitted removals; structural modification checked by modCount."
+}
