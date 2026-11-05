@@ -57,4 +57,10 @@ def complete(replayed,call,finish,actual,identity,member_choices):
         for member in kept:
             if identity(member) is not None:
                 old=member_choices.get(identity(member),(frozenset(),False));member_choices[identity(member)]=(old[0]|member.selectors,old[1]or member.unknown)
-    return Value(finish.get('result',{'value':None}))
+    # The returned boolean is computed from the predicates, not a constant just
+    # because the library call itself has no additional declared source.
+    tests=replayed['decisions']
+    return Value(finish.get('result',{'value':None}),
+                 frozenset().union(*(v.origins for v in tests)),
+                 frozenset().union(*(v.selectors for v in tests)),
+                 any(v.unknown for v in tests))
