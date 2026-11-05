@@ -92,6 +92,14 @@ def infer_application(plan,rows,worker_request=None):
     results=[];audits=[]
     all_enters={r['frame']:r for r in rows if r['kind']=='enter'}
     require(len(all_enters)==sum(r['kind']=='enter' for r in rows),'Application invocation frame ID reused')
+    # Validate the recorded frame forest before selecting a root family. An
+    # orphan must not disappear from an opaque prefix merely because traversal
+    # cannot reach it. Async task ancestry is recorded separately; this parent
+    # is the actual monitored frame that existed at entry.
+    for invocation in all_enters.values():
+        parent=invocation.get('parent')
+        require(parent is None or (parent in all_enters and all_enters[parent]['seq']<invocation['seq']),
+                'Application invocation parent missing or not earlier')
     by_frame=defaultdict(list);children=defaultdict(list);completions=defaultdict(list)
     for index,row in enumerate(rows):
         by_frame[row.get('frame')].append((index,row))
