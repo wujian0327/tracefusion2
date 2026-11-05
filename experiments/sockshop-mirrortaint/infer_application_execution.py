@@ -1157,7 +1157,7 @@ def infer_application(plan,rows,worker_request=None):
                                 else:poison(([recv] if recv else [])+args,ret['seq'])
                             elif key=='com/alibaba/fastjson2/JSONArray.toList(Ljava/lang/Class;[Lcom/alibaba/fastjson2/JSONReader$Feature;)Ljava/util/List;'and plan.get('json_list_copy'):
                                 from infer_json_list_copy import transfer as json_list_transfer
-                                copied=json_list_transfer(plan,library_evidence,root,call,ret,recv,args,state,actual)
+                                copied=json_list_transfer(plan,library_evidence,root,call,ret,recv,args,state,actual,origin)
                                 if copied is None:poison([recv]+args,ret['seq']);v=Value(observed,unknown=True)
                                 else:
                                     v=copied
