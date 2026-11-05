@@ -1,0 +1,20 @@
+{
+  "created_utc": "2026-11-05T01:51:23.371464+00:00",
+  "base": "8cc1befa0696ceb55a8761e141047b759d8c68ea",
+  "scope": "Exact observed ArrayList removeIf with actual lambda callbacks; dictionary rejected source List runtime-class diagnostic only. No costs/new apps/runtime registration.",
+  "original_C1_inputs_and_source_boundaries_unchanged": true,
+  "controls": [
+    "same-value different source occurrences; keep/remove/empty/all",
+    "predicate exception: JDK8 deferred compaction; callback field writes persist",
+    "structural mutation and concurrent-modification; original exception/finally",
+    "null predicate, unsupported callback/subclass, missing/duplicate/wrong membership/call evidence"
+  ],
+  "old_files": {
+    "artifacts/ruoyi-request-scope-20261104/final-03/final-C1/plans/ruoyi-2/plan.json": "84dc399720a6ae09121510dc4f5e610553f864b4e87acb7b2ed4d23679dad6a5",
+    "artifacts/ruoyi-request-scope-20261104/final-03/final-C1/plans/ruoyi-3/plan.json": "528e370985bc3d04a4fb1df904b5254a521031bff5af8fe86ff317c2c78f0f10",
+    "artifacts/ruoyi-request-scope-20261104/final-03/final-C1/runs/ruoyi-2/full/capture/events.jsonl": "3e15d87e99e86c6b8c3d0a1fcc6349a269ee03d31a9d3b69413336dfa1be7243",
+    "artifacts/ruoyi-request-scope-20261104/final-03/final-C1/runs/ruoyi-2/selective/capture/events.jsonl": "491367038d0e6ffd31a8f4c5bb12bc025a99f8b38a60f37e59473d0b5cbbaa10",
+    "artifacts/ruoyi-request-scope-20261104/final-03/final-C1/runs/ruoyi-3/full/capture/events.jsonl": "4236f12cb8666fc9ce90ef7f1d006ceeaac50fdb985034be92869f5d195f1dbf",
+    "artifacts/ruoyi-request-scope-20261104/final-03/final-C1/runs/ruoyi-3/selective/capture/events.jsonl": "de5e645c368b1d0c372497cdf9c4366eaa0301334c3e5c9280153b3823c8ed45"
+  }
+}

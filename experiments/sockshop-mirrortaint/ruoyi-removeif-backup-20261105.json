@@ -1,0 +1,31 @@
+{
+  "batch": {
+    "path": "artifacts/backups/ruoyi-removeif-20261105/batch-artifacts.tar.gz",
+    "bytes": 205838120,
+    "sha256": "5171acd84a75f6696ce3bff57b1aecae7fdc34fd20764176d7d92a1140a34732",
+    "gzip_CRC_passed": true
+  },
+  "actual_images": [
+    "sha256:16b80569968fb112fee59fdbaeda7a5fe9b3d534ba1cf212f33afe1d1089fe75",
+    "sha256:2481edb3016c3749e400daea78a7d2a9d288286105bac729d63adfef95e8534d",
+    "sha256:5107333e08a87b836d48ff7528b1e84b9c86781cc9f1748bbc1b8c42a870d933",
+    "sha256:efeab1ce0ab9219386bc7138b8389149a9b7849e868632ca09340e4039a58982"
+  ],
+  "reused_images_backup": {
+    "path": "artifacts/backups/ruoyi-zlt-refinement-20261103/actual-images.tar.gz",
+    "bytes": 2049513399,
+    "sha256": "cbd9959df39c9d9f40447c693e1b80498c37d4271f47c0fa4b4d4fc3d0134b8b",
+    "gzip_CRC_passed": true
+  },
+  "reused_JDK_backup": {
+    "path": "artifacts/backups/ruoyi-request-scope-20261104/jdk8-runtime.tar.gz",
+    "bytes": 57889824,
+    "sha256": "e3641e13fdfc55d455441f85793b071228ac235758a8e5dc7990d158b6552104",
+    "gzip_CRC_passed": true
+  },
+  "original_business_inputs_prior_backup": "artifacts/backups/ruoyi-request-scope-20261104/batch-artifacts.tar.gz",
+  "complete_batch_failures_and_sources_included": true,
+  "symlinks_dereferenced": false,
+  "local_backup_not_off_machine": true,
+  "no_push": true
+}

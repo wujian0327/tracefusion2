@@ -1,0 +1,262 @@
+{
+  "online_freeze": "e03a376b3535982f3fc357cd8eb8290d47fdab8a",
+  "offline_freeze": "0bdee20f107ff443ccc8735a2340d1f1370c1b71",
+  "agent_sha256": "3114d08b7ffe051314018d6d71fedebacc680c390b0f616f221231265d7207d4",
+  "full_selective_states_and_logical_sources_equal": true,
+  "states": {
+    "ruoyi-1": {
+      "full": {
+        "known_correct": 5
+      },
+      "selective": {
+        "known_correct": 5
+      }
+    },
+    "ruoyi-2": {
+      "full": {
+        "unknown": 43
+      },
+      "selective": {
+        "unknown": 43
+      }
+    },
+    "ruoyi-3": {
+      "full": {
+        "evidence_invalid": 12
+      },
+      "selective": {
+        "evidence_invalid": 12
+      }
+    }
+  },
+  "dictionary_runtime_classes": [
+    "com.alibaba.fastjson2.JSONArray"
+  ],
+  "original_files_unchanged": true,
+  "controls": {
+    "agent_sha256": "74093c294ff3cc06d8ef02d6f75069c8f69b58ee68a79d8aaa7518788509be72",
+    "modes": {
+      "full": {
+        "business_equal": true,
+        "checks": [
+          {
+            "case": 0,
+            "targets": 1,
+            "known": 1
+          },
+          {
+            "case": 1,
+            "targets": 1,
+            "known": 1
+          },
+          {
+            "case": 2,
+            "targets": 2,
+            "known": 2
+          },
+          {
+            "case": 3,
+            "targets": 0,
+            "known": 0
+          },
+          {
+            "case": 4,
+            "targets": 2,
+            "known": 2
+          },
+          {
+            "case": 5,
+            "targets": 2,
+            "known": 2
+          },
+          {
+            "case": 7,
+            "targets": 2,
+            "known": 0
+          }
+        ],
+        "CME_callback_append_preserved": true,
+        "guards": [
+          "missing-proof",
+          "wrong-members",
+          "wrong-predicate",
+          "wrong-modcount",
+          "missing-callback",
+          "duplicate-callback"
+        ]
+      },
+      "selective": {
+        "business_equal": true,
+        "checks": [
+          {
+            "case": 0,
+            "targets": 1,
+            "known": 1
+          },
+          {
+            "case": 1,
+            "targets": 1,
+            "known": 1
+          },
+          {
+            "case": 2,
+            "targets": 2,
+            "known": 2
+          },
+          {
+            "case": 3,
+            "targets": 0,
+            "known": 0
+          },
+          {
+            "case": 4,
+            "targets": 2,
+            "known": 2
+          },
+          {
+            "case": 5,
+            "targets": 2,
+            "known": 2
+          },
+          {
+            "case": 7,
+            "targets": 2,
+            "known": 0
+          }
+        ],
+        "CME_callback_append_preserved": true,
+        "guards": [
+          "missing-proof",
+          "wrong-members",
+          "wrong-predicate",
+          "wrong-modcount",
+          "missing-callback",
+          "duplicate-callback"
+        ]
+      }
+    },
+    "unsupported_subclass": [
+      {
+        "mode": "full",
+        "business_equal": true,
+        "no_extra_iterator": true,
+        "capture_invalid": true
+      },
+      {
+        "mode": "selective",
+        "business_equal": true,
+        "no_extra_iterator": true,
+        "capture_invalid": true
+      }
+    ]
+  },
+  "offline_compatibility": {
+    "captures": [
+      {
+        "query": "ruoyi-1",
+        "mode": "full",
+        "full_graph_or_rejection_equal": true,
+        "state": "valid"
+      },
+      {
+        "query": "ruoyi-1",
+        "mode": "selective",
+        "full_graph_or_rejection_equal": true,
+        "state": "valid"
+      },
+      {
+        "query": "ruoyi-2",
+        "mode": "full",
+        "full_graph_or_rejection_equal": true,
+        "state": "valid"
+      },
+      {
+        "query": "ruoyi-2",
+        "mode": "selective",
+        "full_graph_or_rejection_equal": true,
+        "state": "valid"
+      },
+      {
+        "query": "ruoyi-3",
+        "mode": "full",
+        "full_graph_or_rejection_equal": true,
+        "state": "rejected"
+      },
+      {
+        "query": "ruoyi-3",
+        "mode": "selective",
+        "full_graph_or_rejection_equal": true,
+        "state": "rejected"
+      }
+    ],
+    "all_control_business_agent_classes_equal": true,
+    "class_count": 896,
+    "online_commit": "e03a376b3535982f3fc357cd8eb8290d47fdab8a",
+    "offline_commit": "0bdee20f107ff443ccc8735a2340d1f1370c1b71",
+    "new_online_deployment": false
+  },
+  "business": [
+    {
+      "query": "ruoyi-2",
+      "mode": "full",
+      "business_requests": 6,
+      "business_preserved": 6,
+      "closed": true,
+      "raw_no_problem": true,
+      "integrity_and_reconstruction_validated": true,
+      "problem_count": 0
+    },
+    {
+      "query": "ruoyi-2",
+      "mode": "selective",
+      "business_requests": 6,
+      "business_preserved": 6,
+      "closed": true,
+      "raw_no_problem": true,
+      "integrity_and_reconstruction_validated": true,
+      "problem_count": 0
+    },
+    {
+      "query": "ruoyi-3",
+      "mode": "full",
+      "business_requests": 6,
+      "business_preserved": 6,
+      "closed": true,
+      "raw_no_problem": false,
+      "integrity_and_reconstruction_validated": false,
+      "problem_count": 20
+    },
+    {
+      "query": "ruoyi-3",
+      "mode": "selective",
+      "business_requests": 6,
+      "business_preserved": 6,
+      "closed": true,
+      "raw_no_problem": false,
+      "integrity_and_reconstruction_validated": false,
+      "problem_count": 20
+    },
+    {
+      "query": "ruoyi-1",
+      "mode": "full",
+      "business_requests": 6,
+      "business_preserved": 6,
+      "closed": true,
+      "raw_no_problem": true,
+      "integrity_and_reconstruction_validated": true,
+      "problem_count": 0
+    },
+    {
+      "query": "ruoyi-1",
+      "mode": "selective",
+      "business_requests": 6,
+      "business_preserved": 6,
+      "closed": true,
+      "raw_no_problem": true,
+      "integrity_and_reconstruction_validated": true,
+      "problem_count": 0
+    }
+  ],
+  "historical_full_redeployment": false,
+  "no_new_performance": true
+}
