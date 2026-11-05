@@ -823,6 +823,10 @@ def infer_application(plan,rows,worker_request=None):
                                     if desc=='Ljava/lang/Object;' and render_callback:
                                         require(child_value is not None and isinstance(child_value.observed.get('value'),str),'Rendering did not return String');operand=child_value
                                         if not tainted:require(fact['after']==text+operand.observed['value'],'Rendering append result differs')
+                                    elif desc=='Ljava/lang/Object;' and call.get('argument_types',[None])[0]=='java.lang.Long' and cfg.get('sequence_values'):
+                                        require(type(operand.observed.get('value'))is int and -2**63<=operand.observed['value']<2**63,'Long rendering input not exact signed64')
+                                        require(any(p['java_runtime_version']==runtime[0]['java_runtime_version']and p['class_sha256'].get('java/lang/Long')==fact.get('boxed_long_sha256')for p in cfg['sequence_values']['profiles']),'Long rendering implementation absent/different')
+                                        require(fact['after']==fact['before']+str(operand.observed['value']),'Long decimal rendering differs')
                                     elif desc=='Ljava/lang/Object;' and plan.get('date_effects') and call.get('argument_types',[None])[0]=='java.util.Date':
                                         if not date_render(ret,call['args'][0]):poison([recv]+args,ret['seq']);tainted=True
                                         operand=Value({'value':fact['after'][len(fact['before']):]},unknown=True)

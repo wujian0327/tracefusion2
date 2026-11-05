@@ -18,12 +18,12 @@ def run(out,agent,business):
             if n.startswith('BOOT-INF/lib/')and '/fastjson2-'in n:(deps/Path(n).name).write_bytes(z.read(n))
     cp=':'.join(map(str,[classes,agent,*JARS,*deps.glob('*.jar')]))
     java='/usr/lib/jvm/java-8-openjdk-amd64/bin/java';reports={}
-    for name in ('JsonTreeObservationFixture','LongNarrowingFixture'):
+    for name in ('JsonTreeObservationFixture','LongNarrowingFixture','LongRenderFixture'):
         d=out/name;d.mkdir();command([java[:-4]+'javac','-cp',cp,'-d',str(classes),str(HERE/(name+'.java'))],d/'compile.log')
         jar=d/'fixture.jar'
         with ZipFile(jar,'w')as z:
             for f in classes.glob(name+'*.class'):z.write(f,'BOOT-INF/classes/'+f.name)
-        numeric=name.startswith('Long');target=name+'$Out.'+('value'if numeric else'text');b=d/'build';build(b,{'fixture':{'jar':str(jar),'targets':[target]}})
+        numeric=name.startswith('Long');render=name=='LongRenderFixture';target=name+'$Out.'+('value'if numeric else'text');b=d/'build';build(b,{'fixture':{'jar':str(jar),'targets':[target]}})
         model=load(b/'fixture/model.json');model['library_inventory']=library_inventory(business)
         entry=name+'.root(L'+name+'$Store;'+('JI'if numeric else'I')+')L'+name+'$Out;'
         source=name+'$Store.read('+('J'if numeric else'I')+')'+('L'+name+'$Source;'if numeric else'Ljava/lang/Object;')
@@ -38,21 +38,31 @@ def run(out,agent,business):
             if numeric:
                 result=infer_execution(plan,rows)
                 for i,c in enumerate(actual):
-                    assert c['response']==(c['input']+2**31)%2**32-2**31
+                    assert c['response']==(str(c['input'])if render else(c['input']+2**31)%2**32-2**31)
                     ret=next(r for r in rows if r['kind']=='binding-return'and r['message']==c['message']);answer=next(a for a in result['answers']if a['root_frame']==ret['frame']and a['path']=='/value')
                     if i==9:assert not answer['known'];continue
                     s=next(s for s in sources if s['message']==c['message']);field=next(j for j,f in enumerate(s['fields'])if f['field']==name+'$Source.value');assert answer['known']and answer['origins']==[['field',s['seq'],field]]
                 guards=[]
-                for fault in ('wrong-narrowed-value','wrong-narrowed-type','wrong-return-class','wrong-long-runtime','missing-unbox-proof'):
-                    altered=copy.deepcopy(rows);start=next(r for r in altered if r['kind']=='collection-call-enter'and r['callee']=='java/lang/Long.intValue()I');finish=next(r for r in altered if r['kind']=='collection-call-exit'and r['call_id']==start['call_id'])
-                    if fault=='wrong-narrowed-value':finish['result']['value']+=1
-                    elif fault=='wrong-narrowed-type':finish['result']['value']=False
-                    elif fault=='wrong-return-class':finish['result_type']='java.lang.Long'
-                    elif fault=='wrong-long-runtime':finish['sequence_value']['class_sha256']['java/lang/Long']='wrong'
-                    else:finish.pop('sequence_value')
-                    try:infer_execution(plan,altered)
-                    except ValueError:guards.append(fault)
-                    else:raise AssertionError(fault)
+                if render:
+                    for fault in ('wrong-long-render-hash','wrong-decimal-render','missing-long-render-proof'):
+                        altered=copy.deepcopy(rows);finish=next(r for r in altered if r.get('scalar_contract',{}).get('boxed_long_sha256'))
+                        if fault=='wrong-long-render-hash':finish['scalar_contract']['boxed_long_sha256']='wrong'
+                        elif fault=='wrong-decimal-render':finish['scalar_contract']['after']='WRONG'
+                        else:finish['scalar_contract'].pop('boxed_long_sha256')
+                        try:infer_execution(plan,altered)
+                        except ValueError:guards.append(fault)
+                        else:raise AssertionError(fault)
+                else:
+                    for fault in ('wrong-narrowed-value','wrong-narrowed-type','wrong-return-class','wrong-long-runtime','missing-unbox-proof'):
+                        altered=copy.deepcopy(rows);start=next(r for r in altered if r['kind']=='collection-call-enter'and r['callee']=='java/lang/Long.intValue()I');finish=next(r for r in altered if r['kind']=='collection-call-exit'and r['call_id']==start['call_id'])
+                        if fault=='wrong-narrowed-value':finish['result']['value']+=1
+                        elif fault=='wrong-narrowed-type':finish['result']['value']=False
+                        elif fault=='wrong-return-class':finish['result_type']='java.lang.Long'
+                        elif fault=='wrong-long-runtime':finish['sequence_value']['class_sha256']['java/lang/Long']='wrong'
+                        else:finish.pop('sequence_value')
+                        try:infer_execution(plan,altered)
+                        except ValueError:guards.append(fault)
+                        else:raise AssertionError(fault)
                 modes[mode]={'business_equal':True,'positive_known':9,'necessary_unknown':1,'signed_extremes_and_repeated_value_origins':True,'guards':guards}
             else:
                 assert len(sources)==2
