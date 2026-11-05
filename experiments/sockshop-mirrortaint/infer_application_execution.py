@@ -659,6 +659,17 @@ def infer_application(plan,rows,worker_request=None):
                                             filter_selection=Value(member.observed,member.origins,member.selectors|filter_selectors,member.unknown,member.allocation);accepted=True;break
                                     if not accepted and child_error is None:require(not (pos<len(events) and events[pos]['kind']=='enter'),'Filter callback count exceeds source membership')
                             permitted=cfg['call_targets'].get(entry+'@'+str(fr.pc),[])
+                            # Before advice can call an otherwise planned helper.
+                            # Its closed Frames precede the target certificate;
+                            # they remain opaque effects, not target execution.
+                            if pos<len(events)and events[pos]['kind']=='enter':
+                                limit=next((i for i in range(pos,len(events))if events[i]['kind']in('collection-call-exit','collection-call-throw')and events[i].get('call_id')==call['call_id']),None)
+                                candidates=[]if limit is None else[i for i in range(pos,limit)if events[i]['kind']=='execution-direct-dispatch'and events[i].get('before_only')and events[i].get('call_id')==call['call_id']and events[i].get('frame')==fr.invocation]
+                                if candidates:
+                                    require(len(candidates)==1,'Before target dispatch is ambiguous')
+                                    prefix_end=candidates[0]
+                                    require(not any(r['kind']=='enter'and r['method']in permitted for r in events[pos:prefix_end]),'Target executed before certified before-advice completion')
+                                    opaque_extent(prefix_end)
                             dispatch=None
                             if pos<len(events) and events[pos]['kind']=='execution-direct-dispatch':
                                 dispatch=take('execution-direct-dispatch')
