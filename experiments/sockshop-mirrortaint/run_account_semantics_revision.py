@@ -9,11 +9,11 @@ PARENT=ROOT/'artifacts/contract-routing-revision-20261023/final-v2'
 DEVELOPMENT=ROOT/'artifacts/account-semantics-20261028'
 FIRST=ROOT/'artifacts/portability-first-20261028'
 
-def prepare(root):
+def prepare(root,extra_inputs=None):
  from build_distributed_plans import build
  from plan_capability_policy import choose
  import run_frozen_capability_acceptance as tf
- root.mkdir(parents=True);(root/'logs').mkdir();inputs={k:v['query_config']for k,v in load(PARENT/'frozen-base/build.json')['inputs'].items()};inputs['piggy-account']={'jar':str(FIRST/'business-jars/piggy-account.jar'),'entry':'com/piggymetrics/account/controller/AccountController.createNewAccount(Lcom/piggymetrics/account/domain/User;)Lcom/piggymetrics/account/domain/Account;','targets':['com/piggymetrics/account/domain/Account.name'],'response_path':'/name','execution_kernel':True,'application_calls':True};base=root/'frozen-base';build(base,inputs);manifest=load(base/'build.json');prior=load(PARENT/'algorithm-freeze.json');assert all(manifest['inputs'][r]['original_jar_sha256']==h for r,h in prior['original_jars'].items());commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();shutil.copyfile(PARENT/'protocol.json',root/'protocol.json')
+ root.mkdir(parents=True);(root/'logs').mkdir();inputs={k:v['query_config']for k,v in load(PARENT/'frozen-base/build.json')['inputs'].items()};inputs['piggy-account']={'jar':str(FIRST/'business-jars/piggy-account.jar'),'entry':'com/piggymetrics/account/controller/AccountController.createNewAccount(Lcom/piggymetrics/account/domain/User;)Lcom/piggymetrics/account/domain/Account;','targets':['com/piggymetrics/account/domain/Account.name'],'response_path':'/name','execution_kernel':True,'application_calls':True};inputs.update(extra_inputs or {});base=root/'frozen-base';build(base,inputs);manifest=load(base/'build.json');prior=load(PARENT/'algorithm-freeze.json');assert all(manifest['inputs'][r]['original_jar_sha256']==h for r,h in prior['original_jars'].items());commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();shutil.copyfile(PARENT/'protocol.json',root/'protocol.json')
  cohorts=[('frozen-plans',tf.QUERIES),('regression29-plans',load(ROOT/'artifacts/heldout29-first-20261023/protocol-before-first.json')['queries']),('write-plans',load(root/'protocol.json')['queries'])]
  for folder,queries in cohorts:
   d=root/folder;d.mkdir();records=[]

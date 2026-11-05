@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "kind": "fastjson-existing-element-list-copy",
+  "class_sha256": {
+    "com/alibaba/fastjson2/JSONArray": "2244f49d17695bb793cee15da9a5da4c0190a98ecc8556a26026877c45426359",
+    "com/alibaba/fastjson2/JSONFactory": "5760221c3756bab9919033d131f8b4852e13786118f1e906859a1d4e949bb0b7",
+    "com/alibaba/fastjson2/reader/ObjectReaderProvider": "29c6c20dd727e384a549d0d23d9220e8033264b0a3d1bc9d9f6b0912fde76842"
+  },
+  "profiles": [
+    {
+      "java_runtime_version": "1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01",
+      "class_sha256": {
+        "java/lang/Class": "5e4ffebf74240a2c5a3ef44ad1d7cacb82c9a6942246b5fafc801426139035f1",
+        "java/lang/Object": "91e9554ea0fac57b7ca9595ab777fe2578af2e5b111e8c240e1793f1a3686292",
+        "java/lang/ThreadLocal": "ba171157bc996a29501873c09e04b0efe71ea8ecdc13a3bb1377fcbb887569a0",
+        "java/util/AbstractList": "e44205b9dc8c5899dfc62c6a0267d4c670907065d0bea0eb04a6da3319719b77",
+        "java/util/ArrayList": "0976edaa24bd7790c9778c846ef4c4cdfe396242cb1e298cd190454083366199",
+        "java/util/concurrent/ConcurrentHashMap": "7608d5421bc045ffecfcfcaea69af2e60fd0f6eb5de1c1d2eb464c86fb2f7590"
+      }
+    }
+  ],
+  "conditions": [
+    "Exact classes and original loaded bytes",
+    "Empty feature array; exact provider; actual cache hit; plain ThreadLocal",
+    "JSONFactory initialization witnessed before query root",
+    "All input members null or Class.isInstance, excluding Map; no type conversion",
+    "Fresh exact ArrayList with original member identities and order; no source creation"
+  ]
+}

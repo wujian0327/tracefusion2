@@ -21,7 +21,9 @@ def infer_application(plan,rows,worker_request=None):
         kind=item['kind']
         if kind=='before-dispatch-step':library_evidence[(kind,item['call_id'])].append(item)
         elif kind in ('before-dispatch-framework','commons-framework'):library_evidence[(kind,item['class'])].append(item)
-        elif kind=='commons-initialized':library_evidence[(kind,item['seq'])].append(item)
+        elif kind in ('commons-initialized','json-list-initialized'):library_evidence[(kind,item['seq'])].append(item)
+        elif kind=='json-list-class':library_evidence[(kind,item['class'])].append(item)
+        elif kind=='json-list-cache':library_evidence[(kind,item['call_id'])].append(item)
     from infer_target_observation import validate as validate_target_observation
     validate_target_observation(plan,rows)
     from infer_source_locality import validate as validate_locality
@@ -1153,7 +1155,14 @@ def infer_application(plan,rows,worker_request=None):
                                 require(fact['present']==(selected is not None),'Optional presence differs')
                                 if selected is not None:bind(selected,observed);bind(selected,fact['selected']);v=selected.project(observed)
                                 else:poison(([recv] if recv else [])+args,ret['seq'])
-                            elif ins['owner'] in ('java/util/List','java/util/ArrayList'):
+                            elif key=='com/alibaba/fastjson2/JSONArray.toList(Ljava/lang/Class;[Lcom/alibaba/fastjson2/JSONReader$Feature;)Ljava/util/List;'and plan.get('json_list_copy'):
+                                from infer_json_list_copy import transfer as json_list_transfer
+                                copied=json_list_transfer(plan,library_evidence,root,call,ret,recv,args,state,actual)
+                                if copied is None:poison([recv]+args,ret['seq']);v=Value(observed,unknown=True)
+                                else:
+                                    v=copied
+                                    heap_refs[observed['object']].update(x.observed['object']for x in state.containers[observed['object']].elements if x.observed.get('object'))
+                            elif ins['owner'] in ('java/util/List','java/util/ArrayList')or(ins['owner']=='java/util/Collection'and ins['name']=='isEmpty'and ins['desc']=='()Z'):
                                 c=container(call);name=ins['name']
                                 if name in ('size','isEmpty'):
                                     expected=len(c.elements) if name=='size' else not c.elements;require(observed.get('value')==expected,'Execution list size differs');v=Value(observed)

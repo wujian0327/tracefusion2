@@ -14,6 +14,7 @@ def library_inventory(jar):
     for profile in [dispatch,*dispatch.get('additional_profiles',[])]:names.update(profile['class_sha256'])
     names.update(json.loads((HERE/'before-dispatch-contracts-20261105.json').read_text())['class_sha256'])
     names.update(json.loads((HERE/'json-tree-observation-contracts-20261105.json').read_text())['class_sha256'])
+    names.update(json.loads((HERE/'json-list-copy-contracts-20261105.json').read_text())['class_sha256'])
     names.update(json.loads((HERE/'commons-literal-contracts-20261105.json').read_text())['class_sha256'])
     names.update(json.loads((HERE/'communication-identity-contracts-20261029.json').read_text())['class_sha256'])
     names.update(json.loads((HERE/'source-locality-contracts-20261030.json').read_text())['class_sha256'])

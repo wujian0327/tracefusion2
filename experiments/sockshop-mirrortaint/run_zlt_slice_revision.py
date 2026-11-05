@@ -4,14 +4,14 @@ from pathlib import Path
 from run_planned_service import ROOT,HERE,load,save,sha
 
 
-def prepare(root):
+def prepare(root,extra_inputs=None):
     import run_account_semantics_revision as history
     import run_plan_applicability_revision as mall
     from plan_capability_policy import choose
     from contract_applicability import library_inventory
     from run_zlt_path_revision import prepare as prepare_zlt
     root.mkdir(parents=True,exist_ok=False)
-    history.prepare(root/'historical')
+    history.prepare(root/'historical',extra_inputs=extra_inputs)
     base=root/'historical/frozen-base';manifest=load(base/'build.json')
     freeze=load(root/'historical/algorithm-freeze.json')
     freeze.update(parent_algorithm='c1a4e5ceb60a276cc3651e4cdb413aa29d7f8d5d',

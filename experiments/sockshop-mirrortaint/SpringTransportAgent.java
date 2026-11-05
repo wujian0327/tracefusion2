@@ -155,6 +155,7 @@ public static final class DirectDispatchHooks implements Opcodes {
     public static void premain(String args,Instrumentation i)throws Exception{PlannedServiceAgent.premain(args,i);Transport.start();i.addTransformer(new SpringTransportAgent());}
     public byte[] transform(final ClassLoader loader,String owner,Class<?> prior,ProtectionDomain domain,byte[] bytes){
         try{JsonTreeObservationHooks.loaded(loader,owner,bytes);}catch(Throwable failure){MonitorSafety.fatal(failure);PlannedServiceAgent.Recorder.problem("json-tree-class:"+owner+":"+failure);}
+        try{byte[] copied=JsonListCopyHooks.transform(loader,owner,bytes);if(copied!=null)return copied;}catch(Throwable failure){MonitorSafety.fatal(failure);PlannedServiceAgent.Recorder.problem("json-list-transform:"+owner+":"+failure);return null;}
         try{byte[] scoped=RequestScopeHooks.transform(loader,owner,bytes);if(scoped!=null)return scoped;}catch(Throwable failure){MonitorSafety.fatal(failure);PlannedServiceAgent.Recorder.problem("query-scope-transform:"+owner+":"+failure);return null;}
         byte[] base=transformBase(loader,owner,prior,domain,bytes);
         if(SourceLocalityInstrumentation.owns(owner))try{return SourceLocalityInstrumentation.transform(loader,owner,bytes,base==null?bytes:base);}catch(Throwable e){PlannedServiceAgent.Recorder.problem("locality-transform:"+owner+":"+e);return base;}
