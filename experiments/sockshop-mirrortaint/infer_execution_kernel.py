@@ -21,6 +21,8 @@ def same_value(expected,actual):
 
 
 def infer_execution(plan,rows):
+    from infer_json_tree_observation import validate as validate_json_tree
+    validate_json_tree(plan,rows)
     from infer_request_scope import validate as validate_request_scope
     validate_request_scope(plan,rows)
     from infer_map_wrapper import validate as validate_map_wrapper

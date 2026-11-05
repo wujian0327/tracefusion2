@@ -15,6 +15,13 @@ def infer_application(plan,rows,worker_request=None):
     from infer_source_observation import validate as validate_observation
     validate_observation(plan,rows)
     cfg=plan['execution_kernel']
+    # Capture-local lookup only: retain every candidate, duplicate and raw order.
+    library_evidence=defaultdict(list)
+    for item in rows:
+        kind=item['kind']
+        if kind=='before-dispatch-step':library_evidence[(kind,item['call_id'])].append(item)
+        elif kind in ('before-dispatch-framework','commons-framework'):library_evidence[(kind,item['class'])].append(item)
+        elif kind=='commons-initialized':library_evidence[(kind,item['seq'])].append(item)
     from infer_target_observation import validate as validate_target_observation
     validate_target_observation(plan,rows)
     from infer_source_locality import validate as validate_locality
@@ -657,7 +664,13 @@ def infer_application(plan,rows,worker_request=None):
                                 dispatch=take('execution-direct-dispatch')
                                 proof=cfg.get('direct_dispatch_contract')
                                 require(proof and dispatch['class_sha256']==proof['class_sha256'] and dispatch['static_target'],'Direct dispatch contract absent/differs')
-                                require(dispatch['empty_chain'] and not dispatch.get('transparent_interceptors') or not dispatch['empty_chain'] and proof.get('transparent_interceptors') and dispatch.get('transparent_interceptors')==proof['transparent_interceptors'],'Unproved interceptor effects')
+                                if dispatch.get('before_only'):
+                                    from infer_before_advice import validate as validate_before
+                                    validate_before(plan,library_evidence,dispatch,call)
+                                    poison([recv,Value({'object':dispatch['target']})]+args,dispatch['seq'])
+                                    opaque_calls.append({'frame':fr.invocation,'callee':key,'seq':dispatch['seq'],'completion':'opaque-before-advice-effects'})
+                                else:
+                                    require(dispatch['empty_chain'] and not dispatch.get('transparent_interceptors') or not dispatch['empty_chain'] and proof.get('transparent_interceptors') and dispatch.get('transparent_interceptors')==proof['transparent_interceptors'],'Unproved interceptor effects')
                                 require(dispatch['call_id']==call['call_id'] and dispatch['callee']==key and dispatch['proxy']==identity(recv),'Direct dispatch invocation differs')
                                 require(len(dispatch['args'])==len(call['args']),'Direct dispatch argument count differs')
                                 for desc,a,b in zip(descriptors(ins['desc']),dispatch['args'],call['args']):
@@ -679,6 +692,7 @@ def infer_application(plan,rows,worker_request=None):
                             elif key in ('java/util/Optional.orElseGet(Ljava/util/function/Supplier;)Ljava/lang/Object;','java/util/Optional.orElseThrow(Ljava/util/function/Supplier;)Ljava/lang/Object;') and identity(recv) in state.optionals and state.optionals[identity(recv)] is None:
                                 callback=state.lambdas.get(identity(args[0]))
                             child_args=args;child_recv=Value({'object':dispatch['target']}) if dispatch else recv
+                            if dispatch and dispatch.get('before_only'):child_args=[Value(a.observed,unknown=True)for a in args]
                             render_callback=False
                             if key=='java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;' and cfg.get('scalar_builders') and args and 'value' not in args[0].observed:
                                 permitted=cfg['call_targets'].get(entry+'@'+str(fr.pc)+':render',[]);actual_owner=call.get('argument_types',[None])[0];actual_owner=actual_owner.replace('.','/') if actual_owner else None
@@ -764,7 +778,11 @@ def infer_application(plan,rows,worker_request=None):
                             require(child_error is None,'Exceptional child has normal caller completion')
                             ret=take('collection-call-exit');require(ret['call_id']==call['call_id'],'Application completion instance differs');observed=complete(call,ret);v=Value(observed,unknown=True)
                             invocation=Call(str(call['seq']),fr.pc,recv,args,'normal')
-                            if remove_replay:
+                            from infer_commons_literals import transfer as transfer_commons
+                            commons_value=transfer_commons(cfg,library_evidence,root,call,ret,args,state,actual)
+                            if commons_value is not None:
+                                v=commons_value
+                            elif remove_replay:
                                 from infer_remove_if import complete as finish_remove
                                 v=finish_remove(remove_replay,call,ret,actual,identity,member_choices)
                             elif key in REMOVE_IF_KEYS:
@@ -1176,7 +1194,7 @@ def infer_application(plan,rows,worker_request=None):
                                     require(ret['result_type']=='[Ljava.lang.String;'and owner not in state.arrays and owner not in nonlocal_owners and array['version']==0 and array['element_versions']==[0]*len(expected)and array['component']=='java.lang.String'and [x.get('value')for x in array['elements']]==expected,'Split fresh array/contents differs')
                                     values=[Value(x,recv.origins,recv.selectors|args[0].origins|args[0].selectors,recv.unknown or args[0].unknown)for x in array['elements']]
                                     state.arrays[owner]={'elements':values,'version':0,'versions':[0]*len(values)};v=Value(observed)
-                            elif key in ('java/lang/Long.valueOf(J)Ljava/lang/Long;','java/lang/Long.longValue()J','java/util/Collections.emptyList()Ljava/util/List;')and cfg.get('sequence_values')and any(p['java_runtime_version']==runtime[0]['java_runtime_version']for p in cfg['sequence_values']['profiles']):
+                            elif key in ('java/lang/Long.valueOf(J)Ljava/lang/Long;','java/lang/Long.longValue()J','java/lang/Long.intValue()I','java/util/Collections.emptyList()Ljava/util/List;')and cfg.get('sequence_values')and any(p['java_runtime_version']==runtime[0]['java_runtime_version']for p in cfg['sequence_values']['profiles']):
                                 fact=ret.get('sequence_value');require(fact and fact['callee']==key,'Sequence value proof absent')
                                 require(any(p['java_runtime_version']==runtime[0]['java_runtime_version']==fact['java_runtime_version']and all(p['class_sha256'].get(k)==v for k,v in fact['class_sha256'].items())for p in cfg['sequence_values']['profiles']),'Sequence immutable value runtime differs')
                                 require(set(fact['class_sha256'])=={'java/lang/Long','java/util/Collections','java/util/Collections$EmptyList'},'Sequence value class pins incomplete')
@@ -1184,7 +1202,10 @@ def infer_application(plan,rows,worker_request=None):
                                     require(ret['result_type']=='java.util.Collections$EmptyList','Empty list implementation differs');state.containers[observed['object']]=Container(observed['object'],[],0,False);v=Value(observed)
                                 else:
                                     operand=args[0]if args else recv;require(type(operand.observed.get('value'))is int and -2**63<=operand.observed['value']<2**63,'Long value not exact signed64')
-                                    require((ret['result_type']=='java.lang.Long')if args else(call['receiver_type']=='java.lang.Long'),'Long boxing/unboxing implementation differs');same_value(operand.observed,observed);v=operand.project(observed)
+                                    require((ret['result_type']=='java.lang.Long')if args else(call['receiver_type']=='java.lang.Long'),'Long boxing/unboxing implementation differs')
+                                    if key=='java/lang/Long.intValue()I':require(ret['result_type']=='java.lang.Integer'and type(observed.get('value'))is int and observed.get('value')==(operand.observed['value']+2**31)%2**32-2**31,'Long.intValue narrowing differs')
+                                    else:same_value(operand.observed,observed)
+                                    v=operand.project(observed)
                             elif key=='java/lang/Integer.intValue()I' and cfg.get('library_values'):
                                 library_values(ret.get('library_values'));require(call['receiver_type']=='java.lang.Integer','Unboxing implementation differs');same_value(recv.observed,observed);v=recv.project(observed)
                             elif ins['owner'] in ('java/util/Map','java/util/HashMap') and ins['name'] in ('get','put') and cfg.get('library_values') and identity(recv) in maps and identity(recv) not in poisoned_at and identity(recv) not in nonlocal_owners:

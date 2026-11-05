@@ -62,6 +62,8 @@ def choose(model,query,*,deployment=None):
         dispatch=json.loads(Path(__file__).with_name('direct-dispatch-contracts-20261029.json').read_text())
         selected=select(dispatch,model.get('library_inventory',{}))
         if selected:plan['execution_kernel']['direct_dispatch_contract']=selected
+        from plan_before_advice import attach as attach_before_advice
+        attach_before_advice(plan,model)
         plan['execution_kernel']['class_hashes']={o:c['sha256'] for o,c in model['classes'].items()}
         from contract_obligations import features as api_obligations
         features=api_obligations(plan,model)
@@ -80,6 +82,10 @@ def choose(model,query,*,deployment=None):
         attach_body_observation(plan)
         from plan_target_observation import attach as attach_target_observation
         attach_target_observation(plan)
+    from plan_commons_literals import attach as attach_commons
+    attach_commons(plan,model)
+    from plan_json_tree_observation import attach as attach_json_tree
+    attach_json_tree(plan,model)
     from plan_communication_identity import attach as attach_communication_identity
     attach_communication_identity(plan,model)
     plan['preexecution_applicability']=check(plan,model,query,deployment)

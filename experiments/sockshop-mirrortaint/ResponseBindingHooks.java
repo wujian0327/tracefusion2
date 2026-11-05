@@ -110,8 +110,9 @@ public final class ResponseBindingHooks implements Opcodes {
     // Value demands are independent of reference/effect obligations. This
     // context never suppresses a call, write counter, alias or contract hook.
     static final class SnapshotPolicy {
-        Map policy,proof;boolean selected;
+        Map policy,proof,witness;boolean selected;
         SnapshotPolicy(Map witness,String call,boolean input){
+            this.witness=witness;
             policy=(Map)PlannedServiceAgent.plan.get("target_observation_closure");
             if(policy==null)return;
             Deque<PlannedServiceAgent.Recorder.Frame> stack=PlannedServiceAgent.Recorder.STACK.get();
@@ -156,23 +157,25 @@ public final class ResponseBindingHooks implements Opcodes {
     static void leaf(Object owner,String field,Object value,String path,String anchor,List<Map> result,boolean target,SnapshotPolicy policy){
         List wanted=target?Collections.singletonList(binding().get("target")):(List)binding().get("source_fields");
         boolean dynamic=target&&Boolean.TRUE.equals(binding().get("runtime_container_path"))&&field.startsWith("@")&&path.equals(binding().get("path"));
-        if(!dynamic&&!wanted.contains(anchor==null?field:anchor))return;
-        if(!target&&policy!=null&&field.startsWith("@map:")&&policy.member(anchor,path,value))return;
+        if(!dynamic&&!(!target&&JsonTreeObservationHooks.candidate(owner))&&!wanted.contains(anchor==null?field:anchor))return;
+        if(!target&&!JsonTreeObservationHooks.candidate(owner)&&policy!=null&&field.startsWith("@map:")&&policy.member(anchor,path,value))return;
         Map r=new LinkedHashMap();r.put("path",path);r.put("owner",PlannedServiceAgent.Recorder.id(owner));r.put("field",field);
         r.put("version",field.startsWith("@")?CollectionServiceHooks.epoch(owner):PlannedServiceAgent.Recorder.VERSIONS.getOrDefault(PlannedServiceAgent.Recorder.id(owner)+":"+field,0));
-        r.put("observed",PlannedServiceAgent.Recorder.value(value));if(anchor!=null)r.put("schema_field",anchor);result.add(r);
+        r.put("observed",PlannedServiceAgent.Recorder.value(value));if(JsonTreeObservationHooks.candidate(owner))r.put("json_tree",true);if(anchor!=null)r.put("schema_field",anchor);result.add(r);
     }
+    static void jsonTreeProof(Object o,String path,SnapshotPolicy policy)throws Exception{Map fact=JsonTreeObservationHooks.proof(o,path);if(policy!=null){List ids=(List)policy.witness.get("json_tree_proofs");if(ids==null){ids=new ArrayList();policy.witness.put("json_tree_proofs",ids);}ids.add(fact.get("seq"));}}
     static void walk(Object o,String path,String anchor,List<Map> result,IdentityHashMap<Object,Boolean> seen,int depth,boolean target,SnapshotPolicy policy,List<Map> wrappers)throws Exception{
         if(o==null||SpringTransportAgent.Transport.primitive(o)||o.getClass().getName().equals("org.springframework.http.HttpHeaders"))return;
         if(depth>12||result.size()>10000)throw new IllegalStateException("Binding snapshot bound");
         if(seen.put(o,true)!=null)throw new IllegalStateException("Binding object cycle");
         try{
-            if(o instanceof List){if(!Arrays.asList("java.util.ArrayList","java.util.Arrays$ArrayList","java.util.Collections$SingletonList","java.util.Collections$EmptyList").contains(o.getClass().getName())){Map diagnostic=row();diagnostic.put("runtime_class",o.getClass().getName());diagnostic.put("class_object",PlannedServiceAgent.Recorder.id(o.getClass()));diagnostic.put("source_capture",sourceCapture);if(!CollectionServiceHooks.CALLS.get().isEmpty()){Map call=CollectionServiceHooks.CALLS.get().peek();diagnostic.put("call_id",call.get("call_id"));diagnostic.put("callee",call.get("callee"));}diagnostic.put("loader",PlannedServiceAgent.Recorder.id(o.getClass().getClassLoader()));diagnostic.put("object",PlannedServiceAgent.Recorder.id(o));diagnostic.put("path",path);emit("binding-unsupported-list",diagnostic);throw new IllegalStateException("Unmodeled binding List type");}
+            if(o instanceof List){if(!JsonTreeObservationHooks.candidate(o)&&!Arrays.asList("java.util.ArrayList","java.util.Arrays$ArrayList","java.util.Collections$SingletonList","java.util.Collections$EmptyList").contains(o.getClass().getName())){Map diagnostic=row();diagnostic.put("runtime_class",o.getClass().getName());diagnostic.put("class_object",PlannedServiceAgent.Recorder.id(o.getClass()));diagnostic.put("source_capture",sourceCapture);if(!CollectionServiceHooks.CALLS.get().isEmpty()){Map call=CollectionServiceHooks.CALLS.get().peek();diagnostic.put("call_id",call.get("call_id"));diagnostic.put("callee",call.get("callee"));}diagnostic.put("loader",PlannedServiceAgent.Recorder.id(o.getClass().getClassLoader()));diagnostic.put("object",PlannedServiceAgent.Recorder.id(o));diagnostic.put("path",path);emit("binding-unsupported-list",diagnostic);throw new IllegalStateException("Unmodeled binding List type");}
                 if(sourceCapture)CollectionServiceHooks.received(o);
-                int i=0;for(Object x:(List)o){String p=path+"/"+i;if(SpringTransportAgent.Transport.primitive(x)&&anchor!=null)leaf(o,"@list:"+i,x,p,anchor,result,target,policy);else walk(x,p,anchor,result,seen,depth+1,target,policy,wrappers);i++;}return;}
-            if(o instanceof Map){mapWrapper(o,target,wrappers);
+                if(JsonTreeObservationHooks.candidate(o)){jsonTreeProof(o,path,policy);if(anchor==null)anchor="@json-tree";}
+                int i=0;for(Object x:JsonTreeObservationHooks.candidate(o)?JsonTreeObservationHooks.elements(o):(List)o){String p=path+"/"+i;if(SpringTransportAgent.Transport.primitive(x)&&anchor!=null)leaf(o,"@list:"+i,x,p,anchor,result,target,policy);else walk(x,p,anchor,result,seen,depth+1,target,policy,wrappers);i++;}return;}
+            if(o instanceof Map){if(!JsonTreeObservationHooks.candidate(o))mapWrapper(o,target,wrappers);else{jsonTreeProof(o,path,policy);if(anchor==null)anchor="@json-tree";}
                 if(sourceCapture)CollectionServiceHooks.received(o);
-                List<Map.Entry> actual=new ArrayList<>();if(o.getClass()!=HashMap.class&&o.getClass()!=LinkedHashMap.class)actual=wrapperEntries(o,wrappers);
+                List<Map.Entry> actual=new ArrayList<>();if(JsonTreeObservationHooks.candidate(o))actual=JsonTreeObservationHooks.entries(o);else if(o.getClass()!=HashMap.class&&o.getClass()!=LinkedHashMap.class)actual=wrapperEntries(o,wrappers);
                 else for(Object k:((Map)o).keySet()){if(!(k instanceof String))throw new IllegalStateException("Non-string binding key");actual.add(new AbstractMap.SimpleImmutableEntry(k,((Map)o).get(k)));}
                 for(Map.Entry pair:actual){Object k=pair.getKey(),v=pair.getValue();String p=path+"/"+SpringTransportAgent.Transport.escape((String)k);
                     if(SpringTransportAgent.Transport.primitive(v)&&anchor!=null)leaf(o,"@map:"+k,v,p,anchor,result,target,policy);else walk(v,p,anchor,result,seen,depth+1,target,policy,wrappers);}return;}

@@ -139,7 +139,7 @@ public static final class DirectDispatchHooks implements Opcodes {
         if(call.get("_receiver_ref")!=proxy||!((String)call.get("callee")).endsWith(suffix))return;
         if(method.isVarArgs()||target==null||targetSource==null||!targetSource.getClass().getName().equals("org.springframework.aop.target.SingletonTargetSource")||chain==null||!Arrays.asList("java.util.ArrayList","java.util.Collections$EmptyList").contains(chain.getClass().getName()))return;
         List<String> transparent=new ArrayList<>();boolean empty=((List)chain).isEmpty();if(!empty){
-            if(((List)chain).size()!=1||config().get("transparent_interceptors")==null)return;Object advice=((List)chain).get(0);String name=advice.getClass().getName().replace('.','/');
+            if(((List)chain).size()!=1||config().get("transparent_interceptors")==null){BeforeAdviceHooks.prepare(proxy,method,targetSource,target,chain,args,call);return;}Object advice=((List)chain).get(0);String name=advice.getClass().getName().replace('.','/');
             if(!((List)config().get("transparent_interceptors")).equals(Arrays.asList(name)))return;
             Field singleton=advice.getClass().getDeclaredField("INSTANCE");if(singleton.get(null)!=advice)return;transparent.add(name);
         }
@@ -154,6 +154,7 @@ public static final class DirectDispatchHooks implements Opcodes {
 
     public static void premain(String args,Instrumentation i)throws Exception{PlannedServiceAgent.premain(args,i);Transport.start();i.addTransformer(new SpringTransportAgent());}
     public byte[] transform(final ClassLoader loader,String owner,Class<?> prior,ProtectionDomain domain,byte[] bytes){
+        try{JsonTreeObservationHooks.loaded(loader,owner,bytes);}catch(Throwable failure){MonitorSafety.fatal(failure);PlannedServiceAgent.Recorder.problem("json-tree-class:"+owner+":"+failure);}
         try{byte[] scoped=RequestScopeHooks.transform(loader,owner,bytes);if(scoped!=null)return scoped;}catch(Throwable failure){MonitorSafety.fatal(failure);PlannedServiceAgent.Recorder.problem("query-scope-transform:"+owner+":"+failure);return null;}
         byte[] base=transformBase(loader,owner,prior,domain,bytes);
         if(SourceLocalityInstrumentation.owns(owner))try{return SourceLocalityInstrumentation.transform(loader,owner,bytes,base==null?bytes:base);}catch(Throwable e){PlannedServiceAgent.Recorder.problem("locality-transform:"+owner+":"+e);return base;}
@@ -161,6 +162,8 @@ public static final class DirectDispatchHooks implements Opcodes {
         return base;
     }
     byte[] transformBase(final ClassLoader loader,String owner,Class<?> prior,ProtectionDomain domain,byte[] bytes){
+        try{byte[] literal=CommonsValueHooks.transform(loader,owner,bytes);if(literal!=null)return literal;}catch(Throwable failure){MonitorSafety.fatal(failure);PlannedServiceAgent.Recorder.problem("commons-literal-transform:"+owner+":"+failure);return null;}
+        try{byte[] before=BeforeAdviceHooks.transform(loader,owner,bytes);if(before!=null)return before;}catch(Throwable failure){MonitorSafety.fatal(failure);PlannedServiceAgent.Recorder.problem("before-dispatch-transform:"+owner+":"+failure);return null;}
         if(Communication.owns(owner)){
             try{return Communication.transform(loader,owner,bytes);}catch(Throwable failure){PlannedServiceAgent.Recorder.problem("communication-transform:"+owner+":"+failure);return null;}
         }

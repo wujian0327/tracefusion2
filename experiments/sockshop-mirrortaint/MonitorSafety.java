@@ -53,7 +53,7 @@ public final class MonitorSafety implements Opcodes {
     // Only monitor-owned static calls injected by our transformers are wrapped.
     // The original business invocation (including its Throwable) stays outside.
     static final Set<String> OWNERS=new HashSet<>(Arrays.asList("PlannedServiceAgent$Recorder","CollectionServiceHooks","ExecutionKernelHooks","FeignEffectHooks","DocumentDateHooks","ResponseBindingHooks","ReadEffectHooks","ConversionContractHooks","SaveEffectHooks","TemporalDateHooks","UuidProjectionHooks","AsyncTaskHooks","FrameworkCallHooks","RequestEntityHooks","SourceEvidenceHooks","SpringTransportAgent$Transport"));
-    static {OWNERS.add("SpringTransportAgent$DirectDispatchHooks");OWNERS.add("SpringTransportAgent$Communication");OWNERS.add("BodyObservationHooks");OWNERS.add("SourceLocalityHooks");OWNERS.add("SourceObservationHooks");}
+    static {OWNERS.add("SpringTransportAgent$DirectDispatchHooks");OWNERS.add("BeforeAdviceHooks");OWNERS.add("CommonsValueHooks");OWNERS.add("SpringTransportAgent$Communication");OWNERS.add("BodyObservationHooks");OWNERS.add("SourceLocalityHooks");OWNERS.add("SourceObservationHooks");}
     static void instrument(ClassNode owner){
         Map<String,String> wrappers=new LinkedHashMap<>();List<MethodNode> generated=new ArrayList<>();
         for(MethodNode method:new ArrayList<MethodNode>(owner.methods))for(AbstractInsnNode node:method.instructions.toArray()){

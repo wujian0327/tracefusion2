@@ -171,9 +171,9 @@ public final class ExecutionKernelHooks implements Opcodes {
     public static void lambda(Object lambda,String key,int pc,Object[] captured,Class implementation){synchronized(PlannedServiceAgent.Recorder.class){
         Map r=PlannedServiceAgent.Recorder.row();if(INITIALIZED.containsKey(implementation))r.put("initialized_implementation",INITIALIZED.get(implementation));r.put("pc",pc);r.put("site",key+"@"+pc);r.put("lambda",PlannedServiceAgent.Recorder.value(lambda));r.put("lambda_type",lambda.getClass().getName());r.put("instruction",instruction(key,pc));List vs=new ArrayList();for(Object a:captured)vs.add(PlannedServiceAgent.Recorder.value(a));r.put("captures",vs);PlannedServiceAgent.Recorder.emit("execution-lambda",r);
     }}
-    static void libraryEnd(Map start,Object result,Map row)throws Exception{if(!contracts())return;
+    static void libraryEnd(Map start,Object result,Map row)throws Exception{if(!contracts())return;CommonsValueHooks.completed(start,result,row);
         String valueCall=(String)start.get("callee");
-        if(Arrays.asList("java/lang/Long.valueOf(J)Ljava/lang/Long;","java/lang/Long.longValue()J","java/util/Collections.emptyList()Ljava/util/List;").contains(valueCall)){
+        if(Arrays.asList("java/lang/Long.valueOf(J)Ljava/lang/Long;","java/lang/Long.longValue()J","java/lang/Long.intValue()I","java/util/Collections.emptyList()Ljava/util/List;").contains(valueCall)){
             Map cfg=(Map)((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("sequence_values");
             if(cfg!=null){Map pins=new TreeMap();for(String name:new String[]{"java/lang/Long","java/util/Collections","java/util/Collections$EmptyList"})pins.put(name,JdkContractProbe.hash(name));Map proof=new LinkedHashMap();proof.put("callee",valueCall);proof.put("java_runtime_version",System.getProperty("java.runtime.version"));proof.put("class_sha256",pins);row.put("sequence_value",proof);}
         }

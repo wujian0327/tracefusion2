@@ -6,7 +6,7 @@ from audit_target_external_first import selected,business_comparison
 from analysis_status import AnalysisLimit
 
 
-def run(home,out,modes=('full','selective')):
+def run(home,out,modes=('full','selective'),case_indices=None):
     out.mkdir(parents=True,exist_ok=False)
     protocol=load(home/'task-seal.json');original=load(ROOT/'artifacts/target-closure-revision-20261103/ruoyi-original-03/sealed-original-requests/results.json')['cases']
     import external_transfer_oracle as oracle
@@ -28,6 +28,8 @@ def run(home,out,modes=('full','selective')):
             except AnalysisLimit as e:error=str(e);category='analysis_limited'
             except Exception as e:error=str(e);category='validation_rejected'if valid else'evidence_invalid'
             cases=load(trial/'result.json')['cases'];matched=[];times=[]
+            expected_cases=[c for c in original if c['query']==q['id']and(case_indices is None or c['case']in case_indices)]
+            assert len(cases)==len(expected_cases)and {c['case']for c in cases}=={c['case']for c in expected_cases},'Request subset must be explicit and complete'
             if(trial/'independent-db-times-receipt.json').exists()and load(trial/'independent-db-times-receipt.json')['returncode']==0:
                 table={1:('sys_dept','deptId'),2:('sys_dept','deptId'),3:('sys_dict_data','dictCode'),4:('sys_config','configId'),5:('sys_post','postId')}[int(q['id'].split('-')[-1])]
                 db={}
@@ -41,7 +43,7 @@ def run(home,out,modes=('full','selective')):
                     elif isinstance(v,list):
                         for x in v:clock(x)
                 for c in cases:clock(c['response'])
-            for base in(c for c in original if c['query']==q['id']):
+            for base in expected_cases:
                 actual=next(c for c in cases if c['case']==base['case']);business=business_comparison('ruoyi',base['response'],actual['response'])
                 matched.append(base['http_status']==actual['http_status']and business['task_response_equal_except_original_SQL_initialization_clock'])
                 for pointer,value in selected(base['response'],path):

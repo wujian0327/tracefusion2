@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "class_sha256": {
+    "org/springframework/aop/framework/ReflectiveMethodInvocation": "111edefed4deed796640c89133a093781aec5c67eb1f7b8cfeb3ff54530a53a5",
+    "org/springframework/aop/framework/adapter/MethodBeforeAdviceInterceptor": "31b5dc8f92d544d88508f3595196ea163b254c9ab037d93b38d465051a422b35",
+    "org/springframework/aop/framework/CglibAopProxy$CglibMethodInvocation": "8fcf556dd15d9d61fb73814dd092aa543f73b42aace19f64bf3c03c943993ef5",
+    "org/springframework/aop/framework/InterceptorAndDynamicMethodMatcher": "6ba5059038bc93a0c94c1391c2940de81624b95153c9140dd07461d8550eab75"
+  },
+  "semantics": "All actual interceptors must be exact Expose singleton or exact MethodBeforeAdviceInterceptor (static or dynamic). Observe original matches and completed advice before unique target joinpoint; conservatively invalidate pre-target receiver/argument/global state. No post-target user advice; no readonly claim. No asynchronous/concurrent effect guarantee."
+}

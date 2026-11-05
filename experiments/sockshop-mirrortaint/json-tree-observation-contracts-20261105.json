@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "class_sha256": {
+    "com/alibaba/fastjson2/JSONArray": "2244f49d17695bb793cee15da9a5da4c0190a98ecc8556a26026877c45426359",
+    "com/alibaba/fastjson2/JSONObject": "8d6bfc3f764d6f1d59847264261612ad8a0652947056fac57a0c8afdc9835f5b"
+  },
+  "profiles": [
+    {
+      "java_runtime_version": "1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01",
+      "class_sha256": {
+        "java/util/ArrayList": "0976edaa24bd7790c9778c846ef4c4cdfe396242cb1e298cd190454083366199",
+        "java/util/HashMap": "1c051649321f843d1ac7dcff1075bf4fa93e132ee95c969bfb41dbc33376f8f9",
+        "java/util/HashMap$Node": "0de0dd543f4f1a81e19cb76b8807e1338d1de0e204ce5edc944b3f8d149367d2",
+        "java/util/LinkedHashMap": "44ac2191f4720ca8ed13fbbaa7eb9201e4d0ee0110df525fb0305b3ef1844953",
+        "java/util/LinkedHashMap$Entry": "3004b7d1c7087aeeefb32533ddca3f1010a18147c7df38a063e2ef5482910691"
+      }
+    }
+  ],
+  "kind": "finite-physical-json-tree-observation",
+  "conditions": [
+    "Exact runtime classes and original loaded-byte hashes; no subclasses",
+    "Only pinned ArrayList elementData/size/modCount and HashMap table/Node or exact LinkedHashMap.Entry fields",
+    "No overridden iterator/get/keySet/serialization/toString invoked",
+    "String keys, bounds, unique physical nodes and stable membership; no decoder/DTO provenance inference"
+  ],
+  "observation_only": true
+}

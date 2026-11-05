@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "class_sha256": {
+    "org/apache/commons/lang3/StringUtils": "ced737ae12d0ac69b19dd4e498c2fe30b9dd378421ddcd3f329bf46e5ac536a7",
+    "org/apache/commons/lang3/ArrayUtils": "67b93e0120cb7a2165849043cd0e06ee622d40b36ada9e3fc00295331af5f374"
+  },
+  "profiles": [
+    {
+      "java_runtime_version": "1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01",
+      "class_sha256": {
+        "java/lang/Object": "91e9554ea0fac57b7ca9595ab777fe2578af2e5b111e8c240e1793f1a3686292",
+        "java/lang/String": "969d15cf90e6cc029cd231abf9573f9f4d441c97e5f9062f8dbb5465719b8569",
+        "java/lang/System": "c7f9442418ac38d11de6c3ecb86f35fdd0d78a8098f878216e077c1472bd4765",
+        "java/util/ArrayList": "0976edaa24bd7790c9778c846ef4c4cdfe396242cb1e298cd190454083366199",
+        "java/util/Arrays": "d77a4a5378c6e0f6d609dd087fd2a37d40a056bce60b189eb80867b8176280cf"
+      }
+    }
+  ],
+  "semantics": "Public inherited static methods resolved to exact pinned Commons Lang3: split(String,String) with one BMP nonsurrogate separator drops empty tokens; contains(Object[],Object) only immutable String/null elements and needle. Require successful library initialization before root. Other shapes retain opaque effects; no generic readonly whitelist. Successful static owner class is passed from the original callsite; inherited resolution is proved from frozen class metadata, without loadClass/getMethod callbacks. Empty input is ineligible (shared static empty array). No SecurityManager. Both operations require 1..10000 tokens/elements; empty/shared static arrays remain opaque. All pinned Commons dependencies must be witnessed initialized in the same defining loader before the query root; no class is initialized by the observer."
+}

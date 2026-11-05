@@ -8,6 +8,8 @@ def matches(pattern,path):
 
 
 def sources(graph,role):
+    from infer_json_tree_observation import validate as validate_json_tree
+    validate_json_tree(graph.plans[role],graph.rows[role])
     plan=graph.plans[role]; config=plan.get('response_binding')
     if not config:return
     if plan.get('read_forward_contracts'):audit_read_effects(graph.rows[role],plan)
