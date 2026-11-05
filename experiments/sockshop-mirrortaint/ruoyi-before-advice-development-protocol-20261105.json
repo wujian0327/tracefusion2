@@ -1,0 +1,28 @@
+{
+  "created_utc": "2026-11-05T02:48:24.617821+00:00",
+  "base": "06f1b585bb95d13f3f170d6f51c7d71e5e0aee44",
+  "pilot": {
+    "query": "ruoyi-2",
+    "original_case": 0,
+    "input": 101,
+    "original_members": 10,
+    "retained_members": 4,
+    "source_boundary": "same declared SysDeptMapper.selectDeptList return fields"
+  },
+  "scope": [
+    "Actual dynamic matching/before advice and result reachability",
+    "Finite framework effect only if witnessed; otherwise unknown",
+    "Separate JSONArray implementation/configuration/member observation and original Redis source binding"
+  ],
+  "no_removeIf_semantic_changes": true,
+  "no_performance_new_apps_or_push": true,
+  "old_files": {
+    "artifacts/ruoyi-removeif-20261105/final-C1/task-seal.json": "18f472d17bec650b492818e9fc042d16a2035aec6c1a924c4ceffafe99d7161c",
+    "artifacts/ruoyi-removeif-20261105/final-C1/plans/ruoyi-2/plan.json": "d8431b566de5745bb2e832db1423e4ca8d140bfa8ff07ab948fdf17b9a3a0e87",
+    "artifacts/ruoyi-removeif-20261105/final-C1/plans/ruoyi-3/plan.json": "08cc67a976af9eb611c3814803c0e0da71367650bed22730fb94cefe3a60a1cd",
+    "artifacts/ruoyi-removeif-20261105/final-C1/runs/ruoyi-2/full/capture/events.jsonl": "4dcc9a051ba84355adccb5e14ed5fee02a1a1563547c47a450c2452aaaf9704d",
+    "artifacts/ruoyi-removeif-20261105/final-C1/runs/ruoyi-2/selective/capture/events.jsonl": "1636770ea37c4d4ffde0d1d8c06333651ecd31f65ea6fb289c0357622d6f89e6",
+    "artifacts/ruoyi-removeif-20261105/final-C1/runs/ruoyi-3/full/capture/events.jsonl": "53c85e64eb6f07a0f8da6abe761894d4772f0020b061ec9a497a7a814003dccb",
+    "artifacts/ruoyi-removeif-20261105/final-C1/runs/ruoyi-3/selective/capture/events.jsonl": "ca4fa6819186b3b2369929c1cfc8f664cc3d7d2fa3997fb5c9fb77a2002e5d0a"
+  }
+}
