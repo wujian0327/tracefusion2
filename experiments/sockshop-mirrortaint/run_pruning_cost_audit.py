@@ -1,5 +1,5 @@
 """Presealed existing tasks; independent omission switches and diagnosis-before-timing."""
-import argparse,copy,json,random,resource,subprocess,sys,time
+import argparse,copy,json,os,random,resource,subprocess,sys,time
 from pathlib import Path
 from run_planned_service import ROOT,HERE,load,save,sha
 ARMS={'none':(False,False,False),'boundary_only':(True,False,False),'write_only':(False,True,False),'body_only':(False,False,True),'all':(True,True,True)}
@@ -74,11 +74,11 @@ def trial(home,out,task,arm,diagnostic,warm=None,seconds=None,coarse=False):
  cap=out/'capture/events.jsonl';save(out/'offline-protocol.json',{'tasks':{task:{'selective':{'capture':str(cap),'capture_sha256':sha(cap),'plan':str(plan),'plan_sha256':sha(plan),'role':role}}}})
  script=HERE/'measure_pruning_cost_offline.py'
  for stage in ('trace','oracle'):
-  cmd=[sys.executable,str(script),'--protocol',str(out/'offline-protocol.json'),'--task',task,'--out',str(out/stage)]
+  cmd=['taskset','-c',str(min(os.sched_getaffinity(0))),sys.executable,str(script),'--protocol',str(out/'offline-protocol.json'),'--task',task,'--out',str(out/stage)]
   if stage=='oracle':cmd+=['--score',str(out/'trace')]
   before=resource.getrusage(resource.RUSAGE_CHILDREN);start=time.perf_counter()
   with(out/(stage+'.log')).open('w')as f:subprocess.run(cmd,stdout=f,stderr=subprocess.STDOUT,check=True)
-  after=resource.getrusage(resource.RUSAGE_CHILDREN);save(out/(stage+'-process.json'),{'wall_seconds':time.perf_counter()-start,'cpu_seconds':after.ru_utime+after.ru_stime-before.ru_utime-before.ru_stime,'fresh_exec':True,'profiler':False})
+  after=resource.getrusage(resource.RUSAGE_CHILDREN);save(out/(stage+'-process.json'),{'wall_seconds':time.perf_counter()-start,'cpu_seconds':after.ru_utime+after.ru_stime-before.ru_utime-before.ru_stime,'fresh_exec':True,'profiler':False,'logical_cpu':min(os.sched_getaffinity(0))})
  summary=load(out/'oracle/summary.json');assert summary['correct']==summary['targets']and summary['targets']>0 and summary['targets']==expected_targets['expected_targets']
  verify_current(home)
  save(out/'complete.json',{'complete':True,'task':task,'arm':arm,'diagnostic_only':diagnostic,'targets':summary['targets'],'correct':summary['correct']})
