@@ -133,6 +133,14 @@ def infer_application(plan,rows,worker_request=None):
         defaults=default_facts(cfg,relevant,[r for r in relevant if r['kind']=='execution-constructor-enter'])
         active_defaults={};decimal_values={}
         methods=cfg['methods'];events=[r for r in relevant if r['kind'] in ('enter','exit','abort','collection-call-enter','collection-call-exit','collection-call-throw','execution-direct-dispatch','execution-constructor-enter','execution-constructed','execution-constructor-throw','execution-static-read','execution-lambda','execution-class-literal','execution-array','execution-array-throw','execution-type-test','execution-i2l','collection-catch','branch','read','write','write-version') and (r['kind'] not in ('read','write','write-version','branch') or r['site'].rsplit('@',1)[0] in methods)]
+        # Root-scoped facts only: retain every candidate and its raw position.
+        # No field origins, known states, or mutable heap conclusions are cached.
+        source_calls=defaultdict(list);event_completions=defaultdict(list)
+        for position,row in enumerate(relevant):
+            if row['kind']in ('collection-call-enter','collection-call-exit'):
+                source_calls[(row['kind'],row.get('call_id'))].append((position,row))
+        for position,row in enumerate(events):
+            if row['kind']=='collection-call-exit':event_completions[row.get('call_id')].append((position,row))
         writes=[r for r in relevant if r['kind']in ('write','write-version')];providers=defaultdict(list)
         for row in relevant:
             if row['kind'] in ('binding-source','binding-input'):
@@ -174,8 +182,8 @@ def infer_application(plan,rows,worker_request=None):
             source_row=candidates[0][0]
             if source_row['kind']=='binding-source'and plan['response_binding'].get('source_occurrence_protocol',0)>=1:
                 if source_row.get('source_call_id')is None or source_row.get('source_scope')=='observation-only-call':return Value(f['observed'],unknown=True)
-                starts=[r for r in relevant if r['kind']=='collection-call-enter'and r.get('call_id')==source_row['source_call_id']]
-                finishes=[r for r in relevant if r['kind']=='collection-call-exit'and r.get('call_id')==source_row['source_call_id']]
+                starts=[r for _,r in source_calls[('collection-call-enter',source_row['source_call_id'])]]
+                finishes=[r for _,r in source_calls[('collection-call-exit',source_row['source_call_id'])]]
                 require(len(starts)==len(finishes)==1,'Declared source call pair absent/ambiguous')
                 start,finish=starts[0],finishes[0]
                 require(start['seq']<source_row['seq']<finish['seq'] and start['frame']==source_row['frame']==finish['frame'] and start['callee']==source_row['callee'] and start['method']==source_row['source_caller_method'] and start['pc']==source_row['source_pc'],'Declared source occurrence coordinates differ')
@@ -717,7 +725,11 @@ def infer_application(plan,rows,worker_request=None):
                                     candidate=actual_owner+'.toString()Ljava/lang/String;'
                                     if candidate in permitted:expected_impl=candidate;render_callback=True;child_args=[];child_recv=args[0];break
                                     actual_owner=cfg['class_parents'].get(actual_owner,{}).get('super')
-                            list_render=False;render_finish=next((r for r in events[pos:] if r['kind']=='collection-call-exit' and r.get('call_id')==call['call_id']),None)
+                            list_render=False;render_finish=None
+                            if key in ('java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;','org/springframework/http/RequestEntity.toString()Ljava/lang/String;'):
+                                render_candidates=[r for position,r in event_completions[call['call_id']]if position>=pos]
+                                require(len(render_candidates)<=1,'Render completion ambiguous')
+                                render_finish=render_candidates[0]if render_candidates else None
                             render_proof=render_finish.get('request_render',{}) if render_finish else {}
                             if key=='java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;' and render_proof.get('kind')=='list-render' and render_proof.get('valid'):
                                 require(request_hashes(render_proof['class_sha256']) and any(p['java_runtime_version']==runtime[0]['java_runtime_version'] and p['class_sha256']==render_proof['jdk_sha256'] for p in cfg['request_entity_contracts']['jdk_profiles']),'List render framework/runtime differs')
