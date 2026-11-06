@@ -1,0 +1,3910 @@
+{
+  "gates": {
+    "passed": true,
+    "core_candidate": "bcdf0590d1b22ea13717afded657a062f070e1df",
+    "core_reference": "4cb5943",
+    "source_files": 139,
+    "changed_core_files": [
+      "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/ExecutionKernelHooks.java"
+    ],
+    "scope": "Independent pre-omission control only; all Python reconstruction and contracts unchanged.",
+    "same_capture_full_graph_and_root_audits_equal": true,
+    "declared_target_origins_versions_selectors_and_source_occurrences_equal": true,
+    "formal_deployments": 45,
+    "formal_drivers_unchanged": true,
+    "necessary_unknown_preserved": true,
+    "MT_rerun": false,
+    "new_applications_or_framework_models": false
+  },
+  "formal_matrix": {
+    "mall": {
+      "selected_arms": [
+        "none",
+        "boundary_only",
+        "write_only",
+        "body_only",
+        "all"
+      ],
+      "omission_vectors": {
+        "none": [
+          0,
+          0,
+          0
+        ],
+        "boundary_only": [
+          816,
+          0,
+          0
+        ],
+        "write_only": [
+          0,
+          16,
+          0
+        ],
+        "body_only": [
+          0,
+          0,
+          176
+        ],
+        "all": [
+          816,
+          16,
+          176
+        ]
+      }
+    },
+    "zlt-user": {
+      "selected_arms": [
+        "none",
+        "boundary_only"
+      ],
+      "omission_vectors": {
+        "none": [
+          0,
+          0,
+          0
+        ],
+        "boundary_only": [
+          2024,
+          0,
+          0
+        ]
+      }
+    },
+    "ruoyi-dictionary": {
+      "selected_arms": [
+        "none",
+        "boundary_only"
+      ],
+      "omission_vectors": {
+        "none": [
+          0,
+          0,
+          0
+        ],
+        "boundary_only": [
+          3468,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "diagnosis": {
+    "mall": {
+      "none": {
+        "task": "mall",
+        "trial": "/home/wujian/tracefusion2/artifacts/pruning-contribution-audit-20261106/short/mall-none",
+        "plan_sha256": "8c2019cd79a27316f3eba6438130a10b21b05cff7ce713e806b6077958a517ed",
+        "static_candidates": {
+          "boundary_scalar_candidates": 903,
+          "boundary_container_candidates": 1,
+          "constructor_write_candidates": 14,
+          "application_write_candidates": 1,
+          "body_candidates": 1
+        },
+        "batch": {
+          "boundary_scope_checks": 336,
+          "boundary_selected_scopes": 0,
+          "boundary_scalar_values_omitted": 0,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 16,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {
+            "eligible": 16
+          },
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 5303,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 64,
+            "binding-opaque-touch": 208,
+            "binding-return": 16,
+            "binding-source": 48,
+            "branch": 240,
+            "class": 404,
+            "collection-call-enter": 736,
+            "collection-call-exit": 736,
+            "communication-class": 7,
+            "communication-framework": 7,
+            "date-runtime": 1,
+            "direct-dispatch-check": 16,
+            "direct-dispatch-framework": 1,
+            "enter": 400,
+            "execution-constructed": 208,
+            "execution-constructor-enter": 208,
+            "execution-defaults": 112,
+            "execution-direct-dispatch": 16,
+            "execution-object-birth": 96,
+            "execution-runtime": 1,
+            "execution-static-read": 16,
+            "execution-type-test": 32,
+            "exit": 400,
+            "foundation-runtime": 1,
+            "http-client-attempt": 16,
+            "http-client-receive": 16,
+            "http-client-send": 16,
+            "http-framework": 3,
+            "http-json": 64,
+            "http-request-derived": 16,
+            "http-response-derived": 16,
+            "http-rpc-enter": 16,
+            "http-rpc-exit": 16,
+            "http-server-context": 32,
+            "http-server-input": 16,
+            "http-source-fact": 32,
+            "jackson-isolation": 1,
+            "locality-begin": 48,
+            "locality-birth": 32,
+            "locality-client-return": 16,
+            "locality-decoded": 16,
+            "locality-end": 48,
+            "locality-factory-config": 16,
+            "locality-framework": 49,
+            "locality-reader": 16,
+            "metrics": 1,
+            "read": 176,
+            "start": 1,
+            "write": 634
+          }
+        },
+        "requests": {
+          "boundary_scope_checks": 208,
+          "boundary_selected_scopes": 0,
+          "boundary_scalar_values_omitted": 0,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 16,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {
+            "eligible": 16
+          },
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 3266,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 48,
+            "binding-opaque-touch": 112,
+            "binding-return": 16,
+            "binding-source": 32,
+            "branch": 160,
+            "class": 1,
+            "collection-call-enter": 560,
+            "collection-call-exit": 560,
+            "communication-class": 5,
+            "communication-framework": 1,
+            "direct-dispatch-check": 16,
+            "enter": 224,
+            "execution-constructed": 128,
+            "execution-constructor-enter": 128,
+            "execution-defaults": 64,
+            "execution-direct-dispatch": 16,
+            "execution-object-birth": 48,
+            "execution-static-read": 16,
+            "execution-type-test": 16,
+            "exit": 224,
+            "foundation-runtime": 1,
+            "http-client-attempt": 16,
+            "http-client-receive": 16,
+            "http-client-send": 16,
+            "http-json": 48,
+            "http-request-derived": 16,
+            "http-response-derived": 16,
+            "http-rpc-enter": 16,
+            "http-rpc-exit": 16,
+            "http-server-context": 16,
+            "http-server-input": 16,
+            "http-source-fact": 32,
+            "locality-begin": 32,
+            "locality-birth": 32,
+            "locality-client-return": 16,
+            "locality-decoded": 16,
+            "locality-end": 32,
+            "locality-factory-config": 16,
+            "locality-reader": 16,
+            "read": 112,
+            "write": 378
+          }
+        },
+        "request_messages": 16,
+        "note": "Snapshot selection is not omission. Actual value/field/branch omission counts come from retained completion certificates; zero means no omission, not failure."
+      },
+      "boundary_only": {
+        "task": "mall",
+        "trial": "/home/wujian/tracefusion2/artifacts/pruning-contribution-audit-20261106/short/mall-boundary_only",
+        "plan_sha256": "8c2019cd79a27316f3eba6438130a10b21b05cff7ce713e806b6077958a517ed",
+        "static_candidates": {
+          "boundary_scalar_candidates": 903,
+          "boundary_container_candidates": 1,
+          "constructor_write_candidates": 14,
+          "application_write_candidates": 1,
+          "body_candidates": 1
+        },
+        "batch": {
+          "boundary_scope_checks": 336,
+          "boundary_selected_scopes": 192,
+          "boundary_scalar_values_omitted": 720,
+          "boundary_container_values_omitted": 96,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 16,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {
+            "eligible": 16
+          },
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 5303,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 64,
+            "binding-opaque-touch": 208,
+            "binding-return": 16,
+            "binding-source": 48,
+            "branch": 240,
+            "class": 404,
+            "collection-call-enter": 736,
+            "collection-call-exit": 736,
+            "communication-class": 7,
+            "communication-framework": 7,
+            "date-runtime": 1,
+            "direct-dispatch-check": 16,
+            "direct-dispatch-framework": 1,
+            "enter": 400,
+            "execution-constructed": 208,
+            "execution-constructor-enter": 208,
+            "execution-defaults": 112,
+            "execution-direct-dispatch": 16,
+            "execution-object-birth": 96,
+            "execution-runtime": 1,
+            "execution-static-read": 16,
+            "execution-type-test": 32,
+            "exit": 400,
+            "foundation-runtime": 1,
+            "http-client-attempt": 16,
+            "http-client-receive": 16,
+            "http-client-send": 16,
+            "http-framework": 3,
+            "http-json": 64,
+            "http-request-derived": 16,
+            "http-response-derived": 16,
+            "http-rpc-enter": 16,
+            "http-rpc-exit": 16,
+            "http-server-context": 32,
+            "http-server-input": 16,
+            "http-source-fact": 32,
+            "jackson-isolation": 1,
+            "locality-begin": 48,
+            "locality-birth": 32,
+            "locality-client-return": 16,
+            "locality-decoded": 16,
+            "locality-end": 48,
+            "locality-factory-config": 16,
+            "locality-framework": 49,
+            "locality-reader": 16,
+            "metrics": 1,
+            "read": 176,
+            "start": 1,
+            "write": 634
+          }
+        },
+        "requests": {
+          "boundary_scope_checks": 208,
+          "boundary_selected_scopes": 192,
+          "boundary_scalar_values_omitted": 720,
+          "boundary_container_values_omitted": 96,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 16,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {
+            "eligible": 16
+          },
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 3266,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 48,
+            "binding-opaque-touch": 112,
+            "binding-return": 16,
+            "binding-source": 32,
+            "branch": 160,
+            "class": 1,
+            "collection-call-enter": 560,
+            "collection-call-exit": 560,
+            "communication-class": 5,
+            "communication-framework": 1,
+            "direct-dispatch-check": 16,
+            "enter": 224,
+            "execution-constructed": 128,
+            "execution-constructor-enter": 128,
+            "execution-defaults": 64,
+            "execution-direct-dispatch": 16,
+            "execution-object-birth": 48,
+            "execution-static-read": 16,
+            "execution-type-test": 16,
+            "exit": 224,
+            "foundation-runtime": 1,
+            "http-client-attempt": 16,
+            "http-client-receive": 16,
+            "http-client-send": 16,
+            "http-json": 48,
+            "http-request-derived": 16,
+            "http-response-derived": 16,
+            "http-rpc-enter": 16,
+            "http-rpc-exit": 16,
+            "http-server-context": 16,
+            "http-server-input": 16,
+            "http-source-fact": 32,
+            "locality-begin": 32,
+            "locality-birth": 32,
+            "locality-client-return": 16,
+            "locality-decoded": 16,
+            "locality-end": 32,
+            "locality-factory-config": 16,
+            "locality-reader": 16,
+            "read": 112,
+            "write": 378
+          }
+        },
+        "request_messages": 16,
+        "note": "Snapshot selection is not omission. Actual value/field/branch omission counts come from retained completion certificates; zero means no omission, not failure."
+      },
+      "write_only": {
+        "task": "mall",
+        "trial": "/home/wujian/tracefusion2/artifacts/pruning-contribution-audit-20261106/short/mall-write_only",
+        "plan_sha256": "8c2019cd79a27316f3eba6438130a10b21b05cff7ce713e806b6077958a517ed",
+        "static_candidates": {
+          "boundary_scalar_candidates": 903,
+          "boundary_container_candidates": 1,
+          "constructor_write_candidates": 14,
+          "application_write_candidates": 1,
+          "body_candidates": 1
+        },
+        "batch": {
+          "boundary_scope_checks": 336,
+          "boundary_selected_scopes": 0,
+          "boundary_scalar_values_omitted": 0,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 16,
+          "body_guard_eligible_calls": 16,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {
+            "eligible": 16
+          },
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 5303,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 64,
+            "binding-opaque-touch": 208,
+            "binding-return": 16,
+            "binding-source": 48,
+            "branch": 240,
+            "class": 404,
+            "collection-call-enter": 736,
+            "collection-call-exit": 736,
+            "communication-class": 7,
+            "communication-framework": 7,
+            "date-runtime": 1,
+            "direct-dispatch-check": 16,
+            "direct-dispatch-framework": 1,
+            "enter": 400,
+            "execution-constructed": 208,
+            "execution-constructor-enter": 208,
+            "execution-defaults": 112,
+            "execution-direct-dispatch": 16,
+            "execution-object-birth": 96,
+            "execution-runtime": 1,
+            "execution-static-read": 16,
+            "execution-type-test": 32,
+            "exit": 400,
+            "foundation-runtime": 1,
+            "http-client-attempt": 16,
+            "http-client-receive": 16,
+            "http-client-send": 16,
+            "http-framework": 3,
+            "http-json": 64,
+            "http-request-derived": 16,
+            "http-response-derived": 16,
+            "http-rpc-enter": 16,
+            "http-rpc-exit": 16,
+            "http-server-context": 32,
+            "http-server-input": 16,
+            "http-source-fact": 32,
+            "jackson-isolation": 1,
+            "locality-begin": 48,
+            "locality-birth": 32,
+            "locality-client-return": 16,
+            "locality-decoded": 16,
+            "locality-end": 48,
+            "locality-factory-config": 16,
+            "locality-framework": 49,
+            "locality-reader": 16,
+            "metrics": 1,
+            "read": 176,
+            "start": 1,
+            "write": 618,
+            "write-version": 16
+          }
+        },
+        "requests": {
+          "boundary_scope_checks": 208,
+          "boundary_selected_scopes": 0,
+          "boundary_scalar_values_omitted": 0,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 16,
+          "body_guard_eligible_calls": 16,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {
+            "eligible": 16
+          },
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 3266,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 48,
+            "binding-opaque-touch": 112,
+            "binding-return": 16,
+            "binding-source": 32,
+            "branch": 160,
+            "class": 1,
+            "collection-call-enter": 560,
+            "collection-call-exit": 560,
+            "communication-class": 5,
+            "communication-framework": 1,
+            "direct-dispatch-check": 16,
+            "enter": 224,
+            "execution-constructed": 128,
+            "execution-constructor-enter": 128,
+            "execution-defaults": 64,
+            "execution-direct-dispatch": 16,
+            "execution-object-birth": 48,
+            "execution-static-read": 16,
+            "execution-type-test": 16,
+            "exit": 224,
+            "foundation-runtime": 1,
+            "http-client-attempt": 16,
+            "http-client-receive": 16,
+            "http-client-send": 16,
+            "http-json": 48,
+            "http-request-derived": 16,
+            "http-response-derived": 16,
+            "http-rpc-enter": 16,
+            "http-rpc-exit": 16,
+            "http-server-context": 16,
+            "http-server-input": 16,
+            "http-source-fact": 32,
+            "locality-begin": 32,
+            "locality-birth": 32,
+            "locality-client-return": 16,
+            "locality-decoded": 16,
+            "locality-end": 32,
+            "locality-factory-config": 16,
+            "locality-reader": 16,
+            "read": 112,
+            "write": 362,
+            "write-version": 16
+          }
+        },
+        "request_messages": 16,
+        "note": "Snapshot selection is not omission. Actual value/field/branch omission counts come from retained completion certificates; zero means no omission, not failure."
+      },
+      "body_only": {
+        "task": "mall",
+        "trial": "/home/wujian/tracefusion2/artifacts/pruning-contribution-audit-20261106/short/mall-body_only",
+        "plan_sha256": "8c2019cd79a27316f3eba6438130a10b21b05cff7ce713e806b6077958a517ed",
+        "static_candidates": {
+          "boundary_scalar_candidates": 903,
+          "boundary_container_candidates": 1,
+          "constructor_write_candidates": 14,
+          "application_write_candidates": 1,
+          "body_candidates": 1
+        },
+        "batch": {
+          "boundary_scope_checks": 336,
+          "boundary_selected_scopes": 0,
+          "boundary_scalar_values_omitted": 0,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 16,
+          "body_selected_calls": 16,
+          "body_ineligible_calls": 0,
+          "body_reasons": {
+            "eligible": 16
+          },
+          "body_field_reads_omitted": 80,
+          "body_branches_omitted": 96,
+          "events": 5127,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 64,
+            "binding-opaque-touch": 208,
+            "binding-return": 16,
+            "binding-source": 48,
+            "branch": 144,
+            "class": 404,
+            "collection-call-enter": 736,
+            "collection-call-exit": 736,
+            "communication-class": 7,
+            "communication-framework": 7,
+            "date-runtime": 1,
+            "direct-dispatch-check": 16,
+            "direct-dispatch-framework": 1,
+            "enter": 400,
+            "execution-constructed": 208,
+            "execution-constructor-enter": 208,
+            "execution-defaults": 112,
+            "execution-direct-dispatch": 16,
+            "execution-object-birth": 96,
+            "execution-runtime": 1,
+            "execution-static-read": 16,
+            "execution-type-test": 32,
+            "exit": 400,
+            "foundation-runtime": 1,
+            "http-client-attempt": 16,
+            "http-client-receive": 16,
+            "http-client-send": 16,
+            "http-framework": 3,
+            "http-json": 64,
+            "http-request-derived": 16,
+            "http-response-derived": 16,
+            "http-rpc-enter": 16,
+            "http-rpc-exit": 16,
+            "http-server-context": 32,
+            "http-server-input": 16,
+            "http-source-fact": 32,
+            "jackson-isolation": 1,
+            "locality-begin": 48,
+            "locality-birth": 32,
+            "locality-client-return": 16,
+            "locality-decoded": 16,
+            "locality-end": 48,
+            "locality-factory-config": 16,
+            "locality-framework": 49,
+            "locality-reader": 16,
+            "metrics": 1,
+            "read": 96,
+            "start": 1,
+            "write": 634
+          }
+        },
+        "requests": {
+          "boundary_scope_checks": 208,
+          "boundary_selected_scopes": 0,
+          "boundary_scalar_values_omitted": 0,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 16,
+          "body_selected_calls": 16,
+          "body_ineligible_calls": 0,
+          "body_reasons": {
+            "eligible": 16
+          },
+          "body_field_reads_omitted": 80,
+          "body_branches_omitted": 96,
+          "events": 3090,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 48,
+            "binding-opaque-touch": 112,
+            "binding-return": 16,
+            "binding-source": 32,
+            "branch": 64,
+            "class": 1,
+            "collection-call-enter": 560,
+            "collection-call-exit": 560,
+            "communication-class": 5,
+            "communication-framework": 1,
+            "direct-dispatch-check": 16,
+            "enter": 224,
+            "execution-constructed": 128,
+            "execution-constructor-enter": 128,
+            "execution-defaults": 64,
+            "execution-direct-dispatch": 16,
+            "execution-object-birth": 48,
+            "execution-static-read": 16,
+            "execution-type-test": 16,
+            "exit": 224,
+            "foundation-runtime": 1,
+            "http-client-attempt": 16,
+            "http-client-receive": 16,
+            "http-client-send": 16,
+            "http-json": 48,
+            "http-request-derived": 16,
+            "http-response-derived": 16,
+            "http-rpc-enter": 16,
+            "http-rpc-exit": 16,
+            "http-server-context": 16,
+            "http-server-input": 16,
+            "http-source-fact": 32,
+            "locality-begin": 32,
+            "locality-birth": 32,
+            "locality-client-return": 16,
+            "locality-decoded": 16,
+            "locality-end": 32,
+            "locality-factory-config": 16,
+            "locality-reader": 16,
+            "read": 32,
+            "write": 378
+          }
+        },
+        "request_messages": 16,
+        "note": "Snapshot selection is not omission. Actual value/field/branch omission counts come from retained completion certificates; zero means no omission, not failure."
+      },
+      "all": {
+        "task": "mall",
+        "trial": "/home/wujian/tracefusion2/artifacts/pruning-contribution-audit-20261106/short/mall-all",
+        "plan_sha256": "8c2019cd79a27316f3eba6438130a10b21b05cff7ce713e806b6077958a517ed",
+        "static_candidates": {
+          "boundary_scalar_candidates": 903,
+          "boundary_container_candidates": 1,
+          "constructor_write_candidates": 14,
+          "application_write_candidates": 1,
+          "body_candidates": 1
+        },
+        "batch": {
+          "boundary_scope_checks": 336,
+          "boundary_selected_scopes": 192,
+          "boundary_scalar_values_omitted": 720,
+          "boundary_container_values_omitted": 96,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 16,
+          "body_guard_eligible_calls": 16,
+          "body_selected_calls": 16,
+          "body_ineligible_calls": 0,
+          "body_reasons": {
+            "eligible": 16
+          },
+          "body_field_reads_omitted": 80,
+          "body_branches_omitted": 96,
+          "events": 5127,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 64,
+            "binding-opaque-touch": 208,
+            "binding-return": 16,
+            "binding-source": 48,
+            "branch": 144,
+            "class": 404,
+            "collection-call-enter": 736,
+            "collection-call-exit": 736,
+            "communication-class": 7,
+            "communication-framework": 7,
+            "date-runtime": 1,
+            "direct-dispatch-check": 16,
+            "direct-dispatch-framework": 1,
+            "enter": 400,
+            "execution-constructed": 208,
+            "execution-constructor-enter": 208,
+            "execution-defaults": 112,
+            "execution-direct-dispatch": 16,
+            "execution-object-birth": 96,
+            "execution-runtime": 1,
+            "execution-static-read": 16,
+            "execution-type-test": 32,
+            "exit": 400,
+            "foundation-runtime": 1,
+            "http-client-attempt": 16,
+            "http-client-receive": 16,
+            "http-client-send": 16,
+            "http-framework": 3,
+            "http-json": 64,
+            "http-request-derived": 16,
+            "http-response-derived": 16,
+            "http-rpc-enter": 16,
+            "http-rpc-exit": 16,
+            "http-server-context": 32,
+            "http-server-input": 16,
+            "http-source-fact": 32,
+            "jackson-isolation": 1,
+            "locality-begin": 48,
+            "locality-birth": 32,
+            "locality-client-return": 16,
+            "locality-decoded": 16,
+            "locality-end": 48,
+            "locality-factory-config": 16,
+            "locality-framework": 49,
+            "locality-reader": 16,
+            "metrics": 1,
+            "read": 96,
+            "start": 1,
+            "write": 618,
+            "write-version": 16
+          }
+        },
+        "requests": {
+          "boundary_scope_checks": 208,
+          "boundary_selected_scopes": 192,
+          "boundary_scalar_values_omitted": 720,
+          "boundary_container_values_omitted": 96,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 16,
+          "body_guard_eligible_calls": 16,
+          "body_selected_calls": 16,
+          "body_ineligible_calls": 0,
+          "body_reasons": {
+            "eligible": 16
+          },
+          "body_field_reads_omitted": 80,
+          "body_branches_omitted": 96,
+          "events": 3090,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 48,
+            "binding-opaque-touch": 112,
+            "binding-return": 16,
+            "binding-source": 32,
+            "branch": 64,
+            "class": 1,
+            "collection-call-enter": 560,
+            "collection-call-exit": 560,
+            "communication-class": 5,
+            "communication-framework": 1,
+            "direct-dispatch-check": 16,
+            "enter": 224,
+            "execution-constructed": 128,
+            "execution-constructor-enter": 128,
+            "execution-defaults": 64,
+            "execution-direct-dispatch": 16,
+            "execution-object-birth": 48,
+            "execution-static-read": 16,
+            "execution-type-test": 16,
+            "exit": 224,
+            "foundation-runtime": 1,
+            "http-client-attempt": 16,
+            "http-client-receive": 16,
+            "http-client-send": 16,
+            "http-json": 48,
+            "http-request-derived": 16,
+            "http-response-derived": 16,
+            "http-rpc-enter": 16,
+            "http-rpc-exit": 16,
+            "http-server-context": 16,
+            "http-server-input": 16,
+            "http-source-fact": 32,
+            "locality-begin": 32,
+            "locality-birth": 32,
+            "locality-client-return": 16,
+            "locality-decoded": 16,
+            "locality-end": 32,
+            "locality-factory-config": 16,
+            "locality-reader": 16,
+            "read": 32,
+            "write": 362,
+            "write-version": 16
+          }
+        },
+        "request_messages": 16,
+        "note": "Snapshot selection is not omission. Actual value/field/branch omission counts come from retained completion certificates; zero means no omission, not failure."
+      }
+    },
+    "zlt-user": {
+      "none": {
+        "task": "zlt-user",
+        "trial": "/home/wujian/tracefusion2/artifacts/pruning-contribution-audit-20261106/short/zlt-user-none",
+        "plan_sha256": "d224daf84322ce0282fa608c16ed4b7f85737652ccd151ddb69c6f6f4379f971",
+        "static_candidates": {
+          "boundary_scalar_candidates": 74,
+          "boundary_container_candidates": 0,
+          "constructor_write_candidates": 6,
+          "application_write_candidates": 0,
+          "body_candidates": 0
+        },
+        "batch": {
+          "boundary_scope_checks": 362,
+          "boundary_selected_scopes": 0,
+          "boundary_scalar_values_omitted": 0,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 0,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {},
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 6407,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 120,
+            "binding-opaque-touch": 226,
+            "binding-return": 16,
+            "binding-source": 16,
+            "branch": 72,
+            "class": 121,
+            "collection-call-enter": 576,
+            "collection-call-exit": 576,
+            "direct-dispatch-check": 32,
+            "direct-dispatch-framework": 1,
+            "enter": 352,
+            "execution-constructed": 64,
+            "execution-constructor-enter": 64,
+            "execution-defaults": 48,
+            "execution-direct-dispatch": 32,
+            "execution-i2l": 32,
+            "execution-initialized-class": 1,
+            "execution-lambda": 56,
+            "execution-object-birth": 16,
+            "execution-runtime": 1,
+            "exit": 352,
+            "foundation-runtime": 1,
+            "http-framework": 4,
+            "http-json": 16,
+            "http-server-context": 16,
+            "jackson-isolation": 1,
+            "metrics": 1,
+            "read": 224,
+            "sql-locality-begin": 16,
+            "sql-locality-birth": 102,
+            "sql-locality-callback-begin": 128,
+            "sql-locality-callback-end": 128,
+            "sql-locality-class": 49,
+            "sql-locality-close": 16,
+            "sql-locality-end": 16,
+            "sql-locality-handler": 944,
+            "sql-locality-handler-state": 32,
+            "sql-locality-invoker": 439,
+            "sql-locality-mapper-invoker": 16,
+            "sql-locality-meta": 201,
+            "sql-locality-preallocation-effect": 160,
+            "sql-locality-reflector": 177,
+            "sql-locality-result-begin": 32,
+            "sql-locality-result-end": 32,
+            "sql-locality-select": 16,
+            "sql-locality-transaction": 16,
+            "start": 1,
+            "write": 833
+          }
+        },
+        "requests": {
+          "boundary_scope_checks": 362,
+          "boundary_selected_scopes": 0,
+          "boundary_scalar_values_omitted": 0,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 0,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {},
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 6099,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 120,
+            "binding-opaque-touch": 226,
+            "binding-return": 16,
+            "binding-source": 16,
+            "branch": 72,
+            "class": 1,
+            "collection-call-enter": 576,
+            "collection-call-exit": 576,
+            "direct-dispatch-check": 32,
+            "enter": 304,
+            "execution-constructed": 64,
+            "execution-constructor-enter": 64,
+            "execution-defaults": 48,
+            "execution-direct-dispatch": 32,
+            "execution-i2l": 32,
+            "execution-lambda": 56,
+            "execution-object-birth": 16,
+            "exit": 304,
+            "foundation-runtime": 1,
+            "http-json": 16,
+            "http-server-context": 16,
+            "read": 176,
+            "sql-locality-begin": 16,
+            "sql-locality-birth": 102,
+            "sql-locality-callback-begin": 128,
+            "sql-locality-callback-end": 128,
+            "sql-locality-class": 15,
+            "sql-locality-close": 16,
+            "sql-locality-end": 16,
+            "sql-locality-handler": 944,
+            "sql-locality-handler-state": 32,
+            "sql-locality-invoker": 439,
+            "sql-locality-mapper-invoker": 16,
+            "sql-locality-meta": 201,
+            "sql-locality-preallocation-effect": 160,
+            "sql-locality-reflector": 177,
+            "sql-locality-result-begin": 32,
+            "sql-locality-result-end": 32,
+            "sql-locality-select": 16,
+            "sql-locality-transaction": 16,
+            "write": 833
+          }
+        },
+        "request_messages": 16,
+        "note": "Snapshot selection is not omission. Actual value/field/branch omission counts come from retained completion certificates; zero means no omission, not failure."
+      },
+      "boundary_only": {
+        "task": "zlt-user",
+        "trial": "/home/wujian/tracefusion2/artifacts/pruning-contribution-audit-20261106/short/zlt-user-boundary_only",
+        "plan_sha256": "d224daf84322ce0282fa608c16ed4b7f85737652ccd151ddb69c6f6f4379f971",
+        "static_candidates": {
+          "boundary_scalar_candidates": 74,
+          "boundary_container_candidates": 0,
+          "constructor_write_candidates": 6,
+          "application_write_candidates": 0,
+          "body_candidates": 0
+        },
+        "batch": {
+          "boundary_scope_checks": 362,
+          "boundary_selected_scopes": 192,
+          "boundary_scalar_values_omitted": 2024,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 0,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {},
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 6407,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 120,
+            "binding-opaque-touch": 226,
+            "binding-return": 16,
+            "binding-source": 16,
+            "branch": 72,
+            "class": 121,
+            "collection-call-enter": 576,
+            "collection-call-exit": 576,
+            "direct-dispatch-check": 32,
+            "direct-dispatch-framework": 1,
+            "enter": 352,
+            "execution-constructed": 64,
+            "execution-constructor-enter": 64,
+            "execution-defaults": 48,
+            "execution-direct-dispatch": 32,
+            "execution-i2l": 32,
+            "execution-initialized-class": 1,
+            "execution-lambda": 56,
+            "execution-object-birth": 16,
+            "execution-runtime": 1,
+            "exit": 352,
+            "foundation-runtime": 1,
+            "http-framework": 4,
+            "http-json": 16,
+            "http-server-context": 16,
+            "jackson-isolation": 1,
+            "metrics": 1,
+            "read": 224,
+            "sql-locality-begin": 16,
+            "sql-locality-birth": 102,
+            "sql-locality-callback-begin": 128,
+            "sql-locality-callback-end": 128,
+            "sql-locality-class": 49,
+            "sql-locality-close": 16,
+            "sql-locality-end": 16,
+            "sql-locality-handler": 944,
+            "sql-locality-handler-state": 32,
+            "sql-locality-invoker": 439,
+            "sql-locality-mapper-invoker": 16,
+            "sql-locality-meta": 201,
+            "sql-locality-preallocation-effect": 160,
+            "sql-locality-reflector": 177,
+            "sql-locality-result-begin": 32,
+            "sql-locality-result-end": 32,
+            "sql-locality-select": 16,
+            "sql-locality-transaction": 16,
+            "start": 1,
+            "write": 833
+          }
+        },
+        "requests": {
+          "boundary_scope_checks": 362,
+          "boundary_selected_scopes": 192,
+          "boundary_scalar_values_omitted": 2024,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 0,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {},
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 6099,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 120,
+            "binding-opaque-touch": 226,
+            "binding-return": 16,
+            "binding-source": 16,
+            "branch": 72,
+            "class": 1,
+            "collection-call-enter": 576,
+            "collection-call-exit": 576,
+            "direct-dispatch-check": 32,
+            "enter": 304,
+            "execution-constructed": 64,
+            "execution-constructor-enter": 64,
+            "execution-defaults": 48,
+            "execution-direct-dispatch": 32,
+            "execution-i2l": 32,
+            "execution-lambda": 56,
+            "execution-object-birth": 16,
+            "exit": 304,
+            "foundation-runtime": 1,
+            "http-json": 16,
+            "http-server-context": 16,
+            "read": 176,
+            "sql-locality-begin": 16,
+            "sql-locality-birth": 102,
+            "sql-locality-callback-begin": 128,
+            "sql-locality-callback-end": 128,
+            "sql-locality-class": 15,
+            "sql-locality-close": 16,
+            "sql-locality-end": 16,
+            "sql-locality-handler": 944,
+            "sql-locality-handler-state": 32,
+            "sql-locality-invoker": 439,
+            "sql-locality-mapper-invoker": 16,
+            "sql-locality-meta": 201,
+            "sql-locality-preallocation-effect": 160,
+            "sql-locality-reflector": 177,
+            "sql-locality-result-begin": 32,
+            "sql-locality-result-end": 32,
+            "sql-locality-select": 16,
+            "sql-locality-transaction": 16,
+            "write": 833
+          }
+        },
+        "request_messages": 16,
+        "note": "Snapshot selection is not omission. Actual value/field/branch omission counts come from retained completion certificates; zero means no omission, not failure."
+      },
+      "write_only": {
+        "task": "zlt-user",
+        "trial": "/home/wujian/tracefusion2/artifacts/pruning-contribution-audit-20261106/short/zlt-user-write_only",
+        "plan_sha256": "d224daf84322ce0282fa608c16ed4b7f85737652ccd151ddb69c6f6f4379f971",
+        "static_candidates": {
+          "boundary_scalar_candidates": 74,
+          "boundary_container_candidates": 0,
+          "constructor_write_candidates": 6,
+          "application_write_candidates": 0,
+          "body_candidates": 0
+        },
+        "batch": {
+          "boundary_scope_checks": 362,
+          "boundary_selected_scopes": 0,
+          "boundary_scalar_values_omitted": 0,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 0,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {},
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 6407,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 120,
+            "binding-opaque-touch": 226,
+            "binding-return": 16,
+            "binding-source": 16,
+            "branch": 72,
+            "class": 121,
+            "collection-call-enter": 576,
+            "collection-call-exit": 576,
+            "direct-dispatch-check": 32,
+            "direct-dispatch-framework": 1,
+            "enter": 352,
+            "execution-constructed": 64,
+            "execution-constructor-enter": 64,
+            "execution-defaults": 48,
+            "execution-direct-dispatch": 32,
+            "execution-i2l": 32,
+            "execution-initialized-class": 1,
+            "execution-lambda": 56,
+            "execution-object-birth": 16,
+            "execution-runtime": 1,
+            "exit": 352,
+            "foundation-runtime": 1,
+            "http-framework": 4,
+            "http-json": 16,
+            "http-server-context": 16,
+            "jackson-isolation": 1,
+            "metrics": 1,
+            "read": 224,
+            "sql-locality-begin": 16,
+            "sql-locality-birth": 102,
+            "sql-locality-callback-begin": 128,
+            "sql-locality-callback-end": 128,
+            "sql-locality-class": 49,
+            "sql-locality-close": 16,
+            "sql-locality-end": 16,
+            "sql-locality-handler": 944,
+            "sql-locality-handler-state": 32,
+            "sql-locality-invoker": 439,
+            "sql-locality-mapper-invoker": 16,
+            "sql-locality-meta": 201,
+            "sql-locality-preallocation-effect": 160,
+            "sql-locality-reflector": 177,
+            "sql-locality-result-begin": 32,
+            "sql-locality-result-end": 32,
+            "sql-locality-select": 16,
+            "sql-locality-transaction": 16,
+            "start": 1,
+            "write": 833
+          }
+        },
+        "requests": {
+          "boundary_scope_checks": 362,
+          "boundary_selected_scopes": 0,
+          "boundary_scalar_values_omitted": 0,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 0,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {},
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 6099,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 120,
+            "binding-opaque-touch": 226,
+            "binding-return": 16,
+            "binding-source": 16,
+            "branch": 72,
+            "class": 1,
+            "collection-call-enter": 576,
+            "collection-call-exit": 576,
+            "direct-dispatch-check": 32,
+            "enter": 304,
+            "execution-constructed": 64,
+            "execution-constructor-enter": 64,
+            "execution-defaults": 48,
+            "execution-direct-dispatch": 32,
+            "execution-i2l": 32,
+            "execution-lambda": 56,
+            "execution-object-birth": 16,
+            "exit": 304,
+            "foundation-runtime": 1,
+            "http-json": 16,
+            "http-server-context": 16,
+            "read": 176,
+            "sql-locality-begin": 16,
+            "sql-locality-birth": 102,
+            "sql-locality-callback-begin": 128,
+            "sql-locality-callback-end": 128,
+            "sql-locality-class": 15,
+            "sql-locality-close": 16,
+            "sql-locality-end": 16,
+            "sql-locality-handler": 944,
+            "sql-locality-handler-state": 32,
+            "sql-locality-invoker": 439,
+            "sql-locality-mapper-invoker": 16,
+            "sql-locality-meta": 201,
+            "sql-locality-preallocation-effect": 160,
+            "sql-locality-reflector": 177,
+            "sql-locality-result-begin": 32,
+            "sql-locality-result-end": 32,
+            "sql-locality-select": 16,
+            "sql-locality-transaction": 16,
+            "write": 833
+          }
+        },
+        "request_messages": 16,
+        "note": "Snapshot selection is not omission. Actual value/field/branch omission counts come from retained completion certificates; zero means no omission, not failure."
+      },
+      "body_only": {
+        "task": "zlt-user",
+        "trial": "/home/wujian/tracefusion2/artifacts/pruning-contribution-audit-20261106/short/zlt-user-body_only",
+        "plan_sha256": "d224daf84322ce0282fa608c16ed4b7f85737652ccd151ddb69c6f6f4379f971",
+        "static_candidates": {
+          "boundary_scalar_candidates": 74,
+          "boundary_container_candidates": 0,
+          "constructor_write_candidates": 6,
+          "application_write_candidates": 0,
+          "body_candidates": 0
+        },
+        "batch": {
+          "boundary_scope_checks": 362,
+          "boundary_selected_scopes": 0,
+          "boundary_scalar_values_omitted": 0,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 0,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {},
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 6407,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 120,
+            "binding-opaque-touch": 226,
+            "binding-return": 16,
+            "binding-source": 16,
+            "branch": 72,
+            "class": 121,
+            "collection-call-enter": 576,
+            "collection-call-exit": 576,
+            "direct-dispatch-check": 32,
+            "direct-dispatch-framework": 1,
+            "enter": 352,
+            "execution-constructed": 64,
+            "execution-constructor-enter": 64,
+            "execution-defaults": 48,
+            "execution-direct-dispatch": 32,
+            "execution-i2l": 32,
+            "execution-initialized-class": 1,
+            "execution-lambda": 56,
+            "execution-object-birth": 16,
+            "execution-runtime": 1,
+            "exit": 352,
+            "foundation-runtime": 1,
+            "http-framework": 4,
+            "http-json": 16,
+            "http-server-context": 16,
+            "jackson-isolation": 1,
+            "metrics": 1,
+            "read": 224,
+            "sql-locality-begin": 16,
+            "sql-locality-birth": 102,
+            "sql-locality-callback-begin": 128,
+            "sql-locality-callback-end": 128,
+            "sql-locality-class": 49,
+            "sql-locality-close": 16,
+            "sql-locality-end": 16,
+            "sql-locality-handler": 944,
+            "sql-locality-handler-state": 32,
+            "sql-locality-invoker": 439,
+            "sql-locality-mapper-invoker": 16,
+            "sql-locality-meta": 201,
+            "sql-locality-preallocation-effect": 160,
+            "sql-locality-reflector": 177,
+            "sql-locality-result-begin": 32,
+            "sql-locality-result-end": 32,
+            "sql-locality-select": 16,
+            "sql-locality-transaction": 16,
+            "start": 1,
+            "write": 833
+          }
+        },
+        "requests": {
+          "boundary_scope_checks": 362,
+          "boundary_selected_scopes": 0,
+          "boundary_scalar_values_omitted": 0,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 0,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {},
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 6099,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 120,
+            "binding-opaque-touch": 226,
+            "binding-return": 16,
+            "binding-source": 16,
+            "branch": 72,
+            "class": 1,
+            "collection-call-enter": 576,
+            "collection-call-exit": 576,
+            "direct-dispatch-check": 32,
+            "enter": 304,
+            "execution-constructed": 64,
+            "execution-constructor-enter": 64,
+            "execution-defaults": 48,
+            "execution-direct-dispatch": 32,
+            "execution-i2l": 32,
+            "execution-lambda": 56,
+            "execution-object-birth": 16,
+            "exit": 304,
+            "foundation-runtime": 1,
+            "http-json": 16,
+            "http-server-context": 16,
+            "read": 176,
+            "sql-locality-begin": 16,
+            "sql-locality-birth": 102,
+            "sql-locality-callback-begin": 128,
+            "sql-locality-callback-end": 128,
+            "sql-locality-class": 15,
+            "sql-locality-close": 16,
+            "sql-locality-end": 16,
+            "sql-locality-handler": 944,
+            "sql-locality-handler-state": 32,
+            "sql-locality-invoker": 439,
+            "sql-locality-mapper-invoker": 16,
+            "sql-locality-meta": 201,
+            "sql-locality-preallocation-effect": 160,
+            "sql-locality-reflector": 177,
+            "sql-locality-result-begin": 32,
+            "sql-locality-result-end": 32,
+            "sql-locality-select": 16,
+            "sql-locality-transaction": 16,
+            "write": 833
+          }
+        },
+        "request_messages": 16,
+        "note": "Snapshot selection is not omission. Actual value/field/branch omission counts come from retained completion certificates; zero means no omission, not failure."
+      },
+      "all": {
+        "task": "zlt-user",
+        "trial": "/home/wujian/tracefusion2/artifacts/pruning-contribution-audit-20261106/short/zlt-user-all",
+        "plan_sha256": "d224daf84322ce0282fa608c16ed4b7f85737652ccd151ddb69c6f6f4379f971",
+        "static_candidates": {
+          "boundary_scalar_candidates": 74,
+          "boundary_container_candidates": 0,
+          "constructor_write_candidates": 6,
+          "application_write_candidates": 0,
+          "body_candidates": 0
+        },
+        "batch": {
+          "boundary_scope_checks": 362,
+          "boundary_selected_scopes": 192,
+          "boundary_scalar_values_omitted": 2024,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 0,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {},
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 6407,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 120,
+            "binding-opaque-touch": 226,
+            "binding-return": 16,
+            "binding-source": 16,
+            "branch": 72,
+            "class": 121,
+            "collection-call-enter": 576,
+            "collection-call-exit": 576,
+            "direct-dispatch-check": 32,
+            "direct-dispatch-framework": 1,
+            "enter": 352,
+            "execution-constructed": 64,
+            "execution-constructor-enter": 64,
+            "execution-defaults": 48,
+            "execution-direct-dispatch": 32,
+            "execution-i2l": 32,
+            "execution-initialized-class": 1,
+            "execution-lambda": 56,
+            "execution-object-birth": 16,
+            "execution-runtime": 1,
+            "exit": 352,
+            "foundation-runtime": 1,
+            "http-framework": 4,
+            "http-json": 16,
+            "http-server-context": 16,
+            "jackson-isolation": 1,
+            "metrics": 1,
+            "read": 224,
+            "sql-locality-begin": 16,
+            "sql-locality-birth": 102,
+            "sql-locality-callback-begin": 128,
+            "sql-locality-callback-end": 128,
+            "sql-locality-class": 49,
+            "sql-locality-close": 16,
+            "sql-locality-end": 16,
+            "sql-locality-handler": 944,
+            "sql-locality-handler-state": 32,
+            "sql-locality-invoker": 439,
+            "sql-locality-mapper-invoker": 16,
+            "sql-locality-meta": 201,
+            "sql-locality-preallocation-effect": 160,
+            "sql-locality-reflector": 177,
+            "sql-locality-result-begin": 32,
+            "sql-locality-result-end": 32,
+            "sql-locality-select": 16,
+            "sql-locality-transaction": 16,
+            "start": 1,
+            "write": 833
+          }
+        },
+        "requests": {
+          "boundary_scope_checks": 362,
+          "boundary_selected_scopes": 192,
+          "boundary_scalar_values_omitted": 2024,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 0,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {},
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 6099,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 120,
+            "binding-opaque-touch": 226,
+            "binding-return": 16,
+            "binding-source": 16,
+            "branch": 72,
+            "class": 1,
+            "collection-call-enter": 576,
+            "collection-call-exit": 576,
+            "direct-dispatch-check": 32,
+            "enter": 304,
+            "execution-constructed": 64,
+            "execution-constructor-enter": 64,
+            "execution-defaults": 48,
+            "execution-direct-dispatch": 32,
+            "execution-i2l": 32,
+            "execution-lambda": 56,
+            "execution-object-birth": 16,
+            "exit": 304,
+            "foundation-runtime": 1,
+            "http-json": 16,
+            "http-server-context": 16,
+            "read": 176,
+            "sql-locality-begin": 16,
+            "sql-locality-birth": 102,
+            "sql-locality-callback-begin": 128,
+            "sql-locality-callback-end": 128,
+            "sql-locality-class": 15,
+            "sql-locality-close": 16,
+            "sql-locality-end": 16,
+            "sql-locality-handler": 944,
+            "sql-locality-handler-state": 32,
+            "sql-locality-invoker": 439,
+            "sql-locality-mapper-invoker": 16,
+            "sql-locality-meta": 201,
+            "sql-locality-preallocation-effect": 160,
+            "sql-locality-reflector": 177,
+            "sql-locality-result-begin": 32,
+            "sql-locality-result-end": 32,
+            "sql-locality-select": 16,
+            "sql-locality-transaction": 16,
+            "write": 833
+          }
+        },
+        "request_messages": 16,
+        "note": "Snapshot selection is not omission. Actual value/field/branch omission counts come from retained completion certificates; zero means no omission, not failure."
+      }
+    },
+    "ruoyi-dictionary": {
+      "none": {
+        "task": "ruoyi-dictionary",
+        "trial": "/home/wujian/tracefusion2/artifacts/pruning-contribution-audit-20261106/short/ruoyi-dictionary-none",
+        "plan_sha256": "c1fb5d2547bebbcf7b44275ed61acfacc4535ab09cbc0c23705105a1dd627d31",
+        "static_candidates": {
+          "boundary_scalar_candidates": 133,
+          "boundary_container_candidates": 0,
+          "constructor_write_candidates": 11,
+          "application_write_candidates": 0,
+          "body_candidates": 0
+        },
+        "batch": {
+          "boundary_scope_checks": 346,
+          "boundary_selected_scopes": 0,
+          "boundary_scalar_values_omitted": 0,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 0,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {},
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 4660,
+          "kinds": {
+            "before-dispatch-framework": 3,
+            "binding-input": 16,
+            "binding-opaque-result": 134,
+            "binding-opaque-touch": 214,
+            "binding-return": 16,
+            "binding-source": 30,
+            "branch": 346,
+            "class": 153,
+            "collection-call-enter": 530,
+            "collection-call-exit": 530,
+            "commons-framework": 1,
+            "commons-initialized": 1,
+            "direct-dispatch-check": 16,
+            "direct-dispatch-framework": 1,
+            "enter": 490,
+            "execution-array": 14,
+            "execution-class-literal": 40,
+            "execution-constructed": 45,
+            "execution-constructor-enter": 45,
+            "execution-direct-dispatch": 16,
+            "execution-initialized-class": 1,
+            "execution-runtime": 1,
+            "execution-static-read": 27,
+            "exit": 490,
+            "foundation-runtime": 1,
+            "http-framework": 4,
+            "http-json": 18,
+            "http-server-context": 19,
+            "http-source-fact": 2,
+            "jackson-isolation": 1,
+            "json-list-cache": 14,
+            "json-list-class": 3,
+            "json-list-initialized": 1,
+            "json-tree-class": 2,
+            "json-tree-container": 84,
+            "map-wrapper-class": 1,
+            "metrics": 1,
+            "query-scope-coverage": 1,
+            "query-scope-dispatch-enter": 19,
+            "query-scope-dispatch-exit": 19,
+            "query-scope-framework": 9,
+            "query-scope-output-excluded": 3,
+            "query-scope-output-excluded-end": 3,
+            "query-scope-root": 16,
+            "read": 68,
+            "start": 1,
+            "write": 1210
+          }
+        },
+        "requests": {
+          "boundary_scope_checks": 316,
+          "boundary_selected_scopes": 0,
+          "boundary_scalar_values_omitted": 0,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 0,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {},
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 2646,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 134,
+            "binding-opaque-touch": 184,
+            "binding-return": 16,
+            "binding-source": 30,
+            "branch": 200,
+            "collection-call-enter": 374,
+            "collection-call-exit": 374,
+            "direct-dispatch-check": 16,
+            "enter": 278,
+            "execution-array": 14,
+            "execution-class-literal": 30,
+            "execution-constructed": 34,
+            "execution-constructor-enter": 34,
+            "execution-direct-dispatch": 16,
+            "execution-static-read": 16,
+            "exit": 278,
+            "http-json": 16,
+            "http-server-context": 16,
+            "json-list-cache": 14,
+            "json-tree-container": 84,
+            "query-scope-dispatch-enter": 16,
+            "query-scope-dispatch-exit": 16,
+            "query-scope-root": 16,
+            "read": 34,
+            "write": 390
+          }
+        },
+        "request_messages": 16,
+        "note": "Snapshot selection is not omission. Actual value/field/branch omission counts come from retained completion certificates; zero means no omission, not failure."
+      },
+      "boundary_only": {
+        "task": "ruoyi-dictionary",
+        "trial": "/home/wujian/tracefusion2/artifacts/pruning-contribution-audit-20261106/short/ruoyi-dictionary-boundary_only",
+        "plan_sha256": "c1fb5d2547bebbcf7b44275ed61acfacc4535ab09cbc0c23705105a1dd627d31",
+        "static_candidates": {
+          "boundary_scalar_candidates": 133,
+          "boundary_container_candidates": 0,
+          "constructor_write_candidates": 11,
+          "application_write_candidates": 0,
+          "body_candidates": 0
+        },
+        "batch": {
+          "boundary_scope_checks": 346,
+          "boundary_selected_scopes": 254,
+          "boundary_scalar_values_omitted": 3468,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 0,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {},
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 4660,
+          "kinds": {
+            "before-dispatch-framework": 3,
+            "binding-input": 16,
+            "binding-opaque-result": 134,
+            "binding-opaque-touch": 214,
+            "binding-return": 16,
+            "binding-source": 30,
+            "branch": 346,
+            "class": 153,
+            "collection-call-enter": 530,
+            "collection-call-exit": 530,
+            "commons-framework": 1,
+            "commons-initialized": 1,
+            "direct-dispatch-check": 16,
+            "direct-dispatch-framework": 1,
+            "enter": 490,
+            "execution-array": 14,
+            "execution-class-literal": 40,
+            "execution-constructed": 45,
+            "execution-constructor-enter": 45,
+            "execution-direct-dispatch": 16,
+            "execution-initialized-class": 1,
+            "execution-runtime": 1,
+            "execution-static-read": 27,
+            "exit": 490,
+            "foundation-runtime": 1,
+            "http-framework": 4,
+            "http-json": 18,
+            "http-server-context": 19,
+            "http-source-fact": 2,
+            "jackson-isolation": 1,
+            "json-list-cache": 14,
+            "json-list-class": 3,
+            "json-list-initialized": 1,
+            "json-tree-class": 2,
+            "json-tree-container": 84,
+            "map-wrapper-class": 1,
+            "metrics": 1,
+            "query-scope-coverage": 1,
+            "query-scope-dispatch-enter": 19,
+            "query-scope-dispatch-exit": 19,
+            "query-scope-framework": 9,
+            "query-scope-output-excluded": 3,
+            "query-scope-output-excluded-end": 3,
+            "query-scope-root": 16,
+            "read": 68,
+            "start": 1,
+            "write": 1210
+          }
+        },
+        "requests": {
+          "boundary_scope_checks": 316,
+          "boundary_selected_scopes": 254,
+          "boundary_scalar_values_omitted": 3468,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 0,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {},
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 2646,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 134,
+            "binding-opaque-touch": 184,
+            "binding-return": 16,
+            "binding-source": 30,
+            "branch": 200,
+            "collection-call-enter": 374,
+            "collection-call-exit": 374,
+            "direct-dispatch-check": 16,
+            "enter": 278,
+            "execution-array": 14,
+            "execution-class-literal": 30,
+            "execution-constructed": 34,
+            "execution-constructor-enter": 34,
+            "execution-direct-dispatch": 16,
+            "execution-static-read": 16,
+            "exit": 278,
+            "http-json": 16,
+            "http-server-context": 16,
+            "json-list-cache": 14,
+            "json-tree-container": 84,
+            "query-scope-dispatch-enter": 16,
+            "query-scope-dispatch-exit": 16,
+            "query-scope-root": 16,
+            "read": 34,
+            "write": 390
+          }
+        },
+        "request_messages": 16,
+        "note": "Snapshot selection is not omission. Actual value/field/branch omission counts come from retained completion certificates; zero means no omission, not failure."
+      },
+      "write_only": {
+        "task": "ruoyi-dictionary",
+        "trial": "/home/wujian/tracefusion2/artifacts/pruning-contribution-audit-20261106/short/ruoyi-dictionary-write_only",
+        "plan_sha256": "c1fb5d2547bebbcf7b44275ed61acfacc4535ab09cbc0c23705105a1dd627d31",
+        "static_candidates": {
+          "boundary_scalar_candidates": 133,
+          "boundary_container_candidates": 0,
+          "constructor_write_candidates": 11,
+          "application_write_candidates": 0,
+          "body_candidates": 0
+        },
+        "batch": {
+          "boundary_scope_checks": 346,
+          "boundary_selected_scopes": 0,
+          "boundary_scalar_values_omitted": 0,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 0,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {},
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 4660,
+          "kinds": {
+            "before-dispatch-framework": 3,
+            "binding-input": 16,
+            "binding-opaque-result": 134,
+            "binding-opaque-touch": 214,
+            "binding-return": 16,
+            "binding-source": 30,
+            "branch": 346,
+            "class": 153,
+            "collection-call-enter": 530,
+            "collection-call-exit": 530,
+            "commons-framework": 1,
+            "commons-initialized": 1,
+            "direct-dispatch-check": 16,
+            "direct-dispatch-framework": 1,
+            "enter": 490,
+            "execution-array": 14,
+            "execution-class-literal": 40,
+            "execution-constructed": 45,
+            "execution-constructor-enter": 45,
+            "execution-direct-dispatch": 16,
+            "execution-initialized-class": 1,
+            "execution-runtime": 1,
+            "execution-static-read": 27,
+            "exit": 490,
+            "foundation-runtime": 1,
+            "http-framework": 4,
+            "http-json": 18,
+            "http-server-context": 19,
+            "http-source-fact": 2,
+            "jackson-isolation": 1,
+            "json-list-cache": 14,
+            "json-list-class": 3,
+            "json-list-initialized": 1,
+            "json-tree-class": 2,
+            "json-tree-container": 84,
+            "map-wrapper-class": 1,
+            "metrics": 1,
+            "query-scope-coverage": 1,
+            "query-scope-dispatch-enter": 19,
+            "query-scope-dispatch-exit": 19,
+            "query-scope-framework": 9,
+            "query-scope-output-excluded": 3,
+            "query-scope-output-excluded-end": 3,
+            "query-scope-root": 16,
+            "read": 68,
+            "start": 1,
+            "write": 1210
+          }
+        },
+        "requests": {
+          "boundary_scope_checks": 316,
+          "boundary_selected_scopes": 0,
+          "boundary_scalar_values_omitted": 0,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 0,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {},
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 2646,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 134,
+            "binding-opaque-touch": 184,
+            "binding-return": 16,
+            "binding-source": 30,
+            "branch": 200,
+            "collection-call-enter": 374,
+            "collection-call-exit": 374,
+            "direct-dispatch-check": 16,
+            "enter": 278,
+            "execution-array": 14,
+            "execution-class-literal": 30,
+            "execution-constructed": 34,
+            "execution-constructor-enter": 34,
+            "execution-direct-dispatch": 16,
+            "execution-static-read": 16,
+            "exit": 278,
+            "http-json": 16,
+            "http-server-context": 16,
+            "json-list-cache": 14,
+            "json-tree-container": 84,
+            "query-scope-dispatch-enter": 16,
+            "query-scope-dispatch-exit": 16,
+            "query-scope-root": 16,
+            "read": 34,
+            "write": 390
+          }
+        },
+        "request_messages": 16,
+        "note": "Snapshot selection is not omission. Actual value/field/branch omission counts come from retained completion certificates; zero means no omission, not failure."
+      },
+      "body_only": {
+        "task": "ruoyi-dictionary",
+        "trial": "/home/wujian/tracefusion2/artifacts/pruning-contribution-audit-20261106/short/ruoyi-dictionary-body_only",
+        "plan_sha256": "c1fb5d2547bebbcf7b44275ed61acfacc4535ab09cbc0c23705105a1dd627d31",
+        "static_candidates": {
+          "boundary_scalar_candidates": 133,
+          "boundary_container_candidates": 0,
+          "constructor_write_candidates": 11,
+          "application_write_candidates": 0,
+          "body_candidates": 0
+        },
+        "batch": {
+          "boundary_scope_checks": 346,
+          "boundary_selected_scopes": 0,
+          "boundary_scalar_values_omitted": 0,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 0,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {},
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 4660,
+          "kinds": {
+            "before-dispatch-framework": 3,
+            "binding-input": 16,
+            "binding-opaque-result": 134,
+            "binding-opaque-touch": 214,
+            "binding-return": 16,
+            "binding-source": 30,
+            "branch": 346,
+            "class": 153,
+            "collection-call-enter": 530,
+            "collection-call-exit": 530,
+            "commons-framework": 1,
+            "commons-initialized": 1,
+            "direct-dispatch-check": 16,
+            "direct-dispatch-framework": 1,
+            "enter": 490,
+            "execution-array": 14,
+            "execution-class-literal": 40,
+            "execution-constructed": 45,
+            "execution-constructor-enter": 45,
+            "execution-direct-dispatch": 16,
+            "execution-initialized-class": 1,
+            "execution-runtime": 1,
+            "execution-static-read": 27,
+            "exit": 490,
+            "foundation-runtime": 1,
+            "http-framework": 4,
+            "http-json": 18,
+            "http-server-context": 19,
+            "http-source-fact": 2,
+            "jackson-isolation": 1,
+            "json-list-cache": 14,
+            "json-list-class": 3,
+            "json-list-initialized": 1,
+            "json-tree-class": 2,
+            "json-tree-container": 84,
+            "map-wrapper-class": 1,
+            "metrics": 1,
+            "query-scope-coverage": 1,
+            "query-scope-dispatch-enter": 19,
+            "query-scope-dispatch-exit": 19,
+            "query-scope-framework": 9,
+            "query-scope-output-excluded": 3,
+            "query-scope-output-excluded-end": 3,
+            "query-scope-root": 16,
+            "read": 68,
+            "start": 1,
+            "write": 1210
+          }
+        },
+        "requests": {
+          "boundary_scope_checks": 316,
+          "boundary_selected_scopes": 0,
+          "boundary_scalar_values_omitted": 0,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 0,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {},
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 2646,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 134,
+            "binding-opaque-touch": 184,
+            "binding-return": 16,
+            "binding-source": 30,
+            "branch": 200,
+            "collection-call-enter": 374,
+            "collection-call-exit": 374,
+            "direct-dispatch-check": 16,
+            "enter": 278,
+            "execution-array": 14,
+            "execution-class-literal": 30,
+            "execution-constructed": 34,
+            "execution-constructor-enter": 34,
+            "execution-direct-dispatch": 16,
+            "execution-static-read": 16,
+            "exit": 278,
+            "http-json": 16,
+            "http-server-context": 16,
+            "json-list-cache": 14,
+            "json-tree-container": 84,
+            "query-scope-dispatch-enter": 16,
+            "query-scope-dispatch-exit": 16,
+            "query-scope-root": 16,
+            "read": 34,
+            "write": 390
+          }
+        },
+        "request_messages": 16,
+        "note": "Snapshot selection is not omission. Actual value/field/branch omission counts come from retained completion certificates; zero means no omission, not failure."
+      },
+      "all": {
+        "task": "ruoyi-dictionary",
+        "trial": "/home/wujian/tracefusion2/artifacts/pruning-contribution-audit-20261106/short/ruoyi-dictionary-all",
+        "plan_sha256": "c1fb5d2547bebbcf7b44275ed61acfacc4535ab09cbc0c23705105a1dd627d31",
+        "static_candidates": {
+          "boundary_scalar_candidates": 133,
+          "boundary_container_candidates": 0,
+          "constructor_write_candidates": 11,
+          "application_write_candidates": 0,
+          "body_candidates": 0
+        },
+        "batch": {
+          "boundary_scope_checks": 346,
+          "boundary_selected_scopes": 254,
+          "boundary_scalar_values_omitted": 3468,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 0,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {},
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 4660,
+          "kinds": {
+            "before-dispatch-framework": 3,
+            "binding-input": 16,
+            "binding-opaque-result": 134,
+            "binding-opaque-touch": 214,
+            "binding-return": 16,
+            "binding-source": 30,
+            "branch": 346,
+            "class": 153,
+            "collection-call-enter": 530,
+            "collection-call-exit": 530,
+            "commons-framework": 1,
+            "commons-initialized": 1,
+            "direct-dispatch-check": 16,
+            "direct-dispatch-framework": 1,
+            "enter": 490,
+            "execution-array": 14,
+            "execution-class-literal": 40,
+            "execution-constructed": 45,
+            "execution-constructor-enter": 45,
+            "execution-direct-dispatch": 16,
+            "execution-initialized-class": 1,
+            "execution-runtime": 1,
+            "execution-static-read": 27,
+            "exit": 490,
+            "foundation-runtime": 1,
+            "http-framework": 4,
+            "http-json": 18,
+            "http-server-context": 19,
+            "http-source-fact": 2,
+            "jackson-isolation": 1,
+            "json-list-cache": 14,
+            "json-list-class": 3,
+            "json-list-initialized": 1,
+            "json-tree-class": 2,
+            "json-tree-container": 84,
+            "map-wrapper-class": 1,
+            "metrics": 1,
+            "query-scope-coverage": 1,
+            "query-scope-dispatch-enter": 19,
+            "query-scope-dispatch-exit": 19,
+            "query-scope-framework": 9,
+            "query-scope-output-excluded": 3,
+            "query-scope-output-excluded-end": 3,
+            "query-scope-root": 16,
+            "read": 68,
+            "start": 1,
+            "write": 1210
+          }
+        },
+        "requests": {
+          "boundary_scope_checks": 316,
+          "boundary_selected_scopes": 254,
+          "boundary_scalar_values_omitted": 3468,
+          "boundary_container_values_omitted": 0,
+          "constructor_write_values_omitted": 0,
+          "application_write_values_omitted": 0,
+          "body_guard_eligible_calls": 0,
+          "body_selected_calls": 0,
+          "body_ineligible_calls": 0,
+          "body_reasons": {},
+          "body_field_reads_omitted": 0,
+          "body_branches_omitted": 0,
+          "events": 2646,
+          "kinds": {
+            "binding-input": 16,
+            "binding-opaque-result": 134,
+            "binding-opaque-touch": 184,
+            "binding-return": 16,
+            "binding-source": 30,
+            "branch": 200,
+            "collection-call-enter": 374,
+            "collection-call-exit": 374,
+            "direct-dispatch-check": 16,
+            "enter": 278,
+            "execution-array": 14,
+            "execution-class-literal": 30,
+            "execution-constructed": 34,
+            "execution-constructor-enter": 34,
+            "execution-direct-dispatch": 16,
+            "execution-static-read": 16,
+            "exit": 278,
+            "http-json": 16,
+            "http-server-context": 16,
+            "json-list-cache": 14,
+            "json-tree-container": 84,
+            "query-scope-dispatch-enter": 16,
+            "query-scope-dispatch-exit": 16,
+            "query-scope-root": 16,
+            "read": 34,
+            "write": 390
+          }
+        },
+        "request_messages": 16,
+        "note": "Snapshot selection is not omission. Actual value/field/branch omission counts come from retained completion certificates; zero means no omission, not failure."
+      }
+    }
+  },
+  "coarse_baseline_diagnosis": {
+    "mall": {
+      "groups": {
+        "body_guard_and_state": {
+          "calls": 5719,
+          "inclusive_wall_seconds": 0.012407861,
+          "inclusive_cpu_seconds": 0.011810818,
+          "self_wall_seconds": 0.012407861,
+          "self_cpu_seconds": 0.011810818
+        },
+        "buffered_flush": {
+          "calls": 1,
+          "inclusive_wall_seconds": 0.000143063,
+          "inclusive_cpu_seconds": 0.000144333,
+          "self_wall_seconds": 0.000143063,
+          "self_cpu_seconds": 0.000144333
+        },
+        "buffered_newline": {
+          "calls": 5303,
+          "inclusive_wall_seconds": 0.003379501,
+          "inclusive_cpu_seconds": 0.003156407,
+          "self_wall_seconds": 0.003379501,
+          "self_cpu_seconds": 0.003156407
+        },
+        "buffered_write": {
+          "calls": 5303,
+          "inclusive_wall_seconds": 0.025434889,
+          "inclusive_cpu_seconds": 0.025611006,
+          "self_wall_seconds": 0.025434889,
+          "self_cpu_seconds": 0.025611006
+        },
+        "emit_state_encode_write": {
+          "calls": 5302,
+          "inclusive_wall_seconds": 0.81049873,
+          "inclusive_cpu_seconds": 0.141399027,
+          "self_wall_seconds": 0.69531056,
+          "self_cpu_seconds": 0.032796928
+        },
+        "evidence_and_state": {
+          "calls": 6935,
+          "inclusive_wall_seconds": 0.092124322,
+          "inclusive_cpu_seconds": 0.031144385,
+          "self_wall_seconds": 0.078694894,
+          "self_cpu_seconds": 0.018124119
+        },
+        "json_encoding": {
+          "calls": 5303,
+          "inclusive_wall_seconds": 0.062065648,
+          "inclusive_cpu_seconds": 0.055653556,
+          "self_wall_seconds": 0.062065648,
+          "self_cpu_seconds": 0.055653556
+        },
+        "metadata_and_qualification": {
+          "calls": 5120,
+          "inclusive_wall_seconds": 0.053211006,
+          "inclusive_cpu_seconds": 0.01184475,
+          "self_wall_seconds": 0.046730356,
+          "self_cpu_seconds": 0.005341418
+        },
+        "metadata_declared_field_lookup": {
+          "calls": 510,
+          "inclusive_wall_seconds": 0.00648065,
+          "inclusive_cpu_seconds": 0.006503332,
+          "self_wall_seconds": 0.00648065,
+          "self_cpu_seconds": 0.006503332
+        },
+        "qualification_field_read": {
+          "calls": 1936,
+          "inclusive_wall_seconds": 0.001447742,
+          "inclusive_cpu_seconds": 0.00144454,
+          "self_wall_seconds": 0.001447742,
+          "self_cpu_seconds": 0.00144454
+        },
+        "raw_reflective_field_get": {
+          "calls": 2480,
+          "inclusive_wall_seconds": 0.001860617,
+          "inclusive_cpu_seconds": 0.001843963,
+          "self_wall_seconds": 0.001860617,
+          "self_cpu_seconds": 0.001843963
+        },
+        "required_RPC_locality_qualification": {
+          "calls": 1552,
+          "inclusive_wall_seconds": 0.069333081,
+          "inclusive_cpu_seconds": 0.051590189,
+          "self_wall_seconds": 0.051419492,
+          "self_cpu_seconds": 0.033779745
+        },
+        "required_SQL_locality_qualification": {
+          "calls": 1472,
+          "inclusive_wall_seconds": 0.001078529,
+          "inclusive_cpu_seconds": 0.001081749,
+          "self_wall_seconds": 0.001078529,
+          "self_cpu_seconds": 0.001081749
+        },
+        "snapshot_and_binding": {
+          "calls": 1824,
+          "inclusive_wall_seconds": 0.025451206,
+          "inclusive_cpu_seconds": 0.024976231,
+          "self_wall_seconds": 0.0214733,
+          "self_cpu_seconds": 0.021135036
+        }
+      },
+      "thread_state_samples": {},
+      "boundary": "Selected observer methods and original JDK operations called from them; never application invoke/predicate execution. Self times additive only within this probe coverage. Includes probe overhead, startup and preparation; synchronized-entry waiting is excluded from method timers. Stack samples are counts, not duration/CPU attribution. Shutdown timer snapshot may exclude final footer work. Not formal speed data."
+    },
+    "zlt-user": {
+      "groups": {
+        "body_guard_and_state": {
+          "calls": 6479,
+          "inclusive_wall_seconds": 0.027427159,
+          "inclusive_cpu_seconds": 0.006842061,
+          "self_wall_seconds": 0.027427159,
+          "self_cpu_seconds": 0.006842061
+        },
+        "buffered_flush": {
+          "calls": 2,
+          "inclusive_wall_seconds": 0.000353868,
+          "inclusive_cpu_seconds": 0.000355527,
+          "self_wall_seconds": 0.000353868,
+          "self_cpu_seconds": 0.000355527
+        },
+        "buffered_newline": {
+          "calls": 6407,
+          "inclusive_wall_seconds": 0.003754277,
+          "inclusive_cpu_seconds": 0.003709291,
+          "self_wall_seconds": 0.003754277,
+          "self_cpu_seconds": 0.003709291
+        },
+        "buffered_write": {
+          "calls": 6407,
+          "inclusive_wall_seconds": 0.024162455,
+          "inclusive_cpu_seconds": 0.024361306,
+          "self_wall_seconds": 0.024162455,
+          "self_cpu_seconds": 0.024361306
+        },
+        "emit_state_encode_write": {
+          "calls": 6407,
+          "inclusive_wall_seconds": 0.637505206,
+          "inclusive_cpu_seconds": 0.137255085,
+          "self_wall_seconds": 0.458073409,
+          "self_cpu_seconds": 0.035161419
+        },
+        "evidence_and_state": {
+          "calls": 7612,
+          "inclusive_wall_seconds": 0.051181288,
+          "inclusive_cpu_seconds": 0.030533184,
+          "self_wall_seconds": 0.017357387,
+          "self_cpu_seconds": 0.017106205
+        },
+        "json_encoding": {
+          "calls": 6407,
+          "inclusive_wall_seconds": 0.110570537,
+          "inclusive_cpu_seconds": 0.053737996,
+          "self_wall_seconds": 0.110570537,
+          "self_cpu_seconds": 0.053737996
+        },
+        "metadata_and_qualification": {
+          "calls": 8459,
+          "inclusive_wall_seconds": 0.073696688,
+          "inclusive_cpu_seconds": 0.011585142,
+          "self_wall_seconds": 0.069850173,
+          "self_cpu_seconds": 0.007713582
+        },
+        "metadata_declared_field_lookup": {
+          "calls": 1060,
+          "inclusive_wall_seconds": 0.00439765,
+          "inclusive_cpu_seconds": 0.004419771,
+          "self_wall_seconds": 0.00439765,
+          "self_cpu_seconds": 0.004419771
+        },
+        "qualification_field_read": {
+          "calls": 2703,
+          "inclusive_wall_seconds": 0.002245665,
+          "inclusive_cpu_seconds": 0.002235933,
+          "self_wall_seconds": 0.002245665,
+          "self_cpu_seconds": 0.002235933
+        },
+        "raw_reflective_field_get": {
+          "calls": 5796,
+          "inclusive_wall_seconds": 0.003730146,
+          "inclusive_cpu_seconds": 0.003733328,
+          "self_wall_seconds": 0.003730146,
+          "self_cpu_seconds": 0.003733328
+        },
+        "required_RPC_locality_qualification": {
+          "calls": 1152,
+          "inclusive_wall_seconds": 0.00103841,
+          "inclusive_cpu_seconds": 0.00096597,
+          "self_wall_seconds": 0.00103841,
+          "self_cpu_seconds": 0.00096597
+        },
+        "required_SQL_locality_qualification": {
+          "calls": 1184,
+          "inclusive_wall_seconds": 0.009608305,
+          "inclusive_cpu_seconds": 0.008629462,
+          "self_wall_seconds": 0.005907834,
+          "self_cpu_seconds": 0.004971151
+        },
+        "snapshot_and_binding": {
+          "calls": 2492,
+          "inclusive_wall_seconds": 0.091748893,
+          "inclusive_cpu_seconds": 0.029801232,
+          "self_wall_seconds": 0.02197697,
+          "self_cpu_seconds": 0.02176936
+        }
+      },
+      "thread_state_samples": {},
+      "boundary": "Selected observer methods and original JDK operations called from them; never application invoke/predicate execution. Self times additive only within this probe coverage. Includes probe overhead, startup and preparation; synchronized-entry waiting is excluded from method timers. Stack samples are counts, not duration/CPU attribution. Shutdown timer snapshot may exclude final footer work. Not formal speed data."
+    },
+    "ruoyi-dictionary": {
+      "groups": {
+        "body_guard_and_state": {
+          "calls": 5006,
+          "inclusive_wall_seconds": 0.005043521,
+          "inclusive_cpu_seconds": 0.004998784,
+          "self_wall_seconds": 0.005043521,
+          "self_cpu_seconds": 0.004998784
+        },
+        "buffered_flush": {
+          "calls": 2,
+          "inclusive_wall_seconds": 0.000256316,
+          "inclusive_cpu_seconds": 0.000258366,
+          "self_wall_seconds": 0.000256316,
+          "self_cpu_seconds": 0.000258366
+        },
+        "buffered_newline": {
+          "calls": 4660,
+          "inclusive_wall_seconds": 0.002757911,
+          "inclusive_cpu_seconds": 0.002702064,
+          "self_wall_seconds": 0.002757911,
+          "self_cpu_seconds": 0.002702064
+        },
+        "buffered_write": {
+          "calls": 4660,
+          "inclusive_wall_seconds": 0.021954243,
+          "inclusive_cpu_seconds": 0.022111231,
+          "self_wall_seconds": 0.021954243,
+          "self_cpu_seconds": 0.022111231
+        },
+        "emit_state_encode_write": {
+          "calls": 4660,
+          "inclusive_wall_seconds": 0.294537205,
+          "inclusive_cpu_seconds": 0.113702936,
+          "self_wall_seconds": 0.20306086,
+          "self_cpu_seconds": 0.027244526
+        },
+        "evidence_and_state": {
+          "calls": 6810,
+          "inclusive_wall_seconds": 0.111893466,
+          "inclusive_cpu_seconds": 0.033415271,
+          "self_wall_seconds": 0.094000406,
+          "self_cpu_seconds": 0.015716873
+        },
+        "json_encoding": {
+          "calls": 4660,
+          "inclusive_wall_seconds": 0.046502262,
+          "inclusive_cpu_seconds": 0.046159758,
+          "self_wall_seconds": 0.046502262,
+          "self_cpu_seconds": 0.046159758
+        },
+        "metadata_and_qualification": {
+          "calls": 12273,
+          "inclusive_wall_seconds": 0.01969086,
+          "inclusive_cpu_seconds": 0.019193603,
+          "self_wall_seconds": 0.016613033,
+          "self_cpu_seconds": 0.016106933
+        },
+        "metadata_declared_field_lookup": {
+          "calls": 148,
+          "inclusive_wall_seconds": 0.00131783,
+          "inclusive_cpu_seconds": 0.00132432,
+          "self_wall_seconds": 0.00131783,
+          "self_cpu_seconds": 0.00132432
+        },
+        "qualification_field_read": {
+          "calls": 164,
+          "inclusive_wall_seconds": 0.000117262,
+          "inclusive_cpu_seconds": 0.000115552,
+          "self_wall_seconds": 0.000117262,
+          "self_cpu_seconds": 0.000115552
+        },
+        "raw_container_and_field_read": {
+          "calls": 1708,
+          "inclusive_wall_seconds": 0.009495028,
+          "inclusive_cpu_seconds": 0.00941459,
+          "self_wall_seconds": 0.003419537,
+          "self_cpu_seconds": 0.003349503
+        },
+        "raw_reflective_field_get": {
+          "calls": 12120,
+          "inclusive_wall_seconds": 0.007504978,
+          "inclusive_cpu_seconds": 0.007484611,
+          "self_wall_seconds": 0.007504978,
+          "self_cpu_seconds": 0.007484611
+        },
+        "required_RPC_locality_qualification": {
+          "calls": 1060,
+          "inclusive_wall_seconds": 0.000920455,
+          "inclusive_cpu_seconds": 0.000906736,
+          "self_wall_seconds": 0.000920455,
+          "self_cpu_seconds": 0.000906736
+        },
+        "required_SQL_locality_qualification": {
+          "calls": 1060,
+          "inclusive_wall_seconds": 0.000745783,
+          "inclusive_cpu_seconds": 0.000743492,
+          "self_wall_seconds": 0.000745783,
+          "self_cpu_seconds": 0.000743492
+        },
+        "snapshot_and_binding": {
+          "calls": 1917,
+          "inclusive_wall_seconds": 0.111156199,
+          "inclusive_cpu_seconds": 0.054087077,
+          "self_wall_seconds": 0.089869833,
+          "self_cpu_seconds": 0.033298986
+        },
+        "structure_recheck": {
+          "calls": 168,
+          "inclusive_wall_seconds": 0.001867379,
+          "inclusive_cpu_seconds": 0.001860551,
+          "self_wall_seconds": 0.000532469,
+          "self_cpu_seconds": 0.000555661
+        }
+      },
+      "thread_state_samples": {},
+      "boundary": "Selected observer methods and original JDK operations called from them; never application invoke/predicate execution. Self times additive only within this probe coverage. Includes probe overhead, startup and preparation; synchronized-entry waiting is excluded from method timers. Stack samples are counts, not duration/CPU attribution. Shutdown timer snapshot may exclude final footer work. Not formal speed data."
+    }
+  },
+  "formal": {
+    "paired": {
+      "mall-all": {
+        "business_CPU": {
+          "baseline_median": 27.129862500849512,
+          "arm_median": 27.706284595521893,
+          "median_ratio": 1.016970258476999,
+          "min_ratio": 0.9977290027110394,
+          "max_ratio": 1.0478234514211657
+        },
+        "business_RSS_MiB": {
+          "baseline_median": 922.0796875,
+          "arm_median": 920.3994654605264,
+          "median_ratio": 0.9979402875082227,
+          "min_ratio": 0.9918154531768301,
+          "max_ratio": 1.0164465950477413
+        },
+        "business_peak_RSS_MiB": {
+          "baseline_median": 931.8515625,
+          "arm_median": 929.22265625,
+          "median_ratio": 1.0012743445928385,
+          "min_ratio": 0.9914724061902161,
+          "max_ratio": 1.0140357902000792
+        },
+        "p50_ms": {
+          "baseline_median": 119.863,
+          "arm_median": 121.281,
+          "median_ratio": 1.006665943618965,
+          "min_ratio": 1.0022410338199812,
+          "max_ratio": 1.0252318545835057
+        },
+        "p95_ms": {
+          "baseline_median": 127.60199999999999,
+          "arm_median": 128.674,
+          "median_ratio": 1.0213571505368086,
+          "min_ratio": 0.9959397746224226,
+          "max_ratio": 1.0233072854243572
+        },
+        "p99_ms": {
+          "baseline_median": 131.762,
+          "arm_median": 134.83999999999997,
+          "median_ratio": 1.0291486004075443,
+          "min_ratio": 0.9884036299130637,
+          "max_ratio": 1.2809451297258307
+        },
+        "batch_events": {
+          "baseline_median": 54667,
+          "arm_median": 52687,
+          "median_ratio": 0.9637807086542155,
+          "min_ratio": 0.9637807086542155,
+          "max_ratio": 0.9637807086542155
+        },
+        "batch_bytes": {
+          "baseline_median": 38661922,
+          "arm_median": 36905552,
+          "median_ratio": 0.9545710917025236,
+          "min_ratio": 0.9545410164446296,
+          "max_ratio": 0.9546025673529629
+        },
+        "shared_unattributed_events": {
+          "baseline_median": 18109,
+          "arm_median": 18109,
+          "median_ratio": 1.0,
+          "min_ratio": 1.0,
+          "max_ratio": 1.0
+        },
+        "shared_unattributed_bytes": {
+          "baseline_median": 8904761,
+          "arm_median": 8903353,
+          "median_ratio": 0.999841657773486,
+          "min_ratio": 0.9998028021190013,
+          "max_ratio": 0.9998807333216163
+        },
+        "warmup_events": {
+          "baseline_median": 12198,
+          "arm_median": 11538,
+          "median_ratio": 0.9458927693064437,
+          "min_ratio": 0.9458927693064437,
+          "max_ratio": 0.9458927693064437
+        },
+        "warmup_bytes": {
+          "baseline_median": 9891696,
+          "arm_median": 9310797,
+          "median_ratio": 0.9412743602131607,
+          "min_ratio": 0.9412281156659216,
+          "max_ratio": 0.9413232068595719
+        },
+        "measure_events": {
+          "baseline_median": 24360,
+          "arm_median": 23040,
+          "median_ratio": 0.9458128078817734,
+          "min_ratio": 0.9458128078817734,
+          "max_ratio": 0.9458128078817734
+        },
+        "measure_bytes": {
+          "baseline_median": 19865465,
+          "arm_median": 18691402,
+          "median_ratio": 0.9408992943281217,
+          "min_ratio": 0.9408481444559182,
+          "max_ratio": 0.9409536600326245
+        },
+        "trace_VmHWM_KiB": {
+          "baseline_median": 287856,
+          "arm_median": 273456,
+          "median_ratio": 0.9499089885923105,
+          "min_ratio": 0.9496414874103718,
+          "max_ratio": 0.9504779902178746
+        },
+        "oracle_VmHWM_KiB": {
+          "baseline_median": 270684,
+          "arm_median": 258628,
+          "median_ratio": 0.9558140910031635,
+          "min_ratio": 0.9545467978839731,
+          "max_ratio": 0.9561111849980051
+        },
+        "trace_process_wall_seconds": {
+          "baseline_median": 2.285373389022425,
+          "arm_median": 2.1120268928352743,
+          "median_ratio": 0.9270339425505971,
+          "min_ratio": 0.8987024192792739,
+          "max_ratio": 0.9756641488691937
+        },
+        "trace_process_cpu_seconds": {
+          "baseline_median": 2.2848919999999993,
+          "arm_median": 2.1091289999999994,
+          "median_ratio": 0.9259837811282087,
+          "min_ratio": 0.8944777282195134,
+          "max_ratio": 0.9797636260397696
+        },
+        "trace_decode_and_capture_integrity_wall_seconds": {
+          "baseline_median": 0.5207334968727082,
+          "arm_median": 0.49225176591426134,
+          "median_ratio": 0.9745146187833018,
+          "min_ratio": 0.9344571682888919,
+          "max_ratio": 0.999252301901033
+        },
+        "trace_reconstruction_including_all_required_certificates_wall_seconds": {
+          "baseline_median": 1.3764921259135008,
+          "arm_median": 1.2157876710407436,
+          "median_ratio": 0.9079941209440723,
+          "min_ratio": 0.8582470173487582,
+          "max_ratio": 0.9485420031300942
+        },
+        "trace_query_wall_seconds": {
+          "baseline_median": 0.02821738296188414,
+          "arm_median": 0.0287129539065063,
+          "median_ratio": 1.0175626118584977,
+          "min_ratio": 0.9277704085037117,
+          "max_ratio": 1.0830815416430832
+        },
+        "trace_export_wall_seconds": {
+          "baseline_median": 0.004822409013286233,
+          "arm_median": 0.004832359962165356,
+          "median_ratio": 1.0030366818701322,
+          "min_ratio": 0.902427120291332,
+          "max_ratio": 1.0296333218730376
+        },
+        "trace_decode_and_capture_integrity_cpu_seconds": {
+          "baseline_median": 0.520622716,
+          "arm_median": 0.49220961599999996,
+          "median_ratio": 0.9745573330515117,
+          "min_ratio": 0.9344529318008162,
+          "max_ratio": 0.999489335974352
+        },
+        "trace_reconstruction_including_all_required_certificates_cpu_seconds": {
+          "baseline_median": 1.3764593029999999,
+          "arm_median": 1.2133105899999999,
+          "median_ratio": 0.9079711701436335,
+          "min_ratio": 0.8583304313942627,
+          "max_ratio": 0.9485674373716507
+        },
+        "trace_query_cpu_seconds": {
+          "baseline_median": 0.02821959599999957,
+          "arm_median": 0.028715137999999918,
+          "median_ratio": 1.0175602088704727,
+          "min_ratio": 0.9277471895411078,
+          "max_ratio": 1.0830624596896303
+        },
+        "trace_export_cpu_seconds": {
+          "baseline_median": 0.004823479999999991,
+          "arm_median": 0.004833650999999994,
+          "median_ratio": 1.0030941692031594,
+          "min_ratio": 0.9023158735136677,
+          "max_ratio": 1.02971775564534
+        },
+        "oracle_process_wall_seconds": {
+          "baseline_median": 0.8062372959684581,
+          "arm_median": 0.7772734710015357,
+          "median_ratio": 0.9523686255394811,
+          "min_ratio": 0.9237086201046214,
+          "max_ratio": 0.9774158907693693
+        },
+        "oracle_process_cpu_seconds": {
+          "baseline_median": 0.8058069999999979,
+          "arm_median": 0.7769089999999998,
+          "median_ratio": 0.9523943202699854,
+          "min_ratio": 0.9236301630737305,
+          "max_ratio": 0.9775615253525222
+        },
+        "oracle_decode_and_capture_integrity_wall_seconds": {
+          "baseline_median": 0.48804818582721055,
+          "arm_median": 0.47367961588315666,
+          "median_ratio": 0.9551785102442222,
+          "min_ratio": 0.9248688286081218,
+          "max_ratio": 0.9744027289981525
+        },
+        "oracle_independent_raw_oracle_and_score_wall_seconds": {
+          "baseline_median": 0.11609389097429812,
+          "arm_median": 0.11088221101090312,
+          "median_ratio": 0.9308511288627533,
+          "min_ratio": 0.8922959608818193,
+          "max_ratio": 0.9884472197342994
+        },
+        "oracle_score_export_wall_seconds": {
+          "baseline_median": 0.001922164112329483,
+          "arm_median": 0.0018142119515687227,
+          "median_ratio": 0.9477734446175168,
+          "min_ratio": 0.8635569425255742,
+          "max_ratio": 1.0243447385394342
+        },
+        "oracle_decode_and_capture_integrity_cpu_seconds": {
+          "baseline_median": 0.487958908,
+          "arm_median": 0.47364505200000007,
+          "median_ratio": 0.9551391895233134,
+          "min_ratio": 0.9248445132734469,
+          "max_ratio": 0.9745352735880262
+        },
+        "oracle_independent_raw_oracle_and_score_cpu_seconds": {
+          "baseline_median": 0.11609534700000002,
+          "arm_median": 0.11087332800000005,
+          "median_ratio": 0.9310570741863093,
+          "min_ratio": 0.8922940804818216,
+          "max_ratio": 0.9884429677301152
+        },
+        "oracle_score_export_cpu_seconds": {
+          "baseline_median": 0.001923303999999959,
+          "arm_median": 0.001815601,
+          "median_ratio": 0.9478994922193756,
+          "min_ratio": 0.8633469357179474,
+          "max_ratio": 1.0241738196201926
+        }
+      },
+      "mall-body_only": {
+        "business_CPU": {
+          "baseline_median": 27.129862500849512,
+          "arm_median": 27.073401428588646,
+          "median_ratio": 0.9979188588862513,
+          "min_ratio": 0.979202680329437,
+          "max_ratio": 1.0635412552733858
+        },
+        "business_RSS_MiB": {
+          "baseline_median": 922.0796875,
+          "arm_median": 911.8542351973684,
+          "median_ratio": 0.9955379583389712,
+          "min_ratio": 0.9781385616129226,
+          "max_ratio": 1.0042410801796882
+        },
+        "business_peak_RSS_MiB": {
+          "baseline_median": 931.8515625,
+          "arm_median": 922.234375,
+          "median_ratio": 0.9996559282291773,
+          "min_ratio": 0.9800731055696108,
+          "max_ratio": 1.0056867313860716
+        },
+        "p50_ms": {
+          "baseline_median": 119.863,
+          "arm_median": 120.65299999999999,
+          "median_ratio": 1.0013086328875804,
+          "min_ratio": 0.9890465059366589,
+          "max_ratio": 1.0133408052995199
+        },
+        "p95_ms": {
+          "baseline_median": 127.60199999999999,
+          "arm_median": 130.57399999999998,
+          "median_ratio": 1.0140332886329575,
+          "min_ratio": 0.9949110802849174,
+          "max_ratio": 1.058112405516404
+        },
+        "p99_ms": {
+          "baseline_median": 131.762,
+          "arm_median": 148.704,
+          "median_ratio": 1.0834456579551333,
+          "min_ratio": 1.0435633548841095,
+          "max_ratio": 1.1813876534964558
+        },
+        "batch_events": {
+          "baseline_median": 54667,
+          "arm_median": 52687,
+          "median_ratio": 0.9637807086542155,
+          "min_ratio": 0.9637807086542155,
+          "max_ratio": 0.9637807086542155
+        },
+        "batch_bytes": {
+          "baseline_median": 38661922,
+          "arm_median": 38441710,
+          "median_ratio": 0.9943041117146679,
+          "min_ratio": 0.9942725298104044,
+          "max_ratio": 0.9943054561180614
+        },
+        "shared_unattributed_events": {
+          "baseline_median": 18109,
+          "arm_median": 18109,
+          "median_ratio": 1.0,
+          "min_ratio": 1.0,
+          "max_ratio": 1.0
+        },
+        "shared_unattributed_bytes": {
+          "baseline_median": 8904761,
+          "arm_median": 8904368,
+          "median_ratio": 0.9999560908947677,
+          "min_ratio": 0.9999492406479543,
+          "max_ratio": 0.99998899465376
+        },
+        "warmup_events": {
+          "baseline_median": 12198,
+          "arm_median": 11538,
+          "median_ratio": 0.9458927693064437,
+          "min_ratio": 0.9458927693064437,
+          "max_ratio": 0.9458927693064437
+        },
+        "warmup_bytes": {
+          "baseline_median": 9891696,
+          "arm_median": 9818619,
+          "median_ratio": 0.9926122881253124,
+          "min_ratio": 0.9925631537493127,
+          "max_ratio": 0.9926131979793961
+        },
+        "measure_events": {
+          "baseline_median": 24360,
+          "arm_median": 23040,
+          "median_ratio": 0.9458128078817734,
+          "min_ratio": 0.9458128078817734,
+          "max_ratio": 0.9458128078817734
+        },
+        "measure_bytes": {
+          "baseline_median": 19865465,
+          "arm_median": 19718771,
+          "median_ratio": 0.9926156271700662,
+          "min_ratio": 0.9925612614655634,
+          "max_ratio": 0.9926156271700662
+        },
+        "trace_VmHWM_KiB": {
+          "baseline_median": 287856,
+          "arm_median": 286808,
+          "median_ratio": 0.9963039128501556,
+          "min_ratio": 0.9958454334505135,
+          "max_ratio": 0.996678433443589
+        },
+        "oracle_VmHWM_KiB": {
+          "baseline_median": 270684,
+          "arm_median": 270048,
+          "median_ratio": 0.9979156195488277,
+          "min_ratio": 0.9971046606100894,
+          "max_ratio": 0.9985518810769276
+        },
+        "trace_process_wall_seconds": {
+          "baseline_median": 2.285373389022425,
+          "arm_median": 2.138847150839865,
+          "median_ratio": 0.9331820295700068,
+          "min_ratio": 0.9276748296227005,
+          "max_ratio": 0.9626873931176121
+        },
+        "trace_process_cpu_seconds": {
+          "baseline_median": 2.2848919999999993,
+          "arm_median": 2.1264840000000014,
+          "median_ratio": 0.9306715590933847,
+          "min_ratio": 0.9274945341717912,
+          "max_ratio": 0.9668817990609672
+        },
+        "trace_decode_and_capture_integrity_wall_seconds": {
+          "baseline_median": 0.5207334968727082,
+          "arm_median": 0.5076190568506718,
+          "median_ratio": 0.9748154476314739,
+          "min_ratio": 0.9539100203108436,
+          "max_ratio": 1.0848160750482947
+        },
+        "trace_reconstruction_including_all_required_certificates_wall_seconds": {
+          "baseline_median": 1.3764921259135008,
+          "arm_median": 1.2346725568640977,
+          "median_ratio": 0.9080514366937305,
+          "min_ratio": 0.8894248762720564,
+          "max_ratio": 0.9172337620743922
+        },
+        "trace_query_wall_seconds": {
+          "baseline_median": 0.02821738296188414,
+          "arm_median": 0.027899964014068246,
+          "median_ratio": 0.9972685017416453,
+          "min_ratio": 0.9155879193290888,
+          "max_ratio": 1.0715871921482791
+        },
+        "trace_export_wall_seconds": {
+          "baseline_median": 0.004822409013286233,
+          "arm_median": 0.004924332024529576,
+          "median_ratio": 0.9631415398217078,
+          "min_ratio": 0.8679556083207424,
+          "max_ratio": 1.0413516956208522
+        },
+        "trace_decode_and_capture_integrity_cpu_seconds": {
+          "baseline_median": 0.520622716,
+          "arm_median": 0.507591487,
+          "median_ratio": 0.9749699185234938,
+          "min_ratio": 0.9538834508968882,
+          "max_ratio": 1.0850291232796565
+        },
+        "trace_reconstruction_including_all_required_certificates_cpu_seconds": {
+          "baseline_median": 1.3764593029999999,
+          "arm_median": 1.234518555,
+          "median_ratio": 0.9080616893459038,
+          "min_ratio": 0.8870228653610984,
+          "max_ratio": 0.9172256455221223
+        },
+        "trace_query_cpu_seconds": {
+          "baseline_median": 0.02821959599999957,
+          "arm_median": 0.02790207899999997,
+          "median_ratio": 0.9972651462259147,
+          "min_ratio": 0.9155886136067386,
+          "max_ratio": 1.0715665973567028
+        },
+        "trace_export_cpu_seconds": {
+          "baseline_median": 0.004823479999999991,
+          "arm_median": 0.0049265229999999605,
+          "median_ratio": 0.9631034330337093,
+          "min_ratio": 0.8679970262293382,
+          "max_ratio": 1.0413798751109151
+        },
+        "oracle_process_wall_seconds": {
+          "baseline_median": 0.8062372959684581,
+          "arm_median": 0.8005961810704321,
+          "median_ratio": 0.9930031580947272,
+          "min_ratio": 0.9443845632670903,
+          "max_ratio": 1.0112630738721102
+        },
+        "oracle_process_cpu_seconds": {
+          "baseline_median": 0.8058069999999979,
+          "arm_median": 0.8002630000000011,
+          "median_ratio": 0.993119940630949,
+          "min_ratio": 0.9442033528849891,
+          "max_ratio": 1.011119923799524
+        },
+        "oracle_decode_and_capture_integrity_wall_seconds": {
+          "baseline_median": 0.48804818582721055,
+          "arm_median": 0.4833596758544445,
+          "median_ratio": 0.9816125591403353,
+          "min_ratio": 0.9422501049115461,
+          "max_ratio": 1.0174850722351314
+        },
+        "oracle_independent_raw_oracle_and_score_wall_seconds": {
+          "baseline_median": 0.11609389097429812,
+          "arm_median": 0.11771762697026134,
+          "median_ratio": 1.0081010562202128,
+          "min_ratio": 0.9334883092521478,
+          "max_ratio": 1.0556567209308891
+        },
+        "oracle_score_export_wall_seconds": {
+          "baseline_median": 0.001922164112329483,
+          "arm_median": 0.0017692300025373697,
+          "median_ratio": 0.8890119596524938,
+          "min_ratio": 0.850277732801586,
+          "max_ratio": 0.9288287251989509
+        },
+        "oracle_decode_and_capture_integrity_cpu_seconds": {
+          "baseline_median": 0.487958908,
+          "arm_median": 0.4833433939999999,
+          "median_ratio": 0.9817927158175527,
+          "min_ratio": 0.9422656415119706,
+          "max_ratio": 1.0172533313915093
+        },
+        "oracle_independent_raw_oracle_and_score_cpu_seconds": {
+          "baseline_median": 0.11609534700000002,
+          "arm_median": 0.117719134,
+          "median_ratio": 1.0080992948400125,
+          "min_ratio": 0.9330212815335833,
+          "max_ratio": 1.0556440280824662
+        },
+        "oracle_score_export_cpu_seconds": {
+          "baseline_median": 0.001923303999999959,
+          "arm_median": 0.001771039999999946,
+          "median_ratio": 0.888846432495575,
+          "min_ratio": 0.8504483600787112,
+          "max_ratio": 0.9286296507160934
+        }
+      },
+      "mall-boundary_only": {
+        "business_CPU": {
+          "baseline_median": 27.129862500849512,
+          "arm_median": 27.326077322858282,
+          "median_ratio": 0.9889686179570651,
+          "min_ratio": 0.9770954246030026,
+          "max_ratio": 1.0303892234424152
+        },
+        "business_RSS_MiB": {
+          "baseline_median": 922.0796875,
+          "arm_median": 910.6109375,
+          "median_ratio": 0.994045813556651,
+          "min_ratio": 0.9751858713571371,
+          "max_ratio": 1.0094965657583321
+        },
+        "business_peak_RSS_MiB": {
+          "baseline_median": 931.8515625,
+          "arm_median": 924.81640625,
+          "median_ratio": 0.9905320145931653,
+          "min_ratio": 0.9755092173869552,
+          "max_ratio": 1.0118079546083822
+        },
+        "p50_ms": {
+          "baseline_median": 119.863,
+          "arm_median": 120.619,
+          "median_ratio": 1.006307200720823,
+          "min_ratio": 0.9973802240074281,
+          "max_ratio": 1.013451363279635
+        },
+        "p95_ms": {
+          "baseline_median": 127.60199999999999,
+          "arm_median": 128.357,
+          "median_ratio": 1.0048828587205174,
+          "min_ratio": 0.9996337224707368,
+          "max_ratio": 1.0284164825002744
+        },
+        "p99_ms": {
+          "baseline_median": 131.762,
+          "arm_median": 135.05800000000002,
+          "median_ratio": 1.0346259326786074,
+          "min_ratio": 0.9782005231291574,
+          "max_ratio": 1.0526479561633855
+        },
+        "batch_events": {
+          "baseline_median": 54667,
+          "arm_median": 54667,
+          "median_ratio": 1.0,
+          "min_ratio": 1.0,
+          "max_ratio": 1.0
+        },
+        "batch_bytes": {
+          "baseline_median": 38661922,
+          "arm_median": 37134773,
+          "median_ratio": 0.9604999699963168,
+          "min_ratio": 0.9604696090506257,
+          "max_ratio": 0.9605314241749285
+        },
+        "shared_unattributed_events": {
+          "baseline_median": 18109,
+          "arm_median": 18109,
+          "median_ratio": 1.0,
+          "min_ratio": 1.0,
+          "max_ratio": 1.0
+        },
+        "shared_unattributed_bytes": {
+          "baseline_median": 8904761,
+          "arm_median": 8903451,
+          "median_ratio": 0.999852663119726,
+          "min_ratio": 0.9998135829106288,
+          "max_ratio": 0.9998917390979644
+        },
+        "warmup_events": {
+          "baseline_median": 12198,
+          "arm_median": 12198,
+          "median_ratio": 1.0,
+          "min_ratio": 1.0,
+          "max_ratio": 1.0
+        },
+        "warmup_bytes": {
+          "baseline_median": 9891696,
+          "arm_median": 9386932,
+          "median_ratio": 0.9489709348123921,
+          "min_ratio": 0.9489242966590071,
+          "max_ratio": 0.9490200669329102
+        },
+        "measure_events": {
+          "baseline_median": 24360,
+          "arm_median": 24360,
+          "median_ratio": 1.0,
+          "min_ratio": 1.0,
+          "max_ratio": 1.0
+        },
+        "measure_bytes": {
+          "baseline_median": 19865465,
+          "arm_median": 18844390,
+          "median_ratio": 0.9486004984026299,
+          "min_ratio": 0.9485489298718021,
+          "max_ratio": 0.9486548641071326
+        },
+        "trace_VmHWM_KiB": {
+          "baseline_median": 287856,
+          "arm_median": 274528,
+          "median_ratio": 0.9536990717581013,
+          "min_ratio": 0.9532062150818579,
+          "max_ratio": 0.953847436663563
+        },
+        "oracle_VmHWM_KiB": {
+          "baseline_median": 270684,
+          "arm_median": 258924,
+          "median_ratio": 0.9565545063616616,
+          "min_ratio": 0.9561279073203889,
+          "max_ratio": 0.9577156707704586
+        },
+        "trace_process_wall_seconds": {
+          "baseline_median": 2.285373389022425,
+          "arm_median": 2.2901910790242255,
+          "median_ratio": 1.0034700222932116,
+          "min_ratio": 0.9768978952644838,
+          "max_ratio": 1.037196892325315
+        },
+        "trace_process_cpu_seconds": {
+          "baseline_median": 2.2848919999999993,
+          "arm_median": 2.2865019999999987,
+          "median_ratio": 1.0035050384928323,
+          "min_ratio": 0.9755458828287861,
+          "max_ratio": 1.0371534303866543
+        },
+        "trace_decode_and_capture_integrity_wall_seconds": {
+          "baseline_median": 0.5207334968727082,
+          "arm_median": 0.500302349915728,
+          "median_ratio": 0.9754834296577782,
+          "min_ratio": 0.9291284441503721,
+          "max_ratio": 1.0327399946757858
+        },
+        "trace_reconstruction_including_all_required_certificates_wall_seconds": {
+          "baseline_median": 1.3764921259135008,
+          "arm_median": 1.4068281180225313,
+          "median_ratio": 1.0079057573318693,
+          "min_ratio": 0.9633617571113107,
+          "max_ratio": 1.0641026276445686
+        },
+        "trace_query_wall_seconds": {
+          "baseline_median": 0.02821738296188414,
+          "arm_median": 0.0281627110671252,
+          "median_ratio": 1.0170555517695752,
+          "min_ratio": 0.9022170032227234,
+          "max_ratio": 1.062344027009741
+        },
+        "trace_export_wall_seconds": {
+          "baseline_median": 0.004822409013286233,
+          "arm_median": 0.0050322930328547955,
+          "median_ratio": 1.0799287476436306,
+          "min_ratio": 0.9568042947155387,
+          "max_ratio": 1.1244367809326052
+        },
+        "trace_decode_and_capture_integrity_cpu_seconds": {
+          "baseline_median": 0.520622716,
+          "arm_median": 0.500297459,
+          "median_ratio": 0.9755535701364048,
+          "min_ratio": 0.9291176645297383,
+          "max_ratio": 1.032611565840402
+        },
+        "trace_reconstruction_including_all_required_certificates_cpu_seconds": {
+          "baseline_median": 1.3764593029999999,
+          "arm_median": 1.406662583,
+          "median_ratio": 1.0078289745699838,
+          "min_ratio": 0.9612538335594788,
+          "max_ratio": 1.0639630240093079
+        },
+        "trace_query_cpu_seconds": {
+          "baseline_median": 0.02821959599999957,
+          "arm_median": 0.02816486500000015,
+          "median_ratio": 1.0166203655077188,
+          "min_ratio": 0.9022167199629189,
+          "max_ratio": 1.0623780799771505
+        },
+        "trace_export_cpu_seconds": {
+          "baseline_median": 0.004823479999999991,
+          "arm_median": 0.005033394999999885,
+          "median_ratio": 1.0798709172982202,
+          "min_ratio": 0.9567686502617989,
+          "max_ratio": 1.1246742665770932
+        },
+        "oracle_process_wall_seconds": {
+          "baseline_median": 0.8062372959684581,
+          "arm_median": 0.8113957107998431,
+          "median_ratio": 0.9765266991252787,
+          "min_ratio": 0.9668353786084657,
+          "max_ratio": 1.0108887634592187
+        },
+        "oracle_process_cpu_seconds": {
+          "baseline_median": 0.8058069999999979,
+          "arm_median": 0.8109499999999947,
+          "median_ratio": 0.9765515521755437,
+          "min_ratio": 0.966777023186586,
+          "max_ratio": 1.0109717770638555
+        },
+        "oracle_decode_and_capture_integrity_wall_seconds": {
+          "baseline_median": 0.48804818582721055,
+          "arm_median": 0.4896855209954083,
+          "median_ratio": 0.9780507537843365,
+          "min_ratio": 0.9639299043302652,
+          "max_ratio": 1.0134717827643462
+        },
+        "oracle_independent_raw_oracle_and_score_wall_seconds": {
+          "baseline_median": 0.11609389097429812,
+          "arm_median": 0.11716721416451037,
+          "median_ratio": 0.9756716396942104,
+          "min_ratio": 0.9406509710112655,
+          "max_ratio": 1.0647266992331106
+        },
+        "oracle_score_export_wall_seconds": {
+          "baseline_median": 0.001922164112329483,
+          "arm_median": 0.0018795630894601345,
+          "median_ratio": 0.975411307801853,
+          "min_ratio": 0.9147693023485852,
+          "max_ratio": 1.0323078838785449
+        },
+        "oracle_decode_and_capture_integrity_cpu_seconds": {
+          "baseline_median": 0.487958908,
+          "arm_median": 0.48967893799999995,
+          "median_ratio": 0.9781352436147556,
+          "min_ratio": 0.9639952038748311,
+          "max_ratio": 1.0132550021614621
+        },
+        "oracle_independent_raw_oracle_and_score_cpu_seconds": {
+          "baseline_median": 0.11609534700000002,
+          "arm_median": 0.11716858200000002,
+          "median_ratio": 0.97537080448194,
+          "min_ratio": 0.9406494249328714,
+          "max_ratio": 1.064639125007221
+        },
+        "oracle_score_export_cpu_seconds": {
+          "baseline_median": 0.001923303999999959,
+          "arm_median": 0.0018806530000000654,
+          "median_ratio": 0.9751521072046797,
+          "min_ratio": 0.914518184585886,
+          "max_ratio": 1.0323620186928573
+        }
+      },
+      "mall-write_only": {
+        "business_CPU": {
+          "baseline_median": 27.129862500849512,
+          "arm_median": 27.192396265952485,
+          "median_ratio": 1.0023049790650806,
+          "min_ratio": 0.9636090596138708,
+          "max_ratio": 1.0353191978464005
+        },
+        "business_RSS_MiB": {
+          "baseline_median": 922.0796875,
+          "arm_median": 919.6751953125,
+          "median_ratio": 0.9995742771316045,
+          "min_ratio": 0.9832780772404771,
+          "max_ratio": 1.0376039717985268
+        },
+        "business_peak_RSS_MiB": {
+          "baseline_median": 931.8515625,
+          "arm_median": 932.8671875,
+          "median_ratio": 0.9982753933462466,
+          "min_ratio": 0.9805410516450781,
+          "max_ratio": 1.0371533117223342
+        },
+        "p50_ms": {
+          "baseline_median": 119.863,
+          "arm_median": 120.595,
+          "median_ratio": 0.9997844488107377,
+          "min_ratio": 0.970809147024875,
+          "max_ratio": 1.0251812220993917
+        },
+        "p95_ms": {
+          "baseline_median": 127.60199999999999,
+          "arm_median": 129.89100000000002,
+          "median_ratio": 1.0117693460597934,
+          "min_ratio": 0.9975194679527548,
+          "max_ratio": 1.089937197372837
+        },
+        "p99_ms": {
+          "baseline_median": 131.762,
+          "arm_median": 137.206,
+          "median_ratio": 1.0355233474458418,
+          "min_ratio": 0.9996721335363675,
+          "max_ratio": 1.5852355191977834
+        },
+        "batch_events": {
+          "baseline_median": 54667,
+          "arm_median": 54667,
+          "median_ratio": 1.0,
+          "min_ratio": 1.0,
+          "max_ratio": 1.0
+        },
+        "batch_bytes": {
+          "baseline_median": 38661922,
+          "arm_median": 38655318,
+          "median_ratio": 0.9997977918968245,
+          "min_ratio": 0.9997977596560129,
+          "max_ratio": 0.9998306085204612
+        },
+        "shared_unattributed_events": {
+          "baseline_median": 18109,
+          "arm_median": 18109,
+          "median_ratio": 1.0,
+          "min_ratio": 1.0,
+          "max_ratio": 1.0
+        },
+        "shared_unattributed_bytes": {
+          "baseline_median": 8904761,
+          "arm_median": 8904466,
+          "median_ratio": 1.0,
+          "min_ratio": 0.999960919790903,
+          "max_ratio": 1.0000002245990038
+        },
+        "warmup_events": {
+          "baseline_median": 12198,
+          "arm_median": 12198,
+          "median_ratio": 1.0,
+          "min_ratio": 1.0,
+          "max_ratio": 1.0
+        },
+        "warmup_bytes": {
+          "baseline_median": 9891696,
+          "arm_median": 9889607,
+          "median_ratio": 0.9997402998874161,
+          "min_ratio": 0.9997399839218674,
+          "max_ratio": 0.9997894192632141
+        },
+        "measure_events": {
+          "baseline_median": 24360,
+          "arm_median": 24360,
+          "median_ratio": 1.0,
+          "min_ratio": 1.0,
+          "max_ratio": 1.0
+        },
+        "measure_bytes": {
+          "baseline_median": 19865465,
+          "arm_median": 19861296,
+          "median_ratio": 0.9997357869725209,
+          "min_ratio": 0.9997357726083935,
+          "max_ratio": 0.9997901383128963
+        },
+        "trace_VmHWM_KiB": {
+          "baseline_median": 287856,
+          "arm_median": 287712,
+          "median_ratio": 0.9995969815306364,
+          "min_ratio": 0.9989439164026458,
+          "max_ratio": 1.0000694888400923
+        },
+        "oracle_VmHWM_KiB": {
+          "baseline_median": 270684,
+          "arm_median": 270520,
+          "median_ratio": 0.9996156461579399,
+          "min_ratio": 0.9993054939858734,
+          "max_ratio": 1.000162493537189
+        },
+        "trace_process_wall_seconds": {
+          "baseline_median": 2.285373389022425,
+          "arm_median": 2.3095678971149027,
+          "median_ratio": 1.0106827493868848,
+          "min_ratio": 1.0040361177102564,
+          "max_ratio": 1.0610840120871226
+        },
+        "trace_process_cpu_seconds": {
+          "baseline_median": 2.2848919999999993,
+          "arm_median": 2.308988999999997,
+          "median_ratio": 1.0104295640702494,
+          "min_ratio": 1.0039739296211816,
+          "max_ratio": 1.0610624585934072
+        },
+        "trace_decode_and_capture_integrity_wall_seconds": {
+          "baseline_median": 0.5207334968727082,
+          "arm_median": 0.524317606119439,
+          "median_ratio": 1.0512031963903525,
+          "min_ratio": 0.9942400138753308,
+          "max_ratio": 1.0684260852369551
+        },
+        "trace_reconstruction_including_all_required_certificates_wall_seconds": {
+          "baseline_median": 1.3764921259135008,
+          "arm_median": 1.393187919864431,
+          "median_ratio": 1.0067614319231184,
+          "min_ratio": 0.9981333948957095,
+          "max_ratio": 1.0725827784660413
+        },
+        "trace_query_wall_seconds": {
+          "baseline_median": 0.02821738296188414,
+          "arm_median": 0.028359515825286508,
+          "median_ratio": 1.0177904885504814,
+          "min_ratio": 0.9130107030983068,
+          "max_ratio": 1.076262001097812
+        },
+        "trace_export_wall_seconds": {
+          "baseline_median": 0.004822409013286233,
+          "arm_median": 0.005009133834391832,
+          "median_ratio": 0.9843407809460781,
+          "min_ratio": 0.8372867977502719,
+          "max_ratio": 1.1128175442666142
+        },
+        "trace_decode_and_capture_integrity_cpu_seconds": {
+          "baseline_median": 0.520622716,
+          "arm_median": 0.524302659,
+          "median_ratio": 1.0506128867574691,
+          "min_ratio": 0.9942986371727968,
+          "max_ratio": 1.0687043727410612
+        },
+        "trace_reconstruction_including_all_required_certificates_cpu_seconds": {
+          "baseline_median": 1.3764593029999999,
+          "arm_median": 1.3931389840000001,
+          "median_ratio": 1.0068300599676403,
+          "min_ratio": 0.9973909606202933,
+          "max_ratio": 1.0726092106600786
+        },
+        "trace_query_cpu_seconds": {
+          "baseline_median": 0.02821959599999957,
+          "arm_median": 0.028362999000000055,
+          "median_ratio": 1.0177873205555756,
+          "min_ratio": 0.9130383640623363,
+          "max_ratio": 1.075906003498036
+        },
+        "trace_export_cpu_seconds": {
+          "baseline_median": 0.004823479999999991,
+          "arm_median": 0.0050103240000001215,
+          "median_ratio": 0.9819887276286732,
+          "min_ratio": 0.837228472019255,
+          "max_ratio": 1.1126560380534654
+        },
+        "oracle_process_wall_seconds": {
+          "baseline_median": 0.8062372959684581,
+          "arm_median": 0.8046682919375598,
+          "median_ratio": 0.9831674780957615,
+          "min_ratio": 0.963092333116763,
+          "max_ratio": 1.0175547167064236
+        },
+        "oracle_process_cpu_seconds": {
+          "baseline_median": 0.8058069999999979,
+          "arm_median": 0.804199999999998,
+          "median_ratio": 0.9832466086792532,
+          "min_ratio": 0.9631639702564779,
+          "max_ratio": 1.0173387942035643
+        },
+        "oracle_decode_and_capture_integrity_wall_seconds": {
+          "baseline_median": 0.48804818582721055,
+          "arm_median": 0.48440748709253967,
+          "median_ratio": 0.9849365245895022,
+          "min_ratio": 0.961117205292554,
+          "max_ratio": 1.0178883674211323
+        },
+        "oracle_independent_raw_oracle_and_score_wall_seconds": {
+          "baseline_median": 0.11609389097429812,
+          "arm_median": 0.11811485583893955,
+          "median_ratio": 0.9996294581610938,
+          "min_ratio": 0.9567788220637502,
+          "max_ratio": 1.0263682361952962
+        },
+        "oracle_score_export_wall_seconds": {
+          "baseline_median": 0.001922164112329483,
+          "arm_median": 0.0018530020024627447,
+          "median_ratio": 0.9616272615253302,
+          "min_ratio": 0.8540748299144652,
+          "max_ratio": 1.0015252961981689
+        },
+        "oracle_decode_and_capture_integrity_cpu_seconds": {
+          "baseline_median": 0.487958908,
+          "arm_median": 0.48438730700000004,
+          "median_ratio": 0.9850321084823807,
+          "min_ratio": 0.9611508366080469,
+          "max_ratio": 1.0179076262162625
+        },
+        "oracle_independent_raw_oracle_and_score_cpu_seconds": {
+          "baseline_median": 0.11609534700000002,
+          "arm_median": 0.11810104399999999,
+          "median_ratio": 0.9994653339334492,
+          "min_ratio": 0.9567770910629136,
+          "max_ratio": 1.0264534978870623
+        },
+        "oracle_score_export_cpu_seconds": {
+          "baseline_median": 0.001923303999999959,
+          "arm_median": 0.0018543620000001093,
+          "median_ratio": 0.961519755010801,
+          "min_ratio": 0.8539014577825662,
+          "max_ratio": 1.001529711380566
+        }
+      },
+      "ruoyi-dictionary-boundary_only": {
+        "business_CPU": {
+          "baseline_median": 3.8366258250946323,
+          "arm_median": 3.581321812794303,
+          "median_ratio": 0.9270996799297867,
+          "min_ratio": 0.8261207562623382,
+          "max_ratio": 1.1820558087455058
+        },
+        "business_RSS_MiB": {
+          "baseline_median": 601.9337635869565,
+          "arm_median": 613.5811820652174,
+          "median_ratio": 0.9953526994732802,
+          "min_ratio": 0.9358849757500811,
+          "max_ratio": 1.0797387865330723
+        },
+        "business_peak_RSS_MiB": {
+          "baseline_median": 604.51171875,
+          "arm_median": 620.23828125,
+          "median_ratio": 1.0351871867316431,
+          "min_ratio": 0.9385964351677286,
+          "max_ratio": 1.076024403387733
+        },
+        "p50_ms": {
+          "baseline_median": 8.082,
+          "arm_median": 7.593,
+          "median_ratio": 0.9394951744617668,
+          "min_ratio": 0.9118839867272951,
+          "max_ratio": 0.9509570874515201
+        },
+        "p95_ms": {
+          "baseline_median": 12.814,
+          "arm_median": 12.071,
+          "median_ratio": 0.9455802994603634,
+          "min_ratio": 0.9129985698395041,
+          "max_ratio": 0.988450132667395
+        },
+        "p99_ms": {
+          "baseline_median": 13.409,
+          "arm_median": 13.104,
+          "median_ratio": 0.9530800665960344,
+          "min_ratio": 0.9019164955509925,
+          "max_ratio": 1.0052203743754193
+        },
+        "batch_events": {
+          "baseline_median": 44922,
+          "arm_median": 44922,
+          "median_ratio": 1.0,
+          "min_ratio": 1.0,
+          "max_ratio": 1.0
+        },
+        "batch_bytes": {
+          "baseline_median": 29703345,
+          "arm_median": 24816515,
+          "median_ratio": 0.8354787987682869,
+          "min_ratio": 0.8354787987682869,
+          "max_ratio": 0.835481414627597
+        },
+        "shared_unattributed_events": {
+          "baseline_median": 3942,
+          "arm_median": 3942,
+          "median_ratio": 1.0,
+          "min_ratio": 1.0,
+          "max_ratio": 1.0
+        },
+        "shared_unattributed_bytes": {
+          "baseline_median": 948097,
+          "arm_median": 948097,
+          "median_ratio": 1.0,
+          "min_ratio": 1.0,
+          "max_ratio": 1.000003164243208
+        },
+        "warmup_events": {
+          "baseline_median": 13660,
+          "arm_median": 13660,
+          "median_ratio": 1.0,
+          "min_ratio": 1.0,
+          "max_ratio": 1.0
+        },
+        "warmup_bytes": {
+          "baseline_median": 9545357,
+          "arm_median": 7925809,
+          "median_ratio": 0.8303313328144772,
+          "min_ratio": 0.8303313328144772,
+          "max_ratio": 0.8303391618065791
+        },
+        "measure_events": {
+          "baseline_median": 27320,
+          "arm_median": 27320,
+          "median_ratio": 1.0,
+          "min_ratio": 1.0,
+          "max_ratio": 1.0
+        },
+        "measure_bytes": {
+          "baseline_median": 19209891,
+          "arm_median": 15942609,
+          "median_ratio": 0.8299166819842966,
+          "min_ratio": 0.8299166819842966,
+          "max_ratio": 0.8299166819842966
+        },
+        "trace_VmHWM_KiB": {
+          "baseline_median": 255772,
+          "arm_median": 215028,
+          "median_ratio": 0.8406986926878088,
+          "min_ratio": 0.8405150832394542,
+          "max_ratio": 0.8410931015582178
+        },
+        "oracle_VmHWM_KiB": {
+          "baseline_median": 239124,
+          "arm_median": 203532,
+          "median_ratio": 0.8511567220354294,
+          "min_ratio": 0.8507844645903724,
+          "max_ratio": 0.8518766531623531
+        },
+        "trace_process_wall_seconds": {
+          "baseline_median": 1.7159769260324538,
+          "arm_median": 1.5168992769904435,
+          "median_ratio": 0.8865977968748866,
+          "min_ratio": 0.8788246741544294,
+          "max_ratio": 0.9034221332233625
+        },
+        "trace_process_cpu_seconds": {
+          "baseline_median": 1.7155380000000005,
+          "arm_median": 1.5163620000000009,
+          "median_ratio": 0.8865761061544554,
+          "min_ratio": 0.8788217429089172,
+          "max_ratio": 0.9037114303288039
+        },
+        "trace_decode_and_capture_integrity_wall_seconds": {
+          "baseline_median": 0.42903975979425013,
+          "arm_median": 0.3201601239852607,
+          "median_ratio": 0.759342536356677,
+          "min_ratio": 0.7099000333951253,
+          "max_ratio": 0.8175325414681038
+        },
+        "trace_reconstruction_including_all_required_certificates_wall_seconds": {
+          "baseline_median": 0.9751125960610807,
+          "arm_median": 0.9358851159922779,
+          "median_ratio": 0.9654966327013623,
+          "min_ratio": 0.9250018841501398,
+          "max_ratio": 0.9939982855702509
+        },
+        "trace_query_wall_seconds": {
+          "baseline_median": 0.008006782038137317,
+          "arm_median": 0.00789925898425281,
+          "median_ratio": 0.9688366942527306,
+          "min_ratio": 0.9296742534168627,
+          "max_ratio": 1.0265429797381809
+        },
+        "trace_export_wall_seconds": {
+          "baseline_median": 0.009831303032115102,
+          "arm_median": 0.009171318961307406,
+          "median_ratio": 0.9754434154505295,
+          "min_ratio": 0.8869165489061643,
+          "max_ratio": 0.9954243894345387
+        },
+        "trace_decode_and_capture_integrity_cpu_seconds": {
+          "baseline_median": 0.429024049,
+          "arm_median": 0.32010071500000004,
+          "median_ratio": 0.759945318792547,
+          "min_ratio": 0.7172747139772632,
+          "max_ratio": 0.8175067849104907
+        },
+        "trace_reconstruction_including_all_required_certificates_cpu_seconds": {
+          "baseline_median": 0.974982124,
+          "arm_median": 0.9357787580000001,
+          "median_ratio": 0.9656022452366523,
+          "min_ratio": 0.9250173713813353,
+          "max_ratio": 0.995347913322843
+        },
+        "trace_query_cpu_seconds": {
+          "baseline_median": 0.008009982999999998,
+          "arm_median": 0.007900561000000028,
+          "median_ratio": 0.9687823314686832,
+          "min_ratio": 0.9296325211785165,
+          "max_ratio": 1.026344000979761
+        },
+        "trace_export_cpu_seconds": {
+          "baseline_median": 0.009832985000000072,
+          "arm_median": 0.009172200000000075,
+          "median_ratio": 0.9754115924906115,
+          "min_ratio": 0.8868617739268649,
+          "max_ratio": 0.9964732359730396
+        },
+        "oracle_process_wall_seconds": {
+          "baseline_median": 0.5942499530501664,
+          "arm_median": 0.5421313568949699,
+          "median_ratio": 0.9287043538115559,
+          "min_ratio": 0.8965335318089651,
+          "max_ratio": 0.9302656302969597
+        },
+        "oracle_process_cpu_seconds": {
+          "baseline_median": 0.5937999999999999,
+          "arm_median": 0.541836,
+          "median_ratio": 0.9287145680917431,
+          "min_ratio": 0.8963858901805909,
+          "max_ratio": 0.9303861505767871
+        },
+        "oracle_decode_and_capture_integrity_wall_seconds": {
+          "baseline_median": 0.41072538308799267,
+          "arm_median": 0.3168784989975393,
+          "median_ratio": 0.7821937016267654,
+          "min_ratio": 0.7573627360943259,
+          "max_ratio": 0.7905260271150308
+        },
+        "oracle_independent_raw_oracle_and_score_wall_seconds": {
+          "baseline_median": 0.031340521993115544,
+          "arm_median": 0.08182403701357543,
+          "median_ratio": 2.6219535646577947,
+          "min_ratio": 2.517854867309285,
+          "max_ratio": 2.677131625156144
+        },
+        "oracle_score_export_wall_seconds": {
+          "baseline_median": 0.0033982370514422655,
+          "arm_median": 0.0034055670257657766,
+          "median_ratio": 1.0402365283624195,
+          "min_ratio": 0.9878685081467685,
+          "max_ratio": 1.0577283043278176
+        },
+        "oracle_decode_and_capture_integrity_cpu_seconds": {
+          "baseline_median": 0.41072239,
+          "arm_median": 0.31685179199999997,
+          "median_ratio": 0.7823761608515536,
+          "min_ratio": 0.7573350357583687,
+          "max_ratio": 0.7905472473721203
+        },
+        "oracle_independent_raw_oracle_and_score_cpu_seconds": {
+          "baseline_median": 0.03134211700000006,
+          "arm_median": 0.08182540199999999,
+          "median_ratio": 2.6219041111829036,
+          "min_ratio": 2.517582523222661,
+          "max_ratio": 2.677030166378645
+        },
+        "oracle_score_export_cpu_seconds": {
+          "baseline_median": 0.0033997679999999697,
+          "arm_median": 0.003407268000000019,
+          "median_ratio": 1.0404760845588346,
+          "min_ratio": 0.988092780037187,
+          "max_ratio": 1.0577921368829912
+        }
+      },
+      "zlt-user-boundary_only": {
+        "business_CPU": {
+          "baseline_median": 9.127548152350982,
+          "arm_median": 9.104022934949674,
+          "median_ratio": 1.0298992682805983,
+          "min_ratio": 0.9120329498586729,
+          "max_ratio": 1.0477389832390036
+        },
+        "business_RSS_MiB": {
+          "baseline_median": 674.791015625,
+          "arm_median": 672.4453125,
+          "median_ratio": 0.9999745291510972,
+          "min_ratio": 0.9623587410873755,
+          "max_ratio": 1.0438599279819039
+        },
+        "business_peak_RSS_MiB": {
+          "baseline_median": 680.8671875,
+          "arm_median": 679.0390625,
+          "median_ratio": 0.9988353547291483,
+          "min_ratio": 0.9645291494779447,
+          "max_ratio": 1.0430071862907684
+        },
+        "p50_ms": {
+          "baseline_median": 11.154,
+          "arm_median": 11.028,
+          "median_ratio": 0.9915147138472649,
+          "min_ratio": 0.951854431481804,
+          "max_ratio": 1.0143336659711513
+        },
+        "p95_ms": {
+          "baseline_median": 16.677999999999997,
+          "arm_median": 16.344,
+          "median_ratio": 0.9985609785345966,
+          "min_ratio": 0.9495866806380256,
+          "max_ratio": 1.1910375939849622
+        },
+        "p99_ms": {
+          "baseline_median": 17.708000000000002,
+          "arm_median": 18.441,
+          "median_ratio": 1.045585984010886,
+          "min_ratio": 0.9748701152021685,
+          "max_ratio": 1.1474393824073066
+        },
+        "batch_events": {
+          "baseline_median": 70233,
+          "arm_median": 70233,
+          "median_ratio": 1.0,
+          "min_ratio": 1.0,
+          "max_ratio": 1.0
+        },
+        "batch_bytes": {
+          "baseline_median": 37150678,
+          "arm_median": 34280077,
+          "median_ratio": 0.9227308604507606,
+          "min_ratio": 0.9227159730436144,
+          "max_ratio": 0.9227666257918937
+        },
+        "shared_unattributed_events": {
+          "baseline_median": 1784,
+          "arm_median": 1784,
+          "median_ratio": 1.0,
+          "min_ratio": 1.0,
+          "max_ratio": 1.0
+        },
+        "shared_unattributed_bytes": {
+          "baseline_median": 308451,
+          "arm_median": 308399,
+          "median_ratio": 0.9998314156867704,
+          "min_ratio": 0.9998314156867704,
+          "max_ratio": 0.9998314156867704
+        },
+        "warmup_events": {
+          "baseline_median": 22829,
+          "arm_median": 22829,
+          "median_ratio": 1.0,
+          "min_ratio": 1.0,
+          "max_ratio": 1.0
+        },
+        "warmup_bytes": {
+          "baseline_median": 12218727,
+          "arm_median": 11270199,
+          "median_ratio": 0.922370970202463,
+          "min_ratio": 0.922355168423028,
+          "max_ratio": 0.9224071996580196
+        },
+        "measure_events": {
+          "baseline_median": 45620,
+          "arm_median": 45620,
+          "median_ratio": 1.0,
+          "min_ratio": 1.0,
+          "max_ratio": 1.0
+        },
+        "measure_bytes": {
+          "baseline_median": 24623500,
+          "arm_median": 22701479,
+          "median_ratio": 0.9219436310841269,
+          "min_ratio": 0.9219290109042175,
+          "max_ratio": 0.9219795764368746
+        },
+        "trace_VmHWM_KiB": {
+          "baseline_median": 272952,
+          "arm_median": 245860,
+          "median_ratio": 0.9007884170110496,
+          "min_ratio": 0.8997071742313324,
+          "max_ratio": 0.9016958601062113
+        },
+        "oracle_VmHWM_KiB": {
+          "baseline_median": 269472,
+          "arm_median": 245312,
+          "median_ratio": 0.9105064719154494,
+          "min_ratio": 0.9098802261899461,
+          "max_ratio": 0.9105957806909453
+        },
+        "trace_process_wall_seconds": {
+          "baseline_median": 2.1395075481850654,
+          "arm_median": 1.9605150211136788,
+          "median_ratio": 0.9292235959989208,
+          "min_ratio": 0.8945000577903898,
+          "max_ratio": 0.9408626886249652
+        },
+        "trace_process_cpu_seconds": {
+          "baseline_median": 2.1390010000000004,
+          "arm_median": 1.9600220000000022,
+          "median_ratio": 0.924495825862302,
+          "min_ratio": 0.9030087360507466,
+          "max_ratio": 0.9379406554742145
+        },
+        "trace_decode_and_capture_integrity_wall_seconds": {
+          "baseline_median": 0.5200916009489447,
+          "arm_median": 0.4262791380751878,
+          "median_ratio": 0.8337707399119704,
+          "min_ratio": 0.8000187974198336,
+          "max_ratio": 0.8370407889766205
+        },
+        "trace_reconstruction_including_all_required_certificates_wall_seconds": {
+          "baseline_median": 1.3112965549807996,
+          "arm_median": 1.1842167400754988,
+          "median_ratio": 0.9143772987772925,
+          "min_ratio": 0.8985925377006693,
+          "max_ratio": 0.9379549800584824
+        },
+        "trace_query_wall_seconds": {
+          "baseline_median": 0.004893830977380276,
+          "arm_median": 0.004955332959070802,
+          "median_ratio": 1.0024903227616195,
+          "min_ratio": 0.9262187776748613,
+          "max_ratio": 1.059592573216681
+        },
+        "trace_export_wall_seconds": {
+          "baseline_median": 0.006872365949675441,
+          "arm_median": 0.006963479099795222,
+          "median_ratio": 1.0163312000323494,
+          "min_ratio": 0.9536520111646735,
+          "max_ratio": 1.0382698040257838
+        },
+        "trace_decode_and_capture_integrity_cpu_seconds": {
+          "baseline_median": 0.519990222,
+          "arm_median": 0.426283897,
+          "median_ratio": 0.8337551604960757,
+          "min_ratio": 0.8000615459824565,
+          "max_ratio": 0.8371159721536324
+        },
+        "trace_reconstruction_including_all_required_certificates_cpu_seconds": {
+          "baseline_median": 1.3110445670000002,
+          "arm_median": 1.184063069,
+          "median_ratio": 0.914365062111477,
+          "min_ratio": 0.8986488066289214,
+          "max_ratio": 0.9380685820728473
+        },
+        "trace_query_cpu_seconds": {
+          "baseline_median": 0.004895072000000056,
+          "arm_median": 0.004957352999999998,
+          "median_ratio": 1.0024354305694265,
+          "min_ratio": 0.9262300352245664,
+          "max_ratio": 1.0598126033692687
+        },
+        "trace_export_cpu_seconds": {
+          "baseline_median": 0.006873168000000041,
+          "arm_median": 0.006964720000000035,
+          "median_ratio": 1.01635391700901,
+          "min_ratio": 0.9535649333637941,
+          "max_ratio": 1.0383440358216065
+        },
+        "oracle_process_wall_seconds": {
+          "baseline_median": 0.7174300071783364,
+          "arm_median": 0.677999225910753,
+          "median_ratio": 0.9534293053072853,
+          "min_ratio": 0.9203318659016367,
+          "max_ratio": 0.9586085357721138
+        },
+        "oracle_process_cpu_seconds": {
+          "baseline_median": 0.7169500000000006,
+          "arm_median": 0.6775990000000007,
+          "median_ratio": 0.9533474305329664,
+          "min_ratio": 0.920481683476247,
+          "max_ratio": 0.9584897604540497
+        },
+        "oracle_decode_and_capture_integrity_wall_seconds": {
+          "baseline_median": 0.48889516992494464,
+          "arm_median": 0.40224643400870264,
+          "median_ratio": 0.8294200148745454,
+          "min_ratio": 0.8100104346400718,
+          "max_ratio": 0.839089680908683
+        },
+        "oracle_independent_raw_oracle_and_score_wall_seconds": {
+          "baseline_median": 0.04220994096249342,
+          "arm_median": 0.0406272339168936,
+          "median_ratio": 0.9638364258514527,
+          "min_ratio": 0.8730800955803143,
+          "max_ratio": 1.060715741705696
+        },
+        "oracle_score_export_wall_seconds": {
+          "baseline_median": 0.0028024939820170403,
+          "arm_median": 0.0027481617871671915,
+          "median_ratio": 0.9677331485430164,
+          "min_ratio": 0.8706655798651579,
+          "max_ratio": 1.0561112505495653
+        },
+        "oracle_decode_and_capture_integrity_cpu_seconds": {
+          "baseline_median": 0.48877532599999995,
+          "arm_median": 0.40219004399999997,
+          "median_ratio": 0.8294596766764807,
+          "min_ratio": 0.8101820262506461,
+          "max_ratio": 0.8391288395120446
+        },
+        "oracle_independent_raw_oracle_and_score_cpu_seconds": {
+          "baseline_median": 0.04221166600000004,
+          "arm_median": 0.040628650000000044,
+          "median_ratio": 0.9638220469651021,
+          "min_ratio": 0.8730963777221086,
+          "max_ratio": 1.059671821529149
+        },
+        "oracle_score_export_cpu_seconds": {
+          "baseline_median": 0.0028039539999999974,
+          "arm_median": 0.0027494530000000683,
+          "median_ratio": 0.9677606016802169,
+          "min_ratio": 0.8707074686411757,
+          "max_ratio": 1.056400653161807
+        }
+      }
+    },
+    "resource_recomputed_exact": true,
+    "independent_oracle_is_excluded_from_trace": true
+  },
+  "frozen_agent_files": [
+    {
+      "path": "/home/wujian/tracefusion2/artifacts/pruning-contribution-audit-20261106/build/distributed-observer.jar",
+      "sha256": "a86615f242eb6cba4be24a6d81935f8a2b5185f0a4ba47e34ad8968eec90c072"
+    },
+    {
+      "path": "/home/wujian/tracefusion2/artifacts/pruning-contribution-audit-20261106/final-candidate/historical/frozen-base/distributed-observer.jar",
+      "sha256": "367cbb2300e507e5db4716c4e2fcbed1a39898c5e6c6f5f23583c4c1487e2764"
+    }
+  ],
+  "scope": "Existing development tasks; no new framework semantics or MT cost ranking."
+}

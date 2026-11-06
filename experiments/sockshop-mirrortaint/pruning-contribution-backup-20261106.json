@@ -1,0 +1,78 @@
+{
+  "core_reference": "4cb5943",
+  "core_candidate": "bcdf059",
+  "independent_score_reference": "df977b7",
+  "batch": {
+    "path": "artifacts/backups/pruning-contribution-audit-20261106/batch-artifacts.tar.gz",
+    "sha256": "fef9299f12f28156aff273c24f5a03a57f3cc99086af2e7a94175d872548f8d4",
+    "bytes": 847495441,
+    "gzip_CRC_passed": true
+  },
+  "external_mounted_inputs": {
+    "path": "artifacts/backups/pruning-contribution-audit-20261106/mounted-inputs.tar.gz",
+    "sha256": "4b6edd4afe1a0017762ed3ae89ea0ac69630afbcf2b09285d6fa52cedfca175a",
+    "bytes": 601147516,
+    "gzip_CRC_passed": true
+  },
+  "files_manifest_sha256": "875743b22e9495d31a526f5001859f76978c227fab2e7c9a0beb9348056a7566",
+  "regular_files": 18506,
+  "reused_verified_archives": [
+    {
+      "path": "artifacts/backups/shared-transfer-optimization-20261106/batch-artifacts.tar.gz",
+      "sha256": "0a0bf7c4bd7393111373543eaecc17ad1b92570b2d79b406fdfd637365ab6df2",
+      "bytes": 883999450,
+      "gzip_CRC_passed": true
+    },
+    {
+      "path": "artifacts/backups/shared-transfer-optimization-20261106/mounted-inputs.tar.gz",
+      "sha256": "6e247d4e099815b10323c7d8346d2853ea30f80293775421e1ae9c027cab1b27",
+      "bytes": 400842113,
+      "gzip_CRC_passed": true
+    },
+    {
+      "path": "artifacts/backups/ruoyi-zlt-refinement-20261103/actual-images.tar.gz",
+      "bytes": 2049513399,
+      "sha256": "cbd9959df39c9d9f40447c693e1b80498c37d4271f47c0fa4b4d4fc3d0134b8b",
+      "gzip_CRC_passed": true
+    },
+    {
+      "path": "artifacts/backups/ruoyi-request-scope-20261104/jdk8-runtime.tar.gz",
+      "bytes": 57889824,
+      "sha256": "e3641e13fdfc55d455441f85793b071228ac235758a8e5dc7990d158b6552104",
+      "gzip_CRC_passed": true
+    },
+    {
+      "path": "artifacts/backups/ruoyi-tolist-20261105/batch-artifacts.tar.gz",
+      "bytes": 674745866,
+      "sha256": "e23e2558fe78c19aeb6bee5497658add5a659e777deaee0516fedf5b0c7bbf71",
+      "gzip_CRC_passed": true
+    }
+  ],
+  "actual_image_ids": [
+    "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+    "sha256:113ae8a6646ae04145f869ff71cf2f885762ce79832ea1f923e34ee29bf7efda",
+    "sha256:16b80569968fb112fee59fdbaeda7a5fe9b3d534ba1cf212f33afe1d1089fe75",
+    "sha256:196601f91030425db810fa57104b041e414b9b963923ad574e74700c3ea8213e",
+    "sha256:2481edb3016c3749e400daea78a7d2a9d288286105bac729d63adfef95e8534d",
+    "sha256:4f2c23055dcdcd18d14df338e305effa4679620588686e1a3bdcb1684189125f",
+    "sha256:4fc533e8180ac3805582d3b2a9f8008d54d346211894d6131d92a82d17ee5458",
+    "sha256:5107333e08a87b836d48ff7528b1e84b9c86781cc9f1748bbc1b8c42a870d933",
+    "sha256:7478e572c34ea56b2e8f1162def78243612ccbe4450223c702115fb46be07f01",
+    "sha256:76f0de7a12acaa2bdbda36d1b7ddd0ec42204e9c0f4e8c59c329f07336cfa2dc",
+    "sha256:7cf806ab696534b81de5e0b05599a8c3071110ae9b69991589e09dd5168c7f9b",
+    "sha256:8275c5b9181b2311feccd32f2efe865e9207a52a19e0f69939e5576c6f76dc1c",
+    "sha256:8cdcbee37f622c52f2b8a572577c4aa94daed06ffe8c3292c93141ed50bef248",
+    "sha256:91aac24c0349fef416bd83aef3968028d9b79cd61b8dba630081f76bb35bba1c",
+    "sha256:938169b118c773c6721bbf701c3a64be9e4f7c0b4c5315bb328466e1c49274fa",
+    "sha256:ab8af7050996d310b5a7a9b7eb0fc9bad9d6add5dc13130146f857fbe122ce8c",
+    "sha256:b54402ef78a55ccb3dfbb719669c6740f682621f04cee62ae1f6359fb3b13ee4",
+    "sha256:ba24e52ab4ac674b0d46a14c1193e30e55f8bb751bc7af6bf65ff7472995bb6b",
+    "sha256:c004737361182d3cd7f38e6d9ce4a44f2a349b8dc996834e2cba0defcd0cb522",
+    "sha256:dbd58ca16d23330a501071afd94414b4eca73e3d0f64cff9ccdceb464d807052",
+    "sha256:efeab1ce0ab9219386bc7138b8389149a9b7849e868632ca09340e4039a58982",
+    "sha256:f76f959b2a4947330df7b5878e81dc268f19f3fa4cef9d1ac8a992d2776eab73"
+  ],
+  "symlinks_dereferenced": false,
+  "all_failures_retained": true,
+  "local_backup_not_off_machine": true
+}

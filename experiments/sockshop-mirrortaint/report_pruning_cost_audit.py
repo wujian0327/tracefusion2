@@ -49,9 +49,10 @@ def run(home,summary,out):
    add(f"| {LABEL[task]}／{ARM[arm]} | {v('business_CPU'):.3f} | {v('p95_ms'):.3f} | {v('business_RSS_MiB'):.2f}／{v('business_peak_RSS_MiB'):.2f} | {v('batch_bytes')/2**20:.3f}／{v('measure_bytes')/2**20:.3f} | {v('trace_process_wall_seconds'):.3f}／{v('trace_process_cpu_seconds'):.3f} | {v('trace_VmHWM_KiB')/1024:.2f} |")
  add();add('各机制的方向结论（相对共同基线）：');add()
  def direction(r):
+  if r['min_ratio']==r['max_ratio']==1:return '不变'
   if r['max_ratio']<1:return '五轮均下降'
   if r['min_ratio']>1:return '五轮均上升'
-  return '范围跨1，方向不稳定'
+  return '范围含1，无一致改善'
  for task in LABEL:
   for arm in ('boundary_only','write_only','body_only','all'):
    key=task+'-'+arm
