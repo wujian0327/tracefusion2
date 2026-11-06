@@ -76,7 +76,9 @@ public final class CollectionServiceHooks implements Opcodes {
         else if(o instanceof Map){for(Object key:((Map)o).keySet()){if(!(key instanceof String))throw new IllegalStateException("Only String map keys admitted");if(out.size()>=10000)throw new IllegalStateException("Map bound");Map<String,Object> r=new LinkedHashMap<>();r.put("key",key);r.put("observed",value(((Map)o).get(key)));out.add(r);}out.sort((a,b)->((String)((Map)a).get("key")).compareTo((String)((Map)b).get("key")));}
         return out;
     }
-    public static int epoch(Object o){synchronized(PlannedServiceAgent.Recorder.class){List<Object> now=contents(o),before=CONTENTS.get(o);int epoch=EPOCHS.getOrDefault(o,0);if(before!=null&&!before.equals(now)){if(READ_ONLY.contains(o))throw new IllegalStateException("Received collection changed outside guarded bytecode");epoch++;}CONTENTS.put(o,now);EPOCHS.put(o,epoch);return epoch;}}
+    public static int epoch(Object o){return epoch(o,contents(o));}
+    static int epoch(Object o,List<Object> now){synchronized(PlannedServiceAgent.Recorder.class){List<Object> before=CONTENTS.get(o);int epoch=EPOCHS.getOrDefault(o,0);if(before!=null&&!before.equals(now)){if(READ_ONLY.contains(o))throw new IllegalStateException("Received collection changed outside guarded bytecode");epoch++;}CONTENTS.put(o,now);EPOCHS.put(o,epoch);return epoch;}}
+    static void received(Object o,List<Object> contents){synchronized(PlannedServiceAgent.Recorder.class){epoch(o,contents);if(!ExecutionKernelHooks.enabled())READ_ONLY.add(o);}}
     public static void received(Object o){synchronized(PlannedServiceAgent.Recorder.class){if(o instanceof List||o instanceof Map){epoch(o);if(!ExecutionKernelHooks.enabled())READ_ONLY.add(o);}}}
     public static void begin(int pc,Object receiver,Object[] args){beginAt((String)plan().get("entry"),pc,receiver,args);}
     public static void beginAt(String key,int pc,Object receiver,Object[] args){synchronized(PlannedServiceAgent.Recorder.class){try{
