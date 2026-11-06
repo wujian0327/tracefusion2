@@ -47,6 +47,16 @@ def run(home,summary,out):
   for arm in arms:
    v=lambda key:median(task,arm,key)
    add(f"| {LABEL[task]}／{ARM[arm]} | {v('business_CPU'):.3f} | {v('p95_ms'):.3f} | {v('business_RSS_MiB'):.2f}／{v('business_peak_RSS_MiB'):.2f} | {v('batch_bytes')/2**20:.3f}／{v('measure_bytes')/2**20:.3f} | {v('trace_process_wall_seconds'):.3f}／{v('trace_process_cpu_seconds'):.3f} | {v('trace_VmHWM_KiB')/1024:.2f} |")
+ add();add('各机制的方向结论（相对共同基线）：');add()
+ def direction(r):
+  if r['max_ratio']<1:return '五轮均下降'
+  if r['min_ratio']>1:return '五轮均上升'
+  return '范围跨1，方向不稳定'
+ for task in LABEL:
+  for arm in ('boundary_only','write_only','body_only','all'):
+   key=task+'-'+arm
+   if key not in paired:continue
+   d=paired[key];add(f"- {LABEL[task]}／{ARM[arm]}：记录字节{direction(d['batch_bytes'])}；正常溯源CPU{direction(d['trace_process_cpu_seconds'])}；业务CPU{direction(d['business_CPU'])}；p95{direction(d['p95_ms'])}。")
  add();add('进程时间含导入、输入哈希和回执；重建含必要证书＋查询的核心阶段另在CSV，不能把解码／导出变化都称解释器提速。RSS是2秒采样值；离线VmHWM来自当前fresh-exec进程。协议字节含关闭后完整JSON，不是最大磁盘I/O；按真实消息／Frame及RPC父关系归属测量请求，未配对启动／共享／关闭字节单列，未从整批删掉。原始HTTP审计保持，不能把省略字段值描述成删去整个审计。')
  add();add('## 独立验证成本与能力保持')
  add();add('| 任务（基线） | 独立oracle／评分CPU s | 独立验证进程墙时／CPU s | 独立VmHWM MiB |');add('| --- | ---: | ---: | ---: |')
@@ -63,6 +73,7 @@ def run(home,summary,out):
  add();add('最值得下一步验证的公共规则是：把输出字段需求穿过已核验的对象／列表成员转移。规划器给有限转移声明每输出所需输入字段，并纳入后续计算、选择／异常及可达写入；采集器在实际类型／配置守卫成立前不省略，不成立采全；解释器区分有证明的省略与缺证，保持来源实例、版本、selectors和状态。不得给复制结果自动授予私有性，或因当前实参没有目标就忽略未来全局读取。本轮未实现该规则；仍保留所有解释方法必要字段读取及完整有限转换输入，不是最小跨过程切片，也无任意Java完备证明。')
  add();add('## 工件与复核')
  add();add('主目录`artifacts/pruning-contribution-audit-20261106/`。核心冻结`bcdf059`、139项源码核验；诊断／正式与最终验收构建905个全部JAR成员、904个class内容相同，打包SHA分别记录，不冒充同一个JAR文件。实验驱动、协议、矩阵和环境另锁定哈希。全部失败、完整捕获、逐轮CPU／RSS、原始源坐标、控制和根审计保留；完整工件与必要依赖本机备份，不是异地副本。')
+ add();add('[小型结果](pruning-contribution-results-20261106.json)、[逐轮CSV](pruning-contribution-rounds-20261106.csv)、[备份清单](pruning-contribution-backup-20261106.json)随Git。')
  add();add('小型结果、逐轮CSV与备份清单随Git；代码提交main，不push。复核应使用新的输出目录，汇总不是重新计时：')
  add();add('```bash\npython3 experiments/sockshop-mirrortaint/summarize_pruning_cost_audit.py \\\n  --home artifacts/pruning-contribution-audit-20261106 --formal --out /tmp/tf2-pruning-summary-new\n```')
  out.write_text('\n'.join(lines)+'\n')
