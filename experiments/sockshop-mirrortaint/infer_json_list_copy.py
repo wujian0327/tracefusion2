@@ -1,6 +1,7 @@
 """Copy already typed element identities; never introduce a decoding/source edge."""
 from query_observation_planner import require
-from execution_dependency_state import Value,Container
+from execution_dependency_state import Value
+from member_state_transfer import read_members,copy_member,install_members
 
 def transfer(plan,index,root,call,ret,recv,args,state,actual,origin=None):
     proof=ret.get('json_list_copy')
@@ -24,14 +25,7 @@ def transfer(plan,index,root,call,ret,recv,args,state,actual,origin=None):
     previous=state.containers.get(recv.observed['object'])
     if previous is not None:
         require(previous.epoch==call['collection_epoch']and [actual(v)for v in previous.elements]==proof['members'],'JSON list input dependency state differs')
-        values=[v.project(item)for v,item in zip(previous.elements,proof['members'])]
-    else:
-        values=[]
-        for i,item in enumerate(proof['members']):
-            if 'value'in item or 'date_epoch_ms'in item:
-                field={'owner':recv.observed['object'],'field':'@list:'+str(i),'version':call['collection_epoch'],'observed':item}
-                member=origin(field,call['seq'])if origin is not None else Value(item,unknown=True)
-            else:member=Value(item,selectors=recv.selectors,unknown=recv.unknown)
-            values.append(member)
-    state.containers[owner]=Container(owner,values,0,False)
+        values=[copy_member(v,item)for v,item in zip(previous.elements,proof['members'])]
+    else:values=read_members(recv.observed['object'],call['collection_epoch'],proof['members'],call['seq'],origin,recv.selectors,recv.unknown)
+    install_members(state,owner,values,0)
     return Value(ret['result'])

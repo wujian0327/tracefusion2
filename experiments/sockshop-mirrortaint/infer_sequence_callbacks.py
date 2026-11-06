@@ -1,5 +1,6 @@
 """Transfer helpers for callback plans; no fixture/business-field rules."""
 from query_observation_planner import require
+from member_state_transfer import copy_member
 
 
 def validate_fact(cfg, runtime, fact, kind):
@@ -37,7 +38,7 @@ def replay(kind,call,args,recv,cfg,runtime,state,pipes,take,execute,identity,act
             elif stage['operation']=='filter':
                 require(result is not None and result.observed.get('value')in (0,1,False,True),'Filter result differs');selected=bool(result.observed['value'])
                 # Uncertain selection is not evidence of a heap modification.
-                current=Value(current.observed,current.origins,current.selectors|result.origins|result.selectors,current.unknown or result.unknown,current.allocation)
+                current=copy_member(current,selectors=result.origins|result.selectors,uncertain=result.unknown)
                 if not selected:break
         if error is not None:break
         if selected:output.append(current)

@@ -4,6 +4,7 @@ from execution_dependency_state import Value, Frame, State, Container, Call, com
 from query_observation_planner import require, descriptors
 from plan_service_observations import callee
 from analysis_status import AnalysisLimit
+from member_state_transfer import read_members,copy_member,register_references
 from infer_execution_kernel import coordinate, same_value
 
 
@@ -298,12 +299,7 @@ def infer_application(plan,rows,worker_request=None):
             owner=call['receiver']['object'];items=call.get('collection');require(items is not None,'Execution collection content absent')
             require(call.get('receiver_type') in ('java.util.ArrayList','java.util.Arrays$ArrayList','java.util.Collections$SingletonList','java.util.Collections$EmptyList'),'Execution list implementation unsupported')
             if owner not in state.containers:
-                epoch=call['collection_epoch'];values=[]
-                for i,item in enumerate(items):
-                    f={'owner':owner,'field':'@list:'+str(i),'version':epoch,'observed':item}
-                    # Reference identity is usable without assigning the element
-                    # itself a scalar origin. Subsequent field reads carry origins.
-                    values.append(origin(f,call['seq']) if 'value' in item or 'date_epoch_ms' in item else Value(item))
+                epoch=call['collection_epoch'];values=read_members(owner,epoch,items,call['seq'],origin)
                 state.containers[owner]=Container(owner,values,epoch,False)
             c=state.containers[owner]
             require(c.epoch==call['collection_epoch'] and len(c.elements)==len(items),'Execution list version/length changed')
@@ -1161,13 +1157,13 @@ def infer_application(plan,rows,worker_request=None):
                                 if copied is None:poison([recv]+args,ret['seq']);v=Value(observed,unknown=True)
                                 else:
                                     v=copied
-                                    heap_refs[observed['object']].update(x.observed['object']for x in state.containers[observed['object']].elements if x.observed.get('object'))
+                                    register_references(heap_refs,observed['object'],state.containers[observed['object']].elements,actual)
                             elif ins['owner'] in ('java/util/List','java/util/ArrayList')or(ins['owner']=='java/util/Collection'and ins['name']=='isEmpty'and ins['desc']=='()Z'):
                                 c=container(call);name=ins['name']
                                 if name in ('size','isEmpty'):
                                     expected=len(c.elements) if name=='size' else not c.elements;require(observed.get('value')==expected,'Execution list size differs');v=Value(observed)
                                 elif name=='get':
-                                    i=args[0].observed.get('value');require(isinstance(i,int) and 0<=i<len(c.elements),'Execution get index differs');v=c.elements[i].project(observed);bind(c.elements[i],observed)
+                                    i=args[0].observed.get('value');require(isinstance(i,int) and 0<=i<len(c.elements),'Execution get index differs');v=copy_member(c.elements[i],observed);bind(c.elements[i],observed)
                                 elif name in ('contains','indexOf'):
                                     needle=args[0].observed.get('value');require('value' in args[0].observed and all('value' in x.observed for x in c.elements),'Execution equality contract requires scalar elements')
                                     index=next((i for i,x in enumerate(c.elements) if x.observed['value']==needle),-1);require(observed.get('value')==(index>=0 if name=='contains' else index),'Execution equality result differs');v=combine(observed,c.elements+args)

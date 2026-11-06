@@ -2,6 +2,7 @@
 from query_observation_planner import require
 from execution_dependency_state import Value
 from infer_sequence_callbacks import callback_arguments
+from member_state_transfer import copy_member
 
 KEYS={'java/util/List.removeIf(Ljava/util/function/Predicate;)Z','java/util/ArrayList.removeIf(Ljava/util/function/Predicate;)Z'}
 
@@ -48,7 +49,7 @@ def complete(replayed,call,finish,actual,identity,member_choices):
         decisions=replayed['decisions'];require(len(decisions)==len(replayed['before']),'removeIf callback count differs')
         kept=[];selection=frozenset().union(*(test.origins|test.selectors for test in decisions));uncertain=any(test.unknown for test in decisions)
         for member,test in zip(c.elements,decisions):
-            if not bool(test.observed['value']):kept.append(Value(member.observed,member.origins,member.selectors|selection,member.unknown or uncertain,member.allocation))
+            if not bool(test.observed['value']):kept.append(copy_member(member,selectors=selection,uncertain=uncertain))
         removed=len(kept)!=len(c.elements);require(type(finish['result'].get('value'))is bool and finish['result'].get('value')==removed and fact['result']==finish['result'],'removeIf result differs')
         require(after['elements']==[actual(v)for v in kept],'removeIf compacted wrong members/order')
         wrap=lambda n:(n+2**31)%2**32-2**31
