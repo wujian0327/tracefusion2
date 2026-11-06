@@ -35,9 +35,9 @@ def online(home):
  from run_sockshop_cost import Sampler,percentiles
  from audit_zlt_body_cost import attributable
  from run_shared_work_business import verify_business
- folder=home/'online-paired';assert load(folder/'complete.json')['complete'];records=[]
+ folder=home/'online-paired';assert load(folder/'complete.json')['complete'];records=[];overrides=load(home/'strict-online-overrides.json')['overrides']
  for repeat,task,version,mode in load(folder/'order-before-runs.json')['jobs']:
-  trial=folder/('%02d-%s-%s-%s'%(repeat,task,version,mode));warm=load(trial/'warmup.json')['requests'];phase=load(trial/'measure.json');cases=phase['requests'];result=load(trial/'result.json');summary=load(trial/'offline/summary.json');verify_business(trial,task)
+  name='%02d-%s-%s-%s'%(repeat,task,version,mode);trial=Path(overrides[name])if name in overrides else folder/name;warm=load(trial/'warmup.json')['requests'];phase=load(trial/'measure.json');cases=phase['requests'];result=load(trial/'result.json');summary=load(trial/'offline/summary.json');verify_business(trial,task)
   assert len(warm)==60 and len(cases)==120 and result['requests']==result['business_passed']==180
   assert summary['correct']==summary['targets']==(270 if task=='zlt-user'else 360)
   assert not summary['profile']and not summary['diagnostic_graph_export']and not(trial/'capture/snapshot-work.json').exists()
