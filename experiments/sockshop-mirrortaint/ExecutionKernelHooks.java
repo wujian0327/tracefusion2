@@ -29,12 +29,14 @@ public final class ExecutionKernelHooks implements Opcodes {
         if(PlannedServiceAgent.full||!enabled())return null;Map c=observationClosure();if(c==null||Boolean.FALSE.equals(c.get("enabled")))return null;Map p=(Map)c.get("application_write_values");if(p==null||Boolean.FALSE.equals(p.get("enabled")))return null;Map proof=(Map)((Map)p.get("sites")).get(site);if(proof==null)return null;if(!field.equals(proof.get("field"))||((List)p.get("required_value_fields")).contains(field))throw new IllegalStateException("Application write value overlaps required data");return proof;
     }
     public static boolean versionOnly(Object receiver,String site,String field){
+        if(System.getProperty("service.write.observation","true").equals("false"))return false;
         Map proof=applicationCandidate(site,field);if(proof==null||receiver==null||!receiver.getClass().getName().replace('.','/').equals(proof.get("field_owner")))return false;
         boolean rooted=false;for(PlannedServiceAgent.Recorder.Frame f:PlannedServiceAgent.Recorder.STACK.get())if(f.method.equals(PlannedServiceAgent.plan.get("entry")))rooted=true;if(!rooted||PlannedServiceAgent.Recorder.STACK.get().isEmpty())return false;
         if("frame".equals(proof.get("kind")))return PlannedServiceAgent.Recorder.STACK.get().peek().method.equals(proof.get("method"));
         return !CollectionServiceHooks.CALLS.get().isEmpty()&&proof.get("method").equals(CollectionServiceHooks.CALLS.get().peek().get("callee"));
     }
     public static boolean omitWrite(String site,String field){
+        if(System.getProperty("service.write.observation","true").equals("false"))return false;
         if(!closureCandidate(site,field)||CollectionServiceHooks.CALLS.get().isEmpty())return false;
         boolean root=false;for(PlannedServiceAgent.Recorder.Frame f:PlannedServiceAgent.Recorder.STACK.get())if(f.method.equals(PlannedServiceAgent.plan.get("entry")))root=true;
         return root&&sourceBoundary(CollectionServiceHooks.CALLS.get().peek());
