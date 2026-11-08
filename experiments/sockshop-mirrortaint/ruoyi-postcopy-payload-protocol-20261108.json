@@ -1,0 +1,25 @@
+{
+  "core_reference": "bcdf0590d1b22ea13717afded657a062f070e1df",
+  "analysis_reference": "f4be8b5",
+  "checkout": "f4be8b5f12b1578dcf6c1853f1287541659c033d",
+  "input": {
+    "capture": "/home/wujian/tracefusion2/artifacts/pruning-contribution-audit-20261106/formal/01-ruoyi-dictionary-boundary_only/capture/events.jsonl",
+    "capture_sha256": "e6207989a744d54c427997996e718337c15fb8468e035ecce8b58c3215c377d3",
+    "plan": "/home/wujian/tracefusion2/artifacts/ruoyi-tolist-20261105/final-C1/plans/ruoyi-3/plan.json",
+    "plan_sha256": "c1fb5d2547bebbcf7b44275ed61acfacc4535ab09cbc0c23705105a1dd627d31",
+    "arm": "boundary_only",
+    "requests": 180,
+    "selection": "First sealed formal repeat, existing boundary projection enabled; complete capture, no event filtering."
+  },
+  "scope": "First outer result snapshot following successful typed JSONArray.toList and direct ARETURN, same returned list identity and members; no Redis/source or toList-own pre-completion snapshot changes.",
+  "original_candidate_occurrences": 12240,
+  "decision_gates": [
+    "same root/thread/frame/call lineage, exact copy-return identity, member index and field coordinate",
+    "per-consumer payload requirements audited",
+    "explicit omitted boxed scalar representation, scoped permit available before snapshot",
+    "net serialized bytes including markers and permit must decrease before implementing Agent trial"
+  ],
+  "estimate": "Use compact JSON verified byte-identical to each original line. Replace only selected numeric value with a typed omission tag, add per-snapshot copy/caller/result permit and a minimal protocol/type definition; no filtering original log or deploying estimator output.",
+  "timing_disclosure": "Protocol after preliminary source/timeline inspection, before systematic selection/byte model; no claim of unseen or complete preregistration.",
+  "no_performance_measurements": true
+}

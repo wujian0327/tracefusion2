@@ -1,0 +1,94 @@
+{
+  "reference_core": "bcdf059",
+  "capture_sha256": "e6207989a744d54c427997996e718337c15fb8468e035ecce8b58c3215c377d3",
+  "plan_sha256": "c1fb5d2547bebbcf7b44275ed61acfacc4535ab09cbc0c23705105a1dd627d31",
+  "full_capture_events": 44922,
+  "original_candidates": 12240,
+  "raw_associated_one_site_candidates": 720,
+  "selected_snapshots": 150,
+  "selected_payload_still_consumed_as_value": 0,
+  "consumer_review_scope": "Only this binding-opaque-result payload; source/input, reads/writes, calls, other snapshots and output bindings unchanged.",
+  "remaining_for_representation_study": 720,
+  "existing_complete_new_licenses": 0,
+  "new_stage_witness_absent": true,
+  "partition": {
+    "before_corresponding_copy_completion_or_no_copy": 4320,
+    "selected_one_outer_result_site": 720,
+    "later_same_member_but_other_snapshot_not_authorized": 7200
+  },
+  "byte_estimate": {
+    "payload_occurrences": 720,
+    "gross_value_bytes": 7200,
+    "tag_delta_without_new_stage_samples": 1875,
+    "grouped_delta_without_new_stage_samples": -405,
+    "tag_delta_with_minimum_stage_samples": 3375,
+    "grouped_delta_with_minimum_stage_samples": 1095
+  },
+  "minimal_protocol_header_bytes": 140,
+  "tag_net_delta_without_new_stage_samples": 2015,
+  "grouped_net_delta_without_new_stage_samples": -265,
+  "tag_net_delta_lower_bound": 3515,
+  "grouped_net_delta_lower_bound": 1235,
+  "stage_witness_scope": "A proposed conservative schema, not a proof that all five numbers are necessary in every sound design. Stage-free guard/evidence reuse has not been closed.",
+  "positive_delta_means_growth": true,
+  "new_capture_measurements": null,
+  "stop": "The reviewed stage-witness proposal grows. A denser stage-free variant has a small estimated saving but no completed safety license; no certified positive-net candidate, no Agent trial or core change.",
+  "consumer_review": [
+    {
+      "consumer": "infer_response_binding.sources",
+      "location": "infer_response_binding.py:33",
+      "kind": "binding-opaque-result",
+      "value_required": false,
+      "retains": [
+        "owner",
+        "field",
+        "version",
+        "frame",
+        "seq"
+      ],
+      "reason": "Records a coordinate-specific effect barrier then continue; does not create a source/provider from this snapshot."
+    },
+    {
+      "consumer": "infer_application_execution",
+      "location": "infer_application_execution.py:135",
+      "value_required": false,
+      "reason": "Replay events exclude opaque snapshots; providers include binding-source/input only. Normal read/write/call and source values remain unchanged."
+    },
+    {
+      "consumer": "infer_json_list_copy.transfer",
+      "location": "infer_json_list_copy.py:19",
+      "value_required": false,
+      "reason": "Consumes original cache/members/epoch/completion, not later opaque DTO payload. All those original facts remain."
+    },
+    {
+      "consumer": "infer_json_tree_observation.validate",
+      "location": "infer_json_tree_observation.py:20",
+      "value_required": false,
+      "reason": "Source/input source-container proofs use their own full observations. Selected point is neither source nor input; keep source proofs and reference contents."
+    },
+    {
+      "consumer": "infer_target_observation.validate",
+      "location": "infer_target_observation.py:23",
+      "value_required": false,
+      "reason": "Checks scope, field-set omission permission and counters. A new boxed representation would need a separate strict license parser; current validator is unchanged."
+    },
+    {
+      "consumer": "bind_outputs and independent scorer",
+      "location": "infer_response_binding.py:105;measure_pruning_cost_offline.py:49",
+      "value_required": false,
+      "reason": "Use original binding-return, wire target and source/input facts. Those payloads are not candidates."
+    },
+    {
+      "consumer": "original DTO getter/business serialization",
+      "value_required": true,
+      "selected_snapshot_value_required": false,
+      "reason": "Business still reads its real fields elsewhere. This proposal removes no Field.get, business invoke or actual boxed values; original other observations remain."
+    }
+  ],
+  "controls": {
+    "narrow_association_tests": 9,
+    "existing_shadow_and_bad_payload_tests": 10,
+    "production_permission_or_agent_tests": false
+  },
+  "safety_stage": "Raw lineage and consumer review complete for 720 fields; new per-snapshot permission and guard-sharing not implemented/accepted. No full license issued."
+}

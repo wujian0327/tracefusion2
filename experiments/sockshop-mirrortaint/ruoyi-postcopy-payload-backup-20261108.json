@@ -1,0 +1,12 @@
+{
+  "archive": "artifacts/backups/ruoyi-postcopy-payload-20261108/complete-analysis-and-inputs.tar.gz",
+  "bytes": 2508720,
+  "sha256": "765238b2fc5bf8f5e5f4b3eac036217fc8136f12b9a9e172f64acc7718a03982",
+  "gzip_CRC_passed": true,
+  "regular_files": 36,
+  "manifest_sha256": "836b2e8f703c11e8214c23da9509b4bfe969652ad748a01eb72bdf499d07fb2b",
+  "full_original_capture_and_plan_included": true,
+  "old_records_unchanged": true,
+  "no_new_images_used": true,
+  "local_not_off_machine": true
+}
