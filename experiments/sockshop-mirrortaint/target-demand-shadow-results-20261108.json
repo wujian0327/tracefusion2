@@ -1,0 +1,255 @@
+{
+  "reference": "bcdf0590d1b22ea13717afded657a062f070e1df",
+  "tasks": {
+    "mall": {
+      "events": 52687,
+      "roots": 180,
+      "target_occurrences": 180,
+      "already_omitted_in_query": 9180,
+      "retained_selected_fields": 5580,
+      "boxed_payload_upper_bound_occurrences": 1080,
+      "boxed_fields": [
+        {
+          "scope": "query_selected",
+          "kind": "binding-opaque-result",
+          "field": "com/macro/mall/model/UmsAdmin.status",
+          "descriptor": "Ljava/lang/Integer;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 360
+        },
+        {
+          "scope": "query_selected",
+          "kind": "binding-opaque-touch",
+          "field": "com/macro/mall/model/UmsAdmin.status",
+          "descriptor": "Ljava/lang/Integer;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 360
+        },
+        {
+          "scope": "query_selected",
+          "kind": "binding-opaque-touch",
+          "field": "com/macro/mall/model/UmsAdminLoginLog.adminId",
+          "descriptor": "Ljava/lang/Long;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 180
+        },
+        {
+          "scope": "query_selected",
+          "kind": "binding-source",
+          "field": "com/macro/mall/model/UmsAdmin.status",
+          "descriptor": "Ljava/lang/Integer;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 180
+        }
+      ],
+      "copy_completions": 0,
+      "source_snapshots_preceding_copy_proof": 0,
+      "capture_sha256": "e41c4db928f7ace791533538318a5feeaa842b5eb481baa28503b5d81ede4680",
+      "plan_sha256": "8c2019cd79a27316f3eba6438130a10b21b05cff7ce713e806b6077958a517ed"
+    },
+    "zlt-user": {
+      "events": 70233,
+      "roots": 180,
+      "target_occurrences": 270,
+      "already_omitted_in_query": 22770,
+      "retained_selected_fields": 13860,
+      "boxed_payload_upper_bound_occurrences": 9360,
+      "boxed_fields": [
+        {
+          "scope": "query_selected",
+          "kind": "binding-opaque-result",
+          "field": "com/central/common/enums/DataScope.id",
+          "descriptor": "Ljava/lang/Integer;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 1350
+        },
+        {
+          "scope": "query_selected",
+          "kind": "binding-opaque-result",
+          "field": "com/central/common/model/PageResult.count",
+          "descriptor": "Ljava/lang/Long;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 360
+        },
+        {
+          "scope": "query_selected",
+          "kind": "binding-opaque-result",
+          "field": "com/central/common/model/SysRole.creatorId",
+          "descriptor": "Ljava/lang/Long;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 1350
+        },
+        {
+          "scope": "query_selected",
+          "kind": "binding-opaque-result",
+          "field": "com/central/common/model/SysUser.creatorId",
+          "descriptor": "Ljava/lang/Long;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 540
+        },
+        {
+          "scope": "query_selected",
+          "kind": "binding-opaque-result",
+          "field": "com/central/common/model/SysUser.enabled",
+          "descriptor": "Ljava/lang/Boolean;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 540
+        },
+        {
+          "scope": "query_selected",
+          "kind": "binding-opaque-result",
+          "field": "com/central/common/model/SysUser.sex",
+          "descriptor": "Ljava/lang/Integer;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 540
+        },
+        {
+          "scope": "query_selected",
+          "kind": "binding-opaque-touch",
+          "field": "com/central/common/enums/DataScope.id",
+          "descriptor": "Ljava/lang/Integer;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 720
+        },
+        {
+          "scope": "query_selected",
+          "kind": "binding-opaque-touch",
+          "field": "com/central/common/model/SysRole.creatorId",
+          "descriptor": "Ljava/lang/Long;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 720
+        },
+        {
+          "scope": "query_selected",
+          "kind": "binding-opaque-touch",
+          "field": "com/central/common/model/SysUser.creatorId",
+          "descriptor": "Ljava/lang/Long;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 810
+        },
+        {
+          "scope": "query_selected",
+          "kind": "binding-opaque-touch",
+          "field": "com/central/common/model/SysUser.enabled",
+          "descriptor": "Ljava/lang/Boolean;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 810
+        },
+        {
+          "scope": "query_selected",
+          "kind": "binding-opaque-touch",
+          "field": "com/central/common/model/SysUser.sex",
+          "descriptor": "Ljava/lang/Integer;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 810
+        },
+        {
+          "scope": "query_selected",
+          "kind": "binding-source",
+          "field": "com/central/common/model/SysUser.creatorId",
+          "descriptor": "Ljava/lang/Long;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 270
+        },
+        {
+          "scope": "query_selected",
+          "kind": "binding-source",
+          "field": "com/central/common/model/SysUser.enabled",
+          "descriptor": "Ljava/lang/Boolean;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 270
+        },
+        {
+          "scope": "query_selected",
+          "kind": "binding-source",
+          "field": "com/central/common/model/SysUser.sex",
+          "descriptor": "Ljava/lang/Integer;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 270
+        }
+      ],
+      "copy_completions": 0,
+      "source_snapshots_preceding_copy_proof": 0,
+      "capture_sha256": "41c86a35f762bafe6925df82fe7de369ae153ca2b5f687effb7dd6456b5f147e",
+      "plan_sha256": "d224daf84322ce0282fa608c16ed4b7f85737652ccd151ddb69c6f6f4379f971"
+    },
+    "ruoyi-dictionary": {
+      "events": 44922,
+      "roots": 180,
+      "target_occurrences": 360,
+      "already_omitted_in_query": 36720,
+      "retained_selected_fields": 18360,
+      "boxed_payload_upper_bound_occurrences": 12240,
+      "boxed_fields": [
+        {
+          "scope": "query_selected",
+          "kind": "binding-opaque-result",
+          "field": "com/ruoyi/system/api/domain/SysDictData.dictCode",
+          "descriptor": "Ljava/lang/Long;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 1440
+        },
+        {
+          "scope": "query_selected",
+          "kind": "binding-opaque-result",
+          "field": "com/ruoyi/system/api/domain/SysDictData.dictSort",
+          "descriptor": "Ljava/lang/Long;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 1440
+        },
+        {
+          "scope": "query_selected",
+          "kind": "binding-opaque-touch",
+          "field": "com/ruoyi/system/api/domain/SysDictData.dictCode",
+          "descriptor": "Ljava/lang/Long;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 4320
+        },
+        {
+          "scope": "query_selected",
+          "kind": "binding-opaque-touch",
+          "field": "com/ruoyi/system/api/domain/SysDictData.dictSort",
+          "descriptor": "Ljava/lang/Long;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 4320
+        },
+        {
+          "scope": "query_selected",
+          "kind": "binding-source",
+          "field": "com/ruoyi/system/api/domain/SysDictData.dictCode",
+          "descriptor": "Ljava/lang/Long;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 360
+        },
+        {
+          "scope": "query_selected",
+          "kind": "binding-source",
+          "field": "com/ruoyi/system/api/domain/SysDictData.dictSort",
+          "descriptor": "Ljava/lang/Long;",
+          "reason": "boxed_payload_candidate_missing_closed_consumer_demand",
+          "count": 360
+        }
+      ],
+      "copy_completions": 150,
+      "source_snapshots_preceding_copy_proof": 150,
+      "capture_sha256": "e6207989a744d54c427997996e718337c15fb8468e035ecce8b58c3215c377d3",
+      "plan_sha256": "c1fb5d2547bebbcf7b44275ed61acfacc4535ab09cbc0c23705105a1dd627d31"
+    }
+  },
+  "online_experiment": false,
+  "shadow_not_a_sound_slice_or_provenance_oracle": true,
+  "decision": {
+    "qualified_extra_rule": null,
+    "new_online_deployments": 0,
+    "new_online_omissions": 0,
+    "formal_timing": false,
+    "reason": "No reviewed candidate has both a complete consumer demand/representation contract and sufficient pre-omission guards. This is a bounded negative/conditional analysis, not impossibility or no potential savings.",
+    "boxed_counts_are_not_proved_unnecessary": true,
+    "later_proof_not_backdated": true,
+    "naive_payload_removal_counterexample": "test_naively_dropping_boxed_payload_changes_public_transfer_branch; isolated public-transfer input only, not a real business failure."
+  },
+  "controls": {
+    "count": 10,
+    "scope": "shadow bookkeeping, proof time and isolated public transfer counterexample; not new Agent business acceptance"
+  }
+}

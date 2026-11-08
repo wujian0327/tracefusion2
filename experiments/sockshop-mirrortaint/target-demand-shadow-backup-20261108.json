@@ -1,0 +1,15 @@
+{
+  "archive": "artifacts/backups/target-demand-shadow-20261108-LF/complete-analysis-and-inputs.tar.gz",
+  "bytes": 13085885,
+  "sha256": "0f1f51b6c4ee8c8bc7657a4f3846f79eae5e76362cb657e7c53b4c4d80d52f16",
+  "gzip_CRC_passed": true,
+  "regular_files": 38,
+  "manifest_sha256": "bdd37b8025df2aeaf121455b31a1a1faf104430408366dabf7a1782ba5629b1e",
+  "complete_original_captures_and_plans_included": true,
+  "no_new_business_images_used": true,
+  "local_backup_not_off_machine": true,
+  "old_captures_and_failures_retained": true,
+  "earlier_archive_retained": "artifacts/backups/target-demand-shadow-20261108/complete-analysis-and-inputs.tar.gz",
+  "format_correction": "format-correction/note.json",
+  "additional_manifest_scope": "Original files-manifest is the earlier immutable snapshot; added LF derivation and generator are in format-correction and shadow-LF."
+}

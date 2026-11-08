@@ -1,0 +1,55 @@
+{
+  "reference_core": "bcdf0590d1b22ea13717afded657a062f070e1df",
+  "checkout": "e9b4dac21493513ca7ca1652ddfbdc3711e9f2e8",
+  "date_label": "20261108",
+  "tasks": {
+    "mall": {
+      "capture": "/home/wujian/tracefusion2/artifacts/pruning-contribution-audit-20261106/formal/01-mall-all/capture/events.jsonl",
+      "capture_sha256": "e41c4db928f7ace791533538318a5feeaa842b5eb481baa28503b5d81ede4680",
+      "plan": "/home/wujian/tracefusion2/artifacts/shared-transfer-optimization-20261106/final-candidate/mall/planning-first/mall-swarm-3/002-plan.json",
+      "plan_sha256": "8c2019cd79a27316f3eba6438130a10b21b05cff7ce713e806b6077958a517ed",
+      "arm": "all",
+      "requests": 180,
+      "selection": "First sealed formal repeat, existing boundary projection enabled; complete capture, no event filtering."
+    },
+    "zlt-user": {
+      "capture": "/home/wujian/tracefusion2/artifacts/pruning-contribution-audit-20261106/formal/01-zlt-user-boundary_only/capture/events.jsonl",
+      "capture_sha256": "41c86a35f762bafe6925df82fe7de369ae153ca2b5f687effb7dd6456b5f147e",
+      "plan": "/home/wujian/tracefusion2/artifacts/shared-transfer-optimization-20261106/final-candidate/zlt/planning-first/ZLT-MP-4/000-plan.json",
+      "plan_sha256": "d224daf84322ce0282fa608c16ed4b7f85737652ccd151ddb69c6f6f4379f971",
+      "arm": "boundary_only",
+      "requests": 180,
+      "selection": "First sealed formal repeat, existing boundary projection enabled; complete capture, no event filtering."
+    },
+    "ruoyi-dictionary": {
+      "capture": "/home/wujian/tracefusion2/artifacts/pruning-contribution-audit-20261106/formal/01-ruoyi-dictionary-boundary_only/capture/events.jsonl",
+      "capture_sha256": "e6207989a744d54c427997996e718337c15fb8468e035ecce8b58c3215c377d3",
+      "plan": "/home/wujian/tracefusion2/artifacts/ruoyi-tolist-20261105/final-C1/plans/ruoyi-3/plan.json",
+      "plan_sha256": "c1fb5d2547bebbcf7b44275ed61acfacc4535ab09cbc0c23705105a1dd627d31",
+      "arm": "boundary_only",
+      "requests": 180,
+      "selection": "First sealed formal repeat, existing boundary projection enabled; complete capture, no event filtering."
+    }
+  },
+  "phase": "shadow only before decision; no production edits or new observation",
+  "forbidden_inputs": [
+    "TF predicted answers",
+    "reconstructed dependency graph",
+    "MT labels",
+    "independent oracle output"
+  ],
+  "allowed_inputs": [
+    "declared query and plan",
+    "complete raw events",
+    "reviewed model implementation"
+  ],
+  "count_baseline": "Increment over recorded boundary-on scopes, never all-omissions-off",
+  "decision_gate": [
+    "complete value-demand summary for every consuming contract",
+    "guard available before omitted read; or separately-labelled persistence-only after raw read",
+    "normal ineligible execution must capture all before any omission",
+    "keep effects/identity/version/source/selection/exception evidence"
+  ],
+  "if_no_qualified_rule": "Deliver negative/conditional shadow analysis; no forced Agent change, new deployment or timing.",
+  "timing_disclosure": "Recorded after initial implementation/schema inspection and exploratory counts, before systematic shadow run; not unseen or fully preregistered."
+}
