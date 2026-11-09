@@ -1,0 +1,24 @@
+{
+  "archive": "artifacts/backups/unrelated-work-scaling-20261109/complete-round.tar.gz",
+  "sha256": "acc08db0b7f02212cb55e9db5e64b65db9c4bf25677c9d0ec2086253f24b1ea8",
+  "bytes": 2240378820,
+  "gzip_CRC": true,
+  "prior_archives": [
+    {
+      "path": "artifacts/backups/frozen-reuse-common-cost-20261030/docker-images.tar.gz",
+      "sha256": "4d5198a9f313197f39a3ae933c107bc38d673986f75f8c052632f72c91ba8cd5",
+      "gzip_CRC": true,
+      "reused_not_new_export": true
+    },
+    {
+      "path": "artifacts/backups/ruoyi-request-scope-20261104/jdk8-runtime.tar.gz",
+      "sha256": "e3641e13fdfc55d455441f85793b071228ac235758a8e5dc7990d158b6552104",
+      "gzip_CRC": true,
+      "reused_not_new_export": true
+    }
+  ],
+  "local_backup_only": true,
+  "created_utc": "2026-11-09T13:05:44.167412+00:00",
+  "no_old_capture_or_report_modified": true,
+  "core_sources_unchanged": 139
+}

@@ -5,12 +5,12 @@ from pathlib import Path
 from run_unrelated_work_scaling import H,HERE,ROOT,load,save,sha,verify
 
 def run():
- freeze=verify();out=H/'integrity-final';out.mkdir(exist_ok=False);initial=load(H/'protocol-before-tools.json');allowed={r['Id']for r in initial['images']};receipts=[]
+ freeze=verify();out=H/'integrity-final-02';out.mkdir(exist_ok=False);initial=load(H/'protocol-before-tools.json');allowed={r['Id']for r in initial['images']};refs={ref:r['Id']for r in initial['images']for ref in [r['Id'],*(r.get('RepoTags')or[]),*(r.get('RepoDigests')or[])]};receipts=[]
  for trial in sorted(H.rglob('result.json')):
   base=trial.parent;r=load(trial)
   if r.get('state')!='captured':continue
   if (base/'compose.json').exists():
-   c=load(base/'compose.json');assert all(s['image']in allowed for s in c['services'].values()),str(base)
+   c=load(base/'compose.json');assert all(refs.get(s['image'])in allowed for s in c['services'].values()),str(base)
   cases=load(base/'warmup.json')['requests']+load(base/'measure.json')['requests']
   # Failed environment attempt with404 is intentionally retained, not a gate success.
   receipts.append({'trial':str(base.relative_to(ROOT)),'requests':len(cases),'business_passed':sum(x['business_passed']for x in cases),'cleanup_returncode':r.get('cleanup_returncode'),'raw_capture_sha256':{str(p.relative_to(base)):sha(p)for p in(base/'capture').rglob('*')if p.is_file()and p.name.endswith('.jsonl')}})

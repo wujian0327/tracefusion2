@@ -1,0 +1,15 @@
+{
+  "files": {
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/run_unrelated_work_scaling.py": "e6f02a50e97c73276c3292634c09bc2cea217f07abcad76efa421c092380b000",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/execute_unrelated_work_scaling.py": "e8f135bc644d7450ffd16f98e4d7e27b44c71e13063910da3025f236fd22764f",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/audit_unrelated_work_scaling.py": "7c7df8ab55d5f95ee85f3a48b76706b041aae7f7d8cb0a27a4e7bacae6d22947",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/measure_unrelated_work_offline.py": "dd58baf4ecd382ee5a06e71dd4cf0cee9bca1b74ada13d858eab6b89f3c00be8",
+    "/home/wujian/tracefusion2/artifacts/unrelated-work-scaling-20261109/mall-plan.json": "8c2019cd79a27316f3eba6438130a10b21b05cff7ce713e806b6077958a517ed",
+    "/home/wujian/tracefusion2/artifacts/unrelated-work-scaling-20261109/controlled-build-04/low/plan.json": "5ea73d98e04bb6ca7f85ffd1457ded9908f04a8d9dbb8f4e67cb8247b6e4ba3f",
+    "/home/wujian/tracefusion2/artifacts/unrelated-work-scaling-20261109/controlled-build-04/medium/plan.json": "334271a2660ddef1c9db4d1f9ff17f1a5709d382abf316467ced60e24825b06d",
+    "/home/wujian/tracefusion2/artifacts/unrelated-work-scaling-20261109/controlled-build-04/high/plan.json": "a5f278ae84e6a43bffe056836373ba05172cd201b91382f7e7a5fb5b2a37704d"
+  },
+  "experiment_commit": "28b470cf56cc70f1409a33c607acae383f538f78",
+  "created_utc": "2026-11-09T11:11:38.901915+00:00",
+  "core_unchanged": true
+}

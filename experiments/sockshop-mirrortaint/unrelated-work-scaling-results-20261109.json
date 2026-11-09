@@ -1,0 +1,895 @@
+{
+  "frozen_TF": "bcdf0590d1b22ea13717afded657a062f070e1df",
+  "controlled_gate": {
+    "passed": false,
+    "omissions": {
+      "low": 48,
+      "medium": 384,
+      "high": 1536
+    },
+    "requires_related_control": true,
+    "no_formal_cost_if_false": true,
+    "no_replacement_or_model_fix": true
+  },
+  "mall_gate": {
+    "passed": true,
+    "no_controlled_growth_claim": true
+  },
+  "pilot": [
+    {
+      "tier": "low",
+      "fields": 8,
+      "mode": "original",
+      "business_passed": 6,
+      "requests": 6,
+      "correct": null,
+      "targets": 6,
+      "common_target_obligations": 6,
+      "tool_actual_target_instances": null,
+      "planning_rejected_common_targets": 0,
+      "scoring_applicable": false,
+      "scalar_omissions": 0,
+      "batch_protocol_bytes": null,
+      "batch_protocol_events": null,
+      "state": null,
+      "error": null,
+      "actual_deployment": true
+    },
+    {
+      "tier": "low",
+      "fields": 8,
+      "mode": "full",
+      "business_passed": 6,
+      "requests": 6,
+      "correct": 6,
+      "targets": 6,
+      "common_target_obligations": 6,
+      "tool_actual_target_instances": 6,
+      "planning_rejected_common_targets": 0,
+      "scoring_applicable": true,
+      "scalar_omissions": 0,
+      "batch_protocol_bytes": 44129,
+      "batch_protocol_events": 114,
+      "state": {
+        "known_correct": 6
+      },
+      "error": null,
+      "actual_deployment": true
+    },
+    {
+      "tier": "low",
+      "fields": 8,
+      "mode": "selective",
+      "business_passed": 6,
+      "requests": 6,
+      "correct": 6,
+      "targets": 6,
+      "common_target_obligations": 6,
+      "tool_actual_target_instances": 6,
+      "planning_rejected_common_targets": 0,
+      "scoring_applicable": true,
+      "scalar_omissions": 48,
+      "batch_protocol_bytes": 39849,
+      "batch_protocol_events": 114,
+      "state": {
+        "known_correct": 6
+      },
+      "error": null,
+      "actual_deployment": true
+    },
+    {
+      "tier": "low",
+      "fields": 8,
+      "mode": "mirrortaint",
+      "business_passed": 6,
+      "requests": 6,
+      "correct": 6,
+      "targets": 6,
+      "common_target_obligations": 6,
+      "tool_actual_target_instances": 6,
+      "planning_rejected_common_targets": 0,
+      "scoring_applicable": true,
+      "scalar_omissions": 0,
+      "batch_protocol_bytes": 38218,
+      "batch_protocol_events": 37,
+      "state": {
+        "known_correct": 6
+      },
+      "error": null,
+      "actual_deployment": true
+    },
+    {
+      "tier": "medium",
+      "fields": 64,
+      "mode": "original",
+      "business_passed": 6,
+      "requests": 6,
+      "correct": null,
+      "targets": 6,
+      "common_target_obligations": 6,
+      "tool_actual_target_instances": null,
+      "planning_rejected_common_targets": 0,
+      "scoring_applicable": false,
+      "scalar_omissions": 0,
+      "batch_protocol_bytes": null,
+      "batch_protocol_events": null,
+      "state": null,
+      "error": null,
+      "actual_deployment": true
+    },
+    {
+      "tier": "medium",
+      "fields": 64,
+      "mode": "full",
+      "business_passed": 6,
+      "requests": 6,
+      "correct": 6,
+      "targets": 6,
+      "common_target_obligations": 6,
+      "tool_actual_target_instances": 6,
+      "planning_rejected_common_targets": 0,
+      "scoring_applicable": true,
+      "scalar_omissions": 0,
+      "batch_protocol_bytes": 179147,
+      "batch_protocol_events": 450,
+      "state": {
+        "known_correct": 6
+      },
+      "error": null,
+      "actual_deployment": true
+    },
+    {
+      "tier": "medium",
+      "fields": 64,
+      "mode": "selective",
+      "business_passed": 6,
+      "requests": 6,
+      "correct": 6,
+      "targets": 6,
+      "common_target_obligations": 6,
+      "tool_actual_target_instances": 6,
+      "planning_rejected_common_targets": 0,
+      "scoring_applicable": true,
+      "scalar_omissions": 384,
+      "batch_protocol_bytes": 144636,
+      "batch_protocol_events": 450,
+      "state": {
+        "known_correct": 6
+      },
+      "error": null,
+      "actual_deployment": true
+    },
+    {
+      "tier": "medium",
+      "fields": 64,
+      "mode": "mirrortaint",
+      "business_passed": 6,
+      "requests": 6,
+      "correct": 6,
+      "targets": 6,
+      "common_target_obligations": 6,
+      "tool_actual_target_instances": 6,
+      "planning_rejected_common_targets": 0,
+      "scoring_applicable": true,
+      "scalar_omissions": 0,
+      "batch_protocol_bytes": 178258,
+      "batch_protocol_events": 37,
+      "state": {
+        "known_correct": 6
+      },
+      "error": null,
+      "actual_deployment": true
+    },
+    {
+      "tier": "high",
+      "fields": 256,
+      "mode": "original",
+      "business_passed": 6,
+      "requests": 6,
+      "correct": null,
+      "targets": 6,
+      "common_target_obligations": 6,
+      "tool_actual_target_instances": null,
+      "planning_rejected_common_targets": 0,
+      "scoring_applicable": false,
+      "scalar_omissions": 0,
+      "batch_protocol_bytes": null,
+      "batch_protocol_events": null,
+      "state": null,
+      "error": null,
+      "actual_deployment": true
+    },
+    {
+      "tier": "high",
+      "fields": 256,
+      "mode": "full",
+      "business_passed": 6,
+      "requests": 6,
+      "correct": 6,
+      "targets": 6,
+      "common_target_obligations": 6,
+      "tool_actual_target_instances": 6,
+      "planning_rejected_common_targets": 0,
+      "scoring_applicable": true,
+      "scalar_omissions": 0,
+      "batch_protocol_bytes": 651975,
+      "batch_protocol_events": 1602,
+      "state": {
+        "known_correct": 6
+      },
+      "error": null,
+      "actual_deployment": true
+    },
+    {
+      "tier": "high",
+      "fields": 256,
+      "mode": "selective",
+      "business_passed": 6,
+      "requests": 6,
+      "correct": 6,
+      "targets": 6,
+      "common_target_obligations": 6,
+      "tool_actual_target_instances": 6,
+      "planning_rejected_common_targets": 0,
+      "scoring_applicable": true,
+      "scalar_omissions": 1536,
+      "batch_protocol_bytes": 509772,
+      "batch_protocol_events": 1602,
+      "state": {
+        "known_correct": 6
+      },
+      "error": null,
+      "actual_deployment": true
+    },
+    {
+      "tier": "high",
+      "fields": 256,
+      "mode": "mirrortaint",
+      "business_passed": 6,
+      "requests": 6,
+      "correct": 6,
+      "targets": 6,
+      "common_target_obligations": 6,
+      "tool_actual_target_instances": 6,
+      "planning_rejected_common_targets": 0,
+      "scoring_applicable": true,
+      "scalar_omissions": 0,
+      "batch_protocol_bytes": 664258,
+      "batch_protocol_events": 37,
+      "state": {
+        "known_correct": 6
+      },
+      "error": null,
+      "actual_deployment": true
+    },
+    {
+      "tier": "related-high",
+      "fields": 256,
+      "mode": "original",
+      "business_passed": 6,
+      "requests": 6,
+      "correct": null,
+      "targets": 6,
+      "common_target_obligations": 6,
+      "tool_actual_target_instances": null,
+      "planning_rejected_common_targets": 0,
+      "scoring_applicable": false,
+      "scalar_omissions": 0,
+      "batch_protocol_bytes": null,
+      "batch_protocol_events": null,
+      "state": null,
+      "error": null,
+      "actual_deployment": true
+    },
+    {
+      "tier": "related-high",
+      "fields": 256,
+      "mode": "full",
+      "business_passed": null,
+      "requests": null,
+      "correct": null,
+      "targets": null,
+      "common_target_obligations": 6,
+      "tool_actual_target_instances": null,
+      "planning_rejected_common_targets": 6,
+      "scoring_applicable": true,
+      "scalar_omissions": 0,
+      "batch_protocol_bytes": null,
+      "batch_protocol_events": null,
+      "state": "planning_rejected",
+      "error": "No supported static plan: {'execution': 'Execution instruction unsupported: 97', 'legacy': 'Actual runtime version/class hashes fail read-forward contract'}",
+      "actual_deployment": false
+    },
+    {
+      "tier": "related-high",
+      "fields": 256,
+      "mode": "selective",
+      "business_passed": null,
+      "requests": null,
+      "correct": null,
+      "targets": null,
+      "common_target_obligations": 6,
+      "tool_actual_target_instances": null,
+      "planning_rejected_common_targets": 6,
+      "scoring_applicable": true,
+      "scalar_omissions": 0,
+      "batch_protocol_bytes": null,
+      "batch_protocol_events": null,
+      "state": "planning_rejected",
+      "error": "No supported static plan: {'execution': 'Execution instruction unsupported: 97', 'legacy': 'Actual runtime version/class hashes fail read-forward contract'}",
+      "actual_deployment": false
+    },
+    {
+      "tier": "related-high",
+      "fields": 256,
+      "mode": "mirrortaint",
+      "business_passed": 6,
+      "requests": 6,
+      "correct": 6,
+      "targets": 6,
+      "common_target_obligations": 6,
+      "tool_actual_target_instances": 6,
+      "planning_rejected_common_targets": 0,
+      "scoring_applicable": true,
+      "scalar_omissions": 0,
+      "batch_protocol_bytes": 807994,
+      "batch_protocol_events": 37,
+      "state": {
+        "known_correct": 6
+      },
+      "error": null,
+      "actual_deployment": true
+    }
+  ],
+  "formal_deployments": 40,
+  "formal_medians": [
+    {
+      "task": "mall",
+      "tier": "2",
+      "mode": "original",
+      "rounds": 5,
+      "achieved_rps": {
+        "median": 1.9999726482740636,
+        "min": 1.9999692264735123,
+        "max": 1.9999879264395524
+      },
+      "completion_fraction": {
+        "median": 1.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "business_cpu_seconds": {
+        "median": 14.446338,
+        "min": 14.123855,
+        "max": 14.674575
+      },
+      "cpu_seconds_per_completed_request": {
+        "median": 0.12038615000000001,
+        "min": 0.11769879166666668,
+        "max": 0.12228812500000001
+      },
+      "extra_cpu_seconds_per_completed_request": {
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "p95_ms": {
+        "median": 118.924,
+        "min": 118.19200000000001,
+        "max": 121.757
+      },
+      "rss_mean_MiB": {
+        "median": 859.5378289473684,
+        "min": 851.4323601973684,
+        "max": 863.2220394736842
+      },
+      "batch_protocol_bytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "attributed_measure_bytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "normal_offline_wall_seconds": null,
+      "normal_offline_cpu_seconds": null,
+      "normal_offline_VmHWM_MiB": null,
+      "independent_oracle_and_score_wall_seconds": null
+    },
+    {
+      "task": "mall",
+      "tier": "2",
+      "mode": "full",
+      "rounds": 5,
+      "achieved_rps": {
+        "median": 1.9999722022863617,
+        "min": 1.9999712261806388,
+        "max": 1.9999736809463506
+      },
+      "completion_fraction": {
+        "median": 1.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "business_cpu_seconds": {
+        "median": 15.92182,
+        "min": 15.563761,
+        "max": 16.478741
+      },
+      "cpu_seconds_per_completed_request": {
+        "median": 0.13268183333333333,
+        "min": 0.12969800833333334,
+        "max": 0.13732284166666667
+      },
+      "extra_cpu_seconds_per_completed_request": {
+        "median": 0.013602191666666638,
+        "min": 0.009311858333333325,
+        "max": 0.015522466666666665
+      },
+      "p95_ms": {
+        "median": 126.54099999999998,
+        "min": 126.29399999999998,
+        "max": 128.304
+      },
+      "rss_mean_MiB": {
+        "median": 911.2113486842105,
+        "min": 901.2543174342105,
+        "max": 926.6942845394736
+      },
+      "batch_protocol_bytes": {
+        "median": 40564172,
+        "min": 40564169,
+        "max": 40564172
+      },
+      "attributed_measure_bytes": {
+        "median": 20792535,
+        "min": 20792535,
+        "max": 20792535
+      },
+      "normal_offline_wall_seconds": {
+        "median": 2.28400494699963,
+        "min": 2.2205629410000256,
+        "max": 2.3139294180000434
+      },
+      "normal_offline_cpu_seconds": {
+        "median": 2.2817260000000026,
+        "min": 2.2182809999999997,
+        "max": 2.312644999999997
+      },
+      "normal_offline_VmHWM_MiB": {
+        "median": 288.28515625,
+        "min": 288.22265625,
+        "max": 288.359375
+      },
+      "independent_oracle_and_score_wall_seconds": {
+        "median": 1.8107673819999945,
+        "min": 1.715541051999935,
+        "max": 1.9462921559997994
+      }
+    },
+    {
+      "task": "mall",
+      "tier": "2",
+      "mode": "selective",
+      "rounds": 5,
+      "achieved_rps": {
+        "median": 1.9999713066449936,
+        "min": 1.999970975587881,
+        "max": 1.999973612748148
+      },
+      "completion_fraction": {
+        "median": 1.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "business_cpu_seconds": {
+        "median": 15.853552,
+        "min": 15.643674,
+        "max": 15.964353
+      },
+      "cpu_seconds_per_completed_request": {
+        "median": 0.13211293333333335,
+        "min": 0.13036395,
+        "max": 0.13303627499999998
+      },
+      "extra_cpu_seconds_per_completed_request": {
+        "median": 0.011848116666666644,
+        "min": 0.008563575000000004,
+        "max": 0.014328066666666653
+      },
+      "p95_ms": {
+        "median": 126.813,
+        "min": 125.006,
+        "max": 128.058
+      },
+      "rss_mean_MiB": {
+        "median": 909.2863898026316,
+        "min": 902.5590049342105,
+        "max": 915.198396381579
+      },
+      "batch_protocol_bytes": {
+        "median": 36905552,
+        "min": 36905552,
+        "max": 36907123
+      },
+      "attributed_measure_bytes": {
+        "median": 18691402,
+        "min": 18691402,
+        "max": 18692482
+      },
+      "normal_offline_wall_seconds": {
+        "median": 2.008512276000147,
+        "min": 1.9502989370002979,
+        "max": 2.045119860000341
+      },
+      "normal_offline_cpu_seconds": {
+        "median": 2.0039990000000003,
+        "min": 1.9450430000000014,
+        "max": 2.0404010000000024
+      },
+      "normal_offline_VmHWM_MiB": {
+        "median": 261.1484375,
+        "min": 261.078125,
+        "max": 261.3359375
+      },
+      "independent_oracle_and_score_wall_seconds": {
+        "median": 1.5631954209998185,
+        "min": 1.4962686869998834,
+        "max": 1.6077287119996981
+      }
+    },
+    {
+      "task": "mall",
+      "tier": "2",
+      "mode": "mirrortaint",
+      "rounds": 5,
+      "achieved_rps": {
+        "median": 1.9999746453547664,
+        "min": 1.9999706876296137,
+        "max": 1.9999846548844038
+      },
+      "completion_fraction": {
+        "median": 1.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "business_cpu_seconds": {
+        "median": 15.263859,
+        "min": 15.102731,
+        "max": 15.823942
+      },
+      "cpu_seconds_per_completed_request": {
+        "median": 0.127198825,
+        "min": 0.12585609166666667,
+        "max": 0.13186618333333333
+      },
+      "extra_cpu_seconds_per_completed_request": {
+        "median": 0.00885166666666666,
+        "min": 0.0038598249999999695,
+        "max": 0.013737975
+      },
+      "p95_ms": {
+        "median": 123.166,
+        "min": 119.98100000000001,
+        "max": 123.515
+      },
+      "rss_mean_MiB": {
+        "median": 900.207853618421,
+        "min": 893.5501644736842,
+        "max": 920.460115131579
+      },
+      "batch_protocol_bytes": {
+        "median": 3825532,
+        "min": 3825532,
+        "max": 3825712
+      },
+      "attributed_measure_bytes": {
+        "median": 2312337,
+        "min": 2312337,
+        "max": 2312337
+      },
+      "normal_offline_wall_seconds": {
+        "median": 0.1351386549995368,
+        "min": 0.13162979099979566,
+        "max": 0.13581184800023038
+      },
+      "normal_offline_cpu_seconds": {
+        "median": 0.13147299999999795,
+        "min": 0.12806599999999202,
+        "max": 0.13440599999999892
+      },
+      "normal_offline_VmHWM_MiB": {
+        "median": 45.31640625,
+        "min": 45.28125,
+        "max": 45.35546875
+      },
+      "independent_oracle_and_score_wall_seconds": {
+        "median": 0.023766067000906332,
+        "min": 0.023217104000195832,
+        "max": 0.025401782000244566
+      }
+    },
+    {
+      "task": "mall",
+      "tier": "4",
+      "mode": "original",
+      "rounds": 5,
+      "achieved_rps": {
+        "median": 3.9926406597959585,
+        "min": 3.9922617104983313,
+        "max": 3.994210308678575
+      },
+      "completion_fraction": {
+        "median": 1.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "business_cpu_seconds": {
+        "median": 26.584211,
+        "min": 26.426575,
+        "max": 26.638389
+      },
+      "cpu_seconds_per_completed_request": {
+        "median": 0.11076754583333333,
+        "min": 0.11011072916666667,
+        "max": 0.1109932875
+      },
+      "extra_cpu_seconds_per_completed_request": {
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "p95_ms": {
+        "median": 115.69500000000001,
+        "min": 115.517,
+        "max": 115.982
+      },
+      "rss_mean_MiB": {
+        "median": 865.1186266447369,
+        "min": 863.3540296052631,
+        "max": 884.0970394736842
+      },
+      "batch_protocol_bytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "attributed_measure_bytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "normal_offline_wall_seconds": null,
+      "normal_offline_cpu_seconds": null,
+      "normal_offline_VmHWM_MiB": null,
+      "independent_oracle_and_score_wall_seconds": null
+    },
+    {
+      "task": "mall",
+      "tier": "4",
+      "mode": "full",
+      "rounds": 5,
+      "achieved_rps": {
+        "median": 3.991570978608724,
+        "min": 3.981686617960677,
+        "max": 3.99283865607382
+      },
+      "completion_fraction": {
+        "median": 1.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "business_cpu_seconds": {
+        "median": 29.747216,
+        "min": 29.358005,
+        "max": 30.078568
+      },
+      "cpu_seconds_per_completed_request": {
+        "median": 0.12394673333333334,
+        "min": 0.12232502083333333,
+        "max": 0.12532736666666666
+      },
+      "extra_cpu_seconds_per_completed_request": {
+        "median": 0.01295344583333334,
+        "min": 0.011557474999999998,
+        "max": 0.014414016666666668
+      },
+      "p95_ms": {
+        "median": 125.83500000000001,
+        "min": 123.979,
+        "max": 182.441
+      },
+      "rss_mean_MiB": {
+        "median": 948.2354029605264,
+        "min": 929.9216694078947,
+        "max": 988.3145559210526
+      },
+      "batch_protocol_bytes": {
+        "median": 81212072,
+        "min": 81212064,
+        "max": 81212106
+      },
+      "attributed_measure_bytes": {
+        "median": 41643592,
+        "min": 41643592,
+        "max": 41643592
+      },
+      "normal_offline_wall_seconds": {
+        "median": 4.904772853000395,
+        "min": 4.7443572830006815,
+        "max": 4.974629413000002
+      },
+      "normal_offline_cpu_seconds": {
+        "median": 4.899746,
+        "min": 4.742921,
+        "max": 4.970718999999999
+      },
+      "normal_offline_VmHWM_MiB": {
+        "median": 547.63671875,
+        "min": 547.44140625,
+        "max": 547.77734375
+      },
+      "independent_oracle_and_score_wall_seconds": {
+        "median": 8.008602078000877,
+        "min": 7.475280314999964,
+        "max": 8.103093317999992
+      }
+    },
+    {
+      "task": "mall",
+      "tier": "4",
+      "mode": "selective",
+      "rounds": 5,
+      "achieved_rps": {
+        "median": 3.9922301436409815,
+        "min": 3.9907808281019803,
+        "max": 3.992787269962966
+      },
+      "completion_fraction": {
+        "median": 1.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "business_cpu_seconds": {
+        "median": 29.473044,
+        "min": 29.295745,
+        "max": 29.697275
+      },
+      "cpu_seconds_per_completed_request": {
+        "median": 0.12280435,
+        "min": 0.12206560416666666,
+        "max": 0.12373864583333334
+      },
+      "extra_cpu_seconds_per_completed_request": {
+        "median": 0.012241975000000002,
+        "min": 0.011152254166666667,
+        "max": 0.01362791666666667
+      },
+      "p95_ms": {
+        "median": 127.32199999999999,
+        "min": 125.54499999999999,
+        "max": 140.33399999999997
+      },
+      "rss_mean_MiB": {
+        "median": 943.9446957236842,
+        "min": 939.4379111842105,
+        "max": 950.5563322368421
+      },
+      "batch_protocol_bytes": {
+        "median": 73871722,
+        "min": 73870030,
+        "max": 73872285
+      },
+      "attributed_measure_bytes": {
+        "median": 37431833,
+        "min": 37430474,
+        "max": 37432634
+      },
+      "normal_offline_wall_seconds": {
+        "median": 4.244746800999565,
+        "min": 4.224394411000503,
+        "max": 4.3252188749993365
+      },
+      "normal_offline_cpu_seconds": {
+        "median": 4.242322000000003,
+        "min": 4.220179000000001,
+        "max": 4.318960000000001
+      },
+      "normal_offline_VmHWM_MiB": {
+        "median": 493.42578125,
+        "min": 493.390625,
+        "max": 493.48828125
+      },
+      "independent_oracle_and_score_wall_seconds": {
+        "median": 6.793253145999188,
+        "min": 6.772185699000147,
+        "max": 7.2473254780006755
+      }
+    },
+    {
+      "task": "mall",
+      "tier": "4",
+      "mode": "mirrortaint",
+      "rounds": 5,
+      "achieved_rps": {
+        "median": 3.992921457580562,
+        "min": 3.9924202457708717,
+        "max": 3.9937565130505708
+      },
+      "completion_fraction": {
+        "median": 1.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "business_cpu_seconds": {
+        "median": 28.265401,
+        "min": 28.144501,
+        "max": 28.611417
+      },
+      "cpu_seconds_per_completed_request": {
+        "median": 0.11777250416666667,
+        "min": 0.11726875416666667,
+        "max": 0.1192142375
+      },
+      "extra_cpu_seconds_per_completed_request": {
+        "median": 0.006859154166666673,
+        "min": 0.006806529166666672,
+        "max": 0.008220950000000005
+      },
+      "p95_ms": {
+        "median": 121.807,
+        "min": 119.987,
+        "max": 123.762
+      },
+      "rss_mean_MiB": {
+        "median": 929.85546875,
+        "min": 918.33203125,
+        "max": 953.909333881579
+      },
+      "batch_protocol_bytes": {
+        "median": 7655821,
+        "min": 7655811,
+        "max": 7656550
+      },
+      "attributed_measure_bytes": {
+        "median": 4627498,
+        "min": 4627498,
+        "max": 4627500
+      },
+      "normal_offline_wall_seconds": {
+        "median": 0.3670176220002759,
+        "min": 0.35458204400038085,
+        "max": 0.3725791590004519
+      },
+      "normal_offline_cpu_seconds": {
+        "median": 0.3630440000000008,
+        "min": 0.3538090000000085,
+        "max": 0.3703460000000004
+      },
+      "normal_offline_VmHWM_MiB": {
+        "median": 68.08203125,
+        "min": 67.96875,
+        "max": 68.13671875
+      },
+      "independent_oracle_and_score_wall_seconds": {
+        "median": 0.14959026199994696,
+        "min": 0.14810888699958014,
+        "max": 0.15266766600052506
+      }
+    }
+  ],
+  "growth": [],
+  "slower_growth_established": false,
+  "primary": "baseline-subtracted business CPU seconds / completed measurement request, per round and tier",
+  "old_online_results_unchanged": true,
+  "source_files": {
+    "/home/wujian/tracefusion2/artifacts/unrelated-work-scaling-20261109/protocol-before-tools.json": "8e1f023e19fb2989e469bf4962046ee264f386f56ead9ce5fec1d81d858a029b",
+    "/home/wujian/tracefusion2/artifacts/unrelated-work-scaling-20261109/formal-order-before-timing.json": "122ab7f1844319522d8d7c334f07837461f03a2aba9e49b87a66a994f90df489",
+    "/home/wujian/tracefusion2/artifacts/unrelated-work-scaling-20261109/controlled-gate.json": "45197ee14d12d8c8047d84d89b36cd2f058cf9b189592adc7eda5688a99e80e2",
+    "/home/wujian/tracefusion2/artifacts/unrelated-work-scaling-20261109/mall-gate.json": "eafcc09d633c0f92efdcb65db309e723d9ba90898511c736d125502f29031d59",
+    "/home/wujian/tracefusion2/artifacts/unrelated-work-scaling-20261109/strict-attribution-complete.json": "4aeb3741406bc56faf128b011faed35b3839d16e089ac8e72a9e2bbd1377c856",
+    "/home/wujian/tracefusion2/artifacts/unrelated-work-scaling-20261109/offline-proc-memory-recheck/protocol-before-recheck.json": "29cede8531ace212204ed6b2be08b4139cb75eae8781e88c48327de7e8271e9b"
+  }
+}

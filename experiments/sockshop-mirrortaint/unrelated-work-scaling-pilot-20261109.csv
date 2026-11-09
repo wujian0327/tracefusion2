@@ -1,0 +1,17 @@
+tier,fields,mode,business_passed,requests,correct,targets,common_target_obligations,tool_actual_target_instances,planning_rejected_common_targets,scoring_applicable,scalar_omissions,batch_protocol_bytes,batch_protocol_events,state,error,actual_deployment
+low,8,original,6,6,,6,6,,0,False,0,,,,,True
+low,8,full,6,6,6,6,6,6,0,True,0,44129,114,{'known_correct': 6},,True
+low,8,selective,6,6,6,6,6,6,0,True,48,39849,114,{'known_correct': 6},,True
+low,8,mirrortaint,6,6,6,6,6,6,0,True,0,38218,37,{'known_correct': 6},,True
+medium,64,original,6,6,,6,6,,0,False,0,,,,,True
+medium,64,full,6,6,6,6,6,6,0,True,0,179147,450,{'known_correct': 6},,True
+medium,64,selective,6,6,6,6,6,6,0,True,384,144636,450,{'known_correct': 6},,True
+medium,64,mirrortaint,6,6,6,6,6,6,0,True,0,178258,37,{'known_correct': 6},,True
+high,256,original,6,6,,6,6,,0,False,0,,,,,True
+high,256,full,6,6,6,6,6,6,0,True,0,651975,1602,{'known_correct': 6},,True
+high,256,selective,6,6,6,6,6,6,0,True,1536,509772,1602,{'known_correct': 6},,True
+high,256,mirrortaint,6,6,6,6,6,6,0,True,0,664258,37,{'known_correct': 6},,True
+related-high,256,original,6,6,,6,6,,0,False,0,,,,,True
+related-high,256,full,,,,,6,,6,True,0,,,planning_rejected,"No supported static plan: {'execution': 'Execution instruction unsupported: 97', 'legacy': 'Actual runtime version/class hashes fail read-forward contract'}",False
+related-high,256,selective,,,,,6,,6,True,0,,,planning_rejected,"No supported static plan: {'execution': 'Execution instruction unsupported: 97', 'legacy': 'Actual runtime version/class hashes fail read-forward contract'}",False
+related-high,256,mirrortaint,6,6,6,6,6,6,0,True,0,807994,37,{'known_correct': 6},,True

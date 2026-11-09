@@ -1,0 +1,338 @@
+{
+  "passed": true,
+  "deployments": 40,
+  "measure_completed": 7200,
+  "measure_attempted": 7200,
+  "all_phase_business_requests": 10800,
+  "tool_target_instances_correct": 8100,
+  "tool_target_instances": 8100,
+  "per_deployment": [
+    {
+      "round": "1",
+      "rate": "2",
+      "mode": "original",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "1",
+      "rate": "2",
+      "mode": "full",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "1",
+      "rate": "2",
+      "mode": "selective",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "1",
+      "rate": "2",
+      "mode": "mirrortaint",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "1",
+      "rate": "4",
+      "mode": "selective",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "1",
+      "rate": "4",
+      "mode": "original",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "1",
+      "rate": "4",
+      "mode": "full",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "1",
+      "rate": "4",
+      "mode": "mirrortaint",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "2",
+      "rate": "2",
+      "mode": "original",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "2",
+      "rate": "2",
+      "mode": "mirrortaint",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "2",
+      "rate": "2",
+      "mode": "selective",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "2",
+      "rate": "2",
+      "mode": "full",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "2",
+      "rate": "4",
+      "mode": "mirrortaint",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "2",
+      "rate": "4",
+      "mode": "original",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "2",
+      "rate": "4",
+      "mode": "full",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "2",
+      "rate": "4",
+      "mode": "selective",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "3",
+      "rate": "2",
+      "mode": "mirrortaint",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "3",
+      "rate": "2",
+      "mode": "selective",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "3",
+      "rate": "2",
+      "mode": "original",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "3",
+      "rate": "2",
+      "mode": "full",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "3",
+      "rate": "4",
+      "mode": "selective",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "3",
+      "rate": "4",
+      "mode": "original",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "3",
+      "rate": "4",
+      "mode": "full",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "3",
+      "rate": "4",
+      "mode": "mirrortaint",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "4",
+      "rate": "2",
+      "mode": "original",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "4",
+      "rate": "2",
+      "mode": "full",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "4",
+      "rate": "2",
+      "mode": "mirrortaint",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "4",
+      "rate": "2",
+      "mode": "selective",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "4",
+      "rate": "4",
+      "mode": "full",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "4",
+      "rate": "4",
+      "mode": "mirrortaint",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "4",
+      "rate": "4",
+      "mode": "selective",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "4",
+      "rate": "4",
+      "mode": "original",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "5",
+      "rate": "2",
+      "mode": "original",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "5",
+      "rate": "2",
+      "mode": "full",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "5",
+      "rate": "2",
+      "mode": "mirrortaint",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "5",
+      "rate": "2",
+      "mode": "selective",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "5",
+      "rate": "4",
+      "mode": "original",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "5",
+      "rate": "4",
+      "mode": "full",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "5",
+      "rate": "4",
+      "mode": "mirrortaint",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    },
+    {
+      "round": "5",
+      "rate": "4",
+      "mode": "selective",
+      "cpu_counter_arithmetic_exact": true,
+      "task_and_source_scope_equal": true,
+      "new_independent_deployment": true
+    }
+  ],
+  "matched_MT_Jackson_implementation_sha256": "46a402c06d4e579014ad56ec64ff590461215a32e404c6acfda0a0b095d996b5",
+  "source_sets_equal_all_arms": true,
+  "same_capture_all_normal_predictions_equal": true,
+  "core_source_files_unchanged": 139,
+  "primary_counter_arithmetic_not_derived_from_CPU_percent": true,
+  "all_p95_and_achieved_rates_recomputed_from_requests": true,
+  "all_RSS_recomputed_from_aligned_raw_samples": true
+}
