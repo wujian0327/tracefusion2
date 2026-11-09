@@ -1,0 +1,32 @@
+{
+  "archive": "artifacts/backups/paper-closeout-frozen-reuse-20261109/complete-round.tar.gz",
+  "bytes": 209215376,
+  "sha256": "36ea08da70d2d714d7f91f4996e8a42a5c6802b7edc21fe60c8de2b61bc8885f",
+  "gzip_CRC_passed": true,
+  "regular_files": 943,
+  "manifest_sha256": "62171d703a7ac86e466ce9547783de4063f2b14bd9ab122ae386a229ac25046a",
+  "reused_verified_runtime_archives": [
+    {
+      "path": "artifacts/backups/ruoyi-zlt-refinement-20261103/actual-images.tar.gz",
+      "bytes": 2049513399,
+      "sha256": "cbd9959df39c9d9f40447c693e1b80498c37d4271f47c0fa4b4d4fc3d0134b8b",
+      "gzip_CRC_passed": true
+    },
+    {
+      "path": "artifacts/backups/ruoyi-request-scope-20261104/jdk8-runtime.tar.gz",
+      "bytes": 57889824,
+      "sha256": "e3641e13fdfc55d455441f85793b071228ac235758a8e5dc7990d158b6552104",
+      "gzip_CRC_passed": true
+    }
+  ],
+  "symlinks_not_dereferenced": true,
+  "all_round_raw_failures_and_inputs_retained": true,
+  "local_backup_not_off_machine": true,
+  "delivery_correction": {
+    "archive": "artifacts/backups/paper-closeout-frozen-reuse-20261109/delivery-correction-02.tar.gz",
+    "bytes": 21163,
+    "sha256": "a56f51504e608929d23207a71fafa09ff5860a46baa9d96326b52164c6bc2a71",
+    "gzip_CRC_passed": true,
+    "reason": "Actual missing-data-key/empty-list ledger; earlier draft report and first scores retained. No target count, prediction or core changes."
+  }
+}

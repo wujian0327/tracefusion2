@@ -1,0 +1,21 @@
+{
+  "experiments/sockshop-mirrortaint/baseline-capability-results-20261020.json": "d2200e6d46812facab3b9fb84c0345819202c7c94887aca2e8e96daa727e8fbf",
+  "artifacts/pruning-contribution-audit-20261106/capability-pass-01/audit-historical/summary.json": "c37cf206fcebea17ffe5a8358939ecb0ec013b9cfca0129f4e1a8dc4a997e463",
+  "experiments/sockshop-mirrortaint/piggy-first-capability-results-20261028.json": "db4e6f294cbb7f519f1d4e5890ad973200774f73afe92b7b06f3cfa7ac40293c",
+  "experiments/sockshop-mirrortaint/external-transfer-results-20261029.json": "f6a5e43c7c6faf817339c1b0b9a31bca335517c77e2d24ff991ccd75759f61b8",
+  "artifacts/pruning-contribution-audit-20261106/capability-pass-01/audit-mall/summary.json": "e8dec74415e4f9310d90db3aaaa6d42b477d16b7a79518949a40633291646a98",
+  "experiments/sockshop-mirrortaint/frozen-zlt-reuse-results-20261030.json": "4bb597cc6efc99f3f4e183287c26ba23cfaeb906fb682a5f0058484a18cb3b47",
+  "artifacts/pruning-contribution-audit-20261106/capability-pass-01/audit-zlt/summary.json": "88f702eddb8e61879c33e2636752d0868bb5ad97c04800488a92dce3080f6bbd",
+  "experiments/sockshop-mirrortaint/zlt-foundation-results-20261031.json": "2a5b053326d3badcdb98c1edaf3e6e196dfd529a80b465a342eec25ebbc44079",
+  "experiments/sockshop-mirrortaint/target-external-first-results-20261103.json": "030dcf9cad52b4ebcc07fb36631e99f14fb32ea8078aa33ac42ba679fb1198a7",
+  "artifacts/pruning-contribution-audit-20261106/final-C1-score/summary.json": "381ce47f51ee7b02b83d8bd5eb1e5beae7e79741fdda730bb4d1bb4a23eb32ee",
+  "artifacts/pruning-contribution-audit-20261106/final-C2-score/summary.json": "9461e5257d7202452a15205e5b82be1b89912903dadb7f4bc38faf51ae11d06c",
+  "artifacts/paper-closeout-frozen-reuse-20261109/audit-final/summary.json": "829400bedb7ea4b3f3ee31d2f4291f587597c1f74ce92b5f9e392ba93de044ee",
+  "artifacts/paper-closeout-frozen-reuse-20261109/calibration-C2/audit-final/summary.json": "214a34cbf62885bf4f975dce2deefb94c931c2b761d835ef1ce1cec0b01e9c46",
+  "artifacts/paper-closeout-frozen-reuse-20261109/post-metadata-C2/audit-final/summary.json": "1f6b022e9c8859d043f793971f1f2b90f19a9c83c502afcc4813c660dcdfe837",
+  "experiments/sockshop-mirrortaint/pruning-contribution-results-20261106.json": "062bce2e637f238868db7c97d5c2be24b40d9b27b3b99cb6efec057f659b09c5",
+  "experiments/sockshop-mirrortaint/zlt-user-offline-results-20261103.json": "2c042c292f7947902aade83d4e27f56e7f420505dd40938353f0dc86bbfaf725",
+  "experiments/sockshop-mirrortaint/shared-work-results-20261106.json": "583da64662978e73864b4891d6fa7158f63337813ca151bf62bc5c315b41b89d",
+  "experiments/sockshop-mirrortaint/zlt-body-cost-results-20261031.json": "403eaea15b8f565a86915e8f7925a229897a36d0086e452e5af6186f53a8873d",
+  "experiments/sockshop-mirrortaint/ruoyi-postcopy-payload-results-20261108.json": "ce2ef8ac9f50d171824002e360b78f37eb67cf138b1386c72f826e58317e85c0"
+}

@@ -1,0 +1,2400 @@
+{
+  "reference": "bcdf059",
+  "queries": 2,
+  "new_deployments": 12,
+  "requests": 72,
+  "calibrations_disclosed": true,
+  "no_core_agent_contract_change": true,
+  "no_performance": true,
+  "summaries": [
+    {
+      "configuration": "A0",
+      "reference": "bcdf059",
+      "queries": [
+        {
+          "query": "fresh-post-detail",
+          "mode": "full",
+          "targets": 5,
+          "states": {
+            "evidence_invalid": 5
+          },
+          "business_requests": 6,
+          "business_equal": 6,
+          "first_block": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+          "new_deployment": true,
+          "oracle_adequate": 0,
+          "source_declaration": [
+            "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;"
+          ],
+          "configuration": "A0"
+        },
+        {
+          "query": "fresh-post-detail",
+          "mode": "selective",
+          "targets": 5,
+          "states": {
+            "evidence_invalid": 5
+          },
+          "business_requests": 6,
+          "business_equal": 6,
+          "first_block": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+          "new_deployment": true,
+          "oracle_adequate": 0,
+          "source_declaration": [
+            "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;"
+          ],
+          "configuration": "A0"
+        },
+        {
+          "query": "fresh-post-detail",
+          "mode": "mirrortaint",
+          "targets": 5,
+          "states": {
+            "known_correct": 5
+          },
+          "business_requests": 6,
+          "business_equal": 6,
+          "first_block": null,
+          "new_deployment": true,
+          "oracle_adequate": 5,
+          "source_declaration": [
+            "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;"
+          ],
+          "configuration": "A0"
+        },
+        {
+          "query": "fresh-dict-type-page",
+          "mode": "full",
+          "targets": 10,
+          "states": {
+            "planning_rejected": 10
+          },
+          "business_requests": 0,
+          "business_equal": 0,
+          "first_block": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+          "new_deployment": false,
+          "oracle_adequate": 0,
+          "source_declaration": [
+            "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/domain/SysDictType;)Ljava/util/List;"
+          ],
+          "configuration": "A0"
+        },
+        {
+          "query": "fresh-dict-type-page",
+          "mode": "selective",
+          "targets": 10,
+          "states": {
+            "planning_rejected": 10
+          },
+          "business_requests": 0,
+          "business_equal": 0,
+          "first_block": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+          "new_deployment": false,
+          "oracle_adequate": 0,
+          "source_declaration": [
+            "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/domain/SysDictType;)Ljava/util/List;"
+          ],
+          "configuration": "A0"
+        },
+        {
+          "query": "fresh-dict-type-page",
+          "mode": "mirrortaint",
+          "targets": 10,
+          "states": {
+            "oracle_or_target_unavailable": 10
+          },
+          "business_requests": 6,
+          "business_equal": 6,
+          "first_block": null,
+          "new_deployment": true,
+          "oracle_adequate": 0,
+          "source_declaration": [
+            "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/domain/SysDictType;)Ljava/util/List;"
+          ],
+          "configuration": "A0"
+        }
+      ],
+      "additional_obligations": [],
+      "no_performance": true,
+      "no_core_agent_contract_changes": true
+    },
+    {
+      "configuration": "list-C2",
+      "reference": "bcdf059",
+      "queries": [
+        {
+          "query": "fresh-dict-type-page",
+          "mode": "full",
+          "targets": 10,
+          "states": {
+            "evidence_invalid": 10
+          },
+          "business_requests": 6,
+          "business_equal": 6,
+          "first_block": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+          "new_deployment": true,
+          "oracle_adequate": 0,
+          "source_declaration": [
+            "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;"
+          ],
+          "configuration": "C2 actual full original business metadata (215 classes), unchanged actual dependency inventory, same C1 physical declaration for BOTH tools."
+        },
+        {
+          "query": "fresh-dict-type-page",
+          "mode": "selective",
+          "targets": 10,
+          "states": {
+            "evidence_invalid": 10
+          },
+          "business_requests": 6,
+          "business_equal": 6,
+          "first_block": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+          "new_deployment": true,
+          "oracle_adequate": 0,
+          "source_declaration": [
+            "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;"
+          ],
+          "configuration": "C2 actual full original business metadata (215 classes), unchanged actual dependency inventory, same C1 physical declaration for BOTH tools."
+        },
+        {
+          "query": "fresh-dict-type-page",
+          "mode": "mirrortaint",
+          "targets": 10,
+          "states": {
+            "known_correct": 10
+          },
+          "business_requests": 6,
+          "business_equal": 6,
+          "first_block": null,
+          "new_deployment": true,
+          "oracle_adequate": 10,
+          "source_declaration": [
+            "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;"
+          ],
+          "configuration": "C2 actual full original business metadata (215 classes), unchanged actual dependency inventory, same C1 physical declaration for BOTH tools."
+        }
+      ],
+      "additional_obligations": [],
+      "no_performance": true,
+      "no_core_agent_contract_changes": true
+    },
+    {
+      "configuration": "detail-C2",
+      "reference": "bcdf059",
+      "queries": [
+        {
+          "query": "fresh-post-detail",
+          "mode": "full",
+          "targets": 5,
+          "states": {
+            "known_correct": 5
+          },
+          "business_requests": 6,
+          "business_equal": 6,
+          "first_block": null,
+          "new_deployment": true,
+          "oracle_adequate": 5,
+          "source_declaration": [
+            "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;"
+          ],
+          "configuration": "Post C2 full original215-class metadata; same physical query/source declaration as A0. A0 missing AjaxResult metadata and invalid capture retained."
+        },
+        {
+          "query": "fresh-post-detail",
+          "mode": "selective",
+          "targets": 5,
+          "states": {
+            "known_correct": 5
+          },
+          "business_requests": 6,
+          "business_equal": 6,
+          "first_block": null,
+          "new_deployment": true,
+          "oracle_adequate": 5,
+          "source_declaration": [
+            "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;"
+          ],
+          "configuration": "Post C2 full original215-class metadata; same physical query/source declaration as A0. A0 missing AjaxResult metadata and invalid capture retained."
+        },
+        {
+          "query": "fresh-post-detail",
+          "mode": "mirrortaint",
+          "targets": 5,
+          "states": {
+            "known_correct": 5
+          },
+          "business_requests": 6,
+          "business_equal": 6,
+          "first_block": null,
+          "new_deployment": false,
+          "oracle_adequate": 5,
+          "source_declaration": [
+            "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;"
+          ],
+          "configuration": "Post C2 full original215-class metadata; same physical query/source declaration as A0. A0 missing AjaxResult metadata and invalid capture retained."
+        }
+      ],
+      "additional_obligations": [],
+      "no_performance": true,
+      "no_core_agent_contract_changes": true
+    }
+  ],
+  "instances": [
+    {
+      "query": "fresh-post-detail",
+      "mode": "full",
+      "case": 0,
+      "path": "/data/postName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "full",
+      "case": 1,
+      "path": "/data/postName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "full",
+      "case": 2,
+      "path": "/data/postName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "full",
+      "case": 3,
+      "path": "/data/postName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "full",
+      "case": 5,
+      "path": "/data/postName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "selective",
+      "case": 0,
+      "path": "/data/postName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "selective",
+      "case": 1,
+      "path": "/data/postName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "selective",
+      "case": 2,
+      "path": "/data/postName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "selective",
+      "case": 3,
+      "path": "/data/postName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "selective",
+      "case": 5,
+      "path": "/data/postName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "mirrortaint",
+      "case": 0,
+      "path": "/data/postName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o102",
+        "field": "com/ruoyi/system/domain/SysPost.postName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          2,
+          "/postName",
+          "o102",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ],
+      "pair": {
+        "source_call_id": 1,
+        "caller_method": "com/ruoyi/system/service/impl/SysPostServiceImpl.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+        "instrumented_instruction_index": 72
+      },
+      "configuration": "A0",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          2,
+          "/postName",
+          "o102",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "mirrortaint",
+      "case": 1,
+      "path": "/data/postName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o114",
+        "field": "com/ruoyi/system/domain/SysPost.postName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          2,
+          "/postName",
+          "o114",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ],
+      "pair": {
+        "source_call_id": 2,
+        "caller_method": "com/ruoyi/system/service/impl/SysPostServiceImpl.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+        "instrumented_instruction_index": 72
+      },
+      "configuration": "A0",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          2,
+          "/postName",
+          "o114",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "mirrortaint",
+      "case": 2,
+      "path": "/data/postName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o128",
+        "field": "com/ruoyi/system/domain/SysPost.postName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          2,
+          "/postName",
+          "o128",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ],
+      "pair": {
+        "source_call_id": 3,
+        "caller_method": "com/ruoyi/system/service/impl/SysPostServiceImpl.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+        "instrumented_instruction_index": 72
+      },
+      "configuration": "A0",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          2,
+          "/postName",
+          "o128",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "mirrortaint",
+      "case": 3,
+      "path": "/data/postName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o142",
+        "field": "com/ruoyi/system/domain/SysPost.postName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          2,
+          "/postName",
+          "o142",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ],
+      "pair": {
+        "source_call_id": 4,
+        "caller_method": "com/ruoyi/system/service/impl/SysPostServiceImpl.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+        "instrumented_instruction_index": 72
+      },
+      "configuration": "A0",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          2,
+          "/postName",
+          "o142",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "mirrortaint",
+      "case": 5,
+      "path": "/data/postName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o162",
+        "field": "com/ruoyi/system/domain/SysPost.postName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          2,
+          "/postName",
+          "o162",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ],
+      "pair": {
+        "source_call_id": 6,
+        "caller_method": "com/ruoyi/system/service/impl/SysPostServiceImpl.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+        "instrumented_instruction_index": 72
+      },
+      "configuration": "A0",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          2,
+          "/postName",
+          "o162",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "full",
+      "case": 0,
+      "path": "/rows/0/dictName",
+      "state": "planning_rejected",
+      "reason": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "full",
+      "case": 0,
+      "path": "/rows/1/dictName",
+      "state": "planning_rejected",
+      "reason": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "full",
+      "case": 0,
+      "path": "/rows/2/dictName",
+      "state": "planning_rejected",
+      "reason": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "full",
+      "case": 1,
+      "path": "/rows/0/dictName",
+      "state": "planning_rejected",
+      "reason": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "full",
+      "case": 1,
+      "path": "/rows/1/dictName",
+      "state": "planning_rejected",
+      "reason": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "full",
+      "case": 1,
+      "path": "/rows/2/dictName",
+      "state": "planning_rejected",
+      "reason": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "full",
+      "case": 2,
+      "path": "/rows/0/dictName",
+      "state": "planning_rejected",
+      "reason": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "full",
+      "case": 5,
+      "path": "/rows/0/dictName",
+      "state": "planning_rejected",
+      "reason": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "full",
+      "case": 5,
+      "path": "/rows/1/dictName",
+      "state": "planning_rejected",
+      "reason": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "full",
+      "case": 5,
+      "path": "/rows/2/dictName",
+      "state": "planning_rejected",
+      "reason": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "selective",
+      "case": 0,
+      "path": "/rows/0/dictName",
+      "state": "planning_rejected",
+      "reason": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "selective",
+      "case": 0,
+      "path": "/rows/1/dictName",
+      "state": "planning_rejected",
+      "reason": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "selective",
+      "case": 0,
+      "path": "/rows/2/dictName",
+      "state": "planning_rejected",
+      "reason": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "selective",
+      "case": 1,
+      "path": "/rows/0/dictName",
+      "state": "planning_rejected",
+      "reason": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "selective",
+      "case": 1,
+      "path": "/rows/1/dictName",
+      "state": "planning_rejected",
+      "reason": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "selective",
+      "case": 1,
+      "path": "/rows/2/dictName",
+      "state": "planning_rejected",
+      "reason": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "selective",
+      "case": 2,
+      "path": "/rows/0/dictName",
+      "state": "planning_rejected",
+      "reason": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "selective",
+      "case": 5,
+      "path": "/rows/0/dictName",
+      "state": "planning_rejected",
+      "reason": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "selective",
+      "case": 5,
+      "path": "/rows/1/dictName",
+      "state": "planning_rejected",
+      "reason": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "selective",
+      "case": 5,
+      "path": "/rows/2/dictName",
+      "state": "planning_rejected",
+      "reason": "No supported static plan: {'legacy': 'Entry method absent: com/ruoyi/system/controller/SysDictTypeController.list(Lcom/ruoyi/system/domain/SysDictType;)Lcom/ruoyi/common/core/web/page/TableDataInfo;', 'execution': 'Execution entry absent'}",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "mirrortaint",
+      "case": 0,
+      "path": "/rows/0/dictName",
+      "state": "oracle_or_target_unavailable",
+      "reason": null,
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "native root: 0",
+      "oracle_gap": "native root: 0",
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "mirrortaint",
+      "case": 0,
+      "path": "/rows/1/dictName",
+      "state": "oracle_or_target_unavailable",
+      "reason": null,
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "native root: 0",
+      "oracle_gap": "native root: 0",
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "mirrortaint",
+      "case": 0,
+      "path": "/rows/2/dictName",
+      "state": "oracle_or_target_unavailable",
+      "reason": null,
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "native root: 0",
+      "oracle_gap": "native root: 0",
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "mirrortaint",
+      "case": 1,
+      "path": "/rows/0/dictName",
+      "state": "oracle_or_target_unavailable",
+      "reason": null,
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "native root: 0",
+      "oracle_gap": "native root: 0",
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "mirrortaint",
+      "case": 1,
+      "path": "/rows/1/dictName",
+      "state": "oracle_or_target_unavailable",
+      "reason": null,
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "native root: 0",
+      "oracle_gap": "native root: 0",
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "mirrortaint",
+      "case": 1,
+      "path": "/rows/2/dictName",
+      "state": "oracle_or_target_unavailable",
+      "reason": null,
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "native root: 0",
+      "oracle_gap": "native root: 0",
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "mirrortaint",
+      "case": 2,
+      "path": "/rows/0/dictName",
+      "state": "oracle_or_target_unavailable",
+      "reason": null,
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "native root: 0",
+      "oracle_gap": "native root: 0",
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "mirrortaint",
+      "case": 5,
+      "path": "/rows/0/dictName",
+      "state": "oracle_or_target_unavailable",
+      "reason": null,
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "native root: 0",
+      "oracle_gap": "native root: 0",
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "mirrortaint",
+      "case": 5,
+      "path": "/rows/1/dictName",
+      "state": "oracle_or_target_unavailable",
+      "reason": null,
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "native root: 0",
+      "oracle_gap": "native root: 0",
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "mirrortaint",
+      "case": 5,
+      "path": "/rows/2/dictName",
+      "state": "oracle_or_target_unavailable",
+      "reason": null,
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "native root: 0",
+      "oracle_gap": "native root: 0",
+      "configuration": "A0"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "full",
+      "case": 0,
+      "path": "/rows/0/dictName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "list-C2"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "full",
+      "case": 0,
+      "path": "/rows/1/dictName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "list-C2"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "full",
+      "case": 0,
+      "path": "/rows/2/dictName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "list-C2"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "full",
+      "case": 1,
+      "path": "/rows/0/dictName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "list-C2"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "full",
+      "case": 1,
+      "path": "/rows/1/dictName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "list-C2"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "full",
+      "case": 1,
+      "path": "/rows/2/dictName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "list-C2"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "full",
+      "case": 2,
+      "path": "/rows/0/dictName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "list-C2"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "full",
+      "case": 5,
+      "path": "/rows/0/dictName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "list-C2"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "full",
+      "case": 5,
+      "path": "/rows/1/dictName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "list-C2"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "full",
+      "case": 5,
+      "path": "/rows/2/dictName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "list-C2"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "selective",
+      "case": 0,
+      "path": "/rows/0/dictName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "list-C2"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "selective",
+      "case": 0,
+      "path": "/rows/1/dictName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "list-C2"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "selective",
+      "case": 0,
+      "path": "/rows/2/dictName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "list-C2"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "selective",
+      "case": 1,
+      "path": "/rows/0/dictName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "list-C2"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "selective",
+      "case": 1,
+      "path": "/rows/1/dictName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "list-C2"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "selective",
+      "case": 1,
+      "path": "/rows/2/dictName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "list-C2"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "selective",
+      "case": 2,
+      "path": "/rows/0/dictName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "list-C2"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "selective",
+      "case": 5,
+      "path": "/rows/0/dictName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "list-C2"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "selective",
+      "case": 5,
+      "path": "/rows/1/dictName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "list-C2"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "selective",
+      "case": 5,
+      "path": "/rows/2/dictName",
+      "state": "evidence_invalid",
+      "reason": "Raw capture incomplete or explicitly invalid; do not use it to certify instance truth",
+      "target_bound": false,
+      "source_paired": false,
+      "oracle_adequate": false,
+      "binding_gap": "TF root return: 0",
+      "oracle_gap": "TF root return: 0",
+      "configuration": "list-C2"
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "mirrortaint",
+      "case": 0,
+      "path": "/rows/0/dictName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o104",
+        "field": "com/ruoyi/system/api/domain/SysDictType.dictName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+          2,
+          "/0/dictName",
+          "o104",
+          "com/ruoyi/system/api/domain/SysDictType.dictName",
+          1
+        ]
+      ],
+      "pair": {
+        "source_call_id": 1,
+        "caller_method": "com/ruoyi/system/service/impl/SysDictTypeServiceImpl.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+        "instrumented_instruction_index": 72
+      },
+      "configuration": "list-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+          2,
+          "/0/dictName",
+          "o104",
+          "com/ruoyi/system/api/domain/SysDictType.dictName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "mirrortaint",
+      "case": 0,
+      "path": "/rows/1/dictName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o105",
+        "field": "com/ruoyi/system/api/domain/SysDictType.dictName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+          2,
+          "/1/dictName",
+          "o105",
+          "com/ruoyi/system/api/domain/SysDictType.dictName",
+          1
+        ]
+      ],
+      "pair": {
+        "source_call_id": 1,
+        "caller_method": "com/ruoyi/system/service/impl/SysDictTypeServiceImpl.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+        "instrumented_instruction_index": 72
+      },
+      "configuration": "list-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+          2,
+          "/1/dictName",
+          "o105",
+          "com/ruoyi/system/api/domain/SysDictType.dictName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "mirrortaint",
+      "case": 0,
+      "path": "/rows/2/dictName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o106",
+        "field": "com/ruoyi/system/api/domain/SysDictType.dictName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+          2,
+          "/2/dictName",
+          "o106",
+          "com/ruoyi/system/api/domain/SysDictType.dictName",
+          1
+        ]
+      ],
+      "pair": {
+        "source_call_id": 1,
+        "caller_method": "com/ruoyi/system/service/impl/SysDictTypeServiceImpl.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+        "instrumented_instruction_index": 72
+      },
+      "configuration": "list-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+          2,
+          "/2/dictName",
+          "o106",
+          "com/ruoyi/system/api/domain/SysDictType.dictName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "mirrortaint",
+      "case": 1,
+      "path": "/rows/0/dictName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o131",
+        "field": "com/ruoyi/system/api/domain/SysDictType.dictName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+          2,
+          "/0/dictName",
+          "o131",
+          "com/ruoyi/system/api/domain/SysDictType.dictName",
+          1
+        ]
+      ],
+      "pair": {
+        "source_call_id": 2,
+        "caller_method": "com/ruoyi/system/service/impl/SysDictTypeServiceImpl.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+        "instrumented_instruction_index": 72
+      },
+      "configuration": "list-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+          2,
+          "/0/dictName",
+          "o131",
+          "com/ruoyi/system/api/domain/SysDictType.dictName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "mirrortaint",
+      "case": 1,
+      "path": "/rows/1/dictName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o132",
+        "field": "com/ruoyi/system/api/domain/SysDictType.dictName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+          2,
+          "/1/dictName",
+          "o132",
+          "com/ruoyi/system/api/domain/SysDictType.dictName",
+          1
+        ]
+      ],
+      "pair": {
+        "source_call_id": 2,
+        "caller_method": "com/ruoyi/system/service/impl/SysDictTypeServiceImpl.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+        "instrumented_instruction_index": 72
+      },
+      "configuration": "list-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+          2,
+          "/1/dictName",
+          "o132",
+          "com/ruoyi/system/api/domain/SysDictType.dictName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "mirrortaint",
+      "case": 1,
+      "path": "/rows/2/dictName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o133",
+        "field": "com/ruoyi/system/api/domain/SysDictType.dictName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+          2,
+          "/2/dictName",
+          "o133",
+          "com/ruoyi/system/api/domain/SysDictType.dictName",
+          1
+        ]
+      ],
+      "pair": {
+        "source_call_id": 2,
+        "caller_method": "com/ruoyi/system/service/impl/SysDictTypeServiceImpl.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+        "instrumented_instruction_index": 72
+      },
+      "configuration": "list-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+          2,
+          "/2/dictName",
+          "o133",
+          "com/ruoyi/system/api/domain/SysDictType.dictName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "mirrortaint",
+      "case": 2,
+      "path": "/rows/0/dictName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o158",
+        "field": "com/ruoyi/system/api/domain/SysDictType.dictName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+          2,
+          "/0/dictName",
+          "o158",
+          "com/ruoyi/system/api/domain/SysDictType.dictName",
+          1
+        ]
+      ],
+      "pair": {
+        "source_call_id": 3,
+        "caller_method": "com/ruoyi/system/service/impl/SysDictTypeServiceImpl.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+        "instrumented_instruction_index": 72
+      },
+      "configuration": "list-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+          2,
+          "/0/dictName",
+          "o158",
+          "com/ruoyi/system/api/domain/SysDictType.dictName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "mirrortaint",
+      "case": 5,
+      "path": "/rows/0/dictName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o198",
+        "field": "com/ruoyi/system/api/domain/SysDictType.dictName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+          2,
+          "/0/dictName",
+          "o198",
+          "com/ruoyi/system/api/domain/SysDictType.dictName",
+          1
+        ]
+      ],
+      "pair": {
+        "source_call_id": 6,
+        "caller_method": "com/ruoyi/system/service/impl/SysDictTypeServiceImpl.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+        "instrumented_instruction_index": 72
+      },
+      "configuration": "list-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+          2,
+          "/0/dictName",
+          "o198",
+          "com/ruoyi/system/api/domain/SysDictType.dictName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "mirrortaint",
+      "case": 5,
+      "path": "/rows/1/dictName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o199",
+        "field": "com/ruoyi/system/api/domain/SysDictType.dictName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+          2,
+          "/1/dictName",
+          "o199",
+          "com/ruoyi/system/api/domain/SysDictType.dictName",
+          1
+        ]
+      ],
+      "pair": {
+        "source_call_id": 6,
+        "caller_method": "com/ruoyi/system/service/impl/SysDictTypeServiceImpl.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+        "instrumented_instruction_index": 72
+      },
+      "configuration": "list-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+          2,
+          "/1/dictName",
+          "o199",
+          "com/ruoyi/system/api/domain/SysDictType.dictName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "mode": "mirrortaint",
+      "case": 5,
+      "path": "/rows/2/dictName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o200",
+        "field": "com/ruoyi/system/api/domain/SysDictType.dictName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+          2,
+          "/2/dictName",
+          "o200",
+          "com/ruoyi/system/api/domain/SysDictType.dictName",
+          1
+        ]
+      ],
+      "pair": {
+        "source_call_id": 6,
+        "caller_method": "com/ruoyi/system/service/impl/SysDictTypeServiceImpl.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+        "instrumented_instruction_index": 72
+      },
+      "configuration": "list-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysDictTypeMapper.selectDictTypeList(Lcom/ruoyi/system/api/domain/SysDictType;)Ljava/util/List;",
+          2,
+          "/2/dictName",
+          "o200",
+          "com/ruoyi/system/api/domain/SysDictType.dictName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "full",
+      "case": 0,
+      "path": "/data/postName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o117",
+        "field": "com/ruoyi/system/domain/SysPost.postName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          "f3",
+          231,
+          "/postName",
+          "o117",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ],
+      "pair": {
+        "call_id": 2,
+        "caller": "com/ruoyi/system/service/impl/SysPostServiceImpl.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+        "pc": 3,
+        "frame": "f3",
+        "start": 221,
+        "completion": 232,
+        "scope": "planned-call"
+      },
+      "configuration": "detail-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          "f3",
+          231,
+          "/postName",
+          "o117",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "full",
+      "case": 1,
+      "path": "/data/postName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o146",
+        "field": "com/ruoyi/system/domain/SysPost.postName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          "f8",
+          283,
+          "/postName",
+          "o146",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ],
+      "pair": {
+        "call_id": 7,
+        "caller": "com/ruoyi/system/service/impl/SysPostServiceImpl.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+        "pc": 3,
+        "frame": "f8",
+        "start": 273,
+        "completion": 284,
+        "scope": "planned-call"
+      },
+      "configuration": "detail-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          "f8",
+          283,
+          "/postName",
+          "o146",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "full",
+      "case": 2,
+      "path": "/data/postName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o174",
+        "field": "com/ruoyi/system/domain/SysPost.postName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          "f13",
+          335,
+          "/postName",
+          "o174",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ],
+      "pair": {
+        "call_id": 12,
+        "caller": "com/ruoyi/system/service/impl/SysPostServiceImpl.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+        "pc": 3,
+        "frame": "f13",
+        "start": 325,
+        "completion": 336,
+        "scope": "planned-call"
+      },
+      "configuration": "detail-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          "f13",
+          335,
+          "/postName",
+          "o174",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "full",
+      "case": 3,
+      "path": "/data/postName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o202",
+        "field": "com/ruoyi/system/domain/SysPost.postName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          "f18",
+          387,
+          "/postName",
+          "o202",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ],
+      "pair": {
+        "call_id": 17,
+        "caller": "com/ruoyi/system/service/impl/SysPostServiceImpl.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+        "pc": 3,
+        "frame": "f18",
+        "start": 377,
+        "completion": 388,
+        "scope": "planned-call"
+      },
+      "configuration": "detail-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          "f18",
+          387,
+          "/postName",
+          "o202",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "full",
+      "case": 5,
+      "path": "/data/postName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o240",
+        "field": "com/ruoyi/system/domain/SysPost.postName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          "f28",
+          476,
+          "/postName",
+          "o240",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ],
+      "pair": {
+        "call_id": 27,
+        "caller": "com/ruoyi/system/service/impl/SysPostServiceImpl.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+        "pc": 3,
+        "frame": "f28",
+        "start": 466,
+        "completion": 477,
+        "scope": "planned-call"
+      },
+      "configuration": "detail-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          "f28",
+          476,
+          "/postName",
+          "o240",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "selective",
+      "case": 0,
+      "path": "/data/postName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o111",
+        "field": "com/ruoyi/system/domain/SysPost.postName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          "f3",
+          228,
+          "/postName",
+          "o111",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ],
+      "pair": {
+        "call_id": 2,
+        "caller": "com/ruoyi/system/service/impl/SysPostServiceImpl.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+        "pc": 3,
+        "frame": "f3",
+        "start": 218,
+        "completion": 229,
+        "scope": "planned-call"
+      },
+      "configuration": "detail-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          "f3",
+          228,
+          "/postName",
+          "o111",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "selective",
+      "case": 1,
+      "path": "/data/postName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o135",
+        "field": "com/ruoyi/system/domain/SysPost.postName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          "f8",
+          277,
+          "/postName",
+          "o135",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ],
+      "pair": {
+        "call_id": 7,
+        "caller": "com/ruoyi/system/service/impl/SysPostServiceImpl.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+        "pc": 3,
+        "frame": "f8",
+        "start": 267,
+        "completion": 278,
+        "scope": "planned-call"
+      },
+      "configuration": "detail-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          "f8",
+          277,
+          "/postName",
+          "o135",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "selective",
+      "case": 2,
+      "path": "/data/postName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o158",
+        "field": "com/ruoyi/system/domain/SysPost.postName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          "f13",
+          326,
+          "/postName",
+          "o158",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ],
+      "pair": {
+        "call_id": 12,
+        "caller": "com/ruoyi/system/service/impl/SysPostServiceImpl.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+        "pc": 3,
+        "frame": "f13",
+        "start": 316,
+        "completion": 327,
+        "scope": "planned-call"
+      },
+      "configuration": "detail-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          "f13",
+          326,
+          "/postName",
+          "o158",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "selective",
+      "case": 3,
+      "path": "/data/postName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o181",
+        "field": "com/ruoyi/system/domain/SysPost.postName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          "f18",
+          375,
+          "/postName",
+          "o181",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ],
+      "pair": {
+        "call_id": 17,
+        "caller": "com/ruoyi/system/service/impl/SysPostServiceImpl.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+        "pc": 3,
+        "frame": "f18",
+        "start": 365,
+        "completion": 376,
+        "scope": "planned-call"
+      },
+      "configuration": "detail-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          "f18",
+          375,
+          "/postName",
+          "o181",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "selective",
+      "case": 5,
+      "path": "/data/postName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o214",
+        "field": "com/ruoyi/system/domain/SysPost.postName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          "f28",
+          458,
+          "/postName",
+          "o214",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ],
+      "pair": {
+        "call_id": 27,
+        "caller": "com/ruoyi/system/service/impl/SysPostServiceImpl.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+        "pc": 3,
+        "frame": "f28",
+        "start": 448,
+        "completion": 459,
+        "scope": "planned-call"
+      },
+      "configuration": "detail-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          "f28",
+          458,
+          "/postName",
+          "o214",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "mirrortaint",
+      "case": 0,
+      "path": "/data/postName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o102",
+        "field": "com/ruoyi/system/domain/SysPost.postName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          2,
+          "/postName",
+          "o102",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ],
+      "pair": {
+        "source_call_id": 1,
+        "caller_method": "com/ruoyi/system/service/impl/SysPostServiceImpl.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+        "instrumented_instruction_index": 72
+      },
+      "configuration": "detail-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          2,
+          "/postName",
+          "o102",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "mirrortaint",
+      "case": 1,
+      "path": "/data/postName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o114",
+        "field": "com/ruoyi/system/domain/SysPost.postName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          2,
+          "/postName",
+          "o114",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ],
+      "pair": {
+        "source_call_id": 2,
+        "caller_method": "com/ruoyi/system/service/impl/SysPostServiceImpl.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+        "instrumented_instruction_index": 72
+      },
+      "configuration": "detail-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          2,
+          "/postName",
+          "o114",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "mirrortaint",
+      "case": 2,
+      "path": "/data/postName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o128",
+        "field": "com/ruoyi/system/domain/SysPost.postName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          2,
+          "/postName",
+          "o128",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ],
+      "pair": {
+        "source_call_id": 3,
+        "caller_method": "com/ruoyi/system/service/impl/SysPostServiceImpl.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+        "instrumented_instruction_index": 72
+      },
+      "configuration": "detail-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          2,
+          "/postName",
+          "o128",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "mirrortaint",
+      "case": 3,
+      "path": "/data/postName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o142",
+        "field": "com/ruoyi/system/domain/SysPost.postName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          2,
+          "/postName",
+          "o142",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ],
+      "pair": {
+        "source_call_id": 4,
+        "caller_method": "com/ruoyi/system/service/impl/SysPostServiceImpl.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+        "instrumented_instruction_index": 72
+      },
+      "configuration": "detail-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          2,
+          "/postName",
+          "o142",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "fresh-post-detail",
+      "mode": "mirrortaint",
+      "case": 5,
+      "path": "/data/postName",
+      "state": "known_correct",
+      "reason": null,
+      "target_bound": true,
+      "source_paired": true,
+      "oracle_adequate": true,
+      "target_coordinate": {
+        "owner": "o162",
+        "field": "com/ruoyi/system/domain/SysPost.postName",
+        "version": 1
+      },
+      "expected": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          2,
+          "/postName",
+          "o162",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ],
+      "pair": {
+        "source_call_id": 6,
+        "caller_method": "com/ruoyi/system/service/impl/SysPostServiceImpl.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+        "instrumented_instruction_index": 72
+      },
+      "configuration": "detail-C2",
+      "predicted_sources": [
+        [
+          "com/ruoyi/system/mapper/SysPostMapper.selectPostById(Ljava/lang/Long;)Lcom/ruoyi/system/domain/SysPost;",
+          2,
+          "/postName",
+          "o162",
+          "com/ruoyi/system/domain/SysPost.postName",
+          1
+        ]
+      ]
+    }
+  ],
+  "target_absence_supplement": [
+    {
+      "query": "fresh-post-detail",
+      "case": 4,
+      "state": "no_selected_target_leaf",
+      "response_shape": {
+        "msg": "操作成功",
+        "code": 200
+      },
+      "not_null_or_empty_source_inference": true
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "case": 3,
+      "state": "no_selected_target_leaf",
+      "response_shape": {
+        "total": 0,
+        "rows": [],
+        "code": 200,
+        "msg": "查询成功"
+      },
+      "not_null_or_empty_source_inference": true
+    },
+    {
+      "query": "fresh-dict-type-page",
+      "case": 4,
+      "state": "no_selected_target_leaf",
+      "response_shape": {
+        "total": 0,
+        "rows": [],
+        "code": 200,
+        "msg": "查询成功"
+      },
+      "not_null_or_empty_source_inference": true
+    }
+  ]
+}

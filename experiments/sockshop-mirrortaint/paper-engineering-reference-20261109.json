@@ -1,0 +1,197 @@
+[
+  {
+    "category": "shared-initialization-index",
+    "version": "130858947f3eabc1dbee8693f11c926f37f289e9 -> d2c651c",
+    "task": "zlt-user-full",
+    "metric": "old-report process wall seconds",
+    "before": 14.11005308991298,
+    "after": 2.076673747971654,
+    "paired_change_percent": -85.14462972981991,
+    "ratio_range": [
+      0.1452225022108688,
+      0.1489114003654191
+    ],
+    "scope": "Same original capture offline only; old report stages, not bcdf059 online or pruning.",
+    "source": "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/zlt-user-offline-results-20261103.json"
+  },
+  {
+    "category": "shared-initialization-index",
+    "version": "130858947f3eabc1dbee8693f11c926f37f289e9 -> d2c651c",
+    "task": "zlt-user-selective",
+    "metric": "old-report process wall seconds",
+    "before": 12.577707344898954,
+    "after": 1.7679203019943088,
+    "paired_change_percent": -86.01852181192334,
+    "ratio_range": [
+      0.13775139148255988,
+      0.1440752328281209
+    ],
+    "scope": "Same original capture offline only; old report stages, not bcdf059 online or pruning.",
+    "source": "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/zlt-user-offline-results-20261103.json"
+  },
+  {
+    "category": "shared-initialization-index",
+    "version": "130858947f3eabc1dbee8693f11c926f37f289e9 -> d2c651c",
+    "task": "zlt-user-mirrortaint",
+    "metric": "old-report process wall seconds",
+    "before": 0.2184783190023154,
+    "after": 0.22397381509654224,
+    "paired_change_percent": 2.040022669129171,
+    "ratio_range": [
+      1.0082429473483832,
+      1.0262790996202413
+    ],
+    "scope": "Same original capture offline only; old report stages, not bcdf059 online or pruning.",
+    "source": "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/zlt-user-offline-results-20261103.json"
+  },
+  {
+    "category": "independent-score-index",
+    "version": "4cb5943 core / df977b7 score",
+    "task": "ruoyi-dictionary-full",
+    "metric": "old-report process wall seconds",
+    "before": 4.153407105943188,
+    "after": 2.1223560289945453,
+    "paired_change_percent": -48.63047282361621,
+    "ratio_range": [
+      0.4997791456756778,
+      0.5236299933893432
+    ],
+    "scope": "Same capture; old total includes independent score. Not pruning or a new online experiment.",
+    "source": "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/shared-work-results-20261106.json"
+  },
+  {
+    "category": "independent-score-index",
+    "version": "4cb5943 core / df977b7 score",
+    "task": "ruoyi-dictionary-selective",
+    "metric": "old-report process wall seconds",
+    "before": 3.7191452300176024,
+    "after": 1.7980218748562038,
+    "paired_change_percent": -51.63283899409087,
+    "ratio_range": [
+      0.4493785681442847,
+      0.5100718944945657
+    ],
+    "scope": "Same capture; old total includes independent score. Not pruning or a new online experiment.",
+    "source": "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/shared-work-results-20261106.json"
+  },
+  {
+    "category": "independent-score-index",
+    "version": "4cb5943 core / df977b7 score",
+    "task": "zlt-user-full",
+    "metric": "old-report process wall seconds",
+    "before": 6.870095275109634,
+    "after": 2.7016854691319168,
+    "paired_change_percent": -60.67969326772915,
+    "ratio_range": [
+      0.3892684242618139,
+      0.4162112234616606
+    ],
+    "scope": "Same capture; old total includes independent score. Not pruning or a new online experiment.",
+    "source": "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/shared-work-results-20261106.json"
+  },
+  {
+    "category": "independent-score-index",
+    "version": "4cb5943 core / df977b7 score",
+    "task": "zlt-user-selective",
+    "metric": "old-report process wall seconds",
+    "before": 6.140731238061562,
+    "after": 2.1757731379475445,
+    "paired_change_percent": -64.89788503550297,
+    "ratio_range": [
+      0.3496696600333478,
+      0.3650018970618138
+    ],
+    "scope": "Same capture; old total includes independent score. Not pruning or a new online experiment.",
+    "source": "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/shared-work-results-20261106.json"
+  },
+  {
+    "category": "shared-core-lookup",
+    "version": "5f0c647 -> 4cb5943, same df977b7 score",
+    "task": "ruoyi-dictionary-full",
+    "metric": "old-report process wall seconds",
+    "before": 2.1002665259875357,
+    "after": 2.1260529030114412,
+    "paired_change_percent": -0.12178591654344872,
+    "ratio_range": [
+      0.982816359419741,
+      1.0508519402381065
+    ],
+    "scope": "Same capture; old total includes independent score. Not pruning or a new online experiment.",
+    "source": "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/shared-work-results-20261106.json"
+  },
+  {
+    "category": "shared-core-lookup",
+    "version": "5f0c647 -> 4cb5943, same df977b7 score",
+    "task": "ruoyi-dictionary-selective",
+    "metric": "old-report process wall seconds",
+    "before": 1.7799773048609495,
+    "after": 1.7629569929558784,
+    "paired_change_percent": -2.3729039808344066,
+    "ratio_range": [
+      0.9601904982280628,
+      1.016207981912656
+    ],
+    "scope": "Same capture; old total includes independent score. Not pruning or a new online experiment.",
+    "source": "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/shared-work-results-20261106.json"
+  },
+  {
+    "category": "shared-core-lookup",
+    "version": "5f0c647 -> 4cb5943, same df977b7 score",
+    "task": "zlt-user-full",
+    "metric": "old-report process wall seconds",
+    "before": 2.7049113870598376,
+    "after": 2.68195170792751,
+    "paired_change_percent": -1.0452643061617528,
+    "ratio_range": [
+      0.9456069731987561,
+      1.0760692971611499
+    ],
+    "scope": "Same capture; old total includes independent score. Not pruning or a new online experiment.",
+    "source": "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/shared-work-results-20261106.json"
+  },
+  {
+    "category": "shared-core-lookup",
+    "version": "5f0c647 -> 4cb5943, same df977b7 score",
+    "task": "zlt-user-selective",
+    "metric": "old-report process wall seconds",
+    "before": 2.180700222030282,
+    "after": 2.2422932949848473,
+    "paired_change_percent": 1.7721215576215643,
+    "ratio_range": [
+      0.9750313100202586,
+      1.04978475063441
+    ],
+    "scope": "Same capture; old total includes independent score. Not pruning or a new online experiment.",
+    "source": "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/shared-work-results-20261106.json"
+  },
+  {
+    "category": "old-specialized-path",
+    "version": "7e4ad0b900a64871259a5fac008968128cc5ec28",
+    "task": "Orders.total selective / fixed MT",
+    "metric": "p95_ms",
+    "before": 74.164918,
+    "after": 15.84731,
+    "paired_change_percent": -78.69678895889834,
+    "ratio_range": [
+      0.14112201427853996,
+      0.2237124920222586
+    ],
+    "scope": "Old common task and sending-side Carts source boundary; not bcdf059.",
+    "source": "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/zlt-body-cost-results-20261031.json"
+  },
+  {
+    "category": "old-specialized-path",
+    "version": "7e4ad0b900a64871259a5fac008968128cc5ec28",
+    "task": "Orders.total selective / fixed MT",
+    "metric": "business_cpu_one_core_percent",
+    "before": 20.43736731144788,
+    "after": 8.557516751958179,
+    "paired_change_percent": -58.128086550733315,
+    "ratio_range": [
+      0.35535594361596035,
+      0.4463375324314945
+    ],
+    "scope": "Old common task and sending-side Carts source boundary; not bcdf059.",
+    "source": "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/zlt-body-cost-results-20261031.json"
+  }
+]
