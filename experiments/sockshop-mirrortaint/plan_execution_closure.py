@@ -16,10 +16,11 @@ SCALARS={'Z','B','C','S','I','J','F','D','Ljava/lang/String;'}
 
 
 def application_value_fields(plan):
+    from jvm_semantic_rules import RULES
     cfg=plan['execution_kernel'];required={plan['target']}
     for m in cfg['methods'].values():
         for ins in m['instructions']:
-            if ins['op']==180:required.add(ins['owner']+'.'+ins['name'])
+            if ins['op']in RULES and RULES[ins['op']].demand()['field_value']:required.add(ins['owner']+'.'+ins['name'])
             if ins['op']in (182,183,184,185):
                 getter=plan.get('collection_getters',{}).get(callee(ins))
                 if getter:required.add(getter['field'])
@@ -31,6 +32,7 @@ def application_value_fields(plan):
 
 
 def application_write_sites(plan,model):
+    from jvm_semantic_rules import write_payload_eligible
     required=application_value_fields(plan);methods=plan['execution_kernel']['methods'];sites={}
     invoked={callee(i)for m in methods.values()for i in m['instructions']if i['op']in (182,183,184,185)}
     for key,m in model['methods'].items():
@@ -40,7 +42,7 @@ def application_write_sites(plan,model):
         for ins in m['instructions']:
             if ins['op']!=181 or ins['desc']not in SCALARS:continue
             field=ins['owner']+'.'+ins['name'];owner=model['classes'].get(ins['owner'],{})
-            if field in required or owner.get('super')!='java/lang/Object':continue
+            if not write_payload_eligible(field,required,ins['desc']) or owner.get('super')!='java/lang/Object':continue
             declared=[f for f in owner.get('fields',[])if f['name']==ins['name']and f['desc']==ins['desc']and not f['access']&8]
             if len(declared)!=1:continue
             sites[key+'@'+str(ins['index'])]={'field':field,'descriptor':ins['desc'],'method':key,'pc':ins['index'],'kind':'frame'if frame else'setter','field_owner':ins['owner'],'method_owner':m['owner'],'method_sha256':model['classes'][m['owner']]['sha256'],'field_class_sha256':owner['sha256'],'proof':'Scalar value never read by planned bytecode/getter/constructor projection and is not the target. Actual exact receiver class and rooted Frame/call required; retain object, field, version and site, all calls and paths.'}

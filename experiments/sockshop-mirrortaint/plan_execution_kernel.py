@@ -38,6 +38,8 @@ def plan_execution(model, entry, target, response_path, source_calls=None, appli
     target_field=next(f for f in model['classes'][owner]['fields'] if f['name']==name)
     require(application_calls or not method['exception_handlers'],'Execution v1 root exception handlers not yet modeled')
     supported={0,1,2,3,4,5,6,7,8,16,17,18,87,89,96,100,104,132,133,167,176,178,180,181,182,183,184,185,187,192,198,199}|set(range(21,26))|set(range(54,59))|set(range(153,167))
+    from jvm_semantic_rules import RULES,specification
+    supported.update(RULES)
     if application_calls:supported|={172,173,174,175,177,191,186,189,190,50,83}
     if application_calls:supported.update({107,133,135,148,193}|set(range(9,16)))
     for ins in method['instructions']:require(ins['op'] in supported,'Execution instruction unsupported: '+str(ins['op']))
@@ -92,6 +94,7 @@ def plan_execution(model, entry, target, response_path, source_calls=None, appli
         execution_kernel={'version':1,'i2l_evidence':1,'constructors':constructors,'step_limit':100000,'static_steps':steps,
           'reachable_instructions':len(states),'evidence_policy':'Conservative all root calls, field reads, tracked writes, constructor results and branches in both modes; no reduction claim.',
           'runtime_profiles':json.loads((Path(__file__).parent/'execution-kernel-runtimes-20261020.json').read_text())['profiles']})
+    plan['execution_kernel']['semantic_primitive_rules']=specification()
     plan['contracts']+=['CFG reaching definitions iterate to a finite fixed point, including backedges; actual replay is step bounded.',
         'Only exact pinned ArrayList/Arrays$ArrayList and ArrayList$Itr operations are modeled.',
         'Field writes use actual object and observed write version; local list add maps the exact inserted value.',

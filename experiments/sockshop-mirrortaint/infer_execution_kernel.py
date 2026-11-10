@@ -4,6 +4,7 @@ v1 deliberately expands evidence. Only the documented original-bytecode and
 pinned library contracts produce known values. No application or query names.
 """
 from collections import defaultdict
+from jvm_semantic_rules import compute,field_event,field_transfer,validate_plan
 from analysis_status import AnalysisLimit
 from execution_dependency_state import Value, Frame, State, Container, Call, combine
 from plan_service_observations import callee
@@ -21,6 +22,7 @@ def same_value(expected,actual):
 
 
 def infer_execution(plan,rows):
+    validate_plan(plan)
     from infer_json_tree_observation import validate as validate_json_tree
     validate_json_tree(plan,rows)
     from infer_request_scope import validate as validate_request_scope
@@ -118,10 +120,8 @@ def infer_execution(plan,rows):
             elif 2<=op<=8:fr.stack.append(Value({'value':op-3}))
             elif op in (16,17,18):fr.stack.append(Value({'value':ins.get('operand',ins.get('constant'))}))
             elif op==133:
-                from execution_dependency_state import i2l
-                value=pop();converted=i2l(value);event=take('execution-i2l')
-                require(event['method']==entry and event['input']==value.observed['value']and event['result']==converted.observed['value'],'I2L JVM value/widening differs')
-                fr.stack.append(converted)
+                value=pop();event=take('execution-i2l')
+                fr.stack.append(compute(133,[value],event,entry))
             elif op==89:require(fr.stack,'Execution empty DUP');fr.stack.append(fr.stack[-1])
             elif op==87:pop()
             elif op==132:
@@ -132,14 +132,16 @@ def infer_execution(plan,rows):
                 allocation_count+=1;fr.stack.append(Value(allocation=allocation_count))
             elif op==178:fr.stack.append(Value(unknown=True))
             elif op==180:
-                receiver=pop();read=take('read');require(identity(receiver)==read['owner'] and read['field']==ins['owner']+'.'+ins['name'],'Execution field receiver differs')
-                v=state.fields.get(coordinate(read),origin(read,read['seq']))
+                receiver=pop();read=take('read');field_event(180,receiver,ins,read)
+                v=state.fields.get(coordinate(read),origin(read,read['seq']));v=field_transfer(180,v,v.observed)
                 fr.stack.append(v)
             elif op==181:
-                value,receiver=pop(),pop();write=take('write');require(identity(receiver)==write['owner'] and write['field']==ins['owner']+'.'+ins['name'],'Execution field write differs')
-                bind(value,write['observed']);state.field_write(coordinate(write),value.project(write['observed']))
+                value,receiver=pop(),pop();write=take('write');field_event(181,receiver,ins,write)
+                bind(value,write['observed']);state.field_write(coordinate(write),field_transfer(181,value,write['observed']))
             elif op==192:pass  # Exact runtime invocation/schema checks retain the object identity.
-            elif op in (96,100,104):
+            elif op in (96,97):
+                b,a=pop(),pop();fr.stack.append(compute(op,[a,b]))
+            elif op in (100,104):
                 b,a=pop(),pop();require('value' in a.observed and 'value' in b.observed,'Execution integer operands absent')
                 x,y=a.observed['value'],b.observed['value'];n=x+y if op==96 else x-y if op==100 else x*y
                 fr.stack.append(combine({'value':(n+2**31)%2**32-2**31},[a,b]))

@@ -1,5 +1,6 @@
 """Bounded bytecode calls over shared heap/container state and concrete effects."""
 from collections import defaultdict
+from jvm_semantic_rules import compute,field_event,field_transfer,validate_plan
 from execution_dependency_state import Value, Frame, State, Container, Call, combine
 from query_observation_planner import require, descriptors
 from plan_service_observations import callee
@@ -15,6 +16,7 @@ def infer_application(plan,rows,worker_request=None):
     async_audit=validate_async_protocol(plan,rows)
     from infer_source_observation import validate as validate_observation
     validate_observation(plan,rows)
+    validate_plan(plan)
     cfg=plan['execution_kernel']
     # Capture-local lookup only: retain every candidate, duplicate and raw order.
     library_evidence=defaultdict(list)
@@ -231,13 +233,13 @@ def infer_application(plan,rows,worker_request=None):
             return execute(begin,args,receiver)
         def write_field(w,v):
             if w['kind']=='write-version':
-                state.field_write(coordinate(w),Value(unknown=True));field_seq[coordinate(w)]=w['seq'];return
+                state.field_write(coordinate(w),field_transfer(181,v,{},omitted=True));field_seq[coordinate(w)]=w['seq'];return
             if 'date_epoch_ms' in w['observed'] and w['observed']['object'] in date_values:v=date_values[w['observed']['object']]
             bind(v,w['observed'])
             # Reflection/Recorder boxes primitive fields independently at every
             # observation. Those wrapper identities are not JVM field identity.
             observed={k:x for k,x in w['observed'].items() if k!='object'} if w['field'] in primitive_fields else w['observed']
-            state.field_write(coordinate(w),v.project(observed));field_seq[coordinate(w)]=w['seq']
+            state.field_write(coordinate(w),field_transfer(181,v,observed));field_seq[coordinate(w)]=w['seq']
             if w['owner'] in nonlocal_owners or w['owner'] in state.poisoned:escape(v)
         def escape(value):
             todo=[identity(value)] if 'value' not in value.observed else [];seen=set()
@@ -481,13 +483,13 @@ def infer_application(plan,rows,worker_request=None):
                             error=events[pos].get('observed',{'object':None})
                             if handle(error,'java.lang.NullPointerException'):continue
                             take('abort');return None,error
-                        read=take('read');require(identity(receiver)==read['owner'] and read['field']==ins['owner']+'.'+ins['name'],'Execution field receiver differs')
+                        read=take('read');field_event(180,receiver,ins,read)
                         if ins['desc'].startswith(('L','[')) and 'value' not in read['observed'] and read['observed'].get('object'):heap_refs[read['owner']].add(read['observed']['object'])
-                        v=lookup(read,read['seq'])
+                        v=lookup(read,read['seq']);v=field_transfer(180,v,v.observed)
                         if ins['desc'] in ('Z','B','C','S','I','J','F','D'):v=v.project({k:x for k,x in v.observed.items() if k!='object'})
                         fr.stack.append(v)
                     elif op==181:
-                        value,receiver=pop(),pop();write=take('write-version'if pos<len(events)and events[pos]['kind']=='write-version'else'write');require(identity(receiver)==write['owner'] and write['field']==ins['owner']+'.'+ins['name'],'Execution field write differs')
+                        value,receiver=pop(),pop();write=take('write-version'if pos<len(events)and events[pos]['kind']=='write-version'else'write');field_event(181,receiver,ins,write)
                         if write['kind']=='write':bind(value,write['observed'])
                         write_field(write,value)
                     elif op==192:pass  # Exact runtime invocation/schema checks retain the object identity.
@@ -507,15 +509,15 @@ def infer_application(plan,rows,worker_request=None):
                         require(reachable==ids and (not nodes or nodes[0]['id']==event['actual_class']and nodes[0]['name']==event['actual_type']),'Type-test hierarchy is not that of the actual object')
                         require(bool(nodes)==(event['input'].get('object')is not None),'Null type-test hierarchy differs');require(event['result']in (0,1)and event['result']==int(event['target_class']in ids),'Type test contradicts object hierarchy')
                         fr.stack.append(value.project({'value':event['result']}))
-                    elif op in (96,100,104):
+                    elif op in (96,97):
+                        b,a=pop(),pop();fr.stack.append(compute(op,[a,b]))
+                    elif op in (100,104):
                         b,a=pop(),pop();require('value' in a.observed and 'value' in b.observed,'Execution integer operands absent')
                         x,y=a.observed['value'],b.observed['value'];n=x+y if op==96 else x-y if op==100 else x*y
                         fr.stack.append(combine({'value':(n+2**31)%2**32-2**31},[a,b]))
                     elif op==133:
-                        from execution_dependency_state import i2l
-                        value=pop();converted=i2l(value);event=take('execution-i2l')
-                        require(event['method']==entry and event['input']==value.observed['value']and event['result']==converted.observed['value'],'I2L JVM value/widening differs')
-                        fr.stack.append(converted)
+                        value=pop();event=take('execution-i2l')
+                        fr.stack.append(compute(133,[value],event,entry))
                     elif op==135:
                         value=pop();n=value.observed.get('value')
                         require(type(n) is int and -2**31<=n<2**31,'I2D requires an actual JVM int')

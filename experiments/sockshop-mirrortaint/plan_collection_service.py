@@ -7,6 +7,7 @@ include every possibly aliasing operation; no field or application names occur
 in the rules. This plan is a separate opt-in profile, not a silent fallback.
 """
 from collections import deque
+from jvm_semantic_rules import RULES
 from analysis_status import AnalysisLimit
 from plan_service_observations import callee, field
 from plan_distributed_fields import any_target, json_schema
@@ -78,8 +79,10 @@ def analyze(method, allow_loops=False):
             used.append(locals_[ins['var']]); locals_[ins['var']] = frozenset({pc})
         elif op == 89: require(stack, 'Empty DUP'); stack.append(stack[-1])
         elif op == 87: pop()
-        elif op == 180: pop(); push()
-        elif op == 181: pop(); pop()
+        elif op in RULES:
+            rule=RULES[op]
+            for _ in rule.inputs: pop()
+            for _ in range(rule.outputs): push()
         elif op == 192: v = pop(); stack.append(v)
         elif op == 193 and allow_loops:pop();push()
         elif allow_loops and op in (189,190): pop(); push()
