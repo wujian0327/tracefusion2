@@ -32,6 +32,10 @@ def infer_execution(plan,rows):
     if plan['execution_kernel']['version']>=2:
         from infer_application_execution import infer_application
         return infer_application(plan,rows)
+    # The application interpreter validates this in its closure checker. The
+    # old v1 route must enforce the same physical clock before replay as well.
+    from infer_execution_closure import validate_application_writes
+    validate_application_writes(plan,rows)
     cfg=plan['execution_kernel'];method=plan['collection_method'];code=method['instructions'];entry=plan['entry']
     runtime=[r for r in rows if r['kind']=='execution-runtime']
     require(len(runtime)==1,'Execution runtime proof absent/duplicated')
