@@ -35,5 +35,15 @@ class PrimitiveRules(unittest.TestCase):
         p={'execution_kernel':{'semantic_primitive_rules':json.loads(json.dumps(specification()))}};validate_plan(p)
         p['execution_kernel']['semantic_primitive_rules']['rules']['97']['bits']=32
         with self.assertRaises(ValueError):validate_plan(p)
+    def test_field_values_keep_existing_choice_and_unknown(self):
+        original=self.value(7,8,True)
+        for op in (180,181):
+            copied=field_transfer(op,original,{'value':7})
+            self.assertEqual(copied.origins,original.origins)
+            self.assertEqual(copied.selectors,original.selectors)
+            self.assertTrue(copied.unknown)
+        omitted=field_transfer(181,original,{},True)
+        self.assertTrue(omitted.unknown)
+        self.assertFalse(omitted.origins)
 
 if __name__=='__main__':unittest.main()

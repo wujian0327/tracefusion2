@@ -1,0 +1,37 @@
+{
+  "archives": [
+    {
+      "path": "artifacts/backups/jvm-rule-evidence-20261110/complete-round-final-03.tar.gz",
+      "bytes": 508384343,
+      "sha256": "55a7949c332fc7997c021bdd8c236abee731af008f1655438cbe82e5b19d4a33",
+      "gzip_crc": true
+    },
+    {
+      "path": "artifacts/backups/jvm-rule-evidence-20261110/compatibility-inputs.tar.gz",
+      "bytes": 7636314,
+      "sha256": "94c57eee2ac8c94c49f397ec51c16c50a759b5b6650e56c9585dbda360798866",
+      "gzip_crc": true
+    },
+    {
+      "path": "artifacts/backups/generic-observation-rules-20261110/runtime-image.tar.gz",
+      "bytes": 175314866,
+      "sha256": "d7165c4a1168a743277bc279b544a61dd0423f9c87daf1ae59b39953dbab2e39",
+      "gzip_crc": true
+    },
+    {
+      "path": "artifacts/backups/ruoyi-request-scope-20261104/jdk8-runtime.tar.gz",
+      "bytes": 57889824,
+      "sha256": "e3641e13fdfc55d455441f85793b071228ac235758a8e5dc7990d158b6552104",
+      "gzip_crc": true
+    }
+  ],
+  "manifest": "artifacts/jvm-rule-evidence-20261110/artifact-manifest-final-03.json",
+  "scope": "Local backup, not off-site. Complete new round, required observer/native/export binaries and original JARs; selected old complete captures separately copied. Existing identical runtime image/JDK archives revalidated; no historical failures overwritten.",
+  "image_id": "sha256:efeab1ce0ab9219386bc7138b8389149a9b7849e868632ca09340e4039a58982",
+  "prior_archives_retained": [
+    "artifacts/backups/jvm-rule-evidence-20261110/complete-round.tar.gz",
+    "artifacts/backups/jvm-rule-evidence-20261110/complete-round-final.tar.gz"
+  ],
+  "measurement_core": "c8918bf8b0ed6ac90c0065558fe4df540bd76a2c",
+  "post_experiment_legacy_v1_fix": "c866d67"
+}

@@ -8,7 +8,7 @@ H=ROOT/'artifacts/jvm-rule-evidence-20261110'
 OLD=ROOT/'artifacts/unrelated-work-scaling-20261109'
 
 def verify():
-    path=H/'candidate-after-identity-fix.json' if (H/'candidate-after-identity-fix.json').exists() else H/'candidate-before-pilot.json'
+    path=H/'post-experiment-v1-guard-fix.json' if (H/'post-experiment-v1-guard-fix.json').exists() else H/'candidate-after-identity-fix.json' if (H/'candidate-after-identity-fix.json').exists() else H/'candidate-before-pilot.json'
     f=load(path)
     for p,h in f['core_sources'].items():assert sha(Path(p))==h,p
     for p,h in load(H/'protocol-before-change.json')['binaries_and_protocols'].items():assert sha(Path(p))==h,p
@@ -81,6 +81,7 @@ def pilot():
     print('GATE',gate,flush=True)
 
 def formal():
+    assert not(H/'formal-order-before-timing.json').exists(),'Existing formal evidence is sealed; configure a separate experiment home before rerunning.'
     gate=H/'gate-calibrated.json' if (H/'gate-calibrated.json').exists() else H/'gate.json'
     assert load(gate)['passed'];audit=install();verify()
     rng=random.Random(load(H/'protocol-before-tools.json')['formal']['order_seed']);jobs=[]

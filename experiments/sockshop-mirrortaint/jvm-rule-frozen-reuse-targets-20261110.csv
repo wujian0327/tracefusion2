@@ -1,0 +1,9 @@
+query,request,path,mode,original_value,original_entity_link,physical_oracle_adequate,source_call_id,source_object,source_version,FP,FN,state,known_correct,first_blocker
+person-detail,0,/lastName,full,SAME,http://127.0.0.1:8080/people/1,False,,,,,,evidence_invalid,,binding-before:java.lang.IllegalStateException: Non-string binding key
+person-detail,1,/lastName,full,SAME,http://127.0.0.1:8080/people/2,False,,,,,,evidence_invalid,,binding-before:java.lang.IllegalStateException: Non-string binding key
+person-detail,0,/lastName,selective,SAME,http://127.0.0.1:8080/people/1,False,,,,,,evidence_invalid,,binding-before:java.lang.IllegalStateException: Non-string binding key
+person-detail,1,/lastName,selective,SAME,http://127.0.0.1:8080/people/2,False,,,,,,evidence_invalid,,binding-before:java.lang.IllegalStateException: Non-string binding key
+person-collection,0,/_embedded/people/0/lastName,full,SAME,http://127.0.0.1:8080/people/1,False,,,,,,evidence_invalid,,binding-before:java.lang.IllegalStateException: Non-string binding key
+person-collection,0,/_embedded/people/1/lastName,full,SAME,http://127.0.0.1:8080/people/2,False,,,,,,evidence_invalid,,binding-before:java.lang.IllegalStateException: Non-string binding key
+person-collection,0,/_embedded/people/0/lastName,selective,SAME,http://127.0.0.1:8080/people/1,False,,,,,,evidence_invalid,,binding-before:java.lang.IllegalStateException: Non-string binding key
+person-collection,0,/_embedded/people/1/lastName,selective,SAME,http://127.0.0.1:8080/people/2,False,,,,,,evidence_invalid,,binding-before:java.lang.IllegalStateException: Non-string binding key
