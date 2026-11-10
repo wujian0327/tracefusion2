@@ -30,7 +30,11 @@ def validate_application_writes(plan,rows):
     version_evidence=defaultdict(list);returns_by_frame=defaultdict(list);writes_by_field=defaultdict(list);calls_by_target=defaultdict(list)
     for call in calls:calls_by_target[(call['frame'],call['callee'],call['receiver'].get('object'))].append(call)
     for event in rows:
-        if event['kind']=='binding-return':returns_by_frame[event['frame']].append(event)
+        # The target-projected binding return can omit an unrelated field.
+        # The root's actual exit snapshot still witnesses its final version;
+        # do not accept a contradictory version-only write merely because its
+        # payload is outside the query's data demand.
+        if event['kind']in ('binding-return','exit'):returns_by_frame[event['frame']].append(event)
         elif event['kind']in ('write','write-version'):writes_by_field[(event['owner'],event['field'])].append(event)
     for event in rows:
         if event['kind']in ('write','write-version','read'):version_evidence[(event['owner'],event['field'])].append((event['seq'],event['version']))
