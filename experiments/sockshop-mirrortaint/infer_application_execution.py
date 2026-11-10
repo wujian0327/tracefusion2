@@ -483,13 +483,13 @@ def infer_application(plan,rows,worker_request=None):
                             error=events[pos].get('observed',{'object':None})
                             if handle(error,'java.lang.NullPointerException'):continue
                             take('abort');return None,error
-                        read=take('read');field_event(180,receiver,ins,read)
+                        read=take('read');field_event(180,receiver,ins,read,identity(receiver))
                         if ins['desc'].startswith(('L','[')) and 'value' not in read['observed'] and read['observed'].get('object'):heap_refs[read['owner']].add(read['observed']['object'])
                         v=lookup(read,read['seq']);v=field_transfer(180,v,v.observed)
                         if ins['desc'] in ('Z','B','C','S','I','J','F','D'):v=v.project({k:x for k,x in v.observed.items() if k!='object'})
                         fr.stack.append(v)
                     elif op==181:
-                        value,receiver=pop(),pop();write=take('write-version'if pos<len(events)and events[pos]['kind']=='write-version'else'write');field_event(181,receiver,ins,write)
+                        value,receiver=pop(),pop();write=take('write-version'if pos<len(events)and events[pos]['kind']=='write-version'else'write');field_event(181,receiver,ins,write,identity(receiver))
                         if write['kind']=='write':bind(value,write['observed'])
                         write_field(write,value)
                     elif op==192:pass  # Exact runtime invocation/schema checks retain the object identity.

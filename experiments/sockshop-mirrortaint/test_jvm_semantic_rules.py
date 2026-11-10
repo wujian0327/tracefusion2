@@ -26,6 +26,7 @@ class PrimitiveRules(unittest.TestCase):
     def test_field_identity_null_and_payload(self):
         ins={'owner':'B','name':'x'};r={'kind':'write-version','owner':'o','field':'B.x','version':4}
         field_event(181,Value({'object':'o'}),ins,r)
+        field_event(181,Value(allocation=7),ins,r,actual_identity='o')
         with self.assertRaises(ValueError):field_event(181,Value({'object':'other'}),ins,r)
         self.assertTrue(field_transfer(181,Value({'value':None}),{},True).unknown)
         sourced=self.value(None,5);self.assertEqual(field_transfer(180,sourced,{'value':None}).origins,sourced.origins)

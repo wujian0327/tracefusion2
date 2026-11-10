@@ -58,9 +58,10 @@ def compute(op,values,event=None,method=None):
     return combine({'value':result},values)
 
 
-def field_event(op,receiver,ins,event):
+def field_event(op,receiver,ins,event,actual_identity=None):
     require(op in (180,181),'Not a field rule')
-    require(receiver.observed.get('object')==event['owner'] and event['field']==ins['owner']+'.'+ins['name'],'JVM field receiver/declaration differs')
+    owner=receiver.observed.get('object') if actual_identity is None else actual_identity
+    require(owner==event['owner'] and event['field']==ins['owner']+'.'+ins['name'],'JVM field receiver/declaration differs')
     require(type(event['version'])is int and event['version']>=int(op==181),'JVM field version invalid')
     require(event['kind'] in (('read',) if op==180 else ('write','write-version')),'JVM field event kind differs')
     require(('observed'in event)==(event['kind']!='write-version'),'JVM field payload presence differs')

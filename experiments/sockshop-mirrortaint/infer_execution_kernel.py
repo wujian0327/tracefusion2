@@ -132,11 +132,11 @@ def infer_execution(plan,rows):
                 allocation_count+=1;fr.stack.append(Value(allocation=allocation_count))
             elif op==178:fr.stack.append(Value(unknown=True))
             elif op==180:
-                receiver=pop();read=take('read');field_event(180,receiver,ins,read)
+                receiver=pop();read=take('read');field_event(180,receiver,ins,read,identity(receiver))
                 v=state.fields.get(coordinate(read),origin(read,read['seq']));v=field_transfer(180,v,v.observed)
                 fr.stack.append(v)
             elif op==181:
-                value,receiver=pop(),pop();write=take('write');field_event(181,receiver,ins,write)
+                value,receiver=pop(),pop();write=take('write');field_event(181,receiver,ins,write,identity(receiver))
                 bind(value,write['observed']);state.field_write(coordinate(write),field_transfer(181,value,write['observed']))
             elif op==192:pass  # Exact runtime invocation/schema checks retain the object identity.
             elif op in (96,97):
