@@ -7,6 +7,16 @@ def validate_application_writes(plan,rows):
     from collections import defaultdict
     from bisect import bisect_left
     from plan_execution_closure import application_value_fields,SCALARS
+    # A version clock belongs to a physical field, not a query root. Unknown
+    # intervals may hide writes, so require increase rather than inventing a
+    # no-intervening-write proof and demanding exactly +1.
+    last_write={}
+    for row in rows:
+        if row['kind']not in ('write','write-version'):continue
+        key=(row['owner'],row['field']);version=row['version']
+        require(type(version)is int and version>0,'Invalid actual field write version')
+        if key in last_write:require(version>last_write[key],'Physical field write version did not increase')
+        last_write[key]=version
     c=plan.get('execution_observation_closure',{});policy=c.get('application_write_values');observations=[r for r in rows if r['kind']=='write-version']
     if not policy:
         require(not observations,'Unplanned version-only write');return 0
@@ -50,7 +60,7 @@ def validate_application_writes(plan,rows):
             matches=[a for a in calls_by_target[(r['frame'],p['method'],r['owner'])] if a['call_id']in ends and a['seq']<r['seq']<ends[a['call_id']]['seq']]
             require(len(matches)==1,'Application setter call/owner missing or ambiguous')
         root=root_of(r['frame']);versions=version_evidence[(r['owner'],r['field'])];position=bisect_left(versions,(r['seq'],-1))
-        if position and versions[position-1][0]>=enters[root]['seq']:require(r['version']==versions[position-1][1]+1,'Application write counter does not follow observed version')
+        if position and versions[position-1][0]>=enters[root]['seq']:require(r['version']>versions[position-1][1],'Application write counter does not advance observed version')
         returns=returns_by_frame[root]
         for ret in returns:
             final=[f['version']for f in ret['fields']if f['owner']==r['owner']and f['field']==r['field']]
