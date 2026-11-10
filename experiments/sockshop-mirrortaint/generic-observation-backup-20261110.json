@@ -1,0 +1,27 @@
+{
+  "archives": [
+    {
+      "path": "artifacts/backups/generic-observation-rules-20261110/complete-round-final.tar.gz",
+      "bytes": 455780593,
+      "sha256": "f1211d0d2054920231eab895c87a8aad08aa545144888f96f0cc5bf4f163481a",
+      "gzip_crc": true
+    },
+    {
+      "path": "artifacts/backups/generic-observation-rules-20261110/runtime-image.tar.gz",
+      "bytes": 175314866,
+      "sha256": "d7165c4a1168a743277bc279b544a61dd0423f9c87daf1ae59b39953dbab2e39",
+      "gzip_crc": true
+    },
+    {
+      "path": "artifacts/backups/ruoyi-request-scope-20261104/jdk8-runtime.tar.gz",
+      "bytes": 57889824,
+      "sha256": "e3641e13fdfc55d455441f85793b071228ac235758a8e5dc7990d158b6552104",
+      "gzip_crc": true
+    }
+  ],
+  "earlier_archive_preserved": "artifacts/backups/generic-observation-rules-20261110/complete-round.tar.gz",
+  "runtime_image_id": "sha256:efeab1ce0ab9219386bc7138b8389149a9b7849e868632ca09340e4039a58982",
+  "artifact_manifest": "artifacts/generic-observation-rules-20261110/artifact-manifest-final.json",
+  "files_verified": 8453,
+  "scope": "Local backup, not off-site. Includes all initial failures, protocols, source and original JAR, raw JVM captures, original HTTP replies, model refusals and final controls. Existing JDK archive separately revalidated; no push."
+}

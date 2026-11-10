@@ -1,0 +1,198 @@
+{
+  "reference": "bcdf0590d1b22ea13717afded657a062f070e1df",
+  "candidate_offline_commit": "e01f954",
+  "online_agent_unchanged": true,
+  "contracts_unchanged": true,
+  "frozen_source_count": 139,
+  "unchanged_source_count": 138,
+  "unchanged_contract_count": 30,
+  "agent_sha256": "367cbb2300e507e5db4716c4e2fcbed1a39898c5e6c6f5f23583c4c1487e2764",
+  "new_core_fix": "Check actual root exit field versions even when target binding projection omits unrelated fields. Preserves all valid answers; rejects the confirmed contradiction.",
+  "same_execution_compatibility": [
+    {
+      "control": "remove-if",
+      "mode": "full",
+      "capture_sha256": "f3e51a026e9b891f8e0d172d72857093877ba53babfec0d94e2913af444cf2b4",
+      "answers": 10,
+      "entire_result_equal": true
+    },
+    {
+      "control": "remove-if",
+      "mode": "selective",
+      "capture_sha256": "48e20e64395c3f313e1ca92c4c3f975be828493309b2098a30b4186d8013779a",
+      "answers": 10,
+      "entire_result_equal": true
+    },
+    {
+      "control": "json-copy",
+      "mode": "full",
+      "capture_sha256": "d54d4d93c01a7ae5c20ffdd4a4756feb25fd16a38b6b5156cf777ce1e0313293",
+      "answers": 8,
+      "entire_result_equal": true
+    },
+    {
+      "control": "json-copy",
+      "mode": "selective",
+      "capture_sha256": "c42ee6a7a4c3cf5a0c90eb6fcf58a59f4718fae010e3d1bbbed299da1db92cad",
+      "answers": 8,
+      "entire_result_equal": true
+    },
+    {
+      "control": "json-copy-cold",
+      "mode": "full",
+      "capture_sha256": "f6b96ebeb652ef400b221a5d8f82b469004cade9d1437e1c57d0605db5d5b544",
+      "answers": 8,
+      "entire_result_equal": true
+    },
+    {
+      "control": "json-copy-cold",
+      "mode": "selective",
+      "capture_sha256": "a6e7f9534f102907e76b740574bc7d28cb05fe1969bc7d21b068d3baf4c22c25",
+      "answers": 8,
+      "entire_result_equal": true
+    },
+    {
+      "control": "write-values",
+      "mode": "full",
+      "capture_sha256": "13aabcdbc2422fca3554627843396bb62233d4280673912fb4af5d9c2005a075",
+      "answers": 34,
+      "entire_result_equal": true
+    },
+    {
+      "control": "write-values",
+      "mode": "selective",
+      "capture_sha256": "b2757143a847af95923ab88670ce8d954011204935f2870b0d4f823a6d0fe1e5",
+      "answers": 34,
+      "entire_result_equal": true
+    },
+    {
+      "control": "write-guard-off",
+      "mode": "full",
+      "capture_sha256": "094200ec824aa6bebf98a1af0afccd208d8935fd0ee3efaa7829cdac374b1edc",
+      "answers": 34,
+      "entire_result_equal": true
+    },
+    {
+      "control": "write-guard-off",
+      "mode": "selective",
+      "capture_sha256": "7196ce7d847d3861bbf70b6a58ba9502e525a55c455addda497a4f852dd6174c",
+      "answers": 34,
+      "entire_result_equal": true
+    },
+    {
+      "control": "member-slots",
+      "mode": "full",
+      "capture_sha256": "d2e0315c13407216f53c01885425fba6e11515ed271bc925ae80969b6858059b",
+      "answers": 4,
+      "entire_result_equal": true
+    },
+    {
+      "control": "member-slots",
+      "mode": "selective",
+      "capture_sha256": "651718b59768843d14b569ce5259f9cc13b1eff64640e1c17eb1296c6249aa84",
+      "answers": 4,
+      "entire_result_equal": true
+    }
+  ],
+  "online_signature_comparison": [
+    {
+      "control": "remove-if",
+      "target_status_version_source_occurrences_selectors_equal": true,
+      "physical_ids_compared_across_jvms": false
+    },
+    {
+      "control": "json-copy",
+      "target_status_version_source_occurrences_selectors_equal": true,
+      "physical_ids_compared_across_jvms": false
+    },
+    {
+      "control": "json-copy-cold",
+      "target_status_version_source_occurrences_selectors_equal": true,
+      "physical_ids_compared_across_jvms": false
+    },
+    {
+      "control": "write-values",
+      "target_status_version_source_occurrences_selectors_equal": true,
+      "physical_ids_compared_across_jvms": false
+    },
+    {
+      "control": "write-guard-off",
+      "target_status_version_source_occurrences_selectors_equal": true,
+      "physical_ids_compared_across_jvms": false
+    },
+    {
+      "control": "member-slots",
+      "target_status_version_source_occurrences_selectors_equal": true,
+      "physical_ids_compared_across_jvms": false
+    }
+  ],
+  "raw_writes": {
+    "version_only_writes": 4,
+    "target_writes_with_payload": 26,
+    "same_value_target_overwrites": [
+      {
+        "seq": 95,
+        "previous_version": 5,
+        "new_version": 6,
+        "value_retained": true
+      },
+      {
+        "seq": 313,
+        "previous_version": 13,
+        "new_version": 14,
+        "value_retained": true
+      },
+      {
+        "seq": 715,
+        "previous_version": 25,
+        "new_version": 26,
+        "value_retained": true
+      },
+      {
+        "seq": 933,
+        "previous_version": 33,
+        "new_version": 34,
+        "value_retained": true
+      }
+    ],
+    "omitted_writes_match_actual_exit_versions": true
+  },
+  "offline_projection": {
+    "status": "not_testable_as_a_positive_preservation_claim",
+    "reason": "Full capture header forbids omission; no pre-omission selective guard license is emitted. Runtime-disable capture also does not prove a successful guard. Never rewrite mode or manufacture a later completion license.",
+    "unlicensed_projection_refused": "Version-only write in disabled/full policy"
+  },
+  "petclinic": {
+    "queries": 2,
+    "original_requests": 7,
+    "actual_targets_per_mode": 10,
+    "tf_new_deployments": 0,
+    "known_correct": 0,
+    "physical_oracle_available": 0,
+    "planning_rejected_per_mode": 10,
+    "protocol_sha256": "ce8ac8890c1725d30512f19d2b92218521d6ec37b212dcd814c0582d0986da64",
+    "scope": "First static refusals and original obligations; not propagation FP/FN, not a successful new-application reuse."
+  },
+  "new_queries_frozen_before_first_planning": true,
+  "performance_experiment": false,
+  "limits": [
+    "No certified new-application reuse: both fixed queries statically rejected for JsonProperty schema.",
+    "No positive same-execution derived omission projection claim; pre-omission guard is unavailable in full capture.",
+    "Common transfer primitives are shared; no unified proof-object interface or automatic ownership."
+  ],
+  "sticky_footer_protections": [
+    {
+      "mode": "full",
+      "no_problem_events": true,
+      "no_sidecar": true,
+      "footer_refused": true
+    },
+    {
+      "mode": "selective",
+      "no_problem_events": true,
+      "no_sidecar": true,
+      "footer_refused": true
+    }
+  ],
+  "final_audit": "audit-final-01"
+}

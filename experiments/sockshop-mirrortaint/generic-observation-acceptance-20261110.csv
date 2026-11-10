@@ -1,0 +1,11 @@
+layer,test,mode,targets,known_correct,unknown,invalid,evidence,scope
+rule/online,removeIf,each,10,8,2,0 supported cases; unsupported subclass rejected,"same-valued independent reads, stable filter, callback writes/throw/CME; 6 faults rejected per mode","new frozen Agent, independent raw source facts"
+rule/online,toList initialized,each,8,5,3,0,identity reuse only; 7 faults rejected per mode,new frozen Agent
+rule/online,toList cold,each,8,4,4,0,"first initialization inside root stays unknown, complete business observations",no guard relaxation
+rule/online,application writes,each,34,26,8,0,2 abnormal roots separately; 6 call faults + 7 write faults rejected,26 target writes retain payload; selective 4 version-only writes
+rule/online,write runtime flag off,each,34,26,8,0,selective version-only 4->0; original target state/versions/origins/selectors kept,global license guard false before omission; full payload retained
+rule/online,null and scalar member slots,each,4,4,0,0,"sourced null, two equal scalar appearances, constant null, separate raw Store reads",local list; direct scalar-list boundary failure retained separately
+offline,same capture old/new validation,full/selective,12 complete captures,unchanged,unchanged,0,"entire replay result equal, including target versions/origins/selectors/root audit","offline compatibility, not same-execution projected omission"
+offline,derived write omission,full,not testable,N/A,N/A,unlicensed projection rejected,full header forbids omission; no synthesized guard/license,no positive offline preservation claim
+new application,Petclinic specialty-name,each,3,0,0,3 planning_rejected,JsonProperty target schema unsupported; original 3/3 requests HTTP200,physical source/target oracle absent; FP/FN blank
+new application,Petclinic owner-pet-names,each,7,0,0,7 planning_rejected,same first blocker before JPA effects; original 4/4 requests HTTP200,no fallback entry or public contract changes
