@@ -1,0 +1,53 @@
+{
+  "local_backup_only": true,
+  "no_push": true,
+  "archives": [
+    {
+      "path": "artifacts/backups/galette-static-baselines-20261111/complete-calibration-artifacts.tar.gz",
+      "bytes": 897702047,
+      "sha256": "7b4e520771870196f330de5c4c33a9c23d816a2225a0d5bb36e4760ea3fef997",
+      "gzip_CRC_passed": true
+    },
+    {
+      "path": "artifacts/backups/galette-static-baselines-20261111/build-image-jdk17.tar.gz",
+      "bytes": 283334887,
+      "sha256": "c73792c82f00ac78c3dfff558c64d02cd93fb3f6022305b917be37ff31b5ebab",
+      "gzip_CRC_passed": true
+    }
+  ],
+  "reused_verified_archives": [
+    {
+      "path": "artifacts/backups/ruoyi-zlt-refinement-20261103/actual-images.tar.gz",
+      "bytes": 2049513399,
+      "sha256": "cbd9959df39c9d9f40447c693e1b80498c37d4271f47c0fa4b4d4fc3d0134b8b",
+      "gzip_CRC_passed": true,
+      "reverified_this_round": true
+    },
+    {
+      "path": "artifacts/backups/ruoyi-request-scope-20261104/jdk8-runtime.tar.gz",
+      "bytes": 57889824,
+      "sha256": "e3641e13fdfc55d455441f85793b071228ac235758a8e5dc7990d158b6552104",
+      "gzip_CRC_passed": true,
+      "reverified_this_round": true
+    }
+  ],
+  "business_image_references_to_IDs": {
+    "mongo@sha256:d314f7eca9d3f825d091b77c40d2f3c9d6fff4de88dde2962527353476f107ba": "sha256:f76f959b2a4947330df7b5878e81dc268f19f3fa4cef9d1ac8a992d2776eab73",
+    "rabbitmq@sha256:a9f4923559bbcd00b93b02e61615aef5eb6f1d1c98db51053bab0fa6b680db26": "sha256:8cdcbee37f622c52f2b8a572577c4aa94daed06ffe8c3292c93141ed50bef248",
+    "sha256:16b80569968fb112fee59fdbaeda7a5fe9b3d534ba1cf212f33afe1d1089fe75": "sha256:16b80569968fb112fee59fdbaeda7a5fe9b3d534ba1cf212f33afe1d1089fe75",
+    "sha256:2481edb3016c3749e400daea78a7d2a9d288286105bac729d63adfef95e8534d": "sha256:2481edb3016c3749e400daea78a7d2a9d288286105bac729d63adfef95e8534d",
+    "sha256:5107333e08a87b836d48ff7528b1e84b9c86781cc9f1748bbc1b8c42a870d933": "sha256:5107333e08a87b836d48ff7528b1e84b9c86781cc9f1748bbc1b8c42a870d933",
+    "sha256:938169b118c773c6721bbf701c3a64be9e4f7c0b4c5315bb328466e1c49274fa": "sha256:938169b118c773c6721bbf701c3a64be9e4f7c0b4c5315bb328466e1c49274fa",
+    "sha256:efeab1ce0ab9219386bc7138b8389149a9b7849e868632ca09340e4039a58982": "sha256:efeab1ce0ab9219386bc7138b8389149a9b7849e868632ca09340e4039a58982"
+  },
+  "business_images_covered_by_reused_archive": true,
+  "new_build_image": "sha256:0f909120a5780e04d8cb0aa2f4bd04de2579ff60528719ffb09e3611423534fb",
+  "original_external_inputs": {
+    "manifest": "artifacts/galette-static-baselines-20261111/required-inputs/manifest.json",
+    "sha256": "e81bb02eaf49a9c63d8d588bbf4fbe909fc4e6461a0177c0662e99439fc4d293",
+    "included_in_complete_archive": true
+  },
+  "core_and_driver_source_snapshots_included": true,
+  "all_failures_retained": true,
+  "formal_deployments": 0
+}

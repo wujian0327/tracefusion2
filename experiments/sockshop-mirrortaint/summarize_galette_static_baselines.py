@@ -124,6 +124,14 @@ def run(home, out):
               'static_definition': 'Existing fixed conservative permissions with original validity guards; live-locality body omission disabled. Same binary uses service.mode=selective plus explicit body=false.',
               'static_runtime_cost_boundary': 'Frozen Agent still computes/emits body eligibility evidence when body selection is disabled; equal cuts are not evidence of equal decision cost or pure-static runtime.',
               'cost_conclusions': 'No new formal timing or external ranking. Short counts do not prove CPU improvement.'}
+    empty = home/'empty-control/original/result.json'
+    if empty.exists():
+        result['User_empty_page_control'] = {
+            'original_result': load(empty), 'protocol': str(home/'empty-control-before-runs.json'),
+            'main_six_inputs_preserved': True,
+            'first_blocker': 'Original empty user page proceeds to a role query ending in user_id IN without members; Druid EOFParserException, HTTP500.',
+            'TF_MT_empty_control_not_run': True, 'empty_control_passed': False,
+            'not_added_to_positive_target_denominator': True}
     write_csv(out/'calibration.csv', table); write_csv(out/'instances.csv', instances); write_csv(out/'work.csv', work)
     save(out/'summary.json', result)
     save(out/'input-manifest.json', {str(p): sha(p) for p in sorted(home.rglob('calibration.json'))})

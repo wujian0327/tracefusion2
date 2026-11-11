@@ -1,0 +1,37 @@
+task,configuration,original_targets,business_requests,business_correct,physical_binding,source_facts_adequate,correct,wrong,unknown,rejected_or_invalid,unscored,state,first_blocker,evidence
+low,original,6,6,6,,,0,0,0,0,6,original_business_reference,No provenance instrumentation; source prediction not applicable,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-504/controlled-low-original
+low,mirrortaint,6,6,6,6,True,6,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-504/controlled-low-mirrortaint
+low,galette,6,6,,,,0,0,0,0,6,not_run_after_compatibility_blocker,high original JAR: MethodHandleImpl$BindCaller$T.finalize(TagFrame) VerifyError before query/adapter,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/tool-build-receipt.json
+low,full,6,6,6,6,True,6,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-504/controlled-low-full
+low,static,6,6,6,6,True,6,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-504/controlled-low-static
+low,selective,6,6,6,6,True,6,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-504/controlled-low-selective
+medium,original,6,6,6,,,0,0,0,0,6,original_business_reference,No provenance instrumentation; source prediction not applicable,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-504/controlled-medium-original
+medium,mirrortaint,6,6,6,6,True,6,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-504/controlled-medium-mirrortaint
+medium,galette,6,6,,,,0,0,0,0,6,not_run_after_compatibility_blocker,high original JAR: MethodHandleImpl$BindCaller$T.finalize(TagFrame) VerifyError before query/adapter,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/tool-build-receipt.json
+medium,full,6,6,6,6,True,6,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-504/controlled-medium-full
+medium,static,6,6,6,6,True,6,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-504/controlled-medium-static
+medium,selective,6,6,6,6,True,6,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-504/controlled-medium-selective
+high,original,6,6,6,,,0,0,0,0,6,original_business_reference,No provenance instrumentation; source prediction not applicable,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-504/controlled-high-original
+high,mirrortaint,6,6,6,6,True,6,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-504/controlled-high-mirrortaint
+high,galette,6,6,0,,,0,0,0,0,6,startup_blocked_unscored,high original JAR: MethodHandleImpl$BindCaller$T.finalize(TagFrame) VerifyError before query/adapter,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/galette-boot-high-02
+high,full,6,6,6,6,True,6,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-504/controlled-high-full
+high,static,6,6,6,6,True,6,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-504/controlled-high-static
+high,selective,6,6,6,6,True,6,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-504/controlled-high-selective
+related-high,original,6,6,6,,,0,0,0,0,6,original_business_reference,No provenance instrumentation; source prediction not applicable,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-504/controlled-related-high-original
+related-high,mirrortaint,6,6,6,6,True,6,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-504/controlled-related-high-mirrortaint
+related-high,galette,6,6,,,,0,0,0,0,6,not_run_after_compatibility_blocker,high original JAR: MethodHandleImpl$BindCaller$T.finalize(TagFrame) VerifyError before query/adapter,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/tool-build-receipt.json
+related-high,full,6,6,6,6,True,6,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-504/controlled-related-high-full
+related-high,static,6,6,6,6,True,6,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-504/controlled-related-high-static
+related-high,selective,6,6,6,6,True,6,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-504/controlled-related-high-selective
+mall,original,6,6,6,,,0,0,0,0,6,original_business_reference,No provenance instrumentation; source prediction not applicable,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-business-504/mall-original
+mall,mirrortaint,6,6,6,6,True,6,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-business-504/mall-mirrortaint
+mall,galette,6,6,,,,0,0,0,0,6,not_run_after_compatibility_blocker,high original JAR: MethodHandleImpl$BindCaller$T.finalize(TagFrame) VerifyError before query/adapter,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/tool-build-receipt.json
+mall,full,6,6,6,6,True,6,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-business-504/mall-full
+mall,static,6,6,6,6,True,6,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-business-504/mall-static
+mall,selective,6,6,6,6,True,6,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-business-504/mall-selective
+zlt-user,original,9,6,6,,,0,0,0,0,9,original_business_reference,No provenance instrumentation; source prediction not applicable,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-business-504/zlt-user-original
+zlt-user,mirrortaint,9,6,6,9,True,9,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-business-504/zlt-user-mirrortaint
+zlt-user,galette,9,6,,,,0,0,0,0,9,not_run_after_compatibility_blocker,high original JAR: MethodHandleImpl$BindCaller$T.finalize(TagFrame) VerifyError before query/adapter,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/tool-build-receipt.json
+zlt-user,full,9,6,6,9,True,9,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-business-504/zlt-user-full
+zlt-user,static,9,6,6,9,True,9,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-business-504/zlt-user-static
+zlt-user,selective,9,6,6,9,True,9,0,0,0,0,calibrated,,/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/short-business-504/zlt-user-selective

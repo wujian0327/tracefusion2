@@ -1,0 +1,83 @@
+{
+  "galette_commit": "bc6002cc5ee4d6eaa30518b2d176a9831d77cb1a",
+  "original_source_clean": true,
+  "build_JDK_and_Maven": "openjdk version \"17.0.5\" 2022-10-18\nOpenJDK Runtime Environment Temurin-17.0.5+8 (build 17.0.5+8)\nOpenJDK 64-Bit Server VM Temurin-17.0.5+8 (build 17.0.5+8, mixed mode, sharing)\nApache Maven 3.8.6 (84538c9988a25aec085021c365c560670ad80f63)\nMaven home: /usr/share/maven\nJava version: 17.0.5, vendor: Eclipse Adoptium, runtime: /opt/java/openjdk\nDefault locale: en_US, platform encoding: UTF-8\nOS name: \"linux\", version: \"6.18.54.1-microsoft-standard-wsl2\", arch: \"amd64\", family: \"unix\"\na2d624a7306157ec5b15957a094cc69aabb42599af02e97329a86e05f45cfb47  /opt/java/openjdk/bin/java\n77cadfcd24bda135a19cc6096ff57c85087778686532208b4078392d844069ea  /opt/java/openjdk/lib/modules\n",
+  "files": {
+    "/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/galette-original/galette-agent/target/galette-agent-1.0.0-SNAPSHOT.jar": {
+      "sha256": "cbb34a9e713b3ca506a3c0cb64add2a9b1ad3aba217e59ab99bd84c5f789d27e",
+      "bytes": 480488
+    },
+    "/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/galette-original/galette-instrument/target/galette-instrument-1.0.0-SNAPSHOT.jar": {
+      "sha256": "9339916573593c6420ea3292f743b027421dab1e7aaab75280ecdab210180a62",
+      "bytes": 1003571
+    },
+    "/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/runtime-base/java-8-openjdk-amd64/bin/java": {
+      "sha256": "68e380b6a96f0032786f90ff89cc76bd25cd2ceeffe063a9400c89a734a8df37",
+      "bytes": 14632
+    },
+    "/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/runtime-base/java-8-openjdk-amd64/jre/lib/rt.jar": {
+      "sha256": "8f20323f5d69f9d46a6a9ef67621a01d7a2704ad9b79afc7fb4f97192f600e6b",
+      "bytes": 65732721
+    },
+    "/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/runtime-base/java-8-openjdk-amd64/jre/lib/amd64/server/libjvm.so": {
+      "sha256": "fba4526059a3b4da8382b90750ad307136e26b99c8316a06e1c783d57185a6a7",
+      "bytes": 14491744
+    },
+    "/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/jdk8-galette/bin/java": {
+      "sha256": "68e380b6a96f0032786f90ff89cc76bd25cd2ceeffe063a9400c89a734a8df37",
+      "bytes": 14632
+    },
+    "/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/jdk8-galette/jre/lib/rt.jar": {
+      "sha256": "30bceb4a5ad39cfa50da3fd143832ad3d8e83b84feb6fc46f6fcaeb57f476341",
+      "bytes": 227756894
+    },
+    "/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/jdk8-galette/jre/lib/amd64/server/libjvm.so": {
+      "sha256": "fba4526059a3b4da8382b90750ad307136e26b99c8316a06e1c783d57185a6a7",
+      "bytes": 14491744
+    }
+  },
+  "rt_class_changes": {
+    "original_classes": 19896,
+    "instrumented_classes": 19896,
+    "changed_common_classes": 19895,
+    "added_classes": 0,
+    "removed_classes": 0
+  },
+  "build_first_attempt": {
+    "state": "failed",
+    "Maven_wall_seconds": 242,
+    "reason": "Patcher temp JAR rename across mounts failed; no source edit."
+  },
+  "build_second_attempt": {
+    "state": "success",
+    "Maven_wall_seconds": 88,
+    "temp_directory_only_change": true,
+    "CPU_seconds": null
+  },
+  "JDK_instrumentation": {
+    "reported_core_ms": 11404,
+    "process_wall_seconds": 11.47,
+    "process_user_seconds": 18.57,
+    "process_system_seconds": 7.43,
+    "max_rss_KiB": 779516,
+    "format": "GNU time diagnostic preparation; not business measurement"
+  },
+  "runtime_API_probe": "passed, three assertions; not business provenance calibration",
+  "caller_sensitive_probe": {
+    "original": "passed",
+    "galette": "VerifyError before source adapter"
+  },
+  "business_preflight": {
+    "high": "startup VerifyError in MethodHandleImpl$BindCaller$T.finalize(TagFrame)",
+    "source_adapter_present": false,
+    "formal_gate_passed": false,
+    "other_Galette_tasks": "not run; no inferred propagation errors"
+  },
+  "contracts": 25,
+  "TF_Agent_sha256": "367cbb2300e507e5db4716c4e2fcbed1a39898c5e6c6f5f23583c4c1487e2764",
+  "full_contract_runtime_JSON_count": 30,
+  "frozen_core_reference": "c866d670628610d5abf3242318581c575e1c9fb6",
+  "prior_measurement_reference": "c8918bf8b0ed6ac90c0065558fe4df540bd76a2c",
+  "old_measurements_not_relabelled": true,
+  "protocol_sha256": "92a443a15c304d1c2b06db740cc3532ae03b97f7b224326b5ad83c49d9d14b10"
+}

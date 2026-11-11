@@ -1,0 +1,19 @@
+task,configuration,events,boundary_scalars,boundary_members,constructor_writes,ordinary_writes,body_eligible,body_selected,body_reads,body_branches,field_hooks,protocol_bytes,requests,scope
+low,full,114,0,0,0,0,0,0,0,0,108,44129,6,complete short capture including startup; no speed inference
+low,static,114,48,0,0,0,0,0,0,0,54,39849,6,complete short capture including startup; no speed inference
+low,selective,114,48,0,0,0,0,0,0,0,54,39849,6,complete short capture including startup; no speed inference
+medium,full,450,0,0,0,0,0,0,0,0,780,179147,6,complete short capture including startup; no speed inference
+medium,static,450,384,0,0,0,0,0,0,0,390,144636,6,complete short capture including startup; no speed inference
+medium,selective,450,384,0,0,0,0,0,0,0,390,144636,6,complete short capture including startup; no speed inference
+high,full,1602,0,0,0,0,0,0,0,0,3084,651975,6,complete short capture including startup; no speed inference
+high,static,1602,1536,0,0,0,0,0,0,0,1542,509772,6,complete short capture including startup; no speed inference
+high,selective,1602,1536,0,0,0,0,0,0,0,1542,509772,6,complete short capture including startup; no speed inference
+related-high,full,3150,0,0,0,0,0,0,0,0,4632,961533,6,complete short capture including startup; no speed inference
+related-high,static,3150,0,0,0,0,0,0,0,0,3090,961532,6,complete short capture including startup; no speed inference
+related-high,selective,3150,0,0,0,0,0,0,0,0,3090,961532,6,complete short capture including startup; no speed inference
+mall,full,2491,0,0,0,0,6,0,0,0,1140,1398965,6,complete short capture including startup; no speed inference
+mall,static,2293,270,36,0,6,6,0,0,0,552,1286391,6,complete short capture including startup; no speed inference
+mall,selective,2227,270,36,0,6,6,6,30,36,522,1279100,6,complete short capture including startup; no speed inference
+zlt-user,full,2729,0,0,0,0,0,0,0,0,951,1337896,6,complete short capture including startup; no speed inference
+zlt-user,static,2518,759,0,0,0,0,0,0,0,473,1155933,6,complete short capture including startup; no speed inference
+zlt-user,selective,2518,759,0,0,0,0,0,0,0,473,1155934,6,complete short capture including startup; no speed inference
