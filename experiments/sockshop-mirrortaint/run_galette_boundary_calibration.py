@@ -6,6 +6,8 @@ from run_planned_service import ROOT,HERE,load,save,sha
 from run_query_planner import JARS
 from diagnose_galette_hosted_template import H,OLD
 
+ADAPTER=H/'boundary-build-08/boundary-adapter.jar'
+
 
 def build(out):
     out.mkdir(parents=True,exist_ok=False);classes=out/'classes';classes.mkdir()
@@ -29,7 +31,7 @@ def controlled(tier,out):
     import run_unrelated_work_scaling as old
     from run_galette_static_calibration import fixed_runtime,verify
     os.environ['TF_CALIBRATION_FIXED_RUNTIME']='1';verify();old.H=OLD;old.verify=verify
-    config=load(OLD/'controlled-build-04'/tier/'mt-config.json');adapter=H/'boundary-build-06/boundary-adapter.jar'
+    config=load(OLD/'controlled-build-04'/tier/'mt-config.json');adapter=ADAPTER
     props=H/('boundary-'+tier+'-v3.properties')
     if not props.exists():props.write_text('entry='+config['entry']+'\nprefix='+config['prefix']+'\nsources='+'|'.join(config['source_calls'])+'\ntarget=/target\n')
     spec=old.controlled_spec;agent=OLD/'galette-original/galette-agent/target/galette-agent-1.0.0-SNAPSHOT.jar'
@@ -84,7 +86,7 @@ def mall(out):
     task=load(OLD/'protocol-before-calibration.json')['tasks']['mall']
     props=H/'boundary-mall-v1.properties'
     if not props.exists():props.write_text('entry='+load(Path(task['plan']))['entry']+'\nprefix=com/macro/mall/\nsources='+'|'.join(task['source_calls_exact'])+'\ntarget=/data/expiresIn\n')
-    agent=OLD/'galette-original/galette-agent/target/galette-agent-1.0.0-SNAPSHOT.jar';adapter=H/'boundary-build-06/boundary-adapter.jar'
+    agent=OLD/'galette-original/galette-agent/target/galette-agent-1.0.0-SNAPSHOT.jar';adapter=ADAPTER
     original=run.spec
     def configured(dest,mode):
         cfg=fixed_runtime(original(dest,'original'));s=cfg['services']['admin']
@@ -142,7 +144,7 @@ def zlt(out):
     ref=ROOT/'artifacts/shared-transfer-optimization-20261106/final-candidate';run.FINAL=ref;run.verify=verify;run.fresh=lambda *a:None
     task=load(OLD/'protocol-before-calibration.json')['tasks']['zlt-user'];props=H/'boundary-zlt-v1.properties'
     if not props.exists():props.write_text('entry='+load(Path(task['plan']))['entry']+'\nprefix=com/central/\nsources='+'|'.join(task['source_calls_exact'])+'\ntarget=/data/*/username\n')
-    agent=OLD/'galette-original/galette-agent/target/galette-agent-1.0.0-SNAPSHOT.jar';adapter=H/'boundary-build-06/boundary-adapter.jar';spec=run.zlt_spec
+    agent=OLD/'galette-original/galette-agent/target/galette-agent-1.0.0-SNAPSHOT.jar';adapter=ADAPTER;spec=run.zlt_spec
     def configured(home,dest,which,mode,projection_off=False):
         cfg,q=spec(home,dest,which,'original',False);cfg=fixed_runtime(cfg);s=cfg['services'][q['role']]
         s['volumes']=[v for v in s['volumes']if v.split(':')[1]!='/approved-jdk']+[str(H/'modified-jre8-02')+':/approved-jdk:ro',str(agent)+':/galette-agent.jar:ro',str(adapter)+':/boundary-adapter.jar:ro',str(props)+':/boundary.properties:ro',str(dest/'capture')+':/tf2/capture:rw']
@@ -173,8 +175,9 @@ def zlt(out):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--build',type=Path);p.add_argument('--tier',choices=('low','medium','high','related-high','mall','zlt-user'));p.add_argument('--out',type=Path)
+    p=argparse.ArgumentParser();p.add_argument('--build',type=Path);p.add_argument('--tier',choices=('low','medium','high','related-high','mall','zlt-user'));p.add_argument('--out',type=Path);p.add_argument('--adapter',type=Path,help='Explicit adapter artifact; default is the finite Class-export revision')
     a=p.parse_args()
+    if a.adapter:ADAPTER=a.adapter.resolve()
     if a.build:build(a.build.resolve())
     elif a.tier=='mall':mall(a.out.resolve())
     elif a.tier=='zlt-user':zlt(a.out.resolve())
