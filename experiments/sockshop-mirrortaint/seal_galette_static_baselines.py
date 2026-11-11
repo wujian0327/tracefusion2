@@ -63,7 +63,9 @@ def run(home):
     jdk = Path('/usr/lib/jvm/java-8-openjdk-amd64')
     for n in ('bin/java', 'bin/javac', 'jre/lib/rt.jar', 'jre/lib/amd64/server/libjvm.so'):
         files.add(str(jdk/n))
-    contracts = sorted(HERE.glob('*contracts*.json'))
+    # Include runtime/value/effect registrations whose names do not contain
+    # "contracts". All were already protected by the complete core manifest.
+    contracts = sorted(Path(p) for p in freeze['core_sources'] if p.endswith('.json'))
     receipt = {'main_before_work': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
                'measurement_reference': 'c8918bf8b0ed6ac90c0065558fe4df540bd76a2c',
                'offline_fix_reference': 'c866d670628610d5abf3242318581c575e1c9fb6',
