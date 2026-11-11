@@ -66,11 +66,16 @@ def run(out):
                 norm.extend([{'case':t['case'],'known':False}for a in answers])
             else:
                 assert len(answers)==1;a=answers[0];want=t['expected']
-                assert a['known']and set(map(tuple,a['origins']))==set(map(tuple,want['origins']))
-                assert set(map(tuple,a['selectors']))==set(map(tuple,want['selectors'])),(mode,t,a)
-                assert a['owner']==t['raw_text_fields'][t['case']][1]['owner']and a['version']==t['raw_text_fields'][t['case']][1]['version']
-                norm.append({'case':t['case'],'known':True,'selected_read':t['case'],'version':a['version'],'data_fields':['text'],'selector_fields':['Store.read[0].id','Store.read[1].id','Gate.read.index']})
-            checks.append({'case':t['case'],'answers':answers})
+                data_ok=a['known']and set(map(tuple,a['origins']))==set(map(tuple,want['origins']))
+                selection_ok=set(map(tuple,a['selectors']))==set(map(tuple,want['selectors']))
+                version_ok=a['owner']==t['raw_text_fields'][t['case']][1]['owner']and a['version']==t['raw_text_fields'][t['case']][1]['version']
+                roles={tuple(x[0]):'Store.read[%d].text'%i for i,x in enumerate(t['raw_text_fields'])}
+                roles.update({tuple(x[0]):'Store.read[%d].id'%i for i,x in enumerate(t['raw_id_fields'])});roles[tuple(t['raw_choice'][0])]='Gate.read.index'
+                norm.append({'case':t['case'],'known':a['known'],'version':a['version'],
+                    'actual_data_roles':sorted(roles[tuple(x)]for x in a['origins']),
+                    'actual_selector_roles':sorted(roles[tuple(x)]for x in a['selectors']),
+                    'data_correct':data_ok,'selection_correct':selection_ok,'version_correct':version_ok})
+            checks.append({'case':t['case'],'answers':answers,'expected':t['expected']})
         guards=[]
         for fault in ('missing-predicate-frame','duplicate-predicate-frame','wrong-predicate-object','missing-choice-source-field'):
             changed=copy.deepcopy(rows);call=next(r for r in changed if r['kind']=='collection-call-enter'and r.get('remove_if_start'))
@@ -84,12 +89,19 @@ def run(out):
             except (ValueError,KeyError):guards.append({'fault':fault,'state':'rejected'})
             else:
                 root=next(r for r in changed if r['kind']=='binding-return'and r.get('message')==truth[0]['message'])['frame']
-                assert all(not a['known']for a in bad['answers']if a['root_frame']==root),fault
-                guards.append({'fault':fault,'state':'unknown'})
-        normalized[mode]=norm;results[mode]={'business_preserved':True,'positive_targets':2,'nonempty_selector_targets':2,'required_unknown_targets':2,'checks':checks,'guards':guards}
+                guarded=all(not a['known']for a in bad['answers']if a['root_frame']==root)
+                guards.append({'fault':fault,'state':'unknown'if guarded else'incorrect_known_answer','answers':[a for a in bad['answers']if a['root_frame']==root]})
+        positive=[n for n in norm if n['case']!=2]
+        normalized[mode]=norm;results[mode]={'business_preserved':True,'positive_targets':2,
+            'data_correct':sum(n['data_correct']for n in positive),
+            'version_correct':sum(n['version_correct']for n in positive),
+            'expected_nonempty_selector_targets':2,'correct_nonempty_selector_targets':sum(n['selection_correct']for n in positive),
+            'required_unknown_targets':2,'checks':checks,'guards':guards,
+            'correctness_gate_passed':all(n['data_correct']and n['version_correct']and n['selection_correct']for n in positive)and not any(g['state']=='incorrect_known_answer'for g in guards)}
         save(d/'checks.json',results[mode])
     assert normalized['full']==normalized['static']==normalized['selective']
-    save(out/'results.json',{'Agent_sha256':sha(AGENT),'plan_sha256':sha(out/'plan.json'),'modes':results,'normalized_equal':True,'static_label':'fixed-permission/body-off','new_business_coverage':False,'body_reduction_claim':False})
+    save(out/'normalized.json',normalized)
+    save(out/'results.json',{'Agent_sha256':sha(AGENT),'plan_sha256':sha(out/'plan.json'),'modes':results,'normalized_equal':True,'correctness_gate_passed':all(r['correctness_gate_passed']for r in results.values()),'original_expected_selectors_not_relaxed':True,'static_label':'fixed-permission/body-off','new_business_coverage':False,'body_reduction_claim':False})
 
 
 if __name__=='__main__':

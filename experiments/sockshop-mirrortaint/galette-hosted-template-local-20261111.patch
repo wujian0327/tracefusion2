@@ -1,0 +1,43 @@
+diff --git a/galette-instrument/src/main/java/edu/neu/ccs/prl/galette/instrument/GaletteInstrumentation.java b/galette-instrument/src/main/java/edu/neu/ccs/prl/galette/instrument/GaletteInstrumentation.java
+index aaf1643..7b6a09d 100644
+--- a/galette-instrument/src/main/java/edu/neu/ccs/prl/galette/instrument/GaletteInstrumentation.java
++++ b/galette-instrument/src/main/java/edu/neu/ccs/prl/galette/instrument/GaletteInstrumentation.java
+@@ -10,6 +10,9 @@ import java.util.Properties;
+ import java.util.Set;
+ import java.util.function.BiFunction;
+ import java.util.function.Function;
++import java.security.MessageDigest;
++import java.security.NoSuchAlgorithmException;
++import org.objectweb.asm.ClassReader;
+ 
+ /**
+  * Instances of this class are created via reflection.
+@@ -38,7 +41,27 @@ public class GaletteInstrumentation implements Instrumentation {
+ 
+     @Override
+     public byte[] apply(byte[] classFileBuffer) {
+-        return transformer.transform(classFileBuffer, false);
++        // Local compatibility patch: this JDK8 resource is a bytecode template
++        // later defined by Unsafe.defineAnonymousClass under a foreign host.
++        // Instrument it in that context now; the runtime correctly refuses to
++        // instrument already-tagged class bytes for a second time.
++        boolean hosted = "java/lang/invoke/MethodHandleImpl$BindCaller$T".equals(
++                new ClassReader(classFileBuffer).getClassName());
++        if (hosted && !templateHash(classFileBuffer).equals("ee9f212cefb91ba16a5f4741021e80449ee172ba034bb3cbbce4b26534d24b26")) {
++            throw new IllegalArgumentException("Unreviewed BindCaller template for local hosting patch");
++        }
++        return transformer.transform(classFileBuffer, hosted);
++    }
++
++    private static String templateHash(byte[] bytes) {
++        try {
++            byte[] digest = MessageDigest.getInstance("SHA-256").digest(bytes);
++            StringBuilder hex = new StringBuilder();
++            for (byte value : digest) hex.append(String.format("%02x", value & 255));
++            return hex.toString();
++        } catch (NoSuchAlgorithmException error) {
++            throw new IllegalStateException(error);
++        }
+     }
+ 
+     @Override
