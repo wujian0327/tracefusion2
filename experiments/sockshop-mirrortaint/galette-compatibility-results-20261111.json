@@ -1,0 +1,126 @@
+{
+  "TF_core_files_unchanged": 140,
+  "TF_Agent_sha256": "367cbb2300e507e5db4716c4e2fcbed1a39898c5e6c6f5f23583c4c1487e2764",
+  "ordinary_to_modified_rt_changed_classes": [
+    "java/lang/invoke/MethodHandleImpl$BindCaller$T.class"
+  ],
+  "official_test_results": {
+    "official-tests-related-02": {
+      "counts": {
+        "suites": 3,
+        "tests": 260,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 260
+      },
+      "skip_reasons": {}
+    },
+    "official-tests-full": {
+      "counts": {
+        "suites": 34,
+        "tests": 1381,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 153,
+        "passed": 1228
+      },
+      "skip_reasons": {
+        "Unimplemented": 3,
+        "Disabled on JRE version: 1.8.0_504": 150
+      }
+    },
+    "modified-tests-full": {
+      "counts": {
+        "suites": 34,
+        "tests": 1381,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 153,
+        "passed": 1228
+      },
+      "skip_reasons": {
+        "Unimplemented": 3,
+        "Disabled on JRE version: 1.8.0_504": 150
+      }
+    }
+  },
+  "modified_Galette_targets_verified": 39,
+  "branch_predicate_selection_gate": false,
+  "direct_predicate_selection_gate": true,
+  "static_label": "fixed-permission/body-off",
+  "formal_gate_passed": false,
+  "formal_deployments": 0,
+  "formal_cost": null,
+  "artifact_home": "artifacts/galette-compatibility-selection-20261111",
+  "common_task_calibration": [
+    {
+      "task": "low",
+      "variant": "modified Galette",
+      "targets": 6,
+      "correct": 6,
+      "wrong_known": 0,
+      "source_calls_paired": 6,
+      "physical_truth_independent": true,
+      "selectors": "not compared; explicit data only",
+      "artifact": "artifacts/galette-compatibility-selection-20261111/final-low-01"
+    },
+    {
+      "task": "medium",
+      "variant": "modified Galette",
+      "targets": 6,
+      "correct": 6,
+      "wrong_known": 0,
+      "source_calls_paired": 6,
+      "physical_truth_independent": true,
+      "selectors": "not compared; explicit data only",
+      "artifact": "artifacts/galette-compatibility-selection-20261111/final-medium-01"
+    },
+    {
+      "task": "high",
+      "variant": "modified Galette",
+      "targets": 6,
+      "correct": 6,
+      "wrong_known": 0,
+      "source_calls_paired": 6,
+      "physical_truth_independent": true,
+      "selectors": "not compared; explicit data only",
+      "artifact": "artifacts/galette-compatibility-selection-20261111/final-high-02"
+    },
+    {
+      "task": "related-high",
+      "variant": "modified Galette",
+      "targets": 6,
+      "correct": 6,
+      "wrong_known": 0,
+      "source_calls_paired": 6,
+      "physical_truth_independent": true,
+      "selectors": "not compared; explicit data only",
+      "artifact": "artifacts/galette-compatibility-selection-20261111/final-related-high-01"
+    },
+    {
+      "task": "mall",
+      "variant": "modified Galette",
+      "targets": 6,
+      "correct": 6,
+      "wrong_known": 0,
+      "source_calls_paired": 6,
+      "login_log_rows": 6,
+      "physical_truth_independent": true,
+      "selectors": "not compared; explicit data only",
+      "artifact": "artifacts/galette-compatibility-selection-20261111/final-mall-01"
+    },
+    {
+      "task": "zlt-user",
+      "variant": "modified Galette",
+      "targets": 9,
+      "correct": 9,
+      "wrong_known": 0,
+      "source_calls_paired": 6,
+      "physical_truth_independent": true,
+      "selectors": "not compared; explicit data only",
+      "artifact": "artifacts/galette-compatibility-selection-20261111/final-zlt-user-03"
+    }
+  ],
+  "adapter_scope_note": "Five tasks adapter06; ZLT adapter08 finite Class extension; distinct hashes retained, not one identical adapter build."
+}

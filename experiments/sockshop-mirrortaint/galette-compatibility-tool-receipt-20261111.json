@@ -1,0 +1,129 @@
+{
+  "main_before_work": "f01418c7d229de46a7ecacdef659509c39f47765",
+  "delivery_code_commit": "2d88bba7e6392fd957b1663eac0b12c1526f313a",
+  "official_Galette_pin": "bc6002cc5ee4d6eaa30518b2d176a9831d77cb1a",
+  "variant": "modified Galette; pinned hashed hosted-template instrumentation patch; original propagation Agent",
+  "original_result_preserved": true,
+  "TF_core_Agent_contracts_unchanged": true,
+  "base_JDK": "OpenJDK8u504; same original JVM binary; instrumented Java class library differs",
+  "tool_patch": {
+    "label": "modified Galette / pinned JDK8 runtime hosted-template patch",
+    "official_pin": "bc6002cc5ee4d6eaa30518b2d176a9831d77cb1a",
+    "patch": "/home/wujian/tracefusion2/artifacts/galette-compatibility-selection-20261111/local-hosted-template.patch",
+    "patch_sha256": "91ef5043acfdeb11799d8bd9cb321e6c44ab52b3b4c277f3ae9bfbbbe9043872",
+    "modified_component": "galette-instrument GaletteInstrumentation.apply only; original propagation Agent will be used",
+    "guard": "Exact template name and SHA256; unknown template hashes fail instrumentation",
+    "source_JRE": "Original OpenJDK8u504 JDK jre directory, same scope as official Maven plugin",
+    "previous_full_JDK_attempt": "Rejected the separate ct.sym compiler signature stub; preserved, not relaxed",
+    "no_JVM_verification_disabled": true,
+    "no_runtime_class_exclusions_added": true,
+    "TF_changes": false
+  },
+  "runtime_probes": {
+    "probes": {
+      "GaletteCallerSensitiveProbe": {
+        "returncode": 0,
+        "stdout": "CALLER_SENSITIVE_OK\n"
+      },
+      "GaletteRuntimeProbe": {
+        "returncode": 0,
+        "stdout": "GALETTE_RUNTIME_API_PROBE_OK\n"
+      }
+    },
+    "official_runtime_Agent_sha256": "cbb34a9e713b3ca506a3c0cb64add2a9b1ad3aba217e59ab99bd84c5f789d27e",
+    "recompiled_Agent_classes_identical": true,
+    "JVM_binary_matches_base": true,
+    "patched_runtime_files": {
+      "/home/wujian/tracefusion2/artifacts/galette-compatibility-selection-20261111/modified-jre8-02/bin/java": "68e380b6a96f0032786f90ff89cc76bd25cd2ceeffe063a9400c89a734a8df37",
+      "/home/wujian/tracefusion2/artifacts/galette-compatibility-selection-20261111/modified-jre8-02/lib/rt.jar": "8f0db634bf0607f2c582f7502dcc71e81ad8f3440297810037876f6c74ca5e12",
+      "/home/wujian/tracefusion2/artifacts/galette-compatibility-selection-20261111/modified-jre8-02/lib/amd64/server/libjvm.so": "fba4526059a3b4da8382b90750ad307136e26b99c8316a06e1c783d57185a6a7"
+    }
+  },
+  "adapter_versions": {
+    "6": {
+      "adapter_sha256": "8d709a134e6d6ed38092d041a68b720c473000174dd7d61061bdeb3b60a0d55f",
+      "source_hashes": {
+        "GaletteBoundaryAgent.java": "f0c9294eb81662a268fe2dc24276dbe84a1df5c6a5b507e38afd50d58c5a22ed",
+        "GaletteBoundaryHooks.java": "ae0b7c37b03f3c64f18a4e3f911ac201ff887b112e407a38a594f8aafcc00001"
+      },
+      "official_Agent_sha256": "cbb34a9e713b3ca506a3c0cb64add2a9b1ad3aba217e59ab99bd84c5f789d27e",
+      "source_marker": "Tainter.setTag on each actual declared source leaf; no program dependency formulas",
+      "target_export": "Tainter.getTag only; does not inject expected tags",
+      "TF_imports": false
+    },
+    "7": {
+      "adapter_sha256": "e989b5de19dd8c12a620ddbf5fed457c4c969e96bf4ac61627d72f54500070c6",
+      "source_hashes": {
+        "GaletteBoundaryAgent.java": "f0c9294eb81662a268fe2dc24276dbe84a1df5c6a5b507e38afd50d58c5a22ed",
+        "GaletteBoundaryHooks.java": "16e295573560439d075d7c02faf02865af4d2c7fea7720e8721a41565b979a02"
+      },
+      "official_Agent_sha256": "cbb34a9e713b3ca506a3c0cb64add2a9b1ad3aba217e59ab99bd84c5f789d27e",
+      "source_marker": "Tainter.setTag on each actual declared source leaf; no program dependency formulas",
+      "target_export": "Tainter.getTag only; does not inject expected tags",
+      "TF_imports": false
+    },
+    "8": {
+      "adapter_sha256": "660d195af2051db55beedd107dffea570207c9a171ee75aa9108362b9313b2a0",
+      "source_hashes": {
+        "GaletteBoundaryAgent.java": "f0c9294eb81662a268fe2dc24276dbe84a1df5c6a5b507e38afd50d58c5a22ed",
+        "GaletteBoundaryHooks.java": "fdbc8055e1e499ec9667a126e78c35105fa0b876fc21c19cc9dafd11f85eb93e"
+      },
+      "official_Agent_sha256": "cbb34a9e713b3ca506a3c0cb64add2a9b1ad3aba217e59ab99bd84c5f789d27e",
+      "source_marker": "Tainter.setTag on each actual declared source leaf; no program dependency formulas",
+      "target_export": "Tainter.getTag only; does not inject expected tags",
+      "TF_imports": false
+    }
+  },
+  "task_adapter_versions": {
+    "low": 6,
+    "medium": 6,
+    "high": 6,
+    "related-high": 6,
+    "mall": 6,
+    "zlt-user": 8
+  },
+  "runtime_Class_handling": "Only finite Class reference metadata getName; no traversal, type initialization or unknown toString; native reference tags only",
+  "Class_control": {
+    "returncode": 0
+  },
+  "official_test_driver_recheck": {
+    "variant": "official",
+    "returncode": 0,
+    "official_Agent_sha256": "cbb34a9e713b3ca506a3c0cb64add2a9b1ad3aba217e59ab99bd84c5f789d27e",
+    "counts": {
+      "suites": 3,
+      "tests": 260,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 260
+    },
+    "propagation_Agent_changed": false,
+    "VM_verification_disabled": false
+  },
+  "component_files": {
+    "artifacts/galette-compatibility-selection-20261111/modified-galette/galette-instrument/target/galette-instrument-1.0.0-SNAPSHOT.jar": "4b024ccf718a684b4131fba54aa2320f831fad8693b3c54f0b02d849875ff27d",
+    "artifacts/galette-compatibility-selection-20261111/modified-jre8-02/lib/rt.jar": "8f0db634bf0607f2c582f7502dcc71e81ad8f3440297810037876f6c74ca5e12",
+    "experiments/sockshop-mirrortaint/galette-hosted-template-local-20261111.patch": "91ef5043acfdeb11799d8bd9cb321e6c44ab52b3b4c277f3ae9bfbbbe9043872",
+    "artifacts/galette-compatibility-selection-20261111/official-heads.txt": "1f49bad891d97674e73e7de4d2d45f5e2a6fc114f33bc435d6c3e8116868de33",
+    "artifacts/galette-compatibility-selection-20261111/official-issues.json": "dd3928cca522b4a4f642d655639a63161031eca3d306298b770a42c4af519865",
+    "artifacts/galette-compatibility-selection-20261111/official-releases.json": "2ba33ca0557f1bb5b7ba88d67f9d0093c7185a36ec51fe2b7bd9372d3e001d6d",
+    "artifacts/galette-compatibility-selection-20261111/protocol-before-revisions.json": "c84b99b482a4c49d65fbf4a79ab673443a911f55c221942ebc8ed18352ad8552",
+    "artifacts/galette-compatibility-selection-20261111/direct-predicate-protocol-before-planning.json": "82bba6563855727b83df690e37e26825f8aca76b48c238565a2d396950219f45"
+  },
+  "formal_gate": {
+    "shared_explicit_data": true,
+    "selection_correctness": false,
+    "new_measurement_environment_seal": false,
+    "cost": null,
+    "deployments": 0
+  },
+  "prior_MT_TF": "Compatible fixed short captures from galette-static-baselines-20261111, no new MT/TF business deployment or paired costs this revision",
+  "invariant": "c8918bf costs and c866d67 offline fix retain original attribution",
+  "as_built_patch": {
+    "path": "experiments/sockshop-mirrortaint/galette-hosted-template-built-20261111.patch",
+    "sha256": "2124df79fe9c7599b64eecdd1ad0324bbf47852bfdfbddb5191470fb0eecf2fc",
+    "matches_built_source_diff_exactly": true,
+    "difference_from_draft": "Upstream Maven formatter import ordering and line wrapping only; original draft retained"
+  }
+}

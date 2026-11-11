@@ -137,7 +137,7 @@ def run(out):
     save(out / 'calibration.json', calibration)
     save(out / 'targets.json', targets)
     with (out / 'targets.csv').open('w') as f:
-        writer = csv.DictWriter(f, fieldnames=('task', 'message', 'path', 'state', 'target_owner', 'target_field', 'target_version', 'source_count', 'physical_sources'))
+        writer = csv.DictWriter(f, fieldnames=('task', 'message', 'path', 'state', 'target_owner', 'target_field', 'target_version', 'source_count', 'physical_sources'), lineterminator='\n')
         writer.writeheader()
         for t in targets:
             writer.writerow({**t, 'physical_sources': json.dumps(t['physical_sources'], ensure_ascii=False, separators=(',', ':'))})

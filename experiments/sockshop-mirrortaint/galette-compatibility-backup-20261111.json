@@ -1,0 +1,67 @@
+{
+  "local_backup_only": true,
+  "no_push": true,
+  "archives": [
+    {
+      "path": "artifacts/backups/galette-compatibility-selection-20261111/complete-artifacts-final-02.tar.gz",
+      "role": "complete new artifacts, source, tests, failures and patched JRE",
+      "sha256": "748676a838d1e3ef4ae28efab62cbd371a6365de4f8e89ed46919296a81ca7e1",
+      "bytes": 856300417,
+      "gzip_CRC_passed": true,
+      "reverified_this_revision": true
+    },
+    {
+      "path": "artifacts/backups/galette-static-baselines-20261111/complete-calibration-artifacts.tar.gz",
+      "expected_sha256": "7b4e520771870196f330de5c4c33a9c23d816a2225a0d5bb36e4760ea3fef997",
+      "role": "reused prior source/JDK/dependencies or image archive",
+      "sha256": "7b4e520771870196f330de5c4c33a9c23d816a2225a0d5bb36e4760ea3fef997",
+      "bytes": 897702047,
+      "gzip_CRC_passed": true,
+      "reverified_this_revision": true
+    },
+    {
+      "path": "artifacts/backups/galette-static-baselines-20261111/build-image-jdk17.tar.gz",
+      "expected_sha256": "c73792c82f00ac78c3dfff558c64d02cd93fb3f6022305b917be37ff31b5ebab",
+      "role": "reused prior source/JDK/dependencies or image archive",
+      "sha256": "c73792c82f00ac78c3dfff558c64d02cd93fb3f6022305b917be37ff31b5ebab",
+      "bytes": 283334887,
+      "gzip_CRC_passed": true,
+      "reverified_this_revision": true
+    },
+    {
+      "path": "artifacts/backups/ruoyi-zlt-refinement-20261103/actual-images.tar.gz",
+      "expected_sha256": "cbd9959df39c9d9f40447c693e1b80498c37d4271f47c0fa4b4d4fc3d0134b8b",
+      "role": "reused prior source/JDK/dependencies or image archive",
+      "sha256": "cbd9959df39c9d9f40447c693e1b80498c37d4271f47c0fa4b4d4fc3d0134b8b",
+      "bytes": 2049513399,
+      "gzip_CRC_passed": true,
+      "reverified_this_revision": true
+    },
+    {
+      "path": "artifacts/backups/ruoyi-request-scope-20261104/jdk8-runtime.tar.gz",
+      "expected_sha256": "e3641e13fdfc55d455441f85793b071228ac235758a8e5dc7990d158b6552104",
+      "role": "reused prior source/JDK/dependencies or image archive",
+      "sha256": "e3641e13fdfc55d455441f85793b071228ac235758a8e5dc7990d158b6552104",
+      "bytes": 57889824,
+      "gzip_CRC_passed": true,
+      "reverified_this_revision": true
+    },
+    {
+      "path": "artifacts/backups/galette-compatibility-selection-20261111/delivery-tables-and-audit-lf.tar.gz",
+      "role": "Final LF-normalized small tables, exact code/report and final audit; complete raw captures unchanged in main archive",
+      "sha256": "26ca6d905d74b5a9182cf78fd17abf9460fa24a01ea3e488e705cf569cc08c29",
+      "bytes": 78228,
+      "gzip_CRC_passed": true,
+      "reverified_this_revision": true
+    }
+  ],
+  "first_delivery_archive_preserved": "artifacts/backups/galette-compatibility-selection-20261111/pre-delivery-attempt-01.tar.gz",
+  "first_archive_is_final_delivery": false,
+  "new_images_built_this_revision": false,
+  "frozen_core_and_30_contracts_unchanged": true,
+  "report_and_source_snapshot_inside_final_archive": "galette-compatibility-selection-20261111/delivery-source",
+  "source_commit": "2d88bba",
+  "all_runtime_and_adapter_variants_in_new_archive": true,
+  "formal_cost": null,
+  "final_small_files_supplement": "delivery-tables-and-audit-lf.tar.gz"
+}
