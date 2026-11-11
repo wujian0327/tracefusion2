@@ -3,6 +3,7 @@ import argparse
 import copy
 import csv
 import json
+import subprocess
 import xml.etree.ElementTree as ET
 from collections import Counter
 from pathlib import Path
@@ -61,6 +62,8 @@ def run(out):
     protocol = load(H / 'protocol-before-revisions.json')
     assert all(sha(Path(p)) == digest for p, digest in protocol['core_sources'].items())
     assert sha(Path(protocol['original_protocol'])) == protocol['original_protocol_sha256']
+    built_patch = ROOT / 'experiments/sockshop-mirrortaint/galette-hosted-template-built-20261111.patch'
+    assert subprocess.check_output(['git', '-C', str(H / 'modified-galette'), 'diff'], text=True) == built_patch.read_text()
     for path, fact in protocol['tool_receipt']['files'].items():
         assert sha(Path(path)) == fact['sha256']
     agent = ROOT / 'artifacts/pruning-contribution-audit-20261106/final-candidate/historical/frozen-base/distributed-observer.jar'

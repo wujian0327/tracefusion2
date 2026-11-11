@@ -20,7 +20,7 @@ def run(out, variant, suite):
     subprocess.run(['git', 'clone', '--no-hardlinks', str(H / 'official-fixed'), str(source)], check=True,
                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if variant == 'modified':
-        subprocess.run(['git', '-C', str(source), 'apply', str(HERE / 'galette-hosted-template-local-20261111.patch')], check=True)
+        subprocess.run(['git', '-C', str(source), 'apply', str(HERE / 'galette-hosted-template-built-20261111.patch')], check=True)
     (source / '.build-tmp').mkdir()
     cache = out / 'maven-cache'
     shutil.copytree(H / ('modified-maven-cache' if variant == 'modified' else 'maven-cache'), cache)
