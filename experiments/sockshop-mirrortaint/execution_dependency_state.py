@@ -60,9 +60,12 @@ class State:
     optionals: dict = field(default_factory=dict)
     lambdas: dict = field(default_factory=dict)
     arrays: dict = field(default_factory=dict)
+    control_fields: dict = field(default_factory=dict)  # unresolved conditional write/merge choices by physical field
+    exception_control: Value = field(default_factory=Value)  # one propagating, verified exceptional completion
 
     def field_write(self, coordinate, value):
         require(coordinate not in self.fields, 'Duplicate actual field version')
+        self.control_fields.pop(coordinate[:2], None)
         self.fields[coordinate] = value
 
     def opaque_effect(self, values):

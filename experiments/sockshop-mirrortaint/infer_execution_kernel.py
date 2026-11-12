@@ -9,6 +9,7 @@ from analysis_status import AnalysisLimit
 from execution_dependency_state import Value, Frame, State, Container, Call, combine
 from plan_service_observations import callee
 from query_observation_planner import descriptors, require
+from control_dependencies import ControlFlow, Control, field_selection, selected as control_selected
 
 
 def coordinate(f):return (f['owner'],f['field'],f['version'])
@@ -57,6 +58,7 @@ def infer_execution(plan,rows):
         if ends[0]['kind']=='abort':
             audits.append({'frame':root['frame'],'completion':'aborted','answers':0});continue
         end=ends[0];fr=Frame(root['frame']);state=State(fr);slots=0
+        Control(ControlFlow(method),fr,state,lambda v:state.allocations.get(v.allocation)if v.allocation is not None else v.observed.get('object'),{entry:method})
         if not method['access']&8:fr.locals[0]=Value({'object':root['receiver']});slots=1
         for index,desc in enumerate(descriptors(method['desc'])):
             fr.locals[slots]=Value(root['args'][index],unknown=True);slots+=2 if desc in ('J','D') else 1
@@ -113,6 +115,7 @@ def infer_execution(plan,rows):
             require(ret['seq']>call['seq'],'Execution completion order differs')
             return ret['result']
         while True:
+            fr.control.at(fr.pc)
             fr.steps+=1
             if fr.steps>cfg['step_limit']:raise AnalysisLimit('offline-execution','Execution iteration budget exceeded on complete capture')
             ins=code[fr.pc];op=ins['op'];pop=fr.pop
@@ -137,7 +140,8 @@ def infer_execution(plan,rows):
             elif op==178:fr.stack.append(Value(unknown=True))
             elif op==180:
                 receiver=pop();read=take('read');field_event(180,receiver,ins,read,identity(receiver))
-                v=state.fields.get(coordinate(read),origin(read,read['seq']));v=field_transfer(180,v,v.observed)
+                v=state.fields.get(coordinate(read),origin(read,read['seq']));v=field_transfer(180,v,v.observed);v=field_selection(state,coordinate(read),v)
+                v=control_selected(v,Value(selectors=receiver.selectors,unknown=receiver.unknown))
                 fr.stack.append(v)
             elif op==181:
                 value,receiver=pop(),pop();write=take('write');field_event(181,receiver,ins,write,identity(receiver))
@@ -210,15 +214,8 @@ def infer_execution(plan,rows):
                     invocation.result=v;state.calls.append(invocation)
                     if ins['desc'].split(')')[1]!='V':fr.stack.append(v)
             elif 153<=op<=166 or op in (198,199):
-                b=pop();a=pop() if 159<=op<=166 else None;event=take('branch');branch_count+=1;choice=None
-                if 153<=op<=158 and 'value' in b.observed:
-                    x=b.observed['value'];choice=[x==0,x!=0,x<0,x>=0,x>0,x<=0][op-153]
-                elif 159<=op<=164 and 'value' in a.observed and 'value' in b.observed:
-                    x,y=a.observed['value'],b.observed['value'];choice=[x==y,x!=y,x<y,x>=y,x>y,x<=y][op-159]
-                elif op in (198,199):choice=(identity(b) is None and b.observed.get('value','non-null') is None);choice=choice if op==198 else not choice
-                elif op in (165,166):choice=(identity(a)==identity(b));choice=choice if op==165 else not choice
-                if choice is not None:require(choice==event['taken'],'Execution branch contradicts operands')
-                fr.pc=ins['target'] if event['taken'] else fr.pc+1;continue
+                b=pop();a=pop() if 159<=op<=166 else None;event=take('branch');branch_count+=1
+                fr.pc=fr.control.branch(ins,[a,b]if a is not None else[b],event);continue
             elif op==167:fr.pc=ins['target'];continue
             elif op==176:
                 returned=pop();bind(returned,end['result']);require(not fr.stack,'Execution root return stack differs');require(pos==len(events),'Execution unconsumed necessary evidence');break

@@ -7,6 +7,7 @@ from plan_service_observations import callee
 from analysis_status import AnalysisLimit
 from member_state_transfer import read_members,copy_member,register_references
 from infer_execution_kernel import coordinate, same_value
+from control_dependencies import ControlFlow, Control, selected as control_selected, selection as control_selection, field_selection
 
 
 def infer_application(plan,rows,worker_request=None):
@@ -94,7 +95,7 @@ def infer_application(plan,rows,worker_request=None):
             require(value is None or isinstance(value,str),'Initialization coordinate must be a string')
         initialized_by_class[marker.get('class')].append(marker)
         initialized_by_object[marker.get('class_object')].append(marker)
-    results=[];audits=[]
+    results=[];audits=[];control_graphs={}
     all_enters={r['frame']:r for r in rows if r['kind']=='enter'}
     require(len(all_enters)==sum(r['kind']=='enter' for r in rows),'Application invocation frame ID reused')
     # Validate the recorded frame forest before selecting a root family. An
@@ -192,7 +193,7 @@ def infer_application(plan,rows,worker_request=None):
                 if plan['response_binding']['source_occurrence_protocol']>=2:require(source_row.get('source_callsite')==start['method']+'@'+str(start['pc']),'Declared source actual callsite differs')
             if f['owner'] in poisoned_at and not (candidates[0][0]['kind'] in ('http-json','binding-source') and candidates[0][0]['seq']>poisoned_at[f['owner']]):return Value(f['observed'],unknown=True)
             row,index,source=candidates[0];same_value(source['observed'],f['observed']);return Value(f['observed'],frozenset({('http',row['seq'],source['path']) if row['kind']=='http-json' else ('field',row['seq'],index)}))
-        def lookup(f,before):
+        def raw_lookup(f,before):
             key=coordinate(f)
             if key in literal_enum_fields:
                 # Closed private enum state has no application write after its
@@ -213,6 +214,7 @@ def infer_application(plan,rows,worker_request=None):
                 matches=[v for v in default['fields']if coordinate(v)==key]
                 if len(matches)==1:same_value(matches[0]['observed'],f['observed']);return Value(f['observed'])
             return origin(f,before)
+        def lookup(f,before):return field_selection(state,coordinate(f),raw_lookup(f,before))
         def register_defaults(ctor_start,receiver,completed=None):
             if not cfg.get('default_initializers',{}).get(ctor_start['callee']) and ctor_start['callee']not in cfg.get('constructor_chains',{}):return
             fact=defaults.get(ctor_start['constructor_id']);require(fact is not None,'Required allocation default witness absent')
@@ -285,6 +287,7 @@ def infer_application(plan,rows,worker_request=None):
             nonlocal pos
             require(pos<len(events) and events[pos]['kind']==kind,'Application expected '+kind+' at '+str(entry)+'@'+str(fr.pc))
             event=events[pos];pos+=1
+            if kind=='abort':state.exception_control=control_selection([state.exception_control,fr.control.current(),*fr.control.consumed],fr.control.declared_only)
             if check_frame:require(event.get('frame')==fr.invocation,'Application invocation frame differs')
             if check_pc:
                 if 'pc' in event:require(event['pc']==fr.pc,'Application call pc differs')
@@ -304,7 +307,7 @@ def infer_application(plan,rows,worker_request=None):
             eligible=[h for h in protected if h['type'] is None or h['type'] in hierarchy.get(typename,set())]
             if not eligible:return False
             caught=take('collection-catch',check_pc=False);require(caught['pc']==eligible[0]['handler'] and caught['exception']==typename,'Application original handler differs');same_value(error,caught['observed'])
-            fr.stack=[Value(caught['observed'],unknown=True)];fr.pc=caught['pc'];return True
+            fr.control.caught(caught['pc']);fr.stack.append(Value(caught['observed']));fr.pc=caught['pc'];return True
         def container(call):
             owner=call['receiver']['object'];items=call.get('collection');require(items is not None,'Execution collection content absent')
             require(call.get('receiver_type') in ('java.util.ArrayList','java.util.Arrays$ArrayList','java.util.Collections$SingletonList','java.util.Collections$EmptyList'),'Execution list implementation unsupported')
@@ -373,7 +376,10 @@ def infer_application(plan,rows,worker_request=None):
             if depth>=cfg.get('call_depth_limit',64):raise AnalysisLimit('call-depth','Application invocation depth budget exhausted')
             depth+=1
             saved=(fr,method,code,entry)
+            inherited=fr.control.current() if fr is not None else Value()
             entry=begin['method'];method=methods[entry];code=method['instructions'];fr=Frame(begin['frame']);fr.pc=cfg.get('constructor_starts',{}).get(entry,0);slot=0
+            if entry not in control_graphs:control_graphs[entry]=ControlFlow(method)
+            Control(control_graphs[entry],fr,state,identity,methods,inherited,not plan['response_binding'].get('entry_is_source',False))
             if method['access']&8 and method['owner']in cfg.get('initialized_lambda_owners',[]):
                 markers=initialized_by_class.get(method['owner'],[])
                 require(len(markers)==1 and markers[0]['class_sha256']==plan['class_sha256'][method['owner']],'Static callback initialization absent/ambiguous')
@@ -384,6 +390,7 @@ def infer_application(plan,rows,worker_request=None):
                 bind_argument(args[index],begin['args'][index],desc);fr.locals[slot]=args[index];slot+=2 if desc in ('J','D') else 1
             try:
                 while True:
+                    fr.control.at(fr.pc)
                     fr.steps+=1; total_steps+=1;execution_budget['steps']+=1
                     if execution_budget['steps']>cfg['step_limit']:raise AnalysisLimit('offline-execution','Application execution budget exceeded on complete evidence')
                     ins=code[fr.pc];op=ins['op'];pop=lambda:scalar_value(fr.pop())
@@ -486,6 +493,7 @@ def infer_application(plan,rows,worker_request=None):
                         read=take('read');field_event(180,receiver,ins,read,identity(receiver))
                         if ins['desc'].startswith(('L','[')) and 'value' not in read['observed'] and read['observed'].get('object'):heap_refs[read['owner']].add(read['observed']['object'])
                         v=lookup(read,read['seq']);v=field_transfer(180,v,v.observed)
+                        v=control_selected(v,Value(selectors=receiver.selectors,unknown=receiver.unknown))
                         if ins['desc'] in ('Z','B','C','S','I','J','F','D'):v=v.project({k:x for k,x in v.observed.items() if k!='object'})
                         fr.stack.append(v)
                     elif op==181:
@@ -1284,18 +1292,11 @@ def infer_application(plan,rows,worker_request=None):
                             if result_desc in ('Z','B','C','S','I','J','F','D'):v=v.project({k:x for k,x in v.observed.items() if k!='object'})
                             if result_desc!='V':fr.stack.append(v)
                     elif 153<=op<=166 or op in (198,199):
-                        b=pop();a=pop() if 159<=op<=166 else None;event=take('branch');branch_count+=1;choice=None
-                        if 153<=op<=158 and 'value' in b.observed:
-                            x=b.observed['value'];choice=[x==0,x!=0,x<0,x>=0,x>0,x<=0][op-153]
-                        elif 159<=op<=164 and 'value' in a.observed and 'value' in b.observed:
-                            x,y=a.observed['value'],b.observed['value'];choice=[x==y,x!=y,x<y,x>=y,x>y,x<=y][op-159]
-                        elif op in (198,199):choice=(identity(b) is None and b.observed.get('value','non-null') is None);choice=choice if op==198 else not choice
-                        elif op in (165,166):choice=(identity(a)==identity(b));choice=choice if op==165 else not choice
-                        if choice is not None:require(choice==event['taken'],'Execution branch contradicts operands')
-                        fr.pc=ins['target'] if event['taken'] else fr.pc+1;continue
+                        b=pop();a=pop() if 159<=op<=166 else None;event=take('branch');branch_count+=1
+                        fr.pc=fr.control.branch(ins,[a,b]if a is not None else[b],event);continue
                     elif op==167:fr.pc=ins['target'];continue
                     elif 172<=op<=177:
-                        returned=Value({'value':None,'object':None}) if op==177 else pop();completion=take('exit');bind(returned,completion['result']);require(not fr.stack,'Application return stack differs');return returned,None
+                        returned=fr.control.apply(Value({'value':None,'object':None})) if op==177 else pop();completion=take('exit');bind(returned,completion['result']);require(not fr.stack,'Application return stack differs');return returned,None
                     elif op==191:
                         error=pop();typename=events[pos].get('exception') if pos<len(events) else None
                         if handle(actual(error),typename):continue
@@ -1304,6 +1305,8 @@ def infer_application(plan,rows,worker_request=None):
                     fr.pc+=1
             finally:
                 frame_audits.append({'frame':fr.invocation,'method':entry,'steps':fr.steps})
+                if saved[0]is not None and pos and events[pos-1]['kind']=='exit'and events[pos-1].get('frame')==fr.invocation:
+                    saved[0].control.normal_outcome(fr.control.normal_completion())
                 depth-=1
                 fr,method,code,entry=saved
         root_args=[]
@@ -1369,6 +1372,7 @@ def infer_application(plan,rows,worker_request=None):
                 if not(protection and barrier<=protection[0]<ret['seq']):value=Value(f['observed'],unknown=True)
             if owner in member_choices:
                 selected,uncertain=member_choices[owner];value=Value(value.observed,value.origins,value.selectors|selected,value.unknown or uncertain,value.allocation)
+            value=Value(value.observed,value.origins,value.selectors|returned.selectors,value.unknown or returned.unknown,value.allocation)
             bind(value,f['observed'])
             results.append({'root_frame':root['frame'],'seq':ret['seq'],'path':f['path'],**f,'known':not value.unknown,'origins':[list(x) for x in sorted(value.origins,key=str)],'selectors':[list(x) for x in sorted(value.selectors,key=str)]})
         audits.append({'frame':root['frame'],'completion':'normal','steps':total_steps,'frames':frame_audits,'answers':len(ret['fields']),'poisoned_objects':len(poisoned_at),'source_ownership':source_ownership,'opaque_frames':opaque_frames,'opaque_calls':opaque_calls,'environment_facts':environment_facts,'async_transfers':async_transfers,'steps_including_tasks':execution_budget['steps']})

@@ -12,11 +12,11 @@ from raw_source_call_facts import RawSourceCallFacts
 from audit_zlt_foundation_revision import tf_pair
 
 
-def run(out,direct=False):
+def run(out,direct=False,revision_protocol=None):
     out.mkdir(parents=True,exist_ok=False)
     old=ROOT/'artifacts/galette-static-baselines-20261111'
     java=str(old/'runtime-base/java-8-openjdk-amd64/bin/java')
-    freeze=load(old/'protocol-before-calibration.json')
+    freeze=load(revision_protocol or old/'protocol-before-calibration.json')
     for p,d in freeze['core_sources'].items():assert sha(Path(p))==d,p
     classes=out/'classes';classes.mkdir()
     deps=sorted((ROOT/'artifacts/ruoyi-request-scope-20261104/scope-controls-02/deps').glob('*.jar'))
@@ -108,4 +108,4 @@ def run(out,direct=False):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--direct-predicate',action='store_true');a=p.parse_args();run(a.out.resolve(),a.direct_predicate)
+    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--direct-predicate',action='store_true');p.add_argument('--revision-protocol',type=Path);a=p.parse_args();run(a.out.resolve(),a.direct_predicate,a.revision_protocol)
