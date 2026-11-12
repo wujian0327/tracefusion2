@@ -27,15 +27,15 @@ def score(plan,rows,truth):
         normalized.append({'scenario':t['scenario'],'input':t['input'],'known':a['known'],'version':a['version'],'origins':sorted(roles.get(tuple(x),'UNEXPECTED:'+str(x))for x in a['origins']),'selectors':sorted(roles.get(tuple(x),'UNEXPECTED:'+str(x))for x in a['selectors'])})
     return result,checks,normalized
 
-def run(out,case=None,supported=False):
+def run(out,case=None,supported=False,agent=AGENT):
     limited=False
     out.mkdir(parents=True,exist_ok=False)
     spec=HERE/'EXCEPTION-COMPLETION-SPEC-20261112.md'
-    save(out/'protocol-before-jvm.json',{'source_sha256':sha(HERE/'ExceptionCompletionFixture.java'),'spec_sha256':sha(spec),'Agent_sha256':sha(AGENT),'literal_expectation':'15 predefined completion shapes x two inputs; source keys10/11 data,20/21/30 guards. Unrelated payloads never become selectors. Actual null is a source field. No original native model changes.'})
+    save(out/'protocol-before-jvm.json',{'source_sha256':sha(HERE/'ExceptionCompletionFixture.java'),'spec_sha256':sha(spec),'Agent_sha256':sha(agent),'literal_expectation':'15 predefined completion shapes x two inputs; source keys10/11 data,20/21/30 guards. Unrelated payloads never become selectors. Actual null is a source field. No original native model changes.'})
     java=str(ROOT/'artifacts/galette-static-baselines-20261111/runtime-base/java-8-openjdk-amd64/bin/java')
     classes=out/'classes';classes.mkdir()
     deps=sorted((ROOT/'artifacts/ruoyi-request-scope-20261104/scope-controls-02/deps').glob('*.jar'))
-    cp=':'.join(map(str,[classes,AGENT,*JARS,*deps]))
+    cp=':'.join(map(str,[classes,agent,*JARS,*deps]))
     command([java[:-4]+'javac','-cp',cp,'-d',str(classes),str(HERE/'ExceptionCompletionFixture.java')],out/'compile.log')
     jar=out/'fixture.jar'
     with ZipFile(jar,'w')as z:
@@ -49,7 +49,7 @@ def run(out,case=None,supported=False):
     reports={};norm={}
     for mode in ('full','static','selective'):
         d=out/mode;d.mkdir();policy=configure(plan,mode);save(d/'policy.json',policy)
-        cmd=[java,'-javaagent:'+str(AGENT),'-Dfixture.observe=true','-Dservice.plan='+str(out/'plan.json'),'-Dservice.events='+str(d/'events.jsonl'),*policy['jvm_options'],'-cp',cp,'ExceptionCompletionFixture',*args]
+        cmd=[java,'-javaagent:'+str(agent),'-Dfixture.observe=true','-Dservice.plan='+str(out/'plan.json'),'-Dservice.events='+str(d/'events.jsonl'),*policy['jvm_options'],'-cp',cp,'ExceptionCompletionFixture',*args]
         save(d/'command.json',cmd)
         cases=json.loads(command(cmd,d/'stdout.log').stdout.splitlines()[-1])
         assert [{k:v for k,v in c.items()if k!='message'}for c in cases]==[{k:v for k,v in c.items()if k!='message'}for c in baseline]
@@ -84,7 +84,7 @@ def run(out,case=None,supported=False):
             save(d/'replay-failure.json',{'type':type(e).__name__,'error':str(e)})
             reports[mode]={'business_preserved':True,'targets':len(truth),'error':str(e),'gate':limited and isinstance(e,AnalysisLimit)}
     equal=None if limited else len(norm)==3 and norm['full']==norm['static']==norm['selective']
-    save(out/'results.json',{'modes':reports,'normalized_equal':equal,'gate':(limited or equal) and all(r['gate']for r in reports.values()),'new_JVM_controls':True,'new_Agent':False,'performance':None})
+    save(out/'results.json',{'modes':reports,'normalized_equal':equal,'gate':(limited or equal) and all(r['gate']for r in reports.values()),'new_JVM_controls':True,'new_Agent':agent!=AGENT,'performance':None})
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--case',type=int,choices=range(15));p.add_argument('--supported-sequence',action='store_true');a=p.parse_args();run(a.out.resolve(),a.case,a.supported_sequence)
+    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--case',type=int,choices=range(15));p.add_argument('--supported-sequence',action='store_true');p.add_argument('--agent',type=Path,default=AGENT);a=p.parse_args();run(a.out.resolve(),a.case,a.supported_sequence,a.agent.resolve())

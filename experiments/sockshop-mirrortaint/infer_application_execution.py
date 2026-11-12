@@ -19,6 +19,11 @@ def infer_application(plan,rows,worker_request=None):
     validate_observation(plan,rows)
     validate_plan(plan)
     cfg=plan['execution_kernel']
+    headers=[r for r in rows if r['kind']=='start']
+    dispatch_version=headers[0].get('exception_dispatch_version',0) if len(headers)==1 else 0
+    require(dispatch_version in (0,1),'Unsupported exception dispatch protocol')
+    require(dispatch_version or not any(r.get('exception_dispatch') for r in rows),'Exception dispatch witness without versioned header')
+    exception_classes={}
     # Capture-local lookup only: retain every candidate, duplicate and raw order.
     library_evidence=defaultdict(list)
     for item in rows:
@@ -316,8 +321,15 @@ def infer_application(plan,rows,worker_request=None):
             from exception_completion import HIERARCHY
             hierarchy=HIERARCHY
             protected=[h for h in method['exception_handlers'] if h['start']<=fr.pc<h['end']]
-            if protected and typename not in hierarchy and all(h['type'] is not None for h in protected):raise AnalysisLimit('exception-dispatch','Exception hierarchy unsupported: '+str(typename))
-            eligible=[h for h in protected if h['type'] is None or h['type'] in hierarchy.get(typename,set())]
+            if dispatch_version:
+                from exception_dispatch import first_handler
+                require(pos<len(events),'Exception completion witness absent')
+                witness=events[pos]
+                require(witness['kind'] in ('collection-catch','abort') and witness.get('frame')==fr.invocation,'Exception completion frame/kind differs')
+                target=first_handler(witness.get('exception_dispatch'),method['exception_handlers'],fr.pc,error,typename,entry,plan['class_sha256'],exception_classes,cfg.get('class_parents',{}))
+                eligible=[] if target is None else [{'handler':target}]
+            elif protected and typename not in hierarchy and any(h['type'] is not None for h in protected):raise AnalysisLimit('exception-dispatch','Exception hierarchy unsupported: '+str(typename))
+            if not dispatch_version:eligible=[h for h in protected if h['type'] is None or h['type'] in hierarchy.get(typename,set())]
             if not eligible:return False
             caught=take('collection-catch',check_pc=False);require(caught['pc']==eligible[0]['handler'] and caught['exception']==typename,'Application original handler differs');same_value(error,caught['observed'])
             fr.control.caught(caught['pc'],typename);fr.stack.append(Value(caught['observed']));fr.pc=caught['pc'];return True

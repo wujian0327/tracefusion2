@@ -69,7 +69,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
                     for(AbstractInsnNode n:code)if(n.getOpcode()>=IRETURN&&n.getOpcode()<=RETURN) {
                         InsnList e=new InsnList();Type t=Type.getReturnType(m.desc);if(t.getSort()==Type.VOID)e.add(new InsnNode(ACONST_NULL));else{e.add(new InsnNode(t.getSize()==2?DUP2:DUP));box(e,t);}e.add(new VarInsnNode(ALOAD,scope));e.add(new MethodInsnNode(INVOKESTATIC,R,"exit","(Ljava/lang/Object;Ljava/lang/Object;)V",false));m.instructions.insertBefore(n,e);
                     }
-                    m.instructions.add(end);m.instructions.add(handler);int error=m.maxLocals++;m.instructions.add(new VarInsnNode(ASTORE,error));m.instructions.add(new VarInsnNode(ALOAD,scope));m.instructions.add(new MethodInsnNode(INVOKESTATIC,R,"abort","(Ljava/lang/Object;)V",false));m.instructions.add(new VarInsnNode(ALOAD,error));m.instructions.add(new InsnNode(ATHROW));m.tryCatchBlocks.add(new TryCatchBlockNode(start,end,handler,"java/lang/Throwable"));changed=true;
+                    m.instructions.add(end);m.instructions.add(handler);int error=m.maxLocals++;m.instructions.add(new VarInsnNode(ASTORE,error));m.instructions.add(new VarInsnNode(ALOAD,error));m.instructions.add(new VarInsnNode(ALOAD,scope));m.instructions.add(new LdcInsnNode(Type.getObjectType(owner)));m.instructions.add(new MethodInsnNode(INVOKESTATIC,R,"abort","(Ljava/lang/Throwable;Ljava/lang/Object;Ljava/lang/Class;)V",false));m.instructions.add(new VarInsnNode(ALOAD,error));m.instructions.add(new InsnNode(ATHROW));m.tryCatchBlocks.add(new TryCatchBlockNode(start,end,handler,"java/lang/Throwable"));changed=true;
                 }
             }
             MonitorSafety.instrument(cls);Recorder.transformed(owner);RequestScopeHooks.coverage(owner);
@@ -144,7 +144,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
         static Map<String,Object> row(){Map<String,Object> r=new LinkedHashMap<>();r.put("frame",STACK.get().isEmpty()?null:STACK.get().peek().id);return r;}
         static synchronized Map<String,Object> value(Object o){Map<String,Object> r=new LinkedHashMap<>();r.put("object",id(o));if(ScalarProjectionHooks.enumeration(o))return ScalarProjectionHooks.observed((Enum)o);if(TemporalDateHooks.date(o))return TemporalDateHooks.observe((java.util.Date)o);if(UuidProjectionHooks.uuid(o)){r.put("value",o.toString());r.put("uuid_type","java.util.UUID");return r;}if(o instanceof Character&&ExecutionKernelHooks.extended())r.put("value",(int)((Character)o).charValue());else if(o==null||o instanceof Number||o instanceof String||o instanceof Boolean)r.put("value",o);return r;}
         static String hash(byte[] data)throws Exception{StringBuilder s=new StringBuilder();for(byte b:MessageDigest.getInstance("SHA-256").digest(data))s.append(String.format("%02x",b&255));return s.toString();}
-        public static synchronized void start()throws Exception{output=Files.newBufferedWriter(Paths.get(System.getProperty("service.events")),StandardOpenOption.CREATE_NEW);Map<String,Object> r=row();r.put("mode",mode);r.put("plan_sha256",hash(Files.readAllBytes(Paths.get(System.getProperty("service.plan")))));emit("start",r);Runtime.getRuntime().addShutdownHook(new Thread(()->{synchronized(Recorder.class){Map<String,Object> m=row();m.put("capture_invalid",captureInvalid);m.put("field_hook_calls",fieldHooks);m.put("branch_hook_calls",branches);emit("metrics",m);}}));}
+        public static synchronized void start()throws Exception{output=Files.newBufferedWriter(Paths.get(System.getProperty("service.events")),StandardOpenOption.CREATE_NEW);Map<String,Object> r=row();r.put("mode",mode);r.put("exception_dispatch_version",1);r.put("plan_sha256",hash(Files.readAllBytes(Paths.get(System.getProperty("service.plan")))));emit("start",r);Runtime.getRuntime().addShutdownHook(new Thread(()->{synchronized(Recorder.class){Map<String,Object> m=row();m.put("capture_invalid",captureInvalid);m.put("field_hook_calls",fieldHooks);m.put("branch_hook_calls",branches);emit("metrics",m);}}));}
         public static synchronized void callsite(String site){if(!STACK.get().isEmpty())PENDING.set(site);}
         static List<Object> snapshot(Object o,boolean target)throws Exception{
             List<Object> out=new ArrayList<>();if(o==null)return out;Set<String> wanted=new HashSet<>((List<String>)plan.get(target?"snapshot_fields":full?"full_snapshot_fields":"mapper_fields"));
@@ -167,12 +167,13 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
             if(method.equals(plan.get("entry")))ResponseBindingHooks.enter(args);
         }catch(Throwable e){MonitorSafety.fatal(e);scope.fail("enter",e);}return scope;}
         public static synchronized void exit(Object result,Object token){finish(token,result,false);}
-        public static synchronized void abort(Object token){finish(token,null,true);}
+        public static synchronized void abort(Throwable error,Object token,Class caller){if(token instanceof MonitorSafety.Scope && !((MonitorSafety.Scope)token).failed){Map r=row();r.put("exception",error.getClass().getName());r.put("observed",value(error));r.put("exception_dispatch",ExecutionKernelHooks.exceptionDispatch(error,caller));ABORT.set(r);}try{finish(token,null,true);}finally{ABORT.remove();}}
+        static final ThreadLocal<Map> ABORT=new ThreadLocal<>();
         static void finish(Object token,Object result,boolean exceptional){
             if(!(token instanceof MonitorSafety.Scope))return;MonitorSafety.Scope scope=(MonitorSafety.Scope)token;if(scope.closed)return;
             try{if(scope.failed)return;if(STACK.get().peek()!=scope.frame)throw new IllegalStateException("Frame completion owner differs");Frame f=scope.frame;
                 MonitorSafety.fault(exceptional?"abort":"exit",f.method);
-                if(exceptional){if(f.method.equals(plan.get("entry")))ResponseBindingHooks.abort();emit("abort",row());}
+                if(exceptional){if(f.method.equals(plan.get("entry")))ResponseBindingHooks.abort();emit("abort",ABORT.get()==null?row():ABORT.get());}
                 else{Map<String,Object> r=row();r.put("result",value(result));if(f.method.equals(plan.get("entry"))){r.put("fields",snapshot(result,true));ResponseBindingHooks.exit(result);}emit("exit",r);}
             }catch(Throwable e){MonitorSafety.fatal(e);scope.fail(exceptional?"abort":"exit",e);}finally{scope.close();}
         }
