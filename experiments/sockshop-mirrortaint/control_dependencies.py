@@ -25,9 +25,11 @@ def branch_taken(op, operands, identity):
     a = operands[0] if len(operands) == 2 else None
     if 153 <= op <= 158 and 'value' in b.observed:
         x = b.observed['value']
+        require(type(x)in(int,bool)and -2**31<=x<2**31,'Branch operand is not a signed JVM int')
         return (x == 0, x != 0, x < 0, x >= 0, x > 0, x <= 0)[op - 153]
     if 159 <= op <= 164 and 'value' in a.observed and 'value' in b.observed:
         x, y = a.observed['value'], b.observed['value']
+        require(all(type(x)in(int,bool)and -2**31<=x<2**31 for x in(x,y)),'Branch operands are not signed JVM ints')
         return (x == y, x != y, x < y, x >= y, x > y, x <= y)[op - 159]
     def reference(v):
         object_=identity(v)

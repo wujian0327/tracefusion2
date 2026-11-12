@@ -73,6 +73,11 @@ class ControlTests(unittest.TestCase):
         f,s,c=self.setup_control([{'op':153,'target':2},{'op':177},{'op':177}])
         with self.assertRaises(ValueError):c.branch({'op':153,'target':2},[Value()],{'taken':True})
 
+    def test_impossible_integer_operand_is_rejected(self):
+        from control_dependencies import branch_taken
+        with self.assertRaises(ValueError):branch_taken(153,[Value({'value':2**40})],lambda v:None)
+        with self.assertRaises(ValueError):branch_taken(153,[Value({'value':1.0})],lambda v:None)
+
     def test_missing_reference_ids_are_not_equal_by_default(self):
         from control_dependencies import branch_taken
         with self.assertRaises(ValueError):branch_taken(165,[Value(),Value()],lambda v:None)
