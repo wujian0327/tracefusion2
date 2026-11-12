@@ -1,0 +1,60 @@
+{
+  "local_backup_only": true,
+  "starting_main": "16ddf1f462a00481b35a9449b424bd95e3f1b116",
+  "offline_core": "9fbbc343658a476299340f20e361f0434a862e2b",
+  "report_commit": "669638549cd3168883635ec7376d6b0bc2bd164a",
+  "archives": [
+    {
+      "path": "artifacts/backups/exception-completion-semantics-20261112/complete-exception-completion-artifacts.tar.gz",
+      "sha256": "86eae43071dd94e0655e0e6baaec7c7547aed4acb61e839ea5a288a05cc22259",
+      "bytes": 58299592,
+      "gzip_CRC_passed": true,
+      "role": "Complete exception revision controls, original failures, intermediate results, all fixed pool cases, frozen source snapshots and independent facts"
+    },
+    {
+      "path": "artifacts/backups/constructor-effect-closure-20261112/complete-constructor-scope-artifacts.tar.gz",
+      "sha256": "a66cc31cc909e2d5bc6fe2d9e6a5d8f354ca3036dcdaed2ab92fd9ec58f8f6c8",
+      "bytes": 26547297,
+      "gzip_CRC_passed": true,
+      "role": "Complete new original66 controls, per-case controls, whole-batch failures, fixed-JDK sources/bytecode, expectations, diagnostics and source snapshots"
+    },
+    {
+      "path": "artifacts/backups/call-write-footprints-20261112/complete-call-write-artifacts.tar.gz",
+      "sha256": "d18c7a329586d99eef1e8b86dae6e42b8da7bf530acc1d3f119ebbbc1856c174",
+      "bytes": 27475632,
+      "gzip_CRC_passed": true,
+      "role": "All new raw JVM controls, failures, source snapshots, plans, independent truth, audits"
+    },
+    {
+      "path": "artifacts/backups/public-control-semantics-20261112/complete-control-artifacts.tar.gz",
+      "sha256": "7acf2268e6897cd282578c2bd9ffe9a17619c817eb88574d4a8ffd00b8b9195b",
+      "bytes": 226592851,
+      "gzip_CRC_passed": true,
+      "role": "All new control captures, failures, source snapshots, complete old-input copies and independent expectations"
+    },
+    {
+      "path": "artifacts/backups/galette-static-baselines-20261111/complete-calibration-artifacts.tar.gz",
+      "sha256": "7b4e520771870196f330de5c4c33a9c23d816a2225a0d5bb36e4760ea3fef997",
+      "bytes": 897702047,
+      "gzip_CRC_passed": true,
+      "role": "Original restored8u504 runtime, frozen Agent/dependencies reference"
+    },
+    {
+      "path": "artifacts/backups/galette-compatibility-selection-20261111/complete-artifacts-final-02.tar.gz",
+      "sha256": "748676a838d1e3ef4ae28efab62cbd371a6365de4f8e89ed46919296a81ca7e1",
+      "bytes": 856300417,
+      "gzip_CRC_passed": true,
+      "role": "complete new artifacts, source, tests, failures and patched JRE"
+    }
+  ],
+  "Agent_changed": false,
+  "public_contracts_changed": false,
+  "new_images": false,
+  "new_JVM_controls": true,
+  "new_business_deployments": false,
+  "counterexample_fixed": true,
+  "original_66_gate_passed": false,
+  "new_complete_pool_gate_passed": false,
+  "formal_cost": null,
+  "no_push": true
+}
