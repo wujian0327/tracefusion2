@@ -1,0 +1,50 @@
+{
+  "local_backup_only": true,
+  "starting_main": "d3307ee5859b5d75313488cabb423d64aecf6481",
+  "unchanged_offline_core": "060a5ffd1efc12be0b0901520a9340f89f18b984",
+  "report_commit": "756fa9aeb09a71f274efbba47ba853564ce61f60",
+  "archives": [
+    {
+      "path": "artifacts/backups/constructor-effect-closure-20261112/complete-constructor-scope-artifacts.tar.gz",
+      "bytes": 26547297,
+      "sha256": "a66cc31cc909e2d5bc6fe2d9e6a5d8f354ca3036dcdaed2ab92fd9ec58f8f6c8",
+      "gzip_CRC_passed": true,
+      "role": "Complete new original66 controls, per-case controls, whole-batch failures, fixed-JDK sources/bytecode, expectations, diagnostics and source snapshots"
+    },
+    {
+      "path": "artifacts/backups/call-write-footprints-20261112/complete-call-write-artifacts.tar.gz",
+      "bytes": 27475632,
+      "sha256": "d18c7a329586d99eef1e8b86dae6e42b8da7bf530acc1d3f119ebbbc1856c174",
+      "gzip_CRC_passed": true,
+      "role": "All new raw JVM controls, failures, source snapshots, plans, independent truth, audits"
+    },
+    {
+      "path": "artifacts/backups/public-control-semantics-20261112/complete-control-artifacts.tar.gz",
+      "bytes": 226592851,
+      "sha256": "7acf2268e6897cd282578c2bd9ffe9a17619c817eb88574d4a8ffd00b8b9195b",
+      "gzip_CRC_passed": true,
+      "role": "All new control captures, failures, source snapshots, complete old-input copies and independent expectations"
+    },
+    {
+      "path": "artifacts/backups/galette-static-baselines-20261111/complete-calibration-artifacts.tar.gz",
+      "bytes": 897702047,
+      "sha256": "7b4e520771870196f330de5c4c33a9c23d816a2225a0d5bb36e4760ea3fef997",
+      "gzip_CRC_passed": true,
+      "role": "Original restored8u504 runtime, frozen Agent/dependencies reference"
+    },
+    {
+      "path": "artifacts/backups/galette-compatibility-selection-20261111/complete-artifacts-final-02.tar.gz",
+      "bytes": 856300417,
+      "sha256": "748676a838d1e3ef4ae28efab62cbd371a6365de4f8e89ed46919296a81ca7e1",
+      "gzip_CRC_passed": true,
+      "role": "complete new artifacts, source, tests, failures and patched JRE"
+    }
+  ],
+  "no_new_images": true,
+  "no_Agent_change": true,
+  "no_production_constructor_license": true,
+  "original_full_acceptance_passed": false,
+  "supplement_full_acceptance_passed": false,
+  "performance": null,
+  "no_push": true
+}
