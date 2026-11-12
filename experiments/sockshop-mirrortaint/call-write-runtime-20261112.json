@@ -1,0 +1,83 @@
+{
+  "java": "/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/runtime-base/java-8-openjdk-amd64/jre/bin/java",
+  "java_sha256": "68e380b6a96f0032786f90ff89cc76bd25cd2ceeffe063a9400c89a734a8df37",
+  "java_version": "openjdk version \"1.8.0_504\"\nOpenJDK Runtime Environment (build 1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01)\nOpenJDK 64-Bit Server VM (build 25.504-b01, mixed mode)\n",
+  "java_exit_code": 0,
+  "metadata_extractor_JDK": "host 8u512, not business JDK",
+  "business_JDK": "restored OpenJDK8u504",
+  "new_Agent_compilation": false,
+  "cohorts": {
+    "final-jvm-01": {
+      "fixture_jar": "f35d7ce23e75c55ed2714d8c4b4651ba367976105a0cfc74f1628fe9b9cfd50e",
+      "plan": "f44c010c20caf61bfa5ba03754c1581478e38efd88f37dfa32c589151e93dd5f",
+      "captures": {
+        "full": "9b097d4ab782e19ee32796287c5871d10e6872e590a1e81775b656938284ebbe",
+        "static": "f168233b877f45cf55017961595c48569d42a6b53ec908fa60723d03363313b5",
+        "selective": "5c00247cfd5e7afb73ffb6769bbd9bfccac60636b4633b8dfe8d2259e6e00079"
+      },
+      "results": {
+        "modes": {
+          "full": {
+            "business_preserved": true,
+            "targets": 22,
+            "correct": 22,
+            "gate": true
+          },
+          "static": {
+            "business_preserved": true,
+            "targets": 22,
+            "correct": 22,
+            "gate": true
+          },
+          "selective": {
+            "business_preserved": true,
+            "targets": 22,
+            "correct": 22,
+            "gate": true
+          }
+        },
+        "normalized_equal": true,
+        "gate": true,
+        "new_JVM_controls": true,
+        "new_Agent": false,
+        "performance": null
+      }
+    },
+    "final-unclosed-jvm-01": {
+      "fixture_jar": "758b7443120bbdd037ea91740140533beeb11a9d0977a2247a247cdb921289d6",
+      "plan": "43566f550821d00075959102b03af39a3062e6af35d697ff24e585b08363e546",
+      "captures": {
+        "full": "10a78debc49e7e19a05001b5c4b3b40147ee6bd50f0a61491b34e05ea38a5b95",
+        "static": "0a58fc88d748edb7b5ae478b0b0c8b93b41e60969523f5a91a77741f378f573a",
+        "selective": "d7f2167927e629f76c18d7bd7a114ffaf35f0943d28503ceca91a8de60738991"
+      },
+      "results": {
+        "modes": {
+          "full": {
+            "business_preserved": true,
+            "targets": 2,
+            "error": "control-write-address: Conditional call may rewrite a reference edge used by its write footprint",
+            "gate": true
+          },
+          "static": {
+            "business_preserved": true,
+            "targets": 2,
+            "error": "control-write-address: Conditional call may rewrite a reference edge used by its write footprint",
+            "gate": true
+          },
+          "selective": {
+            "business_preserved": true,
+            "targets": 2,
+            "error": "control-write-address: Conditional call may rewrite a reference edge used by its write footprint",
+            "gate": true
+          }
+        },
+        "normalized_equal": null,
+        "gate": true,
+        "new_JVM_controls": true,
+        "new_Agent": false,
+        "performance": null
+      }
+    }
+  }
+}

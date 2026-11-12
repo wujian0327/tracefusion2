@@ -1,0 +1,67 @@
+mode,scenario,input,complete_correct,known,version,origins,selectors,physical_truth
+full,0,0,True,True,1,"[[""field"", 18, 0]]","[[""field"", 26, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+full,0,1,True,True,1,"[[""field"", 60, 0]]","[[""field"", 64, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+full,1,0,True,True,1,"[[""field"", 100, 0]]","[[""field"", 108, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+full,1,1,True,True,1,"[[""field"", 142, 0]]","[[""field"", 146, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+full,2,0,True,True,1,"[[""field"", 184, 0]]","[[""field"", 192, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+full,2,1,True,True,1,"[[""field"", 227, 0]]","[[""field"", 231, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+full,3,0,True,True,1,"[[""field"", 270, 0]]","[[""field"", 278, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+full,3,1,True,True,1,"[[""field"", 314, 0]]","[[""field"", 318, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+full,4,0,True,True,1,"[[""field"", 364, 0]]","[[""field"", 372, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+full,4,1,True,True,1,"[[""field"", 409, 0]]","[[""field"", 413, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+full,5,0,True,True,1,"[[""field"", 455, 0]]","[[""field"", 463, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+full,5,1,True,True,1,"[[""field"", 501, 0]]","[[""field"", 505, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+full,6,0,True,True,1,"[[""field"", 559, 0]]","[[""field"", 567, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+full,6,1,True,True,1,"[[""field"", 606, 0]]","[[""field"", 610, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+full,7,0,True,True,1,"[[""field"", 655, 0]]","[[""field"", 663, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+full,7,1,True,True,1,"[[""field"", 703, 0]]","[[""field"", 707, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+full,8,0,True,True,1,"[[""field"", 756, 0]]",[],/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+full,8,1,True,True,1,"[[""field"", 801, 0]]",[],/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+full,9,0,True,True,1,"[[""field"", 854, 0]]",[],/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+full,9,1,True,True,1,"[[""field"", 901, 0]]",[],/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+full,10,0,True,True,1,[],[],/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+full,10,1,True,True,1,[],[],/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/full/truth-before-prediction.json
+static,0,0,True,True,1,"[[""field"", 18, 0]]","[[""field"", 26, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+static,0,1,True,True,1,"[[""field"", 60, 0]]","[[""field"", 64, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+static,1,0,True,True,1,"[[""field"", 100, 0]]","[[""field"", 108, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+static,1,1,True,True,1,"[[""field"", 142, 0]]","[[""field"", 146, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+static,2,0,True,True,1,"[[""field"", 184, 0]]","[[""field"", 192, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+static,2,1,True,True,1,"[[""field"", 227, 0]]","[[""field"", 231, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+static,3,0,True,True,1,"[[""field"", 270, 0]]","[[""field"", 278, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+static,3,1,True,True,1,"[[""field"", 314, 0]]","[[""field"", 318, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+static,4,0,True,True,1,"[[""field"", 364, 0]]","[[""field"", 372, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+static,4,1,True,True,1,"[[""field"", 409, 0]]","[[""field"", 413, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+static,5,0,True,True,1,"[[""field"", 455, 0]]","[[""field"", 463, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+static,5,1,True,True,1,"[[""field"", 501, 0]]","[[""field"", 505, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+static,6,0,True,True,1,"[[""field"", 559, 0]]","[[""field"", 567, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+static,6,1,True,True,1,"[[""field"", 606, 0]]","[[""field"", 610, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+static,7,0,True,True,1,"[[""field"", 655, 0]]","[[""field"", 663, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+static,7,1,True,True,1,"[[""field"", 703, 0]]","[[""field"", 707, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+static,8,0,True,True,1,"[[""field"", 756, 0]]",[],/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+static,8,1,True,True,1,"[[""field"", 801, 0]]",[],/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+static,9,0,True,True,1,"[[""field"", 854, 0]]",[],/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+static,9,1,True,True,1,"[[""field"", 901, 0]]",[],/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+static,10,0,True,True,1,[],[],/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+static,10,1,True,True,1,[],[],/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/static/truth-before-prediction.json
+selective,0,0,True,True,1,"[[""field"", 18, 0]]","[[""field"", 26, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json
+selective,0,1,True,True,1,"[[""field"", 60, 0]]","[[""field"", 64, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json
+selective,1,0,True,True,1,"[[""field"", 100, 0]]","[[""field"", 108, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json
+selective,1,1,True,True,1,"[[""field"", 142, 0]]","[[""field"", 146, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json
+selective,2,0,True,True,1,"[[""field"", 184, 0]]","[[""field"", 192, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json
+selective,2,1,True,True,1,"[[""field"", 227, 0]]","[[""field"", 231, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json
+selective,3,0,True,True,1,"[[""field"", 270, 0]]","[[""field"", 278, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json
+selective,3,1,True,True,1,"[[""field"", 314, 0]]","[[""field"", 318, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json
+selective,4,0,True,True,1,"[[""field"", 364, 0]]","[[""field"", 372, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json
+selective,4,1,True,True,1,"[[""field"", 409, 0]]","[[""field"", 413, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json
+selective,5,0,True,True,1,"[[""field"", 455, 0]]","[[""field"", 463, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json
+selective,5,1,True,True,1,"[[""field"", 501, 0]]","[[""field"", 505, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json
+selective,6,0,True,True,1,"[[""field"", 559, 0]]","[[""field"", 567, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json
+selective,6,1,True,True,1,"[[""field"", 606, 0]]","[[""field"", 610, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json
+selective,7,0,True,True,1,"[[""field"", 655, 0]]","[[""field"", 663, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json
+selective,7,1,True,True,1,"[[""field"", 703, 0]]","[[""field"", 707, 0]]",/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json
+selective,8,0,True,True,1,"[[""field"", 756, 0]]",[],/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json
+selective,8,1,True,True,1,"[[""field"", 801, 0]]",[],/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json
+selective,9,0,True,True,1,"[[""field"", 854, 0]]",[],/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json
+selective,9,1,True,True,1,"[[""field"", 901, 0]]",[],/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json
+selective,10,0,True,True,1,[],[],/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json
+selective,10,1,True,True,1,[],[],/home/wujian/tracefusion2/artifacts/call-write-footprints-20261112/final-jvm-01/selective/truth-before-prediction.json

@@ -1,0 +1,49 @@
+mode,fault,expected,state,passed,error
+full,missing-condition,unknown,unknown,True,
+full,ambiguous-condition,unknown,unknown,True,
+full,condition-version-gap,unknown,unknown,True,
+full,source-call,evidence_invalid,evidence_invalid,True,Declared source call pair absent/ambiguous
+full,source-PC,evidence_invalid,evidence_invalid,True,Declared source occurrence coordinates differ
+full,source-caller,evidence_invalid,evidence_invalid,True,Declared source occurrence coordinates differ
+full,branch-missing,evidence_invalid,evidence_invalid,True,Application expected branch at CallWriteFootprintFixture.root(LCallWriteFootprintFixture$Store;LCallWriteFootprintFixture$Worker;II)LCallWriteFootprintFixture$Out;@41
+full,branch-duplicate,evidence_invalid,evidence_invalid,True,Application expected read at CallWriteFootprintFixture.root(LCallWriteFootprintFixture$Store;LCallWriteFootprintFixture$Worker;II)LCallWriteFootprintFixture$Out;@168
+full,branch-result,evidence_invalid,evidence_invalid,True,Execution branch contradicts operands
+full,branch-Frame,evidence_invalid,evidence_invalid,True,Application expected branch at CallWriteFootprintFixture.root(LCallWriteFootprintFixture$Store;LCallWriteFootprintFixture$Worker;II)LCallWriteFootprintFixture$Out;@41
+full,branch-PC,evidence_invalid,evidence_invalid,True,Application instruction site differs
+full,parent-call,evidence_invalid,evidence_invalid,True,Application invocation parent missing or not earlier
+full,link-object,evidence_invalid,evidence_invalid,True,Execution object identity differs
+full,link-version,evidence_invalid,evidence_invalid,True,Invalid actual field write version
+full,link-write-missing,evidence_invalid,evidence_invalid,True,Execution constructor write missing/ambiguous
+full,sticky,evidence_invalid,evidence_invalid,True,
+static,missing-condition,unknown,unknown,True,
+static,ambiguous-condition,unknown,unknown,True,
+static,condition-version-gap,unknown,unknown,True,
+static,source-call,evidence_invalid,evidence_invalid,True,Declared source call pair absent/ambiguous
+static,source-PC,evidence_invalid,evidence_invalid,True,Declared source occurrence coordinates differ
+static,source-caller,evidence_invalid,evidence_invalid,True,Declared source occurrence coordinates differ
+static,branch-missing,evidence_invalid,evidence_invalid,True,Application expected branch at CallWriteFootprintFixture.root(LCallWriteFootprintFixture$Store;LCallWriteFootprintFixture$Worker;II)LCallWriteFootprintFixture$Out;@41
+static,branch-duplicate,evidence_invalid,evidence_invalid,True,Application expected read at CallWriteFootprintFixture.root(LCallWriteFootprintFixture$Store;LCallWriteFootprintFixture$Worker;II)LCallWriteFootprintFixture$Out;@168
+static,branch-result,evidence_invalid,evidence_invalid,True,Execution branch contradicts operands
+static,branch-Frame,evidence_invalid,evidence_invalid,True,Application expected branch at CallWriteFootprintFixture.root(LCallWriteFootprintFixture$Store;LCallWriteFootprintFixture$Worker;II)LCallWriteFootprintFixture$Out;@41
+static,branch-PC,evidence_invalid,evidence_invalid,True,Application instruction site differs
+static,parent-call,evidence_invalid,evidence_invalid,True,Application invocation parent missing or not earlier
+static,link-object,evidence_invalid,evidence_invalid,True,Execution object identity differs
+static,link-version,evidence_invalid,evidence_invalid,True,Invalid actual field write version
+static,link-write-missing,evidence_invalid,evidence_invalid,True,Execution constructor write missing/ambiguous
+static,sticky,evidence_invalid,evidence_invalid,True,
+selective,missing-condition,unknown,unknown,True,
+selective,ambiguous-condition,unknown,unknown,True,
+selective,condition-version-gap,unknown,unknown,True,
+selective,source-call,evidence_invalid,evidence_invalid,True,Declared source call pair absent/ambiguous
+selective,source-PC,evidence_invalid,evidence_invalid,True,Declared source occurrence coordinates differ
+selective,source-caller,evidence_invalid,evidence_invalid,True,Declared source occurrence coordinates differ
+selective,branch-missing,evidence_invalid,evidence_invalid,True,Application expected branch at CallWriteFootprintFixture.root(LCallWriteFootprintFixture$Store;LCallWriteFootprintFixture$Worker;II)LCallWriteFootprintFixture$Out;@41
+selective,branch-duplicate,evidence_invalid,evidence_invalid,True,Application expected read at CallWriteFootprintFixture.root(LCallWriteFootprintFixture$Store;LCallWriteFootprintFixture$Worker;II)LCallWriteFootprintFixture$Out;@168
+selective,branch-result,evidence_invalid,evidence_invalid,True,Execution branch contradicts operands
+selective,branch-Frame,evidence_invalid,evidence_invalid,True,Application expected branch at CallWriteFootprintFixture.root(LCallWriteFootprintFixture$Store;LCallWriteFootprintFixture$Worker;II)LCallWriteFootprintFixture$Out;@41
+selective,branch-PC,evidence_invalid,evidence_invalid,True,Application instruction site differs
+selective,parent-call,evidence_invalid,evidence_invalid,True,Application invocation parent missing or not earlier
+selective,link-object,evidence_invalid,evidence_invalid,True,Execution object identity differs
+selective,link-version,evidence_invalid,evidence_invalid,True,Invalid actual field write version
+selective,link-write-missing,evidence_invalid,evidence_invalid,True,Execution constructor write missing/ambiguous
+selective,sticky,evidence_invalid,evidence_invalid,True,

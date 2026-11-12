@@ -19,8 +19,10 @@ def score(plan,rows,truth):
     for t in truth:
         ret=next(r for r in rows if r['kind']=='binding-return'and r['message']==t['message'])
         a=next(a for a in result['answers']if a['root_frame']==ret['frame']and a['path']=='/value')
+        physical=[f for f in ret['fields']if f['path']=='/value'];assert len(physical)==1
+        physical=physical[0];assert physical['field']=='CallWriteFootprintFixture$Out.value'and physical['version']==1
         roles={tuple(x['token']):x['role']for x in t['raw']}
-        ok=a['known']and a['version']==1 and set(map(tuple,a['origins']))==set(map(tuple,t['origins']))and set(map(tuple,a['selectors']))==set(map(tuple,t['selectors']))
+        ok=a['known']and all(a[k]==physical[k]for k in ('owner','field','version')) and set(map(tuple,a['origins']))==set(map(tuple,t['origins']))and set(map(tuple,a['selectors']))==set(map(tuple,t['selectors']))
         checks.append({'scenario':t['scenario'],'input':t['input'],'complete_correct':ok,'answer':a})
         normalized.append({'scenario':t['scenario'],'input':t['input'],'known':a['known'],'version':a['version'],'origins':sorted(roles.get(tuple(x),'UNEXPECTED:'+str(x))for x in a['origins']),'selectors':sorted(roles.get(tuple(x),'UNEXPECTED:'+str(x))for x in a['selectors'])})
     return result,checks,normalized
@@ -64,7 +66,8 @@ def run(out,limited=False):
             s,n=c['scenario'],c['input'];wanted=set()if s==10 else{11 if s in(8,9)or n else 10};selection={20}if s<8 else set()
             if limited and n:wanted=set()  # replace() then writes literal 7
             assert c['value']==(9 if s==10 else 7)
-            truth.append({'scenario':s,'input':n,'message':c['message'],'origins':[tokens[x]for x in wanted],'selectors':[tokens[x]for x in selection],'raw':raw})
+            target=next(r for r in rows if r['kind']=='binding-return'and r['message']==c['message'])
+            truth.append({'scenario':s,'input':n,'message':c['message'],'origins':[tokens[x]for x in wanted],'selectors':[tokens[x]for x in selection],'raw':raw,'raw_target':target['fields']})
         save(d/'truth-before-prediction.json',truth)
         try:
             result,checks,normalized=score(plan,rows,truth)
