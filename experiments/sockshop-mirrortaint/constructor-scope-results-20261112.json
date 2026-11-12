@@ -1,0 +1,50 @@
+{
+  "starting_main": "d3307ee5859b5d75313488cabb423d64aecf6481",
+  "reference_offline_core": "060a5ffd1efc12be0b0901520a9340f89f18b984",
+  "core_changed": false,
+  "Agent_changed": false,
+  "framework_contracts_changed": false,
+  "production_constructor_rule_enabled": false,
+  "native_contract_enabled": false,
+  "summary_review_is_runtime_license": false,
+  "original_66_per_mode": {
+    "correct": 60,
+    "unknown": 6,
+    "wrong_known": 0
+  },
+  "supplement_split_counts": {
+    "full": {
+      "correct": 13,
+      "unknown": 4,
+      "rejected": 2,
+      "incorrect_selection": 1
+    },
+    "static": {
+      "correct": 13,
+      "unknown": 4,
+      "rejected": 2,
+      "incorrect_selection": 1
+    },
+    "selective": {
+      "correct": 13,
+      "unknown": 4,
+      "rejected": 2,
+      "incorrect_selection": 1
+    }
+  },
+  "original_whole_supplement_batch": "three modes rejected; retained, not replaced by split counts",
+  "new_guards": 54,
+  "unit_tests": 54,
+  "prior_old_control_captures_replayed": 18,
+  "prior_old_business_and_selection_captures_replayed": 14,
+  "prior_Galette_files_preserved": 18,
+  "original_full_acceptance_passed": false,
+  "supplement_full_acceptance_passed": false,
+  "all_implementation_work_complete": false,
+  "stop_reason": "JDK/native effect and internal write-version/dispatch/class-initialization evidence not closed; no production authorization issued",
+  "additional_failures": [
+    "unsupported override frame expectation mismatch",
+    "one extra selector on exceptional constructor completion"
+  ],
+  "performance": null
+}

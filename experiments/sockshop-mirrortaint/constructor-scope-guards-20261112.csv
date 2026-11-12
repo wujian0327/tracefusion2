@@ -1,0 +1,55 @@
+mode,fault,state,passed,error
+full,missing-start,evidence_invalid,True,Constructor completion without entry
+full,duplicate-start,evidence_invalid,True,Constructor ID repeated
+full,wrong-start-id,evidence_invalid,True,Constructor completion identity/caller differs
+full,wrong-start-pc,evidence_invalid,True,Constructor completion identity/caller differs
+full,missing-completion,evidence_invalid,True,Constructor lifecycle incomplete
+full,duplicate-completion,evidence_invalid,True,Constructor completion without entry
+full,wrong-receiver,evidence_invalid,True,Application allocation rebound
+full,wrong-completion-id,evidence_invalid,True,Constructor completion identity/caller differs
+full,missing-parent-frame,evidence_invalid,True,Constructor chain Frame/occurrence differs
+full,wrong-parent-frame,evidence_invalid,True,Application invocation parent missing or not earlier
+full,missing-defaults,evidence_invalid,True,Required allocation default witness absent
+full,duplicate-defaults,evidence_invalid,True,Default allocation occurrence/object repeated
+full,wrong-default-version,evidence_invalid,True,Default owner/version differs
+full,wrong-default-object,evidence_invalid,True,Default initialized constructor Frame differs
+full,missing-child-write,evidence_invalid,True,Application expected write at ConstructorScopeFixture$Child.<init>(LConstructorScopeFixture$Datum;LConstructorScopeFixture$Datum;)V@5
+full,duplicate-child-write,evidence_invalid,True,Physical field write version did not increase
+full,wrong-write-version,evidence_invalid,True,Invalid actual field write version
+full,wrong-reference-object,evidence_invalid,True,Execution object identity differs
+static,missing-start,evidence_invalid,True,Constructor completion without entry
+static,duplicate-start,evidence_invalid,True,Constructor ID repeated
+static,wrong-start-id,evidence_invalid,True,Constructor completion identity/caller differs
+static,wrong-start-pc,evidence_invalid,True,Constructor completion identity/caller differs
+static,missing-completion,evidence_invalid,True,Constructor lifecycle incomplete
+static,duplicate-completion,evidence_invalid,True,Constructor completion without entry
+static,wrong-receiver,evidence_invalid,True,Application allocation rebound
+static,wrong-completion-id,evidence_invalid,True,Constructor completion identity/caller differs
+static,missing-parent-frame,evidence_invalid,True,Constructor chain Frame/occurrence differs
+static,wrong-parent-frame,evidence_invalid,True,Application invocation parent missing or not earlier
+static,missing-defaults,evidence_invalid,True,Required allocation default witness absent
+static,duplicate-defaults,evidence_invalid,True,Default allocation occurrence/object repeated
+static,wrong-default-version,evidence_invalid,True,Default owner/version differs
+static,wrong-default-object,evidence_invalid,True,Default initialized constructor Frame differs
+static,missing-child-write,evidence_invalid,True,Application expected write at ConstructorScopeFixture$Child.<init>(LConstructorScopeFixture$Datum;LConstructorScopeFixture$Datum;)V@5
+static,duplicate-child-write,evidence_invalid,True,Physical field write version did not increase
+static,wrong-write-version,evidence_invalid,True,Invalid actual field write version
+static,wrong-reference-object,evidence_invalid,True,Execution object identity differs
+selective,missing-start,evidence_invalid,True,Constructor completion without entry
+selective,duplicate-start,evidence_invalid,True,Constructor ID repeated
+selective,wrong-start-id,evidence_invalid,True,Constructor completion identity/caller differs
+selective,wrong-start-pc,evidence_invalid,True,Constructor completion identity/caller differs
+selective,missing-completion,evidence_invalid,True,Constructor lifecycle incomplete
+selective,duplicate-completion,evidence_invalid,True,Constructor completion without entry
+selective,wrong-receiver,evidence_invalid,True,Application allocation rebound
+selective,wrong-completion-id,evidence_invalid,True,Constructor completion identity/caller differs
+selective,missing-parent-frame,evidence_invalid,True,Constructor chain Frame/occurrence differs
+selective,wrong-parent-frame,evidence_invalid,True,Application invocation parent missing or not earlier
+selective,missing-defaults,evidence_invalid,True,Required allocation default witness absent
+selective,duplicate-defaults,evidence_invalid,True,Default allocation occurrence/object repeated
+selective,wrong-default-version,evidence_invalid,True,Default owner/version differs
+selective,wrong-default-object,evidence_invalid,True,Default initialized constructor Frame differs
+selective,missing-child-write,evidence_invalid,True,Application expected write at ConstructorScopeFixture$Child.<init>(LConstructorScopeFixture$Datum;LConstructorScopeFixture$Datum;)V@5
+selective,duplicate-child-write,evidence_invalid,True,Physical field write version did not increase
+selective,wrong-write-version,evidence_invalid,True,Invalid actual field write version
+selective,wrong-reference-object,evidence_invalid,True,Execution object identity differs

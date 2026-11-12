@@ -1,0 +1,731 @@
+{
+  "installed_bytecode_and_binary_receipt": {
+    "java": "68e380b6a96f0032786f90ff89cc76bd25cd2ceeffe063a9400c89a734a8df37",
+    "rt_jar": "8f20323f5d69f9d46a6a9ef67621a01d7a2704ad9b79afc7fb4f97192f600e6b",
+    "libjvm": "fba4526059a3b4da8382b90750ad307136e26b99c8316a06e1c783d57185a6a7",
+    "libjava": "4ce093b774e59a613f4e77245159e989660e8892a78e02a8713112edb53ddb3d",
+    "class_sha256": {
+      "java/lang/Object": "91e9554ea0fac57b7ca9595ab777fe2578af2e5b111e8c240e1793f1a3686292",
+      "java/lang/Throwable": "48cc88a0797afe282c55f2aa889e84485198b90ab9965e59244ed7367dcad19b",
+      "java/lang/Exception": "4243acf4fbcc768345e3486002c22c7dace2281c76374a7ea4d8f6fb95e2adb9",
+      "java/lang/RuntimeException": "8f27d65ed9b8975772dee6a42acadebfe663462761719c1c34ead3c0eb0c6355",
+      "java/lang/IllegalArgumentException": "86fa521e5cd3364b54c1f4f04cb200c285ea72383205904bee15b2c45f28f400"
+    },
+    "metadata_JDK": "host8u512; original bytecode from restored8u504",
+    "native_contract_activated": false,
+    "runtime_flags_are_independent_probe_not_old_request_evidence": true,
+    "reviews_have_runtime_license": false
+  },
+  "upstream_sources": [
+    {
+      "url": "https://raw.githubusercontent.com/openjdk/jdk8u/jdk8u504-ga/jdk/src/share/native/java/lang/Throwable.c",
+      "bytes": 2257,
+      "sha256": "9f5b2a4a2604f23e9f0d49163985a8e5638a7eb2157c169229dc624441e57eb3"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/openjdk/jdk8u/jdk8u504-ga/hotspot/src/share/vm/prims/jvm.cpp",
+      "bytes": 177564,
+      "sha256": "5817054d820c624f3c83be346794da4c89b0e6fd229597312cda76dfaf1cef11"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/openjdk/jdk8u/jdk8u504-ga/hotspot/src/share/vm/classfile/javaClasses.cpp",
+      "bytes": 144144,
+      "sha256": "f79233f0eadf68d501bf9fcd4f2c0403f26476348747c27583ca95b3db391be2"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/openjdk/jdk8u/jdk8u504-ga/jdk/src/share/classes/java/lang/Throwable.java",
+      "bytes": 46886,
+      "sha256": "c3fdda386b696143830c244b79e8fbe14e400c3a95aaba50ac269585c7dea20a"
+    }
+  ],
+  "reviews": [
+    {
+      "kind": "constructor-effect-review-v1",
+      "constructor": "java/lang/IllegalArgumentException.<init>(Ljava/lang/String;)V",
+      "class_sha256": {
+        "java/lang/Exception": "4243acf4fbcc768345e3486002c22c7dace2281c76374a7ea4d8f6fb95e2adb9",
+        "java/lang/IllegalArgumentException": "86fa521e5cd3364b54c1f4f04cb200c285ea72383205904bee15b2c45f28f400",
+        "java/lang/Object": "91e9554ea0fac57b7ca9595ab777fe2578af2e5b111e8c240e1793f1a3686292",
+        "java/lang/RuntimeException": "8f27d65ed9b8975772dee6a42acadebfe663462761719c1c34ead3c0eb0c6355",
+        "java/lang/Throwable": "48cc88a0797afe282c55f2aa889e84485198b90ab9965e59244ed7367dcad19b"
+      },
+      "write_addresses": [
+        {
+          "root": "this",
+          "fields": [
+            [
+              "java/lang/Throwable.cause",
+              "Ljava/lang/Throwable;"
+            ]
+          ]
+        },
+        {
+          "root": "this",
+          "fields": [
+            [
+              "java/lang/Throwable.detailMessage",
+              "Ljava/lang/String;"
+            ]
+          ]
+        },
+        {
+          "root": "this",
+          "fields": [
+            [
+              "java/lang/Throwable.stackTrace",
+              "[Ljava/lang/StackTraceElement;"
+            ]
+          ]
+        },
+        {
+          "root": "this",
+          "fields": [
+            [
+              "java/lang/Throwable.suppressedExceptions",
+              "Ljava/util/List;"
+            ]
+          ]
+        }
+      ],
+      "write_sites": [
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 4,
+          "field": "java/lang/Throwable.cause",
+          "descriptor": "Ljava/lang/Throwable;"
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 7,
+          "field": "java/lang/Throwable.stackTrace",
+          "descriptor": "[Ljava/lang/StackTraceElement;"
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 10,
+          "field": "java/lang/Throwable.suppressedExceptions",
+          "descriptor": "Ljava/util/List;"
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 16,
+          "field": "java/lang/Throwable.detailMessage",
+          "descriptor": "Ljava/lang/String;"
+        }
+      ],
+      "parameter_or_nested_writes": [],
+      "reference_stores": [
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 4,
+          "field": "java/lang/Throwable.cause",
+          "value_definitions": [
+            3
+          ],
+          "receiver_definitions": [
+            2
+          ],
+          "external_alias_must_remain_reachable": true
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 7,
+          "field": "java/lang/Throwable.stackTrace",
+          "value_definitions": [
+            6
+          ],
+          "receiver_definitions": [
+            5
+          ],
+          "external_alias_must_remain_reachable": true
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 10,
+          "field": "java/lang/Throwable.suppressedExceptions",
+          "value_definitions": [
+            9
+          ],
+          "receiver_definitions": [
+            8
+          ],
+          "external_alias_must_remain_reachable": true
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 16,
+          "field": "java/lang/Throwable.detailMessage",
+          "value_definitions": [
+            15
+          ],
+          "receiver_definitions": [
+            14
+          ],
+          "external_alias_must_remain_reachable": true
+        }
+      ],
+      "global_stores": [],
+      "calls": [
+        {
+          "caller": "java/lang/IllegalArgumentException.<init>(Ljava/lang/String;)V",
+          "pc": 2,
+          "callee": "java/lang/RuntimeException.<init>(Ljava/lang/String;)V",
+          "opcode": 183
+        },
+        {
+          "caller": "java/lang/RuntimeException.<init>(Ljava/lang/String;)V",
+          "pc": 2,
+          "callee": "java/lang/Exception.<init>(Ljava/lang/String;)V",
+          "opcode": 183
+        },
+        {
+          "caller": "java/lang/Exception.<init>(Ljava/lang/String;)V",
+          "pc": 2,
+          "callee": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "opcode": 183
+        },
+        {
+          "caller": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 1,
+          "callee": "java/lang/Object.<init>()V",
+          "opcode": 183
+        },
+        {
+          "caller": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 12,
+          "callee": "java/lang/Throwable.fillInStackTrace()Ljava/lang/Throwable;",
+          "opcode": 182
+        }
+      ],
+      "unclosed": [
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 12,
+          "reason": "dispatch/callback/native effect not certified",
+          "callee": "java/lang/Throwable.fillInStackTrace()Ljava/lang/Throwable;"
+        },
+        {
+          "method": "java/lang/Throwable.fillInStackTrace(I)Ljava/lang/Throwable;",
+          "reason": "unclosed transitive effect"
+        }
+      ],
+      "initialization_obligations": [
+        "java/lang/Object",
+        "java/lang/Throwable"
+      ],
+      "static_local_candidate": false,
+      "runtime_license": false,
+      "runtime_blockers": [
+        "No new constructor-effect witness protocol is active",
+        "Actual allocation/dispatch/class-init/native effect/write-version/completion facts must be verified before certification"
+      ],
+      "core_consumes_this_review": false
+    },
+    {
+      "kind": "constructor-effect-review-v1",
+      "constructor": "java/lang/RuntimeException.<init>(Ljava/lang/String;)V",
+      "class_sha256": {
+        "java/lang/Exception": "4243acf4fbcc768345e3486002c22c7dace2281c76374a7ea4d8f6fb95e2adb9",
+        "java/lang/Object": "91e9554ea0fac57b7ca9595ab777fe2578af2e5b111e8c240e1793f1a3686292",
+        "java/lang/RuntimeException": "8f27d65ed9b8975772dee6a42acadebfe663462761719c1c34ead3c0eb0c6355",
+        "java/lang/Throwable": "48cc88a0797afe282c55f2aa889e84485198b90ab9965e59244ed7367dcad19b"
+      },
+      "write_addresses": [
+        {
+          "root": "this",
+          "fields": [
+            [
+              "java/lang/Throwable.cause",
+              "Ljava/lang/Throwable;"
+            ]
+          ]
+        },
+        {
+          "root": "this",
+          "fields": [
+            [
+              "java/lang/Throwable.detailMessage",
+              "Ljava/lang/String;"
+            ]
+          ]
+        },
+        {
+          "root": "this",
+          "fields": [
+            [
+              "java/lang/Throwable.stackTrace",
+              "[Ljava/lang/StackTraceElement;"
+            ]
+          ]
+        },
+        {
+          "root": "this",
+          "fields": [
+            [
+              "java/lang/Throwable.suppressedExceptions",
+              "Ljava/util/List;"
+            ]
+          ]
+        }
+      ],
+      "write_sites": [
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 4,
+          "field": "java/lang/Throwable.cause",
+          "descriptor": "Ljava/lang/Throwable;"
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 7,
+          "field": "java/lang/Throwable.stackTrace",
+          "descriptor": "[Ljava/lang/StackTraceElement;"
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 10,
+          "field": "java/lang/Throwable.suppressedExceptions",
+          "descriptor": "Ljava/util/List;"
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 16,
+          "field": "java/lang/Throwable.detailMessage",
+          "descriptor": "Ljava/lang/String;"
+        }
+      ],
+      "parameter_or_nested_writes": [],
+      "reference_stores": [
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 4,
+          "field": "java/lang/Throwable.cause",
+          "value_definitions": [
+            3
+          ],
+          "receiver_definitions": [
+            2
+          ],
+          "external_alias_must_remain_reachable": true
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 7,
+          "field": "java/lang/Throwable.stackTrace",
+          "value_definitions": [
+            6
+          ],
+          "receiver_definitions": [
+            5
+          ],
+          "external_alias_must_remain_reachable": true
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 10,
+          "field": "java/lang/Throwable.suppressedExceptions",
+          "value_definitions": [
+            9
+          ],
+          "receiver_definitions": [
+            8
+          ],
+          "external_alias_must_remain_reachable": true
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 16,
+          "field": "java/lang/Throwable.detailMessage",
+          "value_definitions": [
+            15
+          ],
+          "receiver_definitions": [
+            14
+          ],
+          "external_alias_must_remain_reachable": true
+        }
+      ],
+      "global_stores": [],
+      "calls": [
+        {
+          "caller": "java/lang/RuntimeException.<init>(Ljava/lang/String;)V",
+          "pc": 2,
+          "callee": "java/lang/Exception.<init>(Ljava/lang/String;)V",
+          "opcode": 183
+        },
+        {
+          "caller": "java/lang/Exception.<init>(Ljava/lang/String;)V",
+          "pc": 2,
+          "callee": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "opcode": 183
+        },
+        {
+          "caller": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 1,
+          "callee": "java/lang/Object.<init>()V",
+          "opcode": 183
+        },
+        {
+          "caller": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 12,
+          "callee": "java/lang/Throwable.fillInStackTrace()Ljava/lang/Throwable;",
+          "opcode": 182
+        }
+      ],
+      "unclosed": [
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 12,
+          "reason": "dispatch/callback/native effect not certified",
+          "callee": "java/lang/Throwable.fillInStackTrace()Ljava/lang/Throwable;"
+        },
+        {
+          "method": "java/lang/Throwable.fillInStackTrace(I)Ljava/lang/Throwable;",
+          "reason": "unclosed transitive effect"
+        }
+      ],
+      "initialization_obligations": [
+        "java/lang/Object",
+        "java/lang/Throwable"
+      ],
+      "static_local_candidate": false,
+      "runtime_license": false,
+      "runtime_blockers": [
+        "No new constructor-effect witness protocol is active",
+        "Actual allocation/dispatch/class-init/native effect/write-version/completion facts must be verified before certification"
+      ],
+      "core_consumes_this_review": false
+    },
+    {
+      "kind": "constructor-effect-review-v1",
+      "constructor": "java/lang/Exception.<init>(Ljava/lang/String;)V",
+      "class_sha256": {
+        "java/lang/Exception": "4243acf4fbcc768345e3486002c22c7dace2281c76374a7ea4d8f6fb95e2adb9",
+        "java/lang/Object": "91e9554ea0fac57b7ca9595ab777fe2578af2e5b111e8c240e1793f1a3686292",
+        "java/lang/Throwable": "48cc88a0797afe282c55f2aa889e84485198b90ab9965e59244ed7367dcad19b"
+      },
+      "write_addresses": [
+        {
+          "root": "this",
+          "fields": [
+            [
+              "java/lang/Throwable.cause",
+              "Ljava/lang/Throwable;"
+            ]
+          ]
+        },
+        {
+          "root": "this",
+          "fields": [
+            [
+              "java/lang/Throwable.detailMessage",
+              "Ljava/lang/String;"
+            ]
+          ]
+        },
+        {
+          "root": "this",
+          "fields": [
+            [
+              "java/lang/Throwable.stackTrace",
+              "[Ljava/lang/StackTraceElement;"
+            ]
+          ]
+        },
+        {
+          "root": "this",
+          "fields": [
+            [
+              "java/lang/Throwable.suppressedExceptions",
+              "Ljava/util/List;"
+            ]
+          ]
+        }
+      ],
+      "write_sites": [
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 4,
+          "field": "java/lang/Throwable.cause",
+          "descriptor": "Ljava/lang/Throwable;"
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 7,
+          "field": "java/lang/Throwable.stackTrace",
+          "descriptor": "[Ljava/lang/StackTraceElement;"
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 10,
+          "field": "java/lang/Throwable.suppressedExceptions",
+          "descriptor": "Ljava/util/List;"
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 16,
+          "field": "java/lang/Throwable.detailMessage",
+          "descriptor": "Ljava/lang/String;"
+        }
+      ],
+      "parameter_or_nested_writes": [],
+      "reference_stores": [
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 4,
+          "field": "java/lang/Throwable.cause",
+          "value_definitions": [
+            3
+          ],
+          "receiver_definitions": [
+            2
+          ],
+          "external_alias_must_remain_reachable": true
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 7,
+          "field": "java/lang/Throwable.stackTrace",
+          "value_definitions": [
+            6
+          ],
+          "receiver_definitions": [
+            5
+          ],
+          "external_alias_must_remain_reachable": true
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 10,
+          "field": "java/lang/Throwable.suppressedExceptions",
+          "value_definitions": [
+            9
+          ],
+          "receiver_definitions": [
+            8
+          ],
+          "external_alias_must_remain_reachable": true
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 16,
+          "field": "java/lang/Throwable.detailMessage",
+          "value_definitions": [
+            15
+          ],
+          "receiver_definitions": [
+            14
+          ],
+          "external_alias_must_remain_reachable": true
+        }
+      ],
+      "global_stores": [],
+      "calls": [
+        {
+          "caller": "java/lang/Exception.<init>(Ljava/lang/String;)V",
+          "pc": 2,
+          "callee": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "opcode": 183
+        },
+        {
+          "caller": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 1,
+          "callee": "java/lang/Object.<init>()V",
+          "opcode": 183
+        },
+        {
+          "caller": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 12,
+          "callee": "java/lang/Throwable.fillInStackTrace()Ljava/lang/Throwable;",
+          "opcode": 182
+        }
+      ],
+      "unclosed": [
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 12,
+          "reason": "dispatch/callback/native effect not certified",
+          "callee": "java/lang/Throwable.fillInStackTrace()Ljava/lang/Throwable;"
+        },
+        {
+          "method": "java/lang/Throwable.fillInStackTrace(I)Ljava/lang/Throwable;",
+          "reason": "unclosed transitive effect"
+        }
+      ],
+      "initialization_obligations": [
+        "java/lang/Object",
+        "java/lang/Throwable"
+      ],
+      "static_local_candidate": false,
+      "runtime_license": false,
+      "runtime_blockers": [
+        "No new constructor-effect witness protocol is active",
+        "Actual allocation/dispatch/class-init/native effect/write-version/completion facts must be verified before certification"
+      ],
+      "core_consumes_this_review": false
+    },
+    {
+      "kind": "constructor-effect-review-v1",
+      "constructor": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+      "class_sha256": {
+        "java/lang/Object": "91e9554ea0fac57b7ca9595ab777fe2578af2e5b111e8c240e1793f1a3686292",
+        "java/lang/Throwable": "48cc88a0797afe282c55f2aa889e84485198b90ab9965e59244ed7367dcad19b"
+      },
+      "write_addresses": [
+        {
+          "root": "this",
+          "fields": [
+            [
+              "java/lang/Throwable.cause",
+              "Ljava/lang/Throwable;"
+            ]
+          ]
+        },
+        {
+          "root": "this",
+          "fields": [
+            [
+              "java/lang/Throwable.detailMessage",
+              "Ljava/lang/String;"
+            ]
+          ]
+        },
+        {
+          "root": "this",
+          "fields": [
+            [
+              "java/lang/Throwable.stackTrace",
+              "[Ljava/lang/StackTraceElement;"
+            ]
+          ]
+        },
+        {
+          "root": "this",
+          "fields": [
+            [
+              "java/lang/Throwable.suppressedExceptions",
+              "Ljava/util/List;"
+            ]
+          ]
+        }
+      ],
+      "write_sites": [
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 4,
+          "field": "java/lang/Throwable.cause",
+          "descriptor": "Ljava/lang/Throwable;"
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 7,
+          "field": "java/lang/Throwable.stackTrace",
+          "descriptor": "[Ljava/lang/StackTraceElement;"
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 10,
+          "field": "java/lang/Throwable.suppressedExceptions",
+          "descriptor": "Ljava/util/List;"
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 16,
+          "field": "java/lang/Throwable.detailMessage",
+          "descriptor": "Ljava/lang/String;"
+        }
+      ],
+      "parameter_or_nested_writes": [],
+      "reference_stores": [
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 4,
+          "field": "java/lang/Throwable.cause",
+          "value_definitions": [
+            3
+          ],
+          "receiver_definitions": [
+            2
+          ],
+          "external_alias_must_remain_reachable": true
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 7,
+          "field": "java/lang/Throwable.stackTrace",
+          "value_definitions": [
+            6
+          ],
+          "receiver_definitions": [
+            5
+          ],
+          "external_alias_must_remain_reachable": true
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 10,
+          "field": "java/lang/Throwable.suppressedExceptions",
+          "value_definitions": [
+            9
+          ],
+          "receiver_definitions": [
+            8
+          ],
+          "external_alias_must_remain_reachable": true
+        },
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 16,
+          "field": "java/lang/Throwable.detailMessage",
+          "value_definitions": [
+            15
+          ],
+          "receiver_definitions": [
+            14
+          ],
+          "external_alias_must_remain_reachable": true
+        }
+      ],
+      "global_stores": [],
+      "calls": [
+        {
+          "caller": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 1,
+          "callee": "java/lang/Object.<init>()V",
+          "opcode": 183
+        },
+        {
+          "caller": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 12,
+          "callee": "java/lang/Throwable.fillInStackTrace()Ljava/lang/Throwable;",
+          "opcode": 182
+        }
+      ],
+      "unclosed": [
+        {
+          "method": "java/lang/Throwable.<init>(Ljava/lang/String;)V",
+          "pc": 12,
+          "reason": "dispatch/callback/native effect not certified",
+          "callee": "java/lang/Throwable.fillInStackTrace()Ljava/lang/Throwable;"
+        },
+        {
+          "method": "java/lang/Throwable.fillInStackTrace(I)Ljava/lang/Throwable;",
+          "reason": "unclosed transitive effect"
+        }
+      ],
+      "initialization_obligations": [
+        "java/lang/Object",
+        "java/lang/Throwable"
+      ],
+      "static_local_candidate": false,
+      "runtime_license": false,
+      "runtime_blockers": [
+        "No new constructor-effect witness protocol is active",
+        "Actual allocation/dispatch/class-init/native effect/write-version/completion facts must be verified before certification"
+      ],
+      "core_consumes_this_review": false
+    }
+  ],
+  "native_contract_activated": false,
+  "review_is_not_a_native_effect_certificate": true
+}

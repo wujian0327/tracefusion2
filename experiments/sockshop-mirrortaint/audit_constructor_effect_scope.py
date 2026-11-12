@@ -39,12 +39,21 @@ def audit(out):
         assert {(c['scenario'],c['input'])for c in checks if not all(c['ok'].values())}=={(s,i)for s in [14,16]for i in [0,1,2]}
     assert normal['full']==normal['static']==normal['selective']
     csvwrite(out/'original66.csv',original)
-    supplement=[]
+    supplement=[];write_versions=[]
     home=H/'supplement-by-case-01'
     for scenario in range(10):
         d=home/('case-'+str(scenario));plan=load(d/'plan.json');normalized={}
         for mode in ['full','static','selective']:
             truth=load(d/mode/'truth-before-prediction.json');rows=[json.loads(l)for l in(d/mode/'events.jsonl').read_text().splitlines()]
+            if scenario in (2,7,8,9):
+                for t in truth:
+                    old=next(r for r in t['raw']if r['role']=='10')
+                    ret=next(r for r in rows if r['kind']=='binding-return'and r['message']==t['message'])
+                    writes=[r for r in rows if r['kind']=='write'and r['owner']==old['owner']and r['field']==old['field']and old['token'][1]<r['seq']<ret['seq']]
+                    expected=[]if scenario==7 and t['input']==0 else[2]
+                    assert [r['version']for r in writes]==expected and old['version']==1
+                    assert all(r['observed']['value']==7 for r in writes)
+                    write_versions.append({'mode':mode,'scenario':scenario,'input':t['input'],'owner':old['owner'],'field':old['field'],'source_version':old['version'],'new_write_versions':json.dumps(expected),'same_value_preserved':True})
             try:prediction,checks,normalized[mode]=score(plan,rows,truth)
             except (ValueError,KeyError,AssertionError)as e:
                 assert scenario==5 and str(e)=='Planned application frame evidence absent'
@@ -55,6 +64,7 @@ def audit(out):
                 supplement.append({'mode':mode,'scenario':scenario,'input':t['input'],'state':state,'matches_original_expectation':ok,'known':a['known'],'origins':json.dumps(a['origins']),'selectors':json.dumps(a['selectors']),'expected_origins':json.dumps(t['origins']),'expected_selectors':json.dumps(t['selectors']),'reason':'one extra b.value selector at exceptional completion'if not ok else''})
         if normalized:assert normalized['full']==normalized['static']==normalized['selective']
     csvwrite(out/'supplement.csv',supplement)
+    csvwrite(out/'write-versions.csv',write_versions)
     guards(home/'case-1',out/'guards');faults=load(out/'guards/results.json');assert faults['gate']
     csvwrite(out/'guards.csv',faults['checks'])
     preserved=load(H/'prior-call-write-audit-01/summary.json');assert preserved['unit_tests']==44 and preserved['new_JVM_complete_correct_per_mode']==22 and not preserved['revision_full_acceptance_passed']
