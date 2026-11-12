@@ -1,0 +1,19 @@
+{
+  "selectors": [],
+  "unknown": false,
+  "error": null,
+  "registered_cells": [
+    [
+      "holder",
+      "Child.value"
+    ]
+  ],
+  "expected_selectors": [
+    [
+      "field",
+      7,
+      0
+    ]
+  ],
+  "complete_correct": false
+}
