@@ -1,0 +1,73 @@
+mode,fault,scenario,input,expected,state,passed,error
+full,missing-condition,0,1,unknown,unknown,True,
+full,duplicate-condition,0,1,unknown,unknown,True,
+full,condition-version-gap,0,1,unknown,unknown,True,
+full,missing-null-guard,4,0,unknown,unknown,True,
+full,missing-index-guard,8,1,unknown,unknown,True,
+full,missing-needed-data,0,1,unknown,unknown,True,
+full,missing-ignored-payload,1,0,correct-known,correct-known,True,
+full,missing-stored-payload-on-bounds,8,1,correct-known,correct-known,True,
+full,source-call,0,1,evidence_invalid,evidence_invalid,True,Declared source call pair absent/ambiguous
+full,source-PC,0,1,evidence_invalid,evidence_invalid,True,Declared source occurrence coordinates differ
+full,source-caller,0,1,evidence_invalid,evidence_invalid,True,Declared source occurrence coordinates differ
+full,missing-branch,0,1,evidence_invalid,evidence_invalid,True,Application expected branch at ExceptionCompletionFixture.writeThenThrow(LExceptionCompletionFixture$Datum;IILjava/lang/IllegalArgumentException;)V@4
+full,duplicate-branch,0,1,evidence_invalid,evidence_invalid,True,Application expected abort at ExceptionCompletionFixture.writeThenThrow(LExceptionCompletionFixture$Datum;IILjava/lang/IllegalArgumentException;)V@6
+full,wrong-branch-result,0,1,evidence_invalid,evidence_invalid,True,Execution branch contradicts operands
+full,wrong-branch-PC,0,1,evidence_invalid,evidence_invalid,True,Application instruction site differs
+full,wrong-branch-frame,0,1,evidence_invalid,evidence_invalid,True,Application expected branch at ExceptionCompletionFixture.writeThenThrow(LExceptionCompletionFixture$Datum;IILjava/lang/IllegalArgumentException;)V@4
+full,missing-callee-abort,0,1,evidence_invalid,evidence_invalid,True,Application expected abort at ExceptionCompletionFixture.writeThenThrow(LExceptionCompletionFixture$Datum;IILjava/lang/IllegalArgumentException;)V@6
+full,duplicate-callee-abort,0,1,evidence_invalid,evidence_invalid,True,Exceptional child has normal caller completion
+full,wrong-parent,0,1,evidence_invalid,evidence_invalid,True,Application invocation parent missing or not earlier
+full,wrong-original-exception,0,1,evidence_invalid,evidence_invalid,True,Application rethrown object differs
+full,missing-catch,0,1,evidence_invalid,evidence_invalid,True,Application expected collection-catch at ExceptionCompletionFixture.root(LExceptionCompletionFixture$Store;IILjava/lang/IllegalArgumentException;)LExceptionCompletionFixture$Out;@24
+full,wrong-catch-object,0,1,evidence_invalid,evidence_invalid,True,Execution object identity differs
+full,wrong-array-exception,8,1,evidence_invalid,evidence_invalid,True,Array exceptional semantics differ
+full,sticky,0,1,evidence_invalid,evidence_invalid,True,
+static,missing-condition,0,1,unknown,unknown,True,
+static,duplicate-condition,0,1,unknown,unknown,True,
+static,condition-version-gap,0,1,unknown,unknown,True,
+static,missing-null-guard,4,0,unknown,unknown,True,
+static,missing-index-guard,8,1,unknown,unknown,True,
+static,missing-needed-data,0,1,unknown,unknown,True,
+static,missing-ignored-payload,1,0,correct-known,correct-known,True,
+static,missing-stored-payload-on-bounds,8,1,correct-known,correct-known,True,
+static,source-call,0,1,evidence_invalid,evidence_invalid,True,Declared source call pair absent/ambiguous
+static,source-PC,0,1,evidence_invalid,evidence_invalid,True,Declared source occurrence coordinates differ
+static,source-caller,0,1,evidence_invalid,evidence_invalid,True,Declared source occurrence coordinates differ
+static,missing-branch,0,1,evidence_invalid,evidence_invalid,True,Application expected branch at ExceptionCompletionFixture.writeThenThrow(LExceptionCompletionFixture$Datum;IILjava/lang/IllegalArgumentException;)V@4
+static,duplicate-branch,0,1,evidence_invalid,evidence_invalid,True,Application expected abort at ExceptionCompletionFixture.writeThenThrow(LExceptionCompletionFixture$Datum;IILjava/lang/IllegalArgumentException;)V@6
+static,wrong-branch-result,0,1,evidence_invalid,evidence_invalid,True,Execution branch contradicts operands
+static,wrong-branch-PC,0,1,evidence_invalid,evidence_invalid,True,Application instruction site differs
+static,wrong-branch-frame,0,1,evidence_invalid,evidence_invalid,True,Application expected branch at ExceptionCompletionFixture.writeThenThrow(LExceptionCompletionFixture$Datum;IILjava/lang/IllegalArgumentException;)V@4
+static,missing-callee-abort,0,1,evidence_invalid,evidence_invalid,True,Application expected abort at ExceptionCompletionFixture.writeThenThrow(LExceptionCompletionFixture$Datum;IILjava/lang/IllegalArgumentException;)V@6
+static,duplicate-callee-abort,0,1,evidence_invalid,evidence_invalid,True,Exceptional child has normal caller completion
+static,wrong-parent,0,1,evidence_invalid,evidence_invalid,True,Application invocation parent missing or not earlier
+static,wrong-original-exception,0,1,evidence_invalid,evidence_invalid,True,Application rethrown object differs
+static,missing-catch,0,1,evidence_invalid,evidence_invalid,True,Application expected collection-catch at ExceptionCompletionFixture.root(LExceptionCompletionFixture$Store;IILjava/lang/IllegalArgumentException;)LExceptionCompletionFixture$Out;@24
+static,wrong-catch-object,0,1,evidence_invalid,evidence_invalid,True,Execution object identity differs
+static,wrong-array-exception,8,1,evidence_invalid,evidence_invalid,True,Array exceptional semantics differ
+static,sticky,0,1,evidence_invalid,evidence_invalid,True,
+selective,missing-condition,0,1,unknown,unknown,True,
+selective,duplicate-condition,0,1,unknown,unknown,True,
+selective,condition-version-gap,0,1,unknown,unknown,True,
+selective,missing-null-guard,4,0,unknown,unknown,True,
+selective,missing-index-guard,8,1,unknown,unknown,True,
+selective,missing-needed-data,0,1,unknown,unknown,True,
+selective,missing-ignored-payload,1,0,correct-known,correct-known,True,
+selective,missing-stored-payload-on-bounds,8,1,correct-known,correct-known,True,
+selective,source-call,0,1,evidence_invalid,evidence_invalid,True,Declared source call pair absent/ambiguous
+selective,source-PC,0,1,evidence_invalid,evidence_invalid,True,Declared source occurrence coordinates differ
+selective,source-caller,0,1,evidence_invalid,evidence_invalid,True,Declared source occurrence coordinates differ
+selective,missing-branch,0,1,evidence_invalid,evidence_invalid,True,Application expected branch at ExceptionCompletionFixture.writeThenThrow(LExceptionCompletionFixture$Datum;IILjava/lang/IllegalArgumentException;)V@4
+selective,duplicate-branch,0,1,evidence_invalid,evidence_invalid,True,Application expected abort at ExceptionCompletionFixture.writeThenThrow(LExceptionCompletionFixture$Datum;IILjava/lang/IllegalArgumentException;)V@6
+selective,wrong-branch-result,0,1,evidence_invalid,evidence_invalid,True,Execution branch contradicts operands
+selective,wrong-branch-PC,0,1,evidence_invalid,evidence_invalid,True,Application instruction site differs
+selective,wrong-branch-frame,0,1,evidence_invalid,evidence_invalid,True,Application expected branch at ExceptionCompletionFixture.writeThenThrow(LExceptionCompletionFixture$Datum;IILjava/lang/IllegalArgumentException;)V@4
+selective,missing-callee-abort,0,1,evidence_invalid,evidence_invalid,True,Application expected abort at ExceptionCompletionFixture.writeThenThrow(LExceptionCompletionFixture$Datum;IILjava/lang/IllegalArgumentException;)V@6
+selective,duplicate-callee-abort,0,1,evidence_invalid,evidence_invalid,True,Exceptional child has normal caller completion
+selective,wrong-parent,0,1,evidence_invalid,evidence_invalid,True,Application invocation parent missing or not earlier
+selective,wrong-original-exception,0,1,evidence_invalid,evidence_invalid,True,Application rethrown object differs
+selective,missing-catch,0,1,evidence_invalid,evidence_invalid,True,Application expected collection-catch at ExceptionCompletionFixture.root(LExceptionCompletionFixture$Store;IILjava/lang/IllegalArgumentException;)LExceptionCompletionFixture$Out;@24
+selective,wrong-catch-object,0,1,evidence_invalid,evidence_invalid,True,Execution object identity differs
+selective,wrong-array-exception,8,1,evidence_invalid,evidence_invalid,True,Array exceptional semantics differ
+selective,sticky,0,1,evidence_invalid,evidence_invalid,True,

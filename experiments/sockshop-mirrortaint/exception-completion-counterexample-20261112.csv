@@ -1,0 +1,7 @@
+mode,input,old_correct,new_correct,old_selectors,new_selectors,origins,version,same_execution
+full,0,True,True,"[[""field"", 23, 0]]","[[""field"", 23, 0]]","[[""field"", 19, 0]]",1,True
+full,1,False,True,"[[""field"", 66, 0], [""field"", 70, 0]]","[[""field"", 70, 0]]","[[""field"", 66, 0]]",1,True
+static,0,True,True,"[[""field"", 23, 0]]","[[""field"", 23, 0]]","[[""field"", 19, 0]]",1,True
+static,1,False,True,"[[""field"", 66, 0], [""field"", 70, 0]]","[[""field"", 70, 0]]","[[""field"", 66, 0]]",1,True
+selective,0,True,True,"[[""field"", 23, 0]]","[[""field"", 23, 0]]","[[""field"", 19, 0]]",1,True
+selective,1,False,True,"[[""field"", 66, 0], [""field"", 70, 0]]","[[""field"", 70, 0]]","[[""field"", 66, 0]]",1,True

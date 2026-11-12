@@ -8,7 +8,7 @@ from analysis_status import failure_status
 
 def run(home,out):
     out.mkdir(parents=True,exist_ok=False);plan=load(home/'plan.json');reports=[]
-    faults={k:'unknown'for k in ['missing-condition','duplicate-condition','condition-version-gap','missing-null-guard','missing-index-guard']}
+    faults={k:'unknown'for k in ['missing-condition','duplicate-condition','condition-version-gap','missing-null-guard','missing-index-guard','missing-needed-data']}
     faults.update({k:'correct-known'for k in ['missing-ignored-payload','missing-stored-payload-on-bounds']})
     faults.update({k:'evidence_invalid'for k in ['source-call','source-PC','source-caller','missing-branch','duplicate-branch','wrong-branch-result','wrong-branch-PC','wrong-branch-frame','missing-callee-abort','duplicate-callee-abort','wrong-parent','wrong-original-exception','missing-catch','wrong-catch-object','wrong-array-exception','sticky']})
     for mode in ['full','static','selective']:
@@ -17,9 +17,9 @@ def run(home,out):
             scenario,n=(1,0)if fault=='missing-ignored-payload'else(8,1)if fault in('missing-stored-payload-on-bounds','missing-index-guard','wrong-array-exception')else(4,0)if fault=='missing-null-guard'else(0,1)
             t=next(t for t in truth if t['scenario']==scenario and t['input']==n);rows=copy.deepcopy(original)
             root=next(r['frame']for r in rows if r['kind']=='binding-return'and r['message']==t['message'])
-            role='11.value'if fault=='missing-ignored-payload'else'11.nullable'if fault=='missing-stored-payload-on-bounds'else'30.nullable'if fault=='missing-null-guard'else'20.value'
+            role='11.value'if fault in('missing-ignored-payload','missing-needed-data')else'11.nullable'if fault=='missing-stored-payload-on-bounds'else'30.nullable'if fault=='missing-null-guard'else'20.value'
             fact=next(r for r in t['raw']if r['role']==role);token=fact['token'];source=next(r for r in rows if r['seq']==token[1]);field=source['fields'][token[2]]
-            if fault.startswith('missing-')and fault in('missing-condition','missing-null-guard','missing-index-guard','missing-ignored-payload','missing-stored-payload-on-bounds'):source['fields'].pop(token[2])
+            if fault.startswith('missing-')and fault in('missing-condition','missing-null-guard','missing-index-guard','missing-ignored-payload','missing-stored-payload-on-bounds','missing-needed-data'):source['fields'].pop(token[2])
             elif fault=='duplicate-condition':source['fields'].append(copy.deepcopy(field))
             elif fault=='condition-version-gap':field['version']+=99
             elif fault=='source-call':source['source_call_id']=-1

@@ -1,0 +1,41 @@
+{
+  "core": "9fbbc343658a476299340f20e361f0434a862e2b",
+  "original_Agent_unchanged": true,
+  "Agent_sha256": "367cbb2300e507e5db4716c4e2fcbed1a39898c5e6c6f5f23583c4c1487e2764",
+  "business_java": "/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/runtime-base/java-8-openjdk-amd64/jre/bin/java",
+  "business_java_sha256": "68e380b6a96f0032786f90ff89cc76bd25cd2ceeffe063a9400c89a734a8df37",
+  "business_java_version": "openjdk version \"1.8.0_504\"\nOpenJDK Runtime Environment (build 1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01)\nOpenJDK 64-Bit Server VM (build 25.504-b01, mixed mode)\n",
+  "metadata_extractor": "host8u512; frozen metadata tool, not the JVM running the controls",
+  "cohorts": {
+    "final-original-counterexample-01": {
+      "plan_sha256": "14e2c3c36123868bebeab4aaa61e2550a73e9fcc7e6ac0bdeb11b981340e79df",
+      "original_fixture_jar_sha256": "8c44ff79e9e9aeb62d2ca8020f2f0abcf03b370b48a3e7b825aba72fce66c267",
+      "capture_sha256": {
+        "full": "bf3238ec53a7582345b6a660de33e8e7e3df810e76f979deeaf1247f93ae0246",
+        "static": "a07dd1bd098dd0623d3819087f37434367e00c6885b3b758436c5cd4245a729b",
+        "selective": "86bb4219da3f29a6da2baa5dcf993183f17575f31f3fdbbdd08db04cf61701b2"
+      },
+      "protocol": {
+        "source_sha256": "b4e77dfd1cb09b5f37bafe9cebe7081bc04c1508c7e30427af89dccba2c22691",
+        "spec_sha256": "0b8a816f09e1b30c1c1c593aa3572bf7701d0716b4af73b73085f7abcaf4e67f",
+        "Agent_sha256": "367cbb2300e507e5db4716c4e2fcbed1a39898c5e6c6f5f23583c4c1487e2764",
+        "literal_expectation": "Literal constructor cases:0/6 source10;1/2/9 source11;7 chooses10/11 by flag;8 source11 and flag;3/4/5 required unknown. Supplemental controls do not change original66."
+      }
+    },
+    "final-supported-sequence-01": {
+      "plan_sha256": "67de08ed7d42e20800c2b4101b44cdefc1100b63f4c156721c70444af46b9b18",
+      "original_fixture_jar_sha256": "620dd6ce718e786e86ee4fa694970f7bdc22a363af3ee940337047911bc4d96d",
+      "capture_sha256": {
+        "full": "468fe6f4e53849398e11f15af9b0509f52f9ee700f293393ca92debfccba2181",
+        "static": "71ace5bcdeb4586338d23d7aded6f46d6cf603f4433b184c82a266f7ec703ce3",
+        "selective": "d6e6853305e1f51a29a663b66a8c00d9f22bb2ce3a6bac9462abb2c9b55b6b9d"
+      },
+      "protocol": {
+        "source_sha256": "6e5c24a2bcc9318fe0618cfc1f7e6f3950f38f77aaf0a6d31cb2ce8c10199272",
+        "spec_sha256": "2723cd8a95295ca87e1e858e7668f8eeda5a61b682670e19c03e49fd7ef3ba66",
+        "Agent_sha256": "367cbb2300e507e5db4716c4e2fcbed1a39898c5e6c6f5f23583c4c1487e2764",
+        "literal_expectation": "15 predefined completion shapes x two inputs; source keys10/11 data,20/21/30 guards. Unrelated payloads never become selectors. Actual null is a source field. No original native model changes."
+      }
+    }
+  }
+}

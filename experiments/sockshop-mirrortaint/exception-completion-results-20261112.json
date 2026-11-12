@@ -1,0 +1,420 @@
+{
+  "starting_main": "16ddf1f462a00481b35a9449b424bd95e3f1b116",
+  "offline_core": "9fbbc343658a476299340f20e361f0434a862e2b",
+  "Agent_unchanged": true,
+  "public_contracts_unchanged": true,
+  "counterexample_fixed": true,
+  "old_counterexample_six_targets_same_data_version_and_known": true,
+  "new_counterexample_per_mode": {
+    "correct": 2,
+    "targets": 2
+  },
+  "new_supported_sequence_per_mode": {
+    "correct": 28,
+    "targets": 28
+  },
+  "new_complete_pool_per_mode": {
+    "correct": 28,
+    "analysis_limited": 2,
+    "targets": 30,
+    "all_passed": false
+  },
+  "old_split_constructor_pool": {
+    "full": {
+      "correct": 14,
+      "unknown": 4,
+      "rejected": 2
+    },
+    "static": {
+      "correct": 14,
+      "unknown": 4,
+      "rejected": 2
+    },
+    "selective": {
+      "correct": 14,
+      "unknown": 4,
+      "rejected": 2
+    }
+  },
+  "new_units": 30,
+  "prior_units": 54,
+  "all_unit_tests": 84,
+  "fault_checks": 72,
+  "fault_states": {
+    "correct-known": 6,
+    "evidence_invalid": 48,
+    "unknown": 18
+  },
+  "old_control_captures": [
+    {
+      "cohort": "original",
+      "mode": "full",
+      "targets": 4,
+      "known": 2,
+      "answers_equal": true,
+      "root_audits_equal": true
+    },
+    {
+      "cohort": "original",
+      "mode": "static",
+      "targets": 4,
+      "known": 2,
+      "answers_equal": true,
+      "root_audits_equal": true
+    },
+    {
+      "cohort": "original",
+      "mode": "selective",
+      "targets": 4,
+      "known": 2,
+      "answers_equal": true,
+      "root_audits_equal": true
+    },
+    {
+      "cohort": "direct",
+      "mode": "full",
+      "targets": 4,
+      "known": 2,
+      "answers_equal": true,
+      "root_audits_equal": true
+    },
+    {
+      "cohort": "direct",
+      "mode": "static",
+      "targets": 4,
+      "known": 2,
+      "answers_equal": true,
+      "root_audits_equal": true
+    },
+    {
+      "cohort": "direct",
+      "mode": "selective",
+      "targets": 4,
+      "known": 2,
+      "answers_equal": true,
+      "root_audits_equal": true
+    },
+    {
+      "cohort": "composition",
+      "mode": "full",
+      "targets": 66,
+      "known": 60,
+      "answers_equal": true,
+      "root_audits_equal": true
+    },
+    {
+      "cohort": "composition",
+      "mode": "static",
+      "targets": 66,
+      "known": 60,
+      "answers_equal": true,
+      "root_audits_equal": true
+    },
+    {
+      "cohort": "composition",
+      "mode": "selective",
+      "targets": 66,
+      "known": 60,
+      "answers_equal": true,
+      "root_audits_equal": true
+    },
+    {
+      "cohort": "exception",
+      "mode": "full",
+      "targets": 12,
+      "known": 12,
+      "answers_equal": true,
+      "root_audits_equal": true
+    },
+    {
+      "cohort": "exception",
+      "mode": "static",
+      "targets": 12,
+      "known": 12,
+      "answers_equal": true,
+      "root_audits_equal": true
+    },
+    {
+      "cohort": "exception",
+      "mode": "selective",
+      "targets": 12,
+      "known": 12,
+      "answers_equal": true,
+      "root_audits_equal": true
+    },
+    {
+      "cohort": "implicit",
+      "mode": "full",
+      "targets": 12,
+      "known": 12,
+      "answers_equal": true,
+      "root_audits_equal": true
+    },
+    {
+      "cohort": "implicit",
+      "mode": "static",
+      "targets": 12,
+      "known": 12,
+      "answers_equal": true,
+      "root_audits_equal": true
+    },
+    {
+      "cohort": "implicit",
+      "mode": "selective",
+      "targets": 12,
+      "known": 12,
+      "answers_equal": true,
+      "root_audits_equal": true
+    },
+    {
+      "cohort": "interface",
+      "mode": "full",
+      "targets": 3,
+      "known": 3,
+      "answers_equal": true,
+      "root_audits_equal": true
+    },
+    {
+      "cohort": "interface",
+      "mode": "static",
+      "targets": 3,
+      "known": 3,
+      "answers_equal": true,
+      "root_audits_equal": true
+    },
+    {
+      "cohort": "interface",
+      "mode": "selective",
+      "targets": 3,
+      "known": 3,
+      "answers_equal": true,
+      "root_audits_equal": true
+    }
+  ],
+  "old_business_captures": [
+    {
+      "task": "selection-controls-02-full",
+      "old_status": "completed",
+      "new_status": "completed",
+      "capture_sha256": "d3f62a51b3328c01154c34f981defdc6bcef53c0e120d201a7669fa4180f7442",
+      "selection_oracle": "independent literal expectations retained",
+      "targets": 4,
+      "old_known": 2,
+      "new_known": 2,
+      "versions_equal": true,
+      "explicit_data_changes": 0,
+      "known_changes": 0,
+      "selector_changes": 0,
+      "root_audits_equal": true
+    },
+    {
+      "task": "selection-controls-02-static",
+      "old_status": "completed",
+      "new_status": "completed",
+      "capture_sha256": "6e2ef77f6c56b7e8254f76874432128ed80290a75342bfb38d7d07565f9ea139",
+      "selection_oracle": "independent literal expectations retained",
+      "targets": 4,
+      "old_known": 2,
+      "new_known": 2,
+      "versions_equal": true,
+      "explicit_data_changes": 0,
+      "known_changes": 0,
+      "selector_changes": 0,
+      "root_audits_equal": true
+    },
+    {
+      "task": "selection-controls-02-selective",
+      "old_status": "completed",
+      "new_status": "completed",
+      "capture_sha256": "7ef4f60a5d16db2b14eab1f848def26ef59d90adf16a0faafb9d5d0c932cdca4",
+      "selection_oracle": "independent literal expectations retained",
+      "targets": 4,
+      "old_known": 2,
+      "new_known": 2,
+      "versions_equal": true,
+      "explicit_data_changes": 0,
+      "known_changes": 0,
+      "selector_changes": 0,
+      "root_audits_equal": true
+    },
+    {
+      "task": "direct-selection-controls-02-full",
+      "old_status": "completed",
+      "new_status": "completed",
+      "capture_sha256": "db99db12a20fe9d75735d2a719f0fbbaee251bed93680decae8f77661fc618a7",
+      "selection_oracle": "independent literal expectations retained",
+      "targets": 4,
+      "old_known": 2,
+      "new_known": 2,
+      "versions_equal": true,
+      "explicit_data_changes": 0,
+      "known_changes": 0,
+      "selector_changes": 0,
+      "root_audits_equal": true
+    },
+    {
+      "task": "direct-selection-controls-02-static",
+      "old_status": "completed",
+      "new_status": "completed",
+      "capture_sha256": "32e53ac7dd4bcad9c894274639713fb46e145b3ac75deb5d2c6daec62071a809",
+      "selection_oracle": "independent literal expectations retained",
+      "targets": 4,
+      "old_known": 2,
+      "new_known": 2,
+      "versions_equal": true,
+      "explicit_data_changes": 0,
+      "known_changes": 0,
+      "selector_changes": 0,
+      "root_audits_equal": true
+    },
+    {
+      "task": "direct-selection-controls-02-selective",
+      "old_status": "completed",
+      "new_status": "completed",
+      "capture_sha256": "4c75ed9d18edddca6df8a4d20e4479712422f9ef906993d5279ef831b965cef0",
+      "selection_oracle": "independent literal expectations retained",
+      "targets": 4,
+      "old_known": 2,
+      "new_known": 2,
+      "versions_equal": true,
+      "explicit_data_changes": 0,
+      "known_changes": 0,
+      "selector_changes": 0,
+      "root_audits_equal": true
+    },
+    {
+      "task": "removeIf-control-full",
+      "old_status": "completed",
+      "new_status": "completed",
+      "capture_sha256": "2f036d8a5091c09ccf7bc5f8571bd1fd77ec707e579e417916826710d82549b0",
+      "selection_oracle": "old explicit-data oracle; selection incomplete",
+      "targets": 10,
+      "old_known": 6,
+      "new_known": 6,
+      "versions_equal": true,
+      "explicit_data_changes": 0,
+      "known_changes": 0,
+      "selector_changes": 0,
+      "root_audits_equal": true
+    },
+    {
+      "task": "removeIf-control-selective",
+      "old_status": "completed",
+      "new_status": "completed",
+      "capture_sha256": "e21a9ab72fa502a0c8d17e4543c3d6ca74c8a729d08f22b671e2f37e5fbdf39a",
+      "selection_oracle": "old explicit-data oracle; selection incomplete",
+      "targets": 10,
+      "old_known": 6,
+      "new_known": 6,
+      "versions_equal": true,
+      "explicit_data_changes": 0,
+      "known_changes": 0,
+      "selector_changes": 0,
+      "root_audits_equal": true
+    },
+    {
+      "task": "ruoyi-1-full",
+      "old_status": "completed",
+      "new_status": "completed",
+      "capture_sha256": "599343f59d1ff330a9054d837fc232675b3c7f147bfd1203034757bcf70535dc",
+      "selection_oracle": "old explicit-data oracle; selection incomplete",
+      "targets": 5,
+      "old_known": 5,
+      "new_known": 5,
+      "versions_equal": true,
+      "explicit_data_changes": 0,
+      "known_changes": 0,
+      "selector_changes": 0,
+      "root_audits_equal": true
+    },
+    {
+      "task": "ruoyi-1-selective",
+      "old_status": "completed",
+      "new_status": "completed",
+      "capture_sha256": "795343f9fcbabe4d9357bd7e739bbab0d26cbca86d4e1859c1e5461c4415a297",
+      "selection_oracle": "old explicit-data oracle; selection incomplete",
+      "targets": 5,
+      "old_known": 5,
+      "new_known": 5,
+      "versions_equal": true,
+      "explicit_data_changes": 0,
+      "known_changes": 0,
+      "selector_changes": 0,
+      "root_audits_equal": true
+    },
+    {
+      "task": "ruoyi-2-full",
+      "old_status": "completed",
+      "new_status": "completed",
+      "capture_sha256": "7747f92998e19bfd4816585a37bfa06335301ffb2b96120e14247589e8a67bc4",
+      "selection_oracle": "old explicit-data oracle; selection incomplete",
+      "targets": 43,
+      "old_known": 39,
+      "new_known": 39,
+      "versions_equal": true,
+      "explicit_data_changes": 0,
+      "known_changes": 0,
+      "selector_changes": 0,
+      "root_audits_equal": true
+    },
+    {
+      "task": "ruoyi-2-selective",
+      "old_status": "completed",
+      "new_status": "completed",
+      "capture_sha256": "5e6d3bbbf563d5d8eb4aab25863a592e1f4c014b468c04819cfbb125e9044f90",
+      "selection_oracle": "old explicit-data oracle; selection incomplete",
+      "targets": 43,
+      "old_known": 39,
+      "new_known": 39,
+      "versions_equal": true,
+      "explicit_data_changes": 0,
+      "known_changes": 0,
+      "selector_changes": 0,
+      "root_audits_equal": true
+    },
+    {
+      "task": "ruoyi-3-full",
+      "old_status": "completed",
+      "new_status": "completed",
+      "capture_sha256": "c4923a0a7a369701398141783a0ed97cd0e82298f565ae6b09ac0480c72ed25d",
+      "selection_oracle": "old explicit-data oracle; selection incomplete",
+      "targets": 12,
+      "old_known": 12,
+      "new_known": 12,
+      "versions_equal": true,
+      "explicit_data_changes": 0,
+      "known_changes": 0,
+      "selector_changes": 0,
+      "root_audits_equal": true
+    },
+    {
+      "task": "ruoyi-3-selective",
+      "old_status": "completed",
+      "new_status": "completed",
+      "capture_sha256": "ebcaed03552ffb6176c21854e028e98b5753410b794b5e0458b8053c5aead8d2",
+      "selection_oracle": "old explicit-data oracle; selection incomplete",
+      "targets": 12,
+      "old_known": 12,
+      "new_known": 12,
+      "versions_equal": true,
+      "explicit_data_changes": 0,
+      "known_changes": 0,
+      "selector_changes": 0,
+      "root_audits_equal": true
+    }
+  ],
+  "original_66_per_mode": {
+    "correct": 60,
+    "unknown": 6,
+    "all_passed": false
+  },
+  "original_unsupported_override_per_mode": {
+    "targets": 2,
+    "state": "rejected"
+  },
+  "Galette_preserved_files": 18,
+  "exception_completion_bounded_gate_passed": true,
+  "entire_control_pool_acceptance_passed": false,
+  "all_semantics_acceptance_passed": false,
+  "performance": null
+}
