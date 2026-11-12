@@ -1,0 +1,397 @@
+{
+  "jdk": {
+    "java": "/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/runtime-base/java-8-openjdk-amd64/bin/java",
+    "version": "openjdk version \"1.8.0_504\"\nOpenJDK Runtime Environment (build 1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01)\nOpenJDK 64-Bit Server VM (build 25.504-b01, mixed mode)\n",
+    "java_sha256": "68e380b6a96f0032786f90ff89cc76bd25cd2ceeffe063a9400c89a734a8df37",
+    "rt_jar_sha256": "8f20323f5d69f9d46a6a9ef67621a01d7a2704ad9b79afc7fb4f97192f600e6b",
+    "libjvm_sha256": "fba4526059a3b4da8382b90750ad307136e26b99c8316a06e1c783d57185a6a7"
+  },
+  "agents": {
+    "task2": {
+      "sha256": "f08ca5e108b554a958f86919a62801a221d9da75bdcb86a12d42645e03c474fc",
+      "class_sha256": {
+        "PlannedServiceAgent$1.class": "110d66973026dd7887117a1ca4859f8082958faebaaea7c075e8b5d1739edf2c",
+        "PlannedServiceAgent$Recorder$Frame.class": "4b6fd4a4c6f986740f03e9541d167b7c72396bdb3a57724c3f2dfaea949c6e49",
+        "PlannedServiceAgent.class": "67999ae2fc6c5994636ee512c2db21895f6c432cd9d31f69c3c3905e3cb69ea2",
+        "PlannedServiceAgent$Recorder$Diagnostic.class": "5a77803d684b8dfdeea1918204f2f5402c58739cf8ced9ce1476c74b4bdef87f",
+        "PlannedServiceAgent$Recorder$1.class": "f57898b18951e9d49761d39d6411a707a558a25b78666592a8b83be457b14c2b",
+        "PlannedServiceAgent$Recorder.class": "e23203f0e9467e05cd76832d67e1ccf4892d9dfc997d6187b7454e14201b33f2",
+        "CollectionServiceHooks.class": "f0224aa6d1da3e2e2e2ef285a650c342e09cd72201fffb401d4f7ed13aa094d4",
+        "CollectionServiceHooks$1.class": "0292d2bdfffa20d964c0663ef7001bc586e98490f40ebdc8b8a0a2425910e084",
+        "ExecutionKernelHooks.class": "e2766e2b7ac55edd2561406c9a187f113a018338366184453df88ffd5e6c5460",
+        "FoundationValueHooks.class": "269d1dcebf9ecbe53f16b158436775c7eadeac2ff14ed228a9ae428bd13dc94f",
+        "ResponseBindingHooks.class": "3c98be6052b011f3d4d3578031f31ce6a5a1856cd27dad46fc786c445c07c55f",
+        "ResponseBindingHooks$SnapshotPolicy.class": "4ea254d4cfdbcad49ff0600c6276d5cc8d41b981e3966435f9c12a52137b0a2c",
+        "SpringTransportAgent$4.class": "0fa43112b80ab5bf3c1baa537bf840fe8c2b1b3e8433513285c7d1536024a9c7",
+        "SpringTransportAgent$Communication.class": "3c9967539e15cbf4b8781684eb067f20ee2b67f6c1ec5586d16f54c84a872c72",
+        "SpringTransportAgent$Transport.class": "5894cc6b9faea7e6446ff31b80a79b70fb3c7d91fa7e55f7cc7735a6dc73bae5",
+        "SpringTransportAgent$Transport$2.class": "18303c37a18c27b0d9c7cb20436e402fd5af292cc7a6beaa7930b22da6162f48",
+        "SpringTransportAgent$DirectDispatchHooks$1.class": "484a9614fc04d2924e92bac82c1b8f1de0dea9fa5796701253ab08888d79644c",
+        "SpringTransportAgent$1.class": "7e374fa2cd54da2c264f5f695c0d9c571006daf69c4d552d9642f911152afe56",
+        "SpringTransportAgent$2.class": "08bac0a1882ef9aef865aea9b5b0f37cf6b4cb12e0a2d7788d0e038821d638b7",
+        "SpringTransportAgent$Communication$Exchange.class": "cb6481fe7ec73e9704f2c59837f29ca060ee9ee7c965fabc4794c1a8f6ca620a",
+        "SpringTransportAgent$Communication$1.class": "b5153685bea0dcc49d3eaf5fb87bf40e472319ecbdeab31aaf0fe7bccdd18b18",
+        "SpringTransportAgent.class": "6aa2e4e4aee792cb3af232c266a1d6bd491d5a5df77b61de3e64c2cd264e426d",
+        "SpringTransportAgent$DirectDispatchHooks.class": "2359656bc5d719a79c28a373f3f209dde19d9ab1ad38c4bc546018e8fb820b1a",
+        "SpringTransportAgent$Transport$1.class": "537866bd2f217e4839cca7eb53b53b3a5d0a4ac5f8fbca175cbdd101db5824df",
+        "SpringTransportAgent$Transport$3.class": "a80323aa36424bd4d4350e5bd049799409a5f1a03066e91f8e06036a833ab694",
+        "SpringTransportAgent$Transport$RpcScope.class": "209db121f5f991106acc056a39d93d0e0deea588f57af2fd18368233d4e1a66f",
+        "SpringTransportAgent$3.class": "368c09460ca6b8525566cc211f41dd8e68b0ddbe0261e6312d54b099108ccac1"
+      },
+      "compiler_version": "javac 1.8.0_512",
+      "compiler_target": [
+        "-source",
+        "8",
+        "-target",
+        "8"
+      ],
+      "build": "/home/wujian/tracefusion2/artifacts/review-request-20261112/task2-agent/build.json"
+    },
+    "task3": {
+      "sha256": "c2dff00ee079b89df6dfa122fd1ddd82abccfb862ec0c2562856ecc805850545",
+      "class_sha256": {
+        "PlannedServiceAgent$1.class": "110d66973026dd7887117a1ca4859f8082958faebaaea7c075e8b5d1739edf2c",
+        "PlannedServiceAgent$Recorder$Frame.class": "4b6fd4a4c6f986740f03e9541d167b7c72396bdb3a57724c3f2dfaea949c6e49",
+        "PlannedServiceAgent.class": "c057b26e0ae63419fab07782e9aeeb02cef1856d07852b1a9ec12c11b48ef994",
+        "PlannedServiceAgent$Recorder$Diagnostic.class": "5a77803d684b8dfdeea1918204f2f5402c58739cf8ced9ce1476c74b4bdef87f",
+        "PlannedServiceAgent$Recorder$1.class": "f57898b18951e9d49761d39d6411a707a558a25b78666592a8b83be457b14c2b",
+        "PlannedServiceAgent$Recorder.class": "f32e59a9bdae8f764270749d39d3f75a34577483ce3846d31ae212c90bf841fe",
+        "CollectionServiceHooks.class": "1bf3e4e2efd2e00f4ce61ccf587a4fa42aa6c24d095f7c5cc37d0a88998b1a44",
+        "CollectionServiceHooks$1.class": "0292d2bdfffa20d964c0663ef7001bc586e98490f40ebdc8b8a0a2425910e084",
+        "ExecutionKernelHooks.class": "d6387970e30cdacc76d5786586f8aa7bbebbbe952306fd7237cdc2e8483ae137",
+        "FoundationValueHooks.class": "4c2e154ebe4c6c4837dd3f80cf985a82a5c4c85753bfe5b455fc01b1d7aee0b1",
+        "ResponseBindingHooks.class": "7ccfae2fb20506299c0f9b56cc0bcde66714e5c803203d4ab5fd4c7df7c9c047",
+        "ResponseBindingHooks$SnapshotPolicy.class": "4ea254d4cfdbcad49ff0600c6276d5cc8d41b981e3966435f9c12a52137b0a2c",
+        "SpringTransportAgent$4.class": "0fa43112b80ab5bf3c1baa537bf840fe8c2b1b3e8433513285c7d1536024a9c7",
+        "SpringTransportAgent$Communication.class": "3c9967539e15cbf4b8781684eb067f20ee2b67f6c1ec5586d16f54c84a872c72",
+        "SpringTransportAgent$Transport.class": "d572611fcaa17a5f4398b65acb591788a5be917b293bb8474b07809532a41728",
+        "SpringTransportAgent$Transport$2.class": "18303c37a18c27b0d9c7cb20436e402fd5af292cc7a6beaa7930b22da6162f48",
+        "SpringTransportAgent$DirectDispatchHooks$1.class": "484a9614fc04d2924e92bac82c1b8f1de0dea9fa5796701253ab08888d79644c",
+        "SpringTransportAgent$1.class": "7e374fa2cd54da2c264f5f695c0d9c571006daf69c4d552d9642f911152afe56",
+        "SpringTransportAgent$2.class": "08bac0a1882ef9aef865aea9b5b0f37cf6b4cb12e0a2d7788d0e038821d638b7",
+        "SpringTransportAgent$Communication$Exchange.class": "cb6481fe7ec73e9704f2c59837f29ca060ee9ee7c965fabc4794c1a8f6ca620a",
+        "SpringTransportAgent$Communication$1.class": "b5153685bea0dcc49d3eaf5fb87bf40e472319ecbdeab31aaf0fe7bccdd18b18",
+        "SpringTransportAgent.class": "6aa2e4e4aee792cb3af232c266a1d6bd491d5a5df77b61de3e64c2cd264e426d",
+        "SpringTransportAgent$DirectDispatchHooks.class": "2359656bc5d719a79c28a373f3f209dde19d9ab1ad38c4bc546018e8fb820b1a",
+        "SpringTransportAgent$Transport$1.class": "537866bd2f217e4839cca7eb53b53b3a5d0a4ac5f8fbca175cbdd101db5824df",
+        "SpringTransportAgent$Transport$3.class": "a80323aa36424bd4d4350e5bd049799409a5f1a03066e91f8e06036a833ab694",
+        "SpringTransportAgent$Transport$RpcScope.class": "209db121f5f991106acc056a39d93d0e0deea588f57af2fd18368233d4e1a66f",
+        "SpringTransportAgent$3.class": "368c09460ca6b8525566cc211f41dd8e68b0ddbe0261e6312d54b099108ccac1"
+      },
+      "compiler_version": "javac 1.8.0_512",
+      "compiler_target": [
+        "-source",
+        "8",
+        "-target",
+        "8"
+      ],
+      "build": "/home/wujian/tracefusion2/artifacts/review-request-20261112/task3-agent/build.json"
+    }
+  },
+  "protocol": {
+    "exception_dispatch_version": 1,
+    "field_value_version": 1
+  },
+  "cohorts": {
+    "final-original-case8": {
+      "full": {
+        "correct": 2,
+        "targets": 2,
+        "known": 2,
+        "aborted": 0,
+        "capture_sha256": "ebb641146d0b4b5b4ec2f8c3d35a1da12574e89c1eb9c85e248f8a7334350065",
+        "plan_sha256": "434833d971ae6d8d86af55cc1a537f10d727fb0ac187f39d1716047f2ca2a12f",
+        "command": "/home/wujian/tracefusion2/artifacts/review-request-20261112/final-original-case8/full/command.json"
+      },
+      "static": {
+        "correct": 2,
+        "targets": 2,
+        "known": 2,
+        "aborted": 0,
+        "capture_sha256": "93d2c6ca7f4cb3c859379b138d779be698b959b81b3401aa27e0db7ffa56fbb0",
+        "plan_sha256": "434833d971ae6d8d86af55cc1a537f10d727fb0ac187f39d1716047f2ca2a12f",
+        "command": "/home/wujian/tracefusion2/artifacts/review-request-20261112/final-original-case8/static/command.json"
+      },
+      "selective": {
+        "correct": 2,
+        "targets": 2,
+        "known": 2,
+        "aborted": 0,
+        "capture_sha256": "561242726808af6b9d69f6ed8065f7365c87df6e3935cfeefdb095e62afbd02f",
+        "plan_sha256": "434833d971ae6d8d86af55cc1a537f10d727fb0ac187f39d1716047f2ca2a12f",
+        "command": "/home/wujian/tracefusion2/artifacts/review-request-20261112/final-original-case8/selective/command.json"
+      }
+    },
+    "task3-builtin": {
+      "full": {
+        "correct": 28,
+        "targets": 28,
+        "known": 28,
+        "aborted": 0,
+        "capture_sha256": "b1bbebb9fe1415cf640eabab11e01f528a72ed5c2695b34ef9dcd01b0983ed08",
+        "plan_sha256": "afc164ffcf1165c856320844905d25a913d8ef8a73b913464e10dceeafe6e564",
+        "command": "/home/wujian/tracefusion2/artifacts/review-request-20261112/task3-builtin/full/command.json"
+      },
+      "static": {
+        "correct": 28,
+        "targets": 28,
+        "known": 28,
+        "aborted": 0,
+        "capture_sha256": "2fa5d8029a393eee9c9e5ab220cc4ab5519d93307b9ce9a87b566ca32a017b24",
+        "plan_sha256": "afc164ffcf1165c856320844905d25a913d8ef8a73b913464e10dceeafe6e564",
+        "command": "/home/wujian/tracefusion2/artifacts/review-request-20261112/task3-builtin/static/command.json"
+      },
+      "selective": {
+        "correct": 28,
+        "targets": 28,
+        "known": 28,
+        "aborted": 0,
+        "capture_sha256": "71ce38c936914f735bff84a9989b4de772fa931b9f082894cb991d0b204be20a",
+        "plan_sha256": "afc164ffcf1165c856320844905d25a913d8ef8a73b913464e10dceeafe6e564",
+        "command": "/home/wujian/tracefusion2/artifacts/review-request-20261112/task3-builtin/selective/command.json"
+      }
+    },
+    "task3-custom-verified": {
+      "full": {
+        "correct": 14,
+        "targets": 14,
+        "known": 13,
+        "aborted": 1,
+        "capture_sha256": "052680816c7947b9ef23c03c08db295bd10e1c08bb26a6b72392aa788cb32c65",
+        "plan_sha256": "6aee8673f8d8fd453778cd69f2c8eb8d0086c66d16ba6c543642b0d683b76d03",
+        "command": "/home/wujian/tracefusion2/artifacts/review-request-20261112/task3-custom-verified/full/command.json"
+      },
+      "static": {
+        "correct": 14,
+        "targets": 14,
+        "known": 13,
+        "aborted": 1,
+        "capture_sha256": "205dab0573ea72dcee58f5d273afc0f80cab8c00fb35740b26009f5843a52876",
+        "plan_sha256": "6aee8673f8d8fd453778cd69f2c8eb8d0086c66d16ba6c543642b0d683b76d03",
+        "command": "/home/wujian/tracefusion2/artifacts/review-request-20261112/task3-custom-verified/static/command.json"
+      },
+      "selective": {
+        "correct": 14,
+        "targets": 14,
+        "known": 13,
+        "aborted": 1,
+        "capture_sha256": "04db03e0852930061edd34da7dc9e373dde7a47c1184d1512dce94b551616f4d",
+        "plan_sha256": "6aee8673f8d8fd453778cd69f2c8eb8d0086c66d16ba6c543642b0d683b76d03",
+        "command": "/home/wujian/tracefusion2/artifacts/review-request-20261112/task3-custom-verified/selective/command.json"
+      }
+    },
+    "original66": {
+      "full": {
+        "correct": 60,
+        "unknown": 6,
+        "targets": 66,
+        "capture_sha256": "9418d8ba09f2891d79a91d8b69faf75acf06b7b7807a57285fa470892f26e93b",
+        "all_semantics_gate": false
+      },
+      "static": {
+        "correct": 60,
+        "unknown": 6,
+        "targets": 66,
+        "capture_sha256": "bd20af84c99b1d10c04ee4cce9590cd900313845b6d8c04685e336598a8d6004",
+        "all_semantics_gate": false
+      },
+      "selective": {
+        "correct": 60,
+        "unknown": 6,
+        "targets": 66,
+        "capture_sha256": "01e1fece3b818127fbd9e354fd466cbf67b16ff5fd6f1070a25dc848db57f062",
+        "all_semantics_gate": false
+      }
+    }
+  },
+  "primitive_checks": [
+    {
+      "field": "big",
+      "mode": "full",
+      "correct": true,
+      "capture_sha256": "cef622e81896fa54a3356ede8fb979d58204c987eae8206cb3b3777cc0a42140"
+    },
+    {
+      "field": "big",
+      "mode": "static",
+      "correct": true,
+      "capture_sha256": "7d883a3498cb4bdfb4a2437a63a4bb7dbd9a6ee2a7f79e57f160a5429b46817e"
+    },
+    {
+      "field": "big",
+      "mode": "selective",
+      "correct": true,
+      "capture_sha256": "3d96d49d3d03abb768789a5b0f9370a0f09f9ecbc71b88368365fb70e223ff8d"
+    },
+    {
+      "field": "boxed",
+      "mode": "full",
+      "correct": true,
+      "capture_sha256": "3cf9788d87c83a9a0c26def0fa4300c9fb994c861f71cc83645c68a13971613b"
+    },
+    {
+      "field": "boxed",
+      "mode": "static",
+      "correct": true,
+      "capture_sha256": "5701457a676d36a7f8a02a8ef773f007f463ba99c120f558b46cffe052943bdb"
+    },
+    {
+      "field": "boxed",
+      "mode": "selective",
+      "correct": true,
+      "capture_sha256": "2c5b367d3949dfdfbcd2568b00eb6e60b2b9a1ae38cc9f6487a9d0e4816ef382"
+    },
+    {
+      "field": "absent",
+      "mode": "full",
+      "correct": true,
+      "capture_sha256": "127e1f53f13037b099cfb1295daef39d6b849abf6911d0a5250aaaebf38f0fa3"
+    },
+    {
+      "field": "absent",
+      "mode": "static",
+      "correct": true,
+      "capture_sha256": "e44c988ed9d3dae97a8d591696ef42fd957938bcead853969aa92cd971f73e6e"
+    },
+    {
+      "field": "absent",
+      "mode": "selective",
+      "correct": true,
+      "capture_sha256": "a47dc8fec4fde08e5605bc1b701a70eb4fd265133a14452e9e06ad1cf107e041"
+    }
+  ],
+  "stress": {
+    "before": {
+      "observations_per_phase": 1000,
+      "stats": [
+        {
+          "phase": 0,
+          "IDS": 13,
+          "VERSIONS": 11,
+          "ACTIVE": 0,
+          "CHECKED_CLASSES": 4,
+          "LIBRARY_HASHES": 0,
+          "ARRAY_VERSIONS": 0,
+          "ARRAY_SLOTS": 0,
+          "INITIALIZED": 0
+        },
+        {
+          "phase": 1,
+          "IDS": 6013,
+          "VERSIONS": 11,
+          "ACTIVE": 0,
+          "CHECKED_CLASSES": 4,
+          "LIBRARY_HASHES": 0,
+          "ARRAY_VERSIONS": 0,
+          "ARRAY_SLOTS": 0,
+          "INITIALIZED": 0
+        },
+        {
+          "phase": 2,
+          "IDS": 12013,
+          "VERSIONS": 11,
+          "ACTIVE": 0,
+          "CHECKED_CLASSES": 4,
+          "LIBRARY_HASHES": 0,
+          "ARRAY_VERSIONS": 0,
+          "ARRAY_SLOTS": 0,
+          "INITIALIZED": 0
+        }
+      ],
+      "boxed": "o11",
+      "boxedLong": "o12",
+      "ref": "o13"
+    },
+    "after": {
+      "observations_per_phase": 1000,
+      "stats": [
+        {
+          "phase": 0,
+          "IDS": 5,
+          "VERSIONS": 11,
+          "ACTIVE": 0,
+          "CHECKED_CLASSES": 4,
+          "LIBRARY_HASHES": 0,
+          "ARRAY_VERSIONS": 0,
+          "ARRAY_SLOTS": 0,
+          "INITIALIZED": 0
+        },
+        {
+          "phase": 1,
+          "IDS": 5,
+          "VERSIONS": 11,
+          "ACTIVE": 0,
+          "CHECKED_CLASSES": 4,
+          "LIBRARY_HASHES": 0,
+          "ARRAY_VERSIONS": 0,
+          "ARRAY_SLOTS": 0,
+          "INITIALIZED": 0
+        },
+        {
+          "phase": 2,
+          "IDS": 5,
+          "VERSIONS": 11,
+          "ACTIVE": 0,
+          "CHECKED_CLASSES": 4,
+          "LIBRARY_HASHES": 0,
+          "ARRAY_VERSIONS": 0,
+          "ARRAY_SLOTS": 0,
+          "INITIALIZED": 0
+        }
+      ],
+      "boxed": "o3",
+      "boxedLong": "o4",
+      "ref": "o5"
+    },
+    "field_observations": 24012,
+    "same_fixture_hash": true
+  },
+  "guards": {
+    "task3-final-guards": {
+      "checks": 30,
+      "gate": true
+    },
+    "task3-dispatch-guards-verified": {
+      "checks": 30,
+      "gate": true
+    }
+  },
+  "old_capture_replay": {
+    "public": 18,
+    "business": 14,
+    "faults": 72,
+    "original_unknowns": 6,
+    "historical_write_address_limits": 2,
+    "historical_override_rejections": 2
+  },
+  "sources": {
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/control_dependencies.py": "68ffc72e2ff550445441cf2bed10f58f900c0e2d211d5dce0dd67a317f294f04",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/exception_completion.py": "5277a7f2e178bda64ed1a91489cdc4303b3f0c6e1415ba4c3f9679f9fcfc040c",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/execution_dependency_state.py": "3d502f8f524f03558d2e351ae93dc321d8c74fb96f957b917eaf1d1aabd5bb4b",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/exception_dispatch.py": "d4af62cf6033e21f1c0cf7ce88850c51ac03b9bf129cccd2ce66ea6bea94396a",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/field_value_protocol.py": "5d8edcb3e4846c99abecdb433208086a95036d9e4257ef0a1d6245110859b0b9",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_application_execution.py": "832f9bd1a4d3d472b4f631eacac9485c44c7c3cf9f96ee91fea83f26dd131d21",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_execution_kernel.py": "d741642af3b5bbbb7bdd1a0ec8ff3f05df87ba8c9934cdfa84092781693f3335",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_planned_service.py": "e1a710a927f3a3e476fc6e3d437f6e52cd47d1f305893e16b0b506e74e2e2499",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_response_binding.py": "a78de2881c098cbfa266e52b8df1393258f27176210953783a9ba2682a7b0323",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/audit_review_request.py": "baaa39e15d970a0a64283018e3598230f1c83fb20f7207e8dfdcfcd29c4830aa",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/run_primitive_observation_controls.py": "3a79eaccde74609b0133bccc86474f861ec9d7789c641af6905da3120ef03aa3",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/PrimitiveObservationFixture.java": "5b31ab7bd02d1ef86363485f16e19201737a164c1c7f2401b9edee66caed3f03",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/test_exception_completion.py": "0fb495030b6a405c9cf33532cd065bd0b4dfaff3c38e1dfa3de9e5744b71dafa",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/test_exception_dispatch.py": "9448877ed5a34d6d45024dd7035442694352dd8e82745a7f82b0918940005ea0",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/test_field_value_protocol.py": "8be812a3df76c07b4b1a82ef4493b9c500238ed8af27ec5dc874d26f7c4b908e",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/PlannedServiceAgent.java": "4f38bc42d2ac812ded8e419f4526df6678d4804dea022555ec7dbe15f498e1d1",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/ExecutionKernelHooks.java": "a2b4a8481819bbfa31bc9cc483130fa5fb9b128dcf99dfa4290abd4ebce777f1",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/CollectionServiceHooks.java": "1861503656fd6e4a6fe10d15b1cdfd40e4da7d56cf30945f27a1d1d370970b82",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/FoundationValueHooks.java": "29ab7639151851a484346be31dc3d0f49cabebc0c7d982461f31aace2650bfbf",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/ResponseBindingHooks.java": "bffb57d308aa364f4995c03db97ea14c37b2c2cb44e167e3163b96ff21e98f39",
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/SpringTransportAgent.java": "2e7a1f2d7a49b2dc9c89d723ae1ba2601ba30355b9dea48e01a0a98cacb4b377"
+  },
+  "unit_log": "/home/wujian/tracefusion2/artifacts/review-request-20261112/final-units.log",
+  "not_run": [
+    "unrelated historical application container redeployments",
+    "native construction closure",
+    "performance benchmarks"
+  ],
+  "whole_semantics_gate": false
+}

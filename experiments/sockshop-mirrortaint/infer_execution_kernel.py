@@ -23,6 +23,8 @@ def same_value(expected,actual):
 
 
 def infer_execution(plan,rows):
+    from field_value_protocol import validate as validate_field_values
+    validate_field_values(plan,rows)
     validate_plan(plan)
     from infer_json_tree_observation import validate as validate_json_tree
     validate_json_tree(plan,rows)

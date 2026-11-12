@@ -43,6 +43,8 @@ def infer_service(plan,path,rows=None):
     if rows is None:
         raw=Path(path).read_bytes();rows=[json.loads(l) for l in raw.splitlines()];log_bytes=len(raw)
     else:log_bytes=Path(path).stat().st_size
+    from field_value_protocol import validate as validate_field_values
+    validate_field_values(plan,rows)
     require(rows and rows[0]['kind']=='start','Capture start missing')
     require([r['seq'] for r in rows]==list(range(1,len(rows)+1)),'Observation sequence gap')
     require(not any(r['kind']=='problem' or r['kind']=='metrics' and r.get('capture_invalid') for r in rows),'Failed collection')

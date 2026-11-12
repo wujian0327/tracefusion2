@@ -27,15 +27,15 @@ def score(plan,rows,truth):
         normalized.append({'scenario':t['scenario'],'input':t['input'],'known':a['known'],'version':a['version'],'origins':sorted(roles.get(tuple(x),'UNEXPECTED:'+str(x))for x in a['origins']),'selectors':sorted(roles.get(tuple(x),'UNEXPECTED:'+str(x))for x in a['selectors'])})
     return result,checks,normalized
 
-def run(out,case=None):
+def run(out,case=None,agent=AGENT):
     limited=False
     out.mkdir(parents=True,exist_ok=False)
     spec=HERE/'CONSTRUCTOR-EFFECT-SCOPE-SPEC-20261112.md'
-    save(out/'protocol-before-jvm.json',{'source_sha256':sha(HERE/'ConstructorScopeFixture.java'),'spec_sha256':sha(spec),'Agent_sha256':sha(AGENT),'literal_expectation':'Literal constructor cases:0/6 source10;1/2/9 source11;7 chooses10/11 by flag;8 source11 and flag;3/4/5 required unknown. Supplemental controls do not change original66.'})
+    save(out/'protocol-before-jvm.json',{'source_sha256':sha(HERE/'ConstructorScopeFixture.java'),'spec_sha256':sha(spec),'Agent_sha256':sha(agent),'literal_expectation':'Literal constructor cases:0/6 source10;1/2/9 source11;7 chooses10/11 by flag;8 source11 and flag;3/4/5 required unknown. Supplemental controls do not change original66.'})
     java=str(ROOT/'artifacts/galette-static-baselines-20261111/runtime-base/java-8-openjdk-amd64/bin/java')
     classes=out/'classes';classes.mkdir()
     deps=sorted((ROOT/'artifacts/ruoyi-request-scope-20261104/scope-controls-02/deps').glob('*.jar'))
-    cp=':'.join(map(str,[classes,AGENT,*JARS,*deps]))
+    cp=':'.join(map(str,[classes,agent,*JARS,*deps]))
     command([java[:-4]+'javac','-cp',cp,'-d',str(classes),str(HERE/'ConstructorScopeFixture.java')],out/'compile.log')
     jar=out/'fixture.jar'
     with ZipFile(jar,'w')as z:
@@ -49,7 +49,7 @@ def run(out,case=None):
     reports={};norm={}
     for mode in ('full','static','selective'):
         d=out/mode;d.mkdir();policy=configure(plan,mode);save(d/'policy.json',policy)
-        cmd=[java,'-javaagent:'+str(AGENT),'-Dfixture.observe=true','-Dservice.plan='+str(out/'plan.json'),'-Dservice.events='+str(d/'events.jsonl'),*policy['jvm_options'],'-cp',cp,'ConstructorScopeFixture',*args]
+        cmd=[java,'-javaagent:'+str(agent),'-Dfixture.observe=true','-Dservice.plan='+str(out/'plan.json'),'-Dservice.events='+str(d/'events.jsonl'),*policy['jvm_options'],'-cp',cp,'ConstructorScopeFixture',*args]
         save(d/'command.json',cmd)
         cases=json.loads(command(cmd,d/'stdout.log').stdout.splitlines()[-1])
         assert [{k:v for k,v in c.items()if k!='message'}for c in cases]==[{k:v for k,v in c.items()if k!='message'}for c in baseline]
@@ -77,7 +77,7 @@ def run(out,case=None):
             save(d/'replay-failure.json',{'type':type(e).__name__,'error':str(e)})
             reports[mode]={'business_preserved':True,'targets':len(truth),'error':str(e),'gate':limited and isinstance(e,AnalysisLimit)}
     equal=None if limited else len(norm)==3 and norm['full']==norm['static']==norm['selective']
-    save(out/'results.json',{'modes':reports,'normalized_equal':equal,'gate':(limited or equal) and all(r['gate']for r in reports.values()),'new_JVM_controls':True,'new_Agent':False,'performance':None})
+    save(out/'results.json',{'modes':reports,'normalized_equal':equal,'gate':(limited or equal) and all(r['gate']for r in reports.values()),'new_JVM_controls':True,'new_Agent':agent!=AGENT,'performance':None})
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--case',type=int,choices=range(10));a=p.parse_args();run(a.out.resolve(),a.case)
+    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--case',type=int,choices=range(10));p.add_argument('--agent',type=Path,default=AGENT);a=p.parse_args();run(a.out.resolve(),a.case,a.agent.resolve())

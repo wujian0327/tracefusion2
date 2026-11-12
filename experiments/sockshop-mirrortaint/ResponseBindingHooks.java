@@ -162,7 +162,7 @@ public final class ResponseBindingHooks implements Opcodes {
         if(!target&&!JsonTreeObservationHooks.candidate(owner)&&policy!=null&&field.startsWith("@map:")&&policy.member(anchor,path,value))return;
         Map r=new LinkedHashMap();r.put("path",path);r.put("owner",PlannedServiceAgent.Recorder.id(owner));r.put("field",field);
         r.put("version",field.startsWith("@")?(snapshotEpoch==null?CollectionServiceHooks.epoch(owner):snapshotEpoch):PlannedServiceAgent.Recorder.VERSIONS.getOrDefault(PlannedServiceAgent.Recorder.id(owner)+":"+field,0));
-        r.put("observed",PlannedServiceAgent.Recorder.value(value));if(JsonTreeObservationHooks.candidate(owner))r.put("json_tree",true);if(anchor!=null)r.put("schema_field",anchor);result.add(r);
+        String descriptor=field.startsWith("@")?"Ljava/lang/Object;":PlannedServiceAgent.Recorder.fieldDescriptor(owner,field);r.put("descriptor",descriptor);r.put("observed",PlannedServiceAgent.Recorder.fieldValue(value,descriptor));if(JsonTreeObservationHooks.candidate(owner))r.put("json_tree",true);if(anchor!=null)r.put("schema_field",anchor);result.add(r);
     }
     static void jsonTreeProof(Object o,String path,SnapshotPolicy policy,JsonTreeObservationHooks.Snapshot raw)throws Exception{Map fact=JsonTreeObservationHooks.proof(o,path,raw);if(policy!=null){List ids=(List)policy.witness.get("json_tree_proofs");if(ids==null){ids=new ArrayList();policy.witness.put("json_tree_proofs",ids);}ids.add(fact.get("seq"));}}
     static void walk(Object o,String path,String anchor,List<Map> result,IdentityHashMap<Object,Boolean> seen,int depth,boolean target,SnapshotPolicy policy,List<Map> wrappers)throws Exception{

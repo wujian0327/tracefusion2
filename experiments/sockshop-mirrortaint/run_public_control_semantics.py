@@ -41,15 +41,15 @@ def checked(plan,rows):
     return infer_execution(plan,rows)
 
 
-def run(out,exceptions=False,implicit=False,interfaces=False):
+def run(out,exceptions=False,implicit=False,interfaces=False,agent=AGENT):
     out.mkdir(parents=True,exist_ok=False)
     original=load(H/'protocol-before-implementation.json')
-    assert sha(AGENT)==original['Agent_sha256']
-    save(out/'candidate.json',{'core_sources':{p:sha(Path(p))for p in [*original['core_sources'],str(HERE/'control_dependencies.py')]},'Agent_sha256':sha(AGENT),'fixture_sha256':sha(HERE/'PublicControlFixture.java')})
+    if agent==AGENT:assert sha(agent)==original['Agent_sha256']
+    save(out/'candidate.json',{'core_sources':{p:sha(Path(p))for p in [*original['core_sources'],str(HERE/'control_dependencies.py')]},'Agent_sha256':sha(agent),'fixture_sha256':sha(HERE/'PublicControlFixture.java')})
     java=str(ROOT/'artifacts/galette-static-baselines-20261111/runtime-base/java-8-openjdk-amd64/bin/java')
     classes=out/'classes';classes.mkdir()
     deps=sorted((ROOT/'artifacts/ruoyi-request-scope-20261104/scope-controls-02/deps').glob('*.jar'))
-    cp=':'.join(map(str,[classes,AGENT,*JARS,*deps]))
+    cp=':'.join(map(str,[classes,agent,*JARS,*deps]))
     command([java[:-4]+'javac','-cp',cp,'-d',str(classes),str(HERE/'PublicControlFixture.java')],out/'compile.log')
     jar=out/'fixture.jar'
     with ZipFile(jar,'w')as z:
@@ -63,7 +63,7 @@ def run(out,exceptions=False,implicit=False,interfaces=False):
     reports={};normalized={}
     for mode in ('full','static','selective'):
         d=out/mode;d.mkdir();policy=configure(plan,mode);save(d/'policy.json',policy)
-        cmd=[java,'-javaagent:'+str(AGENT),'-Dfixture.observe=true','-Dservice.plan='+str(out/'plan.json'),'-Dservice.events='+str(d/'events.jsonl'),*policy['jvm_options'],'-cp',cp,'PublicControlFixture',*mainargs]
+        cmd=[java,'-javaagent:'+str(agent),'-Dfixture.observe=true','-Dservice.plan='+str(out/'plan.json'),'-Dservice.events='+str(d/'events.jsonl'),*policy['jvm_options'],'-cp',cp,'PublicControlFixture',*mainargs]
         save(d/'command.json',cmd)
         cases=json.loads(command(cmd,d/'stdout.log').stdout.splitlines()[-1])
         assert [{k:v for k,v in c.items()if k!='message'}for c in cases]==[{k:v for k,v in c.items()if k!='message'}for c in baseline]
@@ -152,8 +152,8 @@ def run(out,exceptions=False,implicit=False,interfaces=False):
             save(d/'guards.json',guards)
         reports[mode]={'business_preserved':True,'targets':len(checks),'correct':sum(all(c['ok'].values())for c in checks),'failed':[{'scenario':c['scenario'],'input':c['input'],'ok':c['ok']}for c in checks if not all(c['ok'].values())],'guards':guards,'gate':all(all(c['ok'].values())for c in checks)and all(g['state']!='incorrect-known'for g in guards)}
     equal=len(normalized)==3 and normalized['full']==normalized['static']==normalized['selective']
-    save(out/'results.json',{'modes':reports,'normalized_equal':equal,'gate':equal and all(r['gate']for r in reports.values()),'Agent_unchanged':sha(AGENT)==original['Agent_sha256'],'performance':None})
+    save(out/'results.json',{'modes':reports,'normalized_equal':equal,'gate':equal and all(r['gate']for r in reports.values()),'Agent_unchanged':sha(agent)==original['Agent_sha256'],'performance':None})
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--exception-controls',action='store_true');p.add_argument('--implicit-controls',action='store_true');p.add_argument('--interface-controls',action='store_true');a=p.parse_args();run(a.out.resolve(),a.exception_controls,a.implicit_controls,a.interface_controls)
+    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--exception-controls',action='store_true');p.add_argument('--implicit-controls',action='store_true');p.add_argument('--interface-controls',action='store_true');p.add_argument('--agent',type=Path,default=AGENT);a=p.parse_args();run(a.out.resolve(),a.exception_controls,a.implicit_controls,a.interface_controls,a.agent.resolve())

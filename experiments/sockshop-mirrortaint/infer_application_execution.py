@@ -11,6 +11,8 @@ from control_dependencies import ControlFlow, Control, selected as control_selec
 
 
 def infer_application(plan,rows,worker_request=None):
+    from field_value_protocol import validate as validate_field_values
+    validate_field_values(plan,rows)
     from infer_date_projection import validate_date_runtime
     validate_date_runtime(plan,rows)
     from infer_async_protocol import validate_async_protocol
@@ -197,7 +199,9 @@ def infer_application(plan,rows,worker_request=None):
                 require(start['seq']<source_row['seq']<finish['seq'] and start['frame']==source_row['frame']==finish['frame'] and start['callee']==source_row['callee'] and start['method']==source_row['source_caller_method'] and start['pc']==source_row['source_pc'],'Declared source occurrence coordinates differ')
                 if plan['response_binding']['source_occurrence_protocol']>=2:require(source_row.get('source_callsite')==start['method']+'@'+str(start['pc']),'Declared source actual callsite differs')
             if f['owner'] in poisoned_at and not (candidates[0][0]['kind'] in ('http-json','binding-source') and candidates[0][0]['seq']>poisoned_at[f['owner']]):return Value(f['observed'],unknown=True)
-            row,index,source=candidates[0];same_value(source['observed'],f['observed']);return Value(f['observed'],frozenset({('http',row['seq'],source['path']) if row['kind']=='http-json' else ('field',row['seq'],index)}))
+            row,index,source=candidates[0];same_value(source['observed'],f['observed'])
+            if f['field'] not in primitive_fields:require(source['observed'].get('object')==f['observed'].get('object'),'Reference source field identity differs')
+            return Value(f['observed'],frozenset({('http',row['seq'],source['path']) if row['kind']=='http-json' else ('field',row['seq'],index)}))
         def raw_lookup(f,before):
             key=coordinate(f)
             if key in literal_enum_fields:
@@ -213,7 +217,10 @@ def infer_application(plan,rows,worker_request=None):
                 obj=f['observed'].get('object')
                 if obj in poisoned_at:return Value(f['observed'],unknown=True)
                 if obj in date_values:return date_values[obj].project(f['observed'])
-            if key in state.fields and field_seq[key]>poisoned_at.get(f['owner'],-1):return state.fields[key]
+            if key in state.fields and field_seq[key]>poisoned_at.get(f['owner'],-1):
+                value=state.fields[key];bind(value,f['observed'])
+                if f['field'] not in primitive_fields and (value.observed or value.allocation is not None):require(identity(value)==f['observed'].get('object'),'Reference written field identity differs')
+                return value
             default=active_defaults.get(f['owner'])
             if default and default['seq']<before and default['seq']>poisoned_at.get(f['owner'],-1) and coordinate(f)not in providers:
                 matches=[v for v in default['fields']if coordinate(v)==key]
