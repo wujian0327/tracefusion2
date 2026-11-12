@@ -1,0 +1,282 @@
+{
+  "source_commit": "4d29ba6",
+  "Agent_sha256": "367cbb2300e507e5db4716c4e2fcbed1a39898c5e6c6f5f23583c4c1487e2764",
+  "Agent_and_30_contracts_unchanged": true,
+  "cohorts": [
+    {
+      "cohort": "original",
+      "mode": "full",
+      "targets": 4,
+      "complete_correct": 2,
+      "unknown": 2,
+      "raw_positive_gate": true
+    },
+    {
+      "cohort": "original",
+      "mode": "static",
+      "targets": 4,
+      "complete_correct": 2,
+      "unknown": 2,
+      "raw_positive_gate": true
+    },
+    {
+      "cohort": "original",
+      "mode": "selective",
+      "targets": 4,
+      "complete_correct": 2,
+      "unknown": 2,
+      "raw_positive_gate": true
+    },
+    {
+      "cohort": "direct",
+      "mode": "full",
+      "targets": 4,
+      "complete_correct": 2,
+      "unknown": 2,
+      "raw_positive_gate": true
+    },
+    {
+      "cohort": "direct",
+      "mode": "static",
+      "targets": 4,
+      "complete_correct": 2,
+      "unknown": 2,
+      "raw_positive_gate": true
+    },
+    {
+      "cohort": "direct",
+      "mode": "selective",
+      "targets": 4,
+      "complete_correct": 2,
+      "unknown": 2,
+      "raw_positive_gate": true
+    },
+    {
+      "cohort": "composition",
+      "mode": "full",
+      "targets": 66,
+      "complete_correct": 60,
+      "unknown": 6,
+      "raw_positive_gate": false
+    },
+    {
+      "cohort": "composition",
+      "mode": "static",
+      "targets": 66,
+      "complete_correct": 60,
+      "unknown": 6,
+      "raw_positive_gate": false
+    },
+    {
+      "cohort": "composition",
+      "mode": "selective",
+      "targets": 66,
+      "complete_correct": 60,
+      "unknown": 6,
+      "raw_positive_gate": false
+    },
+    {
+      "cohort": "exception",
+      "mode": "full",
+      "targets": 12,
+      "complete_correct": 12,
+      "unknown": 0,
+      "raw_positive_gate": true
+    },
+    {
+      "cohort": "exception",
+      "mode": "static",
+      "targets": 12,
+      "complete_correct": 12,
+      "unknown": 0,
+      "raw_positive_gate": true
+    },
+    {
+      "cohort": "exception",
+      "mode": "selective",
+      "targets": 12,
+      "complete_correct": 12,
+      "unknown": 0,
+      "raw_positive_gate": true
+    },
+    {
+      "cohort": "implicit",
+      "mode": "full",
+      "targets": 12,
+      "complete_correct": 12,
+      "unknown": 0,
+      "raw_positive_gate": true
+    },
+    {
+      "cohort": "implicit",
+      "mode": "static",
+      "targets": 12,
+      "complete_correct": 12,
+      "unknown": 0,
+      "raw_positive_gate": true
+    },
+    {
+      "cohort": "implicit",
+      "mode": "selective",
+      "targets": 12,
+      "complete_correct": 12,
+      "unknown": 0,
+      "raw_positive_gate": true
+    },
+    {
+      "cohort": "interface",
+      "mode": "full",
+      "targets": 3,
+      "complete_correct": 3,
+      "unknown": 0,
+      "raw_positive_gate": true
+    },
+    {
+      "cohort": "interface",
+      "mode": "static",
+      "targets": 3,
+      "complete_correct": 3,
+      "unknown": 0,
+      "raw_positive_gate": true
+    },
+    {
+      "cohort": "interface",
+      "mode": "selective",
+      "targets": 3,
+      "complete_correct": 3,
+      "unknown": 0,
+      "raw_positive_gate": true
+    }
+  ],
+  "raw_66_case_gate_passed": false,
+  "revision_full_acceptance_passed": false,
+  "remaining_unanswered_literal_positives_per_mode": 6,
+  "remaining_cases": "14/16 x inputs0/1/2: unclosed constructor effects, including untaken alternatives",
+  "formal_performance": null,
+  "business_deployments": 0,
+  "old_complete_captures": 14,
+  "new_JVM_controls": 18,
+  "guard_checks": 186,
+  "all_guards_prevent_wrong_known": true,
+  "rewrite_checks": 54,
+  "no_old_business_selector_oracle_invented": true,
+  "unit_tests": 16,
+  "artifact_home": "artifacts/public-control-semantics-20261112",
+  "prior_galette_39_preservation": {
+    "records": [
+      {
+        "path": "artifacts/galette-compatibility-selection-20261111/final-mall-01/independent-score/scores.json",
+        "sha256": "967f8909fd83690575ef416545120df85485d84333f9cb99c3a537ccd24286f9",
+        "matches_pre_revision_archive": true
+      },
+      {
+        "path": "artifacts/galette-compatibility-selection-20261111/final-mall-01/independent-score/summary.json",
+        "sha256": "f90e416ac2294499276d8fb0c49522cdadc88681933dc31d22e8f2da7ce5c958",
+        "matches_pre_revision_archive": true
+      },
+      {
+        "path": "artifacts/galette-compatibility-selection-20261111/final-mall-01/capture/galette.jsonl",
+        "sha256": "5f3d5a94acae0d2fe75869cc3d9facd2d30267beff2a07f8d6cc8400f2228a48",
+        "matches_pre_revision_archive": true
+      },
+      {
+        "path": "artifacts/galette-compatibility-selection-20261111/final-zlt-user-03/independent-score/scores.json",
+        "sha256": "08380f3d46944c6f2d8bfdedb003fe5a26344a550330efd2a95fff4fbc299b7b",
+        "matches_pre_revision_archive": true
+      },
+      {
+        "path": "artifacts/galette-compatibility-selection-20261111/final-zlt-user-03/independent-score/summary.json",
+        "sha256": "b8c416dd4233625ecc0907f48a6d28a24601e36ba82e674ad872a371fd845452",
+        "matches_pre_revision_archive": true
+      },
+      {
+        "path": "artifacts/galette-compatibility-selection-20261111/final-zlt-user-03/capture/galette.jsonl",
+        "sha256": "90fa58b5f6e2294a3f54e75301de59051d7cfae5093e84223dbd4e34e8becca0",
+        "matches_pre_revision_archive": true
+      },
+      {
+        "path": "artifacts/galette-compatibility-selection-20261111/final-low-01/independent-score/scores.json",
+        "sha256": "57b44168be498fdcf885246c2cacdf228f3296661c5154d756a1a2c6ab31ebce",
+        "matches_pre_revision_archive": true
+      },
+      {
+        "path": "artifacts/galette-compatibility-selection-20261111/final-low-01/independent-score/summary.json",
+        "sha256": "40bc51a50a832a916a8824c444de5c1dbc5a1149f915ff729c551c47eb372013",
+        "matches_pre_revision_archive": true
+      },
+      {
+        "path": "artifacts/galette-compatibility-selection-20261111/final-low-01/capture/galette.jsonl",
+        "sha256": "e90ca7b2f33f9333f5940cd303adf7647c51bb0a06c7c9df18b57d9ee14a8f1a",
+        "matches_pre_revision_archive": true
+      },
+      {
+        "path": "artifacts/galette-compatibility-selection-20261111/final-related-high-01/independent-score/scores.json",
+        "sha256": "deed5ee05b844a63f9809fbb906b1698d845557dc4646932103c8126d0fd3674",
+        "matches_pre_revision_archive": true
+      },
+      {
+        "path": "artifacts/galette-compatibility-selection-20261111/final-related-high-01/independent-score/summary.json",
+        "sha256": "40bc51a50a832a916a8824c444de5c1dbc5a1149f915ff729c551c47eb372013",
+        "matches_pre_revision_archive": true
+      },
+      {
+        "path": "artifacts/galette-compatibility-selection-20261111/final-related-high-01/capture/galette.jsonl",
+        "sha256": "31a41d9a943bd7da63c189107b3cd2984f318ae64beae801210188fc9669b16c",
+        "matches_pre_revision_archive": true
+      },
+      {
+        "path": "artifacts/galette-compatibility-selection-20261111/final-medium-01/independent-score/scores.json",
+        "sha256": "f9d646460f857ff3ed23d48ce56cd1a542adb6515e4c0fd5ba44de6fb7b10097",
+        "matches_pre_revision_archive": true
+      },
+      {
+        "path": "artifacts/galette-compatibility-selection-20261111/final-medium-01/independent-score/summary.json",
+        "sha256": "40bc51a50a832a916a8824c444de5c1dbc5a1149f915ff729c551c47eb372013",
+        "matches_pre_revision_archive": true
+      },
+      {
+        "path": "artifacts/galette-compatibility-selection-20261111/final-medium-01/capture/galette.jsonl",
+        "sha256": "c8f0ca9935c1e7d1d195681a2d91e87ab0cc2f71f29498ed37cfcd5050deb295",
+        "matches_pre_revision_archive": true
+      },
+      {
+        "path": "artifacts/galette-compatibility-selection-20261111/final-high-02/independent-score/scores.json",
+        "sha256": "22e5eb3255849fa912c50f1b322d2d5ff9bab1be50b7b940535fe27f217a5899",
+        "matches_pre_revision_archive": true
+      },
+      {
+        "path": "artifacts/galette-compatibility-selection-20261111/final-high-02/independent-score/summary.json",
+        "sha256": "40bc51a50a832a916a8824c444de5c1dbc5a1149f915ff729c551c47eb372013",
+        "matches_pre_revision_archive": true
+      },
+      {
+        "path": "artifacts/galette-compatibility-selection-20261111/final-high-02/capture/galette.jsonl",
+        "sha256": "326d3db611e8a9e87318c2700ddf96072fe85961c81a07aafe5e1448d7f8d2b8",
+        "matches_pre_revision_archive": true
+      }
+    ],
+    "official_and_modified_results_not_reassigned": true,
+    "reference_archive": "artifacts/backups/galette-compatibility-selection-20261111/complete-artifacts-final-02.tar.gz",
+    "native_source_scoring_rerun": false
+  },
+  "core_changes": {
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_execution_kernel.py": {
+      "before": "c2c61d862bad33ced0f63846b25658a59ddfd68ffc7c0def9aef65453afef071",
+      "after": "e45e6885780e719a93fe04aa6f2b52d3977ab27eb099f19ac5ca3876eda40a71"
+    },
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/execution_dependency_state.py": {
+      "before": "f142b363027e9259186a853ceefbf36049e8af8948eef8624a427ecedfe1b04b",
+      "after": "497e1a3a27a360cb1f89a918b41a6e2e2ac7e2fc2c02caa7d5cdea604801c858"
+    },
+    "/home/wujian/tracefusion2/experiments/sockshop-mirrortaint/infer_application_execution.py": {
+      "before": "75638160b98b1c8ea9b60b1fd7fddc6a788a72a890da1674bccdfb9a858f6f42",
+      "after": "cd51416c855e926173d778092b65cd69a79cb768872744c03ab6d074e990adbd"
+    }
+  },
+  "new_common_rule": {
+    "file": "control_dependencies.py",
+    "sha256": "3570711300468b1339e76dc35c6ce22ddd13bf010dcc3b14c194b146e67605a2"
+  },
+  "frozen_control_captures": "frozen-* (18 JVM captures this revision); final guard-only offline patch replayed in delivery-audit",
+  "no_new_selectors_comparison_for_MT_or_Galette": true
+}

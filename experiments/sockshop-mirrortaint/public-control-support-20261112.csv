@@ -1,0 +1,11 @@
+rule,status,shared_implementation,code,evidence,limit
+data/selection/unknown,implemented,selection / selected,control_dependencies.py:12,16 isolated tests and new JVM controls,No new sources from equal values or snapshots
+branch value and identity,implemented,branch_taken / branch,control_dependencies.py:23,source missing/ambiguity and event corruption controls,Signed int or witnessed reference/null; missing IDs not equal
+CFG joins and locals phi,implemented bounded,ControlFlow / Control.at,control_dependencies.py:54,"comparison, ternary, nested, short circuit, loops0/1/2",Verified original CFG; no minimal slicing claim
+field/call merge effects,conditional,_receivers / _field_effects,control_dependencies.py,"conditional writes, aliases, interface3/3",Resolvable physical receiver and closed targets; selected addresses without alias footprint limited
+normal/exception completion,conditional,normal_operation / normal_completion / normal_outcome / caught,control_dependencies.py,preallocated12/12 and implicit12/12,Original supported exception dispatch only; async control not claimed
+two replay paths,implemented,Control.branch / normal_operation,infer_execution_kernel.py; infer_application_execution.py,v1 isolated entry + v8 JVM controls,Does not auto-support additional opcodes
+unknown opaque alternatives,not certified,control_barriers / field_selection,control_dependencies.py; execution_dependency_state.py,original66 batch60 correct /6 unknown,Six original expectations retained; full acceptance false
+selected write address,not supported without proof,Control.write_value,control_dependencies.py,isolated analysis-limit negative,Do not derive may-alias targets from current owner only
+division guard hook,not executable support,normal_operation optional opcode cases,control_dependencies.py,not counted as tested support,Interpreter division opcode support was not added
+arbitrary Java implicit flow,not claimed,outside supported replay,PUBLIC-CONTROL-SPEC-20261112.md,not a complete Java proof,No arbitrary concurrency/reflection/native/redefinition coverage

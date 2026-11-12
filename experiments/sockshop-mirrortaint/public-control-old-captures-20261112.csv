@@ -1,0 +1,15 @@
+task,old_status,new_status,capture_sha256,selection_oracle,targets,old_known,new_known,versions_equal,explicit_data_changes,known_changes,selector_changes,root_audits_equal
+selection-controls-02-full,completed,completed,d3f62a51b3328c01154c34f981defdc6bcef53c0e120d201a7669fa4180f7442,independent literal expectations retained,4,2,2,True,0,0,2,True
+selection-controls-02-static,completed,completed,6e2ef77f6c56b7e8254f76874432128ed80290a75342bfb38d7d07565f9ea139,independent literal expectations retained,4,2,2,True,0,0,2,True
+selection-controls-02-selective,completed,completed,7ef4f60a5d16db2b14eab1f848def26ef59d90adf16a0faafb9d5d0c932cdca4,independent literal expectations retained,4,2,2,True,0,0,2,True
+direct-selection-controls-02-full,completed,completed,db99db12a20fe9d75735d2a719f0fbbaee251bed93680decae8f77661fc618a7,independent literal expectations retained,4,2,2,True,0,0,0,True
+direct-selection-controls-02-static,completed,completed,32e53ac7dd4bcad9c894274639713fb46e145b3ac75deb5d2c6daec62071a809,independent literal expectations retained,4,2,2,True,0,0,0,True
+direct-selection-controls-02-selective,completed,completed,4c75ed9d18edddca6df8a4d20e4479712422f9ef906993d5279ef831b965cef0,independent literal expectations retained,4,2,2,True,0,0,0,True
+removeIf-control-full,completed,completed,2f036d8a5091c09ccf7bc5f8571bd1fd77ec707e579e417916826710d82549b0,old explicit-data oracle; selection incomplete,10,8,6,True,0,2,4,True
+removeIf-control-selective,completed,completed,e21a9ab72fa502a0c8d17e4543c3d6ca74c8a729d08f22b671e2f37e5fbdf39a,old explicit-data oracle; selection incomplete,10,8,6,True,0,2,4,True
+ruoyi-1-full,completed,completed,599343f59d1ff330a9054d837fc232675b3c7f147bfd1203034757bcf70535dc,old explicit-data oracle; selection incomplete,5,5,5,True,0,0,0,True
+ruoyi-1-selective,completed,completed,795343f9fcbabe4d9357bd7e739bbab0d26cbca86d4e1859c1e5461c4415a297,old explicit-data oracle; selection incomplete,5,5,5,True,0,0,0,True
+ruoyi-2-full,completed,completed,7747f92998e19bfd4816585a37bfa06335301ffb2b96120e14247589e8a67bc4,old explicit-data oracle; selection incomplete,43,39,39,True,0,0,43,True
+ruoyi-2-selective,completed,completed,5e6d3bbbf563d5d8eb4aab25863a592e1f4c014b468c04819cfbb125e9044f90,old explicit-data oracle; selection incomplete,43,39,39,True,0,0,43,True
+ruoyi-3-full,completed,completed,c4923a0a7a369701398141783a0ed97cd0e82298f565ae6b09ac0480c72ed25d,old explicit-data oracle; selection incomplete,12,12,12,True,0,0,0,True
+ruoyi-3-selective,completed,completed,ebcaed03552ffb6176c21854e028e98b5753410b794b5e0458b8053c5aead8d2,old explicit-data oracle; selection incomplete,12,12,12,True,0,0,0,True

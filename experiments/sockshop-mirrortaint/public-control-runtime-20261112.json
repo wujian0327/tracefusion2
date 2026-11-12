@@ -1,0 +1,32 @@
+{
+  "runtime_files": {
+    "/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/runtime-base/java-8-openjdk-amd64/bin/java": "68e380b6a96f0032786f90ff89cc76bd25cd2ceeffe063a9400c89a734a8df37",
+    "/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/runtime-base/java-8-openjdk-amd64/bin/javac": "3539cebb19b1339d9fb7b482dd84ba7f9d9976e0e7f7e948754b42d38244affb",
+    "/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/runtime-base/java-8-openjdk-amd64/jre/lib/rt.jar": "8f20323f5d69f9d46a6a9ef67621a01d7a2704ad9b79afc7fb4f97192f600e6b",
+    "/home/wujian/tracefusion2/artifacts/galette-static-baselines-20261111/runtime-base/java-8-openjdk-amd64/jre/lib/amd64/server/libjvm.so": "fba4526059a3b4da8382b90750ad307136e26b99c8316a06e1c783d57185a6a7"
+  },
+  "java_version": "openjdk version \"1.8.0_504\"\nOpenJDK Runtime Environment (build 1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01)\nOpenJDK 64-Bit Server VM (build 25.504-b01, mixed mode)\n",
+  "metadata_java": "/usr/lib/jvm/java-8-openjdk-amd64/bin/java",
+  "metadata_java_sha256": "92023d4637f2d9eb653ca6fd5d4ac8acaae8014cbc930f48735fee05402cd2ed",
+  "metadata_java_version": "openjdk version \"1.8.0_512\"\nOpenJDK Runtime Environment (build 1.8.0_512-8u512-b09~us1-0ubuntu1~22.04.1-b09)\nOpenJDK 64-Bit Server VM (build 25.512-b09, mixed mode)\n",
+  "Agent_sha256": "367cbb2300e507e5db4716c4e2fcbed1a39898c5e6c6f5f23583c4c1487e2764",
+  "runtime_archive_reference": "artifacts/backups/galette-static-baselines-20261111/complete-calibration-artifacts.tar.gz",
+  "metadata_only_not_business_JDK": "Metadata tool uses host Java; all new control programs use restored8u504, actual commands retained",
+  "new_business_JARs": {
+    "frozen-implicit/fixture.jar": "da2f8ac040e6e361d2f6cc647c99f3d642a47d94216259d9fc40215252d76110",
+    "frozen-interface/fixture.jar": "5b69bd68ae0060e0b2f67c7ac09f2c87a0ac7af9e1969135380844bda0418d22",
+    "frozen-exception/fixture.jar": "bc83f6b733fdbae8a5c2daa8ff8921c0733c6420aea1e6a0a83de08435169b47",
+    "frozen-direct/fixture.jar": "024d81563840870a1159643fce647e714ed0eee8acf574f00727f3563c272717",
+    "frozen-composition/fixture.jar": "c4db3340faee420700b745176ee81080278ee15a43040ff417e4157564c828cd",
+    "frozen-original/fixture.jar": "300ccecaa457bd4c3f714a2bc0fd27b38e4da16ed2ee82a65f46751df84430dc"
+  },
+  "new_plans": {
+    "frozen-implicit/plan.json": "80ea6e07bdac4213425e07e6be6a4315fab8d7575049d982fea2256800b91d6f",
+    "frozen-interface/plan.json": "6c126a8674450f3b3a32a62585dc131959fd97a849797e40173915ce084d3358",
+    "frozen-exception/plan.json": "01548ad058b102f1ad1f42dc3bda41357f085f266688c34743bbfe824ca056c7",
+    "frozen-direct/plan.json": "954bc312cc4ddace22c2ae45eae2588486bee6e96e7eef34fcd3d881ed0e7171",
+    "frozen-composition/plan.json": "04dfa68d5ab15296d3b23156610b519992f957994428b39c53eecf2d126b499a",
+    "frozen-original/plan.json": "45056b0e15ad23efed1bc4f9567abf5b01eae8a24645e691e1eedf6916644b37"
+  },
+  "source_commit": "4d29ba6"
+}

@@ -1,0 +1,29 @@
+{
+  "local_backup_only": true,
+  "no_push": true,
+  "archives": [
+    {
+      "path": "artifacts/backups/public-control-semantics-20261112/complete-control-artifacts.tar.gz",
+      "role": "All new control captures, failures, source snapshots, complete old-input copies and independent expectations",
+      "sha256": "7acf2268e6897cd282578c2bd9ffe9a17619c817eb88574d4a8ffd00b8b9195b",
+      "bytes": 226592851,
+      "gzip_CRC_passed": true
+    },
+    {
+      "path": "artifacts/backups/galette-static-baselines-20261111/complete-calibration-artifacts.tar.gz",
+      "role": "Original restored8u504 runtime, frozen Agent/dependencies reference",
+      "expected_sha256": "7b4e520771870196f330de5c4c33a9c23d816a2225a0d5bb36e4760ea3fef997",
+      "sha256": "7b4e520771870196f330de5c4c33a9c23d816a2225a0d5bb36e4760ea3fef997",
+      "bytes": 897702047,
+      "gzip_CRC_passed": true
+    }
+  ],
+  "new_images_or_business_deployments": false,
+  "core_commit": "4d29ba6",
+  "code_and_audit_commit": "e124560",
+  "required_external_files_manifest": "artifacts/public-control-semantics-20261112/required-inputs/manifest.json",
+  "prior_Galette_39_capture_score_files_verified_against_old_archive": 18,
+  "original_TF_counterexamples_preserved": true,
+  "full_semantic_acceptance_passed": false,
+  "formal_cost": null
+}
