@@ -49,8 +49,8 @@ public final class ExecutionKernelHooks implements Opcodes {
         if(!enabled()||!sourceBoundary(start))return;Map fact=new LinkedHashMap();fact.put("version",1);fact.put("elided_writes",start.getOrDefault("_closure_elided_writes",Collections.emptyMap()));row.put("execution_closure",fact);
     }
     static final Map<Object,List> STREAMS=new IdentityHashMap<>();
-    static final Map<Object,Integer> ARRAY_VERSIONS=new IdentityHashMap<>();
-    static final Map<Object,int[]> ARRAY_SLOTS=new IdentityHashMap<>();
+    static final WeakIdentityMap<Object,Integer> ARRAY_VERSIONS=new WeakIdentityMap<>("ARRAY_VERSIONS");
+    static final WeakIdentityMap<Object,int[]> ARRAY_SLOTS=new WeakIdentityMap<>("ARRAY_SLOTS");
     static final ThreadLocal<Deque<Map>> CONSTRUCTORS=ThreadLocal.withInitial(ArrayDeque::new);
     static long constructorCounter;
     static boolean extended(){return enabled()&&Boolean.TRUE.equals(((Map)PlannedServiceAgent.plan.get("execution_kernel")).get("constructor_lifecycle"));}

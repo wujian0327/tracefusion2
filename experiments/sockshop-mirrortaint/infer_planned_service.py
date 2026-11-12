@@ -43,6 +43,8 @@ def infer_service(plan,path,rows=None):
     if rows is None:
         raw=Path(path).read_bytes();rows=[json.loads(l) for l in raw.splitlines()];log_bytes=len(raw)
     else:log_bytes=Path(path).stat().st_size
+    from identity_lifecycle_protocol import validate as validate_lifecycle
+    validate_lifecycle(rows)
     from method_value_protocol import validate as validate_method_values
     validate_method_values(plan,rows)
     from field_value_protocol import validate as validate_field_values

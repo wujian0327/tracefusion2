@@ -11,6 +11,8 @@ from control_dependencies import ControlFlow, Control, selected as control_selec
 
 
 def infer_application(plan,rows,worker_request=None):
+    from identity_lifecycle_protocol import validate as validate_lifecycle
+    validate_lifecycle(rows)
     from method_value_protocol import validate as validate_method_values
     validate_method_values(plan,rows)
     from field_value_protocol import validate as validate_field_values

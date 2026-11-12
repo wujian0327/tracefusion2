@@ -32,6 +32,8 @@ public class MethodObservationFixture {
         MethodObservationFixture f=new MethodObservationFixture();Integer one=new Integer(1000000),two=new Integer(1000000);Long left=new Long(9000000000000000000L),right=new Long(9000000000000000000L);Object ordinary=new Object();RuntimeException error=new RuntimeException("preallocated");ObjectMapper json=new ObjectMapper();
         if(one==two||left==right||!one.equals(two)||!left.equals(right))throw new AssertionError();
         if(args.length>0&&args[0].equals("stress")){List counts=new ArrayList();f.probe(one,two,left,right,ordinary);counts.add(count(0));for(int phase=1;phase<=2;phase++){for(int n=0;n<200;n++)f.probe(one,two,left,right,ordinary);counts.add(count(phase));}System.out.println(json.writeValueAsString(counts));return;}
+        double payload=Double.longBitsToDouble(0x7ff8000000000017L);float singlePayload=Float.intBitsToFloat(0x7fc00017);
+        if(Double.doubleToRawLongBits(d(payload))!=0x7ff8000000000017L||Float.floatToRawIntBits(f.f(singlePayload))!=0x7fc00017)throw new AssertionError("NaN payload changed");
         W3CTraceContext ctx=W3CTraceContext.server(null,null);boolean observe=Boolean.getBoolean("fixture.observe");if(observe)SpringTransportAgent.Transport.ASYNC.set(ctx);
         Out out=f.root(new Store(),one,two,left,right,ordinary,error);if(out.value!=1000000)throw new AssertionError();
         if(observe){ResponseBindingHooks.verifySerialization(out,json);Map wire=ctx.fields();wire.put("uri",null);wire.put("direction","response");wire.put("phase","write");wire.put("fields",SpringTransportAgent.Transport.snapshot(out));PlannedServiceAgent.Recorder.emit("http-json",wire);}

@@ -8,6 +8,8 @@ def matches(pattern,path):
 
 
 def sources(graph,role):
+    from identity_lifecycle_protocol import validate as validate_lifecycle
+    validate_lifecycle(graph.rows[role])
     from method_value_protocol import validate as validate_method_values
     validate_method_values(graph.plans[role],graph.rows[role])
     from field_value_protocol import validate as validate_field_values

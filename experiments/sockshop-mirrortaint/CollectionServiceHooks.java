@@ -8,9 +8,10 @@ public final class CollectionServiceHooks implements Opcodes {
     static final String R="CollectionServiceHooks";
     static final ThreadLocal<Deque<Map<String,Object>>> CALLS=new ThreadLocal<Deque<Map<String,Object>>>(){
         protected Deque<Map<String,Object>> initialValue(){return new ArrayDeque<>();}};
-    static final Set<Object> READ_ONLY=Collections.newSetFromMap(new IdentityHashMap<Object,Boolean>());
-    static final Map<Object,List<Object>> CONTENTS=new IdentityHashMap<>();
-    static final Map<Object,Integer> EPOCHS=new IdentityHashMap<>();
+    static final WeakIdentityMap<Object,Boolean> READ_ONLY_INDEX=new WeakIdentityMap<>("READ_ONLY");
+    static final Set<Object> READ_ONLY=Collections.newSetFromMap(READ_ONLY_INDEX);
+    static final WeakIdentityMap<Object,List<Object>> CONTENTS=new WeakIdentityMap<>("CONTENTS");
+    static final WeakIdentityMap<Object,Integer> EPOCHS=new WeakIdentityMap<>("EPOCHS");
     static long callCounter;
     static Map<String,Object> plan(){return PlannedServiceAgent.plan;}
     static Map<String,Object> value(Object x){return PlannedServiceAgent.Recorder.value(x);}
@@ -77,7 +78,7 @@ public final class CollectionServiceHooks implements Opcodes {
         return out;
     }
     public static int epoch(Object o){return epoch(o,contents(o));}
-    static int epoch(Object o,List<Object> now){synchronized(PlannedServiceAgent.Recorder.class){List<Object> before=CONTENTS.get(o);int epoch=EPOCHS.getOrDefault(o,0);if(before!=null&&!before.equals(now)){if(READ_ONLY.contains(o))throw new IllegalStateException("Received collection changed outside guarded bytecode");epoch++;}CONTENTS.put(o,now);EPOCHS.put(o,epoch);return epoch;}}
+    static int epoch(Object o,List<Object> now){synchronized(PlannedServiceAgent.Recorder.class){PlannedServiceAgent.Recorder.safeEvent(now,new IdentityHashMap<Object,Boolean>(),0);List<Object> before=CONTENTS.get(o);int epoch=EPOCHS.getOrDefault(o,0);if(before!=null&&!before.equals(now)){if(READ_ONLY.contains(o))throw new IllegalStateException("Received collection changed outside guarded bytecode");epoch++;}CONTENTS.put(o,now);EPOCHS.put(o,epoch);return epoch;}}
     static void received(Object o,List<Object> contents){synchronized(PlannedServiceAgent.Recorder.class){epoch(o,contents);if(!ExecutionKernelHooks.enabled())READ_ONLY.add(o);}}
     public static void received(Object o){synchronized(PlannedServiceAgent.Recorder.class){if(o instanceof List||o instanceof Map){epoch(o);if(!ExecutionKernelHooks.enabled())READ_ONLY.add(o);}}}
     public static void begin(int pc,Object receiver,Object[] args){beginAt((String)plan().get("entry"),pc,receiver,args);}

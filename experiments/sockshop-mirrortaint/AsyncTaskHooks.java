@@ -5,7 +5,7 @@ import java.util.concurrent.*;
 /** Observational task protocol. Identity checks here never manufacture provenance. */
 public final class AsyncTaskHooks {
     static final ThreadLocal<Task> ACTIVE=new ThreadLocal<>();
-    static final IdentityHashMap<Object,Task> FUTURES=new IdentityHashMap<>();
+    static final WeakIdentityMap<Object,Long> FUTURES=new WeakIdentityMap<>("FUTURES");
     static long next;static boolean runtimeEmitted;
     static Map config(){return (Map)PlannedServiceAgent.plan.get("async_protocol");}
     static boolean enabled(){return config()!=null;}
@@ -32,7 +32,7 @@ public final class AsyncTaskHooks {
             emit("async-submit-begin",r);return t;
         }
     }
-    public static void submitted(Callable<?> work,Object future){if(!enabled())return;synchronized(PlannedServiceAgent.Recorder.class){try{Task t=(Task)work;Map r=row(t);r.put("future",value(future));r.put("future_class",future==null?null:future.getClass().getName());if(future!=null){if(FUTURES.put(future,t)!=null)throw new IllegalStateException("Future reused by submissions");}emit("async-submit-end",r);}catch(Throwable e){fail(e);}}}
+    public static void submitted(Callable<?> work,Object future){if(!enabled())return;synchronized(PlannedServiceAgent.Recorder.class){try{Task t=(Task)work;Map r=row(t);r.put("future",value(future));r.put("future_class",future==null?null:future.getClass().getName());if(future!=null){if(FUTURES.put(future,t.id)!=null)throw new IllegalStateException("Future reused by submissions");}emit("async-submit-end",r);}catch(Throwable e){fail(e);}}}
     public static void rejected(Callable<?> work,Throwable error){if(!enabled())return;synchronized(PlannedServiceAgent.Recorder.class){try{Map r=row((Task)work);r.put("exception",value(error));r.put("exception_type",error.getClass().getName());emit("async-submit-throw",r);}catch(Throwable e){fail(e);}}}
     public static void inner(Object result){Task t=ACTIVE.get();if(t==null)return;synchronized(PlannedServiceAgent.Recorder.class){Map r=row(t);r.put("inner",value(result));r.put("inner_class",result==null?null:result.getClass().getName());emit("async-worker-inner",r);}}
     public static void unwrapped(Object result){Task t=ACTIVE.get();if(t==null)return;synchronized(PlannedServiceAgent.Recorder.class){Map r=row(t);r.put("result",value(result));emit("async-worker-unwrapped",r);}}
@@ -45,7 +45,7 @@ public final class AsyncTaskHooks {
     }
     static void completed(Map start,Object result,Throwable error,Map r){
         if(!enabled()||!(start.get("_receiver_ref") instanceof Future))return;String c=(String)start.get("callee");boolean get=c.contains(".get("),cancel=c.contains(".cancel(");if(!get&&!cancel)return;
-        Task task=FUTURES.get(start.get("_receiver_ref"));Map a=new LinkedHashMap();a.put("task_id",task==null?null:task.id);a.put("future",value(start.get("_receiver_ref")));a.put("operation",get?"get":"cancel");a.put("completion",error==null?"normal":"exceptional");
+        Long task=FUTURES.get(start.get("_receiver_ref"));Map a=new LinkedHashMap();a.put("task_id",task);a.put("future",value(start.get("_receiver_ref")));a.put("operation",get?"get":"cancel");a.put("completion",error==null?"normal":"exceptional");
         a.put("method_descriptor",PlannedServiceAgent.Recorder.methodDescriptor(c));if(error==null)a.put("result",PlannedServiceAgent.Recorder.methodResult(result,PlannedServiceAgent.Recorder.methodDescriptor(c)));else{a.put("exception_type",error.getClass().getName());a.put("exception",value(error));if(error instanceof ExecutionException)a.put("cause",value(error.getCause()));}r.put("async_future",a);
     }
     static void fail(Throwable e){PlannedServiceAgent.Recorder.problem("async-protocol:"+e);throw new IllegalStateException(e);}

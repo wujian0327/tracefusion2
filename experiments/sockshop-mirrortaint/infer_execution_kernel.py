@@ -23,6 +23,8 @@ def same_value(expected,actual):
 
 
 def infer_execution(plan,rows):
+    from identity_lifecycle_protocol import validate as validate_lifecycle
+    validate_lifecycle(rows)
     from method_value_protocol import validate as validate_method_values
     validate_method_values(plan,rows)
     from field_value_protocol import validate as validate_field_values

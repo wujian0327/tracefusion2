@@ -3,7 +3,7 @@ import java.util.*;
 /** Exact Date facts and pinned default serialization; no provenance computation. */
 public final class TemporalDateHooks {
     static boolean emitted;
-    static final Map<Object,Object[]> WIRE=new IdentityHashMap<>();
+    static final WeakIdentityMap<Object,Object[]> WIRE=new WeakIdentityMap<>("DATE_WIRE");
     static Map config(){return PlannedServiceAgent.plan==null?null:(Map)PlannedServiceAgent.plan.get("date_projection");}
     static boolean date(Object value){if(config()==null||!(value instanceof Date))return false;if(value.getClass()!=Date.class)throw new IllegalStateException("Date subclass outside finite projection");return true;}
     static Map observe(Date value){Map r=new LinkedHashMap();r.put("object",PlannedServiceAgent.Recorder.id(value));r.put("date_epoch_ms",value.getTime());r.put("date_type",value.getClass().getName());return r;}
