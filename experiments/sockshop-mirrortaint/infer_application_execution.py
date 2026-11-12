@@ -218,6 +218,19 @@ def infer_application(plan,rows,worker_request=None):
             key=coordinate(f);value=raw_lookup(f,before)
             established=field_seq.get(key,max([x[1]for x in value.origins if x[0]in('field','http')]+[active_defaults.get(f['owner'],{}).get('seq',-1)]))
             return field_selection(state,key,value,established)
+        def reference_lookup(owner,field,descriptor,before):
+            from call_write_effects import unclosed
+            candidates=[(key,value,field_seq[key]) for key,value in state.fields.items() if key[:2]==(owner,field)]
+            candidates.extend((key,value,seq) for key,value,seq in state.reference_reads if key[:2]==(owner,field))
+            candidates=[(key,value,seq)for key,value,seq in candidates if poisoned_at.get(owner,-1)<seq<before]
+            if not candidates:unclosed('Conditional nested write lacks a pre-branch reference witness')
+            version=max(key[2]for key,value,seq in candidates)
+            current=[(key,value,seq)for key,value,seq in candidates if key[2]==version]
+            if len({identity(value)for key,value,seq in current})!=1:unclosed('Conditional nested write has contradictory reference witnesses')
+            if any(value.unknown for key,value,seq in current):unclosed('Conditional nested write reference dependency is unresolved')
+            key,value,seq=max(current,key=lambda x:x[2])
+            value=Value(value.observed,value.origins,frozenset(x for k,v,s in current for x in v.selectors),False,value.allocation)
+            return field_selection(state,key,value,seq)
         def register_defaults(ctor_start,receiver,completed=None):
             if not cfg.get('default_initializers',{}).get(ctor_start['callee']) and ctor_start['callee']not in cfg.get('constructor_chains',{}):return
             fact=defaults.get(ctor_start['constructor_id']);require(fact is not None,'Required allocation default witness absent')
@@ -385,7 +398,7 @@ def infer_application(plan,rows,worker_request=None):
             entry=begin['method'];method=methods[entry];code=method['instructions'];fr=Frame(begin['frame']);fr.pc=cfg.get('constructor_starts',{}).get(entry,0);slot=0
             if entry not in control_graphs:control_graphs[entry]=ControlFlow(method)
             opaque={k for k in cfg.get('opaque_methods',{})if cfg.get('constructors',{}).get(k,{}).get('kind','opaque')=='opaque'}
-            Control(control_graphs[entry],fr,state,identity,methods,inherited,not plan['response_binding'].get('entry_is_source',False),opaque,cfg.get('call_targets',{}))
+            Control(control_graphs[entry],fr,state,identity,methods,inherited,not plan['response_binding'].get('entry_is_source',False),opaque,cfg.get('call_targets',{}),reference_lookup)
             if method['access']&8 and method['owner']in cfg.get('initialized_lambda_owners',[]):
                 markers=initialized_by_class.get(method['owner'],[])
                 require(len(markers)==1 and markers[0]['class_sha256']==plan['class_sha256'][method['owner']],'Static callback initialization absent/ambiguous')
@@ -501,6 +514,7 @@ def infer_application(plan,rows,worker_request=None):
                         v=lookup(read,read['seq']);v=field_transfer(180,v,v.observed)
                         v=control_selected(v,Value(selectors=receiver.selectors,unknown=receiver.unknown))
                         if ins['desc'] in ('Z','B','C','S','I','J','F','D'):v=v.project({k:x for k,x in v.observed.items() if k!='object'})
+                        else:state.reference_reads.append((coordinate(read),v,read['seq']))
                         fr.stack.append(v)
                     elif op==181:
                         value,receiver=pop(),pop();write=take('write-version'if pos<len(events)and events[pos]['kind']=='write-version'else'write');field_event(181,receiver,ins,write,identity(receiver))

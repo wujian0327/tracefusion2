@@ -95,7 +95,8 @@ class ControlTests(unittest.TestCase):
         code=[{'op':4},{'op':153,'target':6},{'op':25,'var':1},{'op':25,'var':0},{'op':4},
               {'op':185,'owner':'Api','name':'apply','desc':'(LBox;I)V'},{'op':177}]
         method=self.method(code);method.update(owner='T',name='root',desc='(LBox;LApi;)V')
-        impl={'instructions':[{'op':25,'var':1},{'op':21,'var':2},{'op':181,'owner':'Box','name':'value','desc':'I'},{'op':177}]}
+        impl={'access':0,'desc':'(LBox;I)V','try_catches':0,'exception_handlers':[],
+              'instructions':[{'op':25,'var':1},{'op':21,'var':2},{'op':181,'owner':'Box','name':'value','desc':'I'},{'op':177}]}
         f=Frame('unit');s=State(f);c=Control(ControlFlow(method),f,s,lambda v:v.observed.get('object'),{'Worker.apply(LBox;I)V':impl},call_targets={'T.root(LBox;LApi;)V@5':['Worker.apply(LBox;I)V']})
         f.locals[0]=Value({'object':'box'});f.locals[1]=Value({'object':'worker'});f.pc=1
         c.branch(code[1],[Value({'value':0},frozenset({('field',1,0)}))],{'taken':True})

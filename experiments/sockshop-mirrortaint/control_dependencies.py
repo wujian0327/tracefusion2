@@ -144,13 +144,17 @@ class ControlledLocals(dict):
 
 
 class Control:
-    def __init__(self, graph, frame, state, identity, methods=None, inherited=None, declared_only=False, opaque_methods=(),call_targets=None):
+    def __init__(self, graph, frame, state, identity, methods=None, inherited=None, declared_only=False, opaque_methods=(),call_targets=None, reference_lookup=None):
         self.graph, self.frame, self.state, self.identity = graph, frame, state, identity
         self.methods = methods or {}
         self.inherited = inherited or Value()
         self.declared_only = declared_only
         self.opaque_methods = set(opaque_methods)
         self.call_targets = call_targets or {}
+        self.reference_lookup = reference_lookup
+        self.entry_locals = None
+        from call_write_effects import WriteEffects
+        self.write_effects = WriteEffects(self.methods, self.targets_for, self.opaque_methods)
         self.regions = []
         self.consumed = []
         self.escape_guards = Value()
@@ -175,6 +179,7 @@ class Control:
         return selected(value,Value(selectors=receiver.selectors,unknown=receiver.unknown))
 
     def at(self, pc):
+        if self.entry_locals is None: self.entry_locals = dict(self.frame.locals)
         ended = [r for r in self.regions if r.join == pc]
         self.regions = [r for r in self.regions if r.join != pc]
         for r in ended:
@@ -184,67 +189,112 @@ class Control:
                 self.frame.stack[i] = selected(self.frame.stack[i], r.condition)
         self.consumed = []
 
-    def _receivers(self, definitions, region, trail=()):
+    def _reference(self, receiver, field, descriptor, seq):
+        from call_write_effects import unclosed
+        owner = self.identity(receiver)
+        if owner is None or receiver.unknown:
+            unclosed('Conditional write path lacks a known physical receiver')
+        if self.reference_lookup is not None:
+            value = self.reference_lookup(owner, field, descriptor, seq)
+        else:
+            # State.fields contains only already executed, verified writes.
+            # A later source/input snapshot is deliberately not searched here.
+            matches = [(k,v) for k,v in self.state.fields.items() if k[:2] == (owner,field)]
+            matches.extend((k,v) for k,v,at in self.state.reference_reads if k[:2] == (owner,field) and at < seq)
+            if owner in self.state.poisoned or self.state.control_barriers or not matches:
+                unclosed('Conditional write path lacks prior verified reference state')
+            version = max(k[2] for k,v in matches)
+            values = [v for k,v in matches if k[2] == version]
+            if any(v != values[0] for v in values[1:]): unclosed('Conditional write path reference is ambiguous')
+            value = field_selection(self.state,(owner,field,version),values[0])
+        if value.unknown or self.identity(value) is None:
+            unclosed('Conditional write path reference is unknown/null')
+        if value.selectors - self.current().selectors:
+            unclosed('Conditional write path crosses an unclosed selected alias')
+        return value
+
+    def _receivers(self, definitions, region, seq, edges, trail=()):
+        from call_write_effects import unclosed
         values = []
+        if self.entry_locals is None: self.entry_locals = dict(self.frame.locals)
         for pc in definitions:
-            if pc in trail: continue
+            if pc in trail: unclosed('Cyclic caller reference definition')
             if pc < 0:
                 slot = 0
                 mapping = {-1: 0} if not self.graph.method['access'] & 8 else {}
                 if mapping: slot = 1
-                for i, d in enumerate(descriptors(self.graph.method['desc'])):
-                    mapping[-i-2] = slot; slot += 2 if d in ('J', 'D') else 1
-                if pc in mapping and mapping[pc] in self.frame.locals: values.append(self.frame.locals[mapping[pc]])
-                continue
+                for i,d in enumerate(descriptors(self.graph.method['desc'])):
+                    mapping[-i-2] = slot; slot += 2 if d in ('J','D') else 1
+                if pc not in mapping or mapping[pc] not in self.entry_locals:
+                    unclosed('Conditional write actual argument is unavailable')
+                values.append(self.entry_locals[mapping[pc]]); continue
             ins = self.graph.code[pc]
+            inputs = self.graph.operands().get(pc, [])
             if ins['op'] == 25:
-                modified = any(self.graph.code[x]['op'] in range(54, 59) and self.graph.code[x].get('var') == ins['var'] for x in region)
+                modified = any(self.graph.code[x]['op'] in range(54,59) and self.graph.code[x].get('var') == ins['var'] for x in region)
+                # A reference loaded before the branch is not the slot's new
+                # value if that slot was subsequently overwritten.
+                modified |= any(self.graph.code[x]['op'] in range(54,59) and self.graph.code[x].get('var') == ins['var']
+                                for x in range(pc+1,self.frame.pc))
                 if not modified and ins['var'] in self.frame.locals:
                     values.append(self.frame.locals[ins['var']]); continue
-                defs = self.graph.operands().get(pc, [])
-                values.extend(self._receivers(set().union(*defs), region, trail + (pc,)))
-            elif ins['op'] in (187, 1): continue  # Fresh allocation or null cannot name preexisting state.
-            elif pc not in region:
-                raise AnalysisLimit('control-write-address', 'Potential field receiver is not an available local reference')
-            else: raise AnalysisLimit('control-write-address', 'Unexecuted field receiver requires unsupported alias proof')
+                values.extend(self._receivers(inputs[0],region,seq,edges,trail+(pc,)))
+            elif ins['op'] == 180 and ins['desc'].startswith(('L','[')):
+                for receiver in self._receivers(inputs[0],region,seq,edges,trail+(pc,)):
+                    edge = (self.identity(receiver),ins['owner']+'.'+ins['name'])
+                    edges.add(edge)
+                    values.append(self._reference(receiver,edge[1],ins['desc'],seq))
+            elif ins['op'] == 192:
+                values.extend(self._receivers(inputs[0],region,seq,edges,trail+(pc,)))
+            else:
+                unclosed('Conditional caller reference address needs an unsupported alias proof')
+        if not values: unclosed('Conditional write actual reference set is empty')
         return values
 
     def _field_effects(self, region, condition, seq):
+        from call_write_effects import bindings,unclosed
         if not condition.selectors and not condition.unknown: return
-        for pc in region:
+        pending, edges, barriers = {}, set(), set()
+        for pc in sorted(region):
             ins = self.graph.code[pc]
-            fields = set()
             if ins['op'] == 181:
-                fields.add(ins['owner'] + '.' + ins['name'])
-                defs = self.graph.operands().get(pc, [])
-                receivers = self._receivers(defs[1], region)
-            elif ins['op'] in (182, 183, 184, 185):
-                from plan_service_observations import callee
-                key = callee(ins)
-                todo = [key,*self.targets_for(self.graph.method,pc)]; seen = set()
-                opaque = set()
-                while todo:
-                    key = todo.pop()
-                    if key in self.opaque_methods: opaque.add(key)
-                    if key in seen or key not in self.methods: continue
-                    seen.add(key)
-                    for index,op in enumerate(self.methods[key]['instructions']):
-                        if op['op'] == 181: fields.add(op['owner'] + '.' + op['name'])
-                        elif op['op'] in (182,183,184,185):todo.extend([callee(op),*self.targets_for(self.methods[key],index)])
-                if opaque:
-                    self.state.control_barriers.append((seq,Value(selectors=condition.selectors,unknown=True),tuple(sorted(opaque))))
-                if not fields: continue
-                definitions = self.graph.operands().get(pc, [])
-                types = list(reversed(descriptors(ins['desc']))) + ([] if ins['op'] == 184 else ['Lreceiver;'])
-                refs = [d for d,t in zip(definitions,types) if t.startswith(('L','['))]
-                receivers = self._receivers(set().union(*refs), region) if refs else []
+                specs = [(self.graph.operands()[pc][1], ((ins['owner']+'.'+ins['name'],ins['desc']),))]
+            elif ins['op'] in (182,183,184,185):
+                actual = bindings(ins,self.graph.operands()[pc])
+                specs = []
+                for target in self.write_effects.candidates(self.graph.method,pc):
+                    writes,opaque = self.write_effects.summary(target)
+                    barriers.update(opaque)
+                    for path in writes:
+                        if path.root not in actual: unclosed('Call formal/actual write mapping is incomplete')
+                        specs.append((actual[path.root],path.fields))
             else: continue
-            for receiver in receivers:
-                owner = self.identity(receiver)
-                if owner is None: continue
-                for field in fields:
-                    key = (owner, field)
-                    self.state.control_fields[key] = selection([self.state.control_fields.get(key, Value()), condition])
+            for definitions,path in specs:
+                # Only the fresh object's own slot cannot name preexisting
+                # state. A path through that slot may still reach an old child.
+                if len(path)==1 and definitions and all(p in region and self.graph.code[p]['op']==187 for p in definitions):continue
+                receivers = self._receivers(definitions,region,seq,edges)
+                for receiver in receivers:
+                    for field,descriptor in path[:-1]:
+                        edges.add((self.identity(receiver),field))
+                        receiver = self._reference(receiver,field,descriptor,seq)
+                    owner = self.identity(receiver)
+                    if owner is None or receiver.unknown:
+                        unclosed('Conditional write has no closed actual object')
+                    if receiver.selectors-self.current().selectors:
+                        unclosed('Conditional write has an unresolved alternative alias')
+                    key = (owner,path[-1][0])
+                    pending[key] = selection([pending.get(key,Value()),condition,selection([receiver])])
+        # Even distinct formals can alias physically. Resolve all alternatives
+        # before publishing anything, and reject a possibly rewritten path edge.
+        if edges & pending.keys():
+            unclosed('Conditional call may rewrite a reference edge used by its write footprint')
+        if barriers and edges:
+            unclosed('Opaque conditional effects prevent closing nested write addresses')
+        for key,value in pending.items():
+            self.state.control_fields[key] = selection([self.state.control_fields.get(key,Value()),value])
+        if barriers:
+            self.state.control_barriers.append((seq,Value(selectors=condition.selectors,unknown=True),tuple(sorted(barriers))))
 
     def branch(self, ins, operands, event):
         require(type(event.get('taken')) is bool, 'Branch result is not a JVM boolean')

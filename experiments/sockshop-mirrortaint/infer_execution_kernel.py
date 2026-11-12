@@ -145,6 +145,7 @@ def infer_execution(plan,rows):
                 established=max([w['seq']for w in writes if coordinate(w)==coordinate(read)and w['seq']<read['seq']]+[x[0]for x in v.origins]+[-1])
                 v=field_selection(state,coordinate(read),v,established)
                 v=control_selected(v,Value(selectors=receiver.selectors,unknown=receiver.unknown))
+                if ins['desc'].startswith(('L','[')):state.reference_reads.append((coordinate(read),v,read['seq']))
                 fr.stack.append(v)
             elif op==181:
                 value,receiver=pop(),pop();write=take('write');field_event(181,receiver,ins,write,identity(receiver))
