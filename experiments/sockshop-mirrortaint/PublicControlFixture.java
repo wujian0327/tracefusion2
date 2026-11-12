@@ -14,6 +14,13 @@ public class PublicControlFixture {
         public Out(int value){this.value=value;}
         public int getValue(){return value;}
     }
+    public interface Assignment {void apply(Out out,int value);}
+    public static class Worker implements Assignment {public void apply(Out out,int value){out.value=value;}}
+    public Out rootInterface(Store store,Assignment worker,int input){
+        Datum a=store.read(10,7),b=store.read(11,7),g=store.read(20,input);Out out=new Out(a.value);
+        if(g.value>0)worker.apply(out,b.value);
+        return new Out(out.value);
+    }
     public boolean direct(Datum g){return g.value>0;}
     public boolean local(Datum g){boolean answer=g.value>0;return answer;}
     public int identity(int value){return value;}
@@ -69,10 +76,11 @@ public class PublicControlFixture {
         ObjectMapper mapper=new ObjectMapper();PublicControlFixture fixture=new PublicControlFixture();List<Map> results=new ArrayList<>();
         boolean exceptionOnly=args.length>0&&args[0].equals("exception-controls");
         boolean implicitOnly=args.length>0&&args[0].equals("implicit-controls");
+        boolean interfaceOnly=args.length>0&&args[0].equals("interface-controls");
         IllegalArgumentException original=new IllegalArgumentException("original object");
-        for(int scenario=0;scenario<=((exceptionOnly||implicitOnly)?3:21);scenario++)for(int input=0;input<=2;input++){
+        for(int scenario=0;scenario<=(interfaceOnly?0:(exceptionOnly||implicitOnly)?3:21);scenario++)for(int input=0;input<=2;input++){
             W3CTraceContext ctx=W3CTraceContext.server(null,null);if(observe)SpringTransportAgent.Transport.ASYNC.set(ctx);
-            Out value=implicitOnly?fixture.rootImplicit(new Store(),scenario,input):exceptionOnly?fixture.rootException(new Store(),scenario,input,original):fixture.root(new Store(),scenario,input);
+            Out value=interfaceOnly?fixture.rootInterface(new Store(),new Worker(),input):implicitOnly?fixture.rootImplicit(new Store(),scenario,input):exceptionOnly?fixture.rootException(new Store(),scenario,input,original):fixture.root(new Store(),scenario,input);
             if(observe){ResponseBindingHooks.verifySerialization(value,mapper);Map wire=ctx.fields();wire.put("uri",null);wire.put("direction","response");wire.put("phase","write");wire.put("fields",SpringTransportAgent.Transport.snapshot(value));PlannedServiceAgent.Recorder.emit("http-json",wire);}
             Map row=new LinkedHashMap();row.put("scenario",scenario);row.put("input",input);row.put("value",value.value);row.put("message",ctx.message());results.add(row);
             if(observe)SpringTransportAgent.Transport.ASYNC.remove();

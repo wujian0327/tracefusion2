@@ -131,12 +131,13 @@ class ControlledLocals(dict):
 
 
 class Control:
-    def __init__(self, graph, frame, state, identity, methods=None, inherited=None, declared_only=False, opaque_methods=()):
+    def __init__(self, graph, frame, state, identity, methods=None, inherited=None, declared_only=False, opaque_methods=(),call_targets=None):
         self.graph, self.frame, self.state, self.identity = graph, frame, state, identity
         self.methods = methods or {}
         self.inherited = inherited or Value()
         self.declared_only = declared_only
         self.opaque_methods = set(opaque_methods)
+        self.call_targets = call_targets or {}
         self.regions = []
         self.consumed = []
         self.escape_guards = Value()
@@ -147,6 +148,10 @@ class Control:
 
     def current(self): return selection([self.inherited] + [r.condition for r in self.regions], self.declared_only)
     def apply(self, value): return selected(value, self.current())
+
+    def targets_for(self,method,index):
+        name=method.get('owner','')+'.'+method.get('name','')+method['desc']+'@'+str(index)
+        return self.call_targets.get(name,())
 
     def write_value(self,value,receiver):
         # A materialized address choice needs a may-alias footprint for the
@@ -203,16 +208,16 @@ class Control:
             elif ins['op'] in (182, 183, 184, 185):
                 from plan_service_observations import callee
                 key = callee(ins)
-                todo = [key]; seen = set()
+                todo = [key,*self.targets_for(self.graph.method,pc)]; seen = set()
                 opaque = set()
                 while todo:
                     key = todo.pop()
                     if key in self.opaque_methods: opaque.add(key)
                     if key in seen or key not in self.methods: continue
                     seen.add(key)
-                    for op in self.methods[key]['instructions']:
+                    for index,op in enumerate(self.methods[key]['instructions']):
                         if op['op'] == 181: fields.add(op['owner'] + '.' + op['name'])
-                        elif op['op'] in (182,183,184,185): todo.append(callee(op))
+                        elif op['op'] in (182,183,184,185):todo.extend([callee(op),*self.targets_for(self.methods[key],index)])
                 if opaque:
                     self.state.control_barriers.append((seq,Value(selectors=condition.selectors,unknown=True),tuple(sorted(opaque))))
                 if not fields: continue
@@ -295,7 +300,9 @@ class Control:
         elif op in (182,183,184,185):
             from plan_service_observations import callee
             if op!=184 and values:guards.append(values[-1])
-            if callee(ins)not in self.methods:guards.extend(values[:-1]if op!=184 else values)
+            targets=self.targets_for(self.graph.method,self.frame.pc)
+            closed=callee(ins)in self.methods or bool(targets)and all(k in self.methods for k in targets)
+            if not closed:guards.extend(values[:-1]if op!=184 else values)
         elif op in (108,109,112,113)and values:guards=[values[0]]
         elif op in (189,190,50,83,192):guards=values
         if guards:self.normal_outcome(selection(guards,self.declared_only))

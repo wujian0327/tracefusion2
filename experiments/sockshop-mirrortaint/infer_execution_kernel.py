@@ -58,7 +58,7 @@ def infer_execution(plan,rows):
         if ends[0]['kind']=='abort':
             audits.append({'frame':root['frame'],'completion':'aborted','answers':0});continue
         end=ends[0];fr=Frame(root['frame']);state=State(fr);slots=0
-        Control(ControlFlow(method),fr,state,lambda v:state.allocations.get(v.allocation)if v.allocation is not None else v.observed.get('object'),{entry:method},opaque_methods=cfg.get('opaque_methods',{}))
+        Control(ControlFlow(method),fr,state,lambda v:state.allocations.get(v.allocation)if v.allocation is not None else v.observed.get('object'),{entry:method},opaque_methods=cfg.get('opaque_methods',{}),call_targets=cfg.get('call_targets',{}))
         if not method['access']&8:fr.locals[0]=Value({'object':root['receiver']});slots=1
         for index,desc in enumerate(descriptors(method['desc'])):
             fr.locals[slots]=Value(root['args'][index],unknown=True);slots+=2 if desc in ('J','D') else 1

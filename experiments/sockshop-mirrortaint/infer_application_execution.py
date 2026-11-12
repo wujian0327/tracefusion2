@@ -385,7 +385,7 @@ def infer_application(plan,rows,worker_request=None):
             entry=begin['method'];method=methods[entry];code=method['instructions'];fr=Frame(begin['frame']);fr.pc=cfg.get('constructor_starts',{}).get(entry,0);slot=0
             if entry not in control_graphs:control_graphs[entry]=ControlFlow(method)
             opaque={k for k in cfg.get('opaque_methods',{})if cfg.get('constructors',{}).get(k,{}).get('kind','opaque')=='opaque'}
-            Control(control_graphs[entry],fr,state,identity,methods,inherited,not plan['response_binding'].get('entry_is_source',False),opaque)
+            Control(control_graphs[entry],fr,state,identity,methods,inherited,not plan['response_binding'].get('entry_is_source',False),opaque,cfg.get('call_targets',{}))
             if method['access']&8 and method['owner']in cfg.get('initialized_lambda_owners',[]):
                 markers=initialized_by_class.get(method['owner'],[])
                 require(len(markers)==1 and markers[0]['class_sha256']==plan['class_sha256'][method['owner']],'Static callback initialization absent/ambiguous')

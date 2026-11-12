@@ -76,6 +76,17 @@ class ControlTests(unittest.TestCase):
         f,s,c=self.setup_control([{'op':177}])
         with self.assertRaises(ValueError):c.write_value(Value({'value':7}),Value({'object':'o'},selectors=frozenset({('field',1,0)})))
 
+    def test_untaken_interface_call_uses_all_planned_write_targets(self):
+        code=[{'op':4},{'op':153,'target':6},{'op':25,'var':1},{'op':25,'var':0},{'op':4},
+              {'op':185,'owner':'Api','name':'apply','desc':'(LBox;I)V'},{'op':177}]
+        method=self.method(code);method.update(owner='T',name='root',desc='(LBox;LApi;)V')
+        impl={'instructions':[{'op':25,'var':1},{'op':21,'var':2},{'op':181,'owner':'Box','name':'value','desc':'I'},{'op':177}]}
+        f=Frame('unit');s=State(f);c=Control(ControlFlow(method),f,s,lambda v:v.observed.get('object'),{'Worker.apply(LBox;I)V':impl},call_targets={'T.root(LBox;LApi;)V@5':['Worker.apply(LBox;I)V']})
+        f.locals[0]=Value({'object':'box'});f.locals[1]=Value({'object':'worker'});f.pc=1
+        c.branch(code[1],[Value({'value':0},frozenset({('field',1,0)}))],{'taken':True})
+        c.at(6)
+        self.assertEqual(field_selection(s,('box','Box.value',1),Value({'value':7})).selectors,frozenset({('field',1,0)}))
+
     def test_legacy_v1_executes_same_control_transfer(self):
         entry='T.root()LT;'
         code=[{'op':25,'var':0},{'op':180,'owner':'T','name':'condition','desc':'I'},
