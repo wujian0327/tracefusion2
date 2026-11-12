@@ -29,11 +29,22 @@ def branch_taken(op, operands, identity):
     if 159 <= op <= 164 and 'value' in a.observed and 'value' in b.observed:
         x, y = a.observed['value'], b.observed['value']
         return (x == y, x != y, x < y, x >= y, x > y, x <= y)[op - 159]
+    def reference(v):
+        object_=identity(v)
+        if object_ is not None:return ('object',object_)
+        if 'value'in v.observed and v.observed['value']is None:return ('null',None)
+        if isinstance(v.observed.get('value'),str):return ('nonnull-literal',None)
+        if v.unknown:raise AnalysisLimit('control-reference','Reference operation lacks concrete identity evidence')
+        require(False,'Branch reference identity/null witness absent')
     if op in (198, 199):
-        null = identity(b) is None and b.observed.get('value', 'not-null') is None
+        null = reference(b)[0]=='null'
         return null if op == 198 else not null
     if op in (165, 166):
-        equal = identity(a) == identity(b)
+        left,right=reference(a),reference(b)
+        if left[0]=='null'or right[0]=='null':equal=left[0]==right[0]
+        else:
+            if left[0]!='object'or right[0]!='object':raise AnalysisLimit('control-reference','Literal identity comparison needs an existing identity contract')
+            equal=left[1]==right[1]
         return equal if op == 165 else not equal
     return None
 
@@ -236,7 +247,9 @@ class Control:
     def branch(self, ins, operands, event):
         require(type(event.get('taken')) is bool, 'Branch result is not a JVM boolean')
         expected = branch_taken(ins['op'], operands, self.identity)
-        if expected is not None: require(expected == event['taken'], 'Execution branch contradicts operands')
+        if expected is None and any(v.unknown for v in operands):raise AnalysisLimit('control-operand','Concrete branch operand absent in the supported value model')
+        require(expected is not None,'Concrete branch operand evidence absent')
+        require(expected == event['taken'], 'Execution branch contradicts operands')
         pc = self.frame.pc
         require(pc in self.graph.joins, 'Executed branch has no supported CFG join')
         condition = selection([self.current(), *operands], self.declared_only)

@@ -69,6 +69,16 @@ class ControlTests(unittest.TestCase):
         f,s,c=self.setup_control([{'op':153,'target':2},{'op':177},{'op':177}])
         with self.assertRaises(ValueError):c.branch({'op':153,'target':2},[Value({'value':1})],{'taken':True})
 
+    def test_missing_operand_is_not_replaced_by_taken_bit(self):
+        f,s,c=self.setup_control([{'op':153,'target':2},{'op':177},{'op':177}])
+        with self.assertRaises(ValueError):c.branch({'op':153,'target':2},[Value()],{'taken':True})
+
+    def test_missing_reference_ids_are_not_equal_by_default(self):
+        from control_dependencies import branch_taken
+        with self.assertRaises(ValueError):branch_taken(165,[Value(),Value()],lambda v:None)
+        with self.assertRaises(ValueError):branch_taken(165,[Value({'value':'SAME'}),Value({'value':'SAME'})],lambda v:None)
+        self.assertTrue(branch_taken(198,[Value({'value':None})],lambda v:None))
+
     def test_unadmitted_control_rejects(self):
         with self.assertRaises(ValueError):ControlFlow(self.method([{'op':170}]))
 
