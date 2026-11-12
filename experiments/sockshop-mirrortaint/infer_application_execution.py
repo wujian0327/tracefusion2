@@ -11,6 +11,8 @@ from control_dependencies import ControlFlow, Control, selected as control_selec
 
 
 def infer_application(plan,rows,worker_request=None):
+    from method_value_protocol import validate as validate_method_values
+    validate_method_values(plan,rows)
     from field_value_protocol import validate as validate_field_values
     validate_field_values(plan,rows)
     from infer_date_projection import validate_date_runtime

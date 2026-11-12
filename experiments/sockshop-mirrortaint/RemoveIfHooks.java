@@ -13,6 +13,6 @@ public final class RemoveIfHooks {
   Map r=new LinkedHashMap();r.put("version",1);r.put("runtime",runtime);r.put("receiver",PlannedServiceAgent.Recorder.id(list));r.put("predicate",PlannedServiceAgent.Recorder.value(((Object[])start.get("_args_ref"))[0]));r.put("before",state(list));start.put("remove_if_start",r);
  }
  static void complete(Map start,Object result,Throwable error,Map row)throws Exception{
-  if(start.get("remove_if_start")==null)return;Map r=new LinkedHashMap((Map)start.get("remove_if_start"));r.put("after",state(start.get("_receiver_ref")));r.put("exception",PlannedServiceAgent.Recorder.value(error));r.put("exception_type",error==null?null:error.getClass().getName());r.put("result",PlannedServiceAgent.Recorder.value(result));row.put("remove_if",r);
+  if(start.get("remove_if_start")==null)return;Map r=new LinkedHashMap((Map)start.get("remove_if_start"));r.put("after",state(start.get("_receiver_ref")));r.put("exception",PlannedServiceAgent.Recorder.value(error));r.put("exception_type",error==null?null:error.getClass().getName());r.put("method_descriptor",PlannedServiceAgent.Recorder.methodDescriptor((String)start.get("callee")));if(error==null)r.put("result",PlannedServiceAgent.Recorder.methodResult(result,PlannedServiceAgent.Recorder.methodDescriptor((String)start.get("callee"))));row.put("remove_if",r);
  }
 }

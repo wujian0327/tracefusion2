@@ -31,7 +31,7 @@ public final class TemporalDateHooks {
     }
     static void bindingCall(String key,Object receiver,Object[] args,Object result)throws Exception{
         if(config()==null||ExecutionKernelHooks.enabled()||!(key.startsWith("java/util/Date.")||key.startsWith("java/util/Calendar.")))return;
-        Map start=new LinkedHashMap();start.put("callee",key);start.put("_receiver_ref",receiver);start.put("_args_ref",args);Map row=ResponseBindingHooks.row();end(start,result,row);row.put("callee",key);row.put("receiver",PlannedServiceAgent.Recorder.value(receiver));row.put("result",PlannedServiceAgent.Recorder.value(result));PlannedServiceAgent.Recorder.emit("date-call",row);
+        Map start=new LinkedHashMap();start.put("callee",key);start.put("_receiver_ref",receiver);start.put("_args_ref",args);Map row=ResponseBindingHooks.row();end(start,result,row);row.put("callee",key);row.put("receiver",PlannedServiceAgent.Recorder.value(receiver));row.put("method_descriptor",PlannedServiceAgent.Recorder.methodDescriptor(key));row.put("result",PlannedServiceAgent.Recorder.methodResult(result,PlannedServiceAgent.Recorder.methodDescriptor(key)));PlannedServiceAgent.Recorder.emit("date-call",row);
     }
     static void serializer(Object s)throws Exception{
         if(!s.getClass().getName().equals("com.fasterxml.jackson.databind.ser.std.DateSerializer")||ResponseBindingHooks.member(s,"_customFormat")!=null||ResponseBindingHooks.member(s,"_useTimestamp")!=null)throw new IllegalStateException("Custom Date serializer/format unsupported");

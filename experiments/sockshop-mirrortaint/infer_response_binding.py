@@ -8,6 +8,8 @@ def matches(pattern,path):
 
 
 def sources(graph,role):
+    from method_value_protocol import validate as validate_method_values
+    validate_method_values(graph.plans[role],graph.rows[role])
     from field_value_protocol import validate as validate_field_values
     validate_field_values(graph.plans[role],graph.rows[role])
     from infer_json_tree_observation import validate as validate_json_tree

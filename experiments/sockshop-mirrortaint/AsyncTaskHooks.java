@@ -27,7 +27,7 @@ public final class AsyncTaskHooks {
             String cls=original.getClass().getName().replace('.','/');r.put("callable_class",cls);
             boolean supported=cls.equals("org/springframework/aop/interceptor/AsyncExecutionInterceptor$1");r.put("supported",supported);
             if(supported){Object invocation=field(original.getClass(),"val$invocation").get(original);Method m=(Method)field(original.getClass(),"val$userDeclaredMethod").get(original);Class api=Class.forName("org.aopalliance.intercept.MethodInvocation",false,original.getClass().getClassLoader());Object receiver=api.getMethod("getThis").invoke(invocation);Object[] args=(Object[])api.getMethod("getArguments").invoke(invocation);
-                r.put("method",m.getDeclaringClass().getName().replace('.','/')+"."+m.getName()+org.objectweb.asm.Type.getMethodDescriptor(m));r.put("receiver",value(receiver));List observed=new ArrayList();for(Object a:args)observed.add(value(a));r.put("args",observed);r.put("future_return",m.getReturnType()==Future.class);
+                r.put("method",m.getDeclaringClass().getName().replace('.','/')+"."+m.getName()+org.objectweb.asm.Type.getMethodDescriptor(m));r.put("receiver",value(receiver));String descriptor=org.objectweb.asm.Type.getMethodDescriptor(m);r.put("method_descriptor",descriptor);r.put("args",PlannedServiceAgent.Recorder.methodArguments(args,descriptor));r.put("future_return",m.getReturnType()==Future.class);
             }
             emit("async-submit-begin",r);return t;
         }
@@ -46,7 +46,7 @@ public final class AsyncTaskHooks {
     static void completed(Map start,Object result,Throwable error,Map r){
         if(!enabled()||!(start.get("_receiver_ref") instanceof Future))return;String c=(String)start.get("callee");boolean get=c.contains(".get("),cancel=c.contains(".cancel(");if(!get&&!cancel)return;
         Task task=FUTURES.get(start.get("_receiver_ref"));Map a=new LinkedHashMap();a.put("task_id",task==null?null:task.id);a.put("future",value(start.get("_receiver_ref")));a.put("operation",get?"get":"cancel");a.put("completion",error==null?"normal":"exceptional");
-        if(error==null)a.put("result",value(result));else{a.put("exception_type",error.getClass().getName());a.put("exception",value(error));if(error instanceof ExecutionException)a.put("cause",value(error.getCause()));}r.put("async_future",a);
+        a.put("method_descriptor",PlannedServiceAgent.Recorder.methodDescriptor(c));if(error==null)a.put("result",PlannedServiceAgent.Recorder.methodResult(result,PlannedServiceAgent.Recorder.methodDescriptor(c)));else{a.put("exception_type",error.getClass().getName());a.put("exception",value(error));if(error instanceof ExecutionException)a.put("cause",value(error.getCause()));}r.put("async_future",a);
     }
     static void fail(Throwable e){PlannedServiceAgent.Recorder.problem("async-protocol:"+e);throw new IllegalStateException(e);}
     static final class Task implements Callable<Object>{

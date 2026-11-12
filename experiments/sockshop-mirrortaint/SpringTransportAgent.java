@@ -148,7 +148,7 @@ public static final class DirectDispatchHooks implements Opcodes {
         Map pins=new TreeMap();for(Object raw:((Map)config().get("class_sha256")).keySet()){String name=(String)raw;pins.put(name,ExecutionKernelHooks.classHash(Class.forName(name.replace('/','.'),false,target.getClass().getClassLoader())));}
         if(!pins.equals(config().get("class_sha256")))throw new IllegalStateException("Direct dispatch framework class differs");
         Map r=PlannedServiceAgent.Recorder.row();r.put("call_id",call.get("call_id"));r.put("pc",call.get("pc"));r.put("callee",call.get("callee"));r.put("proxy",PlannedServiceAgent.Recorder.id(proxy));r.put("target",PlannedServiceAgent.Recorder.id(target));r.put("target_type",target.getClass().getName().replace('.','/'));r.put("target_sha256",ExecutionKernelHooks.classHash(target.getClass()));r.put("class_sha256",pins);r.put("empty_chain",empty);r.put("transparent_interceptors",transparent);r.put("static_target",true);
-        List values=new ArrayList();for(Object arg:args)values.add(PlannedServiceAgent.Recorder.value(arg));r.put("args",values);PlannedServiceAgent.Recorder.emit("execution-direct-dispatch",r);
+        String descriptor=org.objectweb.asm.Type.getMethodDescriptor(method);r.put("method_descriptor",descriptor);r.put("args",PlannedServiceAgent.Recorder.methodArguments(args,descriptor));PlannedServiceAgent.Recorder.emit("execution-direct-dispatch",r);
     }}
 }
 
