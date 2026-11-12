@@ -55,6 +55,8 @@ class WriteEffects:
             # interpreter remain owned by their existing library contracts;
             # the planner separately marks unsupported ones opaque.
             return frozenset(), frozenset()
+        if not self.methods[key].get('instructions'):
+            return frozenset(),frozenset({key})
         # A write-free recursive scalar computation needs no address proof.
         # Inspect the whole finite planned call graph, retaining opaque effects.
         todo,seen,has_writes,uncertain=[key],set(),False,set()
@@ -67,7 +69,7 @@ class WriteEffects:
             m=self.methods[target]
             for pc,ins in enumerate(m['instructions']):
                 if ins['op']==181:has_writes=True
-                elif ins['op']in(179,79,80,81,82,83,84,85,86):uncertain.add(target+'@'+str(pc))
+                elif ins['op']in(179,79,80,81,82,83,84,85,86,186):uncertain.add(target+'@'+str(pc))
                 elif ins['op']in(182,183,184,185):todo.extend(self.candidates(m,pc))
         if not has_writes:
             result=frozenset(),frozenset(uncertain)
@@ -116,8 +118,8 @@ class WriteEffects:
                     for p in child:
                         if p.root not in actual: unclosed('Callee formal has no actual argument')
                         writes.update(Path(q.root,q.fields+p.fields) for q in paths(actual[p.root]))
-            elif ins['op'] in (179,79,80,81,82,83,84,85,86):
-                opaque.add(key+'@'+str(pc))  # global/array effect not a closed field footprint
+            elif ins['op'] in (179,79,80,81,82,83,84,85,86,186):
+                opaque.add(key+'@'+str(pc))  # global/array/bootstrap effect not a closed field footprint
         result = frozenset(writes), frozenset(opaque)
         self.cache[key] = result
         return result

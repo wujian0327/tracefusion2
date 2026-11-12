@@ -149,4 +149,14 @@ class FootprintTests(unittest.TestCase):
         # receiver is concrete; a partial set is not a closed footprint.
         with self.assertRaises(AnalysisLimit):c._receivers({2},set(),20,set(),(2,))
 
+    def test_dynamic_bootstrap_is_not_a_closed_empty_effect(self):
+        m=method([{'op':186,'desc':'()Ljava/lang/Runnable;'},{'op':87},{'op':177}])
+        f,s,c=self.setup({'T.update(LHolder;)V':m});self.branch(f,c)
+        self.assertTrue(s.control_barriers)
+        self.assertTrue(field_selection(s,('child','Child.value',1),Value({'value':7}),1).unknown)
+    def test_bodyless_method_is_not_a_closed_empty_effect(self):
+        m=method([])
+        effects=WriteEffects({'T.update(LHolder;)V':m},lambda m,p:(),())
+        self.assertEqual(effects.summary('T.update(LHolder;)V')[1],{'T.update(LHolder;)V'})
+
 if __name__=='__main__':unittest.main()
