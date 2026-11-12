@@ -110,6 +110,29 @@ class ControlFlow:
                 region.add(x); todo.extend(self.edges[x])
             self.regions[pc] = region
 
+    def completion_join(self, pcs):
+        # javac duplicates a returning finally block on normal and exceptional
+        # paths. Merge structurally identical terminal suffixes before executing
+        # them; carried locals/stack/heap choices keep their own dependencies.
+        # This uses original instructions/protection, never equal runtime values.
+        import json
+        if not hasattr(self, 'completion_aliases'):
+            signatures={self.exit:('exit',)};groups={}
+            for pc in range(self.exit-1,-1,-1):
+                ins=self.code[pc];op=ins['op']
+                if 172<=op<=177:tail=('return',)
+                elif self.edges[pc]=={pc+1} and pc+1 in signatures:tail=signatures[pc+1]
+                else:continue
+                protection=tuple((h['handler'],h['type'])for h in self.method.get('exception_handlers',[])if h['start']<=pc<h['end'])
+                signature=(json.dumps({k:v for k,v in ins.items()if k!='index'},sort_keys=True),protection,tail)
+                signatures[pc]=signature;groups.setdefault(signature,set()).add(pc)
+            self.completion_aliases={p:xs for xs in groups.values()for p in xs}
+        choices=[]
+        for pc in pcs:
+            choices.append({min(self.completion_aliases.get(p,{p}))for p in self.pdom.get(pc,{self.exit})})
+        candidates=set.intersection(*choices)
+        return max(candidates,key=lambda p:len(self.pdom[p]))if candidates else self.exit
+
     def operands(self):
         if self.definitions is None:
             from plan_collection_service import analyze
@@ -210,8 +233,8 @@ class Control:
 
     def at(self, pc):
         if self.entry_locals is None: self.entry_locals = dict(self.frame.locals)
-        ended = [r for r in self.regions if r.join == pc]
-        self.regions = [r for r in self.regions if r.join != pc]
+        ended = [r for r in self.regions if r.join == pc or r.pc<0 and pc in getattr(self.graph,'completion_aliases',{}).get(r.join,set())]
+        self.regions = [r for r in self.regions if r not in ended]
         for r in ended:
             for slot in r.locals & self.frame.locals.keys():
                 self.frame.locals[slot] = selected(self.frame.locals[slot], r.condition)
@@ -394,8 +417,7 @@ class Control:
         self.state.exception_control_ready = False
         retained = [r for r in self.regions if r.pc >= 0 and handler in self.graph.regions.get(r.pc, set())]
         following = self.frame.pc + 1
-        candidates = self.graph.pdom[handler] & self.graph.pdom.get(following, {self.graph.exit})
-        join = max(candidates, key=lambda p: len(self.graph.pdom[p])) if candidates else self.graph.exit
+        join = self.graph.completion_join([handler,following])
         if join == handler: join = self.graph.exit
         if retained:
             join = max((r.join for r in retained), key=lambda p: len(self.graph.pdom[p]))
@@ -465,12 +487,11 @@ class Control:
             if protected:handlers=sorted(set(handlers)|{h['handler']for h in protected})
         if not handlers:return
         following = self.frame.pc + 1
-        candidates = set.intersection(*(self.graph.pdom[p] for p in [following, *handlers]))
-        join = max(candidates, key=lambda p: len(self.graph.pdom[p])) if candidates else self.graph.exit
+        join = self.graph.completion_join([following,*handlers])
         todo=[following,*handlers];nodes=set()
         while todo:
             p=todo.pop()
-            if p==join or p==self.graph.exit or p in nodes:continue
+            if p==join or p in self.graph.completion_aliases.get(join,set()) or p==self.graph.exit or p in nodes:continue
             nodes.add(p);todo.extend(self.graph.edges[p])
         slots={self.graph.code[p]['var']for p in nodes if 54<=self.graph.code[p]['op']<=58 or self.graph.code[p]['op']==132}
         self._field_effects(nodes,condition,self.sequence if seq is None else seq)

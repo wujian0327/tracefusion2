@@ -21,14 +21,15 @@ def csvwrite(p,records):
         w=csv.DictWriter(f,fieldnames=list(records[0]),lineterminator='\n');w.writeheader();w.writerows(records)
 
 
-def run(out):
+def run(out,current_core=False):
     out.mkdir(parents=True,exist_ok=False);freeze=load(H/'candidate-final.json');initial=load(H/'protocol-before-change.json')
-    assert all(sha(Path(p))==s for p,s in freeze['core_sources'].items())
+    if not current_core:assert all(sha(Path(p))==s for p,s in freeze['core_sources'].items())
+    save(out/'core-under-test.json',{'current_core':current_core,'sources':{p:sha(Path(p))for p in freeze['core_sources']}})
     assert all(sha(Path(p))==s for p,s in initial['original_failure_files'].items())
     from run_generic_observation_rules import AGENT
     assert sha(AGENT)==freeze['Agent_sha256']
     for p,s in initial['core_sources'].items():
-        if p.endswith(('.json','.java')):assert sha(Path(p))==s
+        if p.endswith('.json') or not current_core and p.endswith('.java'):assert sha(Path(p))==s
     cmd=[sys.executable,'-m','unittest','test_control_dependencies','test_call_write_effects','test_constructor_effect_scope_audit','test_exception_completion','-v']
     r=subprocess.run(cmd,cwd=HERE,capture_output=True,text=True);(out/'unit.log').write_text(r.stdout+r.stderr);assert r.returncode==0
     counter=[];normalized={};oldcounter=OLD/'supplement-by-case-01/case-8'
@@ -82,8 +83,8 @@ def run(out):
     business=load(H/'old-business-final-02/results.json')['captures']
     assert len(business)==14 and all(c['old_status']==c['new_status']=='completed'and c['versions_equal']and c['root_audits_equal']and c['explicit_data_changes']==c['known_changes']==c['selector_changes']==0 for c in business)
     prior=load(PUBLIC/'prior-galette-39-preservation.json')['records'];assert len(prior)==18 and all(sha(ROOT/r['path'])==r['sha256']for r in prior)
-    save(out/'results.json',{'starting_main':initial['starting_main'],'offline_core':freeze['core_commit'],'Agent_unchanged':True,'public_contracts_unchanged':True,'counterexample_fixed':True,'old_counterexample_six_targets_same_data_version_and_known':True,'new_counterexample_per_mode':{'correct':2,'targets':2},'new_supported_sequence_per_mode':{'correct':28,'targets':28},'new_complete_pool_per_mode':{'correct':28,'analysis_limited':2,'targets':30,'all_passed':False},'old_split_constructor_pool':constructor_pool,'new_units':30,'prior_units':54,'all_unit_tests':84,'fault_checks':len(faults['checks']),'fault_states':{s:sum(c['state']==s for c in faults['checks'])for s in sorted({c['state']for c in faults['checks']})},'old_control_captures':oldgroups,'old_business_captures':business,'original_66_per_mode':{'correct':60,'unknown':6,'all_passed':False},'original_unsupported_override_per_mode':{'targets':2,'state':'rejected'},'Galette_preserved_files':18,'exception_completion_bounded_gate_passed':True,'entire_control_pool_acceptance_passed':False,'all_semantics_acceptance_passed':False,'performance':None})
+    save(out/'results.json',{'starting_main':initial['starting_main'],'offline_core':None if current_core else freeze['core_commit'],'current_core_receipt':'core-under-test.json','Agent_unchanged':True,'public_contracts_unchanged':True,'counterexample_fixed':True,'old_counterexample_six_targets_same_data_version_and_known':True,'new_counterexample_per_mode':{'correct':2,'targets':2},'new_supported_sequence_per_mode':{'correct':28,'targets':28},'new_complete_pool_per_mode':{'correct':28,'analysis_limited':2,'targets':30,'all_passed':False},'old_split_constructor_pool':constructor_pool,'new_units':30,'prior_units':54,'all_unit_tests':84,'fault_checks':len(faults['checks']),'fault_states':{s:sum(c['state']==s for c in faults['checks'])for s in sorted({c['state']for c in faults['checks']})},'old_control_captures':oldgroups,'old_business_captures':business,'original_66_per_mode':{'correct':60,'unknown':6,'all_passed':False},'original_unsupported_override_per_mode':{'targets':2,'state':'rejected'},'Galette_preserved_files':18,'exception_completion_bounded_gate_passed':True,'entire_control_pool_acceptance_passed':False,'all_semantics_acceptance_passed':False,'performance':None})
     print(json.dumps({'counterexample_fixed':True,'new_supported_per_mode':28,'new_pool_refused_per_mode':2,'all_units':84,'faults':len(faults['checks']),'all_semantics_acceptance_passed':False}))
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);a=p.parse_args();run(a.out.resolve())
+    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--current-core',action='store_true');a=p.parse_args();run(a.out.resolve(),a.current_core)

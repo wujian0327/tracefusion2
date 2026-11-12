@@ -122,3 +122,16 @@ class CompletionTests(unittest.TestCase):
         self.assertEqual(c.throw_types(1),{'java/lang/IllegalArgumentException'})
 
 if __name__=='__main__':unittest.main()
+
+class FinallySuffixTests(unittest.TestCase):
+    def graph(self,other=9,handlers=None):
+        return ControlFlow({'instructions':[{'op':3},{'op':153,'target':5},{'op':16,'operand':9},{'op':172},{'op':0},{'op':58,'var':1},{'op':16,'operand':other},{'op':172}], 'exception_handlers':handlers or []})
+    def test_identical_returning_finally_is_shared_join(self):
+        g=self.graph();join=g.completion_join([2,5]);self.assertEqual(join,2);self.assertEqual(g.completion_aliases[join],{2,6})
+    def test_different_literals_are_distinct_definitions(self):
+        g=self.graph(10);self.assertEqual(g.completion_join([2,5]),3)
+    def test_different_exception_protection_is_not_merged(self):
+        g=self.graph(handlers=[{'start':2,'end':3,'handler':5,'type':None}]);self.assertNotEqual(g.completion_join([2,5]),2)
+    def test_exception_scope_ends_at_either_finally_copy(self):
+        from control_dependencies import Region
+        g=self.graph();f=Frame('f');s=State(f);c=Control(g,f,s,lambda v:v.observed.get('object'));join=g.completion_join([2,5]);c.regions=[Region(-1,join,Value(selectors=G),set(),0)];c.at(6);self.assertFalse(c.current().selectors)
