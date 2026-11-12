@@ -112,4 +112,13 @@ class CompletionTests(unittest.TestCase):
         channels={next(iter(t)):v.selectors for v,t in c.normal_completions()}
         self.assertEqual(channels,{'java/lang/NullPointerException':G,'java/lang/ArrayIndexOutOfBoundsException':I})
 
+    def test_athrow_null_formal_is_npe_not_declared_exception(self):
+        m={'owner':'T','name':'root','access':8,'desc':'(Ljava/lang/IllegalArgumentException;)V','try_catches':0,'exception_handlers':[],'instructions':[{'op':25,'var':0},{'op':191}]}
+        f=Frame('typed');s=State(f);c=Control(ControlFlow(m),f,s,lambda v:v.observed.get('object'));f.locals[0]=Value({'value':None});c.at(0)
+        self.assertEqual(c.throw_types(1),{'java/lang/NullPointerException'})
+    def test_athrow_nonnull_formal_keeps_declared_upper_bound(self):
+        m={'owner':'T','name':'root','access':8,'desc':'(Ljava/lang/IllegalArgumentException;)V','try_catches':0,'exception_handlers':[],'instructions':[{'op':25,'var':0},{'op':191}]}
+        f=Frame('typed');s=State(f);c=Control(ControlFlow(m),f,s,lambda v:v.observed.get('object'));f.locals[0]=Value({'object':'original'});c.at(0)
+        self.assertEqual(c.throw_types(1),{'java/lang/IllegalArgumentException'})
+
 if __name__=='__main__':unittest.main()

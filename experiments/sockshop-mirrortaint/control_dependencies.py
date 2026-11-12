@@ -424,6 +424,12 @@ class Control:
                 if pc in trail:return None
                 if pc<0:
                     desc=('L'+self.graph.method.get('owner','')+';')if pc==-1 else args[-pc-2]
+                    slot=0 if pc==-1 else (0 if self.graph.method['access']&8 else 1)+sum(2 if d in('J','D')else 1 for d in args[:-pc-2])
+                    actual=(self.entry_locals or {}).get(slot)
+                    if actual is None or actual.unknown:return None
+                    if self.identity(actual)is None and actual.observed.get('value','not-null')is None:
+                        result.add('java/lang/NullPointerException');continue
+                    if self.identity(actual)is None:return None
                 else:
                     ins=self.graph.code[pc]
                     if ins['op']==25:
@@ -431,8 +437,10 @@ class Control:
                         if found is None:return None
                         result.update(found);continue
                     if ins['op']in(187,192):desc='L'+ins['type']+';'
-                    elif ins['op']==180:desc=ins['desc']
-                    elif ins['op']in(182,183,184,185):desc=ins['desc'].split(')')[1]
+                    elif ins['op']==180:
+                        desc=ins['desc'];result.add('java/lang/NullPointerException')
+                    elif ins['op']in(182,183,184,185):
+                        desc=ins['desc'].split(')')[1];result.add('java/lang/NullPointerException')
                     elif ins['op']==1:desc='Ljava/lang/NullPointerException;'
                     else:return None
                 if not desc.startswith('L'):return None
