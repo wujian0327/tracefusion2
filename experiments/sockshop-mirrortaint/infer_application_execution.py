@@ -214,7 +214,10 @@ def infer_application(plan,rows,worker_request=None):
                 matches=[v for v in default['fields']if coordinate(v)==key]
                 if len(matches)==1:same_value(matches[0]['observed'],f['observed']);return Value(f['observed'])
             return origin(f,before)
-        def lookup(f,before):return field_selection(state,coordinate(f),raw_lookup(f,before))
+        def lookup(f,before):
+            key=coordinate(f);value=raw_lookup(f,before)
+            established=field_seq.get(key,max([x[1]for x in value.origins if x[0]in('field','http')]+[active_defaults.get(f['owner'],{}).get('seq',-1)]))
+            return field_selection(state,key,value,established)
         def register_defaults(ctor_start,receiver,completed=None):
             if not cfg.get('default_initializers',{}).get(ctor_start['callee']) and ctor_start['callee']not in cfg.get('constructor_chains',{}):return
             fact=defaults.get(ctor_start['constructor_id']);require(fact is not None,'Required allocation default witness absent')
@@ -379,7 +382,8 @@ def infer_application(plan,rows,worker_request=None):
             inherited=fr.control.current() if fr is not None else Value()
             entry=begin['method'];method=methods[entry];code=method['instructions'];fr=Frame(begin['frame']);fr.pc=cfg.get('constructor_starts',{}).get(entry,0);slot=0
             if entry not in control_graphs:control_graphs[entry]=ControlFlow(method)
-            Control(control_graphs[entry],fr,state,identity,methods,inherited,not plan['response_binding'].get('entry_is_source',False))
+            opaque={k for k in cfg.get('opaque_methods',{})if cfg.get('constructors',{}).get(k,{}).get('kind','opaque')=='opaque'}
+            Control(control_graphs[entry],fr,state,identity,methods,inherited,not plan['response_binding'].get('entry_is_source',False),opaque)
             if method['access']&8 and method['owner']in cfg.get('initialized_lambda_owners',[]):
                 markers=initialized_by_class.get(method['owner'],[])
                 require(len(markers)==1 and markers[0]['class_sha256']==plan['class_sha256'][method['owner']],'Static callback initialization absent/ambiguous')

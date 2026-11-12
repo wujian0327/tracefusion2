@@ -131,11 +131,12 @@ class ControlledLocals(dict):
 
 
 class Control:
-    def __init__(self, graph, frame, state, identity, methods=None, inherited=None, declared_only=False):
+    def __init__(self, graph, frame, state, identity, methods=None, inherited=None, declared_only=False, opaque_methods=()):
         self.graph, self.frame, self.state, self.identity = graph, frame, state, identity
         self.methods = methods or {}
         self.inherited = inherited or Value()
         self.declared_only = declared_only
+        self.opaque_methods = set(opaque_methods)
         self.regions = []
         self.consumed = []
         frame.control = self
@@ -180,7 +181,7 @@ class Control:
             else: raise AnalysisLimit('control-write-address', 'Unexecuted field receiver requires unsupported alias proof')
         return values
 
-    def _field_effects(self, region, condition):
+    def _field_effects(self, region, condition, seq):
         if not condition.selectors and not condition.unknown: return
         for pc in region:
             ins = self.graph.code[pc]
@@ -193,13 +194,17 @@ class Control:
                 from plan_service_observations import callee
                 key = callee(ins)
                 todo = [key]; seen = set()
+                opaque = set()
                 while todo:
                     key = todo.pop()
+                    if key in self.opaque_methods: opaque.add(key)
                     if key in seen or key not in self.methods: continue
                     seen.add(key)
                     for op in self.methods[key]['instructions']:
                         if op['op'] == 181: fields.add(op['owner'] + '.' + op['name'])
                         elif op['op'] in (182,183,184,185): todo.append(callee(op))
+                if opaque:
+                    self.state.control_barriers.append((seq,Value(selectors=condition.selectors,unknown=True),tuple(sorted(opaque))))
                 if not fields: continue
                 definitions = self.graph.operands().get(pc, [])
                 types = list(reversed(descriptors(ins['desc']))) + ([] if ins['op'] == 184 else ['Lreceiver;'])
@@ -221,7 +226,7 @@ class Control:
         require(pc in self.graph.joins, 'Executed branch has no supported CFG join')
         condition = selection([self.current(), *operands], self.declared_only)
         nodes = self.graph.regions[pc]
-        self._field_effects(nodes, condition)
+        self._field_effects(nodes, condition,event.get('seq',0))
         slots = {self.graph.code[x]['var'] for x in nodes if 54 <= self.graph.code[x]['op'] <= 58 or self.graph.code[x]['op'] == 132}
         prior = next((r for r in self.regions if r.pc == pc), None)
         if prior:
@@ -260,5 +265,9 @@ class Control:
         self.regions.append(Region(-2, join, condition, set(), len(self.frame.stack)))
 
 
-def field_selection(state, key, value):
-    return selected(value, state.control_fields.get(key[:2], Value()))
+def field_selection(state, key, value, established_at=None):
+    value=selected(value, state.control_fields.get(key[:2], Value()))
+    if established_at is not None:
+        for seq,condition,_ in state.control_barriers:
+            if established_at<=seq:value=selected(value,condition)
+    return value

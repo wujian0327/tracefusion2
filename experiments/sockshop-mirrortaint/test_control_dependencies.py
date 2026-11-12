@@ -59,9 +59,18 @@ class ControlTests(unittest.TestCase):
         other=Frame('next');d=Control(c.graph,other,s,lambda v:None)
         self.assertFalse(d.current().selectors)
 
+    def test_potential_opaque_effect_preserves_only_new_established_values(self):
+        f,s,c=self.setup_control([{'op':177}])
+        s.control_barriers.append((10,Value(selectors=frozenset({('field',1,0)}),unknown=True),('unclosed',)))
+        self.assertTrue(field_selection(s,('o','T.value',1),Value({'value':7}),5).unknown)
+        self.assertFalse(field_selection(s,('o','T.value',2),Value({'value':7}),11).unknown)
+
     def test_branch_contradiction_rejects(self):
         f,s,c=self.setup_control([{'op':153,'target':2},{'op':177},{'op':177}])
         with self.assertRaises(ValueError):c.branch({'op':153,'target':2},[Value({'value':1})],{'taken':True})
+
+    def test_unadmitted_control_rejects(self):
+        with self.assertRaises(ValueError):ControlFlow(self.method([{'op':170}]))
 
     def test_legacy_v1_executes_same_control_transfer(self):
         entry='T.root()LT;'

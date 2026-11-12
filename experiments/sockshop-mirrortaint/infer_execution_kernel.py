@@ -58,7 +58,7 @@ def infer_execution(plan,rows):
         if ends[0]['kind']=='abort':
             audits.append({'frame':root['frame'],'completion':'aborted','answers':0});continue
         end=ends[0];fr=Frame(root['frame']);state=State(fr);slots=0
-        Control(ControlFlow(method),fr,state,lambda v:state.allocations.get(v.allocation)if v.allocation is not None else v.observed.get('object'),{entry:method})
+        Control(ControlFlow(method),fr,state,lambda v:state.allocations.get(v.allocation)if v.allocation is not None else v.observed.get('object'),{entry:method},opaque_methods=cfg.get('opaque_methods',{}))
         if not method['access']&8:fr.locals[0]=Value({'object':root['receiver']});slots=1
         for index,desc in enumerate(descriptors(method['desc'])):
             fr.locals[slots]=Value(root['args'][index],unknown=True);slots+=2 if desc in ('J','D') else 1
@@ -140,7 +140,9 @@ def infer_execution(plan,rows):
             elif op==178:fr.stack.append(Value(unknown=True))
             elif op==180:
                 receiver=pop();read=take('read');field_event(180,receiver,ins,read,identity(receiver))
-                v=state.fields.get(coordinate(read),origin(read,read['seq']));v=field_transfer(180,v,v.observed);v=field_selection(state,coordinate(read),v)
+                v=state.fields.get(coordinate(read),origin(read,read['seq']));v=field_transfer(180,v,v.observed)
+                established=max([w['seq']for w in writes if coordinate(w)==coordinate(read)and w['seq']<read['seq']]+[x[0]for x in v.origins]+[-1])
+                v=field_selection(state,coordinate(read),v,established)
                 v=control_selected(v,Value(selectors=receiver.selectors,unknown=receiver.unknown))
                 fr.stack.append(v)
             elif op==181:

@@ -102,7 +102,7 @@ def run(out,exceptions=False):
         save(d/'prediction.json',prediction);save(d/'checks.json',checks);save(d/'normalized.json',norm);normalized[mode]=norm
         guards=[]
         target=next(t for t in truth if t['scenario']==(0 if exceptions else 2) and t['input']==1)
-        for fault in ('missing-condition-source','ambiguous-condition-source','wrong-source-call','wrong-source-version','missing-branch','duplicate-branch','contradictory-branch','wrong-branch-frame','wrong-branch-PC','wrong-parent','sticky-invalid'):
+        for fault in ('missing-condition-source','ambiguous-condition-source','wrong-source-call','wrong-source-PC','wrong-source-version','wrong-physical-write-version','missing-branch','duplicate-branch','contradictory-branch','wrong-branch-frame','wrong-branch-PC','wrong-parent','sticky-invalid'):
             altered=copy.deepcopy(rows);src=next(r for r in altered if r['kind']=='binding-source'and r['seq']==target['selectors'][0][1]);idx=target['selectors'][0][2]
             field=src['fields'][idx]
             read=next(r for r in altered if r['kind']=='read'and r['owner']==field['owner']and r['field']==field['field']and r['seq']>src['seq'])
@@ -110,7 +110,16 @@ def run(out,exceptions=False):
             if fault=='missing-condition-source':src['fields'].pop(idx)
             elif fault=='ambiguous-condition-source':src['fields'].append(copy.deepcopy(src['fields'][idx]))
             elif fault=='wrong-source-call':src['source_call_id']=-1
+            elif fault=='wrong-source-PC':src['source_pc']+=1
             elif fault=='wrong-source-version':src['fields'][idx]['version']+=1
+            elif fault=='wrong-physical-write-version':
+                previous={}
+                for w in altered:
+                    if w['kind']!='write':continue
+                    key=(w['owner'],w['field'])
+                    if key in previous:w['version']=previous[key];break
+                    previous[key]=w['version']
+                else:next(r for r in altered if r['kind']=='write')['version']=0
             elif fault=='missing-branch':altered.remove(branch)
             elif fault=='duplicate-branch':altered.insert(altered.index(branch),copy.deepcopy(branch))
             elif fault=='contradictory-branch':branch['taken']=not branch['taken']
@@ -125,6 +134,18 @@ def run(out,exceptions=False):
             except (ValueError,AssertionError,KeyError):state='rejected'
             guards.append({'fault':fault,'state':state})
         save(d/'guards.json',guards)
+        if exceptions:
+            for input_ in (0,1):
+                t=next(t for t in truth if t['scenario']==3 and t['input']==input_)
+                altered=copy.deepcopy(rows);token=t['selectors'][0]
+                source=next(r for r in altered if r['kind']=='binding-source'and r['seq']==token[1]);source['fields'].pop(token[2])
+                try:
+                    bad=checked(plan,altered)
+                    frame=next(r['frame']for r in altered if r['kind']=='binding-return'and r['message']==t['message'])
+                    state='incorrect-known'if next(a for a in bad['answers']if a['root_frame']==frame)['known']else'unknown'
+                except (ValueError,AssertionError,KeyError):state='rejected'
+                guards.append({'fault':'missing-callee-condition-source-'+str(input_),'state':state})
+            save(d/'guards.json',guards)
         reports[mode]={'business_preserved':True,'targets':len(checks),'correct':sum(all(c['ok'].values())for c in checks),'failed':[{'scenario':c['scenario'],'input':c['input'],'ok':c['ok']}for c in checks if not all(c['ok'].values())],'guards':guards,'gate':all(all(c['ok'].values())for c in checks)and all(g['state']!='incorrect-known'for g in guards)}
     equal=len(normalized)==3 and normalized['full']==normalized['static']==normalized['selective']
     save(out/'results.json',{'modes':reports,'normalized_equal':equal,'gate':equal and all(r['gate']for r in reports.values()),'Agent_unchanged':sha(AGENT)==original['Agent_sha256'],'performance':None})
