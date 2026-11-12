@@ -41,7 +41,7 @@ def checked(plan,rows):
     return infer_execution(plan,rows)
 
 
-def run(out,exceptions=False):
+def run(out,exceptions=False,implicit=False):
     out.mkdir(parents=True,exist_ok=False)
     original=load(H/'protocol-before-implementation.json')
     assert sha(AGENT)==original['Agent_sha256']
@@ -55,10 +55,10 @@ def run(out,exceptions=False):
     with ZipFile(jar,'w')as z:
         for f in classes.glob('*.class'):z.write(f,'BOOT-INF/classes/'+f.name)
     metadata_build(out/'build',{'fixture':{'jar':str(jar),'targets':['PublicControlFixture$Out.value']}})
-    entry='PublicControlFixture.rootException(LPublicControlFixture$Store;IILjava/lang/IllegalArgumentException;)LPublicControlFixture$Out;'if exceptions else'PublicControlFixture.root(LPublicControlFixture$Store;II)LPublicControlFixture$Out;'
+    entry='PublicControlFixture.rootImplicit(LPublicControlFixture$Store;II)LPublicControlFixture$Out;'if implicit else'PublicControlFixture.rootException(LPublicControlFixture$Store;IILjava/lang/IllegalArgumentException;)LPublicControlFixture$Out;'if exceptions else'PublicControlFixture.root(LPublicControlFixture$Store;II)LPublicControlFixture$Out;'
     plan,route=choose(load(out/'build/fixture/model.json'),{'entry':entry,'target':'PublicControlFixture$Out.value','path':'/value','source_calls':['PublicControlFixture$Store.read(II)LPublicControlFixture$Datum;']},deployment=load(ROOT/'artifacts/target-closure-revision-20261103/external-first-01/deployment-environment.json'))
     save(out/'plan.json',plan);plan=load(out/'plan.json');save(out/'route.json',route)
-    mainargs=['exception-controls']if exceptions else[]
+    mainargs=['implicit-controls']if implicit else['exception-controls']if exceptions else[]
     baseline=json.loads(command([java,'-cp',cp,'PublicControlFixture',*mainargs],out/'original.log').stdout.splitlines()[-1])
     reports={};normalized={}
     for mode in ('full','static','selective'):
@@ -80,11 +80,13 @@ def run(out,exceptions=False):
                 for i,f in enumerate(source['fields']):
                     role=(key,f['field'].rsplit('.',1)[-1]);assert role not in fields
                     fields[role]=('field',source['seq'],i);raw.append({'role':list(role),**f})
-            origins,selectors,value=expected(15 if c['scenario']==2 else 14,c['input'])if exceptions else expected(c['scenario'],c['input'])
+            if implicit:
+                s,n=c['scenario'],c['input'];origins=set()if s==1 else{(11 if s==3 or n==0 else 10,'value')};selectors=set()if s in(1,3)else{(30,'nullable')};value=9 if s==1 else 7
+            else:origins,selectors,value=expected(15 if c['scenario']==2 else 14,c['input'])if exceptions else expected(c['scenario'],c['input'])
             assert c['value']==value and origins|selectors<=fields.keys()
-            expected_keys={10,11,20}|({21}if not exceptions and((c['scenario']in(3,4)and c['input']>0)or(c['scenario']==5 and c['input']==0))else set())
+            expected_keys={10,11,30}if implicit else{10,11,20}|({21}if not exceptions and((c['scenario']in(3,4)and c['input']>0)or(c['scenario']==5 and c['input']==0))else set())
             assert {r['role'][0]for r in raw}==expected_keys
-            truth.append({'scenario':c['scenario'],'input':c['input'],'message':c['message'],'origins':[fields[x]for x in sorted(origins)],'selectors':[fields[x]for x in sorted(selectors)],'raw_fields':raw,'expected_value':value,'expected_target_version':2 if not exceptions and c['scenario']==9 and c['input']>0 else 1})
+            truth.append({'scenario':c['scenario'],'input':c['input'],'message':c['message'],'origins':[fields[x]for x in sorted(origins)],'selectors':[fields[x]for x in sorted(selectors)],'raw_fields':raw,'expected_value':value,'expected_target_version':2 if not(exceptions or implicit)and c['scenario']==9 and c['input']>0 else 1})
         save(d/'truth-before-prediction.json',truth)
         try:prediction=checked(plan,rows)
         except Exception as e:
@@ -101,12 +103,14 @@ def run(out,exceptions=False):
             norm.append({'scenario':t['scenario'],'input':t['input'],'known':a['known'],'version':a['version'],'origins':sorted(roles.get(tuple(x),'unexpected:'+str(x))for x in a['origins']),'selectors':sorted(roles.get(tuple(x),'unexpected:'+str(x))for x in a['selectors'])})
         save(d/'prediction.json',prediction);save(d/'checks.json',checks);save(d/'normalized.json',norm);normalized[mode]=norm
         guards=[]
-        target=next(t for t in truth if t['scenario']==(0 if exceptions else 2) and t['input']==1)
+        target=next(t for t in truth if t['scenario']==(0 if exceptions or implicit else 2) and t['input']==1)
         for fault in ('missing-condition-source','ambiguous-condition-source','wrong-source-call','wrong-source-PC','wrong-source-version','wrong-physical-write-version','missing-branch','duplicate-branch','contradictory-branch','wrong-branch-frame','wrong-branch-PC','wrong-parent','sticky-invalid'):
             altered=copy.deepcopy(rows);src=next(r for r in altered if r['kind']=='binding-source'and r['seq']==target['selectors'][0][1]);idx=target['selectors'][0][2]
             field=src['fields'][idx]
-            read=next(r for r in altered if r['kind']=='read'and r['owner']==field['owner']and r['field']==field['field']and r['seq']>src['seq'])
-            branch=next(r for r in altered if r['kind']=='branch'and r.get('frame')==src['frame']and r['site'].startswith('PublicControlFixture.root')and r['seq']>read['seq'])
+            if implicit:branch=next(r for r in altered if r['kind']=='branch'and r.get('frame')==src['frame']and r['site'].startswith(entry+'@'))
+            else:
+                read=next(r for r in altered if r['kind']=='read'and r['owner']==field['owner']and r['field']==field['field']and r['seq']>src['seq'])
+                branch=next(r for r in altered if r['kind']=='branch'and r.get('frame')==src['frame']and r['site'].startswith('PublicControlFixture.root')and r['seq']>read['seq'])
             if fault=='missing-condition-source':src['fields'].pop(idx)
             elif fault=='ambiguous-condition-source':src['fields'].append(copy.deepcopy(src['fields'][idx]))
             elif fault=='wrong-source-call':src['source_call_id']=-1
@@ -152,4 +156,4 @@ def run(out,exceptions=False):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--exception-controls',action='store_true');a=p.parse_args();run(a.out.resolve(),a.exception_controls)
+    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--exception-controls',action='store_true');p.add_argument('--implicit-controls',action='store_true');a=p.parse_args();run(a.out.resolve(),a.exception_controls,a.implicit_controls)

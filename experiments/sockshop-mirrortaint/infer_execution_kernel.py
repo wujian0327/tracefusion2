@@ -79,6 +79,7 @@ def infer_execution(plan,rows):
             nonlocal pos
             require(pos<len(events) and events[pos]['kind']==kind,'Execution expected '+kind+' at pc '+str(fr.pc))
             event=events[pos];pos+=1
+            fr.control.sequence=event['seq']
             if 'pc' in event:require(event['pc']==fr.pc,'Execution call pc differs')
             elif 'site' in event:require(event['site']==entry+'@'+str(fr.pc),'Execution field/branch site differs')
             return event
@@ -147,6 +148,7 @@ def infer_execution(plan,rows):
                 fr.stack.append(v)
             elif op==181:
                 value,receiver=pop(),pop();write=take('write');field_event(181,receiver,ins,write,identity(receiver))
+                value=fr.control.write_value(value,receiver)
                 bind(value,write['observed']);state.field_write(coordinate(write),field_transfer(181,value,write['observed']))
             elif op==192:pass  # Exact runtime invocation/schema checks retain the object identity.
             elif op in (96,97):
@@ -168,7 +170,7 @@ def infer_execution(plan,rows):
                         require(key in cfg['constructors'],'Execution constructor effects absent')
                         for name,index in cfg['constructors'][key].items():
                             matching=[w for w in writes if w['owner']==owner and w['field']==name and w['seq']<event['seq']]
-                            require(len(matching)==1,'Execution constructor write missing/ambiguous');w=matching[0];bind(args[index],w['observed']);state.field_write(coordinate(w),args[index].project(w['observed']))
+                            require(len(matching)==1,'Execution constructor write missing/ambiguous');w=matching[0];bind(args[index],w['observed']);state.field_write(coordinate(w),fr.control.write_value(args[index].project(w['observed']),recv))
                 else:
                     call=take('collection-call-enter');require(call['callee']==key,'Execution invoked method differs')
                     if recv is not None:bind(recv,call['receiver'])
@@ -184,7 +186,7 @@ def infer_execution(plan,rows):
                         v=state.fields.get(coordinate(f),origin(f,call['seq'])) if 'value' in observed else Value(observed)
                     elif key in plan['collection_setters']:
                         name=plan['collection_setters'][key]['field'];matching=[w for w in writes if w['owner']==identity(recv) and w['field']==name and call['seq']<w['seq']<ret['seq']]
-                        require(len(matching)==1,'Execution setter version missing');w=matching[0];bind(args[0],w['observed']);state.field_write(coordinate(w),args[0].project(w['observed']));v=Value(observed)
+                        require(len(matching)==1,'Execution setter version missing');w=matching[0];bind(args[0],w['observed']);state.field_write(coordinate(w),fr.control.write_value(args[0].project(w['observed']),recv));v=Value(observed)
                     elif ins['owner'] in ('java/util/List','java/util/ArrayList'):
                         c=container(call);name=ins['name']
                         if name in ('size','isEmpty'):
@@ -222,6 +224,7 @@ def infer_execution(plan,rows):
             elif op==176:
                 returned=pop();bind(returned,end['result']);require(not fr.stack,'Execution root return stack differs');require(pos==len(events),'Execution unconsumed necessary evidence');break
             else:raise ValueError('Execution opcode not modeled: '+str(op))
+            fr.control.normal_operation(ins)
             fr.pc+=1
         ret=returns[0];require(ret['result']==end['result'],'Execution return witness differs')
         for f in ret['fields']:

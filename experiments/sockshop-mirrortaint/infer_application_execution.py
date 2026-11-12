@@ -236,7 +236,8 @@ def infer_application(plan,rows,worker_request=None):
             bind(receiver,{'object':begin['receiver']})
             if parent=='java/lang/Object.<init>()V':register_defaults(start,receiver)
             return execute(begin,args,receiver)
-        def write_field(w,v):
+        def write_field(w,v,receiver=None):
+            if receiver is not None:v=fr.control.write_value(v,receiver)
             if w['kind']=='write-version':
                 state.field_write(coordinate(w),field_transfer(181,v,{},omitted=True));field_seq[coordinate(w)]=w['seq'];return
             if 'date_epoch_ms' in w['observed'] and w['observed']['object'] in date_values:v=date_values[w['observed']['object']]
@@ -290,6 +291,7 @@ def infer_application(plan,rows,worker_request=None):
             nonlocal pos
             require(pos<len(events) and events[pos]['kind']==kind,'Application expected '+kind+' at '+str(entry)+'@'+str(fr.pc))
             event=events[pos];pos+=1
+            fr.control.sequence=event['seq']
             if kind=='abort':state.exception_control=control_selection([state.exception_control,fr.control.current(),*fr.control.consumed],fr.control.declared_only)
             if check_frame:require(event.get('frame')==fr.invocation,'Application invocation frame differs')
             if check_pc:
@@ -503,7 +505,7 @@ def infer_application(plan,rows,worker_request=None):
                     elif op==181:
                         value,receiver=pop(),pop();write=take('write-version'if pos<len(events)and events[pos]['kind']=='write-version'else'write');field_event(181,receiver,ins,write,identity(receiver))
                         if write['kind']=='write':bind(value,write['observed'])
-                        write_field(write,value)
+                        write_field(write,value,receiver)
                     elif op==192:pass  # Exact runtime invocation/schema checks retain the object identity.
                     elif op==193:
                         value=pop();event=take('execution-type-test');bind(value,event['input']);require(event['target']==ins['type'] and event['method']==entry,'Reference type-test target/site differs');nodes=event['hierarchy'];ids={n['id']for n in nodes};require(len(ids)==len(nodes)and all(set(n['parents'])<=ids for n in nodes),'Type-test hierarchy incomplete/ambiguous')
@@ -646,7 +648,7 @@ def infer_application(plan,rows,worker_request=None):
                                         value=lookup(proof,ctor_start['seq'])
                                     else:value=args[expression['argument']] if 'argument' in expression else Value({'value':expression['constant']})
                                     matching=[w for w in writes if w['owner']==owner and w['field']==name and w['seq']<event['seq']]
-                                    require(len(matching)==1,'Execution constructor write missing/ambiguous');w=matching[0];bind(value,w['observed']);write_field(w,value)
+                                    require(len(matching)==1,'Execution constructor write missing/ambiguous');w=matching[0];bind(value,w['observed']);write_field(w,value,recv)
                         else:
                             call=take('collection-call-enter');require(call['callee']==key,'Execution invoked method differs')
                             if recv is not None:bind(recv,call['receiver'])
@@ -1138,7 +1140,7 @@ def infer_application(plan,rows,worker_request=None):
                                 name=plan['collection_setters'][key]['field'];matching=[w for w in writes if w['owner']==identity(recv) and w['field']==name and call['seq']<w['seq']<ret['seq']]
                                 require(len(matching)==1,'Execution setter version missing');w=matching[0]
                                 if w['kind']=='write':bind(args[0],w['observed'])
-                                write_field(w,args[0]);v=Value(observed)
+                                write_field(w,args[0],recv);v=Value(observed)
                             elif key in ('java/util/stream/Stream.map(Ljava/util/function/Function;)Ljava/util/stream/Stream;','java/util/stream/Stream.filter(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;')and identity(recv)in sequence_pipes:
                                 from infer_sequence_callbacks import validate_fact
                                 proof=ret.get('sequence_contract');validate_fact(cfg,runtime[0],proof,'pipeline-stage');prior=sequence_pipes[identity(recv)];stages=prior['stages']+[{'operation':'map'if'.map('in key else'filter','callback':identity(args[0])}]
@@ -1306,11 +1308,12 @@ def infer_application(plan,rows,worker_request=None):
                         if handle(actual(error),typename):continue
                         take('abort');return None,actual(error)
                     else:raise ValueError('Execution opcode not modeled: '+str(op))
+                    fr.control.normal_operation(ins)
                     fr.pc+=1
             finally:
                 frame_audits.append({'frame':fr.invocation,'method':entry,'steps':fr.steps})
                 if saved[0]is not None and pos and events[pos-1]['kind']=='exit'and events[pos-1].get('frame')==fr.invocation:
-                    saved[0].control.normal_outcome(fr.control.normal_completion())
+                    saved[0].control.normal_outcome(fr.control.normal_completion(),events[pos-1]['seq'])
                 depth-=1
                 fr,method,code,entry=saved
         root_args=[]

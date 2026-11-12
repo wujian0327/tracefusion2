@@ -139,12 +139,22 @@ class Control:
         self.opaque_methods = set(opaque_methods)
         self.regions = []
         self.consumed = []
+        self.escape_guards = Value()
+        self.sequence = 0
         frame.control = self
         frame.stack = ControlledStack(self)
         frame.locals = ControlledLocals(self)
 
     def current(self): return selection([self.inherited] + [r.condition for r in self.regions], self.declared_only)
     def apply(self, value): return selected(value, self.current())
+
+    def write_value(self,value,receiver):
+        # A materialized address choice needs a may-alias footprint for the
+        # targets not written on this execution. This revision does not invent
+        # that proof from the observed owner or equal values.
+        if receiver.selectors-self.current().selectors:
+            raise AnalysisLimit('control-write-address','Cross-join selected write address lacks a closed alias footprint')
+        return selected(value,Value(selectors=receiver.selectors,unknown=receiver.unknown))
 
     def at(self, pc):
         ended = [r for r in self.regions if r.join == pc]
@@ -251,18 +261,44 @@ class Control:
         # Only an actually executed condition with an explicit throwing arm
         # exports a normal/exception outcome choice. A returned data value is
         # not automatically an exception condition.
-        return selection([r.condition for r in self.regions if r.pc >= 0 and
+        return selection([self.escape_guards]+[r.condition for r in self.regions if r.pc >= 0 and
                           any(self.graph.code[p]['op'] == 191 for p in self.graph.regions[r.pc])], self.declared_only)
 
-    def normal_outcome(self, condition):
+    def normal_outcome(self, condition, seq=None):
         if not condition.selectors and not condition.unknown: return
         handlers = [h['handler'] for h in self.graph.method.get('exception_handlers', [])
                     if h['start'] <= self.frame.pc < h['end']]
-        if not handlers: return
+        if not handlers:
+            self.escape_guards=selection([self.escape_guards,condition],self.declared_only)
+            return
         following = self.frame.pc + 1
         candidates = set.intersection(*(self.graph.pdom[p] for p in [following, *handlers]))
         join = max(candidates, key=lambda p: len(self.graph.pdom[p])) if candidates else self.graph.exit
-        self.regions.append(Region(-2, join, condition, set(), len(self.frame.stack)))
+        todo=[following,*handlers];nodes=set()
+        while todo:
+            p=todo.pop()
+            if p==join or p==self.graph.exit or p in nodes:continue
+            nodes.add(p);todo.extend(self.graph.edges[p])
+        slots={self.graph.code[p]['var']for p in nodes if 54<=self.graph.code[p]['op']<=58 or self.graph.code[p]['op']==132}
+        self._field_effects(nodes,condition,self.sequence if seq is None else seq)
+        self.regions.append(Region(-2, join, condition, slots, len(self.frame.stack)))
+
+    def normal_operation(self, ins):
+        """Normal exceptional-edge choices, separate from ordinary data use.
+
+        A null/bounds/divisor guard can choose a handler even without an IF
+        instruction. Export it through normal returns until a verified handler
+        join consumes it; never attach all historical reads to ordinary values.
+        """
+        op=ins['op'];values=self.consumed;guards=[]
+        if op in (180,181) and values:guards=[values[-1]]
+        elif op in (182,183,184,185):
+            from plan_service_observations import callee
+            if op!=184 and values:guards.append(values[-1])
+            if callee(ins)not in self.methods:guards.extend(values[:-1]if op!=184 else values)
+        elif op in (108,109,112,113)and values:guards=[values[0]]
+        elif op in (189,190,50,83,192):guards=values
+        if guards:self.normal_outcome(selection(guards,self.declared_only))
 
 
 def field_selection(state, key, value, established_at=None):

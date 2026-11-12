@@ -72,6 +72,10 @@ class ControlTests(unittest.TestCase):
     def test_unadmitted_control_rejects(self):
         with self.assertRaises(ValueError):ControlFlow(self.method([{'op':170}]))
 
+    def test_unclosed_cross_join_write_address_is_not_certified(self):
+        f,s,c=self.setup_control([{'op':177}])
+        with self.assertRaises(ValueError):c.write_value(Value({'value':7}),Value({'object':'o'},selectors=frozenset({('field',1,0)})))
+
     def test_legacy_v1_executes_same_control_transfer(self):
         entry='T.root()LT;'
         code=[{'op':25,'var':0},{'op':180,'owner':'T','name':'condition','desc':'I'},
