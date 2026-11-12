@@ -3,7 +3,7 @@
 No source is invented for an unexecuted read. Conditions select definitions,
 not data origins. Field merge effects require concrete receiver footprints.
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from execution_dependency_state import Value
 from query_observation_planner import require, descriptors
 from analysis_status import AnalysisLimit
@@ -124,6 +124,7 @@ class Region:
     condition: Value
     locals: set
     stack_base: int
+    token: object = field(default_factory=object,compare=False,repr=False)
 
 
 class ControlledStack(list):
@@ -157,14 +158,43 @@ class Control:
         self.write_effects = WriteEffects(self.methods, self.targets_for, self.opaque_methods)
         self.regions = []
         self.consumed = []
-        self.escape_guards = Value()
+        self.escape_conditions = {}
+        self.ambient = {}
+        self.inherited_token = object()
+        self.verified_exception_guard = None
+        self.exception_type = None
+        self.verified_exception_types = None
+        self.verified_normal_guards = None
         self.sequence = 0
         frame.control = self
         frame.stack = ControlledStack(self)
         frame.locals = ControlledLocals(self)
 
     def current(self): return selection([self.inherited] + [r.condition for r in self.regions], self.declared_only)
-    def apply(self, value): return selected(value, self.current())
+    def scopes(self):
+        result={}
+        for token,c in [(self.inherited_token,self.inherited)]+[(r.token,r.condition)for r in self.regions]:
+            for dep in c.selectors:result.setdefault(dep,set()).add(token)
+        return result
+
+    def apply(self, value):
+        condition=self.current();out=selected(value,condition);active=self.scopes();prior=self.ambient.get(id(value));tags={}
+        if prior and prior[0]is value:
+            tags={dep:tokens & active.get(dep,set())for dep,tokens in prior[1].items()if tokens & active.get(dep,set())}
+        for dep in condition.selectors-value.selectors:tags[dep]=active[dep]
+        if tags:self.ambient[id(out)]=(out,tags)
+        return out
+
+    def guard_selection(self, values):
+        # Execution-context selection is already scoped. Do not turn that
+        # transient annotation into a new null/bounds condition escaping its
+        # handler join. Merged/stored choices have no transient annotation.
+        active=self.scopes();deps=set()
+        for value in values:
+            prior=self.ambient.get(id(value));transient=set()
+            if prior and prior[0]is value:transient={d for d,ts in prior[1].items()if ts & active.get(d,set())}
+            deps.update(value.origins | (value.selectors-transient))
+        return Value(selectors=frozenset(d for d in deps if not(self.declared_only and d[0]=='argument')),unknown=any(v.unknown for v in values))
 
     def targets_for(self,method,index):
         name=method.get('owner','')+'.'+method.get('name','')+method['desc']+'@'+str(index)
@@ -188,6 +218,12 @@ class Control:
             for i in range(r.stack_base, len(self.frame.stack)):
                 self.frame.stack[i] = selected(self.frame.stack[i], r.condition)
         self.consumed = []
+        self.verified_exception_guard = None
+        self.exception_type = None
+        self.verified_exception_types = None
+        self.verified_normal_guards = None
+        live={id(v)for v in [*self.frame.stack,*self.frame.locals.values()]}
+        self.ambient={k:v for k,v in self.ambient.items()if k in live}
 
     def _reference(self, receiver, field, descriptor, seq):
         from call_write_effects import unclosed
@@ -314,9 +350,48 @@ class Control:
         else: self.regions.append(Region(pc, self.graph.joins[pc], condition, slots, len(self.frame.stack)))
         return ins['target'] if event['taken'] else pc + 1
 
-    def caught(self, handler):
-        condition = selection([self.current(), self.state.exception_control, *self.consumed], self.declared_only)
+    def exception_guard(self, ins, typename=None):
+        """Only operands determining this exceptional edge, not payload use.
+
+        Callee completion is a separate, verified contribution. The list of
+        consumed operands remains in JVM pop order (value, index, receiver).
+        """
+        op=ins['op'];values=self.consumed
+        if self.verified_exception_guard is not None:return self.verified_exception_guard
+        needed={180:1,181:2,191:1,189:1,190:1,50:2,83:3,108:2,109:2,112:2,113:2,192:1}.get(op,1 if op in(182,183,185)else 0)
+        require(len(values)>=needed,'Exceptional operation guard operands absent')
+        if op in (180,181):guards=values[-1:]
+        elif op==191:guards=values[:1]
+        elif op==189:guards=values[:1]
+        elif op==190:guards=values[-1:]
+        elif op in (50,83):
+            guards=values[-1:]if typename=='java.lang.NullPointerException'else values[-2:]
+            if op==83 and typename=='java.lang.ArrayStoreException':guards=values
+        elif op in (108,109,112,113):guards=values[:1]
+        elif op==192:guards=values[:1]
+        elif op in (182,183,184,185):
+            guards=[]if op==184 else values[-1:]
+            null=bool(guards)and self.identity(guards[0])is None and guards[0].observed.get('value','not-null')is None
+            if null and typename is not None:require(typename=='java.lang.NullPointerException','Null call receiver contradicts exceptional completion')
+            if not self.state.exception_control_ready and not null:
+                # An unexplained call's arguments are not a completion proof.
+                # Retain uncertainty, rather than invent a known selector set.
+                guards.append(Value(unknown=True))
+        else:guards=[Value(unknown=True)]
+        return selection(guards,self.declared_only)
+
+    def exceptional_completion(self, typename=None):
+        inherited=self.state.exception_control if self.state.exception_control_ready else Value()
+        return selection([self.current(),inherited,self.exception_guard(self.graph.code[self.frame.pc],typename or self.exception_type)],self.declared_only)
+
+    def abort(self, typename=None):
+        self.state.exception_control=self.exceptional_completion(typename)
+        self.state.exception_control_ready=True
+
+    def caught(self, handler, typename=None):
+        condition = self.exceptional_completion(typename)
         self.state.exception_control = Value()
+        self.state.exception_control_ready = False
         retained = [r for r in self.regions if r.pc >= 0 and handler in self.graph.regions.get(r.pc, set())]
         following = self.frame.pc + 1
         candidates = self.graph.pdom[handler] & self.graph.pdom.get(following, {self.graph.exit})
@@ -325,22 +400,62 @@ class Control:
         if retained:
             join = max((r.join for r in retained), key=lambda p: len(self.graph.pdom[p]))
         self.regions = retained + [Region(-1, join, condition, set(), 0)]
+        self.ambient = {}
         self.frame.stack = ControlledStack(self)
 
     def normal_completion(self):
-        # Only an actually executed condition with an explicit throwing arm
-        # exports a normal/exception outcome choice. A returned data value is
-        # not automatically an exception condition.
-        return selection([self.escape_guards]+[r.condition for r in self.regions if r.pc >= 0 and
-                          any(self.graph.code[p]['op'] == 191 for p in self.graph.regions[r.pc])], self.declared_only)
+        return selection([c for c,_ in self.normal_completions()],self.declared_only)
 
-    def normal_outcome(self, condition, seq=None):
+    def normal_completions(self):
+        # Keep exception categories attached to their own conditions. A bounds
+        # condition handled locally must not become a caller's null guard.
+        result=[(c,None if typ is None else{typ})for typ,c in self.escape_conditions.items()]
+        for r in self.regions:
+            if r.pc<0:continue
+            for pc in self.graph.regions[r.pc]:
+                if self.graph.code[pc]['op']==191:result.append((r.condition,self.throw_types(pc)))
+        return result
+
+    def throw_types(self, throw_pc):
+        def reference_types(definitions,trail=()):
+            result=set()
+            args=descriptors(self.graph.method['desc'])
+            for pc in definitions:
+                if pc in trail:return None
+                if pc<0:
+                    desc=('L'+self.graph.method.get('owner','')+';')if pc==-1 else args[-pc-2]
+                else:
+                    ins=self.graph.code[pc]
+                    if ins['op']==25:
+                        found=reference_types(self.graph.operands()[pc][0],trail+(pc,))
+                        if found is None:return None
+                        result.update(found);continue
+                    if ins['op']in(187,192):desc='L'+ins['type']+';'
+                    elif ins['op']==180:desc=ins['desc']
+                    elif ins['op']in(182,183,184,185):desc=ins['desc'].split(')')[1]
+                    elif ins['op']==1:desc='Ljava/lang/NullPointerException;'
+                    else:return None
+                if not desc.startswith('L'):return None
+                result.add(desc[1:-1])
+            return result
+        return reference_types(self.graph.operands()[throw_pc][0])
+
+    def normal_outcome(self, condition, seq=None, exception_types=None):
         if not condition.selectors and not condition.unknown: return
-        handlers = [h['handler'] for h in self.graph.method.get('exception_handlers', [])
-                    if h['start'] <= self.frame.pc < h['end']]
-        if not handlers:
-            self.escape_guards=selection([self.escape_guards,condition],self.declared_only)
-            return
+        from exception_completion import handler_partition
+        protected=[h for h in self.graph.method.get('exception_handlers', [])if h['start'] <= self.frame.pc < h['end']]
+        matched,unhandled=handler_partition(protected,exception_types)
+        handlers=sorted(matched)
+        if unhandled is None or unhandled:
+            escaping=selection([condition,self.current()],self.declared_only)
+            for typ in [None]if unhandled is None else unhandled:
+                self.escape_conditions[typ]=selection([self.escape_conditions.get(typ,Value()),escaping],self.declared_only)
+            # On this normal execution, a protected continuation is defined
+            # only if this escaping outcome did not occur. Use the protected
+            # region's merge for that definition; this does not claim that the
+            # exceptional type would be caught by those handlers.
+            if protected:handlers=sorted(set(handlers)|{h['handler']for h in protected})
+        if not handlers:return
         following = self.frame.pc + 1
         candidates = set.intersection(*(self.graph.pdom[p] for p in [following, *handlers]))
         join = max(candidates, key=lambda p: len(self.graph.pdom[p])) if candidates else self.graph.exit
@@ -360,17 +475,24 @@ class Control:
         instruction. Export it through normal returns until a verified handler
         join consumes it; never attach all historical reads to ordinary values.
         """
+        if self.verified_normal_guards is not None:
+            for typ,guard in self.verified_normal_guards.items():self.normal_outcome(guard,exception_types={typ})
+            return
+        if self.verified_exception_guard is not None:
+            self.normal_outcome(self.verified_exception_guard,exception_types=self.verified_exception_types);return
         op=ins['op'];values=self.consumed;guards=[]
         if op in (180,181) and values:guards=[values[-1]]
         elif op in (182,183,184,185):
             from plan_service_observations import callee
-            if op!=184 and values:guards.append(values[-1])
+            if op!=184 and values:self.normal_outcome(self.guard_selection(values[-1:]),exception_types={'java/lang/NullPointerException'})
             targets=self.targets_for(self.graph.method,self.frame.pc)
             closed=callee(ins)in self.methods or bool(targets)and all(k in self.methods for k in targets)
-            if not closed:guards.extend(values[:-1]if op!=184 else values)
+            if not closed:self.normal_outcome(self.guard_selection(values[:-1]if op!=184 else values))
+            return
         elif op in (108,109,112,113)and values:guards=[values[0]]
         elif op in (189,190,50,83,192):guards=values
-        if guards:self.normal_outcome(selection(guards,self.declared_only))
+        types={180:{'java/lang/NullPointerException'},181:{'java/lang/NullPointerException'},189:{'java/lang/NegativeArraySizeException'},190:{'java/lang/NullPointerException'},50:{'java/lang/NullPointerException','java/lang/ArrayIndexOutOfBoundsException'},83:{'java/lang/NullPointerException','java/lang/ArrayIndexOutOfBoundsException','java/lang/ArrayStoreException'}}.get(op)
+        if guards:self.normal_outcome(self.guard_selection(guards),exception_types=types)
 
 
 def field_selection(state, key, value, established_at=None):

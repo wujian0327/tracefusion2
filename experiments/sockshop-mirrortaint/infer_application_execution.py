@@ -305,27 +305,22 @@ def infer_application(plan,rows,worker_request=None):
             require(pos<len(events) and events[pos]['kind']==kind,'Application expected '+kind+' at '+str(entry)+'@'+str(fr.pc))
             event=events[pos];pos+=1
             fr.control.sequence=event['seq']
-            if kind=='abort':state.exception_control=control_selection([state.exception_control,fr.control.current(),*fr.control.consumed],fr.control.declared_only)
+            if kind=='abort':fr.control.abort()
             if check_frame:require(event.get('frame')==fr.invocation,'Application invocation frame differs')
             if check_pc:
                 if 'pc' in event:require(event['pc']==fr.pc,'Application call pc differs')
                 elif 'site' in event:require(event['site']==entry+'@'+str(fr.pc),'Application instruction site differs')
             return event
         def handle(error,typename):
-            hierarchy={'java.lang.NullPointerException':{'java/lang/NullPointerException','java/lang/RuntimeException','java/lang/Exception','java/lang/Throwable'},'java.lang.IllegalArgumentException':{'java/lang/IllegalArgumentException','java/lang/RuntimeException','java/lang/Exception','java/lang/Throwable'}}
-            for name in ('ExecutionException','TimeoutException','CancellationException'):
-                hierarchy['java.util.concurrent.'+name]={'java/util/concurrent/'+name,'java/lang/Exception','java/lang/Throwable'}
-                if name=='CancellationException':hierarchy['java.util.concurrent.'+name].add('java/lang/RuntimeException')
+            fr.control.exception_type=typename
+            from exception_completion import HIERARCHY
+            hierarchy=HIERARCHY
             protected=[h for h in method['exception_handlers'] if h['start']<=fr.pc<h['end']]
-            for exception in ('ArrayIndexOutOfBoundsException','ArrayStoreException','NegativeArraySizeException'):
-                hierarchy['java.lang.'+exception]={'java/lang/'+exception,'java/lang/RuntimeException','java/lang/Exception','java/lang/Throwable'}
-            hierarchy['java.lang.IndexOutOfBoundsException']={'java/lang/IndexOutOfBoundsException','java/lang/RuntimeException','java/lang/Exception','java/lang/Throwable'}
-            hierarchy['java.lang.ArrayIndexOutOfBoundsException'].add('java/lang/IndexOutOfBoundsException')
             if protected and typename not in hierarchy and all(h['type'] is not None for h in protected):raise AnalysisLimit('exception-dispatch','Exception hierarchy unsupported: '+str(typename))
             eligible=[h for h in protected if h['type'] is None or h['type'] in hierarchy.get(typename,set())]
             if not eligible:return False
             caught=take('collection-catch',check_pc=False);require(caught['pc']==eligible[0]['handler'] and caught['exception']==typename,'Application original handler differs');same_value(error,caught['observed'])
-            fr.control.caught(caught['pc']);fr.stack.append(Value(caught['observed']));fr.pc=caught['pc'];return True
+            fr.control.caught(caught['pc'],typename);fr.stack.append(Value(caught['observed']));fr.pc=caught['pc'];return True
         def container(call):
             owner=call['receiver']['object'];items=call.get('collection');require(items is not None,'Execution collection content absent')
             require(call.get('receiver_type') in ('java.util.ArrayList','java.util.Arrays$ArrayList','java.util.Collections$SingletonList','java.util.Collections$EmptyList'),'Execution list implementation unsupported')
@@ -474,6 +469,19 @@ def infer_application(plan,rows,worker_request=None):
                         else:
                             require(0<=index<len(a['elements']) and event.get('store_compatible') is True and event['after_version']==a['version']+1,'Array write type/version differs');bind(value,event['value']);a['elements'][index]=value;a['versions'][index]+=1;a['version']=event['after_version'];require(a['versions']==event['after_element_versions'],'Array element write version differs')
                             if owner in nonlocal_owners or owner in state.poisoned or not any(r['kind']=='execution-array' and r['operation']=='new' and r['array'].get('object')==owner for r in relevant):escape(value)
+                        # Array facts above already verify the original size,
+                        # component, bounds, compatibility and versions. An
+                        # Object[] accepts every reference, so its store payload
+                        # is not a normal/bounds-completion guard.
+                        guards=[count]if op==189 else[array]if op==190 else[array,index_value]if op==50 else[array,fr.control.consumed[-2]]
+                        if op==83 and event['component']!='java.lang.Object':guards.append(value)
+                        fr.control.verified_exception_guard=fr.control.guard_selection(guards)
+                        if op==189:fr.control.verified_normal_guards={'java/lang/NegativeArraySizeException':fr.control.guard_selection([count])}
+                        else:
+                            channels={'java/lang/NullPointerException':fr.control.guard_selection([array])}
+                            if op in(50,83):channels['java/lang/ArrayIndexOutOfBoundsException']=fr.control.guard_selection([array,index_value]if op==50 else[array,fr.control.consumed[-2]])
+                            if op==83 and event['component']!='java.lang.Object':channels['java/lang/ArrayStoreException']=fr.control.guard_selection(guards)
+                            fr.control.verified_normal_guards=channels
                     elif op==187:
                         allocation_count+=1;fr.stack.append(Value(allocation=allocation_count))
                     elif op==178:
@@ -517,7 +525,12 @@ def infer_application(plan,rows,worker_request=None):
                         else:state.reference_reads.append((coordinate(read),v,read['seq']))
                         fr.stack.append(v)
                     elif op==181:
-                        value,receiver=pop(),pop();write=take('write-version'if pos<len(events)and events[pos]['kind']=='write-version'else'write');field_event(181,receiver,ins,write,identity(receiver))
+                        value,receiver=pop(),pop()
+                        if identity(receiver) is None and receiver.observed.get('value') is None:
+                            error=events[pos].get('observed',{'object':None})
+                            if handle(error,'java.lang.NullPointerException'):continue
+                            take('abort');return None,error
+                        write=take('write-version'if pos<len(events)and events[pos]['kind']=='write-version'else'write');field_event(181,receiver,ins,write,identity(receiver))
                         if write['kind']=='write':bind(value,write['observed'])
                         write_field(write,value,receiver)
                     elif op==192:pass  # Exact runtime invocation/schema checks retain the object identity.
@@ -663,6 +676,9 @@ def infer_application(plan,rows,worker_request=None):
                                     else:value=args[expression['argument']] if 'argument' in expression else Value({'value':expression['constant']})
                                     matching=[w for w in writes if w['owner']==owner and w['field']==name and w['seq']<event['seq']]
                                     require(len(matching)==1,'Execution constructor write missing/ambiguous');w=matching[0];bind(value,w['observed']);write_field(w,value,recv)
+                            if effect.get('kind')=='assignments':
+                                projections=[args[e['argument']]for e in effect['fields'].values()if isinstance(e,dict)and 'field'in e]
+                                fr.control.verified_normal_guards={'java/lang/NullPointerException':fr.control.guard_selection(projections)}
                         else:
                             call=take('collection-call-enter');require(call['callee']==key,'Execution invoked method differs')
                             if recv is not None:bind(recv,call['receiver'])
@@ -827,9 +843,12 @@ def infer_application(plan,rows,worker_request=None):
                                 if key=='org/springframework/util/Assert.isNull(Ljava/lang/Object;Ljava/lang/String;)V' and cfg.get('foundation_values'):
                                     f=call_fact(cfg,failure,'assert-is-null-string',foundation_supported)
                                     if f['valid']:require(not f['null_input'] and failure['exception_type']=='java.lang.IllegalArgumentException','Assert throw contradicts null check');read_only_bounds=True
+                                    if f['valid']:fr.control.verified_exception_guard=control_selection([args[0]],fr.control.declared_only)
                                 if key in ('java/util/List.get(I)Ljava/lang/Object;','java/util/ArrayList.get(I)Ljava/lang/Object;') and recv is not None and call.get('receiver_type') in ('java.util.ArrayList','java.util.Arrays$ArrayList') and failure['exception_type'] in ('java.lang.IndexOutOfBoundsException','java.lang.ArrayIndexOutOfBoundsException'):
                                     c=container(call);index=args[0].observed.get('value')
                                     require(type(index) is int and not 0<=index<len(c.elements),'List bounds failure contradicts actual index/members')
+                                    structure=Value(selectors=frozenset(s for v in c.elements for s in v.selectors),unknown=c.owner in poisoned_at)
+                                    fr.control.verified_exception_guard=control_selection([recv,args[0],structure],fr.control.declared_only)
                                     read_only_bounds=True  # Pinned get performs no writes or user callbacks.
                                 if child_error is None and not read_only_bounds and not (recv is not None and identity(recv) is None and recv.observed.get('value') is None):poison(([recv] if recv else [])+args,failure['seq'])
                                 if handle(failure['exception'],failure['exception_type']):continue
@@ -1316,7 +1335,8 @@ def infer_application(plan,rows,worker_request=None):
                         fr.pc=fr.control.branch(ins,[a,b]if a is not None else[b],event);continue
                     elif op==167:fr.pc=ins['target'];continue
                     elif 172<=op<=177:
-                        returned=fr.control.apply(Value({'value':None,'object':None})) if op==177 else pop();completion=take('exit');bind(returned,completion['result']);require(not fr.stack,'Application return stack differs');return returned,None
+                        returned=fr.control.apply(Value({'value':None,'object':None})) if op==177 else pop()
+                        completion=take('exit');bind(returned,completion['result']);require(not fr.stack,'Application return stack differs');return returned,None
                     elif op==191:
                         error=pop();typename=events[pos].get('exception') if pos<len(events) else None
                         if handle(actual(error),typename):continue
@@ -1327,7 +1347,7 @@ def infer_application(plan,rows,worker_request=None):
             finally:
                 frame_audits.append({'frame':fr.invocation,'method':entry,'steps':fr.steps})
                 if saved[0]is not None and pos and events[pos-1]['kind']=='exit'and events[pos-1].get('frame')==fr.invocation:
-                    saved[0].control.normal_outcome(fr.control.normal_completion(),events[pos-1]['seq'])
+                    for condition,types in fr.control.normal_completions():saved[0].control.normal_outcome(condition,events[pos-1]['seq'],types)
                 depth-=1
                 fr,method,code,entry=saved
         root_args=[]

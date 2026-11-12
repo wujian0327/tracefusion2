@@ -62,6 +62,7 @@ class State:
     arrays: dict = field(default_factory=dict)
     control_fields: dict = field(default_factory=dict)  # unresolved conditional write/merge choices by physical field
     exception_control: Value = field(default_factory=Value)  # one propagating, verified exceptional completion
+    exception_control_ready: bool = False  # an empty verified condition differs from no completion proof
     control_barriers: list = field(default_factory=list)  # potential unclosed effects on preexisting heap versions
     reference_reads: list = field(default_factory=list)  # executed/verified (coordinate, Value, seq), never future snapshots
 
