@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "scope": "Explicit data origins of final HTTP /text; op/key are selectors, reported separately. Source is A external HTTP /value or /fallback, never B cache/read/deserialize. Rn counts requests within one case. Symbolic objects are independent of JVM object IDs.",
+  "source_granularity": "request occurrence + JSON field; /value and /fallback receive distinct origins even when equal",
+  "cases": [
+    {"id":"cache-hit","source":[[1,"/value"]],"versions":["B cache.cell=c1; c1.text@1 <- R1/value", "R2 reads c1.text@1"],"object_relation":"same","field_versions":[1],"response":"SAME","state":{"key":"k","text":"SAME"}},
+    {"id":"same-object-overwrite","source":[[2,"/value"]],"versions":["B cache.cell=c1; c1.text@1 <- R1/value", "same c1.text@2 <- R2/value, kills @1", "R3 reads c1.text@2"],"object_relation":"same","field_versions":[1,2],"response":"SAME","state":{"key":"k","text":"SAME"}},
+    {"id":"new-object-replacement","source":[[2,"/value"]],"versions":["B cache.cell@1=c1; c1.text@1 <- R1/value", "cache.cell@2=c2 != c1; c2.text@1 <- R2/value", "R3 reads c2.text@1"],"object_relation":"different","field_versions":[1,1],"response":"SAME","state":{"key":"k","text":"SAME"}},
+    {"id":"public-constant","source":[],"versions":["c1.text@1 <- R1/value", "same c1.text@2 <- literal PUBLIC, kills @1", "R3 reads c1.text@2; no external data origin"],"object_relation":"same","field_versions":[1,2],"response":"PUBLIC","state":{"key":"k","text":"PUBLIC"}},
+    {"id":"miss-fallback","source":[[2,"/fallback"]],"versions":["c1.text@1 <- R1/value remains cached", "R2 key miss: output <- R2/fallback; no c1.text read"],"object_relation":"same","field_versions":[1],"response":"SAME","state":{"key":"k","text":"SAME"}},
+    {"id":"missing-write","source":[[2,"/value"]],"versions":["same c1.text@2 <- R2/value, kills @1", "derived TF evidence removes that write but keeps actual read@2; raw capture retained", "expected analysis result is unknown/rejected, never infer R1 by equality"],"object_relation":"same","field_versions":[1,2],"response":"SAME","state":{"key":"k","text":"SAME"},"evidence_negative":true}
+  ]
+}

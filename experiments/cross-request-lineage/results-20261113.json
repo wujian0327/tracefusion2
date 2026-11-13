@@ -1,0 +1,3192 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-11-13T18:04:17.555842+08:00",
+  "initial_state": {
+    "recorded_at": "2026-11-13T17:47:52.019814+08:00",
+    "head": "22664f392b17a033d089994d7b1ea926974befeb",
+    "branch": "main",
+    "initial_porcelain": "",
+    "initial_state_observed_before_directory_creation": true,
+    "instructions": {
+      "AGENTS.md": "# 工作分支\n\n本仓库默认直接在 `main` 分支继续开发、验证和提交。\n只有用户明确要求时，才改用其他工作分支。\n\n# 远端同步\n\n允许按任务需要 fetch / pull；所有 push 均由用户手动完成，代理不自行推送。\n"
+    },
+    "scope": "Round 1; no existing core edits; commit on main; no push"
+  },
+  "expected_sha256": "021e65f774ba972dfa2a42dfdcc4fc3f7838289381f467c76308826c6f54a39f",
+  "workload_sha256": "9efa8709a56c4d0d4004d86d176991f23949c36dda149e76665771798d5fb1a5",
+  "core_files_hashed": 1101,
+  "core_unchanged": true,
+  "primary_supported": {
+    "path": "artifacts/cross-request-lineage-supported-20261113-04",
+    "build_manifest": {
+      "business_classes": {
+        "lineage/business/Cache.class": "f66468039564e30c8511390b4d51d8bdd49369ef0fa21081e46e4249195fad25",
+        "lineage/business/Cache$Cell.class": "65a91c4339a8c5aa0cf911f5edc23bd67a3d977f4c53e8ce7e19d1e02d38f528",
+        "lineage/business/Cache$Reply.class": "fb9f196671e76d320dd85765b9bdf359f4632644a9ee8a48c7d81883d57f9c34",
+        "lineage/business/Cache$Request.class": "b722e825f259e6f3d1927c026b23c34d5c3b2e4e1a12dbf36113e754c5bd1621",
+        "lineage/web/Server$1.class": "0f444570680d23c94dca1330ab250104b0f66b82d340979ca09760bfd40dd69a",
+        "lineage/web/Server.class": "53040e2c1f492228e70ad388c091937de0924f6405089fc027cab0af794b7cfd",
+        "lineage/web/Observer.class": "2ac706c56158d90d401d6834427ab17949027e87a40dd738e16efcc15e195063"
+      },
+      "native": "/home/wujian/tracefusion2/artifacts/external-tools/mirrortaint/mirrorTaint.jar",
+      "native_sha256": "e4c679206993b45c6727a4ace1d4dcff6df0ded2b80b56b27b8c86741be63fe7",
+      "dependencies": {
+        "/home/wujian/tracefusion2/artifacts/java-collection-deps/asm-9.7.1.jar": "8cadd43ac5eb6d09de05faecca38b917a040bb9139c7edeb4cc81c740b713281",
+        "/home/wujian/tracefusion2/artifacts/java-collection-deps/asm-tree-9.7.1.jar": "9929881f59eb6b840e86d54570c77b59ce721d104e6dfd7a40978991c2d3b41f",
+        "/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-core-2.8.6.jar": "10a8d607dc66aadee9ef24e8b3d83f04b6c0e033926558cc64e408bcbda0ca9f",
+        "/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-databind-2.8.6.jar": "922413ca2ff5a8f1f86a2eaae8ff02219322ec6ff00d212e7973df8aac4bbaa3",
+        "/home/wujian/tracefusion2/artifacts/flowdist-orders-static-lambda-v3-20261013/work/lib/jackson-annotations-2.8.6.jar": "92d7580f361174bda3e015c66adafa326aeb9ef7f4a99a895486cef0dae773f8"
+      },
+      "tf_agent_sha256": "447fcb33eba85d7f4f53bda8b48d6966cc4712b6f6fe9d02d6062daa769d1f45",
+      "plans": {
+        "A": "ae773a773c0a593952b315bfc019a20fc68037655714cd59a2e024a192ae974e",
+        "B": "a2fc03513830d784b38e060db482a1a8be8d52daa125489a09a602efa95aea17"
+      }
+    },
+    "score": {
+      "summary": {
+        "tracefusion": {
+          "unknown": 12
+        },
+        "mirrortaint": {
+          "wrong": 10,
+          "correct": 2
+        }
+      },
+      "rows": [
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "cache-hit",
+          "business_equal": true,
+          "expected": {
+            "id": "cache-hit",
+            "source": [
+              [
+                1,
+                "/value"
+              ]
+            ],
+            "versions": [
+              "B cache.cell=c1; c1.text@1 <- R1/value",
+              "R2 reads c1.text@1"
+            ],
+            "object_relation": "same",
+            "field_versions": [
+              1
+            ],
+            "response": "SAME",
+            "state": {
+              "key": "k",
+              "text": "SAME"
+            }
+          },
+          "source_status": "unknown",
+          "shared_process_verified": true,
+          "observed_writes": [
+            {
+              "seq": 19,
+              "owner": "o6",
+              "field": "lineage/business/Cache$Cell.text",
+              "version": 1,
+              "frame": "f1"
+            }
+          ],
+          "version_witness_matches": true,
+          "reason": "control-write-address: Conditional nested write lacks a pre-branch reference witness",
+          "classification": "analysis_rejection"
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "miss-fallback",
+          "business_equal": true,
+          "expected": {
+            "id": "miss-fallback",
+            "source": [
+              [
+                2,
+                "/fallback"
+              ]
+            ],
+            "versions": [
+              "c1.text@1 <- R1/value remains cached",
+              "R2 key miss: output <- R2/fallback; no c1.text read"
+            ],
+            "object_relation": "same",
+            "field_versions": [
+              1
+            ],
+            "response": "SAME",
+            "state": {
+              "key": "k",
+              "text": "SAME"
+            }
+          },
+          "source_status": "unknown",
+          "shared_process_verified": true,
+          "observed_writes": [
+            {
+              "seq": 19,
+              "owner": "o6",
+              "field": "lineage/business/Cache$Cell.text",
+              "version": 1,
+              "frame": "f1"
+            }
+          ],
+          "version_witness_matches": true,
+          "reason": "control-write-address: Conditional nested write lacks a pre-branch reference witness",
+          "classification": "analysis_rejection"
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "missing-write",
+          "business_equal": true,
+          "expected": {
+            "id": "missing-write",
+            "source": [
+              [
+                2,
+                "/value"
+              ]
+            ],
+            "versions": [
+              "same c1.text@2 <- R2/value, kills @1",
+              "derived TF evidence removes that write but keeps actual read@2; raw capture retained",
+              "expected analysis result is unknown/rejected, never infer R1 by equality"
+            ],
+            "object_relation": "same",
+            "field_versions": [
+              1,
+              2
+            ],
+            "response": "SAME",
+            "state": {
+              "key": "k",
+              "text": "SAME"
+            },
+            "evidence_negative": true
+          },
+          "source_status": "unknown",
+          "shared_process_verified": true,
+          "observed_writes": [
+            {
+              "seq": 19,
+              "owner": "o6",
+              "field": "lineage/business/Cache$Cell.text",
+              "version": 1,
+              "frame": "f1"
+            },
+            {
+              "seq": 49,
+              "owner": "o6",
+              "field": "lineage/business/Cache$Cell.text",
+              "version": 2,
+              "frame": "f2"
+            }
+          ],
+          "version_witness_matches": true,
+          "reason": "control-write-address: Conditional nested write lacks a pre-branch reference witness",
+          "classification": "analysis_rejection",
+          "missing_write_control": {
+            "state": "analysis_error",
+            "reason": "control-write-address: Conditional nested write lacks a pre-branch reference witness",
+            "rejected": true
+          }
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "new-object-replacement",
+          "business_equal": true,
+          "expected": {
+            "id": "new-object-replacement",
+            "source": [
+              [
+                2,
+                "/value"
+              ]
+            ],
+            "versions": [
+              "B cache.cell@1=c1; c1.text@1 <- R1/value",
+              "cache.cell@2=c2 != c1; c2.text@1 <- R2/value",
+              "R3 reads c2.text@1"
+            ],
+            "object_relation": "different",
+            "field_versions": [
+              1,
+              1
+            ],
+            "response": "SAME",
+            "state": {
+              "key": "k",
+              "text": "SAME"
+            }
+          },
+          "source_status": "unknown",
+          "shared_process_verified": true,
+          "observed_writes": [
+            {
+              "seq": 19,
+              "owner": "o6",
+              "field": "lineage/business/Cache$Cell.text",
+              "version": 1,
+              "frame": "f1"
+            },
+            {
+              "seq": 50,
+              "owner": "o12",
+              "field": "lineage/business/Cache$Cell.text",
+              "version": 1,
+              "frame": "f2"
+            }
+          ],
+          "version_witness_matches": true,
+          "reason": "control-write-address: Conditional nested write lacks a pre-branch reference witness",
+          "classification": "analysis_rejection",
+          "missing_write_control": {
+            "state": "analysis_error",
+            "reason": "control-write-address: Conditional nested write lacks a pre-branch reference witness",
+            "rejected": true
+          }
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "public-constant",
+          "business_equal": true,
+          "expected": {
+            "id": "public-constant",
+            "source": [],
+            "versions": [
+              "c1.text@1 <- R1/value",
+              "same c1.text@2 <- literal PUBLIC, kills @1",
+              "R3 reads c1.text@2; no external data origin"
+            ],
+            "object_relation": "same",
+            "field_versions": [
+              1,
+              2
+            ],
+            "response": "PUBLIC",
+            "state": {
+              "key": "k",
+              "text": "PUBLIC"
+            }
+          },
+          "source_status": "unknown",
+          "shared_process_verified": true,
+          "observed_writes": [
+            {
+              "seq": 19,
+              "owner": "o6",
+              "field": "lineage/business/Cache$Cell.text",
+              "version": 1,
+              "frame": "f1"
+            },
+            {
+              "seq": 50,
+              "owner": "o6",
+              "field": "lineage/business/Cache$Cell.text",
+              "version": 2,
+              "frame": "f2"
+            }
+          ],
+          "version_witness_matches": true,
+          "reason": "control-write-address: Conditional nested write lacks a pre-branch reference witness",
+          "classification": "analysis_rejection",
+          "missing_write_control": {
+            "state": "analysis_error",
+            "reason": "control-write-address: Conditional nested write lacks a pre-branch reference witness",
+            "rejected": true
+          }
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "same-object-overwrite",
+          "business_equal": true,
+          "expected": {
+            "id": "same-object-overwrite",
+            "source": [
+              [
+                2,
+                "/value"
+              ]
+            ],
+            "versions": [
+              "B cache.cell=c1; c1.text@1 <- R1/value",
+              "same c1.text@2 <- R2/value, kills @1",
+              "R3 reads c1.text@2"
+            ],
+            "object_relation": "same",
+            "field_versions": [
+              1,
+              2
+            ],
+            "response": "SAME",
+            "state": {
+              "key": "k",
+              "text": "SAME"
+            }
+          },
+          "source_status": "unknown",
+          "shared_process_verified": true,
+          "observed_writes": [
+            {
+              "seq": 19,
+              "owner": "o6",
+              "field": "lineage/business/Cache$Cell.text",
+              "version": 1,
+              "frame": "f1"
+            },
+            {
+              "seq": 49,
+              "owner": "o6",
+              "field": "lineage/business/Cache$Cell.text",
+              "version": 2,
+              "frame": "f2"
+            }
+          ],
+          "version_witness_matches": true,
+          "reason": "control-write-address: Conditional nested write lacks a pre-branch reference witness",
+          "classification": "analysis_rejection",
+          "missing_write_control": {
+            "state": "analysis_error",
+            "reason": "control-write-address: Conditional nested write lacks a pre-branch reference witness",
+            "rejected": true
+          }
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "cache-hit",
+          "business_equal": true,
+          "expected": {
+            "id": "cache-hit",
+            "source": [
+              [
+                1,
+                "/value"
+              ]
+            ],
+            "versions": [
+              "B cache.cell=c1; c1.text@1 <- R1/value",
+              "R2 reads c1.text@1"
+            ],
+            "object_relation": "same",
+            "field_versions": [
+              1
+            ],
+            "response": "SAME",
+            "state": {
+              "key": "k",
+              "text": "SAME"
+            }
+          },
+          "source_status": "unknown",
+          "shared_process_verified": true,
+          "observed_writes": [
+            {
+              "seq": 19,
+              "owner": "o6",
+              "field": "lineage/business/Cache$Cell.text",
+              "version": 1,
+              "frame": "f1"
+            }
+          ],
+          "version_witness_matches": true,
+          "reason": "control-write-address: Conditional nested write lacks a pre-branch reference witness",
+          "classification": "analysis_rejection"
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "miss-fallback",
+          "business_equal": true,
+          "expected": {
+            "id": "miss-fallback",
+            "source": [
+              [
+                2,
+                "/fallback"
+              ]
+            ],
+            "versions": [
+              "c1.text@1 <- R1/value remains cached",
+              "R2 key miss: output <- R2/fallback; no c1.text read"
+            ],
+            "object_relation": "same",
+            "field_versions": [
+              1
+            ],
+            "response": "SAME",
+            "state": {
+              "key": "k",
+              "text": "SAME"
+            }
+          },
+          "source_status": "unknown",
+          "shared_process_verified": true,
+          "observed_writes": [
+            {
+              "seq": 19,
+              "owner": "o6",
+              "field": "lineage/business/Cache$Cell.text",
+              "version": 1,
+              "frame": "f1"
+            }
+          ],
+          "version_witness_matches": true,
+          "reason": "control-write-address: Conditional nested write lacks a pre-branch reference witness",
+          "classification": "analysis_rejection"
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "missing-write",
+          "business_equal": true,
+          "expected": {
+            "id": "missing-write",
+            "source": [
+              [
+                2,
+                "/value"
+              ]
+            ],
+            "versions": [
+              "same c1.text@2 <- R2/value, kills @1",
+              "derived TF evidence removes that write but keeps actual read@2; raw capture retained",
+              "expected analysis result is unknown/rejected, never infer R1 by equality"
+            ],
+            "object_relation": "same",
+            "field_versions": [
+              1,
+              2
+            ],
+            "response": "SAME",
+            "state": {
+              "key": "k",
+              "text": "SAME"
+            },
+            "evidence_negative": true
+          },
+          "source_status": "unknown",
+          "shared_process_verified": true,
+          "observed_writes": [
+            {
+              "seq": 19,
+              "owner": "o6",
+              "field": "lineage/business/Cache$Cell.text",
+              "version": 1,
+              "frame": "f1"
+            },
+            {
+              "seq": 49,
+              "owner": "o6",
+              "field": "lineage/business/Cache$Cell.text",
+              "version": 2,
+              "frame": "f2"
+            }
+          ],
+          "version_witness_matches": true,
+          "reason": "control-write-address: Conditional nested write lacks a pre-branch reference witness",
+          "classification": "analysis_rejection",
+          "missing_write_control": {
+            "state": "analysis_error",
+            "reason": "control-write-address: Conditional nested write lacks a pre-branch reference witness",
+            "rejected": true
+          }
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "new-object-replacement",
+          "business_equal": true,
+          "expected": {
+            "id": "new-object-replacement",
+            "source": [
+              [
+                2,
+                "/value"
+              ]
+            ],
+            "versions": [
+              "B cache.cell@1=c1; c1.text@1 <- R1/value",
+              "cache.cell@2=c2 != c1; c2.text@1 <- R2/value",
+              "R3 reads c2.text@1"
+            ],
+            "object_relation": "different",
+            "field_versions": [
+              1,
+              1
+            ],
+            "response": "SAME",
+            "state": {
+              "key": "k",
+              "text": "SAME"
+            }
+          },
+          "source_status": "unknown",
+          "shared_process_verified": true,
+          "observed_writes": [
+            {
+              "seq": 19,
+              "owner": "o6",
+              "field": "lineage/business/Cache$Cell.text",
+              "version": 1,
+              "frame": "f1"
+            },
+            {
+              "seq": 50,
+              "owner": "o12",
+              "field": "lineage/business/Cache$Cell.text",
+              "version": 1,
+              "frame": "f2"
+            }
+          ],
+          "version_witness_matches": true,
+          "reason": "control-write-address: Conditional nested write lacks a pre-branch reference witness",
+          "classification": "analysis_rejection",
+          "missing_write_control": {
+            "state": "analysis_error",
+            "reason": "control-write-address: Conditional nested write lacks a pre-branch reference witness",
+            "rejected": true
+          }
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "public-constant",
+          "business_equal": true,
+          "expected": {
+            "id": "public-constant",
+            "source": [],
+            "versions": [
+              "c1.text@1 <- R1/value",
+              "same c1.text@2 <- literal PUBLIC, kills @1",
+              "R3 reads c1.text@2; no external data origin"
+            ],
+            "object_relation": "same",
+            "field_versions": [
+              1,
+              2
+            ],
+            "response": "PUBLIC",
+            "state": {
+              "key": "k",
+              "text": "PUBLIC"
+            }
+          },
+          "source_status": "unknown",
+          "shared_process_verified": true,
+          "observed_writes": [
+            {
+              "seq": 19,
+              "owner": "o6",
+              "field": "lineage/business/Cache$Cell.text",
+              "version": 1,
+              "frame": "f1"
+            },
+            {
+              "seq": 50,
+              "owner": "o6",
+              "field": "lineage/business/Cache$Cell.text",
+              "version": 2,
+              "frame": "f2"
+            }
+          ],
+          "version_witness_matches": true,
+          "reason": "control-write-address: Conditional nested write lacks a pre-branch reference witness",
+          "classification": "analysis_rejection",
+          "missing_write_control": {
+            "state": "analysis_error",
+            "reason": "control-write-address: Conditional nested write lacks a pre-branch reference witness",
+            "rejected": true
+          }
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "same-object-overwrite",
+          "business_equal": true,
+          "expected": {
+            "id": "same-object-overwrite",
+            "source": [
+              [
+                2,
+                "/value"
+              ]
+            ],
+            "versions": [
+              "B cache.cell=c1; c1.text@1 <- R1/value",
+              "same c1.text@2 <- R2/value, kills @1",
+              "R3 reads c1.text@2"
+            ],
+            "object_relation": "same",
+            "field_versions": [
+              1,
+              2
+            ],
+            "response": "SAME",
+            "state": {
+              "key": "k",
+              "text": "SAME"
+            }
+          },
+          "source_status": "unknown",
+          "shared_process_verified": true,
+          "observed_writes": [
+            {
+              "seq": 19,
+              "owner": "o6",
+              "field": "lineage/business/Cache$Cell.text",
+              "version": 1,
+              "frame": "f1"
+            },
+            {
+              "seq": 49,
+              "owner": "o6",
+              "field": "lineage/business/Cache$Cell.text",
+              "version": 2,
+              "frame": "f2"
+            }
+          ],
+          "version_witness_matches": true,
+          "reason": "control-write-address: Conditional nested write lacks a pre-branch reference witness",
+          "classification": "analysis_rejection",
+          "missing_write_control": {
+            "state": "analysis_error",
+            "reason": "control-write-address: Conditional nested write lacks a pre-branch reference witness",
+            "rejected": true
+          }
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "cache-hit",
+          "business_equal": true,
+          "expected": {
+            "id": "cache-hit",
+            "source": [
+              [
+                1,
+                "/value"
+              ]
+            ],
+            "versions": [
+              "B cache.cell=c1; c1.text@1 <- R1/value",
+              "R2 reads c1.text@1"
+            ],
+            "object_relation": "same",
+            "field_versions": [
+              1
+            ],
+            "response": "SAME",
+            "state": {
+              "key": "k",
+              "text": "SAME"
+            }
+          },
+          "source_status": "wrong",
+          "shared_process_verified": true,
+          "source_api_verified": true,
+          "native_ids": [],
+          "actual": [],
+          "strict_version_query": "unavailable",
+          "missing_write_control": "online native API has no write-evidence input",
+          "reason": "native tag set is empty after HTTP; no manual transport propagation allowed",
+          "classification": "transport_configuration_or_unsupported_protocol"
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "miss-fallback",
+          "business_equal": true,
+          "expected": {
+            "id": "miss-fallback",
+            "source": [
+              [
+                2,
+                "/fallback"
+              ]
+            ],
+            "versions": [
+              "c1.text@1 <- R1/value remains cached",
+              "R2 key miss: output <- R2/fallback; no c1.text read"
+            ],
+            "object_relation": "same",
+            "field_versions": [
+              1
+            ],
+            "response": "SAME",
+            "state": {
+              "key": "k",
+              "text": "SAME"
+            }
+          },
+          "source_status": "wrong",
+          "shared_process_verified": true,
+          "source_api_verified": true,
+          "native_ids": [],
+          "actual": [],
+          "strict_version_query": "unavailable",
+          "missing_write_control": "online native API has no write-evidence input",
+          "reason": "native tag set is empty after HTTP; no manual transport propagation allowed",
+          "classification": "transport_configuration_or_unsupported_protocol"
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "missing-write",
+          "business_equal": true,
+          "expected": {
+            "id": "missing-write",
+            "source": [
+              [
+                2,
+                "/value"
+              ]
+            ],
+            "versions": [
+              "same c1.text@2 <- R2/value, kills @1",
+              "derived TF evidence removes that write but keeps actual read@2; raw capture retained",
+              "expected analysis result is unknown/rejected, never infer R1 by equality"
+            ],
+            "object_relation": "same",
+            "field_versions": [
+              1,
+              2
+            ],
+            "response": "SAME",
+            "state": {
+              "key": "k",
+              "text": "SAME"
+            },
+            "evidence_negative": true
+          },
+          "source_status": "wrong",
+          "shared_process_verified": true,
+          "source_api_verified": true,
+          "native_ids": [],
+          "actual": [],
+          "strict_version_query": "unavailable",
+          "missing_write_control": "online native API has no write-evidence input",
+          "reason": "native tag set is empty after HTTP; no manual transport propagation allowed",
+          "classification": "transport_configuration_or_unsupported_protocol"
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "new-object-replacement",
+          "business_equal": true,
+          "expected": {
+            "id": "new-object-replacement",
+            "source": [
+              [
+                2,
+                "/value"
+              ]
+            ],
+            "versions": [
+              "B cache.cell@1=c1; c1.text@1 <- R1/value",
+              "cache.cell@2=c2 != c1; c2.text@1 <- R2/value",
+              "R3 reads c2.text@1"
+            ],
+            "object_relation": "different",
+            "field_versions": [
+              1,
+              1
+            ],
+            "response": "SAME",
+            "state": {
+              "key": "k",
+              "text": "SAME"
+            }
+          },
+          "source_status": "wrong",
+          "shared_process_verified": true,
+          "source_api_verified": true,
+          "native_ids": [],
+          "actual": [],
+          "strict_version_query": "unavailable",
+          "missing_write_control": "online native API has no write-evidence input",
+          "reason": "native tag set is empty after HTTP; no manual transport propagation allowed",
+          "classification": "transport_configuration_or_unsupported_protocol"
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "public-constant",
+          "business_equal": true,
+          "expected": {
+            "id": "public-constant",
+            "source": [],
+            "versions": [
+              "c1.text@1 <- R1/value",
+              "same c1.text@2 <- literal PUBLIC, kills @1",
+              "R3 reads c1.text@2; no external data origin"
+            ],
+            "object_relation": "same",
+            "field_versions": [
+              1,
+              2
+            ],
+            "response": "PUBLIC",
+            "state": {
+              "key": "k",
+              "text": "PUBLIC"
+            }
+          },
+          "source_status": "correct",
+          "shared_process_verified": true,
+          "source_api_verified": true,
+          "native_ids": [],
+          "actual": [],
+          "strict_version_query": "unavailable",
+          "missing_write_control": "online native API has no write-evidence input",
+          "reason": "native tag set is empty after HTTP; no manual transport propagation allowed",
+          "classification": "transport_configuration_or_unsupported_protocol"
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "same-object-overwrite",
+          "business_equal": true,
+          "expected": {
+            "id": "same-object-overwrite",
+            "source": [
+              [
+                2,
+                "/value"
+              ]
+            ],
+            "versions": [
+              "B cache.cell=c1; c1.text@1 <- R1/value",
+              "same c1.text@2 <- R2/value, kills @1",
+              "R3 reads c1.text@2"
+            ],
+            "object_relation": "same",
+            "field_versions": [
+              1,
+              2
+            ],
+            "response": "SAME",
+            "state": {
+              "key": "k",
+              "text": "SAME"
+            }
+          },
+          "source_status": "wrong",
+          "shared_process_verified": true,
+          "source_api_verified": true,
+          "native_ids": [],
+          "actual": [],
+          "strict_version_query": "unavailable",
+          "missing_write_control": "online native API has no write-evidence input",
+          "reason": "native tag set is empty after HTTP; no manual transport propagation allowed",
+          "classification": "transport_configuration_or_unsupported_protocol"
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "cache-hit",
+          "business_equal": true,
+          "expected": {
+            "id": "cache-hit",
+            "source": [
+              [
+                1,
+                "/value"
+              ]
+            ],
+            "versions": [
+              "B cache.cell=c1; c1.text@1 <- R1/value",
+              "R2 reads c1.text@1"
+            ],
+            "object_relation": "same",
+            "field_versions": [
+              1
+            ],
+            "response": "SAME",
+            "state": {
+              "key": "k",
+              "text": "SAME"
+            }
+          },
+          "source_status": "wrong",
+          "shared_process_verified": true,
+          "source_api_verified": true,
+          "native_ids": [],
+          "actual": [],
+          "strict_version_query": "unavailable",
+          "missing_write_control": "online native API has no write-evidence input",
+          "reason": "native tag set is empty after HTTP; no manual transport propagation allowed",
+          "classification": "transport_configuration_or_unsupported_protocol"
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "miss-fallback",
+          "business_equal": true,
+          "expected": {
+            "id": "miss-fallback",
+            "source": [
+              [
+                2,
+                "/fallback"
+              ]
+            ],
+            "versions": [
+              "c1.text@1 <- R1/value remains cached",
+              "R2 key miss: output <- R2/fallback; no c1.text read"
+            ],
+            "object_relation": "same",
+            "field_versions": [
+              1
+            ],
+            "response": "SAME",
+            "state": {
+              "key": "k",
+              "text": "SAME"
+            }
+          },
+          "source_status": "wrong",
+          "shared_process_verified": true,
+          "source_api_verified": true,
+          "native_ids": [],
+          "actual": [],
+          "strict_version_query": "unavailable",
+          "missing_write_control": "online native API has no write-evidence input",
+          "reason": "native tag set is empty after HTTP; no manual transport propagation allowed",
+          "classification": "transport_configuration_or_unsupported_protocol"
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "missing-write",
+          "business_equal": true,
+          "expected": {
+            "id": "missing-write",
+            "source": [
+              [
+                2,
+                "/value"
+              ]
+            ],
+            "versions": [
+              "same c1.text@2 <- R2/value, kills @1",
+              "derived TF evidence removes that write but keeps actual read@2; raw capture retained",
+              "expected analysis result is unknown/rejected, never infer R1 by equality"
+            ],
+            "object_relation": "same",
+            "field_versions": [
+              1,
+              2
+            ],
+            "response": "SAME",
+            "state": {
+              "key": "k",
+              "text": "SAME"
+            },
+            "evidence_negative": true
+          },
+          "source_status": "wrong",
+          "shared_process_verified": true,
+          "source_api_verified": true,
+          "native_ids": [],
+          "actual": [],
+          "strict_version_query": "unavailable",
+          "missing_write_control": "online native API has no write-evidence input",
+          "reason": "native tag set is empty after HTTP; no manual transport propagation allowed",
+          "classification": "transport_configuration_or_unsupported_protocol"
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "new-object-replacement",
+          "business_equal": true,
+          "expected": {
+            "id": "new-object-replacement",
+            "source": [
+              [
+                2,
+                "/value"
+              ]
+            ],
+            "versions": [
+              "B cache.cell@1=c1; c1.text@1 <- R1/value",
+              "cache.cell@2=c2 != c1; c2.text@1 <- R2/value",
+              "R3 reads c2.text@1"
+            ],
+            "object_relation": "different",
+            "field_versions": [
+              1,
+              1
+            ],
+            "response": "SAME",
+            "state": {
+              "key": "k",
+              "text": "SAME"
+            }
+          },
+          "source_status": "wrong",
+          "shared_process_verified": true,
+          "source_api_verified": true,
+          "native_ids": [],
+          "actual": [],
+          "strict_version_query": "unavailable",
+          "missing_write_control": "online native API has no write-evidence input",
+          "reason": "native tag set is empty after HTTP; no manual transport propagation allowed",
+          "classification": "transport_configuration_or_unsupported_protocol"
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "public-constant",
+          "business_equal": true,
+          "expected": {
+            "id": "public-constant",
+            "source": [],
+            "versions": [
+              "c1.text@1 <- R1/value",
+              "same c1.text@2 <- literal PUBLIC, kills @1",
+              "R3 reads c1.text@2; no external data origin"
+            ],
+            "object_relation": "same",
+            "field_versions": [
+              1,
+              2
+            ],
+            "response": "PUBLIC",
+            "state": {
+              "key": "k",
+              "text": "PUBLIC"
+            }
+          },
+          "source_status": "correct",
+          "shared_process_verified": true,
+          "source_api_verified": true,
+          "native_ids": [],
+          "actual": [],
+          "strict_version_query": "unavailable",
+          "missing_write_control": "online native API has no write-evidence input",
+          "reason": "native tag set is empty after HTTP; no manual transport propagation allowed",
+          "classification": "transport_configuration_or_unsupported_protocol"
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "same-object-overwrite",
+          "business_equal": true,
+          "expected": {
+            "id": "same-object-overwrite",
+            "source": [
+              [
+                2,
+                "/value"
+              ]
+            ],
+            "versions": [
+              "B cache.cell=c1; c1.text@1 <- R1/value",
+              "same c1.text@2 <- R2/value, kills @1",
+              "R3 reads c1.text@2"
+            ],
+            "object_relation": "same",
+            "field_versions": [
+              1,
+              2
+            ],
+            "response": "SAME",
+            "state": {
+              "key": "k",
+              "text": "SAME"
+            }
+          },
+          "source_status": "wrong",
+          "shared_process_verified": true,
+          "source_api_verified": true,
+          "native_ids": [],
+          "actual": [],
+          "strict_version_query": "unavailable",
+          "missing_write_control": "online native API has no write-evidence input",
+          "reason": "native tag set is empty after HTTP; no manual transport propagation allowed",
+          "classification": "transport_configuration_or_unsupported_protocol"
+        }
+      ],
+      "core_changed": false,
+      "no_innovation_claim": true
+    },
+    "verification": {
+      "verified": true,
+      "checks": [
+        {
+          "mode": "plain",
+          "repeat": "1",
+          "case": "cache-hit",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "plain",
+          "repeat": "1",
+          "case": "miss-fallback",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "plain",
+          "repeat": "1",
+          "case": "missing-write",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "plain",
+          "repeat": "1",
+          "case": "new-object-replacement",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "plain",
+          "repeat": "1",
+          "case": "public-constant",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "plain",
+          "repeat": "1",
+          "case": "same-object-overwrite",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "plain",
+          "repeat": "2",
+          "case": "cache-hit",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "plain",
+          "repeat": "2",
+          "case": "miss-fallback",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "plain",
+          "repeat": "2",
+          "case": "missing-write",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "plain",
+          "repeat": "2",
+          "case": "new-object-replacement",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "plain",
+          "repeat": "2",
+          "case": "public-constant",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "plain",
+          "repeat": "2",
+          "case": "same-object-overwrite",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "cache-hit",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "miss-fallback",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "missing-write",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "new-object-replacement",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "public-constant",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "same-object-overwrite",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "cache-hit",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "miss-fallback",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "missing-write",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "new-object-replacement",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "public-constant",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "same-object-overwrite",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "cache-hit",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "miss-fallback",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "missing-write",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "new-object-replacement",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "public-constant",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "same-object-overwrite",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "cache-hit",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "miss-fallback",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "missing-write",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "new-object-replacement",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "public-constant",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "same-object-overwrite",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        }
+      ],
+      "business_configurations": 36,
+      "requests": 96,
+      "same_result_across_repetitions": true,
+      "cross_jvm_id_comparisons": 0,
+      "pairing": "actual sent/received traceparent; payload equality checks only after pairing"
+    }
+  },
+  "first_runtime_mismatch": {
+    "path": "artifacts/cross-request-lineage-first-20261113-03",
+    "score": {
+      "tracefusion": {
+        "unknown": 12
+      },
+      "mirrortaint": {
+        "wrong": 10,
+        "correct": 2
+      }
+    },
+    "reason": "Application runtime pin differs; system Java8u512"
+  },
+  "diagnostics": {
+    "path": "artifacts/cross-request-lineage-diagnostics-20261113-05",
+    "score": {
+      "rows": [
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": 1,
+          "case": "cache-hit",
+          "expected": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": 1,
+          "case": "same-object-overwrite",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": 1,
+          "case": "new-object-replacement",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": 1,
+          "case": "public-constant",
+          "expected": [],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": 1,
+          "case": "miss-fallback",
+          "expected": [
+            [
+              2,
+              "/fallback"
+            ]
+          ],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": 1,
+          "case": "missing-write",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": 2,
+          "case": "cache-hit",
+          "expected": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": 2,
+          "case": "same-object-overwrite",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": 2,
+          "case": "new-object-replacement",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": 2,
+          "case": "public-constant",
+          "expected": [],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": 2,
+          "case": "miss-fallback",
+          "expected": [
+            [
+              2,
+              "/fallback"
+            ]
+          ],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": 2,
+          "case": "missing-write",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": 1,
+          "case": "cache-hit",
+          "expected": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": 1,
+          "case": "same-object-overwrite",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": 1,
+          "case": "new-object-replacement",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": 1,
+          "case": "public-constant",
+          "expected": [],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": 1,
+          "case": "miss-fallback",
+          "expected": [
+            [
+              2,
+              "/fallback"
+            ]
+          ],
+          "business_equal": true,
+          "known": false,
+          "actual": [
+            [
+              2,
+              "/fallback"
+            ]
+          ],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": 1,
+          "case": "missing-write",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": 2,
+          "case": "cache-hit",
+          "expected": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": 2,
+          "case": "same-object-overwrite",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": 2,
+          "case": "new-object-replacement",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": 2,
+          "case": "public-constant",
+          "expected": [],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": 2,
+          "case": "miss-fallback",
+          "expected": [
+            [
+              2,
+              "/fallback"
+            ]
+          ],
+          "business_equal": true,
+          "known": false,
+          "actual": [
+            [
+              2,
+              "/fallback"
+            ]
+          ],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": 2,
+          "case": "missing-write",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": false,
+          "actual": [],
+          "reason": "core unknown",
+          "state": "unknown"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": 1,
+          "case": "cache-hit",
+          "expected": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": true,
+          "actual": [],
+          "reason": "native IDs only; no strict version query",
+          "state": "wrong"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": 1,
+          "case": "same-object-overwrite",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": true,
+          "actual": [],
+          "reason": "native IDs only; no strict version query",
+          "state": "wrong"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": 1,
+          "case": "new-object-replacement",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": true,
+          "actual": [],
+          "reason": "native IDs only; no strict version query",
+          "state": "wrong"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": 1,
+          "case": "public-constant",
+          "expected": [],
+          "business_equal": true,
+          "known": true,
+          "actual": [],
+          "reason": "native IDs only; no strict version query",
+          "state": "correct"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": 1,
+          "case": "miss-fallback",
+          "expected": [
+            [
+              2,
+              "/fallback"
+            ]
+          ],
+          "business_equal": true,
+          "known": true,
+          "actual": [],
+          "reason": "native IDs only; no strict version query",
+          "state": "wrong"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": 1,
+          "case": "missing-write",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": true,
+          "actual": [],
+          "reason": "native IDs only; no strict version query",
+          "state": "wrong"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": 2,
+          "case": "cache-hit",
+          "expected": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": true,
+          "actual": [],
+          "reason": "native IDs only; no strict version query",
+          "state": "wrong"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": 2,
+          "case": "same-object-overwrite",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": true,
+          "actual": [],
+          "reason": "native IDs only; no strict version query",
+          "state": "wrong"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": 2,
+          "case": "new-object-replacement",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": true,
+          "actual": [],
+          "reason": "native IDs only; no strict version query",
+          "state": "wrong"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": 2,
+          "case": "public-constant",
+          "expected": [],
+          "business_equal": true,
+          "known": true,
+          "actual": [],
+          "reason": "native IDs only; no strict version query",
+          "state": "correct"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": 2,
+          "case": "miss-fallback",
+          "expected": [
+            [
+              2,
+              "/fallback"
+            ]
+          ],
+          "business_equal": true,
+          "known": true,
+          "actual": [],
+          "reason": "native IDs only; no strict version query",
+          "state": "wrong"
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": 2,
+          "case": "missing-write",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": true,
+          "actual": [],
+          "reason": "native IDs only; no strict version query",
+          "state": "wrong"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": 1,
+          "case": "cache-hit",
+          "expected": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": true,
+          "actual": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "reason": "native IDs only; no strict version query",
+          "state": "correct"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": 1,
+          "case": "same-object-overwrite",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": true,
+          "actual": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "reason": "native IDs only; no strict version query",
+          "state": "correct"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": 1,
+          "case": "new-object-replacement",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": true,
+          "actual": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "reason": "native IDs only; no strict version query",
+          "state": "correct"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": 1,
+          "case": "public-constant",
+          "expected": [],
+          "business_equal": true,
+          "known": true,
+          "actual": [],
+          "reason": "native IDs only; no strict version query",
+          "state": "correct"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": 1,
+          "case": "miss-fallback",
+          "expected": [
+            [
+              2,
+              "/fallback"
+            ]
+          ],
+          "business_equal": true,
+          "known": true,
+          "actual": [
+            [
+              2,
+              "/fallback"
+            ]
+          ],
+          "reason": "native IDs only; no strict version query",
+          "state": "correct"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": 1,
+          "case": "missing-write",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": true,
+          "actual": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "reason": "native IDs only; no strict version query",
+          "state": "correct"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": 2,
+          "case": "cache-hit",
+          "expected": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": true,
+          "actual": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "reason": "native IDs only; no strict version query",
+          "state": "correct"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": 2,
+          "case": "same-object-overwrite",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": true,
+          "actual": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "reason": "native IDs only; no strict version query",
+          "state": "correct"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": 2,
+          "case": "new-object-replacement",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": true,
+          "actual": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "reason": "native IDs only; no strict version query",
+          "state": "correct"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": 2,
+          "case": "public-constant",
+          "expected": [],
+          "business_equal": true,
+          "known": true,
+          "actual": [],
+          "reason": "native IDs only; no strict version query",
+          "state": "correct"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": 2,
+          "case": "miss-fallback",
+          "expected": [
+            [
+              2,
+              "/fallback"
+            ]
+          ],
+          "business_equal": true,
+          "known": true,
+          "actual": [
+            [
+              2,
+              "/fallback"
+            ]
+          ],
+          "reason": "native IDs only; no strict version query",
+          "state": "correct"
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": 2,
+          "case": "missing-write",
+          "expected": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "business_equal": true,
+          "known": true,
+          "actual": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "reason": "native IDs only; no strict version query",
+          "state": "correct"
+        }
+      ],
+      "summary": {
+        "read-only-network": {
+          "tracefusion": {
+            "unknown": 12
+          },
+          "mirrortaint": {
+            "wrong": 10,
+            "correct": 2
+          }
+        },
+        "direct-B": {
+          "tracefusion": {
+            "unknown": 12
+          },
+          "mirrortaint": {
+            "correct": 12
+          }
+        }
+      }
+    },
+    "verification": {
+      "verified": true,
+      "configurations": 72,
+      "requests": 192,
+      "repeat_results_identical": true,
+      "facts": [
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "cache-hit",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "miss-fallback",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "missing-write",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "new-object-replacement",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "public-constant",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "same-object-overwrite",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "cache-hit",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "miss-fallback",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "missing-write",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "new-object-replacement",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "public-constant",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "same-object-overwrite",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "plain",
+          "repeat": "1",
+          "case": "cache-hit",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "direct-B",
+          "mode": "plain",
+          "repeat": "1",
+          "case": "miss-fallback",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "direct-B",
+          "mode": "plain",
+          "repeat": "1",
+          "case": "missing-write",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "plain",
+          "repeat": "1",
+          "case": "new-object-replacement",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "plain",
+          "repeat": "1",
+          "case": "public-constant",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "plain",
+          "repeat": "1",
+          "case": "same-object-overwrite",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "plain",
+          "repeat": "2",
+          "case": "cache-hit",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "direct-B",
+          "mode": "plain",
+          "repeat": "2",
+          "case": "miss-fallback",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "direct-B",
+          "mode": "plain",
+          "repeat": "2",
+          "case": "missing-write",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "plain",
+          "repeat": "2",
+          "case": "new-object-replacement",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "plain",
+          "repeat": "2",
+          "case": "public-constant",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "plain",
+          "repeat": "2",
+          "case": "same-object-overwrite",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "cache-hit",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "miss-fallback",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "missing-write",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "new-object-replacement",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "public-constant",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "same-object-overwrite",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "cache-hit",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "miss-fallback",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "missing-write",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "new-object-replacement",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "public-constant",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "direct-B",
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "same-object-overwrite",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "cache-hit",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "miss-fallback",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "missing-write",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "new-object-replacement",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "public-constant",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "same-object-overwrite",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "cache-hit",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "miss-fallback",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "missing-write",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "new-object-replacement",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "public-constant",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "mirrortaint",
+          "repeat": "2",
+          "case": "same-object-overwrite",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "plain",
+          "repeat": "1",
+          "case": "cache-hit",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "plain",
+          "repeat": "1",
+          "case": "miss-fallback",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "plain",
+          "repeat": "1",
+          "case": "missing-write",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "plain",
+          "repeat": "1",
+          "case": "new-object-replacement",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "plain",
+          "repeat": "1",
+          "case": "public-constant",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "plain",
+          "repeat": "1",
+          "case": "same-object-overwrite",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "plain",
+          "repeat": "2",
+          "case": "cache-hit",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "plain",
+          "repeat": "2",
+          "case": "miss-fallback",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "plain",
+          "repeat": "2",
+          "case": "missing-write",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "plain",
+          "repeat": "2",
+          "case": "new-object-replacement",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "plain",
+          "repeat": "2",
+          "case": "public-constant",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "plain",
+          "repeat": "2",
+          "case": "same-object-overwrite",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "cache-hit",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "miss-fallback",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "missing-write",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "new-object-replacement",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "public-constant",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "same-object-overwrite",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "cache-hit",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "miss-fallback",
+          "persistent_b_requests": 2
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "missing-write",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "new-object-replacement",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "public-constant",
+          "persistent_b_requests": 3
+        },
+        {
+          "profile": "read-only-network",
+          "mode": "tracefusion",
+          "repeat": "2",
+          "case": "same-object-overwrite",
+          "persistent_b_requests": 3
+        }
+      ],
+      "missing_write_controls": [
+        {
+          "repeat": "1",
+          "state": "already_missing_write_evidence",
+          "reason": "No Cell.text write values outside configured query frames; core is already unknown",
+          "rejected": null,
+          "guard_verified": false
+        },
+        {
+          "repeat": "2",
+          "state": "already_missing_write_evidence",
+          "reason": "No Cell.text write values outside configured query frames; core is already unknown",
+          "rejected": null,
+          "guard_verified": false
+        }
+      ],
+      "primary_first_results_replaced": false
+    }
+  },
+  "final_entry": {
+    "path": "artifacts/cross-request-lineage-final-entry-20261113-06/primary",
+    "score_summary": {
+      "tracefusion": {
+        "unknown": 6
+      },
+      "mirrortaint": {
+        "wrong": 5,
+        "correct": 1
+      }
+    },
+    "verification": {
+      "verified": true,
+      "checks": [
+        {
+          "mode": "plain",
+          "repeat": "1",
+          "case": "cache-hit",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "plain",
+          "repeat": "1",
+          "case": "miss-fallback",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "plain",
+          "repeat": "1",
+          "case": "missing-write",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "plain",
+          "repeat": "1",
+          "case": "new-object-replacement",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "plain",
+          "repeat": "1",
+          "case": "public-constant",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "plain",
+          "repeat": "1",
+          "case": "same-object-overwrite",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "cache-hit",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "miss-fallback",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "missing-write",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "new-object-replacement",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "public-constant",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "same-object-overwrite",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "cache-hit",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "miss-fallback",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "missing-write",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "new-object-replacement",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "public-constant",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "same-object-overwrite",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        }
+      ],
+      "business_configurations": 18,
+      "requests": 48,
+      "same_result_across_repetitions": true,
+      "cross_jvm_id_comparisons": 0,
+      "pairing": "actual sent/received traceparent; payload equality checks only after pairing"
+    }
+  },
+  "audit_mutations": [
+    {
+      "mutation": "oracle-change",
+      "rejected": true,
+      "exception": "AssertionError",
+      "reason": ""
+    },
+    {
+      "mutation": "duplicate-real-rpc",
+      "rejected": true,
+      "exception": "AssertionError",
+      "reason": ""
+    },
+    {
+      "mutation": "native-heap-restart",
+      "rejected": true,
+      "exception": "AssertionError",
+      "reason": "Native heap was restarted"
+    },
+    {
+      "mutation": "codec-wire-mismatch",
+      "rejected": true,
+      "exception": "AssertionError",
+      "reason": ""
+    }
+  ],
+  "negative_control_limitation": "Original primary and deleted-write copy hit the same earlier control-write-address limit. No claim that missing-write guard is independently verified. Read-only diagnostic already lacks unframed write values.",
+  "baseline_interpretation": "MirrorTaint correctly answers direct external B cache source queries; full A->B original-source HTTP configuration not calibrated; strict version export unavailable. DisTA/Galette not run this round. No innovation claim.",
+  "raw_archive": {
+    "path": "artifacts/cross-request-lineage-delivery-20261113-02/raw-evidence.tar.gz",
+    "sha256": "62f6ba40193d24e229ed9bd6c2fc85b1886fa11843f95096313f5d294be00e13",
+    "bytes": 19871960,
+    "files": 3607,
+    "historical_outputs_overwritten": false
+  },
+  "final_actual_mapper_entry": {
+    "path": "artifacts/cross-request-lineage-final-mapper-20261113-07/primary",
+    "score_summary": {
+      "tracefusion": {
+        "unknown": 6
+      },
+      "mirrortaint": {
+        "wrong": 5,
+        "correct": 1
+      }
+    },
+    "verification": {
+      "verified": true,
+      "checks": [
+        {
+          "mode": "plain",
+          "repeat": "1",
+          "case": "cache-hit",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "plain",
+          "repeat": "1",
+          "case": "miss-fallback",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "plain",
+          "repeat": "1",
+          "case": "missing-write",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "plain",
+          "repeat": "1",
+          "case": "new-object-replacement",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "plain",
+          "repeat": "1",
+          "case": "public-constant",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "plain",
+          "repeat": "1",
+          "case": "same-object-overwrite",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "cache-hit",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "miss-fallback",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "missing-write",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "new-object-replacement",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "public-constant",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "tracefusion",
+          "repeat": "1",
+          "case": "same-object-overwrite",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "cache-hit",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "miss-fallback",
+          "requests": 2,
+          "wire_pairs": 2,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "missing-write",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "new-object-replacement",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "public-constant",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        },
+        {
+          "mode": "mirrortaint",
+          "repeat": "1",
+          "case": "same-object-overwrite",
+          "requests": 3,
+          "wire_pairs": 3,
+          "persistent_jvms": true
+        }
+      ],
+      "business_configurations": 18,
+      "requests": 48,
+      "same_result_across_repetitions": true,
+      "cross_jvm_id_comparisons": 0,
+      "pairing": "actual sent/received traceparent; payload equality checks only after pairing"
+    },
+    "actual_service_mapper_used": true
+  }
+}

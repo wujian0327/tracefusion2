@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "cases": [
+    {"id":"cache-hit","requests":[{"op":1,"key":"k","value":"SAME","fallback":"SAME"},{"op":0,"key":"k","value":"SAME","fallback":"SAME"}]},
+    {"id":"same-object-overwrite","requests":[{"op":1,"key":"k","value":"SAME","fallback":"SAME"},{"op":2,"key":"k","value":"SAME","fallback":"SAME"},{"op":0,"key":"k","value":"SAME","fallback":"SAME"}]},
+    {"id":"new-object-replacement","requests":[{"op":1,"key":"k","value":"SAME","fallback":"SAME"},{"op":1,"key":"k","value":"SAME","fallback":"SAME"},{"op":0,"key":"k","value":"SAME","fallback":"SAME"}]},
+    {"id":"public-constant","requests":[{"op":1,"key":"k","value":"PUBLIC","fallback":"PUBLIC"},{"op":3,"key":"k","value":"PUBLIC","fallback":"PUBLIC"},{"op":0,"key":"k","value":"PUBLIC","fallback":"PUBLIC"}]},
+    {"id":"miss-fallback","requests":[{"op":1,"key":"k","value":"SAME","fallback":"SAME"},{"op":0,"key":"other","value":"SAME","fallback":"SAME"}]},
+    {"id":"missing-write","requests":[{"op":1,"key":"k","value":"SAME","fallback":"SAME"},{"op":2,"key":"k","value":"SAME","fallback":"SAME"},{"op":0,"key":"k","value":"SAME","fallback":"SAME"}]}
+  ]
+}

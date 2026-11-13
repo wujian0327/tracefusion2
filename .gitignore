@@ -8,6 +8,11 @@ experiments/
 # Keep Sock Shop calibration source reviewable; generated evidence stays ignored.
 !experiments/
 experiments/*
+!experiments/cross-request-lineage/
+!experiments/cross-request-lineage/*.java
+!experiments/cross-request-lineage/*.py
+!experiments/cross-request-lineage/*.json
+!experiments/cross-request-lineage/*.md
 !experiments/sockshop-mirrortaint/
 experiments/sockshop-mirrortaint/*
 !experiments/sockshop-mirrortaint/*.java

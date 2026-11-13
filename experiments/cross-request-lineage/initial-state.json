@@ -1,0 +1,11 @@
+{
+  "recorded_at": "2026-11-13T17:47:52.019814+08:00",
+  "head": "22664f392b17a033d089994d7b1ea926974befeb",
+  "branch": "main",
+  "initial_porcelain": "",
+  "initial_state_observed_before_directory_creation": true,
+  "instructions": {
+    "AGENTS.md": "# 工作分支\n\n本仓库默认直接在 `main` 分支继续开发、验证和提交。\n只有用户明确要求时，才改用其他工作分支。\n\n# 远端同步\n\n允许按任务需要 fetch / pull；所有 push 均由用户手动完成，代理不自行推送。\n"
+  },
+  "scope": "Round 1; no existing core edits; commit on main; no push"
+}
