@@ -1,0 +1,52 @@
+{
+  "id": "seeded-same-trace",
+  "requests": [
+    {
+      "op": 1,
+      "key": "k",
+      "value": "SAME",
+      "fallback": "SAME"
+    },
+    {
+      "op": 0,
+      "key": "other",
+      "value": "SAME",
+      "fallback": "SAME"
+    }
+  ],
+  "same_trace": true,
+  "expected_sources": [
+    [
+      [
+        1,
+        "/value"
+      ]
+    ],
+    [
+      [
+        2,
+        "/fallback"
+      ]
+    ]
+  ],
+  "state": {
+    "key": "k",
+    "text": "SAME"
+  },
+  "read_checkpoints": [
+    {
+      "cell_text_version": 1,
+      "output_reads_cache_text": true
+    },
+    {
+      "cell_text_version": null,
+      "output_reads_cache_text": false
+    }
+  ],
+  "object_relation": "same",
+  "write_versions": [
+    1
+  ],
+  "sixth_full_evidence_control": false,
+  "reason_added": "Unseeded original calibration has no initialization proof for Cache.cell@0; preserve unknown. This additional same-trace control establishes actual field writes before communication calibration."
+}
