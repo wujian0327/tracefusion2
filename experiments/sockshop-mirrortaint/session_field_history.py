@@ -4,6 +4,7 @@ Only verified replay can publish a write. Values are consistency checks, never
 lookup keys. A missing exact version stays unknown. No process-global cache.
 """
 from dataclasses import dataclass
+import hashlib
 import json
 from execution_dependency_state import Value
 from query_observation_planner import require
@@ -24,6 +25,8 @@ class Version:
     descriptor: str
     completion: str
     support: tuple
+    dependency_complete: bool
+    effects_complete: bool
 
     def value(self):
         return Value(json.loads(self.observed_json),self.origins,self.selectors,self.unknown)
@@ -35,6 +38,7 @@ class SessionHistory:
         require(self.config.get('scope')=='sequential-http-external-input-and-application-roots','Unsupported session history scope')
         require(rows and rows[0]['kind']=='start','Session history start absent')
         header=rows[0];self.namespace=(header.get('capture_session'),header.get('process_instance'))
+        require(header.get('plan_sha256')==hashlib.sha256((json.dumps(plan,indent=2)+'\n').encode()).hexdigest(),'Frozen session history plan differs')
         require(all(isinstance(x,str) and x for x in self.namespace),'Session history namespace absent')
         require([r['seq']for r in rows]==list(range(1,len(rows)+1)),'Session history event sequence gap')
         require(all(r.get('session_history_version')==1 and (r.get('capture_session'),r.get('process_instance'))==self.namespace for r in rows),'Session history capture/process identity differs')
@@ -103,14 +107,27 @@ class SessionHistory:
         require(completion in ('normal','aborted'),'Historical completion missing')
         complete=completion=='normal' and self.barriers.get(write['owner'],-1)<write['seq']
         record=Version(self.namespace,coord,json.dumps(value.observed,sort_keys=True),frozenset(value.origins),frozenset(value.selectors),value.unknown or not complete,
-                       write['seq'],write['frame'],write['site'],write['descriptor'],completion,tuple(support))
+                       write['seq'],write['frame'],write['site'],write['descriptor'],completion,tuple(support),not value.unknown,complete)
         self.versions[key]=record
 
     def invalidate(self,owners,seq):
-        for owner in owners:self.barriers[owner]=max(seq,self.barriers.get(owner,-1))
+        # A prior root may have published a reference that the current local
+        # State has not read yet. Unknown effects must cross those historical
+        # edges too. Retaining old edges is deliberately conservative.
+        pending=list(owners);seen=set()
+        while pending:
+            owner=pending.pop()
+            if owner in seen:continue
+            seen.add(owner);self.barriers[owner]=max(seq,self.barriers.get(owner,-1))
+            for record in self.versions.values():
+                if record.coordinate[0]!=owner or record.write_seq>=seq:continue
+                observed=json.loads(record.observed_json)
+                if observed.get('object')and 'value'not in observed:pending.append(observed['object'])
 
     def export(self):
         return {'version':1,'namespace':list(self.namespace),'bindings':self.bindings,'reads':self.reads,
                 'versions':[{'namespace':list(v.namespace),'coordinate':list(v.coordinate),'observed':json.loads(v.observed_json),
                   'origins':[list(x)for x in sorted(v.origins,key=str)],'selectors':[list(x)for x in sorted(v.selectors,key=str)],'known':not v.unknown,
-                  'write_seq':v.write_seq,'frame':v.frame,'site':v.site,'descriptor':v.descriptor,'completion':v.completion,'support':list(v.support)}for v in self.versions.values()]}
+                  'write_seq':v.write_seq,'frame':v.frame,'site':v.site,'descriptor':v.descriptor,'completion':v.completion,'support':list(v.support),
+                  'dependency_complete_at_publish':v.dependency_complete,'effects_complete_at_publish':v.effects_complete}for v in self.versions.values()],
+                'effect_barriers':dict(self.barriers)}

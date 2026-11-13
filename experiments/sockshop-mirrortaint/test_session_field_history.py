@@ -1,5 +1,6 @@
 """Synthetic protocol/index units; real JVM evidence is tested by round_two.py."""
 import copy
+import hashlib,json
 from dataclasses import FrozenInstanceError
 import unittest
 from execution_dependency_state import Value
@@ -13,6 +14,7 @@ class HistoryTests(unittest.TestCase):
         events=[{'kind':'start','mode':'full'},{'kind':'write','owner':'o1','field':'C.value','version':1,'observed':{'object':None,'value':100},'descriptor':'I','frame':'f1','site':'C.write()V@1'},*copy.deepcopy(extra),{'kind':'metrics'}]
         for i,r in enumerate(events,1):r.update(seq=i,session_history_version=1,capture_session=capture,process_instance=process)
         events[-1]['session_history_event_count']=len(events)
+        events[0]['plan_sha256']=hashlib.sha256((json.dumps(plan,indent=2)+'\n').encode()).hexdigest()
         return SessionHistory(plan,events),events
     def publish(self,h,rs,unknown=False,origins=frozenset({('http',1,'/value')}),completion='normal'):
         h.publish(rs[1],Value(rs[1]['observed'],origins,unknown=unknown),completion)
@@ -61,6 +63,13 @@ class HistoryTests(unittest.TestCase):
         h.publish(rs[2],Value(rs[2]['observed']),'normal');self.assertFalse(h.lookup(self.read(h,2),101,'q')[0].unknown)
     def test_aborted_root_does_not_certify_write(self):
         h,rs=self.make();self.publish(h,rs,completion='aborted');self.assertTrue(h.lookup(self.read(h),101,'q')[0].unknown)
+    def test_opaque_effect_crosses_reference_from_prior_root(self):
+        h,rs=self.make(extra=[{'kind':'write','owner':'o1','field':'C.cell','version':1,'observed':{'object':'o2'},'descriptor':'LC;','frame':'f1','site':'C.write()V@2'},
+                             {'kind':'write','owner':'o2','field':'C.value','version':1,'observed':{'object':None,'value':100},'descriptor':'I','frame':'f1','site':'C.write()V@3'}])
+        h.publish(rs[2],Value(rs[2]['observed']),'normal');h.publish(rs[3],Value(rs[3]['observed'],frozenset({('http',1,'/value')})),'normal')
+        h.invalidate(['o1'],10)
+        self.assertTrue(h.lookup(self.read(h,owner='o2'),101,'next-root')[0].unknown)
+        self.assertFalse(h.versions[(h.namespace,('o2','C.value',1))].unknown)
     def test_read_cannot_precede_write(self):
         h,rs=self.make();self.publish(h,rs)
         with self.assertRaisesRegex(ValueError,'precedes'):h.lookup(self.read(h),2,'q')

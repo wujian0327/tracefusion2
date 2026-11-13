@@ -1440,7 +1440,9 @@ def infer_application(plan,rows,worker_request=None):
             return {'worker_export':{'value':payload,'fields':exports,'field_seq':{k:field_seq[k] for k in exports},'resources':exported_resources,'decoded_types':{identity(v):decoded_types[identity(v)] for v in exported_resources.values()},'private_input_preserving':not opaque_calls and not unproved_statics and not external_writes and all(transport_effects),'status':'verified-decoder-result' if verified_decoder else 'private-result' if exports else 'scalar-result' if not payload.unknown else 'unsupported-or-opaque-result','frames':frame_audits,'opaque_calls':opaque_calls}}
         if history:
             for w,value in historical_writes:
-                support=[root['seq'],end['seq']]+[r['seq']for r in relevant if r['seq']<=w['seq'] and r['kind']in ('binding-input','read','execution-constructor-enter','execution-constructed')]
+                support=[root['seq'],end['seq']]+[r['seq']for r in relevant if
+                    r['seq']<=w['seq'] and r['kind']in ('binding-input','read') or
+                    r['kind']in ('execution-constructor-enter','execution-constructed','execution-constructor-throw')]
                 history.publish(w,value,'aborted'if end['kind']=='abort'else'normal',support)
         if end['kind']=='abort':
             require(error is not None,'Application root abort disagrees with replay');audits.append({'frame':root['frame'],'completion':'aborted','steps':total_steps,'frames':frame_audits,'answers':0});continue
