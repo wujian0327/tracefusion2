@@ -114,7 +114,7 @@ def bind_outputs(graph,role):
     config=graph.plans[role].get('response_binding')
     if not config:return
     rows=graph.rows[role];enters={r['frame']:r for r in rows if r['kind']=='enter' and r['method']==graph.plans[role]['entry']}
-    returns=[r for r in rows if r['kind']=='binding-return']
+    returns=[r for r in rows if r['kind']=='binding-return' and (not graph.plans[role].get('session_history') or r['frame']in enters)]
     ends_by_frame={};returns_by_message={}
     for r in rows:
         if r['kind']=='exit':ends_by_frame.setdefault(r['frame'],[]).append(r)

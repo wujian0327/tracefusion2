@@ -8,7 +8,7 @@ from pathlib import Path
 import json,re
 
 
-def augment_calls(plan,model,sources):
+def augment_calls(plan,model,sources,roots=()):
     from plan_execution_kernel import constructor_writes
     methods={};targets={};opaque={};visiting=set();lambdas={};initialized_lambdas=set();constructor_starts={};constructor_chains={};constructors=dict(plan['execution_kernel']['constructors'])
     from plan_foundation_values import enum_proofs,attach as attach_foundations
@@ -144,6 +144,7 @@ def augment_calls(plan,model,sources):
                 targets.setdefault(key+'@'+str(ins['index']),[]).append(candidate);visit(candidate)
         visiting.remove(key)
     visit(plan['entry'])
+    for root in roots:visit(root)
     # A direct, empty Object initialization precedes any opportunity for this
     # reference to escape. Observe this point even for framework-created DTOs.
     births={}

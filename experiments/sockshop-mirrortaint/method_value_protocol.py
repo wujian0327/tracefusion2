@@ -77,7 +77,11 @@ def validate(plan,rows):
         elif k in ('source-call-exit','source-call-throw'):
             key=sources.get(row.get('source_call_id'));require(key==row.get('callee'),'Observation-only completion without call');declared(row,desc(key),result=k=='source-call-exit')
         elif k=='date-call':declared(row,desc(row.get('callee')),result=True)
-        elif k=='binding-return':declared(row,desc(plan.get('entry')),result=True)
+        elif k=='binding-return':
+            if plan.get('session_history'):
+                key=frames.get(frame);require(key in plan['session_history']['roots'],'Session return has no declared actual root')
+                declared(row,desc(key),result=True)
+            else:declared(row,desc(plan.get('entry')),result=True)
         if row.get('async_future'):
             fact=row['async_future'];expected=row.get('method_descriptor');declared(fact,expected,result=fact.get('completion')=='normal')
         if row.get('remove_if'):

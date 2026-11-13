@@ -25,6 +25,13 @@ def infer_application(plan,rows,worker_request=None):
     validate_observation(plan,rows)
     validate_plan(plan)
     cfg=plan['execution_kernel']
+    history=None
+    if plan.get('session_history'):
+        require(worker_request is None,'Session history does not support async worker replay')
+        from session_field_history import SessionHistory
+        history=SessionHistory(plan,rows)
+    else:
+        require(not any(r.get('session_history_version') for r in rows),'Session history evidence requires its declared plan')
     headers=[r for r in rows if r['kind']=='start']
     dispatch_version=headers[0].get('exception_dispatch_version',0) if len(headers)==1 else 0
     require(dispatch_version in (0,1),'Unsupported exception dispatch protocol')
@@ -122,10 +129,12 @@ def infer_application(plan,rows,worker_request=None):
         by_frame[row.get('frame')].append((index,row))
         if row['kind']=='enter':children[row.get('parent')].append(row['frame'])
         elif row['kind']in('exit','abort'):completions[row.get('frame')].append(row)
-    roots=[r for r in rows if r['kind']=='enter' and (r['frame']==worker_request['frame'] if worker_request else r['method']==plan['entry'])]
+    roots=[r for r in rows if r['kind']=='enter' and (r['frame']==worker_request['frame'] if worker_request else (r['method']in history.roots and r.get('parent')is None if history else r['method']==plan['entry']))]
     if worker_request:require(len(roots)==1,'Worker replay frame missing/ambiguous')
     for root in roots:
         ends=completions[root['frame']];require(len(ends)==1,'Application root completion differs');end=ends[0]
+        if history:history.root(root,end)
+        historical_writes=[]
         family=set();todo=[root['frame']]
         while todo:
             child=todo.pop()
@@ -194,6 +203,7 @@ def infer_application(plan,rows,worker_request=None):
             candidates=[v for v in providers.get(coordinate(f),[]) if v[0]['seq']<before]
             if len(candidates)!=1:return Value(f['observed'],unknown=True)
             source_row=candidates[0][0]
+            if history and source_row['kind']=='binding-input':return history.input(source_row,f,before)
             if source_row['kind']=='binding-source'and plan['response_binding'].get('source_occurrence_protocol',0)>=1:
                 if source_row.get('source_call_id')is None or source_row.get('source_scope')=='observation-only-call':return Value(f['observed'],unknown=True)
                 starts=[r for _,r in source_calls[('collection-call-enter',source_row['source_call_id'])]]
@@ -229,6 +239,11 @@ def infer_application(plan,rows,worker_request=None):
             if default and default['seq']<before and default['seq']>poisoned_at.get(f['owner'],-1) and coordinate(f)not in providers:
                 matches=[v for v in default['fields']if coordinate(v)==key]
                 if len(matches)==1:same_value(matches[0]['observed'],f['observed']);return Value(f['observed'])
+            if history and poisoned_at.get(f['owner'],-1)<before:
+                prior=history.lookup(f,before,root['frame'])
+                if prior is not None:
+                    value,established=prior;field_seq[key]=established
+                    if established>poisoned_at.get(f['owner'],-1):return value
             return origin(f,before)
         def lookup(f,before):
             key=coordinate(f);value=raw_lookup(f,before)
@@ -275,6 +290,9 @@ def infer_application(plan,rows,worker_request=None):
             # observation. Those wrapper identities are not JVM field identity.
             observed={k:x for k,x in w['observed'].items() if k!='object'} if w['field'] in primitive_fields else w['observed']
             state.field_write(coordinate(w),field_transfer(181,v,observed));field_seq[coordinate(w)]=w['seq']
+            if history:
+                stored=state.fields[coordinate(w)]
+                historical_writes.append((w,Value(actual(stored),stored.origins,stored.selectors,stored.unknown)))
             if w['owner'] in nonlocal_owners or w['owner'] in state.poisoned:escape(v)
         def escape(value):
             todo=[identity(value)] if 'value' not in value.observed else [];seen=set()
@@ -316,6 +334,7 @@ def infer_application(plan,rows,worker_request=None):
                 if owner in source_ownership:
                     source_ownership[owner].update(local=False,reason='reachable-by-opaque-effect');nonlocal_owners.add(owner)
             state.poisoned.update(affected)
+            if history:history.invalidate(affected,seq)
         def take(kind,check_frame=True,check_pc=True):
             nonlocal pos
             require(pos<len(events) and events[pos]['kind']==kind,'Application expected '+kind+' at '+str(entry)+'@'+str(fr.pc))
@@ -1383,7 +1402,7 @@ def infer_application(plan,rows,worker_request=None):
                     if arg.get('object'):
                         poisoned_at[arg['object']]=root['seq']-1;state.poisoned.add(arg['object'])
                 root_args.append(inherited);continue
-            desc=descriptors(plan['collection_method']['desc'])[index]
+            desc=descriptors(cfg['methods'][root['method']]['desc'] if history else plan['collection_method']['desc'])[index]
             if desc in ('Z','B','C','S','I','J','F','D'):arg={k:v for k,v in arg.items() if k!='object'}
             value=Value(arg)
             if 'value' in arg or 'date_epoch_ms' in arg:value=Value(arg,frozenset({('argument',root['frame'],index)}))
@@ -1419,6 +1438,10 @@ def infer_application(plan,rows,worker_request=None):
                     if owner in resources:exported_resources[owner]=materialize(content)
                     payload=Value(payload.observed);verified_decoder=True
             return {'worker_export':{'value':payload,'fields':exports,'field_seq':{k:field_seq[k] for k in exports},'resources':exported_resources,'decoded_types':{identity(v):decoded_types[identity(v)] for v in exported_resources.values()},'private_input_preserving':not opaque_calls and not unproved_statics and not external_writes and all(transport_effects),'status':'verified-decoder-result' if verified_decoder else 'private-result' if exports else 'scalar-result' if not payload.unknown else 'unsupported-or-opaque-result','frames':frame_audits,'opaque_calls':opaque_calls}}
+        if history:
+            for w,value in historical_writes:
+                support=[root['seq'],end['seq']]+[r['seq']for r in relevant if r['seq']<=w['seq'] and r['kind']in ('binding-input','read','execution-constructor-enter','execution-constructed')]
+                history.publish(w,value,'aborted'if end['kind']=='abort'else'normal',support)
         if end['kind']=='abort':
             require(error is not None,'Application root abort disagrees with replay');audits.append({'frame':root['frame'],'completion':'aborted','steps':total_steps,'frames':frame_audits,'answers':0});continue
         require(error is None,'Application normal root has unhandled exception')
@@ -1440,4 +1463,6 @@ def infer_application(plan,rows,worker_request=None):
             bind(value,f['observed'])
             results.append({'root_frame':root['frame'],'seq':ret['seq'],'path':f['path'],**f,'known':not value.unknown,'origins':[list(x) for x in sorted(value.origins,key=str)],'selectors':[list(x) for x in sorted(value.selectors,key=str)]})
         audits.append({'frame':root['frame'],'completion':'normal','steps':total_steps,'frames':frame_audits,'answers':len(ret['fields']),'poisoned_objects':len(poisoned_at),'source_ownership':source_ownership,'opaque_frames':opaque_frames,'opaque_calls':opaque_calls,'environment_facts':environment_facts,'async_transfers':async_transfers,'steps_including_tasks':execution_budget['steps']})
-    return {'answers':results,'roots':audits,'evidence_policy':cfg['evidence_policy'],'async_protocol':async_audit}
+    result={'answers':results,'roots':audits,'evidence_policy':cfg['evidence_policy'],'async_protocol':async_audit}
+    if history:result['session_history']=history.export()
+    return result

@@ -45,7 +45,8 @@
               "/value"
             ]
           ],
-          "normal_completion": true
+          "normal_completion": true,
+          "output_reads_cache_text": true
         },
         {
           "request": 2,
@@ -63,7 +64,8 @@
               "/value"
             ]
           ],
-          "normal_completion": true
+          "normal_completion": true,
+          "output_reads_cache_text": true
         }
       ],
       "constant_precondition_known": false,
@@ -104,7 +106,8 @@
               "/value"
             ]
           ],
-          "normal_completion": true
+          "normal_completion": true,
+          "output_reads_cache_text": true
         },
         {
           "request": 2,
@@ -122,7 +125,8 @@
               "/value"
             ]
           ],
-          "normal_completion": true
+          "normal_completion": true,
+          "output_reads_cache_text": true
         },
         {
           "request": 3,
@@ -140,7 +144,8 @@
               "/value"
             ]
           ],
-          "normal_completion": true
+          "normal_completion": true,
+          "output_reads_cache_text": true
         }
       ],
       "constant_precondition_known": false,
@@ -181,7 +186,8 @@
               "/value"
             ]
           ],
-          "normal_completion": true
+          "normal_completion": true,
+          "output_reads_cache_text": true
         },
         {
           "request": 2,
@@ -199,7 +205,8 @@
               "/value"
             ]
           ],
-          "normal_completion": true
+          "normal_completion": true,
+          "output_reads_cache_text": true
         },
         {
           "request": 3,
@@ -217,7 +224,8 @@
               "/value"
             ]
           ],
-          "normal_completion": true
+          "normal_completion": true,
+          "output_reads_cache_text": true
         }
       ],
       "constant_precondition_known": false,
@@ -253,7 +261,8 @@
               "/value"
             ]
           ],
-          "normal_completion": true
+          "normal_completion": true,
+          "output_reads_cache_text": true
         },
         {
           "request": 2,
@@ -261,7 +270,8 @@
           "cell_text_version": 2,
           "cache_text_version": 2,
           "cache_source": [],
-          "normal_completion": true
+          "normal_completion": true,
+          "output_reads_cache_text": true
         },
         {
           "request": 3,
@@ -269,7 +279,8 @@
           "cell_text_version": 2,
           "cache_text_version": 2,
           "cache_source": [],
-          "normal_completion": true
+          "normal_completion": true,
+          "output_reads_cache_text": true
         }
       ],
       "constant_precondition_known": true,
@@ -309,7 +320,8 @@
               "/value"
             ]
           ],
-          "normal_completion": true
+          "normal_completion": true,
+          "output_reads_cache_text": true
         },
         {
           "request": 2,
@@ -319,7 +331,7 @@
               "/fallback"
             ]
           ],
-          "cell_text_version": 1,
+          "cell_text_version": null,
           "cache_text_version": 1,
           "cache_source": [
             [
@@ -327,7 +339,8 @@
               "/value"
             ]
           ],
-          "normal_completion": true
+          "normal_completion": true,
+          "output_reads_cache_text": false
         }
       ],
       "constant_precondition_known": false,
@@ -368,7 +381,8 @@
               "/value"
             ]
           ],
-          "normal_completion": true
+          "normal_completion": true,
+          "output_reads_cache_text": true
         },
         {
           "request": 2,
@@ -386,7 +400,8 @@
               "/value"
             ]
           ],
-          "normal_completion": true
+          "normal_completion": true,
+          "output_reads_cache_text": true
         },
         {
           "request": 3,
@@ -404,7 +419,8 @@
               "/value"
             ]
           ],
-          "normal_completion": true
+          "normal_completion": true,
+          "output_reads_cache_text": true
         }
       ],
       "constant_precondition_known": false,

@@ -24,6 +24,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
         if(boundary)frames.clear();
         Recorder.start();instrumentation.addTransformer(new PlannedServiceAgent());
     }
+    static boolean root(String method){Map cfg=(Map)plan.get("session_history");return method.equals(plan.get("entry"))||(cfg!=null&&((List)cfg.get("roots")).contains(method));}
     public byte[] transform(final ClassLoader loader,String owner,Class<?> prior,ProtectionDomain domain,byte[] bytes) {
         if(!hashes.containsKey(owner))return null;
         try {
@@ -136,6 +137,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
         static final ObjectMapper JSON=new ObjectMapper();static BufferedWriter output;static long seq,framesCounter,fieldHooks,branches;
         static final WeakIdentityMap<Object,String> IDS=new WeakIdentityMap<>("IDS",100000,Recorder::retiredIdentity,Recorder::canRetireIdentity);static final OwnerVersions VERSIONS=new OwnerVersions();
         static long allocatedIds,idLookups;
+        static String captureSession,processInstance;
         static final Set<String> CHECKED_CLASSES=new HashSet<>();
         static final ThreadLocal<Deque<Frame>> STACK=new ThreadLocal<Deque<Frame>>(){protected Deque<Frame> initialValue(){return new ArrayDeque<>();}};
         static final ThreadLocal<String> PENDING=new ThreadLocal<>();static final Map<String,Set<String>> ACTIVE=new HashMap<>();
@@ -163,7 +165,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
         static Map<String,Object> methodResult(Object result,String descriptor){String returned=Type.getReturnType(descriptor).getDescriptor();if(returned.equals("V")){if(result!=null)throw new IllegalStateException("Non-null void observation");Map<String,Object> r=value(null);r.put("void",true);return r;}return fieldValue(result,returned);}
         static String fieldDescriptor(Object owner,String field){try{String name=field.substring(0,field.lastIndexOf('.'));for(Class c=owner.getClass();c!=null;c=c.getSuperclass())if(c.getName().replace('.','/').equals(name))return Type.getDescriptor(c.getDeclaredField(field.substring(field.lastIndexOf('.')+1)).getType());throw new IllegalStateException("Declared field absent: "+field);}catch(Exception e){throw new IllegalStateException(e);}}
         static String hash(byte[] data)throws Exception{StringBuilder s=new StringBuilder();for(byte b:MessageDigest.getInstance("SHA-256").digest(data))s.append(String.format("%02x",b&255));return s.toString();}
-        public static synchronized void start()throws Exception{output=Files.newBufferedWriter(Paths.get(System.getProperty("service.events")),StandardOpenOption.CREATE_NEW);Map<String,Object> r=row();r.put("mode",mode);r.put("exception_dispatch_version",1);r.put("field_value_version",1);r.put("method_value_version",1);r.put("identity_lifecycle_version",1);r.put("plan_sha256",hash(Files.readAllBytes(Paths.get(System.getProperty("service.plan")))));emit("start",r);Runtime.getRuntime().addShutdownHook(new Thread(()->{synchronized(Recorder.class){Map<String,Object> m=row();m.put("capture_invalid",captureInvalid);m.put("lifecycle",lifecycle());m.put("field_hook_calls",fieldHooks);m.put("branch_hook_calls",branches);m.put("ids_size",IDS.size());m.put("versions_size",VERSIONS.size());m.put("active_owners",ACTIVE.size());m.put("checked_classes_size",CHECKED_CLASSES.size());m.put("library_hashes_size",ExecutionKernelHooks.LIBRARY_HASHES.size());m.put("array_versions_size",ExecutionKernelHooks.ARRAY_VERSIONS.size());m.put("array_slots_size",ExecutionKernelHooks.ARRAY_SLOTS.size());m.put("initialized_classes_size",ExecutionKernelHooks.INITIALIZED.size());emit("metrics",m);}}));}
+        public static synchronized void start()throws Exception{if(plan.get("session_history")!=null){Map cfg=(Map)plan.get("session_history");if(!Integer.valueOf(1).equals(cfg.get("version"))||!"full".equals(mode))throw new IllegalArgumentException("Session history v1 requires full observation");captureSession=UUID.randomUUID().toString();processInstance=UUID.randomUUID().toString();}output=Files.newBufferedWriter(Paths.get(System.getProperty("service.events")),StandardOpenOption.CREATE_NEW);Map<String,Object> r=row();r.put("mode",mode);r.put("exception_dispatch_version",1);r.put("field_value_version",1);r.put("method_value_version",1);r.put("identity_lifecycle_version",1);r.put("plan_sha256",hash(Files.readAllBytes(Paths.get(System.getProperty("service.plan")))));emit("start",r);Runtime.getRuntime().addShutdownHook(new Thread(()->{synchronized(Recorder.class){Map<String,Object> m=row();m.put("capture_invalid",captureInvalid);m.put("lifecycle",lifecycle());m.put("field_hook_calls",fieldHooks);m.put("branch_hook_calls",branches);m.put("ids_size",IDS.size());m.put("versions_size",VERSIONS.size());m.put("active_owners",ACTIVE.size());m.put("checked_classes_size",CHECKED_CLASSES.size());m.put("library_hashes_size",ExecutionKernelHooks.LIBRARY_HASHES.size());m.put("array_versions_size",ExecutionKernelHooks.ARRAY_VERSIONS.size());m.put("array_slots_size",ExecutionKernelHooks.ARRAY_SLOTS.size());m.put("initialized_classes_size",ExecutionKernelHooks.INITIALIZED.size());emit("metrics",m);}}));}
         public static synchronized void callsite(String site){if(!STACK.get().isEmpty())PENDING.set(site);}
         static List<Object> snapshot(Object o,boolean target)throws Exception{
             List<Object> out=new ArrayList<>();if(o==null)return out;Set<String> wanted=new HashSet<>((List<String>)plan.get(target?"snapshot_fields":full?"full_snapshot_fields":"mapper_fields"));
@@ -183,7 +185,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
                 f.inputs=inputs;r.put("inputs",inputs);for(Object member:(List<?>)a){String o=id(member);Set<String> users=ACTIVE.computeIfAbsent(o,k->new HashSet<>());if(!users.isEmpty()&&!users.contains(f.id))throw new IllegalStateException("Concurrent shared mapper DTO");users.add(f.id);f.locked.add(o);}
             }
             RequestScopeHooks.root(method,f.id);MonitorSafety.fault("enter-active",method);STACK.get().push(f);emit("enter",r);MonitorSafety.fault("enter",method);
-            if(method.equals(plan.get("entry")))ResponseBindingHooks.enter(args);
+            if(root(method))ResponseBindingHooks.enter(args);
         }catch(Throwable e){MonitorSafety.fatal(e);scope.fail("enter",e);}return scope;}
         public static synchronized void exit(Object result,Object token){finish(token,result,false);}
         public static synchronized void abort(Throwable error,Object token,Class caller){if(token instanceof MonitorSafety.Scope && !((MonitorSafety.Scope)token).failed){Map r=row();r.put("exception",error.getClass().getName());r.put("observed",value(error));r.put("exception_dispatch",ExecutionKernelHooks.exceptionDispatch(error,caller));ABORT.set(r);}try{finish(token,null,true);}finally{ABORT.remove();}}
@@ -192,8 +194,8 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
             if(!(token instanceof MonitorSafety.Scope))return;MonitorSafety.Scope scope=(MonitorSafety.Scope)token;if(scope.closed)return;
             try{if(scope.failed)return;if(STACK.get().peek()!=scope.frame)throw new IllegalStateException("Frame completion owner differs");Frame f=scope.frame;
                 MonitorSafety.fault(exceptional?"abort":"exit",f.method);
-                if(exceptional){if(f.method.equals(plan.get("entry")))ResponseBindingHooks.abort();Map r=ABORT.get()==null?row():ABORT.get();r.put("method_descriptor",methodDescriptor(f.method));emit("abort",r);}
-                else{Map<String,Object> r=row();String descriptor=methodDescriptor(f.method);r.put("method_descriptor",descriptor);r.put("result",methodResult(result,descriptor));if(f.method.equals(plan.get("entry"))){r.put("fields",snapshot(result,true));ResponseBindingHooks.exit(result);}emit("exit",r);}
+                if(exceptional){if(root(f.method))ResponseBindingHooks.abort();Map r=ABORT.get()==null?row():ABORT.get();r.put("method_descriptor",methodDescriptor(f.method));emit("abort",r);}
+                else{Map<String,Object> r=row();String descriptor=methodDescriptor(f.method);r.put("method_descriptor",descriptor);r.put("result",methodResult(result,descriptor));if(root(f.method)){r.put("fields",snapshot(result,true));ResponseBindingHooks.exit(result);}emit("exit",r);}
             }catch(Throwable e){MonitorSafety.fatal(e);scope.fail(exceptional?"abort":"exit",e);}finally{scope.close();}
         }
         public static synchronized void field(Object o,String field,Object v,String site,boolean write,boolean log){field(o,field,v,fieldDescriptor(o,field),site,write,log);}
@@ -225,7 +227,7 @@ public final class PlannedServiceAgent implements ClassFileTransformer,Opcodes {
                 throw new IllegalArgumentException("Live object in event metadata: "+type);
             }finally{seen.remove(value);}
         }
-        static synchronized void emit(String kind,Map<String,Object> r){try{BodyObservationHooks.observe(kind,r);if(Diagnostic.enabled){r.put("diagnostic_monotonic_ns",System.nanoTime());r.put("diagnostic_thread_cpu_ns",Diagnostic.threads.getCurrentThreadCpuTime());if(kind.equals("start"))Diagnostic.start();if(kind.equals("enter"))Diagnostic.active=true;}safeEvent(r,new IdentityHashMap<Object,Boolean>(),0);if(++seq>1000000)throw new IllegalStateException("Event bound");r.put("seq",seq);r.put("kind",kind);r.put("thread",Thread.currentThread().getId());output.write(JSON.writeValueAsString(r));output.newLine();
+        static synchronized void emit(String kind,Map<String,Object> r){try{if(captureSession!=null){r.put("session_history_version",1);r.put("capture_session",captureSession);r.put("process_instance",processInstance);if("metrics".equals(kind))r.put("session_history_event_count",seq+1);}BodyObservationHooks.observe(kind,r);if(Diagnostic.enabled){r.put("diagnostic_monotonic_ns",System.nanoTime());r.put("diagnostic_thread_cpu_ns",Diagnostic.threads.getCurrentThreadCpuTime());if(kind.equals("start"))Diagnostic.start();if(kind.equals("enter"))Diagnostic.active=true;}safeEvent(r,new IdentityHashMap<Object,Boolean>(),0);if(++seq>1000000)throw new IllegalStateException("Event bound");r.put("seq",seq);r.put("kind",kind);r.put("thread",Thread.currentThread().getId());output.write(JSON.writeValueAsString(r));output.newLine();
             // BufferedWriter is bounded (8 KiB chars); the encoder is bounded
             // too. Keep every event in order, but avoid a flush/syscall per
             // instruction while all instrumented workers share this monitor.

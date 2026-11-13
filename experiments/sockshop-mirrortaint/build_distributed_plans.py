@@ -112,6 +112,7 @@ def build(out,inputs):
         manifest['sources'][str(HERE/name)]=sha(HERE/name)
     for name in ('infer_remove_if.py','remove-if-contracts-20261105.json','plan_before_advice.py','infer_before_advice.py','before-dispatch-contracts-20261105.json','plan_json_tree_observation.py','infer_json_tree_observation.py','json-tree-observation-contracts-20261105.json','plan_json_list_copy.py','infer_json_list_copy.py','json-list-copy-contracts-20261105.json','plan_commons_literals.py','infer_commons_literals.py','commons-literal-contracts-20261105.json'):manifest['sources'][str(HERE/name)]=sha(HERE/name)
     for name in ('plan_request_scope.py','infer_request_scope.py','request-scope-contracts-20261104.json','plan_map_constructor.py'):manifest['sources'][str(HERE/name)]=sha(HERE/name)
+    for name in ('plan_session_history.py','session_field_history.py'):manifest['sources'][str(HERE/name)]=sha(HERE/name)
     manifest['builder_sha256']=sha(Path(__file__));save(out/'build.json',manifest)
 
 
