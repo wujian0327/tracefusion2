@@ -1,0 +1,23 @@
+{
+  "head": "e48832dc171357c614912d8795c17e186eabd0c1",
+  "branch": "main",
+  "initial_porcelain": "",
+  "recorded_at": "2026-11-13T18:34:20.878124+08:00",
+  "instructions": "# 工作分支\n\n本仓库默认直接在 `main` 分支继续开发、验证和提交。\n只有用户明确要求时，才改用其他工作分支。\n\n# 远端同步\n\n允许按任务需要 fetch / pull；所有 push 均由用户手动完成，代理不自行推送。\n",
+  "runtime": "openjdk version \"1.8.0_504\"\nOpenJDK Runtime Environment (build 1.8.0_504-8u504-ga-1ubuntu1~22.04.3-b01)\nOpenJDK 64-Bit Server VM (build 25.504-b01, mixed mode)\n",
+  "runtime_hashes": {
+    "artifacts/galette-static-baselines-20261111/runtime-base/java-8-openjdk-amd64/bin/java": "68e380b6a96f0032786f90ff89cc76bd25cd2ceeffe063a9400c89a734a8df37",
+    "artifacts/galette-static-baselines-20261111/runtime-base/java-8-openjdk-amd64/jre/lib/rt.jar": "8f20323f5d69f9d46a6a9ef67621a01d7a2704ad9b79afc7fb4f97192f600e6b",
+    "artifacts/galette-static-baselines-20261111/runtime-base/java-8-openjdk-amd64/jre/lib/amd64/server/libjvm.so": "fba4526059a3b4da8382b90750ad307136e26b99c8316a06e1c783d57185a6a7"
+  },
+  "dependency_locks": {
+    "baselines/tools.lock.json": "2fdd39ffcd57fd16bd3193777a315a22eb47fc027de935dd6f1ffd34d005815b",
+    "baselines/build-deps.lock.json": "0ac1f1013315e98c19811b086c5e608ff8fac3cf579ff94d581d8fe6528a9c3e"
+  },
+  "round_one_files": {
+    "workload.json": "9efa8709a56c4d0d4004d86d176991f23949c36dda149e76665771798d5fb1a5",
+    "expected.json": "021e65f774ba972dfa2a42dfdcc4fc3f7838289381f467c76308826c6f54a39f",
+    "RESULTS-20261113.md": "97ac3466e8e0a2e92f6d5117d38eb9810b76fc4a3e8ee12a06238f2e6c4a7208",
+    "results-20261113.json": "7282d4a926eeea4d87ee1291f4db402ec00aad05e69ffd06b78c871f6bb96395"
+  }
+}

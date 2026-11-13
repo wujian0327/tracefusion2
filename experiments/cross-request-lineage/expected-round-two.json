@@ -1,0 +1,415 @@
+{
+  "schema": 1,
+  "frozen_before_round_two_implementation": true,
+  "source_boundary": "B actual external HTTP request fields; canonical occurrence = capture/process + actual HTTP message + field path",
+  "data_fields": [
+    "/value",
+    "/fallback"
+  ],
+  "control_fields": [
+    "/op",
+    "/key"
+  ],
+  "source_and_version_scored_separately": true,
+  "cases": [
+    {
+      "id": "cache-hit",
+      "source": [
+        [
+          1,
+          "/value"
+        ]
+      ],
+      "state": {
+        "key": "k",
+        "text": "SAME"
+      },
+      "object_relation": "same",
+      "write_versions": [
+        1
+      ],
+      "read_checkpoints": [
+        {
+          "request": 1,
+          "source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 1,
+          "cache_text_version": 1,
+          "cache_source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "normal_completion": true
+        },
+        {
+          "request": 2,
+          "source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 1,
+          "cache_text_version": 1,
+          "cache_source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "normal_completion": true
+        }
+      ],
+      "constant_precondition_known": false,
+      "sixth_full_evidence_control": false,
+      "missing_evidence_obligation": null
+    },
+    {
+      "id": "same-object-overwrite",
+      "source": [
+        [
+          2,
+          "/value"
+        ]
+      ],
+      "state": {
+        "key": "k",
+        "text": "SAME"
+      },
+      "object_relation": "same",
+      "write_versions": [
+        1,
+        2
+      ],
+      "read_checkpoints": [
+        {
+          "request": 1,
+          "source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 1,
+          "cache_text_version": 1,
+          "cache_source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "normal_completion": true
+        },
+        {
+          "request": 2,
+          "source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 2,
+          "cache_text_version": 2,
+          "cache_source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "normal_completion": true
+        },
+        {
+          "request": 3,
+          "source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 2,
+          "cache_text_version": 2,
+          "cache_source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "normal_completion": true
+        }
+      ],
+      "constant_precondition_known": false,
+      "sixth_full_evidence_control": false,
+      "missing_evidence_obligation": null
+    },
+    {
+      "id": "new-object-replacement",
+      "source": [
+        [
+          2,
+          "/value"
+        ]
+      ],
+      "state": {
+        "key": "k",
+        "text": "SAME"
+      },
+      "object_relation": "different",
+      "write_versions": [
+        1,
+        1
+      ],
+      "read_checkpoints": [
+        {
+          "request": 1,
+          "source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 1,
+          "cache_text_version": 1,
+          "cache_source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "normal_completion": true
+        },
+        {
+          "request": 2,
+          "source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 1,
+          "cache_text_version": 1,
+          "cache_source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "normal_completion": true
+        },
+        {
+          "request": 3,
+          "source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 1,
+          "cache_text_version": 1,
+          "cache_source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "normal_completion": true
+        }
+      ],
+      "constant_precondition_known": false,
+      "sixth_full_evidence_control": false,
+      "missing_evidence_obligation": null
+    },
+    {
+      "id": "public-constant",
+      "source": [],
+      "state": {
+        "key": "k",
+        "text": "PUBLIC"
+      },
+      "object_relation": "same",
+      "write_versions": [
+        1,
+        2
+      ],
+      "read_checkpoints": [
+        {
+          "request": 1,
+          "source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 1,
+          "cache_text_version": 1,
+          "cache_source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "normal_completion": true
+        },
+        {
+          "request": 2,
+          "source": [],
+          "cell_text_version": 2,
+          "cache_text_version": 2,
+          "cache_source": [],
+          "normal_completion": true
+        },
+        {
+          "request": 3,
+          "source": [],
+          "cell_text_version": 2,
+          "cache_text_version": 2,
+          "cache_source": [],
+          "normal_completion": true
+        }
+      ],
+      "constant_precondition_known": true,
+      "sixth_full_evidence_control": false,
+      "missing_evidence_obligation": null
+    },
+    {
+      "id": "miss-fallback",
+      "source": [
+        [
+          2,
+          "/fallback"
+        ]
+      ],
+      "state": {
+        "key": "k",
+        "text": "SAME"
+      },
+      "object_relation": "same",
+      "write_versions": [
+        1
+      ],
+      "read_checkpoints": [
+        {
+          "request": 1,
+          "source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 1,
+          "cache_text_version": 1,
+          "cache_source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "normal_completion": true
+        },
+        {
+          "request": 2,
+          "source": [
+            [
+              2,
+              "/fallback"
+            ]
+          ],
+          "cell_text_version": 1,
+          "cache_text_version": 1,
+          "cache_source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "normal_completion": true
+        }
+      ],
+      "constant_precondition_known": false,
+      "sixth_full_evidence_control": false,
+      "missing_evidence_obligation": null
+    },
+    {
+      "id": "missing-write",
+      "source": [
+        [
+          2,
+          "/value"
+        ]
+      ],
+      "state": {
+        "key": "k",
+        "text": "SAME"
+      },
+      "object_relation": "same",
+      "write_versions": [
+        1,
+        2
+      ],
+      "read_checkpoints": [
+        {
+          "request": 1,
+          "source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 1,
+          "cache_text_version": 1,
+          "cache_source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "normal_completion": true
+        },
+        {
+          "request": 2,
+          "source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 2,
+          "cache_text_version": 2,
+          "cache_source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "normal_completion": true
+        },
+        {
+          "request": 3,
+          "source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 2,
+          "cache_text_version": 2,
+          "cache_source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "normal_completion": true
+        }
+      ],
+      "constant_precondition_known": false,
+      "sixth_full_evidence_control": true,
+      "missing_evidence_obligation": "known positive must degrade to unknown/rejection"
+    }
+  ]
+}
