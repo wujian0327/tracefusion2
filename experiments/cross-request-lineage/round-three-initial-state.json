@@ -1,0 +1,21 @@
+{
+  "head": "dbb813ad81b789149b90b403a52b6700e2f0588d",
+  "branch": "main",
+  "worktree": "?? experiments/cross-request-lineage/expected-round-three.json\n",
+  "time": "2026-11-13T19:32:12.471733",
+  "agents": "# 工作分支\n\n本仓库默认直接在 `main` 分支继续开发、验证和提交。\n只有用户明确要求时，才改用其他工作分支。\n\n# 远端同步\n\n允许按任务需要 fetch / pull；所有 push 均由用户手动完成，代理不自行推送。\n",
+  "expected_sha256": "3e170da1e556a09869290ecad1a293e27faae6c2886063628629ed0039cd2e8e",
+  "workload_sha256": "9efa8709a56c4d0d4004d86d176991f23949c36dda149e76665771798d5fb1a5",
+  "round_two_archive": {
+    "archive": "artifacts/cross-request-lineage-round-two-delivery-20261113-03/raw-evidence.tar.gz",
+    "sha256": "024c779852ecac6b9a0b375de6fd509fa6900a937c03f25b94bf2212b5fc3135",
+    "bytes": 22527428,
+    "files": 6397,
+    "stream_hash_verification": true,
+    "excludes": [
+      "__pycache__",
+      "external symlink targets"
+    ],
+    "source_snapshot": "artifacts/cross-request-lineage-round-two-delivery-20261113-03/source-snapshot"
+  }
+}

@@ -1,0 +1,475 @@
+{
+  "schema": 1,
+  "frozen_before_round_two_implementation": true,
+  "source_boundary": "Only true external A request fields. B ingress and A RPC response read are intermediate dependencies.",
+  "data_fields": [
+    "/value",
+    "/fallback"
+  ],
+  "control_fields": [
+    "/op",
+    "/key"
+  ],
+  "source_and_version_scored_separately": true,
+  "cases": [
+    {
+      "id": "cache-hit",
+      "source": [
+        [
+          1,
+          "/value"
+        ]
+      ],
+      "state": {
+        "key": "k",
+        "text": "SAME"
+      },
+      "object_relation": "same",
+      "write_versions": [
+        1
+      ],
+      "read_checkpoints": [
+        {
+          "request": 1,
+          "source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 1,
+          "cache_text_version": 1,
+          "cache_source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "normal_completion": true,
+          "output_reads_cache_text": true
+        },
+        {
+          "request": 2,
+          "source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 1,
+          "cache_text_version": 1,
+          "cache_source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "normal_completion": true,
+          "output_reads_cache_text": true
+        }
+      ],
+      "constant_precondition_known": false,
+      "sixth_full_evidence_control": false,
+      "missing_evidence_obligation": null
+    },
+    {
+      "id": "same-object-overwrite",
+      "source": [
+        [
+          2,
+          "/value"
+        ]
+      ],
+      "state": {
+        "key": "k",
+        "text": "SAME"
+      },
+      "object_relation": "same",
+      "write_versions": [
+        1,
+        2
+      ],
+      "read_checkpoints": [
+        {
+          "request": 1,
+          "source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 1,
+          "cache_text_version": 1,
+          "cache_source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "normal_completion": true,
+          "output_reads_cache_text": true
+        },
+        {
+          "request": 2,
+          "source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 2,
+          "cache_text_version": 2,
+          "cache_source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "normal_completion": true,
+          "output_reads_cache_text": true
+        },
+        {
+          "request": 3,
+          "source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 2,
+          "cache_text_version": 2,
+          "cache_source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "normal_completion": true,
+          "output_reads_cache_text": true
+        }
+      ],
+      "constant_precondition_known": false,
+      "sixth_full_evidence_control": false,
+      "missing_evidence_obligation": null
+    },
+    {
+      "id": "new-object-replacement",
+      "source": [
+        [
+          2,
+          "/value"
+        ]
+      ],
+      "state": {
+        "key": "k",
+        "text": "SAME"
+      },
+      "object_relation": "different",
+      "write_versions": [
+        1,
+        1
+      ],
+      "read_checkpoints": [
+        {
+          "request": 1,
+          "source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 1,
+          "cache_text_version": 1,
+          "cache_source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "normal_completion": true,
+          "output_reads_cache_text": true
+        },
+        {
+          "request": 2,
+          "source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 1,
+          "cache_text_version": 1,
+          "cache_source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "normal_completion": true,
+          "output_reads_cache_text": true
+        },
+        {
+          "request": 3,
+          "source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 1,
+          "cache_text_version": 1,
+          "cache_source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "normal_completion": true,
+          "output_reads_cache_text": true
+        }
+      ],
+      "constant_precondition_known": false,
+      "sixth_full_evidence_control": false,
+      "missing_evidence_obligation": null
+    },
+    {
+      "id": "public-constant",
+      "source": [],
+      "state": {
+        "key": "k",
+        "text": "PUBLIC"
+      },
+      "object_relation": "same",
+      "write_versions": [
+        1,
+        2
+      ],
+      "read_checkpoints": [
+        {
+          "request": 1,
+          "source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 1,
+          "cache_text_version": 1,
+          "cache_source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "normal_completion": true,
+          "output_reads_cache_text": true
+        },
+        {
+          "request": 2,
+          "source": [],
+          "cell_text_version": 2,
+          "cache_text_version": 2,
+          "cache_source": [],
+          "normal_completion": true,
+          "output_reads_cache_text": true
+        },
+        {
+          "request": 3,
+          "source": [],
+          "cell_text_version": 2,
+          "cache_text_version": 2,
+          "cache_source": [],
+          "normal_completion": true,
+          "output_reads_cache_text": true
+        }
+      ],
+      "constant_precondition_known": true,
+      "sixth_full_evidence_control": false,
+      "missing_evidence_obligation": null
+    },
+    {
+      "id": "miss-fallback",
+      "source": [
+        [
+          2,
+          "/fallback"
+        ]
+      ],
+      "state": {
+        "key": "k",
+        "text": "SAME"
+      },
+      "object_relation": "same",
+      "write_versions": [
+        1
+      ],
+      "read_checkpoints": [
+        {
+          "request": 1,
+          "source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 1,
+          "cache_text_version": 1,
+          "cache_source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "normal_completion": true,
+          "output_reads_cache_text": true
+        },
+        {
+          "request": 2,
+          "source": [
+            [
+              2,
+              "/fallback"
+            ]
+          ],
+          "cell_text_version": null,
+          "cache_text_version": 1,
+          "cache_source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "normal_completion": true,
+          "output_reads_cache_text": false
+        }
+      ],
+      "constant_precondition_known": false,
+      "sixth_full_evidence_control": false,
+      "missing_evidence_obligation": null
+    },
+    {
+      "id": "missing-write",
+      "source": [
+        [
+          2,
+          "/value"
+        ]
+      ],
+      "state": {
+        "key": "k",
+        "text": "SAME"
+      },
+      "object_relation": "same",
+      "write_versions": [
+        1,
+        2
+      ],
+      "read_checkpoints": [
+        {
+          "request": 1,
+          "source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 1,
+          "cache_text_version": 1,
+          "cache_source": [
+            [
+              1,
+              "/value"
+            ]
+          ],
+          "normal_completion": true,
+          "output_reads_cache_text": true
+        },
+        {
+          "request": 2,
+          "source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 2,
+          "cache_text_version": 2,
+          "cache_source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "normal_completion": true,
+          "output_reads_cache_text": true
+        },
+        {
+          "request": 3,
+          "source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "cell_text_version": 2,
+          "cache_text_version": 2,
+          "cache_source": [
+            [
+              2,
+              "/value"
+            ]
+          ],
+          "normal_completion": true,
+          "output_reads_cache_text": true
+        }
+      ],
+      "constant_precondition_known": false,
+      "sixth_full_evidence_control": true,
+      "missing_evidence_obligation": "known positive must degrade to unknown/rejection"
+    }
+  ],
+  "round": 3,
+  "communication_obligations": [
+    "Actual TCP exchange tuple plus actual wire traceparent and direction; no trace-only, time, value or cross-JVM object-ID joins",
+    "Exact default JSON scalar property mapping audited against frozen schema and real bytes",
+    "Every returned source chain reaches A external input; no unmatched B receive accepted as external",
+    "Five normal controls and sixth full-evidence control scored separately; source and exact history versions separately",
+    "On correct-known positives: swap equal value/fallback mapping; cross-message/capture identity; remove wire/codec/history facts, original sequence and reindexed synthetic copies; false source wrapper independently detected"
+  ],
+  "calibration": {
+    "id": "same-trace-no-cache",
+    "requests": [
+      {
+        "op": 0,
+        "key": "k",
+        "value": "SAME",
+        "fallback": "SAME"
+      },
+      {
+        "op": 0,
+        "key": "k",
+        "value": "SAME",
+        "fallback": "SAME"
+      }
+    ],
+    "same_trace": true,
+    "expected_sources": [
+      [
+        [
+          1,
+          "/fallback"
+        ]
+      ],
+      [
+        [
+          2,
+          "/fallback"
+        ]
+      ]
+    ],
+    "state": {
+      "key": null,
+      "text": null
+    }
+  }
+}
