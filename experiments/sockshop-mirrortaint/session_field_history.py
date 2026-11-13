@@ -34,16 +34,20 @@ class Version:
 
 class SessionHistory:
     def __init__(self,plan,rows):
-        self.config=plan['session_history'];require(self.config.get('version')==1,'Unsupported session history plan')
-        require(self.config.get('scope')=='sequential-http-external-input-and-application-roots','Unsupported session history scope')
-        require(not plan.get('response_binding',{}).get('source_calls'),'Session history v1 excludes method-return sources')
-        require(not any(r['kind']=='http-rpc-enter'for r in rows),'Session history v1 excludes outbound RPC')
+        self.config=plan['session_history'];version=self.config.get('version');require(version in (1,2),'Unsupported session history plan')
+        require(self.config.get('scope')==('sequential-http-external-input-and-application-roots'if version==1 else'sequential-http-intermediate-input-and-application-roots'),'Unsupported session history scope')
+        if version==2:
+            require(plan.get('http_exchange',{}).get('input_role')=='intermediate','Historical HTTP dependencies need an intermediate boundary')
+            from http_exchange_protocol import validate_local
+            validate_local(plan,rows)
+        require(not plan.get('response_binding',{}).get('source_calls'),'Session history excludes method-return sources')
+        require(not any(r['kind']=='http-rpc-enter'for r in rows),'Session history excludes outbound RPC')
         require(rows and rows[0]['kind']=='start','Session history start absent')
         header=rows[0];self.namespace=(header.get('capture_session'),header.get('process_instance'))
         require(header.get('plan_sha256')==hashlib.sha256((json.dumps(plan,indent=2)+'\n').encode()).hexdigest(),'Frozen session history plan differs')
         require(all(isinstance(x,str) and x for x in self.namespace),'Session history namespace absent')
         require([r['seq']for r in rows]==list(range(1,len(rows)+1)),'Session history event sequence gap')
-        require(all(r.get('session_history_version')==1 and (r.get('capture_session'),r.get('process_instance'))==self.namespace for r in rows),'Session history capture/process identity differs')
+        require(all(r.get('session_history_version')==version and (r.get('capture_session'),r.get('process_instance'))==self.namespace for r in rows),'Session history capture/process identity differs')
         footers=[r for r in rows if r['kind']=='metrics'];require(len(footers)==1 and footers[0].get('session_history_event_count')==len(rows),'Session history event count differs')
         require(header.get('mode')=='full'and not any(r['kind']=='problem'or r.get('capture_invalid')for r in rows),'Invalid session history capture')
         from transport_context import validate_protocol
@@ -127,7 +131,7 @@ class SessionHistory:
                 if observed.get('object')and 'value'not in observed:pending.append(observed['object'])
 
     def export(self):
-        return {'version':1,'namespace':list(self.namespace),'bindings':self.bindings,'reads':self.reads,
+        return {'version':self.config['version'],'origin_scope':'external-http-input'if self.config['version']==1 else'service-local-http-intermediate-dependency','namespace':list(self.namespace),'bindings':self.bindings,'reads':self.reads,
                 'versions':[{'namespace':list(v.namespace),'coordinate':list(v.coordinate),'observed':json.loads(v.observed_json),
                   'origins':[list(x)for x in sorted(v.origins,key=str)],'selectors':[list(x)for x in sorted(v.selectors,key=str)],'known':not v.unknown,
                   'write_seq':v.write_seq,'frame':v.frame,'site':v.site,'descriptor':v.descriptor,'completion':v.completion,'support':list(v.support),

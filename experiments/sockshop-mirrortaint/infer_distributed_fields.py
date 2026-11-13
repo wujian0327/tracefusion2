@@ -53,6 +53,11 @@ class Reconstruction:
             from infer_uuid_projection import validate_uuid_projection
             validate_uuid_projection(plan,rows)
             self.stats[role]={'events':len(rows),'json_events':sum(r['kind']=='http-json' for r in rows),'log_bytes':path.stat().st_size}
+        self.exchange_audits={};self.exchange_links=[]
+        if any(p.get("http_exchange")for p in self.plans.values()):
+            require(all(p.get("http_exchange")for p in self.plans.values()),"Mixed HTTP exchange protocols")
+            from http_exchange_protocol import bridges
+            self.exchange_audits,self.exchange_links=bridges(self.plans,self.rows)
         self.json=[]
         for role,rows in self.rows.items():
             for r in rows:
@@ -111,6 +116,11 @@ class Reconstruction:
             self.edges[key]=possible
         elif len(possible)>1:n['unknown']='Multiple same-coordinate provider observations'
     def bridge(self):
+        if self.exchange_audits:
+            for edge in self.exchange_links:
+                target=(edge["receiver"],edge["receive_seq"],edge["path"]);source=(edge["sender"],edge["send_seq"],edge["path"])
+                self.edges[target]=[source]
+            return
         writes=defaultdict(list);reads=defaultdict(list)
         groups=defaultdict(dict)
         for key,r in self.json:
@@ -217,7 +227,10 @@ class Reconstruction:
         require(key not in trail,'Provenance cycle')
         n=self.nodes[key]
         boundaries=boundary if isinstance(boundary,list) else [boundary] if boundary is not None else []
-        if any(all(n.get(k)==v for k,v in b.items()) for b in boundaries):return [key],True
+        if any(all(n.get(k)==v for k,v in b.items()) for b in boundaries):
+            if self.exchange_audits and n['kind']=='http-json'and n.get('direction')=='request'and n.get('phase')=='read':
+                if self.plans[n['service']]['http_exchange']['input_role']!='external':return [],False
+            return [key],True
         if n.get('unknown'):return [],False
         if key not in self.edges:
             unbound=n['kind']=='input-snapshot' or (n['kind']=='http-json' and n['phase']=='read')
@@ -241,4 +254,4 @@ class Reconstruction:
             for parent in self.edges.get(k,[]):edges.append([list(k),list(parent)]);visit(parent)
         visit(tuple(key));return edges
     def export(self):return {'nodes':[{'key':list(k),**n} for k,n in self.nodes.items()],'edges':[[list(k),list(p)] for k,ps in self.edges.items() for p in ps],
-        'stats':self.stats,'unpaired_transport_properties':self.unpaired,'origin_matching_uses_values':False,'transport_matching':'validated W3C trace-id + concrete request span-id + direction + JSON pointer' if any(r.get('transport_protocol')=='w3c-trace-context' for rows in self.rows.values() for r in rows) else 'legacy message UUID', 'origin_matching_uses_trace_id_alone':False,'oracle_consumed':False}
+        'stats':self.stats,'unpaired_transport_properties':self.unpaired,'origin_matching_uses_values':False,'transport_matching':'completed TCP endpoints + actual wire invocation + operation + direction + schema property'if self.exchange_audits else'validated W3C trace-id + concrete request span-id + direction + JSON pointer' if any(r.get('transport_protocol')=='w3c-trace-context' for rows in self.rows.values() for r in rows) else 'legacy message UUID', 'origin_matching_uses_trace_id_alone':False,'oracle_consumed':False,'http_exchange_audits':self.exchange_audits,'http_exchange_links':self.exchange_links}
