@@ -1,0 +1,16 @@
+{
+  "round": "two",
+  "original_capture": "artifacts/cross-request-lineage-round-two-complete-20261113-03",
+  "archive": "experiments/cross-request-lineage/evidence-round-two-review/offline-review.tar.gz",
+  "sha256": "82bad982d47f2f6a0724830025a6da1bd3854f1830a9ca505951bc0e8ded6d79",
+  "bytes": 185902,
+  "files": 145,
+  "raw_bytes_unchanged": true,
+  "purpose": "All inputs for JVM-free replay, independent scoring and regeneration of synthetic evidence checks",
+  "excludes": [
+    "Agent/dependency/runtime binaries",
+    "compiled classes",
+    "source snapshot (in Git and full archive)",
+    "derived negatives (regenerated from raw positives)"
+  ]
+}

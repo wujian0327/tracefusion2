@@ -1,0 +1,16 @@
+{
+  "round": "three",
+  "original_capture": "artifacts/cross-request-lineage-round-three-complete-20261113-05",
+  "archive": "experiments/cross-request-lineage/evidence-round-three-review/offline-review.tar.gz",
+  "sha256": "9a4aaf79cd6c994f7dada9d158f16d2388d548bf6788ec8e8f2ac4b90d4961a5",
+  "bytes": 331351,
+  "files": 429,
+  "raw_bytes_unchanged": true,
+  "purpose": "All inputs for JVM-free replay, independent scoring and regeneration of synthetic evidence checks",
+  "excludes": [
+    "Agent/dependency/runtime binaries",
+    "compiled classes",
+    "source snapshot (in Git and full archive)",
+    "derived negatives (regenerated from raw positives)"
+  ]
+}
