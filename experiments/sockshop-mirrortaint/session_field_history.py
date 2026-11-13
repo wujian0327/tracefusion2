@@ -36,6 +36,8 @@ class SessionHistory:
     def __init__(self,plan,rows):
         self.config=plan['session_history'];require(self.config.get('version')==1,'Unsupported session history plan')
         require(self.config.get('scope')=='sequential-http-external-input-and-application-roots','Unsupported session history scope')
+        require(not plan.get('response_binding',{}).get('source_calls'),'Session history v1 excludes method-return sources')
+        require(not any(r['kind']=='http-rpc-enter'for r in rows),'Session history v1 excludes outbound RPC')
         require(rows and rows[0]['kind']=='start','Session history start absent')
         header=rows[0];self.namespace=(header.get('capture_session'),header.get('process_instance'))
         require(header.get('plan_sha256')==hashlib.sha256((json.dumps(plan,indent=2)+'\n').encode()).hexdigest(),'Frozen session history plan differs')

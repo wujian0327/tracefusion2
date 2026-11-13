@@ -8,4 +8,6 @@ Agent 对真实方法入口／出口沿用 Frame 和 descriptor-aware 方法协�
 
 外部来源按实际 HTTP message 加解码对象／声明字段／版本绑定到早于方法入口的 request-read。重复 binding-input 是同一 HTTP 来源的别名；缺少实际 HTTP 或入口绑定就不建立来源。data_fields 与 control_fields 分开声明，后者保留 selectors，不混入数据来源评分。普通方法返回和缓存读取不成为 source，也不把历史输入加入当前 providers。
 
+v1 明确拒绝配置方法返回 source 或出现 outbound RPC；没有外部字段绑定协议的顶层标量参数保持 unknown，不自动创建 argument source。此限制只约束新会话范围，旧格式的来源规则不变。
+
 会话观测是新启用范围，不使旧捕获凭空拥有写事件。合成证据须标记，传输序号和计数先核验；对重新生成计数的合成副本仍执行字节码、调用完成、字段坐标和确切版本核验。并发、异步、GC 后复活、任意未观测写及全框架外部来源认证不属于 v1 的承诺。

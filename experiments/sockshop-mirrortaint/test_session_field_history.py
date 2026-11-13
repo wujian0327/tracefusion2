@@ -89,6 +89,12 @@ class HistoryTests(unittest.TestCase):
         self.assertEqual(a.origins,b.origins);self.assertEqual(a.origins,frozenset({('http',2,'/value')}))
     def test_missing_external_source_is_unknown(self):
         h,rs=self.make();v=h.input({'seq':3,'message':'missing','frame':'f'},dict(self.read(h),path='/value'),4);self.assertTrue(v.unknown)
+    def test_method_returns_cannot_be_declared_external_sources(self):
+        h,rs=self.make()
+        plan={'entry':'C.read()LO;','execution_kernel':{'methods':{'C.read()LO;':{}}},'session_history':h.config,'response_binding':{'source_calls':['C.cached()LC;']}}
+        with self.assertRaisesRegex(ValueError,'excludes method-return'):SessionHistory(plan,rs)
+    def test_external_only_scope_rejects_outbound_rpc(self):
+        with self.assertRaisesRegex(ValueError,'excludes outbound RPC'):self.make(extra=[{'kind':'http-rpc-enter'}])
 
 
 class SessionMethodTests(unittest.TestCase):

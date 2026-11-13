@@ -203,7 +203,9 @@ def infer_application(plan,rows,worker_request=None):
             candidates=[v for v in providers.get(coordinate(f),[]) if v[0]['seq']<before]
             if len(candidates)!=1:return Value(f['observed'],unknown=True)
             source_row=candidates[0][0]
-            if history and source_row['kind']=='binding-input':return history.input(source_row,f,before)
+            if history:
+                if source_row['kind']=='binding-input':return history.input(source_row,f,before)
+                return Value(f['observed'],unknown=True)
             if source_row['kind']=='binding-source'and plan['response_binding'].get('source_occurrence_protocol',0)>=1:
                 if source_row.get('source_call_id')is None or source_row.get('source_scope')=='observation-only-call':return Value(f['observed'],unknown=True)
                 starts=[r for _,r in source_calls[('collection-call-enter',source_row['source_call_id'])]]
@@ -1405,7 +1407,8 @@ def infer_application(plan,rows,worker_request=None):
             desc=descriptors(cfg['methods'][root['method']]['desc'] if history else plan['collection_method']['desc'])[index]
             if desc in ('Z','B','C','S','I','J','F','D'):arg={k:v for k,v in arg.items() if k!='object'}
             value=Value(arg)
-            if 'value' in arg or 'date_epoch_ms' in arg:value=Value(arg,frozenset({('argument',root['frame'],index)}))
+            if 'value' in arg or 'date_epoch_ms' in arg:
+                value=Value(arg,unknown=True)if history else Value(arg,frozenset({('argument',root['frame'],index)}))
             root_args.append(value)
         returned,error=execute(root,root_args,worker_request['receiver'] if worker_request else Value({'object':root['receiver']}) if root.get('receiver') else None)
         require(pos==len(events),'Application unconsumed necessary evidence')
