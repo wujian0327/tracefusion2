@@ -80,6 +80,12 @@ class ExchangeTests(unittest.TestCase):
         from infer_distributed_fields import Reconstruction
         g=Reconstruction.__new__(Reconstruction);g.exchange_audits={'A':{}};g.plans={'A':{'http_exchange':{'input_role':'external'}}};g.nodes={('A',1,'/value'):{'service':'A','kind':'http-json','direction':'request','phase':'read'}};g.edges={}
         self.assertEqual(g.origins(('A',1,'/value'),boundary={'service':'A'}),([('A',1,'/value')],True))
+    def test_equal_valued_new_local_reference_cannot_forward_without_write(self):
+        from infer_distributed_fields import Reconstruction
+        g=Reconstruction.__new__(Reconstruction);g.exchange_audits={'A':{}};g.plans={'A':{}};g.edges={}
+        source=('A',1,'/value');target=('A',2,'/value');base={'service':'A','owner':'dto','field':'DTO.value','version':0,'descriptor':'Ljava/lang/String;','kind':'http-json'}
+        g.nodes={source:dict(base,seq=1,observed={'object':'s1','value':'SAME'}),target:dict(base,seq=2,observed={'object':'s2','value':'SAME'})};g.providers={('A',('dto','DTO.value',0)):[source]}
+        g.alias(target);self.assertNotIn(target,g.edges);self.assertIn('outside counted',g.nodes[target]['unknown'])
 
 
 if __name__=='__main__':unittest.main()

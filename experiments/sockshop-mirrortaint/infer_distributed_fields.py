@@ -111,8 +111,10 @@ class Reconstruction:
                 or self.nodes[k]['kind']=='http-json' and self.nodes[k].get('direction')=='response'
                 and self.nodes[k].get('parent_message')==message and message is not None)]
         if len(possible)==1:
-            if not equivalent(self.nodes[possible[0]]['observed'],n['observed']):
-                n['unknown']='Value changed outside counted application writes; no forwarding edge';return
+            source=self.nodes[possible[0]]
+            reference_changed=self.exchange_audits and n.get('descriptor','').startswith(('L','[')) and source['observed'].get('object')!=n['observed'].get('object')
+            if not equivalent(source['observed'],n['observed']) or reference_changed:
+                n['unknown']='Value/reference changed outside counted application writes; no forwarding edge';return
             self.edges[key]=possible
         elif len(possible)>1:n['unknown']='Multiple same-coordinate provider observations'
     def bridge(self):
